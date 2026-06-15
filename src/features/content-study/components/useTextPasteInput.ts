@@ -10,7 +10,7 @@ import {
 import type { AnimatedStyle } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { TextPasteInputProps, ValidationError } from '../types';
 import { CONTENT_STUDY_CONSTANTS } from '../types';
 import { validatePastedText } from '../validation';

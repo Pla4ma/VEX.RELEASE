@@ -6,9 +6,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { View } from 'react-native';
-import { Text } from '../../components/primitives';
-import { useTheme } from '../../theme';
-import { SkeletonItem } from '../../shared/ui/components';
+import { Text } from '../../components/primitives/Text';
+import { useTheme } from '../../theme/ThemeContext';
+import { SkeletonItem } from '../../shared/ui/components/EnhancedSkeleton';
 
 export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): React.JSX.Element {
   const { theme } = useTheme();

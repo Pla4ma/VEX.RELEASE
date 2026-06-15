@@ -11,7 +11,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StudyOsUnlockGate } from '../schemas';
 
 const UNLOCK_SESSIONS_TARGET = 5;
@@ -24,7 +24,7 @@ export interface UnlockBannerProps {
 export function UnlockBanner({
   gate,
   currentSessions,
-}: UnlockBannerProps): JSX.Element {
+}: UnlockBannerProps): React.ReactNode {
   const { theme } = useTheme();
   if (gate.isUnlocked) {return <></>;}
 

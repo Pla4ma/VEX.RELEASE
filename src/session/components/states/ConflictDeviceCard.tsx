@@ -42,7 +42,7 @@ export function ConflictDeviceCard({
   buttonText,
   accessibilityLabel,
   delay,
-}: ConflictDeviceCardProps): JSX.Element {
+}: ConflictDeviceCardProps): React.ReactNode {
   return (
     <Animated.View entering={FadeInUp.delay(delay)}>
       <Box

@@ -4,7 +4,7 @@ import { CompletionEngine } from './engines/CompletionEngine';
 import { AntiCheatEngine } from './antiCheat/AntiCheatEngine';
 import { SessionEventEmitter } from './SessionEventEmitter';
 import { getSessionRepository } from './repository/SessionRepositoryFactory';
-import { getPresetService } from './presets';
+import { getPresetService } from './presets/preset-manager';
 import type {
   SessionState,
   SessionConfig,

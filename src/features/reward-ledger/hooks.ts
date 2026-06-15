@@ -4,18 +4,22 @@ import { createReward, syncPendingRewards } from './service';
 import type {} from './types';
 
 export function usePendingRewards(userId: string) {
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['rewards', 'pending', userId],
     queryFn: () => syncPendingRewards(userId),
     staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+    });
+
+
+
+
 
   return {
-    rewards: query.data,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
+    rewards: data,
+    isPending: isPending,
+    isError: isError,
+    error: error,
+    refetch: refetch,
   };
 }
 

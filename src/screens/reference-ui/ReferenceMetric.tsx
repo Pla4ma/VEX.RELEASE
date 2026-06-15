@@ -16,7 +16,7 @@ export function ReferenceMetric({
   tone = 'mint',
   value,
   progress = 0.64,
-}: ReferenceMetricProps): JSX.Element {
+}: ReferenceMetricProps): React.ReactNode {
   const accent = tone === 'fire' ? '#FF8A2A' : ref.mint;
   const track = tone === 'fire'
     ? vexLightGlass.background.atmosphericFire

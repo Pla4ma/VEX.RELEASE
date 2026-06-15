@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, TextInput } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   getMinTouchTargetStyle,
   StandardHitSlops,
@@ -38,11 +38,7 @@ export function SessionContractInput({
         borderWidth={1}
         p="md"
         style={{
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.08,
-          shadowRadius: 8,
-          elevation: 2,
+          boxShadow: `0px 2px 8px ${theme.colors.semantic.shadow} / 0.08`,
         }}
       >
         <Box flexDirection="row" alignItems="center">
@@ -99,4 +95,4 @@ export function SessionContractInput({
   );
 }
 
-export default SessionContractInput;
+export default SessionContractInput;

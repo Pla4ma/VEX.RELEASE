@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { CompanionElement } from '../../../features/onboarding/types';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 import { ELEMENTS } from './elementData';
@@ -15,7 +15,7 @@ interface OnboardingChooseElementProps {
 export function OnboardingChooseElement({
   selectedElement,
   onSelect,
-}: OnboardingChooseElementProps): JSX.Element {
+}: OnboardingChooseElementProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View style={{ flex: 1 }}>

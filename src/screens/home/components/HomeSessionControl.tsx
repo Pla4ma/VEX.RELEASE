@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { StartSessionButton } from '../../../features/home-spine/components';
+import { StartSessionButton } from '../../../features/home-spine/components/StartSessionButton';
 import { SessionRecommendationCard } from '../../../features/session-recommendation/components/SessionRecommendationCard';
 import type { SessionRecommendation } from '../../../features/session-recommendation/types';
 
@@ -30,7 +30,7 @@ export function HomeSessionControl({
   streakHoursRemaining,
   streakRiskLevel,
   recommendation,
-}: HomeSessionControlProps): JSX.Element {
+}: HomeSessionControlProps): React.ReactNode {
   if (recommendation && !recommendation.isBlocked) {
     return (
       <SessionRecommendationCard

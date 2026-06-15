@@ -5,7 +5,7 @@ interface VariantProps {
   size: number;
 }
 
-export function RibbonVariant({ size }: VariantProps): JSX.Element {
+export function RibbonVariant({ size }: VariantProps): React.ReactNode {
   const cx = size / 2;
   const cy = size / 2;
   return (

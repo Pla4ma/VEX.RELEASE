@@ -4,7 +4,7 @@ import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 

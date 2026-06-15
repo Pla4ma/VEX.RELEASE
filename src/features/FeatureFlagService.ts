@@ -1,8 +1,8 @@
 // Contract: liveops-config/feature-access owns user-visible progressive disclosure.
 // This service is limited to remote kill switches, rollouts, and local dev overrides.
-import { getStorageManager } from '../persistence';
+import { getStorageManager } from '../persistence/StorageManager';
 import type { StorageManager } from '../persistence/StorageManager';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { createDebugger } from '../utils/debug';
 import type { Nullable } from '../types/global';
 import { defaultFlags } from './featureFlagDefaults';

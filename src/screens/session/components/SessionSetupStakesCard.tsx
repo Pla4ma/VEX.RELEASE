@@ -29,7 +29,7 @@ interface SessionSetupStakesCardProps {
 
 export function SessionSetupStakesCard({
   stakes,
-}: SessionSetupStakesCardProps): JSX.Element {
+}: SessionSetupStakesCardProps): React.ReactNode {
   const navigation = useNavigation<SessionNavigationProp>();
   const disclosure = useFeatureAccess();
 

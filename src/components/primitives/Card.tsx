@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { springPresets } from '../../theme/tokens/motion';
 import { variantStyles, sizeStyles, stateStyles } from './Card.styles';
 

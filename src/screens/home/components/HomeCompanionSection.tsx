@@ -4,8 +4,8 @@ import { useCompanionPromise } from '../../../features/companion-promise/hooks';
 import {
   CoachPresenceCard,
   useCoachPresence,
-} from '../../../features/coach-presence';
-import type { FeatureAccessMap } from '../../../features/liveops-config';
+} from $1../../../features/coach-presence/components/CoachPresenceCard$1;
+import type { FeatureAccessMap } from $1../../../features/coach-presence/components/CoachPresenceCard$1;
 import { HomeCompanionWidget } from './HomeCompanionWidget';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { useHomeCompanion } from '../hooks/useHomeCompanion';

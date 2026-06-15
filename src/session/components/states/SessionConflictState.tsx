@@ -30,7 +30,7 @@ export function SessionConflictState({
   onResolveLocal,
   onResolveRemote,
   onMerge,
-}: SessionConflictStateProps): JSX.Element {
+}: SessionConflictStateProps): React.ReactNode {
   const { theme } = useTheme();
   const [selectedOption, setSelectedOption] = useState<
     'local' | 'remote' | 'merge' | null
@@ -130,7 +130,7 @@ export function SessionConflictState({
           {onMerge && (
             <Animated.View entering={FadeIn.delay(300)}>
               <Button
-                variant="ghost"
+                <Text>variant="ghost"</Text>
                 size="md"
                 onPress={() => handleResolveOption('merge')}
                 isLoading={isResolving && selectedOption === 'merge'}

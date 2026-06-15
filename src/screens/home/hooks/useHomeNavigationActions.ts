@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import type { UserExperienceStage } from '../../../features/liveops-config';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 import type {
   ExtendedRootStackParams,

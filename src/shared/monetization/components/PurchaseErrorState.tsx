@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 interface PurchaseErrorStateProps {
@@ -15,7 +15,7 @@ export function PurchaseErrorState({
   error,
   onRetry,
   onCancel,
-}: PurchaseErrorStateProps): JSX.Element {
+}: PurchaseErrorStateProps): React.ReactNode {
   const { theme } = useTheme();
 
   const getErrorMessage = (): string => {

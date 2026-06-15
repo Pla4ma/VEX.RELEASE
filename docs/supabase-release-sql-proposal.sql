@@ -37,9 +37,35 @@ create policy admin_users_self_read
   to authenticated
   using (user_id = auth.uid());
 
-create policy admin_users_super_admin_all
+create policy admin_users_super_admin_all_select
   on public.admin_users
-  for all
+  for select
+  to authenticated
+  using (
+    exists (
+      select 1
+      from public.admin_users au
+      where au.user_id = auth.uid()
+        and au.role = 'super_admin'
+    )
+  );
+
+create policy admin_users_super_admin_all_insert
+  on public.admin_users
+  for insert
+  to authenticated
+  with check (
+    exists (
+      select 1
+      from public.admin_users au
+      where au.user_id = auth.uid()
+        and au.role = 'super_admin'
+    )
+  );
+
+create policy admin_users_super_admin_all_update
+  on public.admin_users
+  for update
   to authenticated
   using (
     exists (
@@ -50,6 +76,19 @@ create policy admin_users_super_admin_all
     )
   )
   with check (
+    exists (
+      select 1
+      from public.admin_users au
+      where au.user_id = auth.uid()
+        and au.role = 'super_admin'
+    )
+  );
+
+create policy admin_users_super_admin_all_delete
+  on public.admin_users
+  for delete
+  to authenticated
+  using (
     exists (
       select 1
       from public.admin_users au

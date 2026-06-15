@@ -8,8 +8,8 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { useTheme } from '../../../../theme';
-import { Icon } from '../../../../icons';
+import { useTheme } from '../../../../theme/ThemeContext';
+import { Icon } from '../../../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 interface EmptyStateProps {

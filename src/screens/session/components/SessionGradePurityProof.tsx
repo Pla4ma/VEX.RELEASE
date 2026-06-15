@@ -1,11 +1,11 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import {
   getPremiumCardStyle,
   withAlpha,
 } from '../../../components/premiumStyles';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { glow } from '../../../theme/tokens/elevation';
 
 interface SessionGradePurityProofProps {
@@ -22,7 +22,7 @@ export function SessionGradePurityProof({
   purityLabel,
   durationLabel,
   gradeColor,
-}: SessionGradePurityProofProps): JSX.Element {
+}: SessionGradePurityProofProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Animated.View entering={FadeInUp.delay(380).springify()}>

@@ -6,7 +6,7 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import { HomeStageResolver } from './containers/HomeStageResolver';
 
 export const HomeScreen = withScreenErrorBoundary(
-  function _HomeScreen(): JSX.Element {
+  function _HomeScreen(): React.ReactNode {
     return <HomeStageResolver />;
   },
   'Home',

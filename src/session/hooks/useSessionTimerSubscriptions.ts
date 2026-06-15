@@ -1,7 +1,7 @@
 import { useEffect, type RefObject } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { createDebugger } from '../../utils/debug';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 
 const debug = createDebugger('session:timer');
 

@@ -16,7 +16,7 @@ interface HomeColdStartFallbackProps {
 
 export function HomeColdStartFallback({
   showMatchingCopy = true,
-}: HomeColdStartFallbackProps): JSX.Element {
+}: HomeColdStartFallbackProps): React.ReactNode {
   const navigation = useNavigation<Nav>();
   const { theme } = useTheme();
 
@@ -83,7 +83,7 @@ export function HomeColdStartFallback({
         </View>
 
         <Button
-          accessibilityHint="Opens setup for your first focus session."
+          <Text>accessibilityHint="Opens setup for your first focus session."</Text>
           accessibilityLabel="Start first session"
           accessibilityRole="button"
           fullWidth

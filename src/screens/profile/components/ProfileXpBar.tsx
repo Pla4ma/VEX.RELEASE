@@ -16,7 +16,7 @@ export function ProfileXpBar({
   xp,
   nextLevelThreshold,
   xpPercent,
-}: ProfileXpBarProps): JSX.Element {
+}: ProfileXpBarProps): React.ReactNode {
   return (
     <View style={{ marginTop: 12, zIndex: 2 }}>
       <View

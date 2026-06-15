@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CARD_WIDTH } from './session-consequence-types';
 
 interface StreakConsequenceCardProps {
@@ -18,7 +18,7 @@ export function StreakConsequenceCard({
   nextMilestone,
   daysUntilMilestone,
   streakSaved,
-}: StreakConsequenceCardProps): JSX.Element {
+}: StreakConsequenceCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

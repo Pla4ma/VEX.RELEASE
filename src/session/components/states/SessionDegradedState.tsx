@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { styles } from './SessionDegradedState.styles';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface DegradedFeature {
   name: string;
@@ -48,7 +48,7 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
         </Text>
         {features.map((feature, index) => (
           <View
-            key={index}
+            key={feature.name}
             style={[styles.featureRow, { borderBottomColor: semantic.border }]}
           >
             <Text

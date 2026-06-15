@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { MotivationProfileType } from '../../onboarding/schemas';
 
 export interface ModeOption {
@@ -55,7 +55,7 @@ export function ModeCard({
   isSelected: boolean;
   onPress: () => void;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   const animatedStyle = useAnimatedStyle(() => ({

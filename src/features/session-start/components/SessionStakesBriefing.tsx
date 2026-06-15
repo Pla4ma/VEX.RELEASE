@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionStakesBriefingProps } from './SessionStakesBriefing.types';
 import { StakeCard } from './StakeCard';
 import { EmptyStakesMessage } from './EmptyStakesMessage';
@@ -17,7 +17,7 @@ export function SessionStakesBriefing({
   rivalStake,
   squadWarStake,
   onStakePress,
-}: SessionStakesBriefingProps): JSX.Element {
+}: SessionStakesBriefingProps): React.ReactNode {
   const { theme } = useTheme();
   const topStakes = buildStakes(
     { bossStake, streakStake, challengeStake, rivalStake, squadWarStake },

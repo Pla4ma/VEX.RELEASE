@@ -35,7 +35,7 @@ export function GoalCard({ stage }: { stage: UserExperienceStage }) {
         <Text
           style={{
             color: vexLightGlass.text.secondary,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '700',
             letterSpacing: 0.5,
             textTransform: 'uppercase',

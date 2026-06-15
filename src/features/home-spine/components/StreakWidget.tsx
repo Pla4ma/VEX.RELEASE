@@ -7,7 +7,7 @@ import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { StreakWidgetSkeleton } from './StreakWidget.parts';
 import { DayCheckRow } from './DayCheckRow';
@@ -37,7 +37,7 @@ export function StreakWidget({
   longestStreak,
   onPress,
   isLoading = false,
-}: StreakWidgetProps): JSX.Element {
+}: StreakWidgetProps): React.ReactNode {
   if (isLoading) {
     return <StreakWidgetSkeleton />;
   }
@@ -124,7 +124,7 @@ export function StreakWidget({
               <Text
                 style={{
                   color: vexLightGlass.text.tertiary,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: '600',
                 }}
               >

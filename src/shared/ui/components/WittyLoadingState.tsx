@@ -9,7 +9,7 @@ import React from 'react';
 import { View, TextStyle } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Skeleton } from '../primitives/Skeleton';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
 import {
   type LoadingContext,
@@ -32,7 +32,7 @@ export function WittyLoadingState({
   coachName,
   squadName,
   style,
-}: WittyLoadingStateProps): JSX.Element {
+}: WittyLoadingStateProps): React.ReactNode {
   const { theme } = useTheme();
 
   let message = getRandomMessage(context);
@@ -76,7 +76,7 @@ export function WittyLoadingState({
 }
 
 // Context-specific loading state exports
-export function HomeLoadingState(): JSX.Element {
+export function HomeLoadingState(): React.ReactNode {
   return <WittyLoadingState context="home" />;
 }
 
@@ -84,11 +84,11 @@ export function BossLoadingState({
   bossName,
 }: {
   bossName?: string;
-}): JSX.Element {
+}): React.ReactNode {
   return <WittyLoadingState context="boss" bossName={bossName} />;
 }
 
-export function LeaderboardLoadingState(): JSX.Element {
+export function LeaderboardLoadingState(): React.ReactNode {
   return <WittyLoadingState context="leaderboard" />;
 }
 
@@ -96,15 +96,15 @@ export function CoachLoadingState({
   coachName,
 }: {
   coachName?: string;
-}): JSX.Element {
+}): React.ReactNode {
   return <WittyLoadingState context="coach" coachName={coachName} />;
 }
 
-export function AchievementsLoadingState(): JSX.Element {
+export function AchievementsLoadingState(): React.ReactNode {
   return <WittyLoadingState context="achievements" />;
 }
 
-export function ChallengesLoadingState(): JSX.Element {
+export function ChallengesLoadingState(): React.ReactNode {
   return <WittyLoadingState context="challenges" />;
 }
 
@@ -112,15 +112,15 @@ export function SquadLoadingState({
   squadName,
 }: {
   squadName?: string;
-}): JSX.Element {
+}): React.ReactNode {
   return <WittyLoadingState context="squad" squadName={squadName} />;
 }
 
-export function ProfileLoadingState(): JSX.Element {
+export function ProfileLoadingState(): React.ReactNode {
   return <WittyLoadingState context="profile" />;
 }
 
-export function AnalyticsLoadingState(): JSX.Element {
+export function AnalyticsLoadingState(): React.ReactNode {
   return <WittyLoadingState context="analytics" />;
 }
 

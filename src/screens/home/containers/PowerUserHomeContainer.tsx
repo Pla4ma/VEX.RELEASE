@@ -7,11 +7,11 @@ import {
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
 import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
-import { useActiveStudyPlan } from '../../../features/content-study';
-import { useLearningExecutionLayer } from '../../../features/learning-execution';
+import { useActiveStudyPlan } from '../../../features/content-study/runtime-barrel';
+import { useLearningExecutionLayer } from '../../../features/learning-execution/hooks';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useComebackState } from '../../../features/streaks/hooks';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,

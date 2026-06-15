@@ -1,6 +1,6 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Card, Text } from '../../../components/primitives/Box';
 import {
   type CompanionMood,
   type CompanionState,
@@ -30,7 +30,7 @@ export function CompanionStatsBar({
   companion,
   moodHistory,
   reducedMotion,
-}: CompanionStatsBarProps): JSX.Element {
+}: CompanionStatsBarProps): React.ReactNode {
   const themeColors = ELEMENT_THEMES[companion.element];
   const fadeUp = (delay: number) =>
     reducedMotion ? undefined : FadeInUp.duration(400).delay(delay);

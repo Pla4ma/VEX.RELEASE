@@ -4,7 +4,7 @@ import {
   calculateTechniqueXp,
   getMasteryRankDisplay,
   type MasteryState,
-} from '../../../features/mastery';
+} from $1../../../features/mastery/xp-calculator$1;
 
 type ToastFn = (input: {
   type: 'success';

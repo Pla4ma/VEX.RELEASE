@@ -22,7 +22,7 @@ export function ActiveSessionBackground({
   accentOverlay,
   colors,
   accentColor,
-}: ActiveSessionBackgroundProps): JSX.Element {
+}: ActiveSessionBackgroundProps): React.ReactNode {
   const { width, height } = useWindowDimensions();
   const { isReducedMotion } = useReducedMotion();
   const drift = useSharedValue(0);

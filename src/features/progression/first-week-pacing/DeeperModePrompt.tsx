@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { MotivationProfileType } from '../../onboarding/schemas';
 import { MODE_OPTIONS, ModeCard } from './ModeCard';
 
@@ -16,7 +16,7 @@ interface DeeperModePromptProps {
 export function DeeperModePrompt({
   onSelect,
   onContinueAsIs,
-}: DeeperModePromptProps): JSX.Element {
+}: DeeperModePromptProps): React.ReactNode {
   const { theme } = useTheme();
   const [selected, setSelected] = useState<MotivationProfileType | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);

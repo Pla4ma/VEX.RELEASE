@@ -14,17 +14,21 @@ export function useCompanionMemories(userId: string | null): {
   isPending: boolean;
   refetch: () => void;
 } {
-  const query = useQuery({
+  const { refetch, data, error, isError, isPending } = useQuery({
     enabled: Boolean(userId),
     queryFn: () => (userId ? getCompanionMemories(userId) : []),
     queryKey: companionMemoryKeys.list(userId ?? 'none'),
-  });
-  const refresh = query.refetch;
+    });
+
+
+
+
+  const refresh = refetch;
   return {
-    data: query.data ?? [],
-    error: query.error instanceof Error ? query.error : null,
-    isError: query.isError,
-    isPending: query.isPending,
+    data: data ?? [],
+    error: error instanceof Error ? error : null,
+    isError: isError,
+    isPending: isPending,
     refetch: () => {
       refresh();
     },

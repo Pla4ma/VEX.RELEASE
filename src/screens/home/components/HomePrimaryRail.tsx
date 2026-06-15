@@ -40,7 +40,7 @@ export function HomePrimaryRail({
   primaryAction,
   progressSignal,
   returnReason,
-}: HomePrimaryRailProps): JSX.Element {
+}: HomePrimaryRailProps): React.ReactNode {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const focusModel = useFocusScoreDashboardModel(userId, 30);
 

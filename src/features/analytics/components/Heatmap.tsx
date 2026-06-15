@@ -97,7 +97,7 @@ export function Heatmap({
         <Text style={styles.legendText}>Less</Text>
         {colors.map((color, index) => (
           <View
-            key={index}
+            key={color.id}
             style={[styles.legendCell, { backgroundColor: color }]}
           />
         ))}

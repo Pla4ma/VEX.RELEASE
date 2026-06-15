@@ -4,11 +4,11 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { AnalyticsDashboard } from '../../features/analytics/components';
+import { AnalyticsDashboard } from '../../features/analytics/components/AnalyticsDashboard';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { usePremiumStatus } from '../../shared/monetization';
+import { usePremiumStatus } from '../../shared/monetization/use-revenuecat';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   Skeleton,
   SkeletonCard,
@@ -18,7 +18,7 @@ import { createSheet } from '@/shared/ui/create-sheet';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export function AnalyticsScreen(): JSX.Element {
+export function AnalyticsScreen(): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
   const { theme } = useTheme();
   const { user } = useAuthStore();

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface NotificationButtonProps {
   onPress: () => void;
 }
 
-export function NotificationButton({ onPress }: NotificationButtonProps): JSX.Element {
+export function NotificationButton({ onPress }: NotificationButtonProps): React.ReactNode {
   return (
     <Pressable
       accessibilityHint="Shows your VEX notifications"
@@ -24,10 +24,7 @@ export function NotificationButton({ onPress }: NotificationButtonProps): JSX.El
         height: 38,
         justifyContent: 'center',
         overflow: 'hidden',
-        shadowColor: 'rgba(13, 76, 65, 0.16)',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.35,
-        shadowRadius: 10,
+        boxShadow: `0px 6px 10px rgba(13, 76, 65, 0.055999999999999994)`,
         width: 38,
       }}
     >

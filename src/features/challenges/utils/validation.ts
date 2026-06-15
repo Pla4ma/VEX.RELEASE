@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { createDebugger } from '../../../utils/debug';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 const _debug = createDebugger('challenges:validation');
 export const ChallengeDifficultySchema = z.enum([
   'EASY',

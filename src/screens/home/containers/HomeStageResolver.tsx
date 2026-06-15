@@ -50,7 +50,7 @@ function useDeferredFeatureHealth(
   }, [enabled, totalCompletedSessions]);
 }
 
-function HydratedHomeStageResolver(): JSX.Element {
+function HydratedHomeStageResolver(): React.ReactNode {
   const vm = useHomeViewModel();
   const { sharedInput, stage, isLoading } = vm;
 
@@ -87,7 +87,7 @@ function HydratedHomeStageResolver(): JSX.Element {
   );
 }
 
-export function HomeStageResolver(): JSX.Element {
+export function HomeStageResolver(): React.ReactNode {
   const canHydrate = useHydrationGate();
 
   if (!canHydrate) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 
-export function OfflineBanner(): JSX.Element {
+export function OfflineBanner(): React.ReactNode {
   return (
     <Box
       bg="warning.light"

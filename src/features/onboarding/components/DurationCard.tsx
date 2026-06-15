@@ -17,7 +17,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { DurationOption } from '../schemas';
 
 interface DurationCardProps {
@@ -37,7 +37,7 @@ export function DurationCard({
   onPress,
   index,
   isRecommended,
-}: DurationCardProps): JSX.Element {
+}: DurationCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const animatedStyle = useAnimatedStyle(() => ({

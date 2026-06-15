@@ -25,7 +25,7 @@ export function ErrorFallback({
   error,
   onRetry,
   onGoBack,
-}: ErrorFallbackProps): JSX.Element {
+}: ErrorFallbackProps): React.ReactNode {
   const { theme } = useTheme();
   const { isOffline } = useNetInfo();
 
@@ -99,7 +99,7 @@ export function ErrorFallback({
         {offlineNotice}
       </Text>
       <Button
-        variant="primary"
+        <Text>variant="primary"</Text>
         onPress={onRetry}
         style={{ width: '100%', maxWidth: 280 }}
         accessibilityLabel="Try again"
@@ -110,7 +110,7 @@ export function ErrorFallback({
       </Button>
       {onGoBack && (
         <Button
-          variant="ghost"
+          <Text>variant="ghost"</Text>
           onPress={onGoBack}
           style={{ width: '100%', maxWidth: 280, marginTop: theme.spacing[3] }}
           accessibilityLabel="Go back"

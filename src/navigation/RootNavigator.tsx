@@ -12,7 +12,7 @@ import {
 } from '@react-navigation/native';
 
 import { useAuthStore } from '../store';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { useOnboardingStore } from '../onboarding';
 import { useFeatureAccess } from '../features/liveops-config';
 

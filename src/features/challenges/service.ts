@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
 import {
   AssignChallengeInputSchema,

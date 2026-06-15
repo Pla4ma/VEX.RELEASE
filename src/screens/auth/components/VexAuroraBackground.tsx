@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 const AURORA_CYCLE_MS = 18000;
 const EASE_SINE = Easing.inOut(Easing.sin);

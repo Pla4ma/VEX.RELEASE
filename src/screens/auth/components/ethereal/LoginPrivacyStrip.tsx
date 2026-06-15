@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Text } from '../../../../components/primitives';
+import { Text } from '../../../../components/primitives/Text';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { LockGlyph, PrivacyShieldGlyph } from './AuthGlyphs';
 

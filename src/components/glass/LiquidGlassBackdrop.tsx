@@ -11,7 +11,7 @@ import Svg, {
 
 const { width, height } = Dimensions.get('window');
 
-export function LiquidGlassBackdrop(): JSX.Element {
+export function LiquidGlassBackdrop(): React.ReactNode {
   return (
     <Svg
       height={height}

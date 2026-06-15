@@ -27,7 +27,7 @@ export function CompanionGrowthSection({
   summary,
   theme,
   userId,
-}: CompanionGrowthSectionProps): JSX.Element {
+}: CompanionGrowthSectionProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
   const load = useCallback(() => {
@@ -93,7 +93,7 @@ export function CompanionGrowthSection({
           Your session is safe. Retry the companion growth sync.
         </Text>
         <Button
-          variant="secondary"
+          <Text>variant="secondary"</Text>
           onPress={load}
           style={{ marginTop: theme.spacing[3] }}
           accessibilityLabel="Retry loading"

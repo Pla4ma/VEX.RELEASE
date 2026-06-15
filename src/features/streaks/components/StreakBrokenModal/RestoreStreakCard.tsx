@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '../../../../components/primitives/Box';
 import { Text } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import { calculateRestoreCost } from './helpers';
 
 interface RestoreStreakCardProps {

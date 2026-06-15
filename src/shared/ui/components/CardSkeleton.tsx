@@ -1,7 +1,13 @@
+const sizeStyles: Record<CardSize, ViewStyle> = {
+    sm: { padding: 12, borderRadius: 12 },
+    md: { padding: 16, borderRadius: 16 },
+    lg: { padding: 20, borderRadius: 20 },
+  };
+
 import React from 'react';
 import { View, ViewStyle } from 'react-native';
-import { useTheme } from '../../../theme';
-import { Skeleton } from '../state-components';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Skeleton } from '../state-components/skeleton';
 import type { CardVariant, CardSize } from './InteractiveCardTypes';
 import { cardStyles as styles } from './InteractiveCardStyles';
 
@@ -13,11 +19,6 @@ export const CardSkeleton: React.FC<{
   style?: ViewStyle;
 }> = ({ size = 'md', lines = 2, hasIcon = true, style }) => {
   const { theme } = useTheme();
-  const sizeStyles: Record<CardSize, ViewStyle> = {
-    sm: { padding: 12, borderRadius: 12 },
-    md: { padding: 16, borderRadius: 16 },
-    lg: { padding: 20, borderRadius: 20 },
-  };
   return (
     <View
       style={[
@@ -36,7 +37,7 @@ export const CardSkeleton: React.FC<{
             .fill(null)
             .map((_, i) => (
               <Skeleton
-                key={i}
+                key={_.id}
                 variant="text"
                 width={i === 0 ? '70%' : '50%'}
                 height={16}
@@ -47,4 +48,4 @@ export const CardSkeleton: React.FC<{
       </View>
     </View>
   );
-};
+};

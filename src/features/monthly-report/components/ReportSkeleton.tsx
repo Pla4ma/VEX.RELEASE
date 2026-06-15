@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Skeleton, Stack } from '@components/primitives';
-import { useReducedMotion } from '../../../hooks';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
-export function ReportSkeleton(): JSX.Element {
+export function ReportSkeleton(): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const animate = !isReducedMotion;
 

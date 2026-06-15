@@ -28,7 +28,7 @@ export function SessionCompleteOverlays({
   revealedGradeLetter,
   onGradeRevealComplete,
   bottomSheetRef,
-}: SessionCompleteOverlaysProps): JSX.Element {
+}: SessionCompleteOverlaysProps): React.ReactNode {
   return (
     <>
       {!gradeRevealed ? (

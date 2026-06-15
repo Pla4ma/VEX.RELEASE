@@ -4,10 +4,10 @@ import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-export function AiCoachCard(): JSX.Element {
+export function AiCoachCard(): React.ReactNode {
   return (
     <GlassCard padding={16} radius={22} variant="default">
       <View

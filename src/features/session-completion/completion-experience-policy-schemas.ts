@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { LaneSchema } from '../lane-engine/schemas';
 import { SessionModeSchema } from '../../session/modes';
-import { SessionSummarySchema } from '../../session/types';
+import { SessionSummarySchema } from '../../session/types/schemas';
 
 export const MotivationStyleSchema = z.enum([
   'calm',

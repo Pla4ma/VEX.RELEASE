@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SessionSummarySchema } from '../../session/types';
+import { SessionSummarySchema } from '../../session/types/schemas';
 import type { CompletionExperiencePolicy } from './completion-experience-policy';
 
 const CompletionPayoffSchema = z

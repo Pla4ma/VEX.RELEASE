@@ -7,7 +7,7 @@ interface BorderProps {
   width: number;
 }
 
-export function GlassBorder({ color, radius, width }: BorderProps): JSX.Element {
+export function GlassBorder({ color, radius, width }: BorderProps): React.ReactNode {
   return (
     <View
       pointerEvents="none"
@@ -30,7 +30,7 @@ interface OuterBorderProps {
   radius: number;
 }
 
-export function GlassOuterBorder({ color, radius }: OuterBorderProps): JSX.Element {
+export function GlassOuterBorder({ color, radius }: OuterBorderProps): React.ReactNode {
   return (
     <View
       pointerEvents="none"

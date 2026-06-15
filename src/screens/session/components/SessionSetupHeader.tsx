@@ -6,9 +6,9 @@ import { Box } from '../../../components/primitives/Box';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { usePersonalBestPreview } from '../../../features/personal-bests/hooks';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { SessionMode } from '../../../session/modes';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type SessionSetupHeaderProps = {
   durationSeconds: number;

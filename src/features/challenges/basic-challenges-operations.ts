@@ -2,7 +2,7 @@
  * Basic Challenges — Core service operations
  */
 
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
 import { UserChallengeSchema, type UserChallenge } from './schemas';
 import { CONFIG, type BasicChallengeClaimResult, type BasicChallengeProgressResult, type BasicChallengesStatus } from './basic-challenge-types';

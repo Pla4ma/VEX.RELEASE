@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { Text } from '../../components/primitives';
+import { Text } from '../../components/primitives/Text';
 import { trackBossCTAClicked } from '../../features/boss/analytics';
 import { useSessionHistory } from '../../session/hooks/useSession';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   ATTACK_PRESETS,
   estimateDamage,
@@ -30,7 +30,7 @@ function BossScreenSectionsRaw({
   streakMultiplier,
   userDamage,
   userId,
-}: BossScreenSectionsProps): JSX.Element {
+}: BossScreenSectionsProps): React.ReactNode {
   const { theme } = useTheme();
   const historyQuery = useSessionHistory(userId, 5);
   const [selectedMinutes, setSelectedMinutes] = useState<number>(25);

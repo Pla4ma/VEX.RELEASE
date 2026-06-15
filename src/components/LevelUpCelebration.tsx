@@ -7,8 +7,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Box, Text } from './primitives';
-import { useTheme } from '../theme';
+import { Box, Text } from './primitives/Box';
+import { useTheme } from '../theme/ThemeContext';
 import { useReducedMotion } from '@/hooks';
 import { buttonTap } from '../utils/haptics';
 

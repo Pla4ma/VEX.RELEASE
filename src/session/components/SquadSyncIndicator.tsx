@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Box } from '../../components/primitives/Box';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { SquadMemberIndicator } from './SquadMemberIndicator';
 import {
   SquadEncouragementToastView,

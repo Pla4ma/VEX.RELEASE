@@ -3,16 +3,16 @@ import { useNavigation, useRoute, type RouteProp } from '@react-navigation/nativ
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { capture } from '../../shared/analytics';
+import { capture } from '../../shared/analytics/analytics-service';
 import {
   usePaywall,
   usePremiumStatus,
   type PurchasesPackageDisplayInfo,
-} from '../../shared/monetization';
+} from $1../../shared/monetization/use-revenuecat$1;
 import {
   PurchaseEvents,
   createPaywallProperties,
-} from '../../shared/monetization/purchase-events';
+} from $1../../shared/monetization/use-revenuecat$1;
 import {
   FEATURE_HIGHLIGHT_MAP,
   buildPackageSelection,

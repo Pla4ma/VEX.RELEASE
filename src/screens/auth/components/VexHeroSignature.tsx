@@ -10,7 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Path, Stop } from 'react-native-svg';
@@ -42,7 +42,7 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
         <Defs>
           <SvgLinearGradient id="flourishGrad" x1="0" y1="0" x2="1" y2="0">
             {FLOURISH_GRADIENT_STOPS.map((s, i) => (
-              <Stop key={i} offset={s.offset} stopColor={s.stopColor} />
+              <Stop key={s.id} offset={s.offset} stopColor={s.stopColor} />
             ))}
           </SvgLinearGradient>
         </Defs>
@@ -136,7 +136,7 @@ export function VexHeroSignature({
 }: {
   title?: string;
   tagline?: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const tagOp = useSharedValue(isReducedMotion ? 1 : 0);
   const tagTy = useSharedValue(isReducedMotion ? 0 : 14);
@@ -166,7 +166,7 @@ export function VexHeroSignature({
       <Flourish isReducedMotion={isReducedMotion} />
       <Animated.View style={[{ flexDirection: 'row', marginTop: 4, height: 100 }, wordBreath]}>
         {title.split('').map((c, i) => (
-          <VexLetter key={i} char={c} index={i} isReducedMotion={isReducedMotion} />
+          <VexLetter key={c.id} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
       <Underline isReducedMotion={isReducedMotion} />

@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { StreakWidget } from '../../../features/home-spine/components';
+import { StreakWidget } from '../../../features/home-spine/components/StreakWidget';
 
 interface HomeStreakProgressProps {
   currentDays: number;
@@ -24,7 +24,7 @@ export function HomeStreakProgress({
   longestStreak,
   isLoading,
   userId,
-}: HomeStreakProgressProps): JSX.Element {
+}: HomeStreakProgressProps): React.ReactNode {
   return (
     <StreakWidget
       currentDays={currentDays}

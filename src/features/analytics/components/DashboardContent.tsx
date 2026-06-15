@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { EmptyAnalytics, NetworkError } from '../../../shared/ui/primitives/EmptyState';
 import { Skeleton, SkeletonChart, SkeletonList } from '../../../shared/ui/primitives/Skeleton';
 import type { Insight, TimeSeriesData } from '../types';

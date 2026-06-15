@@ -93,30 +93,43 @@ export function useSignOut() {
 }
 
 export function useResetPassword() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (email: string) => service.resetPassword(email),
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'auth-reset-password' } });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+    },
   });
 }
 
 export function useUpdatePassword() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (newPassword: string) => service.updatePassword(newPassword),
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'auth-update-password' } });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
+      queryClient.invalidateQueries({ queryKey: ['session'] });
+    },
   });
 }
 
 export function useResendVerification() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (email: string) => service.resendVerification(email),
     onError: (error) => {
       Sentry.captureException(error, {
         tags: { feature: 'auth-resend-verification' },
       });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['auth'] });
     },
   });
 }

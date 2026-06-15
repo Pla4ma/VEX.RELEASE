@@ -10,7 +10,7 @@ interface EvolutionTeaserProps {
   teaseCopy: string;
 }
 
-export function EvolutionTeaserCard({ teaseCopy }: EvolutionTeaserProps): JSX.Element {
+export function EvolutionTeaserCard({ teaseCopy }: EvolutionTeaserProps): React.ReactNode {
   return (
     <GlassCard padding={16} radius={22} variant="subtle">
       <View

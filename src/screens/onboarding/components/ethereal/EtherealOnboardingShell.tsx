@@ -16,7 +16,7 @@ import { OnboardingErrorBanner } from './OnboardingErrorBanner';
 import { VexMascotGuide } from './VexMascotGuide';
 import { OnboardingCinematicIntro } from './OnboardingCinematicIntro';
 import type { MascotMood } from './VexMascotGuide.tokens';
-import { useOnboardingStore } from '../../../../features/onboarding';
+import { useOnboardingStore } from '../../../../features/onboarding/store';
 
 type EtherealOnboardingShellProps = {
   stepKey: string | number;

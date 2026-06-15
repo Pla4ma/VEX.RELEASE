@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { QueryProvider } from '../api';
+import { QueryProvider } from '../api/QueryProvider';
 import { initSentry } from '../config/sentry';
 import { ErrorBoundary } from '../errors/ErrorBoundary';
 import { PrivacyBlurOverlay } from '../components/primitives/PrivacyBlurOverlay';
@@ -17,7 +17,7 @@ import { RootNavigator } from '../navigation/RootNavigator';
 
 import { ToastProvider } from '../shared/ui/components/Toast';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
-import { ThemeProvider } from '../theme';
+import { ThemeProvider } from '../theme/ThemeContext';
 import { bootstrapApp } from './bootstrap';
 import { markColdStart } from './cold-start-performance';
 

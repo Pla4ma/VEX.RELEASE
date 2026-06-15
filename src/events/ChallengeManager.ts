@@ -34,10 +34,11 @@ export class ChallengeManager {
     const challenge = this.activeChallenges.get(challengeId);
     if (!challenge || challenge.status === 'EXPIRED') {return;}
     if (challenge.status === 'LOCKED' && challenge.prerequisites) {
+      const completedbySet = new Set(completedBy);
       for (const prereqId of challenge.prerequisites) {
         const prereq = this.activeChallenges.get(prereqId);
         if (!prereq || !prereq.completedBy.includes(userId)) {
-          debug.debug('Challenge prerequisite not met: %s', prereqId);
+        if (!prereq || !prereq.completedbySet.has(userId)) {
           return;
         }
       }

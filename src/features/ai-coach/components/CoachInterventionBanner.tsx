@@ -3,7 +3,7 @@ import { buttonTap } from '../../../utils/haptics';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
-import { Text } from '../../../components';
+import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import type { CoachInterventionBannerProps } from './intervention-types';
@@ -24,13 +24,18 @@ export function CoachInterventionBanner({
   onDismiss,
 }: CoachInterventionBannerProps): JSX.Element | null {
   const [isDismissed, setIsDismissed] = useState(false);
+  const [prevInterventionId, setPrevInterventionId] = useState<string | null | undefined>(intervention?.id);
   const [storage] = useState(
     () => new MMKVStorageAdapter('coach-interventions'),
   );
 
+  if (intervention?.id !== prevInterventionId) {
+    setPrevInterventionId(intervention?.id);
+    setIsDismissed(false);
+  }
+
   useEffect(() => {
     if (!intervention) {
-      setIsDismissed(false);
       return;
     }
     const checkDismissal = (): void => {

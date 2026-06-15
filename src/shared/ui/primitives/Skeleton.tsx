@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
   interpolate,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 interface SkeletonProps {
   width?: number | string;
@@ -75,7 +75,7 @@ export function Skeleton({
         : width;
     return (
       <View
-        key={index}
+        key={`skeleton-line-${index}`}
         style={[
           styles.skeleton,
           {

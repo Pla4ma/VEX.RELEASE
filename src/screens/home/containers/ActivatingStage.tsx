@@ -9,7 +9,7 @@ interface StageProps {
   sharedInput: NewUserContainerInput;
 }
 
-export function ActivatingStage({ sharedInput }: StageProps): JSX.Element {
+export function ActivatingStage({ sharedInput }: StageProps): React.ReactNode {
   const model = useActivatingContainerModel(sharedInput);
   const data = useActivatingHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;

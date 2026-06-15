@@ -4,7 +4,7 @@
  * Individual event tracking functions for challenge engagement.
  */
 
-import { getAnalyticsService } from '../../../analytics';
+import { getAnalyticsService } from '../../../analytics/AnalyticsService';
 
 const analytics = getAnalyticsService();
 

@@ -11,10 +11,10 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import type { SessionSuggestion } from './session-suggestions-types';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 /**
  * Individual suggestion card
@@ -27,7 +27,7 @@ export function SuggestionCard({
   suggestion: SessionSuggestion;
   index: number;
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
 

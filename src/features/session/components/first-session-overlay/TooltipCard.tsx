@@ -6,7 +6,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../../components/primitives/Text';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import type { TooltipCardProps } from './types';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -16,7 +16,7 @@ export function TooltipCard({
   onNext,
   onDismiss,
   isLast,
-}: TooltipCardProps): JSX.Element {
+}: TooltipCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -28,11 +28,7 @@ export function TooltipCard({
         padding: theme.spacing[5],
         marginHorizontal: theme.spacing[6],
         maxWidth: 320,
-        shadowColor: lightColors.text.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.85,
-        shadowRadius: 12,
-        elevation: 8,
+        boxShadow: `0px 4px 12px ${lightColors.text.primary} / 0.85`,
       }}
     >
       {/* Icon */}
@@ -108,4 +104,4 @@ export function TooltipCard({
       </View>
     </Animated.View>
   );
-}
+}

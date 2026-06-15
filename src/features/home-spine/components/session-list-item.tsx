@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import {
   type SessionListItem,
@@ -13,7 +13,7 @@ import {
   getGradeColor,
 } from './session-list-utils';
 
-export function SessionItemSkeleton(): JSX.Element {
+export function SessionItemSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box flexDirection="row" alignItems="center" py="md" px="lg" gap="md">
@@ -47,7 +47,7 @@ export function SessionItemSkeleton(): JSX.Element {
   );
 }
 
-export function RecentSessionsSkeleton(): JSX.Element {
+export function RecentSessionsSkeleton(): React.ReactNode {
   return (
     <Box>
       <SessionItemSkeleton />
@@ -57,7 +57,7 @@ export function RecentSessionsSkeleton(): JSX.Element {
   );
 }
 
-export function EmptyState(): JSX.Element {
+export function EmptyState(): React.ReactNode {
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Box py="xl" px="lg" alignItems="center" justifyContent="center" gap="md">
@@ -79,7 +79,7 @@ export function SessionRow({
 }: {
   session: SessionListItem;
   onPress?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const accentColor = getGradeColor(session.qualityGrade, theme);
   const hasInterruptions = session.interruptions > 0;

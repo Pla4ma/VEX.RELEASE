@@ -3,7 +3,7 @@ import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import type { SquadCompletionToast } from './SquadSyncIndicator.types';
 
 interface CompletionToastProps {
@@ -14,7 +14,7 @@ interface CompletionToastProps {
 export function SquadCompletionToastView({
   toast,
   onDismiss,
-}: CompletionToastProps): JSX.Element {
+}: CompletionToastProps): React.ReactNode {
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export function SquadEncouragementToastView({
   message,
 }: {
   message: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import { TextInput, Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { PRESETS, type DurationPreset } from './duration-picker-types';
 
 export function CustomDurationInput({
@@ -15,7 +15,7 @@ export function CustomDurationInput({
   onChange: (minutes: number) => void;
   isActive: boolean;
   onActivate: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const [inputValue, setInputValue] = React.useState(
     value && !PRESETS.includes(value as DurationPreset) ? value.toString() : '',

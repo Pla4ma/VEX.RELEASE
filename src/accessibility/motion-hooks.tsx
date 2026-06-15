@@ -28,7 +28,9 @@ export function useMotionAccessibility(): MotionPreferences & {
     const unsubscribe = motionAccessibilityManager.addListener(() => {
       setPreferences(motionAccessibilityManager.getPreferences());
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const updatePreferences = React.useCallback(

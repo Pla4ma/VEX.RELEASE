@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 import { createDebugger } from '../../../utils/debug';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 
 const debug = createDebugger('monetization:validation');
 

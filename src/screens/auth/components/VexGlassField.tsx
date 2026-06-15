@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type VexGlassFieldProps = {
   label: string;
@@ -47,10 +47,7 @@ export function VexGlassField({
           borderWidth: 1,
           borderColor,
           backgroundColor: semantic.liquidInput,
-          shadowColor: isFocused ? semantic.liquidOrange : semantic.liquidShadow,
-          shadowOffset: { width: 0, height: 14 },
-          shadowOpacity: isFocused ? 0.28 : 0.18,
-          shadowRadius: isFocused ? 30 : 18,
+          boxShadow: '0px 14px isFocused ? 30 : 18px isFocused ? semantic.liquidOrange : semantic.liquidShadow / isFocused ? 0.28 : 0.18',
         }}
       >
         <TextInput

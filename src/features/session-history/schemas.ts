@@ -5,7 +5,7 @@ import {
   SessionConfigSchema,
   SessionStatusSchema,
   SessionSummarySchema,
-} from '../../session/types';
+} from $1../../session/types/schemas$1;
 
 export const SupabaseSessionRowSchema = z.object({
   id: z.string().min(1),

@@ -60,13 +60,13 @@ export function useCoachState(userId: string): UseCoachStateResult {
     }),
     [store.reduceNotifications, store.selectedPersona, userId],
   );
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error, status } = useQuery({
     queryKey: COACH_QUERY_KEYS.state(userId),
     queryFn: async () => {
-      if (!network.isConnected) {
-        return fallbackState();
-      }
-      return (await fetchCoachState(userId)) ?? fallbackState();
+    if (!network.isConnected) {
+    return fallbackState();
+    }
+    return (await fetchCoachState(userId)) ?? fallbackState();
     },
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
@@ -74,19 +74,33 @@ export function useCoachState(userId: string): UseCoachStateResult {
     retry: RETRY_CONFIG.maxRetries,
     retryDelay: RETRY_CONFIG.retryDelay,
     networkMode: 'offlineFirst',
-  });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const handleRetry = useCallback(() => {
     setIsRetrying(true);
-    query.refetch().finally(() => setIsRetrying(false));
+    refetch().finally(() => setIsRetrying(false));
   }, [query]);
   return {
-    data: query.data ?? null,
-    isLoading: query.isPending,
-    isError: query.isError,
-    error: query.error,
+    data: data ?? null,
+    isLoading: isPending,
+    isError: isError,
+    error: error,
     isRetrying,
-    isDegraded: !network.isConnected || query.status === 'error',
-    refetch: async (options?: RefetchOptions) => query.refetch(options),
+    isDegraded: !network.isConnected || status === 'error',
+    refetch: async (options?: RefetchOptions) => refetch(options),
     retry: handleRetry,
   };
 }

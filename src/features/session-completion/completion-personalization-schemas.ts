@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { SessionSummarySchema } from '../../session/types';
+import { SessionSummarySchema } from '../../session/types/schemas';
 import { LaneSchema } from '../lane-engine/schemas';
 
 export const CompletionMemoryCandidateSchema = z

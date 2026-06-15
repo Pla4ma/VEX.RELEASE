@@ -7,9 +7,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
-export function BossPreviewSkeleton(): JSX.Element {
+export function BossPreviewSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box m="lg" p="lg" borderRadius="xl" bg={theme.colors.background.secondary}>
@@ -45,7 +45,7 @@ export function HealthBar({
 }: {
   healthPercent: number;
   animated?: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progressValue = useSharedValue(0);
   React.useEffect(() => {
@@ -123,7 +123,7 @@ export function EscapeTimer({
   hoursRemaining,
 }: {
   hoursRemaining: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const isUrgent = hoursRemaining <= 6;
   const isWarning = hoursRemaining <= 12;

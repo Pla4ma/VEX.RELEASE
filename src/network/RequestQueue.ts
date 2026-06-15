@@ -1,4 +1,4 @@
-import { getStorageManager } from '../persistence';
+import { getStorageManager } from '../persistence/StorageManager';
 import type { Nullable } from '../types/global';
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('network');

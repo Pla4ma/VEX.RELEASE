@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
-export function EmptyStakesMessage(): JSX.Element {
+export function EmptyStakesMessage(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View

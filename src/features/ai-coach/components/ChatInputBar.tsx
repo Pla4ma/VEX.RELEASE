@@ -16,7 +16,7 @@ export function ChatInputBar({
   onChangeText,
   onSend,
   disabled,
-}: ChatInputBarProps): JSX.Element {
+}: ChatInputBarProps): React.ReactNode {
   return (
     <View style={styles.inputContainer}>
       <TextInput

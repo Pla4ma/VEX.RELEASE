@@ -8,7 +8,7 @@ import Animated, {
   withSequence,
 } from 'react-native-reanimated';
 import { useFadeIn } from '../hooks/useReanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { overlayStyles as styles } from './loadingOverlay.styles';
 
 interface LoadingOverlayProps {

@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { TabBarProps } from './TabBar.types';
 import { styles } from './TabBar.styles';
 import TabItemComponent from './TabItemComponent';

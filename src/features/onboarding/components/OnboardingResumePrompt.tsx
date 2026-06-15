@@ -99,7 +99,7 @@ export function OnboardingResumePrompt({
             )}
             <Box gap="sm">
               <Button
-                variant="primary"
+                <Text>variant="primary"</Text>
                 size="lg"
                 onPress={handleResume}
                 disabled={selectedAction !== null}
@@ -111,7 +111,7 @@ export function OnboardingResumePrompt({
                 Continue Setup →
               </Button>
               <Button
-                variant="secondary"
+                <Text>variant="secondary"</Text>
                 size="md"
                 onPress={handleRestart}
                 disabled={selectedAction !== null}
@@ -123,7 +123,7 @@ export function OnboardingResumePrompt({
                 Start Fresh
               </Button>
               <Button
-                variant="ghost"
+                <Text>variant="ghost"</Text>
                 size="sm"
                 onPress={handleDismiss}
                 disabled={selectedAction !== null}

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { LiquidGlassObject } from '../../../components/glass/LiquidGlassObject';
 
-export function VexFocusDecorations(): JSX.Element {
+export function VexFocusDecorations(): React.ReactNode {
   return (
     <>
       <View

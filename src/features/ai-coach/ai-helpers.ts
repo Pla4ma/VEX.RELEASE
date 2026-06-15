@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { CoachInputContract } from './input/input-contract';
 import type { CoachPriority, CoachSuggestion } from './recommendation/suggestion-schemas';
 import { v4 } from '../../utils/uuid';

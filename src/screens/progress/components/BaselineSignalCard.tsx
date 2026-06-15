@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import { GOAL_OPTIONS } from '../../../features/onboarding/service';
 import type { FocusGoal } from '../../../features/onboarding/schemas';
@@ -20,7 +20,7 @@ const GOAL_ICONS: Record<FocusGoal, string> = {
   PERSONAL: 'heart',
 };
 
-export function BaselineSignalCard(): JSX.Element {
+export function BaselineSignalCard(): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const goal = useOnboardingStore((state) => state.goal);
   const setGoal = useOnboardingStore((state) => state.setGoal);
@@ -62,7 +62,7 @@ export function BaselineSignalCard(): JSX.Element {
           <Text
             style={{
               color: vexLightGlass.mint[700],
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: '800',
               letterSpacing: 1.5,
             }}

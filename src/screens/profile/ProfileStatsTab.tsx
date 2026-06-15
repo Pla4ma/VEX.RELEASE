@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Text } from '../../components/primitives';
+import { Box, Text } from '../../components/primitives/Box';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { RealisticModeOrb } from '../../components/glass/RealisticModeOrb';
 import { VexAssetImage } from '../../components/glass/VexAssetImage';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import {
   type ProfileStatItem,
 } from './components/ProfileStatTile';
@@ -43,7 +43,7 @@ const BESTS = [
   { label: 'Comeback', value: '3d', mode: 'recovery' },
 ] as const;
 
-function ProfileStatsError(): JSX.Element {
+function ProfileStatsError(): React.ReactNode {
   return (
     <GlassCard padding={16} radius={22} size="md" variant="warning">
       <Box alignItems="center" flexDirection="row" gap={12}>

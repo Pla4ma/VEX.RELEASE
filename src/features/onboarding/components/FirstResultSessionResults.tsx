@@ -7,7 +7,7 @@
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { FocusScoreChange } from './FocusScoreChange';
 import type { SessionGradingResult } from '../../session-completion/grading-schemas';
 
@@ -27,7 +27,7 @@ export function FirstResultSessionResults({
   focusScoreBefore,
   focusScoreAfter,
   gradingResult,
-}: FirstResultSessionResultsProps): JSX.Element {
+}: FirstResultSessionResultsProps): React.ReactNode {
   const { theme } = useTheme();
   const xpEarned = Math.floor(
     sessionDuration * 2 * (gradingResult.xpQualityMultiplier || 1),

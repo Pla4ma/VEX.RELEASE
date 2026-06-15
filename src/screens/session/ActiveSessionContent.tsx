@@ -11,7 +11,7 @@ import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlay
 import { CoachSessionBannerLazy } from './components/CoachSessionBannerLazy';
 import { ActiveSessionBottomControls } from './ActiveSessionBottomControls';
 import { ModeActiveIndicatorBar } from '../../features/mode-native/components/ModeRescueSurface';
-import { useNetInfo } from '../../network';
+import { useNetInfo } from '../../network/useNetInfo';
 import {
   ENABLE_SESSION_COMPANION_LAYER,
   ENABLE_SESSION_COACH_BANNER,

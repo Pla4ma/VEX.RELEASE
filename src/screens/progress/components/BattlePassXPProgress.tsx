@@ -28,7 +28,7 @@ export function BattlePassXPProgress({
   tierXP,
   currentTier,
   totalTiers,
-}: BattlePassXPProgressProps): JSX.Element {
+}: BattlePassXPProgressProps): React.ReactNode {
   const { theme } = useTheme();
 
   const progress = tierXP > 0 ? (currentXP / tierXP) * 100 : 0;

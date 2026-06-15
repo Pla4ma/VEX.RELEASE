@@ -23,7 +23,7 @@ export function CaptureSheet({
   userId,
   onClose,
   onSuccess,
-}: CaptureSheetProps): JSX.Element {
+}: CaptureSheetProps): React.ReactNode {
   const { state, setType, setContent } = useCaptureForm();
   const mutation = useCaptureMutation(userId);
   const [submitted, setSubmitted] = useState(false);
@@ -162,7 +162,7 @@ export function CaptureSheet({
           )}
 
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="lg"
             fullWidth
             style={{ marginTop: spacing[5] }}

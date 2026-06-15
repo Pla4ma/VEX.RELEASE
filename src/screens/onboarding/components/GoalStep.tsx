@@ -5,8 +5,8 @@ import { Text } from '../../../components/primitives/Text';
 import {
   ONBOARDING_GOALS,
   type OnboardingGoal,
-} from '../../../features/onboarding';
-import { useTheme } from '../../../theme';
+} from $1../../../features/onboarding/constants$1;
+import { useTheme } from $1../../../features/onboarding/constants$1;
 import { styles } from '../styles';
 import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 
@@ -15,7 +15,7 @@ type GoalStepProps = {
   onSelectGoal: (goal: OnboardingGoal) => void;
 };
 
-export function GoalStep({ goal, onSelectGoal }: GoalStepProps): JSX.Element {
+export function GoalStep({ goal, onSelectGoal }: GoalStepProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

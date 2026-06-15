@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMemoryPanel, MemoryPanel } from '../../../features/focus-memory';
+import { useMemoryPanel, MemoryPanel } from '../../../features/focus-memory/useMemoryPanel';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
 

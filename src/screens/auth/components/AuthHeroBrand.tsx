@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
 import { VexFocusMark } from './VexFocusMark';
@@ -26,7 +26,7 @@ export function AuthHeroBrand({
   label,
   title = 'VEX',
   tagline = 'Protect one block. Leave with proof.',
-}: AuthHeroBrandProps): JSX.Element {
+}: AuthHeroBrandProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const glowOpacity = useSharedValue(0.3);
@@ -101,9 +101,7 @@ export function AuthHeroBrand({
         style={[
           {
             marginVertical: theme.spacing[2],
-            shadowColor: theme.colors.semantic.vexCyan,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 24,
+            boxShadow: `0px 0px 24px ${theme.colors.semantic.vexCyan}`,
           },
           glowStyle,
         ]}
@@ -130,10 +128,7 @@ export function AuthHeroBrand({
             backgroundColor: theme.colors.semantic.vexCyan,
             borderRadius: 1,
             marginTop: theme.spacing[2],
-            shadowColor: theme.colors.semantic.vexCyan,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.5,
-            shadowRadius: 8,
+            boxShadow: `0px 0px 8px ${theme.colors.semantic.vexCyan} / 0.5`,
           },
           dividerStyle,
         ]}
@@ -157,4 +152,4 @@ export function AuthHeroBrand({
   );
 }
 
-export default AuthHeroBrand;
+export default AuthHeroBrand;

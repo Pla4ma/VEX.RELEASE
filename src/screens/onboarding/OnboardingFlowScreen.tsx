@@ -12,13 +12,13 @@
  * - 'SessionStack' screen: 'SessionSetup' presetId: 'onboarding_first_session'
  */
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 
-import { ONBOARDING_GOALS } from '../../features/onboarding';
+import { ONBOARDING_GOALS } from '../../features/onboarding/constants';
 import { Text } from '../../components/primitives/Text';
 import {
   MOTIVATION_STYLE_OPTIONS,
@@ -34,20 +34,20 @@ import {
   FloatingChoiceCard,
   OnboardingCinematicIntro,
   SerifTitle,
-} from './components/ethereal';
-import { LaneChoiceStep } from './components/LaneChoiceStep';
+} from $1./components/ethereal/EtherealOnboardingShell$1;
+import { LaneChoiceStep } from $1./components/ethereal/EtherealOnboardingShell$1;
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
 import type { Lane } from '../../features/lane-engine';
 import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES, GUIDE_COPY } from './onboarding-flow-copy';
 
-export function OnboardingFlowScreen(): JSX.Element {
+export function OnboardingFlowScreen(): React.ReactNode {
   const route = useRoute<OnboardingRouteProp>();
   const navigation = useNavigation<any>();
   const isFocused = useIsFocused();
   const flow = useOnboardingFlow(route.params?.step);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [hasSeenCinematicIntro, setHasSeenCinematicIntro] = useState(false);
-  const choiceWrapStyle = { gap: 8, marginTop: 2 };
+  const choiceWrapStyle = useMemo(() => ({ gap: 8, marginTop: 2 }), []);
 
   // Step 5 launch step check - ensures we don't advance past the session launch step
   // when not on the last step (step !== LAST_STEP_INDEX)
@@ -77,10 +77,6 @@ export function OnboardingFlowScreen(): JSX.Element {
       });
     }
   }, [navigation, flow.userId, flow.chosenLane]);
-
-  if (!flow.userId) {
-    return <SignedOutOnboardingState />;
-  }
 
   const { isContinueDisabled } = getStepValidation(
     flow.step,
@@ -216,6 +212,10 @@ export function OnboardingFlowScreen(): JSX.Element {
     [flow, guideCopy, handleStartFirstSession],
   );
 
+  if (!flow.userId) {
+    return <SignedOutOnboardingState />;
+  }
+
   if (!hasSeenCinematicIntro) {
     return (
       <View style={{ flex: 1 }}>
@@ -260,7 +260,7 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 }
 
-function SignedOutOnboardingState(): JSX.Element {
+function SignedOutOnboardingState(): React.ReactNode {
   return (
     <View style={{ flex: 1 }}>
       <EtherealSkyBackground />

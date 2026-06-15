@@ -1,7 +1,7 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import { integrationCache } from './integration-types';
-import * as repository from './repository';
+import { bulkInsertAnalyticsEvents } from './repository/stats';
 import { generateInsights } from './service';
 import { updateIntegrationState, getTimeOfDay } from './integration-helpers';
 
@@ -53,7 +53,7 @@ export async function trackSessionCompleted(
       await generateInsights(userId);
     }
 
-    await repository.bulkInsertAnalyticsEvents([
+    await bulkInsertAnalyticsEvents([
       {
         user_id: userId,
         metric_type: 'sessions_completed',
@@ -98,7 +98,7 @@ export async function trackBossEncounter(
   },
 ): Promise<void> {
   try {
-    await repository.bulkInsertAnalyticsEvents([
+    await bulkInsertAnalyticsEvents([
       {
         user_id: userId,
         metric_type: 'boss_damage_dealt',
@@ -127,7 +127,7 @@ export async function trackItemCrafted(
   itemData: { itemId: string; rarity: string; coinsSpent: number },
 ): Promise<void> {
   try {
-    await repository.bulkInsertAnalyticsEvents([
+    await bulkInsertAnalyticsEvents([
       {
         user_id: userId,
         metric_type: 'items_crafted',

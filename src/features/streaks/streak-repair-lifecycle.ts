@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
 import type { StreakRepairQuest, RepairQuestStatus } from './streak-repair-quest';
 

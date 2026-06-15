@@ -29,18 +29,29 @@ export function useMemoryPanel(userId: string | null) {
   const { isVisible, isLoading: isVisibilityLoading } =
     useMemoryConsoleVisibility(userId);
 
-  const memoriesQuery = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['memory-panel', userId],
     queryFn: async () => {
-      if (!userId) {return { items: [], hasEnoughSessions: false };}
-      const memories = await listActiveMemories(userId);
-      const hasEnoughSessions = memories.length >= 0; // actually checked by visibility
-      const items = memories.map((m) => toPanelItem(m, false));
-      return { items, hasEnoughSessions };
+    if (!userId) {return { items: [], hasEnoughSessions: false };}
+    const memories = await listActiveMemories(userId);
+    const hasEnoughSessions = memories.length >= 0; // actually checked by visibility
+    const items = memories.map((m) => toPanelItem(m, false));
+    return { items, hasEnoughSessions };
     },
     enabled: Boolean(userId) && isVisible,
     staleTime: 60_000,
-  });
+    });
+
+
+
+
+
+
+
+
+
+
+
 
   const hideMutation = useMutation({
     mutationFn: async (memoryId: string) => {
@@ -83,11 +94,11 @@ export function useMemoryPanel(userId: string | null) {
   });
 
   return {
-    data: memoriesQuery.data ?? { items: [], hasEnoughSessions: false },
-    isPending: isVisibilityLoading || memoriesQuery.isPending,
-    isError: memoriesQuery.isError,
-    error: memoriesQuery.error,
-    refetch: memoriesQuery.refetch,
+    data: data ?? { items: [], hasEnoughSessions: false },
+    isPending: isVisibilityLoading || isPending,
+    isError: isError,
+    error: error,
+    refetch: refetch,
     isVisible,
     minSessions: WHAT_VEX_LEARNED_MIN_SESSIONS,
     hideMemory: hideMutation.mutate,

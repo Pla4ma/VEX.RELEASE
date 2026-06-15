@@ -6,9 +6,9 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Box, Text, Card } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text, Card } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 
@@ -62,7 +62,7 @@ export const LockedSlot: React.FC<{
           <Text
             variant="caption"
             color="text.tertiary"
-            style={{ marginTop: 8, fontSize: 10 }}
+            style={{ marginTop: 8, fontSize: 12 }}
           >
             Tap to add
           </Text>
@@ -138,7 +138,7 @@ export const AchievementSlot: React.FC<{
               fontWeight: '700',
               textAlign: 'center',
               color: rarityColor,
-              fontSize: 11,
+              fontSize: 12,
             }}
             numberOfLines={1}
           >

@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
  * Creates a tunnel-vision effect that signals "serious mode."
  * Pointer-events: none — does not intercept touches.
  */
-export function DeepWorkVignette(): JSX.Element {
+export function DeepWorkVignette(): React.ReactNode {
   return (
     <View pointerEvents="none" style={{ position: 'absolute' as const, left: 0, right: 0, top: 0, bottom: 0 }}>
       <LinearGradient

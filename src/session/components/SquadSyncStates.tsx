@@ -1,8 +1,8 @@
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
-export function SquadSyncLoadingState(): JSX.Element {
+export function SquadSyncLoadingState(): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -20,7 +20,7 @@ export function SquadSyncLoadingState(): JSX.Element {
   );
 }
 
-export function SquadSyncEmptyState(): JSX.Element {
+export function SquadSyncEmptyState(): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -43,7 +43,7 @@ export function SquadSyncHeader({
   focusingCount,
 }: {
   focusingCount: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   return (

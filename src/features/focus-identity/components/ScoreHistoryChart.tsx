@@ -1,3 +1,5 @@
+const padding = { top: 20, right: 40, bottom: 30, left: 40 };
+
 import { View, useWindowDimensions } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
@@ -26,11 +28,10 @@ export function ScoreHistoryChart({
   days = 90,
   height = 200,
   showGrid = true,
-}: ScoreHistoryChartProps): JSX.Element {
+}: ScoreHistoryChartProps): React.ReactNode {
   const { width: screenWidth } = useWindowDimensions();
   const { history, status } = useFocusScoreHistory(userId, days);
   const chartWidth = screenWidth - 48;
-  const padding = { top: 20, right: 40, bottom: 30, left: 40 };
   const graphWidth = chartWidth - padding.left - padding.right;
   const graphHeight = height - padding.top - padding.bottom;
   const safeHistory = history ?? [];
@@ -162,7 +163,7 @@ export function ScoreHistoryChart({
         <Text
           style={{
             color: vexLightGlass.text.tertiary,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '600',
           }}
         >
@@ -171,4 +172,4 @@ export function ScoreHistoryChart({
       </View>
     </GlassCard>
   );
-}
+}

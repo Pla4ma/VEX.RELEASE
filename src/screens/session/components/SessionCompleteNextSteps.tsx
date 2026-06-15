@@ -25,7 +25,7 @@ export function SessionCompleteNextSteps({
   bottomInset,
   onShare,
   onOpenReflection,
-}: SessionCompleteNextStepsProps): JSX.Element {
+}: SessionCompleteNextStepsProps): React.ReactNode {
   return (
     <>
       {tomorrowPreview && (

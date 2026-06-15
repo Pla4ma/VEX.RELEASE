@@ -12,7 +12,7 @@ import type {
   ContentStudyMetrics,
 } from './types';
 import { CONTENT_STUDY_CONSTANTS } from './types';
-import { getDefaultStorageAdapter } from '../../persistence';
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import { createDebugger } from '../../utils/debug';
 
 const getStorage = () => getDefaultStorageAdapter();

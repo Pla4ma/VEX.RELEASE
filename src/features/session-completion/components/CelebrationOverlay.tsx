@@ -12,11 +12,11 @@ import Animated, {
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, timingPresets } from '../../../theme/tokens/motion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
 import { triggerHaptic } from '../../../utils/haptics';
 import type { UnlockDecision } from '../../unlock-explainer/types';
 import { EvidenceRow } from './EvidenceRow';
@@ -45,7 +45,7 @@ export function CelebrationOverlay({
   featureDescription,
   decision,
   onDismiss,
-}: CelebrationOverlayProps): JSX.Element {
+}: CelebrationOverlayProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const [showEvidence, setShowEvidence] = useState(false);
 

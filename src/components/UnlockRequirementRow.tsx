@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 
 interface UnlockRequirementRowProps {
   label: string;
@@ -12,7 +12,7 @@ interface UnlockRequirementRowProps {
 export function UnlockRequirementRow({
   label,
   progressLabel,
-}: UnlockRequirementRowProps): JSX.Element {
+}: UnlockRequirementRowProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { Box, Card, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import { getMasteryRankDisplay, type MasteryRank } from '../types';
 import {
@@ -24,7 +24,7 @@ export function LockedFeaturePreview({
   userRank: _userRank,
   userPoints,
   onNavigateToMastery,
-}: LockedFeaturePreviewProps): JSX.Element {
+}: LockedFeaturePreviewProps): React.ReactNode {
   const { theme } = useTheme();
   const featureInfo = FEATURE_INFO[feature];
   const requiredRank = FEATURE_REQUIREMENTS[feature];

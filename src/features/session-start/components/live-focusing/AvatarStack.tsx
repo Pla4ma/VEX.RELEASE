@@ -5,7 +5,7 @@ import React from 'react';
 import { Box } from '../../../../components/primitives/Box';
 import { Text } from '../../../../components/primitives/Text';
 import { Avatar } from '../../../../components/Avatar';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 
 interface AvatarStackProps {
   avatars?: Array<{ url?: string; initials: string }>;
@@ -15,7 +15,7 @@ interface AvatarStackProps {
 export function AvatarStack({
   avatars,
   maxDisplay = 4,
-}: AvatarStackProps): JSX.Element {
+}: AvatarStackProps): React.ReactNode {
   const { theme } = useTheme();
   if (!avatars || avatars.length === 0) {
     return (
@@ -40,7 +40,7 @@ export function AvatarStack({
       {displayAvatars.map((avatar, index) => {
         return (
           <Box
-            key={index}
+            key={avatar.id}
             style={{
               marginLeft: index === 0 ? 0 : -8,
               zIndex: displayAvatars.length - index,

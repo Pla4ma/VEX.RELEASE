@@ -6,9 +6,9 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Box, Text, Card } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text, Card } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 
@@ -139,7 +139,7 @@ export const CosmeticPreviewCard: React.FC<{
               fontWeight: isEquipped ? '700' : '600',
               textAlign: 'center',
               color: isEquipped ? rarityColor : theme.colors.text.primary,
-              fontSize: 11,
+              fontSize: 12,
             }}
             numberOfLines={1}
           >
@@ -149,7 +149,7 @@ export const CosmeticPreviewCard: React.FC<{
           {}
           <Text
             style={{
-              fontSize: 9,
+              fontSize: 12,
               fontWeight: '600',
               textTransform: 'uppercase',
               letterSpacing: 0.5,

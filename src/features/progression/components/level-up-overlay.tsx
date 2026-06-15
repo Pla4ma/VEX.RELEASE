@@ -36,6 +36,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
     if (isVisible) {
       levelUp();
       const pieces: ConfettiPiece[] = Array.from({ length: 100 }, (_, i) => ({
@@ -57,12 +58,15 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
       scaleAnim.value = withSpring(1, { damping: 12, stiffness: 100 });
       opacityAnim.value = withTiming(1, { duration: 300 });
       rotateAnim.value = withTiming(1, { duration: 1000 });
-      setTimeout(() => setShowConfetti(false), 5000);
+      timer = setTimeout(() => setShowConfetti(false), 5000);
     } else {
       scaleAnim.value = 0;
       opacityAnim.value = 0;
       rotateAnim.value = 0;
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isVisible, scaleAnim, opacityAnim, rotateAnim]);
 
   const [startColor, endColor] = getTierColor(newLevel);

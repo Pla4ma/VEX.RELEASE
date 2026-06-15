@@ -21,7 +21,7 @@ export function ScoreOverviewCard({
   grade,
   change,
   scoreColor,
-}: ScoreOverviewCardProps): JSX.Element {
+}: ScoreOverviewCardProps): React.ReactNode {
   return (
     <Animated.View entering={FadeIn.delay(100).duration(300)}>
       <Box

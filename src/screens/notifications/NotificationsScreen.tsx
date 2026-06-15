@@ -6,8 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   NotificationLoadingState,

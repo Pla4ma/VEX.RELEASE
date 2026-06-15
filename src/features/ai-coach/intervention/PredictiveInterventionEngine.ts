@@ -1,5 +1,5 @@
 import { featureFlags } from '../../../feature-flags/FeatureFlagEngine';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { createDebugger } from '../../../utils/debug';
 import type {
   BehavioralPattern, RiskPrediction, InterventionResult, SessionRecord,

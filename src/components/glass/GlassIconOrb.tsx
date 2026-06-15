@@ -78,7 +78,7 @@ export function GlassIconOrb({
   size = 64,
   variant = 'mint',
   testID,
-}: GlassIconOrbProps): JSX.Element {
+}: GlassIconOrbProps): React.ReactNode {
   const v = resolveVariant(variant);
   const coreSize = Math.max(size - 24, 26);
 
@@ -89,10 +89,7 @@ export function GlassIconOrb({
         alignItems: 'center',
         height: size,
         justifyContent: 'center',
-        shadowColor: v.glow,
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.82,
-        shadowRadius: 22,
+        boxShadow: '0px 8px 22px v.glow / 0.82',
         width: size,
       }}
     >
@@ -157,10 +154,7 @@ export function GlassIconOrb({
             borderWidth: 1,
             height: coreSize,
             justifyContent: 'center',
-            shadowColor: 'rgba(13, 76, 65, 0.16)',
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.8,
-            shadowRadius: 14,
+            boxShadow: `0px 6px 14px rgba(13, 76, 65, 0.128)`,
             width: coreSize,
           }}
         >

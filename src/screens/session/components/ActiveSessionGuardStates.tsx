@@ -56,7 +56,7 @@ export function ActiveSessionGuardStates({
           Not authenticated
         </Text>
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           onPress={onGoBack}
           accessibilityLabel="Go back to the previous screen"
         >

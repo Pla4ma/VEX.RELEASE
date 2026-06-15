@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react-native';
 
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { createDebugger } from '../../utils/debug';
 
 let isSessionCompletedSubscribed = false;

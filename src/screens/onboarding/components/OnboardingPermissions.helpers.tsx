@@ -8,7 +8,7 @@ import Animated, {
 import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export interface PermissionBenefit {
   mark: string;
@@ -40,7 +40,7 @@ export function BenefitCard({
 }: {
   benefit: PermissionBenefit;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;
   return (
@@ -81,7 +81,7 @@ export function BenefitCard({
   );
 }
 
-export function SuccessAnimation(): JSX.Element {
+export function SuccessAnimation(): React.ReactNode {
   const scale = useSharedValue(0);
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;

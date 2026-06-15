@@ -1,6 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import * as service from '../service';
-import * as repository from '../repository';
+import { fetchInsights } from '../repository/insights';
+import { fetchDetectedPatterns, fetchAnalyticsPreferences } from '../repository/stats';
+import { fetchDefaultDashboard } from '../repository/dashboard';
+import { fetchExportJobs } from '../repository/export-jobs';
+import { fetchSessionHeatmapData } from '../repository/time-series';
 import type {
   TimeRange,
   AnalyticsMetric,
@@ -56,7 +60,7 @@ export function useInsights(
   return useQuery({
     queryKey: analyticsKeys.insights(userId, options),
     queryFn: () =>
-      repository.fetchInsights(userId, {
+      fetchInsights(userId, {
         unreadOnly: options?.unreadOnly,
         limit: options?.limit,
       }),
@@ -74,7 +78,7 @@ export function useDetectedPatterns(userId: string) {
   return useQuery({
     queryKey: analyticsKeys.patterns(userId),
     queryFn: () =>
-      repository.fetchDetectedPatterns(userId, {
+      fetchDetectedPatterns(userId, {
         since: Date.now() - 30 * 24 * 60 * 60 * 1000,
       }),
     staleTime: 30 * 60 * 1000,
@@ -85,7 +89,7 @@ export function useDetectedPatterns(userId: string) {
 export function useDashboardLayout(userId: string) {
   return useQuery({
     queryKey: analyticsKeys.dashboard(userId),
-    queryFn: () => repository.fetchDefaultDashboard(userId),
+    queryFn: () => fetchDefaultDashboard(userId),
     staleTime: 60 * 60 * 1000,
     enabled: !!userId,
   });
@@ -94,7 +98,7 @@ export function useDashboardLayout(userId: string) {
 export function useExportJobs(userId: string) {
   return useQuery({
     queryKey: analyticsKeys.exportJobs(userId),
-    queryFn: () => repository.fetchExportJobs(userId),
+    queryFn: () => fetchExportJobs(userId),
     staleTime: 30 * 1000,
     refetchInterval: 5000,
     enabled: !!userId,
@@ -104,7 +108,7 @@ export function useExportJobs(userId: string) {
 export function useAnalyticsPreferences(userId: string) {
   return useQuery({
     queryKey: analyticsKeys.preferences(userId),
-    queryFn: () => repository.fetchAnalyticsPreferences(userId),
+    queryFn: () => fetchAnalyticsPreferences(userId),
     staleTime: 60 * 60 * 1000,
     enabled: !!userId,
   });
@@ -122,7 +126,7 @@ export function useAnalyticsSummary(userId: string, timeRange: TimeRange) {
 export function useSessionHeatmapData(userId: string, weeks: number) {
   return useQuery({
     queryKey: analyticsKeys.sessionHeatmap(userId, weeks),
-    queryFn: () => repository.fetchSessionHeatmapData(userId, weeks),
+    queryFn: () => fetchSessionHeatmapData(userId, weeks),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     enabled: Boolean(userId) && weeks > 0,

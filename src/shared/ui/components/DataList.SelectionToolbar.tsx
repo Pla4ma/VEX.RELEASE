@@ -4,7 +4,7 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './DataList.styles';
 import type { SelectionToolbarProps } from './DataList.types';
 
@@ -42,7 +42,7 @@ export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
         <View style={styles.toolbarActions}>
           {actions.map((action, index) => (
             <Pressable
-              key={index}
+              key={action.label}
               onPress={action.onPress}
               style={[
                 styles.toolbarAction,

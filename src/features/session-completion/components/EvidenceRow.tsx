@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
 
 export function EvidenceRow({
   label,
@@ -14,7 +14,7 @@ export function EvidenceRow({
   label: string;
   emoji: string;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const entering = isReducedMotion ? undefined : FadeIn.delay(200 + index * 80).duration(300);
 

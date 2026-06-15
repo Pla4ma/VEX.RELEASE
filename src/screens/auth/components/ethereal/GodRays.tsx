@@ -77,7 +77,7 @@ export function GodRays(): React.JSX.Element {
       <Canvas style={{ width, height }}>
         {rays.map((ray, i) => (
           <RayBeam
-            key={i}
+            key={ray.id}
             height={height * 0.9}
             opacity={ray.opacity}
             width={width}

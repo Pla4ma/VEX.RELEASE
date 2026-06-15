@@ -10,7 +10,7 @@ interface EmptyVaultProps {
   onGetChest: () => void;
 }
 
-export function EmptyVault({ onGetChest }: EmptyVaultProps): JSX.Element {
+export function EmptyVault({ onGetChest }: EmptyVaultProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -44,7 +44,7 @@ export function EmptyVault({ onGetChest }: EmptyVaultProps): JSX.Element {
         </Text>
 
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="lg"
           onPress={onGetChest}
           accessibilityLabel="Start a session"

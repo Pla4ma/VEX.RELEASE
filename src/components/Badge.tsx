@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { buttonTap } from '../utils/haptics';
-import { Text } from './primitives';
-import { Icon } from '../icons';
+import { Text } from './primitives/Text';
+import { Icon } from '../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 import {
   type BadgeProps,

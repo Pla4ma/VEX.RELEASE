@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { etherealButton } from '@/theme/tokens/ethereal-sky';
 import { buttonTap } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
@@ -57,10 +57,7 @@ export function VexActivationButton({
             minHeight: 62,
             minWidth: 296,
             paddingHorizontal: theme.spacing[6],
-            shadowColor: etherealButton.buttonShadow,
-            shadowOffset: { width: 0, height: 12 },
-            shadowOpacity: 0.42,
-            shadowRadius: 24,
+            boxShadow: '0px 12px 24px etherealButton.buttonShadow / 0.42',
           }}
         >
           <View

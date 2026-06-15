@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
-import { useTheme } from '../../../theme';
-import { Box, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { RECENT_SEARCHES } from '../searchData';
@@ -35,7 +35,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({ onSelect }) => {
       </Box>
       {RECENT_SEARCHES.map((search, index) => (
         <Pressable
-          key={index}
+          key={search.id}
           style={{
             flexDirection: 'row',
             alignItems: 'center',

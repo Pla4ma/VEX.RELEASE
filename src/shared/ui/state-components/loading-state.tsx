@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useFadeStyle } from './animations';
 import { Skeleton } from './skeleton';
 import { styles } from './styles';
@@ -17,7 +17,7 @@ export function LoadingState({
   skeletonItems = 3,
   style,
   testID,
-}: LoadingStateProps): JSX.Element {
+}: LoadingStateProps): React.ReactNode {
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 200);
   if (variant === 'skeleton') {

@@ -22,7 +22,7 @@ export function SessionSuggestionCard({
   recommendation,
   onAccept,
   onDismiss,
-}: SessionSuggestionCardProps): JSX.Element {
+}: SessionSuggestionCardProps): React.ReactNode {
   const config = TYPE_CONFIG[recommendation.recommendationType];
   const durationMinutes = Math.round(
     (recommendation.suggestedDuration ?? 15 * 60) / 60,

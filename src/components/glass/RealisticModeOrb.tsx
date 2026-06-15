@@ -20,7 +20,7 @@ const ORB_ASSETS: Record<RealisticModeOrbMode, ImageSourcePropType> = {
 export function RealisticModeOrb({
   mode,
   size = 64,
-}: RealisticModeOrbProps): JSX.Element {
+}: RealisticModeOrbProps): React.ReactNode {
   return (
     <View
       pointerEvents="none"
@@ -32,10 +32,7 @@ export function RealisticModeOrb({
         borderWidth: 1,
         height: size,
         justifyContent: 'center',
-        shadowColor: vexLightGlass.mint[700],
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.18,
-        shadowRadius: 18,
+        boxShadow: '0px 12px 18px vexLightGlass.mint[700] / 0.18',
         width: size,
       }}
     >

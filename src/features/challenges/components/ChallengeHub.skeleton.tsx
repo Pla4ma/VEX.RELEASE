@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { useThemeObject } from '../../../theme';
-import { Card } from '../../../components';
+import { useThemeObject } from '../../../theme/ThemeContext';
+import { Card } from '../../../components/primitives/Card';
 import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
 import { styles } from './challenge-hub-styles';
 

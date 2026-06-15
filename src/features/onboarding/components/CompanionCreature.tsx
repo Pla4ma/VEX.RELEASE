@@ -17,12 +17,12 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 /**
  * Animated companion creature with personality
  */
-export function CompanionCreature(): JSX.Element {
+export function CompanionCreature(): React.ReactNode {
   const { theme } = useTheme();
 
   // Breathing animation
@@ -73,11 +73,7 @@ export function CompanionCreature(): JSX.Element {
             alignItems: 'center',
             borderWidth: 3,
             borderColor: `${theme.colors.primary[600]}50`,
-            shadowColor: theme.colors.primary[500],
-            shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.3,
-            shadowRadius: 16,
-            elevation: 8,
+            boxShadow: `0px 8px 16px ${theme.colors.primary}[500] / 0.3`,
           },
         ]}
       >
@@ -121,4 +117,4 @@ export function CompanionCreature(): JSX.Element {
   );
 }
 
-export default CompanionCreature;
+export default CompanionCreature;

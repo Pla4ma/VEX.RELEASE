@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface TopHighlightProps { color: string; stop: number; radius: number }
 
-export function TopHighlight({ color, stop, radius }: TopHighlightProps): JSX.Element {
+export function TopHighlight({ color, stop, radius }: TopHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={[color, 'rgba(255, 255, 255, 0)']} end={{ x: 0, y: 1 }}
@@ -19,7 +19,7 @@ export function TopHighlight({ color, stop, radius }: TopHighlightProps): JSX.El
 
 interface BottomTintProps { color: string; stop: number }
 
-export function BottomTint({ color, stop }: BottomTintProps): JSX.Element {
+export function BottomTint({ color, stop }: BottomTintProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0)', color]} end={{ x: 0, y: 1 }}
@@ -31,7 +31,7 @@ export function BottomTint({ color, stop }: BottomTintProps): JSX.Element {
 
 interface TopAccentBarProps { color: string; radius: number }
 
-export function TopAccentBar({ color, radius }: TopAccentBarProps): JSX.Element {
+export function TopAccentBar({ color, radius }: TopAccentBarProps): React.ReactNode {
   return (
     <>
       <LinearGradient
@@ -52,7 +52,7 @@ export function TopAccentBar({ color, radius }: TopAccentBarProps): JSX.Element 
 
 interface GlassGlowProps { color: string; opacity: number; radius: number }
 
-export function GlassGlow({ color, opacity, radius }: GlassGlowProps): JSX.Element {
+export function GlassGlow({ color, opacity, radius }: GlassGlowProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: color, borderRadius: radius,

@@ -86,7 +86,7 @@ export function PremiumLock({ onOpenPaywall }: { onOpenPaywall: () => void }) {
         Premium insight available
       </Text>
       <Button
-        onPress={onOpenPaywall}
+        <Text>onPress={onOpenPaywall}</Text>
         variant="outline"
         size="sm"
         accessibilityLabel="Unlock premium insights"

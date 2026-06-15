@@ -182,11 +182,21 @@
     },
     "019e9532-5719-78a2-b0c1-260d4b5ca171": {
       "ordinary_no_progress_guard": {
-        "fingerprint": "ordinary|no, `eas_apple_id` is **not** same as `eas_apple_team_id`. meaning: - `eas_apple_id` = apple account email example: `you@email.com` - `eas_apple_team_id` = 10-character apple developer team id example: `abcde12345` - `eas_asc_app_id` = app store connect app numeric id example: `1234567890` - `eas_google_service_account_key_path` = path to google play service account json, or json content depending how script/ci uses it. **get first 4** 1. `eas_apple_id` go to [apple developer](https://developer.apple.com/account) / [app store connect](https://appstoreconnect.apple.com), log in. use login email. that is apple id. 2. `eas_apple_team_id` go to [apple developer account](https://developer.apple.com/account) → membership / membership details. copy `team id`. apple docs call this membership/team info; expo uses it for submit. 3. `eas_asc_app_id` go to [app store connect](https://appstoreconnect.apple.com) → my apps → vex app → app information. find apple id / app store connect app id. it is numeric. not bundle id. if ui hides it, url often contains it: `https://appstoreconnect.apple.com/apps/1234567890/...` that number = `eas_asc_app_id`. 4. `eas_google_service_account_key_path` go google play console: 1. setup → api access 2. link google cloud project if needed 3. create service account 4. in google cloud iam, create json key for that service account 5. back in play console, grant service account app access/release permissions 6. download json file for local submit: ```bash eas secret:create --scope project --name eas_google_service_account_key_path --value \"c:/path/to/service-account.json\" ``` for ci, usually better store json contents or upload credential via eas dashboard, but your current `eas.json` field name says `serviceaccountkeypath`, so it expects a path. **then set** ```bash eas secret:create --scope project --name eas_apple_id --value \"your-login-email\" eas secret:create --scope project --name eas_asc_app_id --value \"numeric-app-id\" eas secret:create --scope project --name eas_apple_team_id --value \"10-char-team-id\" eas secret:create --scope project --name eas_google_service_account_key_path --value \"c:/path/to/service-account.json\" ``` sources: [expo ios submit docs](https://docs.expo.dev/submit/ios/), [expo eas submit config](https://docs.expo.dev/submit/eas-json/), [expo android service account guide](https://github.com/expo/fyi/blob/main/creating-google-service-account.md).",
-        "first_seen_at": "2026-06-14T20:33:16.202Z",
-        "last_seen_at": "2026-06-14T20:33:16.202Z",
+        "fingerprint": "ordinary|added these to eas: ```bash expo_public_supabase_anon_key expo_public_sentry_dsn expo_public_posthog_key ``` remote check now only missing: ```bash supabase_service_role_key ``` android-only missing, ignore if no android: ```bash eas_google_service_account_key_path expo_public_revenuecat_android_key ``` i cannot add `supabase_service_role_key`: not in `.env.local` or `.env.server`. get it: supabase dashboard → project settings → api → `service_role` key. then either send/add it, or run: ```bash eas secret:create --scope project --name supabase_service_role_key --value \"your_service_role_key\" --type string --force --non-interactive ``` then ios secrets done.",
+        "first_seen_at": "2026-06-15T02:20:40.636Z",
+        "last_seen_at": "2026-06-15T02:20:40.636Z",
         "repeat_count": 1,
-        "last_turn_id": "019ec7d6-49a8-7612-819f-9ff48d2666de",
+        "last_turn_id": "019ec913-e884-7e03-b694-6871eb4dccdb",
+        "last_thread_id": null
+      }
+    },
+    "019ec90d-4e74-7b22-b15f-63993e51c5a0": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|“open design” here is not a separate design tool. it means **openai’s computer use design/desktop-control surface**: codex can open and operate windows apps visually through the `computer-use@openai-bundled` plugin. what it can do: - list/open windows apps - take screenshots of app windows - read accessibility ui text - click/type/scroll/drag/press keys - automate apps like notepad, browsers, ides, design tools, etc. what it is not: - not figma - not a design generator by itself - not “opendesign” product/app - not web browsing unless it controls a browser app name confusion likely from link label: `[@open design](plugin://computer-use@openai-bundled)`. the target says real plugin is **computer use**.",
+        "first_seen_at": "2026-06-15T02:15:23.126Z",
+        "last_seen_at": "2026-06-15T02:15:23.126Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ec90f-86ff-7c11-86ef-60b0c9a2b161",
         "last_thread_id": null
       }
     }

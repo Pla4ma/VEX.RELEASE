@@ -7,7 +7,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { resolveColorValue, resolveSpacingValue } from './theme-values';
 import type { BoxProps } from './BoxProps';
 
@@ -72,7 +72,7 @@ export function Box({
   children,
   style,
   ...props
-}: BoxProps): JSX.Element {
+}: BoxProps): React.ReactNode {
   const { theme } = useTheme();
 
   const boxStyle: ViewStyle = {
@@ -156,7 +156,7 @@ export function Box({
  * Create a specialized Box variant
  */
 export function createBox(defaultProps: Partial<BoxProps>) {
-  return function BoxVariant(props: BoxProps): JSX.Element {
+  return function BoxVariant(props: BoxProps): React.ReactNode {
     return <Box {...defaultProps} {...props} />;
   };
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useFadeStyle, useScaleInStyle } from './animations';
 import { styles } from './styles';
 import type { EmptyStateProps } from './types';
@@ -16,7 +16,7 @@ export function EmptyState({
   onSecondaryAction,
   style,
   testID,
-}: EmptyStateProps): JSX.Element {
+}: EmptyStateProps): React.ReactNode {
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 300);
   const scaleStyle = useScaleInStyle(0.9);

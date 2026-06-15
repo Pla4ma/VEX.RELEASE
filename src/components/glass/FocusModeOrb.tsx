@@ -26,7 +26,7 @@ export function FocusModeOrbRaw({
   mode,
   style,
   intensity = 1,
-}: FocusModeOrbProps): JSX.Element {
+}: FocusModeOrbProps): React.ReactNode {
   const c = MODE_CONFIGS[mode];
   if (!c) {
     return <View style={[{ height: size, width: size }, style]} />;
@@ -42,10 +42,7 @@ export function FocusModeOrbRaw({
         {
           height: size,
           width: size,
-          shadowColor: 'rgba(10, 94, 77, 0.25)',
-          shadowOffset: { width: 0, height: size * 0.06 },
-          shadowOpacity: 0.85 * i,
-          shadowRadius: size * 0.12,
+          boxShadow: `0px size * 0.06px size * 0.12px rgba(10, 94, 77, NaN)`,
         },
         style,
       ]}

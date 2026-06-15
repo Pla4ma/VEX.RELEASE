@@ -50,7 +50,7 @@ export function Starfield(): React.JSX.Element {
 
         return (
           <View
-            key={i}
+            key={s.id}
             pointerEvents="none"
             style={{
               position: 'absolute',
@@ -60,10 +60,7 @@ export function Starfield(): React.JSX.Element {
               height: size,
               borderRadius: size / 2,
               backgroundColor: s.color,
-              shadowColor: s.color,
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 0.9,
-              shadowRadius: s.r * 6,
+              boxShadow: '0px 0px s.r * 6px s.color / 0.9',
               opacity: 0.8,
             }}
           />

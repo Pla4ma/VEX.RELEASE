@@ -1,5 +1,5 @@
 import { getSupabaseClient } from '../config/supabase';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { createDebugger } from '../utils/debug';
 import {
   activeChannels,

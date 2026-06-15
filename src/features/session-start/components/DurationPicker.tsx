@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   type DurationPickerProps,
   type DurationPreset,
@@ -21,7 +21,7 @@ export function DurationPicker({
   xpPerMinute = 2,
   isStrictMode = false,
   isLoading = false,
-}: DurationPickerProps): JSX.Element {
+}: DurationPickerProps): React.ReactNode {
   const { theme } = useTheme();
   const [showCustom, setShowCustom] = React.useState(
     !PRESETS.includes(selectedDuration as DurationPreset),

@@ -19,7 +19,7 @@ import { VipPaywallSkeleton } from './VipPaywallSkeleton';
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;
 
-export function VipPaywallScreen(): JSX.Element {
+export function VipPaywallScreen(): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<VipPaywallRouteProp>();
   const insets = useSafeAreaInsets();
@@ -92,7 +92,7 @@ export function VipPaywallScreen(): JSX.Element {
             </Text>
           </View>
           <Button
-            variant="ghost"
+            <Text>variant="ghost"</Text>
             onPress={handleClose}
             size="sm"
             accessibilityLabel="Close Premium paywall"
@@ -150,7 +150,7 @@ export function VipPaywallScreen(): JSX.Element {
         )}
 
         <Button
-          variant="ghost"
+          <Text>variant="ghost"</Text>
           size="sm"
           onPress={handleRestore}
           accessibilityLabel="Restore purchases"
@@ -161,7 +161,7 @@ export function VipPaywallScreen(): JSX.Element {
         </Button>
         {!isPremium && !isLoading && !error ? (
           <Button
-            onPress={handlePurchase}
+            <Text>onPress={handlePurchase}</Text>
             variant="primary"
             size="lg"
             fullWidth

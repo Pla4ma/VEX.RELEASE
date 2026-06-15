@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { brandShadowTokens } from '@/theme/tokens/shadows';
@@ -37,10 +37,7 @@ function StatusDot(): React.JSX.Element {
           height: 6,
           borderRadius: 3,
           backgroundColor: lightColors.semantic.success,
-          shadowColor: lightColors.semantic.success,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.8,
-          shadowRadius: 6,
+          boxShadow: '0px 0px 6px lightColors.semantic.success / 0.8',
         },
         style,
       ]}
@@ -86,10 +83,7 @@ export function VexBrandHeader(): React.JSX.Element {
           pointerEvents="none"
           style={{
             position: 'absolute',
-            shadowColor: brandShadowTokens.primary.color,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.55,
-            shadowRadius: 36,
+            boxShadow: '0px 0px 36px brandShadowTokens.primary.color / 0.55',
           }}
         >
           <Text
@@ -111,10 +105,7 @@ export function VexBrandHeader(): React.JSX.Element {
           style={{
             position: 'absolute',
             top: 8,
-            shadowColor: brandShadowTokens.accent.color,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.85,
-            shadowRadius: 20,
+            boxShadow: '0px 2px 20px brandShadowTokens.accent.color / 0.85',
           }}
         >
           <Text

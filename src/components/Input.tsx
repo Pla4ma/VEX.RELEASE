@@ -11,9 +11,9 @@ import {
   type TextInputProps,
 } from 'react-native';
 
-import { useTheme } from '../theme';
-import { Text } from './primitives';
-import { Icon } from '../icons';
+import { useTheme } from '../theme/ThemeContext';
+import { Text } from './primitives/Text';
+import { Icon } from '../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { type InputProps } from './input-types';
 

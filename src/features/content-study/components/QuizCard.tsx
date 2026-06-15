@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { QuizItemProps } from '../types';
 import { QUIZ_DIFFICULTY_CONFIG } from '../constants';
 import { quizPanelStyles } from './QuizPanelStyles';

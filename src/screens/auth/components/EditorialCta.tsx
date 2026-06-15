@@ -12,7 +12,7 @@ import Animated, {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets } from '../../../theme/tokens/motion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
 import { Platform } from 'react-native';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
@@ -113,10 +113,7 @@ export function EditorialCta({
             backgroundColor: theme.colors.semantic.editorialDeepBackground,
             borderWidth: 1,
             borderColor: theme.colors.semantic.editorialGoldBorder,
-            shadowColor: theme.colors.semantic.editorialGold,
-            shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.85,
-            shadowRadius: 28,
+            boxShadow: '0px 8px 28px theme.colors.semantic.editorialGold / 0.85',
           }}
         >
           {/* Warm vertical wash */}

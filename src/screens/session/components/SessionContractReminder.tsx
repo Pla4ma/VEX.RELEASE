@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { triggerHaptic } from '../../../utils/haptics';
 import {
   getMinTouchTargetStyle,

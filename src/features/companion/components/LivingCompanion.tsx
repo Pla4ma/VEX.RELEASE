@@ -1,3 +1,12 @@
+const PHASE_MULTIPLIERS: Record<CompanionPhase, number> = {
+    EGG: 0.5,
+    HATCHING: 0.7,
+    YOUNG: 0.85,
+    MATURE: 1,
+    AWAKENED: 1.2,
+    TRANSCENDENT: 1.5,
+  };
+
 import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -116,14 +125,6 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   }, [particlePhase, pulsePhase]);
 
   const theme = ELEMENT_THEMES[companionState.element];
-  const PHASE_MULTIPLIERS: Record<CompanionPhase, number> = {
-    EGG: 0.5,
-    HATCHING: 0.7,
-    YOUNG: 0.85,
-    MATURE: 1,
-    AWAKENED: 1.2,
-    TRANSCENDENT: 1.5,
-  };
   const phaseMultiplier = PHASE_MULTIPLIERS[companionState.phase];
 
   const companionStyle = useAnimatedStyle(() => {
@@ -195,4 +196,4 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   );
 };
 
-export { COMPANION_SIZE, PARTICLE_COUNT, companionStyles } from './LivingCompanion.styles';
+export { COMPANION_SIZE, PARTICLE_COUNT, companionStyles } from './LivingCompanion.styles';

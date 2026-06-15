@@ -32,7 +32,7 @@ export function HoloCard({
   accent = 'gold',
   delay = 0,
   float = false,
-}: HoloCardProps): JSX.Element {
+}: HoloCardProps): React.ReactNode {
   const sheenPos = useSharedValue(-1);
   const floatY = useSharedValue(0);
   const op = useSharedValue(0);

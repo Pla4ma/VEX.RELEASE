@@ -8,8 +8,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { sessionStart } from '../../../utils/haptics';
 
 export function StreakCriticalAlert({
@@ -20,7 +20,7 @@ export function StreakCriticalAlert({
   hoursRemaining: number;
   streakDays: number;
   onStartSession: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const pulseStyle = useAnimatedStyle(() => ({
     backgroundColor: withRepeat(

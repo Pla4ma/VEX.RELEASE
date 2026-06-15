@@ -1,4 +1,4 @@
-import { getNetInfoAdapter } from '../network';
+import { getNetInfoAdapter } from '../network/NetInfoAdapter';
 import { getQueueLength, startAutoProcessing } from '../lib/offline/queue';
 import { createDebugger } from '../utils/debug';
 import {
@@ -6,8 +6,8 @@ import {
   capture,
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
-} from '../shared/analytics';
-import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
+} from $1../shared/analytics/analytics-service$1;
+import { setupGlobalErrorHandler, setupRejectionHandler } from $1../shared/analytics/analytics-service$1;
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 import { getMmkvEncryptionKey } from '../persistence/mmkv-key';
 

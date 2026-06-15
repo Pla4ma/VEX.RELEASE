@@ -8,7 +8,7 @@ import type {
   StudyGeneration,
 } from './types';
 import { CONTENT_STUDY_CONSTANTS } from './types';
-import { getDefaultStorageAdapter } from '../../persistence';
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const getStorage = () => getDefaultStorageAdapter();
 

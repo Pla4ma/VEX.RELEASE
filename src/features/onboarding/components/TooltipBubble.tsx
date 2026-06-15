@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -34,7 +34,7 @@ export function TooltipBubble({
   tooltip: Tooltip;
   isActive: boolean;
   onDismiss: () => void;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   const { theme } = useTheme();
 
   const bounceStyle = useAnimatedStyle(() => ({
@@ -80,11 +80,7 @@ export function TooltipBubble({
           borderWidth={2}
           borderColor="primary.500"
           style={{
-            shadowColor: theme.colors.background.elevated,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 8,
+            boxShadow: `0px 4px 8px ${theme.colors.background.elevated} / 0.3`,
           }}
         >
           <Box
@@ -147,7 +143,7 @@ export function TooltipOverlay({
 }: {
   isVisible: boolean;
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   if (!isVisible) {
@@ -177,4 +173,4 @@ export function TooltipOverlay({
       />
     </Animated.View>
   );
-}
+}

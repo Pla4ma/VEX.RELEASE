@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store';
-import { useNetInfo } from '../../network';
+import { useNetInfo } from '../../network/useNetInfo';
 import { QueryKeys } from '../../api/QueryProvider';
 import { trackPromiseViewed } from './analytics';
 import * as service from './service';
@@ -39,27 +39,36 @@ export function useCompanionPromise(): {
   const { isOnline } = useNetInfo();
   const { show } = useToast();
   const viewedRef = useRef<string | null>(null);
-  const query = useQuery({
+  const { data, refetch, error, isError, isPending } = useQuery({
     queryKey: companionPromiseKeys.home(userId ?? 'none'),
     queryFn: async () => {
-      if (!userId) {
-        return { kind: 'hidden', showOfflineBanner: false } as const;
-      }
-      return service.getHomePromiseState(userId, isOnline, getTimeZone());
+    if (!userId) {
+    return { kind: 'hidden', showOfflineBanner: false } as const;
+    }
+    return service.getHomePromiseState(userId, isOnline, getTimeZone());
     },
     enabled: Boolean(userId),
-  });
+    });
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     if (
-      query.data &&
-      hasPromise(query.data) &&
-      query.data.promise.id !== viewedRef.current
+      data &&
+      hasPromise(data) &&
+      data.promise.id !== viewedRef.current
     ) {
-      viewedRef.current = query.data.promise.id;
-      trackPromiseViewed(query.data.promise, 'home');
+      viewedRef.current = data.promise.id;
+      trackPromiseViewed(data.promise, 'home');
     }
-  }, [query.data]);
+  }, [data]);
 
   const invalidate = async (): Promise<void> => {
     if (!userId) {
@@ -112,15 +121,15 @@ export function useCompanionPromise(): {
     ? ({ kind: 'hidden', showOfflineBanner: false } as const)
     : ({ kind: 'offline', showOfflineBanner: true } as const);
   const rerunQuery = (): void => {
-    const refresh = query.refetch;
+    const refresh = refetch;
     refresh();
   };
 
   return {
-    data: query.data ?? fallbackData,
-    error: query.error instanceof Error ? query.error : null,
-    isError: query.isError,
-    isPending: query.isPending,
+    data: data ?? fallbackData,
+    error: error instanceof Error ? error : null,
+    isError: isError,
+    isPending: isPending,
     refetch: rerunQuery,
     keepPromise: async (promise) => {
       await keepPromiseMutation.mutateAsync(promise);

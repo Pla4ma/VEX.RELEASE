@@ -1,3 +1,12 @@
+const categories: AchievementCategory[] = [
+    'SESSION',
+    'STREAK',
+    'BOSS',
+    'SOCIAL',
+    'PROGRESSION',
+    'ECONOMY',
+  ];
+
 import type { AchievementCategory, AchievementRarity } from './types';
 import {
   useAchievements,
@@ -60,14 +69,6 @@ export function useAchievementStats(userId: string): {
   const pointsEarned = data
     .filter((a) => a.isUnlocked)
     .reduce((sum, a) => sum + a.pointValue, 0);
-  const categories: AchievementCategory[] = [
-    'SESSION',
-    'STREAK',
-    'BOSS',
-    'SOCIAL',
-    'PROGRESSION',
-    'ECONOMY',
-  ];
   const byCategory: Record<
     AchievementCategory,
     { total: number; unlocked: number }
@@ -118,4 +119,4 @@ export function useAchievementStats(userId: string): {
     isLoading,
     isError,
   };
-}
+}

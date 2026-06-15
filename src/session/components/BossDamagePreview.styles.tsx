@@ -10,9 +10,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
-export function BossDamageSkeleton(): JSX.Element {
+export function BossDamageSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box p="md" borderRadius="lg" bg={`${theme.colors.background.elevated}80`}>
@@ -42,7 +42,7 @@ export function BossDamageSkeleton(): JSX.Element {
   );
 }
 
-export function BossIcon({ willDefeat }: { willDefeat: boolean }): JSX.Element {
+export function BossIcon({ willDefeat }: { willDefeat: boolean }): React.ReactNode {
   const { theme } = useTheme();
   const scaleValue = useSharedValue(1);
   const rotateValue = useSharedValue(0);
@@ -102,7 +102,7 @@ export function DamageEstimate({
 }: {
   damage: number;
   willDefeat: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box flexDirection="row" alignItems="center" gap="xs" mt="xs">

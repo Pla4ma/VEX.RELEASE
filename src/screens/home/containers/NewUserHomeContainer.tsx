@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import type {} from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { HomeViewModel } from '../hooks/home-view-model';

@@ -23,7 +23,7 @@ export function PaywallFooterActions({
   plans,
   onPurchase,
   onRestore,
-}: PaywallFooterActionsProps): JSX.Element {
+}: PaywallFooterActionsProps): React.ReactNode {
   const annual = plans[0];
   const introPrice = annual?.packageInfo?.product.introPrice;
   const ctaLabel = introPrice
@@ -47,7 +47,7 @@ export function PaywallFooterActions({
       ) : null}
       {isPremium ? (
         <Button
-          variant="secondary"
+          <Text>variant="secondary"</Text>
           size="lg"
           fullWidth
           isDisabled
@@ -59,7 +59,7 @@ export function PaywallFooterActions({
         </Button>
       ) : null}
       <Button
-        variant="ghost"
+        <Text>variant="ghost"</Text>
         size="sm"
         onPress={onRestore}
         accessibilityLabel="Restore purchases"

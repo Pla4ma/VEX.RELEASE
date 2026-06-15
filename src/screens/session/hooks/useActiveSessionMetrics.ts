@@ -9,7 +9,7 @@ import {
 import { getStreakMultiplier } from '../../../features/streaks/service';
 import type { SessionTheme } from '../../../features/themes/session-themes';
 import type { SessionHistoryEntry } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useSessionAnimations } from './useSessionAnimations';
 import { useSessionPurity } from './useSessionPurity';
 import {

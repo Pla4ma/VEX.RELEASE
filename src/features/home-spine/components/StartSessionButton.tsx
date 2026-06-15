@@ -10,8 +10,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { StartSessionButtonCompact } from './StartSessionButtonCompact';
 import { useStartSessionButtonColors } from './start-session-button-colors';
 import type { StartSessionButtonProps } from './start-session-button-types';
@@ -32,7 +32,7 @@ export function StartSessionButton({
   testID,
   bossName,
   isFinalStrike = false,
-}: StartSessionButtonProps): JSX.Element {
+}: StartSessionButtonProps): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   const colors = useStartSessionButtonColors(

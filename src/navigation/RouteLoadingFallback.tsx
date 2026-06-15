@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Text } from '../components/primitives';
-import { useTheme } from '../theme';
+import { Text } from '../components/primitives/Text';
+import { useTheme } from '../theme/ThemeContext';
 
 interface RouteLoadingFallbackProps {
   label?: string;
@@ -10,7 +10,7 @@ interface RouteLoadingFallbackProps {
 
 export function RouteLoadingFallback({
   label = 'Loading',
-}: RouteLoadingFallbackProps): JSX.Element {
+}: RouteLoadingFallbackProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

@@ -18,7 +18,7 @@ const SESSION_MODE_TO_LANE: Record<string, Lane> = {
 };
 
 export const ActiveSessionScreen = withScreenErrorBoundary(
-  function _ActiveSessionScreen(): React.JSX.Element | null {
+  function ActiveSessionScreen(): React.JSX.Element | null {
     const controller = useActiveSessionController();
     const {
       actions,

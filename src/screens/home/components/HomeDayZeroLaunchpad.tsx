@@ -2,9 +2,9 @@ import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useToast } from '../../../shared/ui/components/ToastProvider';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
@@ -25,7 +25,7 @@ export function HomeDayZeroLaunchpad({
   onStartSession,
   onOpenCoach,
   userId,
-}: HomeDayZeroLaunchpadProps): JSX.Element {
+}: HomeDayZeroLaunchpadProps): React.ReactNode {
   const { show: showToast } = useToast();
   const [activeMode, setActiveMode] = useState<Day0Mode | null>(null);
   const [completedActions, setCompletedActions] = useState(0);

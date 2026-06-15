@@ -8,12 +8,12 @@ import {
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
 import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
-import { useActiveStudyPlan } from '../../../features/content-study';
+import { useActiveStudyPlan } from '../../../features/content-study/runtime-barrel';
 import {
   buildLearningSessionParams,
   useLearningExecutionLayer,
-} from '../../../features/learning-execution';
-import { useComebackState } from '../../../features/streaks/hooks';
+} from $1../../../features/learning-execution/service$1;
+import { useComebackState } from $1../../../features/learning-execution/service$1;
 import { getNextBestAction } from '../../../features/progression';
 import {
   getFeatureAvailability,

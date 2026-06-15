@@ -23,7 +23,7 @@ export function HomeExperiencePrelude({
   model,
   firstWeekExperience,
   surfaceMap,
-}: HomeExperiencePreludeProps): JSX.Element {
+}: HomeExperiencePreludeProps): React.ReactNode {
   const selected = useOnboardingStore((state) => state.explicitMotivationStyle);
   const setStyle = useOnboardingStore(
     (state) => state.setExplicitMotivationStyle,

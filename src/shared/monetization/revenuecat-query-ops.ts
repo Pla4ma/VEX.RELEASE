@@ -13,7 +13,7 @@ import {
   createOfferingProperties,
 } from './purchase-events';
 import { hasPremiumEntitlement } from './entitlements';
-import { capture, type PurchaseEvent } from '../analytics';
+import { capture, type PurchaseEvent } from '../analytics/analytics-service';
 import { buildError, mapOfferingToDisplayInfo } from './revenuecat-helpers';
 
 export interface OfferingsOps {

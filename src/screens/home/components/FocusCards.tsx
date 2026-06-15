@@ -5,7 +5,7 @@ import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface FocusScoreCardProps {
@@ -18,7 +18,7 @@ export function FocusScoreCard({
   score = 82,
   delta = '+6',
   status = 'Stable',
-}: FocusScoreCardProps): JSX.Element {
+}: FocusScoreCardProps): React.ReactNode {
   return (
     <GlassCard
       padding={16}
@@ -109,7 +109,7 @@ interface FocusMemoryCardProps {
 
 export function FocusMemoryCard({
   memoryText = 'VEX remembered your next move.',
-}: FocusMemoryCardProps): JSX.Element {
+}: FocusMemoryCardProps): React.ReactNode {
   return (
     <GlassCard
       padding={16}

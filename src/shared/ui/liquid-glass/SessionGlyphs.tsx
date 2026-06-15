@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export type SessionGlyphName =
   | 'casual'

@@ -15,7 +15,7 @@ interface FirstCompletionOverlayProps {
   onComplete: () => void;
 }
 
-function SessionCompleteCard(): JSX.Element {
+function SessionCompleteCard(): React.ReactNode {
   const { theme: _theme } = useTheme();
 
   return (
@@ -76,7 +76,7 @@ function SessionCompleteCard(): JSX.Element {
   );
 }
 
-function ComebackCTA({ onPress }: { onPress: () => void }): JSX.Element {
+function ComebackCTA({ onPress }: { onPress: () => void }): React.ReactNode {
   const { theme: _theme } = useTheme();
 
   return (
@@ -89,7 +89,7 @@ function ComebackCTA({ onPress }: { onPress: () => void }): JSX.Element {
           Come back tomorrow and VEX will be ready.
         </Text>
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="lg"
           fullWidth
           onPress={onPress}
@@ -107,7 +107,7 @@ function ComebackCTA({ onPress }: { onPress: () => void }): JSX.Element {
 export function FirstCompletionOverlay({
   xpEarned: _xpEarned,
   onComplete,
-}: FirstCompletionOverlayProps): JSX.Element {
+}: FirstCompletionOverlayProps): React.ReactNode {
   const { theme } = useTheme();
 
   useEffect(() => {

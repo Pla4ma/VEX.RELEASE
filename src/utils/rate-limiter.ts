@@ -1,7 +1,7 @@
 import { captureSilentFailure } from './silent-failure';
 import { MMKV } from 'react-native-mmkv';
 import { createDebugger } from './debug';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { TokenBucketLimiter } from './token-bucket';
 import type { RateLimitResult } from './token-bucket';
 

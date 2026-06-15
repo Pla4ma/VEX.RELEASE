@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { OnboardingGoal } from './OnboardingChooseGoal';
 
 interface GoalCardProps {
@@ -17,7 +17,7 @@ export function GoalCard({
   isSelected,
   onPress,
   index: _index,
-}: GoalCardProps): JSX.Element {
+}: GoalCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

@@ -27,7 +27,7 @@ export function StarterSessionCompanion({
   sessionProgress,
   elapsedSeconds,
   totalSeconds,
-}: StarterSessionCompanionProps): JSX.Element {
+}: StarterSessionCompanionProps): React.ReactNode {
   // Get encouraging message based on progress
   const getEncouragingMessage = (): string => {
     if (sessionProgress < 0.2) {

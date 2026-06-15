@@ -4,7 +4,7 @@ import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';
@@ -78,7 +78,7 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
         <Text
           style={{
             color: vexLightGlass.text.secondary,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '500',
           }}
         >

@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { awardInsurance } from '../streaks/StreakEvolutionSystem';
 import type { Achievement, AchievementCategory } from './types';
 import type { FeatureUnlock } from './feature-unlocks';
@@ -66,13 +66,14 @@ export function getProgressionGuide(
     .slice(0, 5)
     .map((a) => a.achievement);
   const categoryProgress: Record<string, number> = {};
+  const unlockedidSet = new Set(unlockedIds);
   for (const category of ALL_CATEGORIES) {
     const categoryAchievements = ALL_ACHIEVEMENTS.filter(
       (a) => a.category === category,
     );
     const unlockedInCategory = categoryAchievements.filter((a) =>
       unlockedIds.includes(a.id),
-    ).length;
+      unlockedidSet.has(a.id),
     categoryProgress[category] =
       categoryAchievements.length > 0
         ? (unlockedInCategory / categoryAchievements.length) * 100

@@ -10,7 +10,7 @@ interface GlassBlurLayerProps {
 export function GlassBlurLayer({
   intensity,
   radius,
-}: GlassBlurLayerProps): JSX.Element {
+}: GlassBlurLayerProps): React.ReactNode {
   const alpha = Math.min(0.98, Math.max(0.72, intensity / 82));
 
   return (

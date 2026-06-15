@@ -46,7 +46,7 @@ export function PaywallHero({
   showBoundary,
   theme,
   onClose,
-}: PaywallHeroProps): JSX.Element {
+}: PaywallHeroProps): React.ReactNode {
   const premiumLane = resolveLane(lane);
   const laneCopy = premiumLane ? LANE_PREMIUM_HERO_COPY[premiumLane] : null;
 
@@ -65,7 +65,7 @@ export function PaywallHero({
           </Text>
         </View>
         <Button
-          variant="ghost"
+          <Text>variant="ghost"</Text>
           onPress={onClose}
           accessibilityLabel="Close paywall"
           accessibilityRole="button"

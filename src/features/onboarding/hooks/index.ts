@@ -10,7 +10,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
-import { onboardingRepository } from '../repository/index';
+import { onboardingRepository } from '../repository/OnboardingRepository';
 import type { OnboardingProgress } from '../schemas';
 
 const ONBOARDING_PROGRESS_KEY = 'onboarding-progress';
@@ -44,18 +44,29 @@ export function useOnboardingProgressState() {
   const queryClient = useQueryClient();
   const { show } = useToast();
 
-  const query = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: [ONBOARDING_PROGRESS_KEY, userId],
     queryFn: async () => {
-      if (!userId) {
-        return null;
-      }
-      const state = await onboardingRepository.getProgress(userId);
-      return state ?? defaultProgress(userId);
+    if (!userId) {
+    return null;
+    }
+    const state = await onboardingRepository.getProgress(userId);
+    return state ?? defaultProgress(userId);
     },
     enabled: !!userId,
     staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+    });
+
+
+
+
+
+
+
+
+
+
+
 
   const updateMutation = useMutation({
     mutationFn: async (updates: Partial<OnboardingProgress>) => {
@@ -77,7 +88,7 @@ export function useOnboardingProgressState() {
   });
 
   const markFirstSessionStarted = async (sessionId: string) => {
-    const currentSteps = query.data?.steps ?? defaultProgress(userId!).steps;
+    const currentSteps = data?.steps ?? defaultProgress(userId!).steps;
     await updateMutation.mutateAsync({
       status: 'FIRST_SESSION_IN_PROGRESS',
       steps: {
@@ -95,8 +106,8 @@ export function useOnboardingProgressState() {
   };
 
   const markFirstSessionCompleted = async () => {
-    const currentSteps = query.data?.steps ?? defaultProgress(userId!).steps;
-    const currentFirstSession = query.data?.firstSession ?? {};
+    const currentSteps = data?.steps ?? defaultProgress(userId!).steps;
+    const currentFirstSession = data?.firstSession ?? {};
     await updateMutation.mutateAsync({
       steps: {
         profileStarted: currentSteps.profileStarted,
@@ -122,7 +133,7 @@ export function useOnboardingProgressState() {
   };
 
   const markRewardSeen = async () => {
-    const currentSteps = query.data?.steps ?? defaultProgress(userId!).steps;
+    const currentSteps = data?.steps ?? defaultProgress(userId!).steps;
     await updateMutation.mutateAsync({
       steps: {
         profileStarted: currentSteps.profileStarted,
@@ -135,9 +146,9 @@ export function useOnboardingProgressState() {
   };
 
   return {
-    state: query.data,
-    isLoading: query.isPending,
-    error: query.error,
+    state: data,
+    isLoading: isPending,
+    error: error,
     markFirstSessionStarted,
     markFirstSessionCompleted,
     markNotificationAsked,

@@ -15,7 +15,7 @@ export function ModeRescueSurface({
   lane,
   onStart,
   onDismiss,
-}: ModeRescueSurfaceProps): JSX.Element {
+}: ModeRescueSurfaceProps): React.ReactNode {
   const surface = useModeRescueSurface(lane);
 
   return (
@@ -93,7 +93,7 @@ interface ModeActiveIndicatorProps {
 export function ModeActiveIndicatorBar({
   lane,
   completionPercentage,
-}: ModeActiveIndicatorProps): JSX.Element {
+}: ModeActiveIndicatorProps): React.ReactNode {
   const indicator = useModeActiveIndicator(lane);
 
   return (

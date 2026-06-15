@@ -5,18 +5,22 @@ import { type ProjectThread } from './schemas';
 import { useProjectFocusStore } from './store';
 
 export function useProjectThreads(userId: string | null, enabled = true) {
-  const query = useQuery({
+  const { data, error, isError, isPending, refetch } = useQuery({
     enabled: Boolean(userId) && enabled,
     queryFn: () => listStoredProjectThreads(userId ?? ''),
     queryKey: ['project-focus', userId],
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? [],
-    error: query.error,
-    isError: query.isError,
-    isPending: query.isPending,
-    refetch: query.refetch,
+    data: data ?? [],
+    error: error,
+    isError: isError,
+    isPending: isPending,
+    refetch: refetch,
   };
 }
 

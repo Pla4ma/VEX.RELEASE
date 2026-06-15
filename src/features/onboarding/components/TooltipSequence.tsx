@@ -14,7 +14,7 @@ export function TooltipSequence({
   hasStreak: _hasStreak,
   hasBoss,
   onComplete,
-}: TooltipSequenceProps): JSX.Element {
+}: TooltipSequenceProps): React.ReactNode {
   const [currentTooltipIndex, setCurrentTooltipIndex] = useState(0);
 
   const tooltips: Tooltip[] = [

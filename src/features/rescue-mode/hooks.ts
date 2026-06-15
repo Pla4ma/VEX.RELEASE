@@ -23,18 +23,22 @@ import type {
 } from './schemas';
 
 export function useActiveRescuePlan(userId: string | null) {
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['rescue-mode', userId],
     queryFn: () => getActiveRescuePlan(userId ?? ''),
     enabled: Boolean(userId),
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? null,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
+    data: data ?? null,
+    isPending: isPending,
+    isError: isError,
+    error: error,
+    refetch: refetch,
   };
 }
 

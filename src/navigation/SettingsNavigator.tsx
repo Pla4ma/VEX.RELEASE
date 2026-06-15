@@ -17,7 +17,7 @@ import PrivacySettingsScreen from '../screens/settings/PrivacySettingsScreen';
 import AccountSettingsScreen from '../screens/settings/AccountSettingsScreen';
 import { DataExportScreen } from '../screens/settings/DataExportScreen';
 import type { SettingsStackParams } from './types';
-import { lightColors } from '../theme/tokens';
+import { lightColors } from '../theme/tokens/colors';
 
 const Stack = createNativeStackNavigator<SettingsStackParams>();
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Text } from '../primitives';
-import { useTheme } from '../../theme';
+import { Text } from '../primitives/Text';
+import { useTheme } from '../../theme/ThemeContext';
 
 interface StepIndicatorProps {
   steps: number;

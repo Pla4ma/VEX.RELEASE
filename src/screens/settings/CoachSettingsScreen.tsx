@@ -3,9 +3,9 @@ import React, { useState, useCallback } from 'react';
 import { ScrollView, Pressable, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
-import { Icon } from '../../icons';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
 
@@ -23,7 +23,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass';
+} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 

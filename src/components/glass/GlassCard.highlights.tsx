@@ -7,7 +7,7 @@ interface HighlightProps {
   radius?: number;
 }
 
-export function CardTopHighlight({ color, radius = 999 }: HighlightProps): JSX.Element {
+export function CardTopHighlight({ color, radius = 999 }: HighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={[color, 'rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0)']}
@@ -29,7 +29,7 @@ export function CardTopHighlight({ color, radius = 999 }: HighlightProps): JSX.E
   );
 }
 
-export function CardInnerGlow({ color, radius = 999 }: HighlightProps): JSX.Element {
+export function CardInnerGlow({ color, radius = 999 }: HighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={[color, 'rgba(132, 228, 229, 0.04)', 'rgba(255, 255, 255, 0)']}
@@ -51,7 +51,7 @@ export function CardInnerGlow({ color, radius = 999 }: HighlightProps): JSX.Elem
   );
 }
 
-export function CardBottomShadow({ radius = 999 }: { radius?: number }): JSX.Element {
+export function CardBottomShadow({ radius = 999 }: { radius?: number }): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0)', 'rgba(10, 94, 77, 0.06)', 'rgba(10, 94, 77, 0.1)']}
@@ -73,7 +73,7 @@ export function CardBottomShadow({ radius = 999 }: { radius?: number }): JSX.Ele
   );
 }
 
-export function CardEdgeRefraction({ side }: { side: 'left' | 'right' }): JSX.Element {
+export function CardEdgeRefraction({ side }: { side: 'left' | 'right' }): React.ReactNode {
   const colors = side === 'right'
     ? ['rgba(255, 255, 255, 0)', 'rgba(18, 184, 148, 0.06)', 'rgba(255, 255, 255, 0)'] as const
     : ['rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.02)', 'rgba(255, 255, 255, 0)'] as const;
@@ -101,7 +101,7 @@ export function CardEdgeRefraction({ side }: { side: 'left' | 'right' }): JSX.El
   );
 }
 
-export function CardShineStreak({ radius = 999 }: { radius?: number }): JSX.Element {
+export function CardShineStreak({ radius = 999 }: { radius?: number }): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0.18)', 'rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0)']}

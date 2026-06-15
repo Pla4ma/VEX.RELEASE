@@ -5,7 +5,7 @@ import { GlassCard } from '../../../components/glass/GlassCard';
 import { RealisticModeOrb } from '../../../components/glass/RealisticModeOrb';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -34,7 +34,7 @@ interface FocusModeCardViewProps {
 export function FocusModeCardView({
   card,
   onPress,
-}: FocusModeCardViewProps): JSX.Element {
+}: FocusModeCardViewProps): React.ReactNode {
   const isPrimary = card.id === 'sprint-15';
   const orbMode = getOrbMode(card.id);
 

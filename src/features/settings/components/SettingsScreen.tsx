@@ -5,8 +5,8 @@ import {
   useSettingsUIState,
   useSyncSettings,
   useResetSettings,
-} from '../hooks';
-import { type SettingCategory } from '../types';
+} from $1../hooks/useSettingsUIState$1;
+import { type SettingCategory } from $1../hooks/useSettingsUIState$1;
 import { eventBus } from '../../../events';
 import * as Sentry from '@sentry/react-native';
 import { SettingsSectionHeader } from './SettingsSectionHeader';

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 import type { SessionStackParams } from '../../../navigation/types';
 import type { Nav } from './engaged-home-types';

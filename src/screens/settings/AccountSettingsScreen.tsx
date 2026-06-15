@@ -3,9 +3,9 @@ import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
-import { Icon } from '../../icons';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { useAuthStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
 import { EmailChangeSection } from './EmailChangeSection';
@@ -15,7 +15,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass';
+} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 

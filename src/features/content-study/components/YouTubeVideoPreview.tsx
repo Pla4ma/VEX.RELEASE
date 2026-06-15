@@ -79,7 +79,7 @@ export function YouTubeVideoPreview({
                 {videoInfo.channelName}
               </Text>
             )}
-            {videoInfo.duration && (
+            {videoInfo.duration > 0 && (
               <View style={styles.durationBadge}>
                 <Icon
                   name="clock"
@@ -116,7 +116,7 @@ export function YouTubeVideoPreview({
           </Text>
           {onExtract && (
             <Button
-              variant="ghost"
+              <Text>variant="ghost"</Text>
               size="sm"
               onPress={onExtract}
               accessibilityLabel="Retry loading video"

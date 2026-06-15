@@ -35,7 +35,7 @@ export function Colophon({ delay, isReducedMotion }: { delay: number; isReducedM
         <Text
           style={{
             color: rgbaColors.rgb_224_184_112_0_65,
-            fontSize: 9,
+            fontSize: 12,
             fontFamily: SERIF_STACK,
             fontWeight: '500',
             letterSpacing: 4,

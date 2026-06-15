@@ -7,7 +7,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { LiquidLens } from '../../../components/glass/LiquidLens';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 const { width: SCREEN_W } = Dimensions.get('window');
@@ -18,7 +18,7 @@ interface ProgressHeaderProps {
 
 export function ProgressHeader({
   onOpenNotifications,
-}: ProgressHeaderProps): JSX.Element {
+}: ProgressHeaderProps): React.ReactNode {
   return (
     <View style={{ width: '100%', marginBottom: 10, position: 'relative' }}>
       {/* Liquid analytics atmosphere at top of progress screen */}
@@ -107,10 +107,7 @@ export function ProgressHeader({
             height: 38,
             justifyContent: 'center',
             overflow: 'hidden',
-            shadowColor: vexLightGlass.glass.shadow,
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.85,
-            shadowRadius: 10,
+            boxShadow: '0px 6px 10px vexLightGlass.glass.shadow / 0.85',
             width: 38,
           }}
         >
@@ -127,7 +124,7 @@ export function ProgressHeader({
         <Text
           style={{
             color: vexLightGlass.mint[600],
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '700',
             letterSpacing: 1.2,
             textTransform: 'uppercase',

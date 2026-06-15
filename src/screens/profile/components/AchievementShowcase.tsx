@@ -1,9 +1,9 @@
 import { lightColors } from '@/theme/tokens/colors';
 import React, { useState, useCallback, useMemo } from 'react';
 import { Pressable, ViewStyle } from 'react-native';
-import { useTheme } from '../../../theme';
-import { Box, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 
 import {
   type FeaturedAchievement,
@@ -151,7 +151,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               />
             ) : (
               <LockedSlot
-                key={`locked-${index}`}
+                key={`locked-slot-${index}`}
                 slotIndex={index}
                 onPress={() => handleSlotPress(index)}
                 isEditable={isEditable || isEditMode}

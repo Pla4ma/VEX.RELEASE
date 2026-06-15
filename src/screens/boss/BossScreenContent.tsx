@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Text } from '../../components/primitives';
+import { Text } from '../../components/primitives/Text';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { BossBattleHUD } from '../../features/boss/components/boss-battle-hud';
 import { useActiveBoss, useBossTemplates } from '../../features/boss/hooks';
@@ -33,7 +33,7 @@ export function BossScreenContent({
   resetLabel,
   theme,
   userId,
-}: BossScreenContentProps): JSX.Element {
+}: BossScreenContentProps): React.ReactNode {
   const bossQuery = useActiveBoss(canQueryBoss ? userId : null);
   const templatesQuery = useBossTemplates(canQueryBoss ? userId : null);
   const progressionQuery = useProgressionSummary(userId);

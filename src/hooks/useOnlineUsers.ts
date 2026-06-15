@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 
 export function useOnlineUsers() {
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());

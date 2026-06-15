@@ -3,8 +3,8 @@ import { Pressable, View } from 'react-native';
 
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { borderRadius, spacing } from '../../../theme/tokens';
+import { Icon } from '../../../icons/components/Icon';
+import { borderRadius, spacing } from '../../../theme/tokens/radius';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import { type } from '../../reference-ui/referenceTokens';
@@ -22,7 +22,7 @@ export function ActiveUnlockCard({
   progress,
   progressLabel,
   actionCopy,
-}: ActiveUnlockCardProps): JSX.Element {
+}: ActiveUnlockCardProps): React.ReactNode {
   return (
     <GlassCard padding={16} radius={borderRadius['2xl']} variant="warning">
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
@@ -106,7 +106,7 @@ interface LockedTeaserCardProps {
 export function LockedTeaserCard({
   item,
   onPeekLocked,
-}: LockedTeaserCardProps): JSX.Element {
+}: LockedTeaserCardProps): React.ReactNode {
   return (
     <Pressable
       accessibilityHint={`Preview ${item.reward}. Finish more sessions to unlock.`}

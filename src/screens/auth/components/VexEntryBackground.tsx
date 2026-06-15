@@ -11,7 +11,7 @@ import { Starfield } from './Starfield';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
-export function VexEntryBackground(): JSX.Element {
+export function VexEntryBackground(): React.ReactNode {
   const { width, height } = useWindowDimensions();
 
   const o1x = useSharedValue(0);
@@ -59,10 +59,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: rgbaColors.rgb_0_229_255_0_06,
             top: height * 0.1,
             left: -width * 0.2,
-            shadowColor: lightColors.semantic.vexCyan,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.3,
-            shadowRadius: 100,
+            boxShadow: '0px 0px 100px lightColors.semantic.vexCyan / 0.3',
           },
           s1,
         ]}
@@ -79,10 +76,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: rgbaColors.rgb_139_92_246_0_05,
             bottom: -height * 0.15,
             right: -width * 0.3,
-            shadowColor: lightColors.accent.purple,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.85,
-            shadowRadius: 120,
+            boxShadow: '0px 0px 120px lightColors.accent.purple / 0.85',
           },
           s2,
         ]}
@@ -99,10 +93,7 @@ export function VexEntryBackground(): JSX.Element {
             backgroundColor: rgbaColors.rgb_59_130_246_0_04,
             top: height * 0.4,
             right: width * 0.1,
-            shadowColor: lightColors.accent.blue,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.2,
-            shadowRadius: 90,
+            boxShadow: '0px 0px 90px lightColors.accent.blue / 0.2',
           },
           s3,
         ]}

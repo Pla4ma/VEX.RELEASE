@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing, borderRadius } from '../../../theme/tokens';
+import { spacing, borderRadius } from '../../../theme/tokens/spacing';
 import { triggerHaptic } from '../../../utils/haptics';
 import type { HomeUnlockPathItem } from '../services/home-unlock-path-schemas';
 import { MilestoneNode, type MilestoneState } from './MilestoneNode';
@@ -24,7 +24,7 @@ export function MilestoneCard({
   item: HomeUnlockPathItem;
   isNext: boolean;
   onPress?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const state = stateFor(item, isNext);
   const variant = state === 'unlocked' ? 'success' : state === 'current' ? 'warning' : 'subtle';
   const badgeText = state === 'unlocked' ? 'OPEN' : state === 'current' ? 'NEXT' : 'LOCKED';
@@ -48,7 +48,7 @@ export function MilestoneCard({
         <Text
           style={{
             color: vexLightGlass.mint[800],
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: '900',
             letterSpacing: 1.5,
           }}
@@ -66,7 +66,7 @@ export function MilestoneCard({
           }}
         >
           <Text
-            style={{ color: badgeColor, fontSize: 9, fontWeight: '900' }}
+            style={{ color: badgeColor, fontSize: 12, fontWeight: '900' }}
           >
             {badgeText}
           </Text>

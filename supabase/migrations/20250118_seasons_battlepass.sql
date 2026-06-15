@@ -321,15 +321,26 @@ CREATE TABLE IF NOT EXISTS admin_users (
 
 -- Seasons: readable by all, writable by admins only
 ALTER TABLE seasons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE battle_pass_tiers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY seasons_read_all ON seasons
   FOR SELECT TO authenticated, anon
   USING (true);
 
-CREATE POLICY seasons_write_admin ON seasons
-  FOR ALL TO authenticated
+CREATE POLICY seasons_write_admin_select ON seasons
+  FOR SELECT TO authenticated
+  USING (auth.uid() IN (SELECT user_id FROM admin_users));
+CREATE POLICY seasons_write_admin_insert ON seasons
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() IN (SELECT user_id FROM admin_users));
+CREATE POLICY seasons_write_admin_update ON seasons
+  FOR UPDATE TO authenticated
   USING (auth.uid() IN (SELECT user_id FROM admin_users))
   WITH CHECK (auth.uid() IN (SELECT user_id FROM admin_users));
+CREATE POLICY seasons_write_admin_delete ON seasons
+  FOR DELETE TO authenticated
+  USING (auth.uid() IN (SELECT user_id FROM admin_users));
 
 -- User Season Progress: users can only access their own
 ALTER TABLE user_season_progress ENABLE ROW LEVEL SECURITY;

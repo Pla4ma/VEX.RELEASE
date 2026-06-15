@@ -23,14 +23,6 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
   const { presets, createPreset, deletePreset } = useSessionPresets();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const categories = ['All', 'Focus', 'Study', 'Work', 'Creative', 'Health'];
-  const filteredPresets =
-    selectedCategory && selectedCategory !== 'All'
-      ? presets.filter(
-          (p) =>
-            p.category === selectedCategory ||
-            (selectedCategory === 'Focus' && !p.category),
-        )
       : presets;
 
   const handleCreatePreset = (name: string, durationSeconds: number) => {
@@ -115,6 +107,15 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
   );
 };
 
+const filteredPresets =
+    selectedCategory && selectedCategory !== 'All'
+      ? presets.filter(
+          (p) =>
+            p.category === selectedCategory ||
+            (selectedCategory === 'Focus' && !p.category),
+        )
+
+const categories = ['All', 'Focus', 'Study', 'Work', 'Creative', 'Health'];
 const styles = createSheet({
   container: { flex: 1 },
   categoryScroll: { maxHeight: 50, marginBottom: 16 },
@@ -151,4 +152,4 @@ const styles = createSheet({
   },
 });
 
-export default SessionPresets;
+export default SessionPresets;

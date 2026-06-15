@@ -128,7 +128,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   };
   const indicatorContent = (
     <Animated.View
-      style={[
+      <Text>style={[</Text>
         styles.indicator,
         {
           width,
@@ -150,7 +150,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   }
   return (
     <Pressable
-      onPress={onPress}
+      <Text>onPress={onPress}</Text>
       disabled={disabled || !onPress}
       style={styles.stepContainer}
       accessibilityLabel="Step indicator"
@@ -164,7 +164,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
           {' '}
           {title && (
             <Text
-              variant="body"
+              <Text>variant="body"</Text>
               style={[
                 styles.stepTitle,
                 {

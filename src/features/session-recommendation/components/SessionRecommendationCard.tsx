@@ -25,7 +25,7 @@ export function SessionRecommendationCard({
   onAccept,
   onDismiss,
   showDismiss = true,
-}: SessionRecommendationCardProps): JSX.Element {
+}: SessionRecommendationCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const getSessionModeColor = (mode: string): string => {
@@ -99,7 +99,7 @@ export function SessionRecommendationCard({
         </Text>
 
         <Button variant="outline" size="sm" disabled style={{ width: '100%' }}>
-          Cannot start session
+          <Text>Cannot start session</Text>
         </Button>
       </Box>
     );
@@ -154,7 +154,7 @@ export function SessionRecommendationCard({
         alignItems="center"
       >
         <Button
-          variant={recommendation.fallback ? 'outline' : 'primary'}
+          <Text>variant={recommendation.fallback ? 'outline' : 'primary'}</Text>
           size="sm"
           onPress={onAccept}
           style={{ flex: 1, marginRight: showDismiss ? theme.spacing[2] : 0 }}
@@ -164,7 +164,7 @@ export function SessionRecommendationCard({
 
         {showDismiss && onDismiss && (
           <Button variant="ghost" size="sm" onPress={onDismiss}>
-            Dismiss
+            <Text>Dismiss</Text>
           </Button>
         )}
       </Box>

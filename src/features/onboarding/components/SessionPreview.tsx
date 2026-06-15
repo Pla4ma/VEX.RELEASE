@@ -11,7 +11,7 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusDuration } from '../schemas';
 import { DURATION_OPTIONS } from '../service';
 
@@ -26,7 +26,7 @@ interface SessionPreviewProps {
 export function SessionPreview({
   duration,
   goal,
-}: SessionPreviewProps): JSX.Element {
+}: SessionPreviewProps): React.ReactNode {
   const { theme } = useTheme();
   const durationOption = DURATION_OPTIONS.find((d) => d.value === duration);
 

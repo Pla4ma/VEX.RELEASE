@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 
 type TrackFunction = (
   eventName: string,

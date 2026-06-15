@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { StreakRecoveryPlan } from './types';
 
 const recoveryPlans = new Map<string, StreakRecoveryPlan>();

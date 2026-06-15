@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { SessionStackParams } from '../../../navigation/types';
 import { getNextUnlockFeature } from '../hooks/home-controller-helpers';

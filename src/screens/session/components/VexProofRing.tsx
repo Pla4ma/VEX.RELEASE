@@ -10,7 +10,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -37,7 +37,7 @@ export function VexProofRing({
   size = 200,
   delay = 400,
   testID,
-}: VexProofRingProps): JSX.Element {
+}: VexProofRingProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const ringProgress = useSharedValue(0);

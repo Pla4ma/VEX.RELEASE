@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface BossCombatHUDViewProps {
   phaseColor: string;
@@ -39,7 +39,7 @@ export function BossCombatHUDView({
   abilityLabel,
   abilityIcon,
   onActivateAbility,
-}: BossCombatHUDViewProps): JSX.Element {
+}: BossCombatHUDViewProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
@@ -53,11 +53,7 @@ export function BossCombatHUDView({
         borderWidth: 2,
         borderColor: phaseColor,
         padding: theme.spacing[3],
-        shadowColor: phaseColor,
-        shadowOffset: { width: 0, height: theme.spacing[1] },
-        shadowOpacity: 0.3,
-        shadowRadius: theme.spacing[2],
-        elevation: 8,
+        boxShadow: `0px ${theme.spacing}[1]px ${theme.spacing}[2]px phaseColor / 0.3`,
       }}
     >
       {showToast && (
@@ -171,4 +167,4 @@ export function BossCombatHUDView({
       </Animated.View>
     </View>
   );
-}
+}

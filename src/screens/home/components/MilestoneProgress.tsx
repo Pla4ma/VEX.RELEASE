@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing, borderRadius } from '../../../theme/tokens';
+import { spacing, borderRadius } from '../../../theme/tokens/spacing';
 import type { HomeUnlockPathItem } from '../services/home-unlock-path-schemas';
 import type { MilestoneState } from './MilestoneNode';
 
@@ -19,7 +19,7 @@ export function MilestoneProgress({
       <Text
         style={{
           color: vexLightGlass.mint[800],
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: '800',
           marginTop: spacing[2],
         }}
@@ -59,7 +59,7 @@ export function MilestoneProgress({
             state === 'current'
               ? vexLightGlass.semantic.fireDeep
               : vexLightGlass.text.tertiary,
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: '800',
           marginTop: spacing[1],
         }}

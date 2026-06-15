@@ -24,7 +24,7 @@ export function FocusScoreHeader({
   showTrend,
   successColor,
   errorColor,
-}: FocusScoreHeaderProps): JSX.Element {
+}: FocusScoreHeaderProps): React.ReactNode {
   const isPositiveChange = scoreChange > 0;
   const isNegativeChange = scoreChange < 0;
   return (
@@ -50,7 +50,7 @@ export function FocusScoreHeader({
         <Text
           style={{
             color: vexLightGlass.text.tertiary,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '600',
             marginTop: 4,
           }}

@@ -1,5 +1,5 @@
 import { createDebugger } from '../../../../utils/debug';
-import { eventBus } from '../../../../events';
+import { eventBus } from '../../../../events/EventBus';
 import {
   XPTransactionSchema,
   type XPTransaction,

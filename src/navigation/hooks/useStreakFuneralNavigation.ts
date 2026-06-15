@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 import { MMKV } from 'react-native-mmkv';
 
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { getStreakService } from '../../streaks/StreakService';
 
 import type { ExtendedRootStackParams } from '../types';

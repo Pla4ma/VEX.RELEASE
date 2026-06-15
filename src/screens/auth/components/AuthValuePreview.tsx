@@ -1,7 +1,7 @@
 import React from 'react';
 import { FocusLoopPreview } from './FocusLoopPreview';
 
-export function AuthValuePreview(): JSX.Element {
+export function AuthValuePreview(): React.ReactNode {
   return <FocusLoopPreview />;
 }
 

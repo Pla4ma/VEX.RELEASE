@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { analyticsService, capture, screen } from './analytics-service';
 import { ProductAnalyticsEvents } from './product-events';
 

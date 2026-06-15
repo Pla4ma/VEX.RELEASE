@@ -5,7 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import { ref, type } from '../../reference-ui/referenceTokens';
@@ -29,7 +29,7 @@ interface HomeDailyCardsProps {
 export function HomeDailyCards({
   controller,
   onStartSession,
-}: HomeDailyCardsProps): JSX.Element {
+}: HomeDailyCardsProps): React.ReactNode {
   const navigation = useNavigation<Nav>();
 
   return (

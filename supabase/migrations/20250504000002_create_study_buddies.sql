@@ -108,9 +108,16 @@ CREATE INDEX IF NOT EXISTS idx_study_buddy_check_ins_date ON study_buddy_check_i
 -- RLS Policies
 -- ============================================================================
 
+ALTER TABLE study_buddies ENABLE ROW LEVEL SECURITY;
+ALTER TABLE study_buddy_shared_goals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE study_buddy_encouragements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE study_buddy_check_ins ENABLE ROW LEVEL SECURITY;
+
 -- Study Buddies (user-specific)
 CREATE POLICY "Users can view own study buddies" ON study_buddies
-  FOR SELECT USING (auth.uid() = user_id OR auth.uid() = buddy_id);
+  FOR SELECT TO authenticated
+  USING (auth.uid() = user_id OR auth.uid() = buddy_id)
+  WITH CHECK (auth.uid() = user_id OR auth.uid() = buddy_id);
 
 CREATE POLICY "Users can create own study buddy requests" ON study_buddies
   FOR INSERT WITH CHECK (auth.uid() = user_id);

@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 
 type Confidence = 'low' | 'medium' | 'high';
@@ -13,7 +13,7 @@ interface ConfidenceIndicatorProps {
 
 export function ConfidenceIndicator({
   confidence,
-}: ConfidenceIndicatorProps): JSX.Element {
+}: ConfidenceIndicatorProps): React.ReactNode {
   const { theme } = useTheme();
 
   const barWidth = confidence === 'high' ? '100%' : confidence === 'medium' ? '60%' : '30%';

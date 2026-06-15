@@ -12,9 +12,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Box } from '../components/primitives/Box';
 import type { ExtendedRootStackParams } from '../navigation/types';
 import { useSessionUIStore } from '../store/session-state';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { Particle } from './ComebackParticles';
-import { capture, RetentionEvents } from '../shared/analytics';
+import { capture, RetentionEvents } from '../shared/analytics/analytics-service';
 import { ComebackCard } from './ComebackCard';
 
 type ComebackNavigationProp = NativeStackNavigationProp<
@@ -25,7 +25,7 @@ type ComebackRoute = RouteProp<ExtendedRootStackParams, 'Comeback'>;
 
 const PARTICLE_COUNT = 20;
 
-export function ComebackScreen(): JSX.Element {
+export function ComebackScreen(): React.ReactNode {
   const navigation = useNavigation<ComebackNavigationProp>();
   const route = useRoute<ComebackRoute>();
   const { theme } = useTheme();

@@ -13,7 +13,7 @@ import {
   PurchaseEvents,
   createPurchaseProperties,
 } from './purchase-events';
-import { capture, type PurchaseEvent } from '../analytics';
+import { capture, type PurchaseEvent } from '../analytics/analytics-service';
 import { buildError } from './revenuecat-helpers';
 
 export interface PurchaseOps {

@@ -8,7 +8,7 @@ import Animated, {
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { LiquidButton } from '../../components/glass/LiquidButton';
 import type { LaneViewModel } from './service';
 
@@ -80,7 +80,7 @@ export function GameLikeHomeSurface({ viewModel }: GameLikeHomeSurfaceProps): Re
                   Boss Battle
                 </Text>
               </Box>
-              {viewModel.currentRank && (
+              {Boolean(viewModel.currentRank) && (
                 <Box px="sm" py="xs" bg="semantic.surfaceElevated" borderRadius={999}>
                   <Text variant="caption" color="text.secondary" style={{ fontWeight: '600' }}>
                     {viewModel.currentRank}

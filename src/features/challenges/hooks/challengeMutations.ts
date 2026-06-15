@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useCallback, useEffect } from 'react';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import * as service from '../service';
 import * as queries from '../queries';
 import { useActiveChallenges } from './challengeQueries';

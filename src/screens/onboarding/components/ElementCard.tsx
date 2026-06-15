@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 
 import type { ElementInfo } from './elementData';
@@ -21,7 +21,7 @@ export function ElementCard({
   isSelected,
   onSelect,
   delay: _delay,
-}: ElementCardProps): JSX.Element {
+}: ElementCardProps): React.ReactNode {
   const { theme } = useTheme();
   const themeColors = ELEMENT_THEMES[element.id];
   return (
@@ -56,10 +56,7 @@ export function ElementCard({
               justifyContent: 'center',
               alignItems: 'center',
               marginBottom: theme.spacing[3],
-              shadowColor: themeColors.glow,
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: isSelected ? 0.5 : 0.2,
-              shadowRadius: isSelected ? 10 : 4,
+              boxShadow: '0px 0px isSelected ? 10 : 4px themeColors.glow / isSelected ? 0.5 : 0.2',
             }}
           >
             <ElementVisual element={element.id} color={themeColors.primary} />

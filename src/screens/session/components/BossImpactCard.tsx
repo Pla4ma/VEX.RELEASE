@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CARD_WIDTH } from './session-consequence-types';
 
 interface BossImpactCardProps {
@@ -26,7 +26,7 @@ export function BossImpactCard({
   damageDealt,
   wasDefeated,
   hadCriticalHit,
-}: BossImpactCardProps): JSX.Element {
+}: BossImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
   const healthAnim = useSharedValue(healthBefore);
 

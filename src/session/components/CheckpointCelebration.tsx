@@ -10,7 +10,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
-import { Text } from '../../components';
+import { Text } from '../../components/primitives/Text';
 import type {
   Particle,
   CheckpointCelebrationProps,

@@ -35,7 +35,7 @@ export function HomeHeroSection({
   controller,
   surfaceMap,
   firstWeekExperience,
-}: HomeHeroSectionProps): JSX.Element {
+}: HomeHeroSectionProps): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
 
   const productContext = useMemo<ProductContext>(() => {

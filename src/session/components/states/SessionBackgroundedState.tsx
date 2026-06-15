@@ -31,7 +31,7 @@ export function SessionBackgroundedState({
   onEnd,
   onAbandon,
   maxBackgroundTime = MAX_BACKGROUND_TIME_DEFAULT,
-}: SessionBackgroundedStateProps): JSX.Element {
+}: SessionBackgroundedStateProps): React.ReactNode {
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
@@ -123,7 +123,7 @@ export function SessionBackgroundedState({
         )}
         <Box gap="sm" width="100%">
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="lg"
             onPress={() => handleAction('resume', onResume)}
             disabled={selectedAction !== null}
@@ -135,7 +135,7 @@ export function SessionBackgroundedState({
             Resume Session
           </Button>
           <Button
-            variant="secondary"
+            <Text>variant="secondary"</Text>
             size="md"
             onPress={() => handleAction('pause', onPause)}
             disabled={selectedAction !== null}
@@ -147,7 +147,7 @@ export function SessionBackgroundedState({
           </Button>
           <Box flexDirection="row" gap="sm">
             <Button
-              variant="ghost"
+              <Text>variant="ghost"</Text>
               size="sm"
               style={{ flex: 1 }}
               onPress={() => handleAction('end', onEnd)}
@@ -159,7 +159,7 @@ export function SessionBackgroundedState({
               End Session
             </Button>
             <Button
-              variant="ghost"
+              <Text>variant="ghost"</Text>
               size="sm"
               style={{ flex: 1 }}
               onPress={() => handleAction('abandon', onAbandon)}

@@ -5,7 +5,7 @@
  */
 
 import Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type {
   SessionRecommendation,
   SessionRecommendationInput,

@@ -10,7 +10,7 @@ import Animated, { FadeInUp, FadeOutDown } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { cardSelection } from '../../../utils/haptics';
 import type { RecallQuestion } from '../schemas';
 
@@ -25,7 +25,7 @@ export function RecallQuestionCard({
   question,
   onDismiss,
   onReview,
-}: RecallQuestionCardProps): JSX.Element {
+}: RecallQuestionCardProps): React.ReactNode {
   const { theme } = useTheme();
   const [dismissed, setDismissed] = useState(false);
 

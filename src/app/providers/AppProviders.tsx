@@ -10,11 +10,11 @@ import { Platform, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { QueryProvider } from '../../api';
-import { ThemeProvider } from '../../theme';
-import { ErrorBoundary } from '../../errors';
-import { getNetInfoAdapter } from '../../network';
-import { getSecureStorage } from '../../persistence';
+import { QueryProvider } from '../../api/QueryProvider';
+import { ThemeProvider } from '../../theme/ThemeContext';
+import { ErrorBoundary } from '../../errors/ErrorBoundary';
+import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
+import { getSecureStorage } from '../../persistence/SecureStorage';
 import { addBreadcrumb, captureException } from '../../config/sentry';
 
 interface AppProvidersProps {

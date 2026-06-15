@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, TextInput, Pressable } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { YouTubeInputProps } from '../types';
 import { validateYouTubeUrl } from '../validation';
 import { styles } from './YouTubeInputStyles';
@@ -22,27 +22,26 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
 }) => {
   const { theme } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
-  const [validationState, setValidationState] = useState<{
-    isValid: boolean;
-    errors: string[];
-    warnings: string[];
-    videoId?: string;
-  }>({ isValid: false, errors: [], warnings: [] });
-  useEffect(() => {
+  const validationState = useMemo(() => {
     if (!value) {
-      setValidationState({ isValid: false, errors: [], warnings: [] });
-      onValidationChange?.(false);
-      return;
+      return { isValid: false, errors: [], warnings: [] };
     }
     const result = validateYouTubeUrl(value);
-    setValidationState({
+    return {
       isValid: result.isValid,
       errors: result.errors.map((e) => e.message),
       warnings: result.warnings.map((w) => w.message),
       videoId: result.metadata?.youtubeVideoId,
-    });
-    onValidationChange?.(result.isValid, result.errors[0]?.message);
-  }, [value, onValidationChange]);
+    };
+  }, [value]);
+
+  useEffect(() => {
+    if (!value) {
+      onValidationChange?.(false);
+      return;
+    }
+    onValidationChange?.(validationState.isValid, validationState.errors[0]);
+  }, [validationState, value, onValidationChange]);
   const clearInput = useCallback(() => {
     onChange('');
   }, [onChange]);
@@ -101,7 +100,7 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
       {validationState.errors.length > 0 && (
         <View style={styles.messageContainer}>
           {validationState.errors.map((error, index) => (
-            <View key={index} style={styles.messageRow}>
+            <View key={error.id} style={styles.messageRow}>
               <Icon
                 name="alert-circle"
                 size="sm"
@@ -120,7 +119,7 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
         validationState.warnings.length > 0 && (
           <View style={styles.messageContainer}>
             {validationState.warnings.map((warning, index) => (
-              <View key={index} style={styles.messageRow}>
+              <View key={warning.id} style={styles.messageRow}>
                 <Icon
                   name="alert-triangle"
                   size="sm"

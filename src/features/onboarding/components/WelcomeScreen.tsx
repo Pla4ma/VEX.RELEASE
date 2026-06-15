@@ -22,7 +22,7 @@ interface WelcomeScreenProps {
   onStart: (path: OnboardingPath) => void;
 }
 
-function AnimatedBackground(): JSX.Element {
+function AnimatedBackground(): React.ReactNode {
   const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
@@ -85,7 +85,7 @@ function AnimatedBackground(): JSX.Element {
   );
 }
 
-export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
+export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const [selectedPath, setSelectedPath] = useState<OnboardingPath>('focus');
@@ -146,7 +146,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
           style={{ width: '100%' }}
         >
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="lg"
             fullWidth
             onPress={() => onStart(selectedPath)}

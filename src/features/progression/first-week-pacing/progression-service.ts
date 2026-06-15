@@ -77,9 +77,10 @@ export async function progressToNextSession(
     const newUnlockedFeatures = [...currentProgress.unlocked_features];
     let nextUnlock = null;
 
+    const newunlockedfeatureSet = new Set(newUnlockedFeatures);
     for (const unlock of sessionUnlocks) {
       if (!newUnlockedFeatures.includes(unlock.title)) {
-        newUnlockedFeatures.push(unlock.title);
+      if (!newunlockedfeatureSet.has(unlock.title)) {
         if (!nextUnlock) {
           nextUnlock = unlock.title;
         }

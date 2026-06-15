@@ -58,10 +58,7 @@ export function MascotSpeechBubble({
           borderWidth: 1,
           gap: 4,
           padding: config.bubblePadding,
-          shadowColor: etherealGlass.shadowStrong,
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.2,
-          shadowRadius: 16,
+          boxShadow: '0px 6px 16px etherealGlass.shadowStrong / 0.2',
         },
         pulseStyle,
       ]}

@@ -7,31 +7,28 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { springPresets } from '../../../theme/tokens/motion';
 import { spacing } from '../../../theme/tokens/spacing';
 import type { OnboardingPath } from '../onboarding-paths';
 import { PATH_METADATA } from '../onboarding-paths';
-
 interface PathSelectionCardProps {
   path: OnboardingPath;
   isSelected: boolean;
   onPress: () => void;
   index: number;
 }
-
 export function PathSelectionCard({
   path,
   isSelected,
   onPress,
   index,
-}: PathSelectionCardProps): JSX.Element {
+}: PathSelectionCardProps): React.ReactNode {
   const meta = PATH_METADATA[path];
   const scale = useSharedValue(1);
   const glow = useSharedValue(0);
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
     borderColor: isSelected
@@ -42,19 +39,15 @@ export function PathSelectionCard({
       : vexLightGlass.glass.fill,
     shadowOpacity: glow.value,
   }));
-
   const handlePressIn = () => {
     scale.value = withSpring(0.97, springPresets.tactile);
   };
-
   const handlePressOut = () => {
     scale.value = withSpring(1, springPresets.tactile);
   };
-
   React.useEffect(() => {
     glow.value = withTiming(isSelected ? 0.3 : 0, { duration: 300 });
   }, [isSelected, glow]);
-
   return (
     <Animated.View            entering={FadeInUp.delay(index * 80).duration(400)}
       style={[
@@ -63,9 +56,7 @@ export function PathSelectionCard({
           borderWidth: 2,
           padding: spacing[4],
           marginBottom: spacing[3],
-          shadowColor: meta.accentColor,
-          shadowRadius: 20,
-          shadowOffset: { width: 0, height: 8 },
+          boxShadow: `0px 8px 20px ${meta.accentColor}`,
         },
         animatedStyle,
       ]}

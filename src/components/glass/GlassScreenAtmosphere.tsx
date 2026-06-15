@@ -29,7 +29,7 @@ export function GlassScreenAtmosphere({
   variant,
 }: {
   variant: GlassScreenAtmosphereVariant;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <View
       pointerEvents="none"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
@@ -31,7 +31,7 @@ interface PersonalBestCardProps {
   item: PersonalBest;
 }
 
-export function PersonalBestCard({ item }: PersonalBestCardProps): JSX.Element {
+export function PersonalBestCard({ item }: PersonalBestCardProps): React.ReactNode {
   const label = `${formatMode(item.sessionMode)} ${formatDuration(item.durationBucket)}, ${Math.round(item.bestPurityScore)} purity, grade ${item.bestGrade}`;
   return (
     <View style={{ marginBottom: 10 }}>
@@ -89,7 +89,7 @@ export function PersonalBestCard({ item }: PersonalBestCardProps): JSX.Element {
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: '600',
               }}
             >

@@ -1,4 +1,4 @@
-import { capture } from './index';
+import { capture } from './analytics-service';
 
 export interface FunnelStep {
   name: string;

@@ -2,7 +2,7 @@ import { fetchActiveRecommendations } from '../ai-coach/repository/recommendatio
 import { fetchActiveEncounter } from '../boss/repository';
 import { fetchActiveChallengeDetails } from '../challenges/repository';
 import { getHomePromiseState } from '../companion-promise/service';
-import { onboardingRepository } from '../onboarding/repository/index';
+import { onboardingRepository } from '../onboarding/repository/OnboardingRepository';
 import { fetchStreak } from '../streaks/repository';
 import {
   getFeatureAvailability,

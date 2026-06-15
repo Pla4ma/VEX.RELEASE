@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { CompanionPromise } from './types';
 
 export function publishPromiseCreated(promise: CompanionPromise): void {

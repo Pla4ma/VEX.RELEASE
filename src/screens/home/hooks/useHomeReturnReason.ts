@@ -3,8 +3,8 @@ import { useEffect, useMemo } from 'react';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
-  type SessionRecommendation,
-} from '../../../features/ai-coach';
+} from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import type { SessionRecommendation } from '../../../features/ai-coach/schemas/recommendations';
 import type { HomeActionIntent } from '../../../features/home-spine/schemas';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { NextBestAction } from '../../../features/progression';

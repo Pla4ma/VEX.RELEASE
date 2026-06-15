@@ -60,7 +60,7 @@ export const GlassPill: React.FC<GlassPillProps> = React.memo(function GlassPill
   testID,
   accessibilityLabel,
   accessibilityHint,
-}: GlassPillProps): JSX.Element {
+}: GlassPillProps): React.ReactNode {
   const dim = SIZE_DIM[size];
   const tone = TONE_FOR[variant];
   const textColor = selected ? SELECTED_TEXT_COLOR : TEXT_COLOR_FOR[variant];

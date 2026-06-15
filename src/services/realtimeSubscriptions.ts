@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { getSupabaseClient } from '../config/supabase';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import {
   activeChannels,
   CHANNELS,

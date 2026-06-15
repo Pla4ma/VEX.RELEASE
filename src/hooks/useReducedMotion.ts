@@ -50,10 +50,10 @@ interface ReducedMotionResult {
  * Hook to detect and respond to reduced motion preference
  */
 export function useReducedMotion(): ReducedMotionResult {
-  return _useSystemReducedMotion();
+  return useSystemReducedMotion();
 }
 
-function _useSystemReducedMotion(): ReducedMotionResult {
+function useSystemReducedMotion(): ReducedMotionResult {
   // Use Reanimated 3's built-in hook as primary source
   const reanimatedReducedMotion = useReanimatedReducedMotion();
 

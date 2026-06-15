@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Text } from '../../components/primitives';
-import { Skeleton, SkeletonList } from '../../shared/ui/primitives';
-import { ErrorState } from '../../components/states';
+import { Box, Text } from '../../components/primitives/Box';
+import { Skeleton, SkeletonList } from '../../shared/ui/primitives/Skeleton';
+import { ErrorState } from '../../components/states/ErrorState';
 import { EmptyNotifications } from '../../shared/ui/primitives/EmptyState.variants';
 import { FILTER_LABELS } from './NotificationScreenConfig';
 
@@ -11,7 +11,7 @@ export function NotificationLoadingState({
 }: {
   insetsTop: number;
   backgroundColor: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} style={{ backgroundColor }}>
       <Box px={20} pb={12} pt={insetsTop + 16}>
@@ -42,7 +42,7 @@ export function NotificationErrorState({
   backgroundColor: string;
   message: string;
   onRetry: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} style={{ backgroundColor }}>
       <Box px={20} pb={12} pt={insetsTop + 16}>
@@ -64,9 +64,9 @@ export function NotificationEmptyState({
   onAdjustSettings,
 }: {
   backgroundColor: string;
-  headerElement: JSX.Element;
+  headerElement: React.ReactNode;
   onAdjustSettings?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} style={{ backgroundColor }}>
       {headerElement}
@@ -81,9 +81,9 @@ export function NotificationFilteredEmptyState({
   activeFilter,
 }: {
   backgroundColor: string;
-  headerElement: JSX.Element;
+  headerElement: React.ReactNode;
   activeFilter: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} style={{ backgroundColor }}>
       {headerElement}

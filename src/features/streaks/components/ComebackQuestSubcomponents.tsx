@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export function QuestStep({
   step,
@@ -17,7 +17,7 @@ export function QuestStep({
   isCompleted: boolean;
   isActive: boolean;
   requirements: { duration: number; grade?: string };
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -91,7 +91,7 @@ export function QuestStep({
   );
 }
 
-export function PhoenixBadgePreview(): JSX.Element {
+export function PhoenixBadgePreview(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -122,7 +122,7 @@ export function PhoenixBadgePreview(): JSX.Element {
   );
 }
 
-export function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
+export function QuestProgressBar({ progress }: { progress: number }): React.ReactNode {
   return (
     <Box gap="sm">
       <Box flexDirection="row" justifyContent="space-between">

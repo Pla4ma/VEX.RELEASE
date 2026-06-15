@@ -5,7 +5,7 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { sizing } from '../../../theme/tokens/sizing';
 
-export function HistorySkeleton(): JSX.Element {
+export function HistorySkeleton(): React.ReactNode {
   return (
     <Box p="lg">
       {[0, 1, 2].map((key) => (
@@ -25,7 +25,7 @@ export function HistoryEmptyState({
   onStart,
 }: {
   onStart: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} justifyContent="center" alignItems="center" p="xl">
       <Text variant="h3" color="text.primary" textAlign="center" mb="md">
@@ -35,7 +35,7 @@ export function HistoryEmptyState({
         Finish a focus block and VEX will track the rhythm you actually built.
       </Text>
       <Button
-        accessibilityHint="Starts setup for a new focus session"
+        <Text>accessibilityHint="Starts setup for a new focus session"</Text>
         accessibilityLabel="Start a focus session"
         accessibilityRole="button"
         onPress={onStart}

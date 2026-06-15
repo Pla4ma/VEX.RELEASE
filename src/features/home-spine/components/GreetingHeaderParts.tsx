@@ -4,7 +4,7 @@ import { Pressable } from 'react-native';
 import { Avatar } from '../../../components/Avatar';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { CompanionMood } from '../../companion/types';
 import {
   StreakIndicator,
@@ -14,7 +14,7 @@ import {
 
 export { StreakIndicator, LevelBadge } from './GreetingHeaderBadges';
 
-export function GreetingHeaderSkeleton(): JSX.Element {
+export function GreetingHeaderSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box flexDirection="row" alignItems="center" px="lg" py="md" gap="md">
@@ -50,7 +50,7 @@ export function ProfileAvatar({
   avatarUrl?: string;
   displayName: string;
   onPressProfile?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Pressable
@@ -76,7 +76,7 @@ export function CompanionHeaderAvatar({
 }: {
   mood?: CompanionMood;
   onPress?: () => void;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   const { theme } = useTheme();
   if (!mood) {
     return null;

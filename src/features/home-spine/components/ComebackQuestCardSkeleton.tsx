@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
-export function ComebackQuestCardSkeleton(): JSX.Element {
+export function ComebackQuestCardSkeleton(): React.ReactNode {
   const { theme } = useTheme();
 
   return (

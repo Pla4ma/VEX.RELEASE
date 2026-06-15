@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import * as repository from '../repository';
+import { fetchTimeSeriesData } from '../repository/time-series';
 import { GetAnalyticsDataInputSchema } from '../schemas';
 import * as Sentry from '@sentry/react-native';
 
@@ -27,7 +27,7 @@ export async function getAnalyticsData(
   const validated = GetAnalyticsDataInputSchema.parse(input);
   const results = await Promise.all(
     validated.metrics.map((metric) =>
-      repository.fetchTimeSeriesData(
+      fetchTimeSeriesData(
         validated.userId,
         metric,
         validated.timeRange,

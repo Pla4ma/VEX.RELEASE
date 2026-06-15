@@ -59,7 +59,7 @@ export function SessionSetupFooter({
       </Text>
 
       <Button
-        variant="primary"
+        <Text>variant="primary"</Text>
         size="lg"
         onPress={onStart}
         isLoading={isStarting}

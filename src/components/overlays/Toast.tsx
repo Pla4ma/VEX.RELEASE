@@ -8,9 +8,9 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../primitives';
-import { Icon } from '../../icons';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';

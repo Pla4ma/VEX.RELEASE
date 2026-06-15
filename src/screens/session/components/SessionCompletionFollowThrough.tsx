@@ -2,10 +2,10 @@ import React, { useMemo, useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import type { SessionSummary } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type SessionCompletionFollowThroughProps = {
   summary: SessionSummary;
@@ -49,7 +49,7 @@ function FollowThroughCard({
   children: React.ReactNode;
   delay: number;
   title: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -74,7 +74,7 @@ function FollowThroughCard({
 
 export function SessionCompletionFollowThrough({
   summary,
-}: SessionCompletionFollowThroughProps): JSX.Element {
+}: SessionCompletionFollowThroughProps): React.ReactNode {
   const { theme } = useTheme();
   const [challengesExpanded, setChallengesExpanded] = useState(false);
   const challengeLines = useMemo(() => buildChallengeLines(summary), [summary]);

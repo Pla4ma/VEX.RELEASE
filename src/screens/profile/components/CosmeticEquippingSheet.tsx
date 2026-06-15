@@ -5,8 +5,8 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Box, Card } from '../../../components/primitives';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Card } from '../../../components/primitives/Box';
 import { useUIStore } from '../../../store/index';
 
 import {

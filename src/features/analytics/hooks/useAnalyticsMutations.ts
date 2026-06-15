@@ -2,7 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import * as Sentry from '@sentry/react-native';
 import * as service from '../service';
-import * as repository from '../repository';
+import { markInsightAsRead } from '../repository/insights';
+import { updateDashboardWidget } from '../repository/dashboard';
+import { updateAnalyticsPreferences } from '../repository/stats';
 import {
   CreateExportJobInputSchema,
   UpdateDashboardWidgetInputSchema,
@@ -14,7 +16,7 @@ export function useMarkInsightAsRead(userId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ insightId }: { insightId: string }) =>
-      repository.markInsightAsRead(userId, insightId),
+      markInsightAsRead(userId, insightId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.insights(userId),
@@ -32,7 +34,7 @@ export function useUpdateDashboardWidget(userId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: z.infer<typeof UpdateDashboardWidgetInputSchema>) =>
-      repository.updateDashboardWidget(input.widgetId, input.updates),
+      updateDashboardWidget(input.widgetId, input.updates),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.dashboard(userId),
@@ -78,8 +80,8 @@ export function useUpdateAnalyticsPreferences(userId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (
-      preferences: Parameters<typeof repository.updateAnalyticsPreferences>[1],
-    ) => repository.updateAnalyticsPreferences(userId, preferences),
+      preferences: Parameters<typeof updateAnalyticsPreferences>[1],
+    ) => updateAnalyticsPreferences(userId, preferences),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: analyticsKeys.preferences(userId),

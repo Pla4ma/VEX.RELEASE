@@ -17,7 +17,7 @@ import Animated, {
 
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { GoalOption } from '../schemas';
 
 interface GoalCardProps {
@@ -35,7 +35,7 @@ export function GoalCard({
   isSelected,
   onPress,
   index,
-}: GoalCardProps): JSX.Element {
+}: GoalCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const animatedStyle = useAnimatedStyle(() => ({

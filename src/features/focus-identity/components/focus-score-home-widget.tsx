@@ -6,7 +6,7 @@ import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use ali
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
 
@@ -20,7 +20,7 @@ export function FocusScoreHomeWidget({
   model,
   onPress,
   onRetry,
-}: FocusScoreHomeWidgetProps): JSX.Element {
+}: FocusScoreHomeWidgetProps): React.ReactNode {
   if (model.isPending) {
     return (
       <GlassCard
@@ -58,7 +58,7 @@ export function FocusScoreHomeWidget({
             <Text
               style={{
                 color: vexLightGlass.text.secondary,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: '800',
                 letterSpacing: 0.8,
                 textTransform: 'uppercase',
@@ -121,7 +121,7 @@ export function FocusScoreHomeWidget({
             <Text
               style={{
                 color: vexLightGlass.text.secondary,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: '800',
                 letterSpacing: 0.8,
                 textTransform: 'uppercase',
@@ -150,7 +150,7 @@ export function FocusScoreHomeWidget({
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 12,
               }}
               numberOfLines={2}
             >

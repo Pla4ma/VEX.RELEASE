@@ -22,7 +22,7 @@ export function MasteryCard({
   userId,
   state,
   onStateChange,
-}: Props): JSX.Element {
+}: Props): React.ReactNode {
   const { theme } = useTheme();
   const [cardState, setCardState] = useState(state);
 
@@ -165,7 +165,7 @@ export function MasteryCard({
               </View>
               {challenge.status === 'COMPLETED' ? (
                 <Button
-                  size="sm"
+                  <Text>size="sm"</Text>
                   variant="outline"
                   onPress={() => handleClaim(challenge.id)}
                   accessibilityLabel="Claim reward"

@@ -28,7 +28,7 @@ export function LauncherStep({
   onFinishOnboarding,
   onStartFirstSession,
   selectedPreset,
-}: LauncherStepProps): JSX.Element {
+}: LauncherStepProps): React.ReactNode {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const stepPadding = {
@@ -92,7 +92,7 @@ export function LauncherStep({
         </View>
         <View style={styles.fullWidth}>
           <Button
-            fullWidth
+            <Text>fullWidth</Text>
             onPress={() =>
               onFinishOnboarding(
                 'Your first session is complete. Come back tomorrow.',

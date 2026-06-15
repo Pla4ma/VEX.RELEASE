@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, Switch } from 'react-native';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
-import { Icon } from '../../icons';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 

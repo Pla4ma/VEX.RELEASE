@@ -19,7 +19,7 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusGoal } from '../schemas';
 import { GOAL_OPTIONS } from '../service';
 import { GoalCard } from './GoalCard';
@@ -35,7 +35,7 @@ export function NameAndGoalScreen({
   onContinue,
   onSkip,
   onBack,
-}: NameAndGoalScreenProps): JSX.Element {
+}: NameAndGoalScreenProps): React.ReactNode {
   const { theme } = useTheme();
   const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);

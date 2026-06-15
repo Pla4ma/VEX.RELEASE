@@ -5,7 +5,7 @@ import { lightColors } from '@/theme/tokens/colors';
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { useOnboardingStore } from '../../features/onboarding/store';
 import type { Lane } from '../../features/lane-engine';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,7 +19,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass';
+} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 
@@ -42,7 +42,7 @@ const LANE_DESCRIPTIONS: Record<Lane, string> = {
 };
 
 export const LaneModeSettingsScreen = withScreenErrorBoundary(
-  function _LaneModeSettingsScreen({ navigation }: Props): JSX.Element {
+  function LaneModeSettingsScreen({ navigation }: Props): React.ReactNode {
     const { theme } = useTheme();
     const insets = useSafeAreaInsets();
     const chosenLane = useOnboardingStore(

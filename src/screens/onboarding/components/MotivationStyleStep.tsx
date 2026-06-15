@@ -6,7 +6,7 @@ import type {
   FocusGoal,
   MotivationProfileType,
 } from '../../../features/onboarding/schemas';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from '../styles';
 import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 import { MOTIVATION_STYLE_OPTIONS } from './onboarding-flow-data';
@@ -21,7 +21,7 @@ export function MotivationStyleStep({
   goal,
   motivationStyle,
   onSelectStyle,
-}: MotivationStyleStepProps): JSX.Element {
+}: MotivationStyleStepProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

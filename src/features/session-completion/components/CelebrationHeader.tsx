@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
 
 interface CelebrationHeaderProps {
   featureColor: string;
@@ -15,7 +15,7 @@ export function CelebrationHeader({
   featureColor,
   featureName,
   featureDescription,
-}: CelebrationHeaderProps): JSX.Element {
+}: CelebrationHeaderProps): React.ReactNode {
   return (
     <>
       <View
@@ -31,7 +31,7 @@ export function CelebrationHeader({
         <Text
           style={{
             color: featureColor,
-            fontSize: 9,
+            fontSize: 12,
             fontWeight: '900',
             letterSpacing: 2,
           }}

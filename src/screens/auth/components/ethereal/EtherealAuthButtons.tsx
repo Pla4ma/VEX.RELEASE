@@ -1,33 +1,4 @@
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
-
-import { etherealButton } from '@/theme/tokens/ethereal-sky';
-import { AppleGlyph, EnvelopeGlyph, GoogleGlyph } from './AuthGlyphs';
-import {
-  StaggeredAuthButton,
-  type StaggeredButtonSpec,
-} from './StaggeredAuthButton';
-
-export type EtherealAuthProvider = 'apple' | 'google' | 'email';
-
-type EtherealAuthButtonsProps = {
-  onProviderPress: (provider: EtherealAuthProvider) => void;
-  disabled?: boolean;
-  startDelayMs?: number;
-  emailLabel?: string;
-};
-
-export function EtherealAuthButtons({
-  onProviderPress,
-  disabled = false,
-  startDelayMs = 800,
-  emailLabel = 'Continue with Email',
-}: EtherealAuthButtonsProps): React.JSX.Element {
-  const onEmailPress = useCallback((): void => {
-    onProviderPress('email');
-  }, [onProviderPress]);
-
-  const googleSpec: StaggeredButtonSpec = {
+const googleSpec: StaggeredButtonSpec = {
     provider: 'google',
     label: 'Continue with Google',
     fill: etherealButton.googleFill,
@@ -39,6 +10,30 @@ export function EtherealAuthButtons({
     useRipple: false,
   };
 
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
+import { etherealButton } from '@/theme/tokens/ethereal-sky';
+import { AppleGlyph, EnvelopeGlyph, GoogleGlyph } from './AuthGlyphs';
+import {
+  StaggeredAuthButton,
+  type StaggeredButtonSpec,
+} from './StaggeredAuthButton';
+export type EtherealAuthProvider = 'apple' | 'google' | 'email';
+type EtherealAuthButtonsProps = {
+  onProviderPress: (provider: EtherealAuthProvider) => void;
+  disabled?: boolean;
+  startDelayMs?: number;
+  emailLabel?: string;
+};
+export function EtherealAuthButtons({
+  onProviderPress,
+  disabled = false,
+  startDelayMs = 800,
+  emailLabel = 'Continue with Email',
+}: EtherealAuthButtonsProps): React.JSX.Element {
+  const onEmailPress = useCallback((): void => {
+    onProviderPress('email');
+  }, [onProviderPress]);
   const appleSpec: StaggeredButtonSpec = {
     provider: 'apple',
     label: 'Continue with Apple',
@@ -50,7 +45,6 @@ export function EtherealAuthButtons({
     useShimmer: true,
     useRipple: false,
   };
-
   const emailSpec: StaggeredButtonSpec = {
     provider: 'email',
     label: emailLabel,
@@ -64,7 +58,6 @@ export function EtherealAuthButtons({
     useRipple: false,
     rippleColor: etherealButton.googleBorder,
   };
-
   return (
     <View style={{ width: '100%', gap: 14 }}>
       <StaggeredAuthButton

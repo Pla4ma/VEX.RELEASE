@@ -17,7 +17,7 @@ export function WeeklyCalendar({
   selectedDay,
   onDaySelect,
   currentStreak,
-}: WeeklyCalendarProps): JSX.Element {
+}: WeeklyCalendarProps): React.ReactNode {
   const [showDetails, setShowDetails] = useState<Date | null>(null);
   const today = new Date();
   today.setHours(0, 0, 0, 0);

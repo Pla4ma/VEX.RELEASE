@@ -33,7 +33,7 @@ export function StreakBrokenModal({
   onRestoreStreak,
   gemsBalance = 0,
   onRestoreStart,
-}: StreakBrokenModalProps): JSX.Element {
+}: StreakBrokenModalProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const [isRestoring, setIsRestoring] = useState(false);
@@ -161,7 +161,7 @@ export function StreakBrokenModal({
               }}
             >
               <Button
-                variant="primary"
+                <Text>variant="primary"</Text>
                 size="lg"
                 fullWidth
                 onPress={onStartFresh}
@@ -172,7 +172,7 @@ export function StreakBrokenModal({
                 🔥 Start Fresh
               </Button>
               <Button
-                variant="ghost"
+                <Text>variant="ghost"</Text>
                 size="md"
                 fullWidth
                 onPress={onDismiss}

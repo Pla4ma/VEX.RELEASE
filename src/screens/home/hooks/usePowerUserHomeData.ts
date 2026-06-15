@@ -6,8 +6,8 @@ import { getFeatureAvailability } from '../../../features/liveops-config';
 import {
   useActiveChallenges,
   useClaimChallengeReward,
-} from '../../../features/challenges/hooks';
-import { useFreezeStreak } from '../../../features/streaks/hooks';
+} from $1../../../features/challenges/hooks/challengeQueries$1;
+import { useFreezeStreak } from $1../../../features/challenges/hooks/challengeQueries$1;
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';

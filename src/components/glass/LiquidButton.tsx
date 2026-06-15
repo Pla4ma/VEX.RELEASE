@@ -48,7 +48,7 @@ export function LiquidButton({
   accessibilityLabel,
   accessibilityHint,
   testID,
-}: LiquidButtonProps): JSX.Element {
+}: LiquidButtonProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(1);
 
@@ -157,7 +157,7 @@ export function LiquidButton({
           <Text
             style={{
               color: v.textColor,
-              fontSize: 11,
+              fontSize: 12,
               opacity: 0.78,
             }}
           >

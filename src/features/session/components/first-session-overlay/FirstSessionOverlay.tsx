@@ -7,7 +7,7 @@
 import React, { useCallback } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { Box } from '../../../../components/primitives/Box';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import { TooltipCard } from './TooltipCard';
 import { HighlightRing } from './HighlightRing';
 import { TOOLTIPS } from './constants';

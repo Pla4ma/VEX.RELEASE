@@ -30,7 +30,7 @@ type ActiveSessionModeOverlaysProps = {
 
 export function ActiveSessionModeOverlays(
   props: ActiveSessionModeOverlaysProps,
-): JSX.Element {
+): React.ReactNode {
   if (!props.displayPolicy.showModeOverlay) {
     return <></>;
   }

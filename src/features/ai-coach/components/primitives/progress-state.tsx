@@ -24,7 +24,7 @@ export function StepProgress({ steps, currentStep }: StepProgressProps) {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
         return (
-          <View key={index} style={styles.stepItem}>
+          <View key={step.label} style={styles.stepItem}>
             <View
               style={[
                 styles.stepCircle,
@@ -118,7 +118,7 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
   return (
     <View style={styles.processingContainer}>
       {steps.map((step, index) => (
-        <View key={index} style={styles.processingItem}>
+        <View key={step.label} style={styles.processingItem}>
           <View
             style={[
               styles.processingDot,

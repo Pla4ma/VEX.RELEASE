@@ -5,7 +5,7 @@ import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Text } from '../../../components/primitives/Text';
 import { Skeleton } from '../../../components/ui/Skeleton';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { PlanItem } from '../../../features/plan/types';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -31,7 +31,7 @@ export function PlanWeekView({
   onRetry,
   onAddItem,
   onStartSession,
-}: PlanWeekViewProps): JSX.Element {
+}: PlanWeekViewProps): React.ReactNode {
   if (isLoading) {
     return (
       <View style={{ gap: 10 }}>

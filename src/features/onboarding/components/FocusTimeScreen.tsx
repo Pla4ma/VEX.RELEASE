@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusDuration, DurationOption } from '../schemas';
 import { DURATION_OPTIONS } from '../service';
 interface FocusTimeScreenProps {
@@ -26,7 +26,7 @@ function DurationCard({
   isSelected: boolean;
   onPress: () => void;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   useEffect(() => {
@@ -88,7 +88,7 @@ export function FocusTimeScreen({
   onSelect,
   onSkip,
   onBack,
-}: FocusTimeScreenProps & { onBack?: () => void }): JSX.Element {
+}: FocusTimeScreenProps & { onBack?: () => void }): React.ReactNode {
   const [selectedDuration, setSelectedDuration] =
     useState<FocusDuration | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);

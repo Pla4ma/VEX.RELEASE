@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { getConnectionState } from '../../lib/repository/base';
 import { enqueue } from '../../lib/offline/queue';
-import { SessionSummarySchema } from '../../session/types';
+import { SessionSummarySchema } from '../../session/types/schemas';
 import { createDebugger } from '../../utils/debug';
 import { queryClient, QueryKeys } from '../../api/QueryProvider';
 import { useSessionUIStore } from '../../store/session-state';

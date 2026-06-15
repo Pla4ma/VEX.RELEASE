@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { StudyTask } from '../types';
 import { TASK_PRIORITY_CONFIG } from '../constants';
 import { styles } from './study-task-list-styles';

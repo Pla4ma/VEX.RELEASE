@@ -121,7 +121,7 @@ describe('ScreenErrorBoundary', () => {
 
   it('resets and remounts children when retry is pressed', () => {
     let shouldThrow = true;
-    const RetryComponent = (): JSX.Element => {
+    const RetryComponent = (): React.ReactNode => {
       if (shouldThrow) {
         throw new Error('Test error');
       }

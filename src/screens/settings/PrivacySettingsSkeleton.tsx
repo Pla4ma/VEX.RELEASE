@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '../../theme';
-import { Box } from '../../components/primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box } from '../../components/primitives/Box';
 import { SkeletonItem } from '../../shared/ui/components/SkeletonItem';
 
 export const PrivacySettingsSkeleton: React.FC = () => {

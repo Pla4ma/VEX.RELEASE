@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
 import type { NotificationContext } from './service-types';
 import {

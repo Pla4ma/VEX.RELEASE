@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { useTheme } from '../../../theme';
 
 type ActiveSessionHeaderProps = {
@@ -16,7 +16,7 @@ export function ActiveSessionHeader({
   isPaused,
   onInterrupt,
   theme,
-}: ActiveSessionHeaderProps): JSX.Element {
+}: ActiveSessionHeaderProps): React.ReactNode {
   return (
     <Box
       flexDirection="row"

@@ -11,7 +11,7 @@ import {
   navigateToMainTab,
 } from '../../../navigation/navigation-helpers';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 

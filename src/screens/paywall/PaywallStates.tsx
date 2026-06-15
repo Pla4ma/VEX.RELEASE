@@ -22,7 +22,7 @@ type StatusMessageProps = {
 export function PaywallStatusMessageBanner({
   statusMessage,
   onDismiss,
-}: StatusMessageProps): JSX.Element {
+}: StatusMessageProps): React.ReactNode {
   return (
     <StatusBanner
       status={
@@ -39,7 +39,7 @@ export function PaywallStatusMessageBanner({
   );
 }
 
-export function PaywallLoadingState(): JSX.Element {
+export function PaywallLoadingState(): React.ReactNode {
   return (
     <View style={styles.skeletonContainer}>
       <View style={styles.skeletonHeader}>
@@ -67,7 +67,7 @@ export function PaywallErrorState({
   theme,
   onRestore,
   onRetry,
-}: PaywallErrorStateProps): JSX.Element {
+}: PaywallErrorStateProps): React.ReactNode {
   return (
     <View style={styles.errorContainer}>
       <StatusBanner
@@ -85,7 +85,7 @@ export function PaywallErrorState({
           Having trouble? Try again or contact support
         </Text>
         <Button
-          variant="ghost"
+          <Text>variant="ghost"</Text>
           size="sm"
           onPress={onRestore}
           accessibilityLabel="Restore purchases"
@@ -107,7 +107,7 @@ type PaywallUnavailableStateProps = {
 export function PaywallUnavailableState({
   onRestore,
   onRetry,
-}: PaywallUnavailableStateProps): JSX.Element {
+}: PaywallUnavailableStateProps): React.ReactNode {
   return (
     <View style={styles.errorContainer}>
       <StatusBanner
@@ -117,7 +117,7 @@ export function PaywallUnavailableState({
         onRetry={onRetry}
       />
       <Button
-        variant="ghost"
+        <Text>variant="ghost"</Text>
         size="sm"
         onPress={onRestore}
         accessibilityLabel="Restore purchases"

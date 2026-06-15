@@ -1,4 +1,4 @@
-import * as repository from '../repository';
+import { fetchTimeSeriesData } from '../repository/time-series';
 import {
   TrendAnalysisSchema,
   type TimeRange,
@@ -39,7 +39,7 @@ export async function calculateTrend(
   timeRange: TimeRange,
   _lookbackPeriods: number = 3,
 ): Promise<TrendAnalysis> {
-  const data = await repository.fetchTimeSeriesData(
+  const data = await fetchTimeSeriesData(
     userId,
     metric,
     timeRange,

@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useHaptics } from '../../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
@@ -25,7 +25,7 @@ function DockButton({
   onPress: () => void;
   children: React.ReactNode;
   color: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const { light } = useHaptics();
   const scale = useSharedValue(1);
@@ -78,7 +78,7 @@ export function VexControlDock({
   onEnd,
   isPaused,
   testID,
-}: VexControlDockProps): JSX.Element {
+}: VexControlDockProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

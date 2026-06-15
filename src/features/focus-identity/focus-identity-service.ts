@@ -1,5 +1,5 @@
 import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { FOCUS_SCORE_CONFIG } from './focus-score-config';
 import type { FocusIdentityProfile } from './FocusIdentityEngine';
 import {

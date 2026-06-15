@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import * as repository from '../repository';
+import { fetchTimeSeriesData } from '../repository/time-series';
+import { createInsight } from '../repository/insights';
 import {
   ComparativeStatsSchema,
   InsightSchema,
@@ -10,7 +11,7 @@ import {
   type Insight,
   type ComparativeStats,
 } from '../schemas';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 
 export async function getComparativeStats(
   userId: string,
@@ -23,8 +24,8 @@ export async function getComparativeStats(
   const previousStart = currentStart - periodLength;
   const previousEnd = currentStart;
   const [currentData, previousData] = await Promise.all([
-    repository.fetchTimeSeriesData(userId, metric, currentRange, 'day'),
-    repository.fetchTimeSeriesData(
+    fetchTimeSeriesData(userId, metric, currentRange, 'day'),
+    fetchTimeSeriesData(
       userId,
       metric,
       'custom' as TimeRange,
@@ -81,7 +82,7 @@ async function createInsight(
     actionPayload: validated.actionPayload,
     relatedMetrics: validated.relatedMetrics,
   });
-  await repository.createInsight(insight);
+  await createInsight(insight);
   eventBus.publish('analytics:insight_generated', {
     userId: validated.userId,
     insightId: insight.id,
@@ -92,7 +93,7 @@ async function createInsight(
 
 export async function generateInsights(userId: string): Promise<Insight[]> {
   const insights: Insight[] = [];
-  const streakData = await repository.fetchTimeSeriesData(
+  const streakData = await fetchTimeSeriesData(
     userId,
     'streak_days',
     'last_7_days',
@@ -113,7 +114,7 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
       }),
     );
   }
-  const todaysSession = await repository.fetchTimeSeriesData(
+  const todaysSession = await fetchTimeSeriesData(
     userId,
     'sessions_completed',
     'today',
@@ -137,7 +138,7 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
       }),
     );
   }
-  const xpData = await repository.fetchTimeSeriesData(
+  const xpData = await fetchTimeSeriesData(
     userId,
     'xp_earned',
     'last_30_days',

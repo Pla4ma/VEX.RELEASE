@@ -154,7 +154,7 @@ export function StudyProgressPanel({
 
         <Box flexDirection="row" gap={12}>
           <Button
-            size="sm"
+            <Text>size="sm"</Text>
             onPress={studyProgress.onMarkComplete}
             isLoading={studyProgress.isCompleting}
             accessibilityLabel="Mark complete"
@@ -164,7 +164,7 @@ export function StudyProgressPanel({
             Mark Complete
           </Button>
           <Button
-            variant="outline"
+            <Text>variant="outline"</Text>
             size="sm"
             onPress={studyProgress.onSkip}
             accessibilityLabel="Skip task"

@@ -1,7 +1,7 @@
 import { MMKV } from 'react-native-mmkv';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { createDebugger } from '../../../utils/debug';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import type { OnboardingState } from '../types';
 import { loadPersistedOnboarding } from './persistence';
 import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';

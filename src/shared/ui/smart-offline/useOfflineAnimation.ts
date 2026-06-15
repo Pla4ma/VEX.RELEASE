@@ -82,6 +82,11 @@ export function useOfflineAnimation({
       animateIn();
       hideTimer.current = setTimeout(animateOut, animationVerySlow);
     }
+    return () => {
+      if (hideTimer.current) {
+        clearTimeout(hideTimer.current);
+      }
+    };
   }, [animateIn, animateOut, isConnected, lastSyncTime, syncQueueLength, animationVerySlow]);
 
   const handleScale = useCallback(() => {

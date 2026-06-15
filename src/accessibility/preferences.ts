@@ -2,7 +2,7 @@
  * User accessibility preference management.
  */
 
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import type { AccessibilityPreferences } from './types';
 import { DEFAULT_ACCESSIBILITY } from './types';
 

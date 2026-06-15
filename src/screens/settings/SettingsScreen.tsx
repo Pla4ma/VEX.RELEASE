@@ -2,8 +2,8 @@ import React from 'react';
 import { ScrollView, Pressable, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme, ThemeMode } from '../../theme';
-import { Box, Text } from '../../components/primitives';
+import { useTheme, ThemeMode } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
 import { useAuthStore } from '../../store';
 import type { SettingsStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
@@ -16,11 +16,11 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass';
+} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
-export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
+export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
   navigation,
 }: Props): React.JSX.Element {
   const { theme, mode, setMode } = useTheme();

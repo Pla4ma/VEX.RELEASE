@@ -4,7 +4,7 @@ import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 
 interface StreakCardProps {
   currentStreak: number;
@@ -12,7 +12,7 @@ interface StreakCardProps {
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
 
-export function StreakCard({ currentStreak }: StreakCardProps): JSX.Element {
+export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode {
   return (
     <GlassCard padding={16} radius={22} variant="default">
       <View
@@ -71,7 +71,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): JSX.Element {
             <Text
               style={{
                 color: '#6B8F85',
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: '700',
               }}
             >

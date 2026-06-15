@@ -10,7 +10,7 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useHaptics } from '../../../utils/haptics';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -52,7 +52,7 @@ const QUICK_ACTIONS: QuickAction[] = [
 
 export function QuickActionsRail({
   onAction,
-}: QuickActionsRailProps): JSX.Element {
+}: QuickActionsRailProps): React.ReactNode {
   const haptics = useHaptics();
 
   const handlePress = (action: QuickAction) => {

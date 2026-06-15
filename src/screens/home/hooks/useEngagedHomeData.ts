@@ -6,8 +6,8 @@ import { getFeatureAvailability } from '../../../features/liveops-config';
 import {
   useActiveChallenges,
   useClaimChallengeReward,
-} from '../../../features/challenges/hooks';
-import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
+} from $1../../../features/challenges/hooks/challengeQueries$1;
+import { useActiveIntervention } from $1../../../features/challenges/hooks/challengeQueries$1;
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { EngagedHomeData } from './home-data-types';
 

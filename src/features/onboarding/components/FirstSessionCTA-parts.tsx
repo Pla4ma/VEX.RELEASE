@@ -6,14 +6,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusDuration, FocusGoal } from '../schemas';
 import { DURATION_OPTIONS, GOAL_OPTIONS } from '../service';
 
 /**
  * Pulsing circle animation for excitement
  */
-export function PulseRing(): JSX.Element {
+export function PulseRing(): React.ReactNode {
   const { theme } = useTheme();
 
   const pulseStyle = useAnimatedStyle(() => ({
@@ -50,7 +50,7 @@ export function SessionPreview({
 }: {
   duration: FocusDuration | null;
   goal: FocusGoal | null;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   const durationOption = DURATION_OPTIONS.find((d) => d.value === duration);

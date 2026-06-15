@@ -2,13 +2,13 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import React, { useCallback } from 'react';
 import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 
-import { Box, Text } from '../../components/primitives';
-import { ChallengeHub } from '../../features/challenges/components';
-import { useClaimChallengeReward } from '../../features/challenges/hooks';
+import { Box, Text } from '../../components/primitives/Box';
+import { ChallengeHub } from '../../features/challenges/components/ChallengeHub';
+import { useClaimChallengeReward } from '../../features/challenges/hooks/challengeMutations';
 import { useAuthStore } from '../../store';
 import { useToast } from '../../shared/ui/components/Toast';
 
-export function ChallengesScreen(): JSX.Element {
+export function ChallengesScreen(): React.ReactNode {
   const userId = useAuthStore((state) => state.user?.id);
   const claimReward = useClaimChallengeReward();
   const { show: showToast } = useToast();

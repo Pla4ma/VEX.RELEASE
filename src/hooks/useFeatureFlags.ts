@@ -4,7 +4,7 @@ import {
   FeatureFlag,
   FeatureFlagValue,
 } from '../features/FeatureFlagService';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('hooks:feature-flags');
 export interface FeatureFlagsState {

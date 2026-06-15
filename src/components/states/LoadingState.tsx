@@ -9,8 +9,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Skeleton } from '../ui/Skeleton';
-import { useTheme } from '../../theme';
-import { Text } from '../primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Text } from '../primitives/Text';
 
 // ============================================================================
 // Types

@@ -27,7 +27,7 @@ export function SessionLayers({
   displayPolicy,
   isOffline,
   theme,
-}: SessionLayersProps): JSX.Element {
+}: SessionLayersProps): React.ReactNode {
   const { companion, sessionQuery, metrics } = controller;
   const { isPaused } = sessionQuery;
   const activeSession = sessionQuery.session;

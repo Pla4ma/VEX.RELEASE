@@ -9,7 +9,7 @@ import Animated, {
 
 import { lightColors } from '../../../../theme/tokens/colors';
 
-export function PulsingLiveDot(): JSX.Element {
+export function PulsingLiveDot(): React.ReactNode {
   const reduceMotion = useReducedMotion();
   const animatedStyle = useAnimatedStyle(() =>
     reduceMotion

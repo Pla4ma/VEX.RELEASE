@@ -9,7 +9,7 @@ interface StageProps {
   sharedInput: NewUserContainerInput;
 }
 
-export function EngagedStage({ sharedInput }: StageProps): JSX.Element {
+export function EngagedStage({ sharedInput }: StageProps): React.ReactNode {
   const model = useEngagedContainerModel(sharedInput);
   const data = useEngagedHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;

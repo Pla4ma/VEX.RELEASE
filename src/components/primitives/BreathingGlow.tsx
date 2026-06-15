@@ -39,7 +39,7 @@ export function BreathingGlow({
   intensity = 0.45,
   durationMs = ambientLoop.breathing,
   style,
-}: BreathingGlowProps): JSX.Element {
+}: BreathingGlowProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const phase = useSharedValue(0);
 

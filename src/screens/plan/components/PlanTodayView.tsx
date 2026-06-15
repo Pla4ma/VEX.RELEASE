@@ -3,7 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
@@ -30,7 +30,7 @@ export function PlanTodayView({
   onAddItem,
   onCompleteItem,
   onStartSession,
-}: PlanTodayViewProps): JSX.Element {
+}: PlanTodayViewProps): React.ReactNode {
   if (isLoading) {
     return (
       <View style={{ padding: 20, gap: 12 }}>
@@ -157,7 +157,7 @@ export function PlanTodayView({
                   <Text
                     style={{
                       color: getPriorityColor(item.priority),
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: '700',
                     }}
                   >

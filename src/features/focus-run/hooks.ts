@@ -11,18 +11,22 @@ import type { FocusRunDisplay, FocusRunGrade } from './schemas';
 import type { Lane } from '../lane-engine/types';
 
 export function useFocusRun(userId: string | null, enabled = true) {
-  const query = useQuery({
+  const { data, error, isError, isPending, refetch } = useQuery({
     enabled: Boolean(userId) && enabled,
     queryFn: () => getStoredFocusRun(userId ?? ''),
     queryKey: ['focus-run', userId],
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? null,
-    error: query.error,
-    isError: query.isError,
-    isPending: query.isPending,
-    refetch: query.refetch,
+    data: data ?? null,
+    error: error,
+    isError: isError,
+    isPending: isPending,
+    refetch: refetch,
   };
 }
 

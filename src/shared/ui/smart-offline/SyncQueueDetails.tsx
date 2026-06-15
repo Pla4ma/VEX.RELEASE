@@ -18,7 +18,7 @@ export function SyncQueueDetails({
   isConnected: boolean;
   onSync: () => void;
   syncQueue: PendingAction[];
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   return (

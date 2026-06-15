@@ -5,8 +5,8 @@ import {
   PdfUploader,
   TextPasteInput,
   YouTubeInput,
-} from '../components';
-import type { ContentSourceType, InputTab } from '../types';
+} from $1./ExtractionProgress$1;
+import type { ContentSourceType, InputTab } from $1./ExtractionProgress$1;
 
 const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {
   paste: 'PASTE',
@@ -47,7 +47,7 @@ export function ContentInputActiveTab({
   setPastedText,
   setYoutubeUrl,
   setSelectedFile,
-}: ContentInputActiveTabProps): JSX.Element {
+}: ContentInputActiveTabProps): React.ReactNode {
   if (showExtractionProgress) {
     return (
       <ExtractionProgress

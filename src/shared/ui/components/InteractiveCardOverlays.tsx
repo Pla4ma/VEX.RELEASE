@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { Theme } from '../../../theme';
 import { cardStyles as styles } from './InteractiveCardStyles';
 

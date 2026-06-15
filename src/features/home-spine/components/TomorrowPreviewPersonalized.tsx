@@ -25,7 +25,7 @@ function PreviewLine({
   icon: string;
   label: string;
   text: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box mb="md">
       <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
@@ -43,7 +43,7 @@ function PreviewLine({
   );
 }
 
-export function TomorrowPreviewPersonalized(props: Props): JSX.Element | null {
+export function TomorrowPreviewPersonalized(props: Props): React.ReactNode | null {
   if (props.bossPreview) {
     const boss = props.bossPreview;
     return (

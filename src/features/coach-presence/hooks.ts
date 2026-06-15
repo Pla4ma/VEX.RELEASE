@@ -47,14 +47,19 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
   );
   const motivationStyle = mapMotivationStyle(motivationProfile?.primary);
   const enabled = Boolean(input.userId && input.isOnline);
-  const memoryQuery = useQuery({
+  const { data, error, isError, isPending, refetch } = useQuery({
     enabled,
     queryFn: () => fetchCoachPresenceMemorySummary(input.userId ?? ''),
     queryKey: ['coach-presence', 'memory-summary', input.userId],
     staleTime: 300000,
-  });
+    });
+
+
+
+
+
   const fallbackMemory = enabled ? UNAVAILABLE_MEMORY : EMPTY_MEMORY;
-  const memorySummary = memoryQuery.data ?? fallbackMemory;
+  const memorySummary = data ?? fallbackMemory;
   const data = memorySummary
     ? buildCoachPresence({
         companion: input.companion,
@@ -76,11 +81,11 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
 
   return {
     data,
-    error: memoryQuery.error,
-    isError: memoryQuery.isError,
-    isPending: memoryQuery.isPending,
+    error: error,
+    isError: isError,
+    isPending: isPending,
     refetch: () => {
-      memoryQuery.refetch();
+      refetch();
     },
   };
 }

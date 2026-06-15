@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Box, Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box, Text } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { RewardPrioritySummary } from '../../../features/session-completion/reward-priority';
 
 type SessionRewardPriorityRowsProps = {

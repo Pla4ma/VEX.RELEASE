@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Pressable, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useFadeStyle, useScaleInStyle } from './animations';
 import { styles } from './styles';
 import type { SuccessStateProps } from './types';
@@ -17,7 +17,7 @@ export function SuccessState({
   onAction,
   style,
   testID,
-}: SuccessStateProps): JSX.Element {
+}: SuccessStateProps): React.ReactNode {
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 200);
   const scaleStyle = useScaleInStyle(0.5);

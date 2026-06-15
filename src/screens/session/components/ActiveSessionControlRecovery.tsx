@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 
-import { Box, Card, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
 
 type ActiveSessionControlRecoveryProps = {
@@ -15,7 +15,7 @@ export function ActiveSessionControlRecovery({
   failure,
   onDismiss,
   onRetry,
-}: ActiveSessionControlRecoveryProps): JSX.Element {
+}: ActiveSessionControlRecoveryProps): React.ReactNode {
   return (
     <Box px="lg" pb="md">
       <Card size="md">

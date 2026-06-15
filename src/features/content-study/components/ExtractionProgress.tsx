@@ -8,10 +8,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Button, Card, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { Button, Card, Text } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons/components/Icon';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ExtractionProgressProps } from '../types';
 
 const STAGES = [
@@ -45,7 +45,7 @@ export function ExtractionProgress({
   onCancel,
   error,
   onRetry,
-}: ExtractionProgressProps): JSX.Element {
+}: ExtractionProgressProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(1);
@@ -182,12 +182,12 @@ export function ExtractionProgress({
 
         {isFailed && onRetry ? (
           <Button onPress={onRetry} size="sm">
-            Retry Extraction
+            <Text>Retry Extraction</Text>
           </Button>
         ) : null}
         {!isFailed && !isComplete && onCancel ? (
           <Button onPress={onCancel} size="sm" variant="ghost">
-            Cancel
+            <Text>Cancel</Text>
           </Button>
         ) : null}
       </View>

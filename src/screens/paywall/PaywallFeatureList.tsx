@@ -9,7 +9,7 @@ import type { Theme } from '../../theme';
 import { FREE_BOUNDARY_COPY, PREMIUM_FEATURES } from './paywall-copy';
 import { paywallStyles as styles } from './paywall-styles';
 
-export function PaywallFeatureList({ theme }: { theme: Theme }): JSX.Element {
+export function PaywallFeatureList({ theme }: { theme: Theme }): React.ReactNode {
   return (
     <View style={styles.featuresList}>
       {PREMIUM_FEATURES.map((feature, index) => (
@@ -64,7 +64,7 @@ export function PaywallFeatureList({ theme }: { theme: Theme }): JSX.Element {
   );
 }
 
-export function FreeBoundaryCard({ theme }: { theme: Theme }): JSX.Element {
+export function FreeBoundaryCard({ theme }: { theme: Theme }): React.ReactNode {
   return (
     <CardEnterAnimation>
       <View

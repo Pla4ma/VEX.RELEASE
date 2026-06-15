@@ -46,7 +46,7 @@ export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard
   testID,
   accessibilityLabel,
   glowMint = false,
-}: GlassCardProps): JSX.Element {
+}: GlassCardProps): React.ReactNode {
   const v = resolveVariant(variant);
   const resolvedPadding = padding ?? (size ? SIZE_PADDING[size] : 18);
   const resolvedRadius = radius ?? (size ? SIZE_RADIUS[size] : 24);
@@ -61,12 +61,7 @@ export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard
         {
           backgroundColor: v.background, borderColor: v.border,
           borderRadius: resolvedRadius, borderWidth: 1.35, elevation: 3, overflow: 'hidden',
-          shadowColor: v.shadowColor, shadowOffset: v.shadowOffset,
-          shadowOpacity: v.shadowOpacity, shadowRadius: v.shadowRadius,
-        },
-        glowMint ? {
-          shadowColor: 'rgba(18, 184, 148, 0.22)', shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.85, shadowRadius: 22,
+          boxShadow: `0px 10px 22px ${v.shadowColor, shadowOffset: v.shadowOffset, shadowOpacity: v.shadowOpacity, shadowRadius: v.shadowRadius, }, glowMint ? { shadowColor: 'rgba(18, 184, 148, 0.22)'}`,
         } : null,
         style,
       ]}

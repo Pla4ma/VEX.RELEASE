@@ -12,7 +12,7 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, timingPresets } from '../../../theme/tokens/motion';
-import { borderRadius } from '../../../theme/tokens';
+import { borderRadius } from '../../../theme/tokens/radius';
 
 export function UnlockIconBurst({
   icon,
@@ -20,7 +20,7 @@ export function UnlockIconBurst({
 }: {
   icon: string;
   color: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const burstScale = useSharedValue(0);
   const burstOpacity = useSharedValue(0);

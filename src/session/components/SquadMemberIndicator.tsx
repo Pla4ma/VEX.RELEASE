@@ -12,7 +12,7 @@ import Animated, {
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import type { SquadMemberSession } from './SquadSyncIndicator.types';
 
 import { formatDurationColon as formatDuration } from '../../utils/format-duration';
@@ -29,7 +29,7 @@ export function SquadMemberIndicator({
   showCompletionToast,
   onEncourage,
   hasBeenEncouraged,
-}: MemberIndicatorProps): JSX.Element {
+}: MemberIndicatorProps): React.ReactNode {
   const { theme } = useTheme();
   const pulseValue = useSharedValue(1);
   const [showEncourageAction, setShowEncourageAction] = React.useState(false);

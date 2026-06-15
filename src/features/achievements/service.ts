@@ -5,7 +5,7 @@ import {
 } from './types';
 import { ALL_ACHIEVEMENTS } from './definitions';
 import * as repository from './repository';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { capture } from '../../shared/analytics/analytics-service';
 import { ProgressionEvents } from '../../shared/analytics/analytics-events';
 import { initializeAchievementTracking } from './achievement-tracking-init';

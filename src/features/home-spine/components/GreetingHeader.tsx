@@ -5,8 +5,8 @@ import { lightColors } from '@/theme/tokens/colors';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { CompanionMood } from '../../companion/types';
 import {
   CompanionHeaderAvatar,
@@ -56,7 +56,7 @@ export function GreetingHeader({
   onPressProfile,
   onPressNotifications,
   unreadNotificationCount = 0,
-}: GreetingHeaderProps): JSX.Element {
+}: GreetingHeaderProps): React.ReactNode {
   const { theme } = useTheme();
   const hour = new Date().getHours();
   const greeting = useMemo(() => getGreeting(hour), [hour]);
@@ -147,7 +147,7 @@ export function GreetingHeader({
                     variant="caption"
                     style={{
                       color: lightColors.text.inverse,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: '700',
                       lineHeight: 14,
                     }}

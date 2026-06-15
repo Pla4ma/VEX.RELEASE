@@ -8,7 +8,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useHaptics } from '../../../utils/haptics';
 import { springPresets, timingPresets } from '../../../theme/tokens/motion';
@@ -28,7 +28,7 @@ const ACTION_ITEM_HEIGHT = 52;
 export function FloatingActionButton({
   actions,
   onActionPress,
-}: FloatingActionButtonProps): JSX.Element {
+}: FloatingActionButtonProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const haptics = useHaptics();
   const [isOpen, setIsOpen] = useState(false);

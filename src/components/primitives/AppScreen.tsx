@@ -9,7 +9,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
 import { GlassScreen } from '../glass/GlassScreen';
 
@@ -31,7 +31,7 @@ export function AppScreen({
   contentStyle,
   style,
   bottomInset = true,
-}: AppScreenProps): JSX.Element {
+}: AppScreenProps): React.ReactNode {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const content = {

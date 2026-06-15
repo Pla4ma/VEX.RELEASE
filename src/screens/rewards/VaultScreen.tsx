@@ -3,10 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
-export function VaultScreen(): JSX.Element {
+export function VaultScreen(): React.ReactNode {
   const { theme } = useTheme();
 
   return (

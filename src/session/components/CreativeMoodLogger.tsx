@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import Animated, { SlideInDown, FadeOut } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { selection } from '../../utils/haptics';
 
 /**

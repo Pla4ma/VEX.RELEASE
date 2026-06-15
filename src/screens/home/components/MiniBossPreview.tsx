@@ -12,7 +12,7 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useHaptics } from '../../../utils/haptics';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';

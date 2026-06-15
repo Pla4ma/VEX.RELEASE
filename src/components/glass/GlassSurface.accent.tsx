@@ -7,7 +7,7 @@ interface TopAccentBarProps {
   radius: number;
 }
 
-export function TopAccentBar({ color, radius }: TopAccentBarProps): JSX.Element {
+export function TopAccentBar({ color, radius }: TopAccentBarProps): React.ReactNode {
   return (
     <>
       <LinearGradient

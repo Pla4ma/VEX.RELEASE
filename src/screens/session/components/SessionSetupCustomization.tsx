@@ -3,11 +3,11 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { TabBar } from '../../../shared/ui/components/TabBar';
 import { InteractiveCard } from '../../../shared/ui/components/InteractiveCard';
 import { ModeSelector } from '../../../features/session-start/components/ModeSelector';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { PRESET_CATEGORIES } from '../utils/session-setup';
 import { SessionAdvancedOptions } from './SessionAdvancedOptions';
 import { SessionThemeSelector } from './SessionThemeSelector';

@@ -21,31 +21,36 @@ export function useStudyPlan(generationId: string) {
   const { show } = useToast();
   const [isStartingSession, setIsStartingSession] = useState(false);
 
-  const generationQuery = useQuery({
+  const { data, isPending, error, refetch } = useQuery({
     queryKey: contentStudyQueryKeys.generation(generationId),
     queryFn: () => fetchGenerationById(generationId),
     enabled: !!generationId,
     staleTime: 60 * 1000,
-  });
+    });
 
-  const contentQuery = useQuery({
+
+
+
+
+
+  const { data: contentData, isPending: contentPending, error: contentError, refetch: refetchContent } = useQuery({
     queryKey: [
       ...contentStudyQueryKeys.all,
       'generation-content',
       generationId,
     ],
     queryFn: async () => {
-      if (!generationQuery.data?.contentId) {
+      if (!data?.contentId) {
         return null;
       }
-      return fetchContentById(generationQuery.data.contentId);
+      return fetchContentById(data.contentId);
     },
-    enabled: !!generationQuery.data?.contentId,
+    enabled: !!data?.contentId,
     staleTime: 60 * 1000,
   });
 
   const startSession = useCallback(async () => {
-    if (!generationQuery.data) {
+    if (!data) {
       return null;
     }
 
@@ -53,19 +58,19 @@ export function useStudyPlan(generationId: string) {
 
     try {
       const sessionConfig = prepareContentStudySession(generationId, {
-        tasks: generationQuery.data.tasks,
+        tasks: data.tasks,
         recommendedDurationMinutes:
-          generationQuery.data.sessionPlan.recommendedDuration,
+          data.sessionPlan.recommendedDuration,
         recommendedDifficulty:
-          generationQuery.data.sessionPlan.suggestedDifficulty,
-        focusAreas: generationQuery.data.sessionPlan.focusAreas,
+          data.sessionPlan.suggestedDifficulty,
+        focusAreas: data.sessionPlan.focusAreas,
       });
       const existingSession =
         await studySessionManager.getActiveSession(generationId);
 
       await studySessionManager.saveSession({
         generationId,
-        contentId: generationQuery.data.contentId,
+        contentId: data.contentId,
         startTime: existingSession?.startTime ?? Date.now(),
         completedTasks: existingSession?.completedTasks ?? [],
         quizResults: existingSession?.quizResults ?? {},
@@ -78,7 +83,7 @@ export function useStudyPlan(generationId: string) {
     } finally {
       setIsStartingSession(false);
     }
-  }, [generationId, generationQuery.data]);
+  }, [generationId, data]);
 
   const completeTaskMutation = useMutation({
     mutationFn: async ({ taskId }: { taskId: string }) => {
@@ -129,24 +134,24 @@ export function useStudyPlan(generationId: string) {
     },
   });
 
-  const generation = generationQuery.data;
-  const content = contentQuery.data ?? null;
+  const generation = data;
+  const content = contentData ?? null;
   const title = generation && getStudyPlanTitle(content, generation);
 
   return {
     generation,
     content,
     title,
-    isLoading: generationQuery.isPending || contentQuery.isPending,
+    isLoading: isPending || contentPending,
     error:
-      generationQuery.error?.message || contentQuery.error?.message || null,
+      error?.message || contentError?.message || null,
     startSession,
     isStartingSession,
     completeTask: completeTaskMutation.mutate,
     isCompletingTask: completeTaskMutation.isPending,
     refetch: () => {
-      generationQuery.refetch();
-      contentQuery.refetch();
+      refetch();
+      refetchContent();
     },
   };
 }

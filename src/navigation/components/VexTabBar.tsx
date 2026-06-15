@@ -16,7 +16,7 @@ export function VexTabBar({
   state,
   descriptors,
   navigation,
-}: BottomTabBarProps): JSX.Element {
+}: BottomTabBarProps): React.ReactNode {
   const insets = useSafeAreaInsets();
   const userId = useAuthStore((store) => store.user?.id ?? null);
   const { streakSummary, isLoading } = useStreakSummary(userId);
@@ -69,15 +69,11 @@ export function VexTabBar({
       <View
         style={{
           borderRadius: 36,
-          elevation: 6,
           height: tabBarHeight,
           marginBottom: Math.max(insets.bottom - 2, 10),
           marginHorizontal: horizontalMargin,
           overflow: 'hidden',
-          shadowColor: 'rgba(80, 100, 95, 0.14)',
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.85,
-          shadowRadius: 18,
+          boxShadow: `0px 6px 18px rgba(80, 100, 95, 0.11900000000000001)`,
         }}
       >
         <GlassBlurLayer intensity={82} radius={36} />
@@ -200,4 +196,4 @@ export function VexTabBar({
   );
 }
 
-export default VexTabBar;
+export default VexTabBar;

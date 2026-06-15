@@ -12,7 +12,7 @@ import Animated, {
 
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { glow } from '../../../theme/tokens/elevation';
 import { ambientLoop } from '../../../theme/tokens/motion';
 import type { CompanionMood } from '../types';
@@ -28,7 +28,7 @@ export function MoodIndicator({
   mood,
   size = 24,
   showLabel = true,
-}: MoodIndicatorProps): JSX.Element {
+}: MoodIndicatorProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const phase = useSharedValue(0);

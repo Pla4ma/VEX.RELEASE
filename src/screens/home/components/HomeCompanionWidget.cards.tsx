@@ -15,7 +15,7 @@ export function CompanionCard({
 }: {
   state: CompanionState;
   onPress?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const elementTheme = ELEMENT_THEMES[state.element];
 
   return (
@@ -73,7 +73,7 @@ export function CompanionCard({
   );
 }
 
-export function SkeletonCard(): JSX.Element {
+export function SkeletonCard(): React.ReactNode {
   return (
     <GlassCard variant="default" padding={16} radius={22}>
       <View

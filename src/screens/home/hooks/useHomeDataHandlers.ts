@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useClaimChallengeReward } from '../../../features/challenges/hooks';
+import { useClaimChallengeReward } from '../../../features/challenges/hooks/challengeMutations';
 import { useFreezeStreak } from '../../../features/streaks/hooks';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { HomeController } from './home-controller-types';

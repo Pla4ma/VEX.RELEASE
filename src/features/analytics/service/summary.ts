@@ -1,4 +1,6 @@
-import * as repository from '../repository';
+import { fetchAggregatedStats, fetchDetectedPatterns, storeAggregatedStats } from '../repository/stats';
+import { fetchInsights } from '../repository/insights';
+import { fetchTimeSeriesData } from '../repository/time-series';
 import {
   type TimeRange,
   type AnalyticsMetric,
@@ -11,9 +13,9 @@ export async function getAnalyticsSummary(
   timeRange: TimeRange,
 ) {
   const [stats, insights, patterns] = await Promise.all([
-    repository.fetchAggregatedStats(userId, timeRange),
-    repository.fetchInsights(userId, { unreadOnly: false, limit: 10 }),
-    repository.fetchDetectedPatterns(userId, {
+    fetchAggregatedStats(userId, timeRange),
+    fetchInsights(userId, { unreadOnly: false, limit: 10 }),
+    fetchDetectedPatterns(userId, {
       since: Date.now() - 30 * 24 * 60 * 60 * 1000,
     }),
   ]);
@@ -36,7 +38,7 @@ async function generateAggregatedStats(userId: string, period: TimeRange) {
   ] as AnalyticsMetric[];
   const metricData = await Promise.all(
     metrics.map(async (metric) => {
-      const data = await repository.fetchTimeSeriesData(
+      const data = await fetchTimeSeriesData(
         userId,
         metric,
         period,
@@ -64,6 +66,6 @@ async function generateAggregatedStats(userId: string, period: TimeRange) {
     patterns: [],
     topPerforming: { dayOfWeek: 1, hourOfDay: 9, category: 'work' },
   };
-  await repository.storeAggregatedStats(stats);
+  await storeAggregatedStats(stats);
   return stats;
 }

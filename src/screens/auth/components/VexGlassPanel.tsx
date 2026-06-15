@@ -6,7 +6,7 @@ import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { brandShadowTokens } from '@/theme/tokens/shadows';
 
 import { SafeBlurView } from './SafeBlurView';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type VexConsoleProps = {
   children: React.ReactNode;
@@ -22,11 +22,7 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
     <View
       style={{
         borderRadius: r,
-        shadowColor: brandShadowTokens.glass.color,
-        shadowOffset: { width: 0, height: 20 },
-        shadowOpacity: 0.55,
-        shadowRadius: 36,
-        elevation: 16,
+        boxShadow: `0px 20px 36px ${brandShadowTokens.glass.color} / 0.55`,
       }}
     >
       {/* Gradient border rim — violet through orange */}
@@ -111,4 +107,4 @@ export function VexConsole({ children }: VexConsoleProps): React.JSX.Element {
       </View>
     </View>
   );
-}
+}

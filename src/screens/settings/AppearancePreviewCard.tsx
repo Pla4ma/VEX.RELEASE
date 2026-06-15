@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Text, Card } from '../../components/primitives';
-import { Icon } from '../../icons';
+import { Box, Text, Card } from '../../components/primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 import type { AccentColor, TimerFormat } from './ColorSchemeToggle';
@@ -19,7 +19,7 @@ export function AppearancePreviewCard({
   accentColor,
   timerFormat,
   fontSizeMultiplier,
-}: AppearancePreviewCardProps): JSX.Element {
+}: AppearancePreviewCardProps): React.ReactNode {
   return (
     <Box px={16} mb={24}>
       <Text

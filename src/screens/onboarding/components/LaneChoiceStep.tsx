@@ -25,7 +25,7 @@ export const LANE_DESCRIPTIONS: Record<Lane, string> = {
   minimal_normal: 'One useful action starts without noise.',
 };
 
-export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {
+export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): React.ReactNode {
   return (
     <View style={{ gap: 12, paddingTop: 8 }}>
       {ALL_LANES.map((lane) => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useCoachMemories } from '../hooks/useMemories';
 import type { CoachMemory, MemoryType } from '../memory/memory-schemas';
@@ -16,7 +16,7 @@ export function MemoryList({
   userId,
   type,
   onStartSession,
-}: MemoryListProps): JSX.Element {
+}: MemoryListProps): React.ReactNode {
   const { theme } = useTheme();
   const { data, isPending, isError, error, refetch, isOffline } =
     useCoachMemories(userId, type);
@@ -70,7 +70,7 @@ function keyMemory(item: CoachMemory): string {
   return item.id;
 }
 
-function MemoryRow({ memory }: { memory: CoachMemory }): JSX.Element {
+function MemoryRow({ memory }: { memory: CoachMemory }): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
@@ -90,7 +90,7 @@ function MemoryRow({ memory }: { memory: CoachMemory }): JSX.Element {
   );
 }
 
-function MemoryListSkeleton(): JSX.Element {
+function MemoryListSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View accessibilityLabel="Coach memory loading">
@@ -115,7 +115,7 @@ function EmptyMemoryState({
 }: {
   isOffline: boolean;
   onStartSession?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View>

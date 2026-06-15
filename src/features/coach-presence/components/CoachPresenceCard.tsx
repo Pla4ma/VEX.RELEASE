@@ -19,7 +19,7 @@ export function CoachPresenceCard({
   presence,
   onAction,
   onPress,
-}: CoachPresenceCardProps): JSX.Element {
+}: CoachPresenceCardProps): React.ReactNode {
   const reactionColor = getReactionColor(
     presence.visualCompanionState.reaction,
   );
@@ -57,7 +57,7 @@ export function CoachPresenceCard({
               <Text
                 style={{
                   color: vexLightGlass.text.secondary,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: '600',
                   letterSpacing: 0.5,
                   textTransform: 'uppercase',

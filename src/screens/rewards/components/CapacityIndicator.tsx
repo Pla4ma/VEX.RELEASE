@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface CapacityIndicatorProps {
   current: number;
@@ -12,7 +12,7 @@ interface CapacityIndicatorProps {
 export function CapacityIndicator({
   current,
   max,
-}: CapacityIndicatorProps): JSX.Element {
+}: CapacityIndicatorProps): React.ReactNode {
   const { theme } = useTheme();
   const isFull = current >= max;
 

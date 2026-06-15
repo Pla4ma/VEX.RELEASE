@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Box } from '../../components/primitives/Box';
-import { FeatureScreen } from '../../components/primitives';
+import { FeatureScreen } from '../../components/primitives/FeatureScreen';
 import { Text } from '../../components/primitives/Text';
 import { ErrorState } from '../../components/states/ErrorState';
 import {
@@ -23,7 +23,7 @@ import type { SessionStackParams } from '../../navigation/types';
 import { useNetInfo } from '../../network/useNetInfo';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { sizing } from '../../theme/tokens/sizing';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
@@ -45,7 +45,7 @@ function useFilteredHistory(
   }, [filter, items]);
 }
 
-function SessionHistoryScreen(): JSX.Element {
+function SessionHistoryScreen(): React.ReactNode {
   const navigation = useNavigation<SessionNavigationProp>();
   const { theme } = useTheme();
   const { isOffline } = useNetInfo();

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SkeletonItem } from '../../ui/components/SkeletonItem';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { PREMIUM_BENEFITS } from './paywall-data';
 
-export function VipPaywallSkeleton(): JSX.Element {
+export function VipPaywallSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   const spacing = theme.spacing;
 

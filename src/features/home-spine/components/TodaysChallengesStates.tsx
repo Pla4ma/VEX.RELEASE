@@ -4,7 +4,7 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
-export function ChallengesWidgetSkeleton(): JSX.Element {
+export function ChallengesWidgetSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box m="lg" p="lg" borderRadius="xl" bg={theme.colors.background.secondary}>
@@ -44,7 +44,7 @@ export function ChallengesWidgetSkeleton(): JSX.Element {
   );
 }
 
-export function ChallengesEmptyState(): JSX.Element {
+export function ChallengesEmptyState(): React.ReactNode {
   const now = new Date();
   const midnight = new Date(now);
   midnight.setHours(24, 0, 0, 0);
@@ -71,7 +71,7 @@ export function ChallengesErrorState({
   onRetry,
 }: {
   onRetry?: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box alignItems="center" gap="md" py="md">
       <Text fontSize={32} />
@@ -80,7 +80,7 @@ export function ChallengesErrorState({
       </Text>
       {onRetry ? (
         <Button
-          variant="outline"
+          <Text>variant="outline"</Text>
           size="sm"
           onPress={onRetry}
           accessibilityLabel="Retry loading challenges"

@@ -46,7 +46,7 @@ export function ScoreChartSvg({
   pathD,
   areaD,
   showGrid,
-}: ScoreChartSvgProps): JSX.Element {
+}: ScoreChartSvgProps): React.ReactNode {
   return (
     <Svg width={chartWidth} height={height}>
       <Defs>
@@ -101,7 +101,7 @@ export function ScoreChartSvg({
         const isLatest = i === history.length - 1;
         return (
           <Circle
-            key={i}
+            key={`point-${history[i]?.id ?? i}`}
             cx={x}
             cy={y}
             r={isLatest ? 6 : 4}

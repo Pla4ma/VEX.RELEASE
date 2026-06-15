@@ -9,7 +9,7 @@ import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { glow } from '../../../theme/tokens/elevation';
 import { getHeroTitle, getHeroEyebrow } from './HomeHeroCard.helpers';
 
@@ -25,7 +25,7 @@ export function HomeHeroCard({
   onPressPrimary,
   priority,
   stakes,
-}: HomeHeroCardProps): JSX.Element {
+}: HomeHeroCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   if (isLoading || !priority) {

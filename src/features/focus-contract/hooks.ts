@@ -25,23 +25,32 @@ export function useContractForSession(sessionId: string | null): {
   refetch: () => void;
 } {
   const userId = useAuthStore((state) => state.user?.id ?? null);
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error } = useQuery({
     queryKey: focusContractKeys.session(sessionId ?? 'none'),
     queryFn: () => {
-      if (!sessionId || !userId) {
-        return null;
-      }
-      return service.getContractForSession(sessionId, userId);
+    if (!sessionId || !userId) {
+    return null;
+    }
+    return service.getContractForSession(sessionId, userId);
     },
     enabled: Boolean(sessionId && userId),
-  });
-  const refresh = query.refetch;
+    });
+
+
+
+
+
+
+
+
+
+  const refresh = refetch;
 
   return {
-    contract: query.data ?? null,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error instanceof Error ? query.error : null,
+    contract: data ?? null,
+    isPending: isPending,
+    isError: isError,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },
@@ -150,19 +159,20 @@ export function useContractCompletionRate(
   error: Error | null;
   refetch: () => void;
 } {
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: focusContractKeys.rate(userId ?? 'none', windowDays),
     queryFn: () =>
       userId ? service.getCompletionRate(userId, windowDays) : 0.5,
     enabled: Boolean(userId),
   });
-  const refresh = query.refetch;
+  const refresh = refetch;
+
 
   return {
-    rate: query.data ?? 0.5,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error instanceof Error ? query.error : null,
+    rate: data ?? 0.5,
+    isPending: isPending,
+    isError: isError,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },

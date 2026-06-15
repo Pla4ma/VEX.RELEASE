@@ -31,7 +31,7 @@ export function CompanionRevealScreen({
   userName,
   onContinue,
   onBack,
-}: CompanionRevealScreenProps): JSX.Element {
+}: CompanionRevealScreenProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   const displayName = userName || 'there';
 
@@ -114,7 +114,7 @@ export function CompanionRevealScreen({
         style={{ width: '100%' }}
       >
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="lg"
           fullWidth
           onPress={onContinue}

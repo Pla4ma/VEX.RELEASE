@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface GlassCardHighlightProps { resolvedRadius: number }
 
-export function GlassCardTopLight({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardTopLight({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0.78)', 'rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0)']}
@@ -16,7 +16,7 @@ export function GlassCardTopLight({ resolvedRadius }: GlassCardHighlightProps): 
   );
 }
 
-export function GlassCardMintGlow({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardMintGlow({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(66, 207, 174, 0.18)', 'rgba(132, 228, 229, 0.06)', 'rgba(255, 255, 255, 0)']}
@@ -29,7 +29,7 @@ export function GlassCardMintGlow({ resolvedRadius }: GlassCardHighlightProps): 
   );
 }
 
-export function GlassCardBottomShadow({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardBottomShadow({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0)', 'rgba(10, 94, 77, 0.03)', 'rgba(10, 94, 77, 0.06)']}
@@ -42,7 +42,7 @@ export function GlassCardBottomShadow({ resolvedRadius }: GlassCardHighlightProp
   );
 }
 
-export function GlassCardRightEdge({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardRightEdge({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0)', 'rgba(18, 184, 148, 0.13)', 'rgba(255, 255, 255, 0)']}
@@ -55,7 +55,7 @@ export function GlassCardRightEdge({ resolvedRadius }: GlassCardHighlightProps):
   );
 }
 
-export function GlassCardLeftEdge({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardLeftEdge({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.04)', 'rgba(255, 255, 255, 0)']}
@@ -68,7 +68,7 @@ export function GlassCardLeftEdge({ resolvedRadius }: GlassCardHighlightProps): 
   );
 }
 
-export function GlassCardShineStreak({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardShineStreak({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
       colors={['rgba(255, 255, 255, 0.22)', 'rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0)']}

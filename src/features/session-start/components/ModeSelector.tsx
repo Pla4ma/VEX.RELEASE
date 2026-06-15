@@ -4,8 +4,8 @@ import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { SessionMode, isSessionLessMode } from '../../../session/modes';
-import { useTheme } from '../../../theme';
-import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 import {
   isFeatureUnlocked,
   type UnlockableFeature,
@@ -125,7 +125,7 @@ function ModeCardItem({
   disabledReason: string | null;
   onPress: () => void;
   theme: ReturnType<typeof useTheme>['theme'];
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Pressable
       key={card.mode}
@@ -147,10 +147,7 @@ function ModeCardItem({
             ? theme.colors.semantic.secondary
             : theme.colors.semantic.liquidGlassBorder,
           opacity: isDisabled ? 0.55 : 1,
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: isSelected ? 0.18 : 0.08,
-          shadowRadius: isSelected ? 16 : 10,
+          boxShadow: '0px 8px isSelected ? 16 : 10px theme.colors.semantic.shadow / isSelected ? 0.18 : 0.08',
         }}
       >
         <Box flexDirection="row" alignItems="center" gap="md">
@@ -200,7 +197,7 @@ export function ModeSelector({
   selectedMode,
   userMasteryRank,
   showSessionless = false,
-}: ModeSelectorProps): JSX.Element {
+}: ModeSelectorProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

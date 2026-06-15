@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export function CharacterCounter({
   current,
@@ -8,7 +8,7 @@ export function CharacterCounter({
 }: {
   current: number;
   max: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme: _theme } = useTheme();
   const isNearLimit = current >= max - 3;
 

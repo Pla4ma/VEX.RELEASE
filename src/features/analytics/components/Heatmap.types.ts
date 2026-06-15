@@ -61,7 +61,10 @@ export function calculatePeakDay(data: HeatmapData[]): string {
       .filter((d) => d.day === day)
       .reduce((sum, d) => sum + d.value, 0),
   }));
-  const peak = dayTotals.sort((a, b) => b.total - a.total)[0];
+  const peak = dayTotals.reduce<{ day: string; total: number } | undefined>((max, curr) => {
+    if (!max || curr.total > max.total) return curr;
+    return max;
+  }, undefined);
   return peak?.day ?? '-';
 }
 
@@ -72,7 +75,10 @@ export function calculatePeakHour(data: HeatmapData[]): string {
       .filter((d) => d.hour === hour)
       .reduce((sum, d) => sum + d.value, 0),
   }));
-  const peak = hourTotals.sort((a, b) => b.total - a.total)[0];
+  const peak = hourTotals.reduce<{ hour: number; total: number } | undefined>((max, curr) => {
+    if (!max || curr.total > max.total) return curr;
+    return max;
+  }, undefined);
   if (!peak) {
     return '-';
   }

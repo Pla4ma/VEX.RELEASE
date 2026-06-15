@@ -1,4 +1,4 @@
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 
 export interface EngagementMetrics {
   userId: string;

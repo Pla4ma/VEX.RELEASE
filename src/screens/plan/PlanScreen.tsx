@@ -6,7 +6,7 @@ import { GlassScreen } from '../../components/glass/GlassScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { PlanWorkspace } from './components/PlanWorkspace';
 
-function PlanScreenContent(): JSX.Element {
+function PlanScreenContent(): React.ReactNode {
   const insets = useSafeAreaInsets();
 
   return (

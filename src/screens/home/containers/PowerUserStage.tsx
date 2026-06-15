@@ -9,7 +9,7 @@ interface StageProps {
   sharedInput: NewUserContainerInput;
 }
 
-export function PowerUserStage({ sharedInput }: StageProps): JSX.Element {
+export function PowerUserStage({ sharedInput }: StageProps): React.ReactNode {
   const model = usePowerUserContainerModel(sharedInput);
   const data = usePowerUserHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;

@@ -7,8 +7,8 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../../../utils/haptics';
 

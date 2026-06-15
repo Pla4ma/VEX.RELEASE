@@ -133,6 +133,13 @@ CREATE INDEX IF NOT EXISTS idx_circle_invites_status ON circle_invites(status);
 -- RLS Policies
 -- ============================================================================
 
+ALTER TABLE study_circles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE circle_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE circle_weekly_checks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE circle_activities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE circle_invites ENABLE ROW LEVEL SECURITY;
+
+
 -- Study Circles (public read, member write)
 CREATE POLICY "Study circles are publicly viewable" ON study_circles
   FOR SELECT USING (true);

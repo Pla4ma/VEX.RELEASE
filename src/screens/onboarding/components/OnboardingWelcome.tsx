@@ -3,10 +3,10 @@ import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { etherealButton, etherealText } from '../../../theme/tokens/ethereal-sky';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
-import { EtherealSkyBackground } from '../../auth/components/ethereal';
+import { EtherealSkyBackground } from '../../auth/components/ethereal/EtherealSkyBackground';
 import { LockGlyph, PrivacyShieldGlyph } from '../../auth/components/ethereal/AuthGlyphs';
 import { LoginHero } from '../../auth/components/ethereal/LoginHero';
 import { MascotGuide } from './ethereal/MascotGuide';
@@ -15,7 +15,7 @@ interface OnboardingWelcomeProps {
   onContinue: () => void;
 }
 
-function StartButton({ onContinue }: OnboardingWelcomeProps): JSX.Element {
+function StartButton({ onContinue }: OnboardingWelcomeProps): React.ReactNode {
   return (
     <Pressable
       accessibilityHint="Starts the onboarding flow"
@@ -59,7 +59,7 @@ function StartButton({ onContinue }: OnboardingWelcomeProps): JSX.Element {
 
 export function OnboardingWelcome({
   onContinue,
-}: OnboardingWelcomeProps): JSX.Element {
+}: OnboardingWelcomeProps): React.ReactNode {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
 

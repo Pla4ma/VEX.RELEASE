@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import Svg, { Path, G } from 'react-native-svg';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { getIcon } from '../IconRegistry';
 import { createDebugger } from '../../utils/debug';
 
@@ -37,7 +37,7 @@ export function Icon({
   testID,
   accessibilityLabel,
   ...svgProps
-}: IconProps): JSX.Element | null {
+}: IconProps): React.ReactNode | null {
   const { theme } = useTheme();
 
   // Get icon data from registry
@@ -148,7 +148,7 @@ export function Icon({
           <G>
             {pathData.split(' M').map((path, index) => {
               const d = index === 0 ? path : `M${path}`;
-              return <Path key={index} d={d} />;
+              return <Path key={path.id} d={d} />;
             })}
           </G>
         )}
@@ -161,7 +161,7 @@ export function Icon({
  * Create an icon component for a specific icon
  */
 export function createIcon(name: string, defaultProps?: Partial<IconProps>) {
-  return function NamedIcon(props: Omit<IconProps, 'name'>): JSX.Element {
+  return function NamedIcon(props: Omit<IconProps, 'name'>): React.ReactNode {
     return <Icon name={name} {...defaultProps} {...props} />;
   };
 }

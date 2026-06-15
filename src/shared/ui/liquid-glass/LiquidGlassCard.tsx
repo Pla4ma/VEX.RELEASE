@@ -1,17 +1,14 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
-
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { liquidGlassRadii, liquidGlassSpacing } from './liquidGlassTokens';
-
 type LiquidGlassCardProps = {
   children: React.ReactNode;
   compact?: boolean;
   emphasized?: boolean;
   style?: ViewStyle;
 };
-
 export function LiquidGlassCard({
   children,
   compact = false,
@@ -22,7 +19,6 @@ export function LiquidGlassCard({
   const padding = compact
     ? liquidGlassSpacing.cardCompact
     : liquidGlassSpacing.card;
-
   return (
     <BlurView
       intensity={emphasized ? 78 : 58}
@@ -37,13 +33,9 @@ export function LiquidGlassCard({
             : theme.colors.semantic.liquidGlassBorder,
           borderRadius: liquidGlassRadii.card,
           borderWidth: 1,
-          elevation: emphasized ? 8 : 5,
           overflow: 'hidden',
           padding,
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: 12 },
-          shadowOpacity: emphasized ? 0.22 : 0.14,
-          shadowRadius: emphasized ? 28 : 18,
+          boxShadow: `0px 12px emphasized ? 28 : 18px ${theme.colors.semantic.shadow} / emphasized ? 0.22 : 0.14`,
         },
         style,
       ]}

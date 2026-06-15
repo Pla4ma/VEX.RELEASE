@@ -119,7 +119,7 @@ export function ErrorFallback({
         <Box flexDirection="row" style={{ gap: 12 }}>
           {canRetry && (
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               onPress={onRetry}
               accessibilityLabel="Try again"
               accessibilityRole="button"
@@ -130,7 +130,7 @@ export function ErrorFallback({
           )}
           {onDegraded && isRecoverable && (
             <Button
-              variant="ghost"
+              <Text>variant="ghost"</Text>
               onPress={onDegraded}
               accessibilityLabel="Continue anyway"
               accessibilityRole="button"
@@ -141,7 +141,7 @@ export function ErrorFallback({
           )}
           {category === 'client' && (
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               onPress={handleRestart}
               accessibilityLabel="Restart app"
               accessibilityRole="button"

@@ -10,7 +10,7 @@ interface DayCheckRowProps {
   currentDays: number;
 }
 
-export function DayCheckRow({ currentDays }: DayCheckRowProps): JSX.Element {
+export function DayCheckRow({ currentDays }: DayCheckRowProps): React.ReactNode {
   const daysToShow = Math.min(currentDays, 7);
   const showFullWeek = currentDays >= 7;
   return (
@@ -42,10 +42,7 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): JSX.Element {
                 borderWidth: 1.2,
                 height: 24,
                 justifyContent: 'center',
-                shadowColor: active ? vexLightGlass.mint[300] : 'transparent',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: active ? 0.50 : 0,
-                shadowRadius: 6,
+                boxShadow: '0px 2px 6px active ? vexLightGlass.mint[300] : 'transparent' / active ? 0.50 : 0',
                 width: 24,
               }}
             >

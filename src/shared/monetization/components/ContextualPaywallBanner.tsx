@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { usePremiumStatus } from '../use-revenuecat';
 import {
   type PaywallTriggerType,
@@ -80,11 +80,7 @@ export function ContextualPaywallBanner({
           borderWidth: 1,
           borderColor: `${theme.colors.primary[500]}40`,
           padding: 16,
-          shadowColor: theme.colors.primary[500],
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.85,
-          shadowRadius: 12,
-          elevation: 8,
+          boxShadow: `0px 4px 12px ${theme.colors.primary}[500] / 0.85`,
         }}
       >
         <Pressable
@@ -142,4 +138,4 @@ export function ContextualPaywallBanner({
     </Animated.View>
   );
 }
-export default ContextualPaywallBanner;
+export default ContextualPaywallBanner;

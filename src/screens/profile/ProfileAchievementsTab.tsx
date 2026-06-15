@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { Box, Text } from '../../components/primitives';
+import { Box, Text } from '../../components/primitives/Box';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { GlassIconOrb } from '../../components/glass/GlassIconOrb';
 import { GlassPill } from '../../components/glass/GlassPill';
@@ -8,7 +8,7 @@ import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
 import { EmptyStateLens } from '../../components/glass/EmptyStateLens';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import type { Theme } from '../../theme/types';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
@@ -157,7 +157,7 @@ export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
                   <Text
                     style={{
                       color: vexLightGlass.text.tertiary,
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: '600',
                       marginTop: 4,
                     }}

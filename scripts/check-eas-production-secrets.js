@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
+const { execSync } = require('child_process');
 
 const repoRoot = path.resolve(__dirname, '..');
 const easPath = path.join(repoRoot, 'eas.json');
@@ -77,10 +77,11 @@ function assertSubmitRefs(easConfig) {
 
 function listRemoteSecrets() {
   try {
-    const output = execFileSync('eas', ['secret:list', '--scope', 'project'], {
+    const output = execSync('eas secret:list --scope project', {
       cwd: repoRoot,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
+      shell: process.platform === 'win32',
     });
     return new Set(requiredSecrets.filter((name) => output.includes(name)));
   } catch {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { SessionModeSchema } from '../../session/modes';
-import { SessionSummarySchema } from '../../session/types';
+import { SessionSummarySchema } from '../../session/types/schemas';
 
 export const SessionCompletionGradeSchema = z.enum(['S', 'A', 'B', 'C', 'D']);
 export type SessionCompletionGrade = z.infer<

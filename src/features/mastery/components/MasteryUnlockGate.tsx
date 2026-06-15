@@ -27,7 +27,7 @@ export function MasteryUnlockGate({
   feature,
   children,
   onNavigateToMastery,
-}: MasteryUnlockGateProps): JSX.Element {
+}: MasteryUnlockGateProps): React.ReactNode {
   const { theme } = useTheme();
   const isUnlocked = isFeatureUnlocked(userRank, feature);
   const featureInfo = FEATURE_INFO[feature];
@@ -109,7 +109,7 @@ export function MasteryUnlockGate({
 
         {onNavigateToMastery && (
           <Button
-            size="sm"
+            <Text>size="sm"</Text>
             variant="outline"
             onPress={onNavigateToMastery}
             accessibilityLabel="View mastery progression"

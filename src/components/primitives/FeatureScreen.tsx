@@ -14,9 +14,9 @@ import { Pressable } from 'react-native';
 
 import { Box } from './Box';
 import { Text } from './Text';
-import { Icon } from '../../icons';
-import { useTheme } from '../../theme';
-import { ErrorState, Skeleton } from '../../shared/ui/state-components';
+import { Icon } from '../../icons/components/Icon';
+import { useTheme } from '../../theme/ThemeContext';
+import { ErrorState, Skeleton } from '../../shared/ui/state-components/error-state';
 
 interface FeatureScreenProps {
   title: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import type { AnimatedStyle } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import type { CompanionPhase } from '../types';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -86,10 +86,7 @@ export const OldFormLayer: React.FC<{
         style={{
           borderWidth: 4,
           borderColor: themeColors.primary,
-          shadowColor: themeColors.glow,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.8,
-          shadowRadius: 20,
+          boxShadow: '0px 0px 20px themeColors.glow / 0.8',
         }}
       >
         <Text fontSize={72}>{PHASE_EMOJIS[previousPhase]}</Text>
@@ -120,10 +117,7 @@ export const NewFormLayer: React.FC<{
         style={{
           borderWidth: 6,
           borderColor: themeColors.glow,
-          shadowColor: themeColors.glow,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 1,
-          shadowRadius: 30,
+          boxShadow: '0px 0px 30px themeColors.glow / 1',
         }}
       >
         <Text fontSize={80}>{PHASE_EMOJIS[newPhase]}</Text>

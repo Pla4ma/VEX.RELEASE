@@ -10,7 +10,7 @@ import {
   type SessionRecommendation,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
 import { useCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from './home-feature-runtime';
 import type { HomeViewModel } from './home-view-model';

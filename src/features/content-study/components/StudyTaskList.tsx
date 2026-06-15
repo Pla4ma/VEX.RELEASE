@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { StudyTaskListProps, StudyTask } from '../types';
 import { TaskCard } from './TaskCard';
 import { styles } from './study-task-list-styles';

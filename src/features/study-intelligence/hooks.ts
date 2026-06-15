@@ -22,20 +22,26 @@ export function useWeeklyIntelligence(input: {
     input.enabled !== false,
   );
 
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     enabled: Boolean(input.userId) && input.enabled !== false && !plansPending,
     queryFn: () =>
-      computeWeeklyIntelligence({ plans, streakDays: input.streakDays }),
+    computeWeeklyIntelligence({ plans, streakDays: input.streakDays }),
     queryKey: ['study-intelligence', input.userId, plans?.length ?? 0],
     staleTime: 1000 * 60 * 5,
-  });
+    });
+
+
+
+
+
+
 
   return {
-    data: query.data ?? null,
-    isPending: plansPending || query.isPending,
-    isError: query.isError,
-    error: query.error as Error | null,
-    refetch: query.refetch,
+    data: data ?? null,
+    isPending: plansPending || isPending,
+    isError: isError,
+    error: error as Error | null,
+    refetch: refetch,
   };
 }
 

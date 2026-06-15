@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box, Text } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { MasteryRank } from '../types';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -34,7 +34,7 @@ export function MasteryRankBadge({
   rank,
   totalPoints,
   size = 'md',
-}: Props): JSX.Element {
+}: Props): React.ReactNode {
   const { theme } = useTheme();
   const config = rankConfig[rank];
   const sizeMap = {
@@ -77,11 +77,7 @@ export function MasteryRankBadge({
         backgroundColor: theme.colors.background.secondary,
         borderWidth: size === 'lg' ? 2 : 1,
         borderColor: `${config.color}${size === 'lg' ? 'AA' : '55'}`,
-        shadowColor: size === 'lg' ? config.color : undefined,
-        shadowOpacity: size === 'lg' ? 0.35 : 0,
-        shadowRadius: size === 'lg' ? 18 : 0,
-        shadowOffset: size === 'lg' ? { width: 0, height: 0 } : undefined,
-        elevation: size === 'lg' ? 10 : 0,
+        boxShadow: `0px 0px 0px ${size === 'lg' ? config.color : undefined}`,
       }}
     >
       <Text fontSize={current.icon}>{config.icon}</Text>
@@ -106,4 +102,4 @@ export function MasteryRankBadge({
       ) : null}
     </Box>
   );
-}
+}

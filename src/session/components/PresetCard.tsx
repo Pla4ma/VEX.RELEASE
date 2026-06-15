@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
-import { Text } from '../../components/primitives';
-import { Icon } from '../../icons';
-import { useTheme } from '../../theme';
+import { Text } from '../../components/primitives/Text';
+import { Icon } from '../../icons/components/Icon';
+import { useTheme } from '../../theme/ThemeContext';
 import { buttonTap } from '../../utils/haptics';
 import type { SessionPreset } from '../types';
 

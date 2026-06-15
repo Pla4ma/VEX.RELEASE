@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   type QualityGrade,
   type QualityIndicatorProps,
@@ -25,7 +25,7 @@ function XpEstimatePreview({
 }: {
   xpEstimate: number;
   multiplier: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const displayXp = Math.round(xpEstimate * multiplier);
   return (
@@ -61,7 +61,7 @@ function PurityBar({
 }: {
   purityScore: number;
   grade: QualityGrade;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progressValue = useSharedValue(0);
   React.useEffect(() => {
@@ -105,7 +105,7 @@ export function QualityIndicator({
   isPaused,
   qualityDecreased,
   isLoading = false,
-}: QualityIndicatorProps): JSX.Element {
+}: QualityIndicatorProps): React.ReactNode {
   const config = gradeConfig[grade];
   if (isLoading) {
     return <QualityIndicatorSkeleton />;

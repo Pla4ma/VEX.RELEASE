@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { Button } from './primitives/Button';
 import { Text } from './primitives/Text';
-import { Icon } from '../icons';
+import { Icon } from '../icons/components/Icon';
 
 interface EmptyStateProps {
   iconName: string;
@@ -22,7 +22,7 @@ export function EmptyState({
   actionLabel,
   onAction,
   accessibilityLabel,
-}: EmptyStateProps): JSX.Element {
+}: EmptyStateProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

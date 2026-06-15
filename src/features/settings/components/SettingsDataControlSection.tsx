@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
 import { SettingItem } from './SettingItem';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 

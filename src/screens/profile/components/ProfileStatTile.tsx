@@ -6,7 +6,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 type LiquidSphereColor = 'mint' | 'cyan' | 'teal' | 'coral' | 'amber' | 'pearl';

@@ -51,7 +51,7 @@ export function GlassProgressBar({
   height = 8,
   variant = 'mint',
   testID,
-}: GlassProgressBarProps): JSX.Element {
+}: GlassProgressBarProps): React.ReactNode {
   const safeMax = max <= 0 ? 1 : max;
   const pct = Math.max(0, Math.min(1, value / safeMax));
   const v = resolveVariant(variant);
@@ -73,10 +73,7 @@ export function GlassProgressBar({
           height: '100%',
           overflow: 'hidden',
           width: `${pct * 100}%`,
-          shadowColor: v.start,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.85,
-          shadowRadius: 6,
+          boxShadow: `0px 0px 6px ${v.start}80`,
         }}
       >
         <LinearGradient

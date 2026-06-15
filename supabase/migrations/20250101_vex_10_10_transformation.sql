@@ -493,6 +493,7 @@ CREATE INDEX IF NOT EXISTS idx_unified_wallets_user ON unified_wallets(user_id);
 -- ============================================================================
 
 -- Enable RLS on all tables
+ALTER TABLE unified_wallets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mastery_tracks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prestige_states ENABLE ROW LEVEL SECURITY;
 ALTER TABLE journey_progress ENABLE ROW LEVEL SECURITY;
@@ -510,16 +511,55 @@ ALTER TABLE coach_quests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_coach_preferences ENABLE ROW LEVEL SECURITY;
 
 -- Users can only access their own data
-CREATE POLICY user_is_owner ON mastery_tracks FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON prestige_states FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON journey_progress FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON streak_insurance FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON streak_gambles FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON comeback_tokens FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON user_items FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON user_dungeon_attempts FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON coach_quests FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY user_is_owner ON user_coach_preferences FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_select ON mastery_tracks FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON mastery_tracks FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON mastery_tracks FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON mastery_tracks FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON prestige_states FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON prestige_states FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON prestige_states FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON prestige_states FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON journey_progress FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON journey_progress FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON journey_progress FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON journey_progress FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON streak_insurance FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON streak_insurance FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON streak_insurance FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON streak_insurance FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON streak_gambles FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON streak_gambles FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON streak_gambles FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON streak_gambles FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON comeback_tokens FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON comeback_tokens FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON comeback_tokens FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON comeback_tokens FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON user_items FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON user_items FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON user_items FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON user_items FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON user_dungeon_attempts FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON user_dungeon_attempts FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON user_dungeon_attempts FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_dungeon_attempts_delete ON user_dungeon_attempts FOR DELETE TO authenticated USING (( SELECT auth.uid() AS uid) = user_id);
+
+CREATE POLICY user_is_owner_select ON coach_quests FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON coach_quests FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON coach_quests FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON coach_quests FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY user_is_owner_select ON user_coach_preferences FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_insert ON user_coach_preferences FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY user_is_owner_update ON user_coach_preferences FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY user_is_owner_delete ON user_coach_preferences FOR DELETE USING (auth.uid() = user_id);
 
 -- Trading listings: everyone can view, only seller can modify
 CREATE POLICY public_view ON trading_listings FOR SELECT USING (TRUE);

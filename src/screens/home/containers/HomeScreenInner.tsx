@@ -28,7 +28,7 @@ export type { HomeDataProps, HomeScreenInnerProps } from './HomeScreenInnerTypes
 function HomeScreenInnerRaw({
   model,
   data,
-}: HomeScreenInnerProps): JSX.Element {
+}: HomeScreenInnerProps): React.ReactNode {
   const controller = model.controller;
   const {
     intervention,

@@ -10,7 +10,7 @@ import Animated, {
 
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { timingPresets } from '../../../theme/tokens/motion';
-import { borderRadius } from '../../../theme/tokens';
+import { borderRadius } from '../../../theme/tokens/radius';
 
 export function GlowParticle({
   color,
@@ -18,7 +18,7 @@ export function GlowParticle({
 }: {
   color: string;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const size = 6 + (index % 3) * 3;
   const angle = (index * 72 + 15) * (Math.PI / 180);

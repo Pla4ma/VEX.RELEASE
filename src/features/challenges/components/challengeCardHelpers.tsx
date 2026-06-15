@@ -1,20 +1,20 @@
-import type {} from 'react-native';
-import { Badge } from '../../../components';
+import { Text } from 'react-native';
+import { Badge } from '../../../components/Badge';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';
 
 export function getStatusBadge(
   status: UserChallengeSummary['status'],
-): JSX.Element | null {
+): React.ReactNode {
   switch (status) {
     case 'COMPLETED':
-      return <Badge variant="success">Ready to Claim</Badge>;
+      return <Badge variant="success"><Text>{'Ready to Claim'}</Text></Badge>;
     case 'CLAIMED':
-      return <Badge variant="secondary">Claimed</Badge>;
+      return <Badge variant="secondary"><Text>{'Claimed'}</Text></Badge>;
     case 'EXPIRED':
-      return <Badge variant="error">Expired</Badge>;
+      return <Badge variant="error"><Text>{'Expired'}</Text></Badge>;
     case 'REROLLED':
-      return <Badge variant="secondary">Rerolled</Badge>;
+      return <Badge variant="secondary"><Text>{'Rerolled'}</Text></Badge>;
     default:
       return null;
   }

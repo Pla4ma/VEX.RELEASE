@@ -54,10 +54,7 @@ export const FloatingDroplets: React.FC<FloatingDropletsProps> = ({
             backgroundColor: `rgba(255, 255, 255, ${opacity * 0.85})`,
             left: spread + d.xOffset - d.size / 2,
             top: spread * 0.5 + d.yOffset - d.size / 2,
-            shadowColor: 'rgba(136, 213, 197, 0.35)',
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: opacity * 0.35,
-            shadowRadius: 3,
+            boxShadow: `0px 1px 3px rgba(136, 213, 197, NaN)`,
           }}
         />
       ))}

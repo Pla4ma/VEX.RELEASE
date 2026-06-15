@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 import type { BossTier } from './BossPreviewCard.types';
 import { lightColors } from '@/theme/tokens/colors';
@@ -30,7 +30,7 @@ function getTierConfig(tier: BossTier, fallbackColor: string, fallbackBg: string
   return { color: fallbackColor, bg: fallbackBg, label: 'COMMON' };
 }
 
-export function TierBadge({ tier }: { tier: BossTier }): JSX.Element {
+export function TierBadge({ tier }: { tier: BossTier }): React.ReactNode {
   const { theme } = useTheme();
   const tierConfig = useMemo(
     () => getTierConfig(tier, theme.colors.text.tertiary, theme.colors.background.tertiary),
@@ -57,7 +57,7 @@ export function TierBadge({ tier }: { tier: BossTier }): JSX.Element {
   );
 }
 
-export function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
+export function BossTauntBubble({ taunt }: { taunt: string }): React.ReactNode {
   const { theme } = useTheme();
   const slideStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: withSpring(0, { damping: 15, stiffness: 100 }) }],
@@ -80,11 +80,7 @@ export function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
         borderWidth={1}
         borderColor={theme.colors.error[500]}
         style={{
-          shadowColor: theme.colors.error[500],
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.3,
-          shadowRadius: 4,
-          elevation: 4,
+          boxShadow: `0px 2px 4px ${theme.colors.error}[500] / 0.3`,
         }}
       >
         <Text
@@ -115,7 +111,7 @@ export function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
   );
 }
 
-export function DefeatIndicator(): JSX.Element {
+export function DefeatIndicator(): React.ReactNode {
   const { theme } = useTheme();
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
@@ -150,7 +146,7 @@ export function DefeatIndicator(): JSX.Element {
   );
 }
 
-export function FinalStrikeIndicator(): JSX.Element {
+export function FinalStrikeIndicator(): React.ReactNode {
   const { theme } = useTheme();
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [
@@ -194,4 +190,4 @@ export function FinalStrikeIndicator(): JSX.Element {
       </Box>
     </Animated.View>
   );
-}
+}

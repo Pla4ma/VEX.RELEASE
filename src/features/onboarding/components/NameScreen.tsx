@@ -26,7 +26,7 @@ export function NameScreen({
   onContinue,
   onSkip,
   onBack,
-}: NameScreenProps & { onBack?: () => void }): JSX.Element {
+}: NameScreenProps & { onBack?: () => void }): React.ReactNode {
   const { theme } = useTheme();
   const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -156,7 +156,7 @@ export function NameScreen({
             style={{ width: '100%' }}
           >
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               size="lg"
               fullWidth
               onPress={handleContinue}

@@ -3,8 +3,8 @@ import { Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
 } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import type { CoachMessage } from '../types';
 
@@ -20,7 +20,7 @@ export function CoachMessageBubble({
   isCoach = true,
   index = 0,
   onActionPress,
-}: CoachMessageBubbleProps): JSX.Element {
+}: CoachMessageBubbleProps): React.ReactNode {
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState(false);
   const formatTime = (timestamp: number): string => {

@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { getRewardService } from '../../rewards/RewardService';
 import * as repository from './repository';
 import {

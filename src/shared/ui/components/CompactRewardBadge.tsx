@@ -2,7 +2,7 @@ import React from 'react';
 import type { ViewStyle } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   REWARD_CONFIG,
   getRewardColor,

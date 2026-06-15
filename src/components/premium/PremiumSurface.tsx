@@ -35,7 +35,7 @@ export function PremiumSurface({
   secondaryActionLabel,
   onSecondaryAction,
   style,
-}: PremiumSurfaceProps): JSX.Element {
+}: PremiumSurfaceProps): React.ReactNode {
   const cardVariant = tone === 'celebration' ? 'default' : 'subtle';
   const isWarning = tone === 'warning';
 

@@ -13,7 +13,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 import { ComebackQuestCardSkeleton } from './ComebackQuestCardSkeleton';
 
@@ -73,11 +73,7 @@ export function ComebackQuestCard({
           borderWidth={2}
           borderColor={theme.colors.warning.DEFAULT}
           style={{
-            shadowColor: theme.colors.warning.DEFAULT,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.85,
-            shadowRadius: 4,
-            elevation: 2,
+            boxShadow: `0px 2px 4px ${theme.colors.warning.DEFAULT} / 0.85`,
           }}
         >
           {/* Header */}
@@ -180,4 +176,4 @@ export function ComebackQuestCard({
   );
 }
 
-export default ComebackQuestCard;
+export default ComebackQuestCard;

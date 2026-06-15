@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export function LiquidGlassPanel({ children }: { children: React.ReactNode }): React.JSX.Element {
   const { theme } = useTheme();
@@ -16,10 +16,7 @@ export function LiquidGlassPanel({ children }: { children: React.ReactNode }): R
         borderWidth: 1,
         borderColor: semantic.liquidGlassBorder,
         backgroundColor: semantic.liquidPanel,
-        shadowColor: semantic.liquidShadow,
-        shadowOffset: { width: 0, height: 28 },
-        shadowOpacity: 0.85,
-        shadowRadius: 48,
+        boxShadow: '0px 28px 48px semantic.liquidShadow / 0.85',
       }}
     >
       <LinearGradient

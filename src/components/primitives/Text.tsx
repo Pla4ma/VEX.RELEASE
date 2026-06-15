@@ -6,7 +6,7 @@ import {
   type StyleProp,
 } from 'react-native';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import type { ColorValue, SpacingValue } from './types';
 import { resolveColorValue, resolveSpacingValue } from './theme-values';
 
@@ -139,7 +139,7 @@ export function Text({
   children,
   style,
   ...props
-}: TextProps): JSX.Element {
+}: TextProps): React.ReactNode {
   const { theme } = useTheme();
 
   const variantStyles = getVariantStyles(variant, theme);
@@ -190,7 +190,7 @@ export function createTextVariant(
   variant: TextVariant,
   defaultProps?: Partial<TextProps>,
 ) {
-  return function TextVariantComponent(props: TextProps): JSX.Element {
+  return function TextVariantComponent(props: TextProps): React.ReactNode {
     return <Text variant={variant} {...defaultProps} {...props} />;
   };
 }

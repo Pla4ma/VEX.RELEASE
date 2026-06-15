@@ -17,7 +17,7 @@ const OPACITY = {
 export function GlassTextureOverlay({
   radius,
   intensity = 'normal',
-}: GlassTextureOverlayProps): JSX.Element {
+}: GlassTextureOverlayProps): React.ReactNode {
   const opacity = OPACITY[intensity];
 
   return (

@@ -1,4 +1,4 @@
-import { getDefaultStorageAdapter } from '../../../persistence';
+import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import { CONTENT_STUDY_CONSTANTS } from '../types';
 
 export const getStorage = () => getDefaultStorageAdapter();

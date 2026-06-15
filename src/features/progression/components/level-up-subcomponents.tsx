@@ -57,7 +57,7 @@ export const RewardsSection: React.FC<RewardsSectionProps> = ({ rewards }) => {
       <Text style={styles.rewardsLabel}>REWARDS</Text>
       <View style={styles.rewardsRow}>
         {rewards.map((reward, index) => (
-          <View key={index} style={styles.rewardBadge}>
+          <View key={reward.id} style={styles.rewardBadge}>
               <LinearGradient
                 colors={[
                   'rgba(255,255,255,0.2)',
@@ -96,7 +96,7 @@ export const UnlocksSection: React.FC<UnlocksSectionProps> = ({ unlocks }) => {
     <View style={styles.unlocksSection}>
       <Text style={styles.unlocksLabel}>NEW UNLOCKS</Text>
       {unlocks.map((unlock, index) => (
-        <View key={index} style={styles.unlockItem}>
+        <View key={unlock.id} style={styles.unlockItem}>
           <Text style={styles.unlockIcon}>→</Text>
           <Text style={styles.unlockText}>{unlock}</Text>
         </View>

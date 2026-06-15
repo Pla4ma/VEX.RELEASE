@@ -8,7 +8,7 @@ interface GlassIconOrbHighlightsProps {
 
 export function GlassIconOrbHighlights({
   size,
-}: GlassIconOrbHighlightsProps): JSX.Element {
+}: GlassIconOrbHighlightsProps): React.ReactNode {
   return (
     <>
       <LinearGradient

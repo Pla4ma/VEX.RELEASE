@@ -1,10 +1,10 @@
 import React from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { useTheme } from '../../../theme';
-import { Box, Text, Card } from '../../../components/primitives';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text, Card } from '../../../components/primitives/Box';
 import { Badge } from '../../../components/Badge';
-import { Icon } from '../../../icons';
-import { Skeleton } from '../../../shared/ui/primitives';
+import { Icon } from '../../../icons/components/Icon';
+import { Skeleton } from '../../../shared/ui/primitives/Skeleton';
 import type { SearchResult } from '../searchSchemas';
 
 interface SearchResultsProps {

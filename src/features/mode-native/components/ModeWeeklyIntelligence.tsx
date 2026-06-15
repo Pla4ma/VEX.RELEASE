@@ -20,7 +20,7 @@ export function ModeWeeklyIntelligence({
   totalSessions = 0,
   cleanStarts = 0,
   duration = 15,
-}: ModeWeeklyIntelligenceProps): JSX.Element {
+}: ModeWeeklyIntelligenceProps): React.ReactNode {
   const { data } = useModeWeeklyIntelligence(userId, {
     laneOverride: lane,
     completedSessions,

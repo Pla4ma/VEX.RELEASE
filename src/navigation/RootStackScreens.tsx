@@ -7,7 +7,7 @@ import type { ExtendedRootStackParams } from './types';
 import { RootStackAuthenticatedRoutes } from './root-stack-authenticated-routes';
 import { RouteLoadingFallback } from './RouteLoadingFallback';
 import type { FeatureAccessMap } from '../features/liveops-config';
-import { lightColors } from '../theme/tokens';
+import { lightColors } from '../theme/tokens/colors';
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;

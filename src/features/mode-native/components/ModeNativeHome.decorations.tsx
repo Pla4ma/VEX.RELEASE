@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { LiquidGlassObject } from '../../../components/glass/LiquidGlassObject';
 
-export function ModeNativeHomeDecorations(): JSX.Element {
+export function ModeNativeHomeDecorations(): React.ReactNode {
   return (
     <>
       <View

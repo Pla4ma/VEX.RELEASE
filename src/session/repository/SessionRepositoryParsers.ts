@@ -9,7 +9,7 @@ import {
   type SessionHistoryEntry,
   type SessionState,
   type SessionSummary,
-} from '../types';
+} from $1../types/schemas$1;
 
 const SessionHistoryEntrySchema = z
   .object({

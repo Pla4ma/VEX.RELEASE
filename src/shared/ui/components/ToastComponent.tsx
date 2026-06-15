@@ -16,8 +16,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles, getToastTypeStyle } from './Toast.styles';
 import type { ToastProps } from './Toast.types';
 
@@ -117,7 +117,7 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
       style={[
         styles.toastContainer,
         animatedStyle,
-        { shadowColor: theme.colors.background.primary },
+        { boxShadow: `0 4px 12px ${theme.colors.background.primary}` },
       ]}
     >
       <GestureDetector gesture={gestureHandler}>
@@ -192,4 +192,4 @@ export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
       )}
     </Animated.View>
   );
-};
+};

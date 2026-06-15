@@ -115,7 +115,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
               />
             </Box>
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               onPress={handleLogin}
               style={{ marginTop: 32 }}
               accessibilityLabel="Continue to login"
@@ -152,7 +152,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
 
               {/* Submit button */}
               <Button
-                variant="primary"
+                <Text>variant="primary"</Text>
                 onPress={handleSubmit}
                 isLoading={isLoading}
                 disabled={isLoading || !password || !confirmPassword}

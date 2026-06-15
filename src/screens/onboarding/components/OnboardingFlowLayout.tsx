@@ -27,7 +27,7 @@ type OnboardingFlowLayoutProps = {
   step: number;
 };
 
-export function SignedOutOnboardingState(): JSX.Element {
+export function SignedOutOnboardingState(): React.ReactNode {
   const { theme } = useTheme();
   const centeredScreenStyle = useMemo(
     () => [
@@ -58,7 +58,7 @@ export function OnboardingFlowLayout({
   onContinue,
   onRetryFinish,
   step,
-}: OnboardingFlowLayoutProps): JSX.Element {
+}: OnboardingFlowLayoutProps): React.ReactNode {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isLaunchStep = step === lastStepIndex;
@@ -144,7 +144,7 @@ export function OnboardingFlowLayout({
         <View style={footerStyle}>
           {step > 0 ? (
             <Button
-              accessibilityHint="Returns to the previous onboarding step"
+              <Text>accessibilityHint="Returns to the previous onboarding step"</Text>
               accessibilityLabel="Back"
               accessibilityRole="button"
               onPress={onBack}
@@ -156,7 +156,7 @@ export function OnboardingFlowLayout({
             <View />
           )}
           <Button
-            accessibilityHint="Moves to the next onboarding step"
+            <Text>accessibilityHint="Moves to the next onboarding step"</Text>
             accessibilityLabel="Continue"
             accessibilityRole="button"
             isDisabled={isContinueDisabled}

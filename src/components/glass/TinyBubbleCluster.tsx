@@ -55,10 +55,7 @@ export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
             backgroundColor: `rgba(199, 245, 233, ${opacity * 0.72})`,
             left: spread + b.xOffset - b.size / 2,
             top: spread * 0.5 + b.yOffset - b.size / 2,
-            shadowColor: 'rgba(136, 213, 197, 0.25)',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: opacity * 0.25,
-            shadowRadius: 2,
+            boxShadow: `0px 0px 2px rgba(136, 213, 197, NaN)`,
           }}
         />
       ))}

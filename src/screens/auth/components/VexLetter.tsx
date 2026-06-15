@@ -1,3 +1,5 @@
+const ALLOWED_FONT_WEIGHTS = ['300', '400', '500', '600', '700', '800'] as const;
+
 import React, { useEffect } from 'react';
 import Animated, {
   Easing,
@@ -47,7 +49,6 @@ export function VexLetter({
     transform: [{ translateY: ty.value }],
   }));
 
-  const ALLOWED_FONT_WEIGHTS = ['300', '400', '500', '600', '700', '800'] as const;
   type FontWeight = typeof ALLOWED_FONT_WEIGHTS[number];
   const fontWeight = (ALLOWED_FONT_WEIGHTS.includes(weight.value as FontWeight)
     ? weight.value
@@ -101,4 +102,4 @@ export function VexLetter({
       </Text>
     </Animated.View>
   );
-}
+}

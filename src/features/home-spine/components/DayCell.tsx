@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { DAY_WIDTH, EVENT_ICONS, type DayData } from './weekly-calendar-types';
 import { buttonTap } from '../../../utils/haptics';
 
@@ -23,7 +23,7 @@ export function DayCell({
   isToday: boolean;
   onPress: () => void;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const getStatusColor = () => {
     switch (day.status) {
@@ -109,7 +109,7 @@ export function DayCell({
           {day.events.length > 0 && (
             <Box flexDirection="row" gap="xs" mt="xs">
               {day.events.slice(0, 2).map((event, i) => (
-                <Text key={i} fontSize={8}>
+                <Text key={event.id} fontSize={8}>
                   {EVENT_ICONS[event]}
                 </Text>
               ))}

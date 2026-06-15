@@ -18,7 +18,7 @@ interface RootAuthLoadingScreenProps {
 export function RootAuthLoadingScreen({
   background,
   primary,
-}: RootAuthLoadingScreenProps): JSX.Element {
+}: RootAuthLoadingScreenProps): React.ReactNode {
   const pulse = useSharedValue(0.3);
 
   React.useEffect(() => {

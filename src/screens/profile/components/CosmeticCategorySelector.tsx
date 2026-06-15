@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Box, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box, Text } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 import type { CosmeticType } from './CosmeticPreviewCard';

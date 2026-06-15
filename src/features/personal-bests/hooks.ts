@@ -28,18 +28,23 @@ export function usePersonalBestPreview(
   error: Error | null;
   refetch: () => void;
 } {
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error } = useQuery({
     queryKey: personalBestKeys.preview(userId ?? 'none', mode, durationSeconds),
     queryFn: () =>
-      userId ? service.getBestPreview(userId, mode, durationSeconds) : null,
+    userId ? service.getBestPreview(userId, mode, durationSeconds) : null,
     enabled: Boolean(userId && durationSeconds > 0),
-  });
-  const refresh = query.refetch;
+    });
+
+
+
+
+
+  const refresh = refetch;
   return {
-    data: query.data ?? null,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error instanceof Error ? query.error : null,
+    data: data ?? null,
+    isPending: isPending,
+    isError: isError,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },
@@ -53,17 +58,17 @@ export function usePersonalBests(userId: string | null): {
   error: Error | null;
   refetch: () => void;
 } {
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error } = useQuery({
     queryKey: personalBestKeys.profile(userId ?? 'none'),
     queryFn: () => (userId ? service.getUserPersonalBests(userId) : []),
     enabled: Boolean(userId),
   });
-  const refresh = query.refetch;
+  const refresh = refetch;
   return {
-    data: query.data ?? [],
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error instanceof Error ? query.error : null,
+    data: data ?? [],
+    isPending: isPending,
+    isError: isError,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },

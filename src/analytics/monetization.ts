@@ -1,4 +1,4 @@
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 
 export interface MonetizationMetrics {
   totalUsers: number;

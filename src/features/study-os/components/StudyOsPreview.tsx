@@ -10,7 +10,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import type { StudyOsHomeSurface } from '../schemas';
 
@@ -24,7 +24,7 @@ export function StudyOsPreview({
   surface,
   onStartBlock,
   isLoading = false,
-}: StudyOsPreviewProps): JSX.Element {
+}: StudyOsPreviewProps): React.ReactNode {
   const { theme } = useTheme();
   if (surface.hidden) {return <></>;}
 

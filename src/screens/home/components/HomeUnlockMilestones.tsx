@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens/spacing';
 import type {
   HomeUnlockPathItem,
   HomeUnlockPathModel,
@@ -30,7 +30,7 @@ export function HomeUnlockMilestones({
   model,
   onStartSession,
   onPeekLocked,
-}: HomeUnlockMilestonesProps): JSX.Element {
+}: HomeUnlockMilestonesProps): React.ReactNode {
   return (
     <View style={{ gap: spacing[3] }}>
       {model.items.map((item, index) => {

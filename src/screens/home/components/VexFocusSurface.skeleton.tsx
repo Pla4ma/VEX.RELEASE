@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { GlassCard } from '../../../components/glass/GlassCard';
 
-export function VexFocusSkeleton(): JSX.Element {
+export function VexFocusSkeleton(): React.ReactNode {
   return (
     <GlassCard padding={20} radius={32} variant="hero">
       <View style={{ gap: 12 }}>

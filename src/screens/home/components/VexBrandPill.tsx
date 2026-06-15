@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-export function VexBrandPill(): JSX.Element {
+export function VexBrandPill(): React.ReactNode {
   return (
     <View
       style={{

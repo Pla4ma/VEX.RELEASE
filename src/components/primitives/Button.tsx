@@ -14,7 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { springPresets } from '../../theme/tokens/motion';
 import { buttonTap, triggerHaptic } from '../../utils/haptics';
 import { Text } from './Text';
@@ -64,7 +64,7 @@ export function Button({
   ml,
   mr,
   ...props
-}: ButtonProps): JSX.Element {
+}: ButtonProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(1);

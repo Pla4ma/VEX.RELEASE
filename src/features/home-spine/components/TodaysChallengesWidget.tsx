@@ -25,7 +25,7 @@ export function TodaysChallengesWidget({
   onViewAll,
   onClaimReward,
   onRetry,
-}: TodaysChallengesWidgetProps): JSX.Element {
+}: TodaysChallengesWidgetProps): React.ReactNode {
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const stats = useMemo(() => {
@@ -132,7 +132,7 @@ export function TodaysChallengesWidget({
                   ))}
                   {/* View All button */}
                   <Button
-                    variant="ghost"
+                    <Text>variant="ghost"</Text>
                     size="sm"
                     onPress={onViewAll}
                     style={{ alignSelf: 'center' }}

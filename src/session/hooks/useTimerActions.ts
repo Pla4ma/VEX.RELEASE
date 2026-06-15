@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { createDebugger } from '../../utils/debug';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { triggerHapticEvent, HapticEvents } from '../../constants/haptics';
 
 const debug = createDebugger('session:timer');

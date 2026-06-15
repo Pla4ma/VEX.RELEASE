@@ -46,7 +46,7 @@ export function FirstResultScreen({
   sessionData,
   focusScoreBefore,
   onComplete,
-}: FirstResultScreenProps): JSX.Element {
+}: FirstResultScreenProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   const displayName = userName || 'there';
 
@@ -142,7 +142,7 @@ export function FirstResultScreen({
         style={{ width: '100%' }}
       >
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="lg"
           fullWidth
           onPress={onComplete}

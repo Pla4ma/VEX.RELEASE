@@ -6,7 +6,7 @@
  * NEW_USER stage does NOT import or execute boss/squads/study/advanced coach hooks.
  */
 import { useMemo } from 'react';
-import { useNetInfo } from '../../../network';
+import { useNetInfo } from '../../../network/useNetInfo';
 import {
   useFeatureAccess,
   useDisclosureAnalytics,

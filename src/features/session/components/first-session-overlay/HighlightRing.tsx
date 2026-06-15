@@ -10,7 +10,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import type { HighlightRingProps } from './types';
 
 export function HighlightRing({

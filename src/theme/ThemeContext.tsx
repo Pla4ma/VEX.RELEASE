@@ -45,7 +45,7 @@ export function ThemeProvider({
   children,
   config: userConfig,
   initialMode,
-}: ThemeProviderProps): JSX.Element {
+}: ThemeProviderProps): React.ReactNode {
   // Merge with default config
   const config = useMemo(
     () => ({ ...defaultThemeConfig, ...userConfig }),

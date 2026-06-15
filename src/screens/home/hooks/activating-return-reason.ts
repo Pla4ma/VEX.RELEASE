@@ -1,7 +1,5 @@
-import {
-  useUpdateRecommendationStatus,
-  type SessionRecommendation,
-} from '../../../features/ai-coach';
+import { useUpdateRecommendationStatus } from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import type { SessionRecommendation } from '../../../features/ai-coach/schemas/recommendations';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { NextBestAction } from '../../../features/progression';

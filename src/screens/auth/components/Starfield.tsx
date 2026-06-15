@@ -28,7 +28,7 @@ const PARTICLES: ParticleSpec[] = Array.from({ length: PARTICLE_COUNT }).map(
   }),
 );
 
-function Star({ spec }: { spec: ParticleSpec }): JSX.Element {
+function Star({ spec }: { spec: ParticleSpec }): React.ReactNode {
   const opacity = useSharedValue(0.2);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function Star({ spec }: { spec: ParticleSpec }): JSX.Element {
   );
 }
 
-export const Starfield = memo(function Starfield(): JSX.Element {
+export const Starfield = memo(function Starfield(): React.ReactNode {
   return (
     <View
       style={{
@@ -75,7 +75,7 @@ export const Starfield = memo(function Starfield(): JSX.Element {
       pointerEvents="none"
     >
       {PARTICLES.map((p, i) => (
-        <Star key={i} spec={p} />
+        <Star key={p.id} spec={p} />
       ))}
     </View>
   );

@@ -1,4 +1,4 @@
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import type { Experiment, ExperimentAssignment } from './ab-types';
 
 export const experiments = new Map<string, Experiment>();

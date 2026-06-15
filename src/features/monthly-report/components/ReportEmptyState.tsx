@@ -9,7 +9,7 @@ interface ReportEmptyStateProps {
 export function ReportEmptyState({
   isOffline,
   onStartSession,
-}: ReportEmptyStateProps): JSX.Element {
+}: ReportEmptyStateProps): React.ReactNode {
   return (
     <Box flex={1} bg="background.primary">
       {isOffline ? (
@@ -31,7 +31,7 @@ export function ReportEmptyState({
           Complete focus sessions this month to generate your first monthly report.
         </Text>
         <Button
-          onPress={onStartSession}
+          <Text>onPress={onStartSession}</Text>
           variant="primary"
           accessibilityLabel="Start a session"
           accessibilityRole="button"

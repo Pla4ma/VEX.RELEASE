@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useOnboardingProgressState } from '../hooks';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import type { FocusGoal } from '../schemas';
@@ -21,7 +21,7 @@ function NotificationPermissionScreen({
   onComplete,
 }: {
   onComplete: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const [NotificationCard, setNotificationCard] = React.useState<React.FC<{
     userId: string;
@@ -65,11 +65,11 @@ function NotificationPermissionScreen({
     </View>
   );
 }
-function _FirstResultScreen({
+function FirstResultScreenInner({
   onComplete,
 }: {
   onComplete: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const [FirstResult, setFirstResult] = React.useState<React.FC<{
     userName: string;
     sessionDuration: number;
@@ -143,11 +143,11 @@ function _FirstResultScreen({
     />
   );
 }
-export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
+export const OnboardingFlow = withScreenErrorBoundary(function OnboardingFlowInner({
   onStartSession,
   onBack,
   onComplete: _onComplete,
-}: OnboardingFlowProps): JSX.Element {
+}: OnboardingFlowProps): React.ReactNode {
   const { state, isLoading } =
     useOnboardingProgressState();
   if (isLoading || !state) {

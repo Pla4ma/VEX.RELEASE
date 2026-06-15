@@ -5,7 +5,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 
 interface ProjectAtlasCardProps {
   title?: string;
@@ -15,7 +15,7 @@ interface ProjectAtlasCardProps {
 export function ProjectAtlasCard({
   title = 'Project Atlas',
   subtitle = 'Continue where you left off.',
-}: ProjectAtlasCardProps): JSX.Element {
+}: ProjectAtlasCardProps): React.ReactNode {
   return (
     <GlassCard padding={16} radius={22} variant="default">
       <View

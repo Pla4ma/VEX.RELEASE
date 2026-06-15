@@ -2,7 +2,7 @@ import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export interface FormSectionProps {
   title?: string;
@@ -16,7 +16,7 @@ export function FormSection({
   subtitle,
   children,
   style,
-}: FormSectionProps): JSX.Element {
+}: FormSectionProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View style={[{ marginBottom: theme.spacing[6] }, style]}>
@@ -52,7 +52,7 @@ export function InputGroup({
   inline?: boolean;
   gap?: number;
   style?: ViewStyle;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <View
       style={[

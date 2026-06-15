@@ -9,7 +9,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { AnimatedMascot } from '../../../screens/onboarding/components/ethereal/AnimatedMascot';
 import type { MascotMood } from '../../../screens/onboarding/components/ethereal/VexMascotGuide.tokens';
@@ -111,10 +111,7 @@ export function DailyBriefing({
           style={{
             borderWidth: 1,
             borderColor: accentColor,
-            shadowColor: accentColor,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.12,
-            shadowRadius: 12,
+            boxShadow: '0px 4px 12px accentColor / 0.12',
           }}
         >
           <Box flexDirection="row" alignItems="center" gap="sm">
@@ -149,7 +146,7 @@ export function DailyBriefing({
             <Box flexDirection="row" flexWrap="wrap" gap="xs">
               {stats.map((stat, i) => (
                 <Box
-                  key={i}
+                  key={stat.id}
                   px="sm"
                   py="xs"
                   bg="semantic.backgroundElevated"

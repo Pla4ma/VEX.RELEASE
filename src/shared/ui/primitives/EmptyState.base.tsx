@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Pressable, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { glow } from '../../../theme/tokens/elevation';
 import { useFadeIn, useSlideIn } from '../hooks/useReanimated';
 import { createSheet } from '@/shared/ui/create-sheet';

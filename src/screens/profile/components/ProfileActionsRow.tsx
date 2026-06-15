@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileActionsRowProps {
@@ -21,7 +21,7 @@ function GlassIconButton({
   label: string;
   hint: string;
   iconName: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Pressable
       accessibilityHint={hint}
@@ -36,10 +36,7 @@ function GlassIconButton({
         borderWidth: 1.5,
         height: 44,
         justifyContent: 'center',
-        shadowColor: vexLightGlass.glass.shadowStrong,
-        shadowOffset: { width: 0, height: 7 },
-        shadowOpacity: 0.85,
-        shadowRadius: 14,
+        boxShadow: '0px 7px 14px vexLightGlass.glass.shadowStrong / 0.85',
         overflow: 'hidden',
         width: 44,
       }}
@@ -54,7 +51,7 @@ export function ProfileActionsRow({
   onSettingsPress,
   onNotificationsPress,
   onLogout,
-}: ProfileActionsRowProps): JSX.Element {
+}: ProfileActionsRowProps): React.ReactNode {
   return (
     <View
       style={{

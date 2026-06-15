@@ -26,13 +26,13 @@ export interface UseCoachMessagesResult {
 
 export function useCoachMessages(userId: string): UseCoachMessagesResult {
   const network = useNetworkStatus();
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: COACH_QUERY_KEYS.messages(userId),
     queryFn: async () => {
-      if (!network.isConnected) {
-        return [];
-      }
-      return repository.fetchRecentMessages(userId, 50, 0);
+    if (!network.isConnected) {
+    return [];
+    }
+    return repository.fetchRecentMessages(userId, 50, 0);
     },
     enabled: !!userId,
     staleTime: 2 * 60 * 1000,
@@ -40,13 +40,27 @@ export function useCoachMessages(userId: string): UseCoachMessagesResult {
     retry: RETRY_CONFIG.maxRetries,
     retryDelay: RETRY_CONFIG.retryDelay,
     networkMode: 'offlineFirst',
-  });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return {
-    data: query.data ?? [],
-    isLoading: query.isPending,
-    isError: query.isError,
-    error: query.error as Error | null,
-    refetch: async (options?: RefetchOptions) => query.refetch(options),
+    data: data ?? [],
+    isLoading: isPending,
+    isError: isError,
+    error: error as Error | null,
+    refetch: async (options?: RefetchOptions) => refetch(options),
   };
 }

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { CoachPersona } from './persona-data';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -12,7 +12,7 @@ function ExampleMessage({
 }: {
   text: string;
   delay: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View>
@@ -41,7 +41,7 @@ export function PersonaCard({
   isSelected: boolean;
   onPress: () => void;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const [showExamples, setShowExamples] = useState(false);
   const handlePress = () => {
@@ -114,7 +114,7 @@ export function PersonaCard({
           {(isSelected || showExamples) && (
             <Box gap="sm">
               {persona.examples.map((example, i) => (
-                <ExampleMessage key={i} text={example} delay={i * 200} />
+                <ExampleMessage key={example.id} text={example} delay={i * 200} />
               ))}
             </Box>
           )}

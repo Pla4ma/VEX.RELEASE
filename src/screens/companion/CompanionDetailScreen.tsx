@@ -13,7 +13,7 @@ type LoadState =
   | { status: 'error'; error: Error }
   | { status: 'success'; companion: CompanionState };
 
-export function CompanionDetailScreen(): JSX.Element {
+export function CompanionDetailScreen(): React.ReactNode {
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
@@ -77,7 +77,7 @@ export function CompanionDetailScreen(): JSX.Element {
           VEX kept the session safe. Retry the companion profile.
         </Text>
         <Button
-          variant="secondary"
+          <Text>variant="secondary"</Text>
           onPress={load}
           style={{ marginTop: theme.spacing[4] }}
           accessibilityLabel="Retry loading companion"

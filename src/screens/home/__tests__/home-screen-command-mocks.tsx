@@ -99,7 +99,7 @@ jest.mock('../containers/HomeStageResolver', () => {
   const Rn = require('react');
   const { View } = require('react-native');
   return {
-    HomeStageResolver: (): JSX.Element => {
+    HomeStageResolver: (): React.ReactNode => {
       const { HomeContent } = require('../components/HomeContent');
       return Rn.createElement(
         View,

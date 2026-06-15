@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { AnimatedGradientBorder } from './AnimatedGradientBorder';
 
 interface AuthCommandPanelProps {
@@ -9,7 +9,7 @@ interface AuthCommandPanelProps {
   style?: ViewStyle;
 }
 
-export function AuthCommandPanel({ children, style }: AuthCommandPanelProps): JSX.Element {
+export function AuthCommandPanel({ children, style }: AuthCommandPanelProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

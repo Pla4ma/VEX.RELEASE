@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { Pressable, Switch, Alert } from 'react-native';
-import { useTheme } from '../../theme';
-import { Box, Text, Card } from '../../components/primitives';
-import { Icon } from '../../icons';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text, Card } from '../../components/primitives/Box';
+import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
 import { lightColors } from '@/theme/tokens/colors';
 

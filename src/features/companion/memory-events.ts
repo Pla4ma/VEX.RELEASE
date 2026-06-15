@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { CompanionMemory } from './memory-types';
 
 export function emitCompanionMemoryCreated(memory: CompanionMemory): void {

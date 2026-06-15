@@ -22,7 +22,7 @@ interface OnboardingNavigatorProps {
 export function OnboardingNavigator({
   onStartSession,
   onBack,
-}: OnboardingNavigatorProps): JSX.Element {
+}: OnboardingNavigatorProps): React.ReactNode {
   const store = useOnboardingStore();
   useOnboardingProgress();
   const currentStep = store.currentStep;

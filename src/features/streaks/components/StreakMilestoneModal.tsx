@@ -27,7 +27,7 @@ export function StreakMilestoneModal({
   rewards,
   onDismiss,
   onShare,
-}: StreakMilestoneModalProps): JSX.Element {
+}: StreakMilestoneModalProps): React.ReactNode {
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -164,7 +164,7 @@ export function StreakMilestoneModal({
                   </Button>
                 )}
                 <Button
-                  variant="primary"
+                  <Text>variant="primary"</Text>
                   size="lg"
                   fullWidth
                   onPress={onDismiss}

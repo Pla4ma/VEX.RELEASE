@@ -5,7 +5,7 @@ interface VariantProps {
   size: number;
 }
 
-export function SwirlVariant({ size }: VariantProps): JSX.Element {
+export function SwirlVariant({ size }: VariantProps): React.ReactNode {
   const cx = size / 2;
   const cy = size / 2;
   return (

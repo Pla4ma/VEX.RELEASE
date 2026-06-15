@@ -25,9 +25,9 @@ import { SessionSetupHeader } from './SessionSetupHeader';
 import { SessionSetupStakesCard } from './SessionSetupStakesCard';
 import { SessionSetupStudyPlanCard } from './SessionSetupStudyPlanCard';
 import { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
-import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass';
+import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -53,7 +53,7 @@ export function ReturningUserView({
   setSelectedDifficulty,
   navigation,
   route,
-}: ReturningUserViewProps): JSX.Element {
+}: ReturningUserViewProps): React.ReactNode {
   const stakes = useSessionSetupStakes({
     currentStreakDays: controller.streak?.currentDays ?? null,
     selectedDurationSeconds: controller.selectedDurationSeconds,

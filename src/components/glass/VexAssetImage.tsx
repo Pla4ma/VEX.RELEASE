@@ -38,7 +38,7 @@ export function VexAssetImage({
   name,
   size,
   opacity = 1,
-}: VexAssetImageProps): JSX.Element {
+}: VexAssetImageProps): React.ReactNode {
   return (
     <View
       pointerEvents="none"
@@ -47,10 +47,7 @@ export function VexAssetImage({
         height: size,
         opacity,
         overflow: 'hidden',
-        shadowColor: vexLightGlass.glass.shadowStrong,
-        shadowOffset: { width: 0, height: 12 },
-        shadowOpacity: 0.18,
-        shadowRadius: 20,
+        boxShadow: '0px 12px 20px vexLightGlass.glass.shadowStrong / 0.18',
         width: size,
       }}
     >

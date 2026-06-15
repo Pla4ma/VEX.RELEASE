@@ -33,7 +33,7 @@ export function ChallengeList({
   error,
   onRetry,
   filter = 'ALL',
-}: ChallengeListProps): JSX.Element {
+}: ChallengeListProps): React.ReactNode {
   const filteredChallenges = React.useMemo(() => {
     switch (filter) {
       case 'ACTIVE':
@@ -82,7 +82,7 @@ export function ChallengeList({
           <Text style={styles.errorMessage}>{sanitizeErrorMessage(error)}</Text>
           {onRetry && (
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               onPress={onRetry}
               style={styles.retryButton}
               accessibilityLabel="Retry loading challenges"
@@ -114,7 +114,7 @@ export function ChallengeList({
           </Text>
           {filter !== 'ALL' && onRefresh && (
             <Button
-              variant="secondary"
+              <Text>variant="secondary"</Text>
               onPress={onRefresh}
               style={styles.retryButton}
               accessibilityLabel="Show all challenges"

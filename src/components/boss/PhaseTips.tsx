@@ -33,8 +33,8 @@ export const PhaseTips: React.FC<{ phase: BossPhase }> = ({ phase }) => {
   return (
     <View>
       <Text style={styles.tipsHeader}>Phase Tips:</Text>
-      {phaseTips.map((tip: string, index: number) => (
-        <Text key={index} style={styles.tip}>
+      {phaseTips.map((tip: string) => (
+        <Text key={tip} style={styles.tip}>
           {' '}
           • {tip}
         </Text>

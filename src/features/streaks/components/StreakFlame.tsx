@@ -8,12 +8,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { glow } from '../../../theme/tokens/elevation';
 import { lightColors } from '@/theme/tokens/colors';
 
 
-export function StreakFlame({ days }: { days: number }): JSX.Element {
+export function StreakFlame({ days }: { days: number }): React.ReactNode {
   const reduceMotion = useReducedMotion();
   const flameStyle = useAnimatedStyle(() =>
     reduceMotion
@@ -79,7 +79,7 @@ export function RewardItem({
   value: string;
   label: string;
   isNew?: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box alignItems="center" gap="xs">
       <Box position="relative">

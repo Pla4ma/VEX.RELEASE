@@ -1,15 +1,15 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../components/primitives';
+import { Box, Card, Text } from '../../components/primitives/Box';
 import { MasteryRankBadge } from '../../features/mastery/components/MasteryRankBadge';
 import {
   getMasteryRankDisplay,
   type MasteryRank,
   type MasteryState,
 } from '../../features/mastery/types';
-import { Icon } from '../../icons';
-import { useTheme } from '../../theme';
+import { Icon } from '../../icons/components/Icon';
+import { useTheme } from '../../theme/ThemeContext';
 
 const RANK_UNLOCKS: Record<MasteryRank, string[]> = {
   APPRENTICE: ['All base session modes', 'Basic boss encounters'],
@@ -23,15 +23,8 @@ export function RankUnlocks({
   currentRank,
 }: {
   currentRank: MasteryRank;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
-  const ranks: MasteryRank[] = [
-    'APPRENTICE',
-    'ADEPT',
-    'EXPERT',
-    'MASTER',
-    'GRANDMASTER',
-  ];
   return (
     <View style={{ gap: theme.spacing[3] }}>
       <Text variant="h4" color="text.primary">
@@ -92,6 +85,14 @@ export function RankUnlocks({
   );
 }
 
+const ranks: MasteryRank[] = [
+    'APPRENTICE',
+    'ADEPT',
+    'EXPERT',
+    'MASTER',
+    'GRANDMASTER',
+  ];
+
 export function MasteryHeader({
   state,
   pointsToNext,
@@ -102,7 +103,7 @@ export function MasteryHeader({
   pointsToNext: number;
   nextRankName: string;
   progressStyle: ReturnType<typeof useAnimatedStyle>;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const rankDisplay = getMasteryRankDisplay(state.rank);
   return (
@@ -161,4 +162,4 @@ export function MasteryHeader({
       </Box>
     </Card>
   );
-}
+}

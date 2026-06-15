@@ -41,7 +41,7 @@ export function VexFocusSurface({
   onPressPrimary,
   priority,
   stakes,
-}: VexFocusSurfaceProps): JSX.Element {
+}: VexFocusSurfaceProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
 
   if (isLoading || !priority) {

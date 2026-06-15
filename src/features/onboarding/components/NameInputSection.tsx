@@ -17,7 +17,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface NameInputSectionProps {
   name: string;
@@ -36,7 +36,7 @@ export function NameInputSection({
   isFocused,
   setIsFocused,
   showGoals,
-}: NameInputSectionProps): JSX.Element {
+}: NameInputSectionProps): React.ReactNode {
   const { theme } = useTheme();
   const inputRef = useRef<TextInput>(null);
 

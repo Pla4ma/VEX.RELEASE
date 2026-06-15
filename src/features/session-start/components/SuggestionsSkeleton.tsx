@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 /**
  * Skeleton loading state for suggestions
  */
-export function SuggestionsSkeleton(): JSX.Element {
+export function SuggestionsSkeleton(): React.ReactNode {
   const { theme } = useTheme();
 
   return (

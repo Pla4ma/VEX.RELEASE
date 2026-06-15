@@ -77,9 +77,10 @@ export function useCoachChat() {
 
   useEffect(() => {
     if (chatMessages.length > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         flashListRef.current?.scrollToEnd({ animated: true });
       }, 100);
+      return () => clearTimeout(timer);
     }
   }, [chatMessages]);
 

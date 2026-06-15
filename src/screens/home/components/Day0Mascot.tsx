@@ -9,7 +9,7 @@ interface Day0MascotProps {
   size: number;
 }
 
-export function Day0Mascot({ size }: Day0MascotProps): JSX.Element {
+export function Day0Mascot({ size }: Day0MascotProps): React.ReactNode {
   return (
     <View
       pointerEvents="none"

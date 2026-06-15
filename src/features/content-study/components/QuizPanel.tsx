@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { QuizPanelProps } from '../types';
 import { quizPanelStyles } from './QuizPanelStyles';
 import { QuizCard } from './QuizCard';
@@ -80,7 +80,7 @@ export const QuizPanel: React.FC<QuizPanelProps> = ({
           </Text>
         </View>
 
-        {calculateScore && (
+        {calculateScore !== null && calculateScore !== undefined && (
           <View
             style={[
               quizPanelStyles.scoreBadge,

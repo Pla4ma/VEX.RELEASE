@@ -16,7 +16,7 @@ export function SessionNotices({
   showContractReminder,
   contract,
   completionPercentage,
-}: SessionNoticesProps): JSX.Element {
+}: SessionNoticesProps): React.ReactNode {
   return (
     <>
       {isOffline ? <OfflineBanner /> : null}

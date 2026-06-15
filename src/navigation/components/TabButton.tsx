@@ -8,7 +8,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import { Text } from '../../components/primitives/Text';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
@@ -157,7 +157,7 @@ export function TabButton({
           <Text
             style={{
               color: focused ? vexLightGlass.mint[700] : vexLightGlass.text.disabled,
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: focused ? '800' : '500',
               letterSpacing: 0,
             }}

@@ -108,7 +108,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
         <AchievementRewards achievement={achievement} />
 
         <Button
-          variant="outline"
+          <Text>variant="outline"</Text>
           size="lg"
           fullWidth
           onPress={handleShare}
@@ -120,7 +120,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
         </Button>
 
         <Button
-          variant="ghost"
+          <Text>variant="ghost"</Text>
           size="md"
           fullWidth
           onPress={onClose}

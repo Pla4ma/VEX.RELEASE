@@ -14,7 +14,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 /**
  * Progress bar for recovery
@@ -25,7 +25,7 @@ export function RecoveryProgress({
 }: {
   completed: number;
   total: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progress = completed / total;
 
@@ -67,7 +67,7 @@ export function RecoveryProgress({
 /**
  * Comeback King badge (shown when complete)
  */
-export function ComebackKingBadge(): JSX.Element {
+export function ComebackKingBadge(): React.ReactNode {
   const { theme } = useTheme();
 
   const bounceStyle = useAnimatedStyle(() => ({

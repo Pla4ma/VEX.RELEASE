@@ -2,7 +2,7 @@ import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { rgbaColors } from '../../theme/tokens/rgba-colors';
 import { lightColors } from '../../theme/tokens/colors';
 import { AuroraField } from './AuroraField';
@@ -21,7 +21,7 @@ const absoluteFill: ViewStyle = {
 
 export function PremiumBackdrop({
   intensity = 0.58,
-}: PremiumBackdropProps): JSX.Element {
+}: PremiumBackdropProps): React.ReactNode {
   const { theme, isDark } = useTheme();
   const base = theme.colors.semantic.background;
   const top = isDark

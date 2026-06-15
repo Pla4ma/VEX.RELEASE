@@ -100,8 +100,8 @@ export class ScreenErrorBoundary extends Component<
 export function withScreenErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   screenName: string,
-): (props: P) => JSX.Element {
-  return function WithErrorBoundary(props: P): JSX.Element {
+): (props: P) => React.ReactNode {
+  return function WithErrorBoundary(props: P): React.ReactNode {
     return (
       <ScreenErrorBoundary screenName={screenName}>
         <WrappedComponent

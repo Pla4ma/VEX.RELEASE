@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 const LOADING_STAT_PLACEHOLDERS = ['first', 'second', 'third'] as const;

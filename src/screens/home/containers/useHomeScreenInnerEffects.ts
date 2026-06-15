@@ -6,7 +6,7 @@ import {
   trackInterventionDisplayed,
   trackInterventionActioned,
 } from '../../../features/ai-coach/analytics';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { getOrchestratorHandlesCompletion } from '../../../session/analytics/SessionAnalytics';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import type { ExtendedRootStackParams } from '../../../navigation/types';

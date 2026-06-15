@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { PremiumSurface, SectionHeader } from '../../../components/premium';
+import { PremiumSurface, SectionHeader } from '../../../components/premium/PremiumSurface';
 import {
   getFeatureAvailability,
   type FeatureAccessMap,

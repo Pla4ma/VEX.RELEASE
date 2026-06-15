@@ -11,7 +11,7 @@ export { parseSessionCompletionParams, type ParsedSessionCompletionParams } from
 export { buildSessionSummaryFromCompletionLedger } from './session-summary-builder';
 export { buildSessionCompletionHero, buildSessionCompletionReturnPlan } from './hero-return-plan';
 import { SessionMode } from '../../session/modes';
-import { SessionSummarySchema, type SessionSummary } from '../../session/types';
+import { SessionSummarySchema, type SessionSummary } from '../../session/types/schemas';
 import {
   CompletionLedgerSchema,
   SessionCompletionHeroSchema,

@@ -7,10 +7,10 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { useTheme } from '../theme';
-import { Text } from './primitives';
-import { Icon } from '../icons';
-import { Button } from './primitives';
+import { useTheme } from '../theme/ThemeContext';
+import { Text } from './primitives/Text';
+import { Icon } from '../icons/components/Icon';
+import { Button } from './primitives/Button';
 import { buttonTap } from '../utils/haptics';
 import {
   getVariantStyles,

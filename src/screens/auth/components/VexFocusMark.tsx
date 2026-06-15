@@ -7,7 +7,7 @@ interface VexFocusMarkProps {
   size?: number;
 }
 
-export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
+export function VexFocusMark({ size = 120 }: VexFocusMarkProps): React.ReactNode {
   const s = size;
   const cx = s / 2;
   const cy = s / 2;
@@ -94,10 +94,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): JSX.Element {
         height: s,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: lightColors.semantic.vexCyan,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: isWeb ? 0.25 : 0.35,
-        shadowRadius: isWeb ? 16 : 20,
+        boxShadow: '0px 0px isWeb ? 16 : 20px lightColors.semantic.vexCyan / isWeb ? 0.25 : 0.35',
       }}
       accessibilityLabel="VEX focus mark"
     >

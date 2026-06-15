@@ -17,7 +17,7 @@ import { ScrollView, View } from 'react-native';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { BossImpactCard } from './BossImpactCard';
 import { StreakConsequenceCard } from './StreakConsequenceCard';
 import { ChallengeImpactCard } from './ChallengeImpactCard';

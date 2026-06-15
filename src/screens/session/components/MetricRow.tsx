@@ -1,9 +1,9 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ProgressMetric } from './SessionProgressionCard.types';
 
 export function isProgressMetric(

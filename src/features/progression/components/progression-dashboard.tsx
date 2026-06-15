@@ -76,7 +76,7 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
           <Text
             style={{
               color: vexLightGlass.mint[500],
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: '700',
               letterSpacing: 1.0,
               textTransform: 'uppercase',

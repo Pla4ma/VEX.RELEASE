@@ -10,19 +10,19 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { Box, Text } from '../../components/primitives';
-import { Skeleton } from '../../shared/ui/primitives';
+import { Box, Text } from '../../components/primitives/Box';
+import { Skeleton } from '../../shared/ui/primitives/Skeleton';
 import { ErrorState } from '../../components/states/ErrorState';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import type { MainStackParams } from '../../navigation/types';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { MasteryHeader, RankUnlocks } from './MasteryHeader';
 import { MasteryTechniqueGrid } from './MasteryTechniqueGrid';
 import { MasteryChallengesList } from './MasteryChallengesList';
 import { useMasteryState } from './useMasteryState';
 
-export function MasteryScreen(): JSX.Element {
+export function MasteryScreen(): React.ReactNode {
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParams>>();
   const { theme } = useTheme();

@@ -2,14 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 
 interface VexFocusFooterProps {
   ctaLabel: string;
   onPressPrimary: () => void;
 }
 
-export function VexFocusFooter({ ctaLabel, onPressPrimary }: VexFocusFooterProps): JSX.Element {
+export function VexFocusFooter({ ctaLabel, onPressPrimary }: VexFocusFooterProps): React.ReactNode {
   return (
     <>
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: 14, zIndex: 2 }}>

@@ -1,9 +1,9 @@
 import React from 'react';
 import type { Theme } from '../../theme';
-import { Box, Text, Card } from '../../components/primitives';
+import { Box, Text, Card } from '../../components/primitives/Box';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 
 interface SettingsProfileRowProps {
   displayName: string;
@@ -36,7 +36,7 @@ export function SettingsProfileRow({
           </Text>
           <Box flexDirection="row" mt={8}>
             <Badge variant="primary" size="sm" leftIcon="star">
-              Pro
+              <Text>Pro</Text>
             </Badge>
           </Box>
         </Box>

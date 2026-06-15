@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { spacing } from '../../../theme/tokens/spacing';
@@ -32,7 +32,7 @@ interface CaptureTypeSelectorProps {
 export function CaptureTypeSelector({
   selectedType,
   onSelect,
-}: CaptureTypeSelectorProps): JSX.Element {
+}: CaptureTypeSelectorProps): React.ReactNode {
   return (
     <View
       style={{
@@ -61,7 +61,7 @@ function CaptureTypeButton({
   item: (typeof CAPTURE_TYPES)[0];
   isSelected: boolean;
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({

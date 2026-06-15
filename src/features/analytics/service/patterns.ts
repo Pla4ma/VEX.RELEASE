@@ -1,4 +1,5 @@
-import * as repository from '../repository';
+import { fetchTimeSeriesData } from '../repository/time-series';
+import { storeDetectedPattern } from '../repository/stats';
 import {
   DetectedPatternSchema,
   type TimeRange,
@@ -31,13 +32,13 @@ export async function detectPatterns(
 ): Promise<DetectedPattern[]> {
   const patterns: DetectedPattern[] = [];
   const [sessionsData, xpData] = await Promise.all([
-    repository.fetchTimeSeriesData(
+    fetchTimeSeriesData(
       userId,
       'sessions_completed',
       timeRange,
       'day',
     ),
-    repository.fetchTimeSeriesData(userId, 'xp_earned', timeRange, 'day'),
+    fetchTimeSeriesData(userId, 'xp_earned', timeRange, 'day'),
   ]);
   if (sessionsData.points.length > 3 && xpData.points.length > 3) {
     const correlation = calculateCorrelation(
@@ -95,7 +96,7 @@ export async function detectPatterns(
     }
   }
   for (const pattern of patterns) {
-    await repository.storeDetectedPattern(pattern);
+    await storeDetectedPattern(pattern);
   }
   return patterns;
 }

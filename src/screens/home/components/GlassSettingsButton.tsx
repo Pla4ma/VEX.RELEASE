@@ -1,23 +1,19 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface GlassSettingsButtonProps {
   onPress: () => void;
 }
 
-export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): JSX.Element {
+export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): React.ReactNode {
   return (
     <View
       style={{
         borderRadius: 19,
-        elevation: 4,
-        shadowColor: 'rgba(13, 76, 65, 0.16)',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.85,
-        shadowRadius: 10,
+        boxShadow: `0px 6px 10px rgba(13, 76, 65, 0.136)`,
       }}
     >
       <Pressable
@@ -76,4 +72,4 @@ export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): JSX.
   );
 }
 
-export default GlassSettingsButton;
+export default GlassSettingsButton;

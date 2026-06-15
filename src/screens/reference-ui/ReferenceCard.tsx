@@ -20,7 +20,7 @@ export function ReferenceCard({
   glow = false,
   showAsset = true,
   style,
-}: ReferenceCardProps): JSX.Element {
+}: ReferenceCardProps): React.ReactNode {
   const assetName = asset ?? (glow ? 'progressBars' : 'coachStar');
   const railColor =
     accent === 'fire' || (accent === undefined && glow)

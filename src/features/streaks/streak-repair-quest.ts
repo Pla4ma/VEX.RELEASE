@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { v4 } from '../../utils/uuid';
 import * as repository from './repository';
 import { expireRepairQuest, completeRepairQuest } from './streak-repair-lifecycle';

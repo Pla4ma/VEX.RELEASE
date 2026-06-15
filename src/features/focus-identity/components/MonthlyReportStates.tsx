@@ -14,7 +14,7 @@ export function MonthlyReportErrorState({
   message,
   onRetry,
   onClose,
-}: ErrorStateProps): JSX.Element {
+}: ErrorStateProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
@@ -41,14 +41,14 @@ export function MonthlyReportErrorState({
         {message}
       </Text>
       <Button
-        onPress={onRetry}
+        <Text>onPress={onRetry}</Text>
         variant="primary"
         style={{ marginBottom: theme.spacing[4] }}
       >
         Try Again
       </Button>
       <Button onPress={onClose} variant="secondary">
-        Close
+        <Text>Close</Text>
       </Button>
     </View>
   );
@@ -60,7 +60,7 @@ interface EmptyStateProps {
 
 export function MonthlyReportEmptyState({
   onClose,
-}: EmptyStateProps): JSX.Element {
+}: EmptyStateProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
@@ -87,7 +87,7 @@ export function MonthlyReportEmptyState({
         Complete sessions this month to generate your first focus report.
       </Text>
       <Button onPress={onClose} variant="primary">
-        Start a Session
+        <Text>Start a Session</Text>
       </Button>
     </View>
   );

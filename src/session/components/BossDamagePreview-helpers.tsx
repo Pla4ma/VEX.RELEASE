@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function BossHealthBar({
   healthPercent,
@@ -18,7 +18,7 @@ export function BossHealthBar({
 }: {
   healthPercent: number;
   willDefeat: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progressValue = useSharedValue(healthPercent / 100);
   useEffect(() => {
@@ -84,7 +84,7 @@ export function BossHealthBar({
   );
 }
 
-export function DefeatCelebration(): JSX.Element {
+export function DefeatCelebration(): React.ReactNode {
   const { theme } = useTheme();
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [

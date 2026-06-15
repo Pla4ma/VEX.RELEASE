@@ -8,8 +8,8 @@ import Animated, {
   useReducedMotion,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { glow } from '../../../theme/tokens/elevation';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { TabItemProps } from './TabBar.types';

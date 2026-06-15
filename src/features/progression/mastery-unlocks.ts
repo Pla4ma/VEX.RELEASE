@@ -138,10 +138,11 @@ export function checkUnlocks(
 ): { newlyUnlocked: MasteryUnlock[]; allUnlocks: string[] } {
   const newlyUnlocked: MasteryUnlock[] = [];
   const allUnlocks = [...existingUnlocks];
+  const existingunlockSet = new Set(existingUnlocks);
   for (const unlock of MASTERY_UNLOCKS) {
     const trackLevel = state.tracks[unlock.requiredTrack].level;
     const alreadyUnlocked = existingUnlocks.includes(unlock.id);
-    if (trackLevel >= unlock.requiredLevel && !alreadyUnlocked) {
+    const alreadyUnlocked = existingunlockSet.has(unlock.id);
       newlyUnlocked.push({ ...unlock, unlocked: true });
       allUnlocks.push(unlock.id);
     }

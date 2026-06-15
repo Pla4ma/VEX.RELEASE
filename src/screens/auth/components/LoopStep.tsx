@@ -24,7 +24,7 @@ interface LoopStepProps {
   staggerMs: number;
 }
 
-export function LoopStep({ step, index, isReducedMotion, staggerMs }: LoopStepProps): JSX.Element {
+export function LoopStep({ step, index, isReducedMotion, staggerMs }: LoopStepProps): React.ReactNode {
   const labelOpacity = useSharedValue(0);
   const labelTranslateY = useSharedValue(8);
 

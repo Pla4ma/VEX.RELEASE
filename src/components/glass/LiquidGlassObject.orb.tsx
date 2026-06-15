@@ -6,7 +6,7 @@ interface VariantProps {
   size: number;
 }
 
-export function OrbVariant({ size }: VariantProps): JSX.Element {
+export function OrbVariant({ size }: VariantProps): React.ReactNode {
   const r = size * 0.42;
   const center = size / 2;
   return (

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { Text } from '../../../components/primitives';
-import { Button } from '../../../components';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
 import { EnterAnimation } from './EnterAnimation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { PRESETS, type EmptyStateProps } from './EmptyState.presets';

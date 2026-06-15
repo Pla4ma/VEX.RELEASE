@@ -17,7 +17,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { ContentStudyStackParamList } from '../types';
 import { useContentReview } from '../hooks';
 import { UI_TEXT } from '../constants';
-import { useNetInfo } from '../../../network';
+import { useNetInfo } from '../../../network/useNetInfo';
 
 import { styles } from './ContentReviewScreen.styles';
 import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';

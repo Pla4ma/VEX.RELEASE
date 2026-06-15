@@ -8,12 +8,12 @@ import {
 } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { AppScreen, Button, Card } from '../../../components/primitives';
+import { AppScreen, Button, Card } from '../../../components/primitives/AppScreen';
 import { Text } from '../../../components/primitives/Text';
-import { ContentInputActiveTab, InputTypeSelector } from '../components';
+import { ContentInputActiveTab, InputTypeSelector } from '../components/ContentInputActiveTab';
 import { UI_TEXT } from '../constants';
 import { useContentInput } from '../hooks';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ContentStudyStackParamList } from '../types';
 
 type ContentInputRouteProp = RouteProp<
@@ -25,7 +25,7 @@ type ContentInputNavigationProp = NativeStackNavigationProp<
   'ContentInput'
 >;
 
-export function ContentInputScreen(): JSX.Element {
+export function ContentInputScreen(): React.ReactNode {
   const navigation = useNavigation<ContentInputNavigationProp>();
   const route = useRoute<ContentInputRouteProp>();
   const { theme } = useTheme();
@@ -148,7 +148,7 @@ export function ContentInputScreen(): JSX.Element {
             {error}
           </Text>
           <Button mt="md" onPress={clearError} size="sm" variant="ghost">
-            Dismiss
+            <Text>Dismiss</Text>
           </Button>
         </Card>
       ) : null}

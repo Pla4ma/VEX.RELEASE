@@ -6,7 +6,7 @@ import { VexLaunchButton } from '../../../components/primitives/VexLaunchButton'
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { timingPresets } from '../../../theme/tokens/motion';
 import { useModeHomeSurface } from '../hooks';
@@ -24,7 +24,7 @@ export function ModeNativeHome({
   lane,
   homeContext,
   onStart,
-}: ModeNativeHomeProps): JSX.Element {
+}: ModeNativeHomeProps): React.ReactNode {
   const context: HomeContext = {
     ...homeContext,
     laneOverride: lane,
@@ -112,7 +112,7 @@ export function ModeNativeHome({
             <Text
               style={{
                 color: vexLightGlass.mint[700],
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: '800',
                 letterSpacing: 1.4,
                 marginBottom: 6,

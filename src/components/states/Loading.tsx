@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../primitives/Box';
 import { Spinner, Dots, Pulse, styles } from './loading-variants';
 
 export type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton';

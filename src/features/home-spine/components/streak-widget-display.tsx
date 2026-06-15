@@ -9,10 +9,10 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StreakWidgetProps } from './StreakWidget';
 
-export function StreakWidgetSkeleton(): JSX.Element {
+export function StreakWidgetSkeleton(): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -51,7 +51,7 @@ export function FlameIcon({
   riskLevel: StreakWidgetProps['riskLevel'];
   currentDays: number;
   size?: number;
-}): JSX.Element {
+}): React.ReactNode {
   const flameAnimation = useAnimatedStyle(() => {
     const intensity =
       riskLevel === 'CRITICAL' ? 1.5 : riskLevel === 'HIGH' ? 1.3 : 1;
@@ -93,7 +93,7 @@ export function RiskBanner({
 }: {
   riskLevel: StreakWidgetProps['riskLevel'];
   hoursRemaining: number | null;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   const { theme } = useTheme();
 
   if (riskLevel === 'NONE' || riskLevel === 'LOW' || hoursRemaining === null) {

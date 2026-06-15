@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '../../../../components/primitives/Box';
 import { Text } from '../../../../components/primitives/Text';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import type { StreakBrokenModalProps } from './types';
 
 interface LossStatProps {
@@ -16,7 +16,7 @@ export function LossStat({
   value,
   label,
   isLoss = false,
-}: LossStatProps): JSX.Element {
+}: LossStatProps): React.ReactNode {
   return (
     <Box alignItems="center" gap="xs">
       <Text fontSize={32}>{emoji}</Text>
@@ -38,7 +38,7 @@ export function WhatRemains({
   longestStreak,
 }: {
   longestStreak: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -68,7 +68,7 @@ export function ComebackBonus({
   bonus,
 }: {
   bonus: StreakBrokenModalProps['comebackBonus'];
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -96,7 +96,7 @@ export function ComebackBonus({
   );
 }
 
-export function CoachMessage({ message }: { message: string }): JSX.Element {
+export function CoachMessage({ message }: { message: string }): React.ReactNode {
   return (
     <Box
       flexDirection="row"

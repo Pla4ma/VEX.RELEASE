@@ -1,4 +1,4 @@
-import { borderRadius, spacing } from '../../../theme/tokens';
+import { borderRadius, spacing } from '../../../theme/tokens/radius';
 
 export const liquidGlassRadii = {
   card: borderRadius['2xl'],

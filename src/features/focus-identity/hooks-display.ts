@@ -3,7 +3,7 @@ import {
   FocusIdentityEngine,
   type ScoreBand,
 } from './FocusIdentityEngine';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 

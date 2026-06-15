@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useReducedMotion } from '@/hooks';
 
@@ -27,7 +27,7 @@ export function FocusRing({
   focusMinutes,
   size = 148,
   gradientColors,
-}: FocusRingProps): JSX.Element {
+}: FocusRingProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const strokeWidth = 12;

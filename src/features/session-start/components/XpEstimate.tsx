@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { calculateEstimatedXp } from './duration-picker-types';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 export function XpEstimate({
   minutes,
@@ -15,7 +15,7 @@ export function XpEstimate({
   xpPerMinute: number;
   streakMultiplier: number;
   isStrictMode: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const estimatedXp = useMemo(
     () =>

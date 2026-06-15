@@ -5,7 +5,7 @@ export function loadingSkeleton(
   spacing: number,
   _borderColor: string,
   _cardColor: string,
-): JSX.Element {
+): React.ReactNode {
   return (
     <View style={{ gap: spacing }}>
       {[1, 2, 3, 4].map((item) => (

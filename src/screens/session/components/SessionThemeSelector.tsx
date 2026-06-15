@@ -65,7 +65,7 @@ export function SessionThemeSelector({
             We could not load your themes right now.
           </Text>
           <Button
-            variant="outline"
+            <Text>variant="outline"</Text>
             onPress={themeQueryRetry}
             accessibilityLabel="Retry loading themes"
             accessibilityRole="button"

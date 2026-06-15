@@ -1,6 +1,6 @@
 import type { StorageManager } from '../persistence/StorageManager';
 import type { FeatureFlag, FeatureFlagValue } from './FeatureFlagService';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import {
   saveFlagsToStorage,
   saveOverridesToStorage,

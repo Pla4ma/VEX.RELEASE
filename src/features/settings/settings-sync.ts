@@ -1,6 +1,6 @@
 import * as syncRepo from './repository-sync';
-import { withRetry, CircuitBreaker, classifyError } from '../../shared/hardening';
-import { eventBus } from '../../events';
+import { withRetry, CircuitBreaker, classifyError } from '../../shared/hardening/retry';
+import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { SyncState, SyncConflict, SettingCategory } from './types';
 import { resolveConflict } from './settings-validation';

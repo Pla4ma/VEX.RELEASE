@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { spacing } from '../../../theme/tokens';
+import { Icon } from '../../../icons/components/Icon';
+import { spacing } from '../../../theme/tokens/spacing';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import { ref, type } from '../../reference-ui/referenceTokens';
 import type {
@@ -24,7 +24,7 @@ export function HomeUnlockPath({
   model,
   onStartSession,
   onPeekLocked,
-}: HomeUnlockPathProps): JSX.Element {
+}: HomeUnlockPathProps): React.ReactNode {
   const next = model.nextItem;
   const teaser = model.previewItems.find(
     (item) => item.eyebrow !== next.eyebrow,

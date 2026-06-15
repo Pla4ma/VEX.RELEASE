@@ -3,12 +3,12 @@ import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme } from '../../theme';
-import { Box, Card, Text } from '../../components/primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Card, Text } from '../../components/primitives/Box';
 import type { SettingsStackParams } from '../../navigation';
 import { useDeleteAccount } from '../../features/account-deletion/hooks';
 import { useAuthStore, useUIStore } from '../../store/index';
-import { usePaywall } from '../../shared/monetization';
+import { usePaywall } from '../../shared/monetization/use-revenuecat';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
@@ -19,7 +19,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass';
+} from $1../../shared/ui/liquid-glass/LiquidGlassCard$1;
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 

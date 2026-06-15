@@ -42,7 +42,7 @@ export function ReportCards({
   identityStatement,
   onShare,
   onClose,
-}: ReportCardsProps): JSX.Element {
+}: ReportCardsProps): React.ReactNode {
   return (
     <>
       <ScoreOverviewCard
@@ -164,14 +164,14 @@ export function ReportCards({
       {/* Share / Close buttons */}
       <Animated.View entering={SlideInDown.delay(500).duration(300)}>
         <Button
-          onPress={onShare}
+          <Text>onPress={onShare}</Text>
           variant="primary"
           style={{ marginBottom: theme.spacing[4] }}
         >
           Share Monthly Report
         </Button>
         <Button onPress={onClose} variant="secondary">
-          Close
+          <Text>Close</Text>
         </Button>
       </Animated.View>
     </>

@@ -8,18 +8,22 @@ import {
 import type { MemoryCandidateInput } from './schemas';
 
 export function useMemoryCandidates(userId: string | null, enabled = true) {
-  const query = useQuery({
+  const { data, error, isError, isPending, refetch } = useQuery({
     enabled: Boolean(userId) && enabled,
     queryFn: () => getMemoryCandidates(userId ?? ''),
     queryKey: ['memory-candidate', userId],
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? [],
-    error: query.error,
-    isError: query.isError,
-    isPending: query.isPending,
-    refetch: query.refetch,
+    data: data ?? [],
+    error: error,
+    isError: isError,
+    isPending: isPending,
+    refetch: refetch,
   };
 }
 

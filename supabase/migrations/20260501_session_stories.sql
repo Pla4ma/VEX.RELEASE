@@ -7,6 +7,20 @@ CREATE TABLE IF NOT EXISTS public.sessions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+ALTER TABLE public.sessions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own sessions" ON public.sessions
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own sessions" ON public.sessions
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own sessions" ON public.sessions
+    FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete own sessions" ON public.sessions
+    FOR DELETE USING (auth.uid() = user_id);
+
 CREATE TABLE IF NOT EXISTS session_stories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     session_id UUID NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,

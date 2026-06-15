@@ -136,11 +136,11 @@ export function FocusScoreCardContent({
             {identityStatement}
           </Text>
 
-          {percentileRank && (
+          {Boolean(percentileRank) && (
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: '600',
                 marginTop: 8,
               }}
@@ -172,7 +172,7 @@ export function FocusScoreCardContent({
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: '600',
                 marginTop: 4,
                 textAlign: 'right',

@@ -7,7 +7,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { LiquidLens } from '../../../components/glass/LiquidLens';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 
-export function VexFocusSurfaceDecor(): JSX.Element {
+export function VexFocusSurfaceDecor(): React.ReactNode {
   return (
     <>
       <View

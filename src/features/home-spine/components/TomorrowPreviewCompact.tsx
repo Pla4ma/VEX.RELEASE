@@ -13,7 +13,7 @@ export function TomorrowPreviewCompact({
   streakWillContinue: boolean;
   events: TomorrowPreviewProps['events'];
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const firstEvent = events[0];
   const eventMark = firstEvent
     ? firstEvent.type === 'double_xp'

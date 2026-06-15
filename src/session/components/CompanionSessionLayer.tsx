@@ -5,7 +5,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { LivingCompanion } from '../../features/companion/components/LivingCompanion';
 import type { CompanionState } from '../../features/companion/types';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
 type CompanionSessionLayerProps = {
   companionState: CompanionState;
@@ -25,7 +25,7 @@ export function CompanionSessionLayer({
   purityScore,
   sessionProgress,
   totalSeconds,
-}: CompanionSessionLayerProps): JSX.Element {
+}: CompanionSessionLayerProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

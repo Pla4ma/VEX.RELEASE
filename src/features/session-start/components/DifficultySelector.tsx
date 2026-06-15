@@ -16,12 +16,12 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
 import { useHaptics } from '../../../utils/haptics';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { addBreadcrumb } from '../../../config/sentry';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 import {
   DIFFICULTY_OPTIONS,
   type DifficultyOption,
@@ -35,7 +35,7 @@ export function DifficultySelector({
   selected,
   onChange,
   disabled = false,
-}: DifficultySelectorProps): JSX.Element {
+}: DifficultySelectorProps): React.ReactNode {
   const { theme } = useTheme();
   const haptics = useHaptics();
 
@@ -96,7 +96,7 @@ function DifficultyCard({
   isSelected,
   disabled,
   onPress,
-}: DifficultyCardProps): JSX.Element {
+}: DifficultyCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const scale = useAnimatedStyle(() => ({
@@ -133,10 +133,7 @@ function DifficultyCard({
             borderColor,
             backgroundColor,
             opacity: disabled ? 0.5 : 1,
-            shadowColor: theme.colors.semantic.shadow,
-            shadowOffset: { width: 0, height: 10 },
-            shadowOpacity: isSelected ? 0.2 : 0.08,
-            shadowRadius: isSelected ? 18 : 10,
+            boxShadow: '0px 10px isSelected ? 18 : 10px theme.colors.semantic.shadow / isSelected ? 0.2 : 0.08',
           },
         ]}
         accessibilityLabel={`${option.name} difficulty: ${option.pauseLimit} pauses, ${option.xpMultiplier} XP. ${option.description}`}

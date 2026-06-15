@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 export interface TomorrowPreviewSessionProps {
@@ -26,7 +26,7 @@ export interface TomorrowPreviewSessionProps {
 export function TomorrowPreviewSession({
   preview,
   onPress,
-}: TomorrowPreviewSessionProps): JSX.Element {
+}: TomorrowPreviewSessionProps): React.ReactNode {
   const { theme } = useTheme();
   const getTypeColor = () => {
     switch (preview.type) {
@@ -57,11 +57,7 @@ export function TomorrowPreviewSession({
           borderWidth={2}
           borderColor={accentColor}
           style={{
-            shadowColor: accentColor,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.2,
-            shadowRadius: 8,
-            elevation: 4,
+            boxShadow: `0px 2px 8px ${accentColor} / 0.2`,
           }}
         >
           <Box flexDirection="row" alignItems="center" gap="sm" mb="md">
@@ -117,4 +113,4 @@ export function TomorrowPreviewSession({
       </CardWrapper>
     </Animated.View>
   );
-}
+}

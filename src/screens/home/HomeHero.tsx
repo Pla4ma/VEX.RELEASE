@@ -7,7 +7,7 @@ import { Text } from '../../components/primitives/Text';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalletBadge';
 import { getPremiumCardStyle } from '../../components/premiumStyles';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
@@ -57,7 +57,7 @@ export function HomeHero({
   todayFocusMinutes: number;
   userId?: string;
   userFirstName?: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const { width } = useWindowDimensions();
   const isCompact = width < 380;

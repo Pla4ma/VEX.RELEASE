@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StartSessionButtonProps } from './StartSessionButton';
 import { useStartSessionButtonColors } from './start-session-button-colors';
 import { sessionStart } from '../../../utils/haptics';
@@ -12,7 +12,7 @@ export function StartSessionButtonCompact({
   isLoading,
   streakRiskLevel = 'NONE',
   hasActiveSession = false,
-}: Omit<StartSessionButtonProps, 'label' | 'subtitle'>): JSX.Element {
+}: Omit<StartSessionButtonProps, 'label' | 'subtitle'>): React.ReactNode {
   const { theme } = useTheme();
   const colors = useStartSessionButtonColors(streakRiskLevel, hasActiveSession);
   return (

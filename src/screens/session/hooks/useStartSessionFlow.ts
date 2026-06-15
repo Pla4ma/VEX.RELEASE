@@ -6,7 +6,7 @@ import { startStreakRestoreQuest } from '../../../features/streaks/restore-quest
 import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import { SessionMode } from '../../../session/modes';
 import { useSession } from '../../../session/hooks/useSession';
-import { SessionConfigSchema } from '../../../session/types';
+import { SessionConfigSchema } from '../../../session/types/schemas';
 import { sessionStart } from '../../../utils/haptics';
 import {
   createContract,

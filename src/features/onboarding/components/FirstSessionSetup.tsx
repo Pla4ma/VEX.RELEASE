@@ -14,7 +14,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusDuration, FocusGoal } from '../schemas';
 import { DURATION_OPTIONS } from '../service';
 import { DurationCard } from './DurationCard';
@@ -39,7 +39,7 @@ export function FirstSessionSetup({
   goal,
   onStartSession,
   onBack,
-}: FirstSessionSetupProps): JSX.Element {
+}: FirstSessionSetupProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration>(10);
   const [isAdvancing, setIsAdvancing] = useState(false);

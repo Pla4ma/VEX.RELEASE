@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 interface GlassCardHighlightProps { resolvedRadius: number }
 
-export function GlassCardTopEdge({ resolvedRadius }: GlassCardHighlightProps): JSX.Element {
+export function GlassCardTopEdge({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(255, 255, 255, 0.95)', borderRadius: 999,
@@ -12,7 +12,7 @@ export function GlassCardTopEdge({ resolvedRadius }: GlassCardHighlightProps): J
   );
 }
 
-export function GlassCardSecondEdge({ showTopBar }: { showTopBar: boolean }): JSX.Element {
+export function GlassCardSecondEdge({ showTopBar }: { showTopBar: boolean }): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(255, 255, 255, 0.55)', borderRadius: 999,
@@ -22,7 +22,7 @@ export function GlassCardSecondEdge({ showTopBar }: { showTopBar: boolean }): JS
   );
 }
 
-export function GlassCardBottomEdge(): JSX.Element {
+export function GlassCardBottomEdge(): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(10, 94, 77, 0.14)', borderRadius: 999,
@@ -31,7 +31,7 @@ export function GlassCardBottomEdge(): JSX.Element {
   );
 }
 
-export function GlassCardBottomSecondaryEdge(): JSX.Element {
+export function GlassCardBottomSecondaryEdge(): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(10, 94, 77, 0.08)', borderRadius: 999,

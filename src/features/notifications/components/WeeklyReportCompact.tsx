@@ -15,7 +15,7 @@ export function WeeklyReportCompact({
   totalMinutes,
   changePercent,
   onPress,
-}: WeeklyReportCompactProps): JSX.Element {
+}: WeeklyReportCompactProps): React.ReactNode {
   const isImprovement = changePercent >= 0;
   return (
     <Pressable

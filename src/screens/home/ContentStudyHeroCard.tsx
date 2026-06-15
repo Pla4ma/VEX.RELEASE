@@ -55,7 +55,7 @@ export function ContentStudyHeroCard({
       <GlassCard variant="premium" padding={20} radius={26}>
         <View style={{ gap: 12 }}>
           <Text style={{
-            color: vexLightGlass.mint[700], fontSize: 11,
+            color: vexLightGlass.mint[700], fontSize: 12,
             fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
           }}>{copy.layerName}</Text>
           <Text style={{
@@ -88,7 +88,7 @@ export function ContentStudyHeroCard({
     <GlassCard variant="premium" padding={20} radius={26}>
       <View style={{ gap: 12 }}>
         <Text style={{
-          color: vexLightGlass.mint[700], fontSize: 11,
+          color: vexLightGlass.mint[700], fontSize: 12,
           fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
         }}>{copy.layerName}</Text>
         <Text style={{

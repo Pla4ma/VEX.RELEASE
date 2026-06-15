@@ -9,11 +9,11 @@ import { type ViewStyle } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../primitives/Box';
 import { Button } from '../primitives/Button';
 import { Text } from '../primitives/Text';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 
 /**
  * ErrorState props

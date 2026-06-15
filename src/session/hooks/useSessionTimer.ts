@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { useMMKVNumber } from 'react-native-mmkv';
 import { createDebugger } from '../../utils/debug';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { triggerHapticEvent, HapticEvents } from '../../constants/haptics';
 import {
   useSessionTimerSubscriptions,

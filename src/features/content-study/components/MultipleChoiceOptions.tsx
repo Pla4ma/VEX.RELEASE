@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { quizPanelStyles } from './QuizPanelStyles';
 import { cardSelection } from '../../../utils/haptics';
 

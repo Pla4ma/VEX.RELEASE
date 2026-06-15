@@ -22,7 +22,7 @@ function ChallengeCard({
 }: {
   challenge: MasteryChallenge;
   onClaim: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progress =
     challenge.target > 0
@@ -98,7 +98,7 @@ function ChallengeCard({
         </View>
         {challenge.status === 'COMPLETED' && (
           <Button
-            size="sm"
+            <Text>size="sm"</Text>
             variant="primary"
             onPress={onClaim}
             accessibilityLabel={`Claim reward for ${challenge.title}`}
@@ -121,7 +121,7 @@ export function MasteryChallengesList({
   challenges: MasteryChallenge[];
   onClaim: (id: string) => void;
   onRefresh: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <>

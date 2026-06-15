@@ -37,10 +37,7 @@ export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
       borderRadius: height / 2,
       backgroundColor: trackColor,
       overflow: 'hidden',
-      shadowColor: 'rgba(136, 213, 197, 0.25)',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.85,
-      shadowRadius: 4,
+      boxShadow: `0px 1px 4px rgba(136, 213, 197, 0.2125)`,
     }}
   >
     <View
@@ -49,10 +46,7 @@ export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
         height: '100%',
         borderRadius: height / 2,
         backgroundColor: fillColor,
-        shadowColor: fillColor,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.85,
-        shadowRadius: 6,
+        boxShadow: '0px 0px 6px fillColor / 0.85',
       }}
     >
       <View

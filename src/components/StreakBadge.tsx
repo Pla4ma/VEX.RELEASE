@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useReducedMotion } from '@/hooks';
@@ -26,7 +26,7 @@ export function StreakBadge({
   isAtRisk,
   variant = 'default',
   accessibilityLabel,
-}: StreakBadgeProps): JSX.Element {
+}: StreakBadgeProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);

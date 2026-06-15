@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { useFadeStyle, useShakeStyle } from './animations';
 import { styles } from './styles';
@@ -17,7 +17,7 @@ export function ErrorState({
   showDetails = false,
   style,
   testID,
-}: ErrorStateProps): JSX.Element {
+}: ErrorStateProps): React.ReactNode {
   const { theme } = useTheme();
   const fadeStyle = useFadeStyle(true, 300);
   const shakeStyle = useShakeStyle();

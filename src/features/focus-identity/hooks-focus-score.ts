@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useNetInfo } from '../../network';
+import { useNetInfo } from '../../network/useNetInfo';
 import { useAuthStore } from '../../store';
 import {
   getCurrentFocusScore,
@@ -30,28 +30,32 @@ export function useFocusScore(
   const { user } = useAuthStore();
   const userId = requestedUserId ?? user?.id ?? null;
 
-  const scoreQuery = useQuery({
+  const { refetch, data, status, error, isRefetching } = useQuery({
     queryKey: focusScoreKeys.current(userId ?? 'none'),
     queryFn: () => getCurrentFocusScore(userId ?? ''),
     enabled: Boolean(userId),
-  });
+    });
 
-  const historyQuery = useQuery({
+
+
+
+
+  const { data: historyData, status: historyStatus, error: historyError, refetch: refetchHistory } = useQuery({
     queryKey: focusScoreKeys.history(userId ?? 'none', days),
     queryFn: () => getFocusScoreHistory(userId ?? '', days),
     enabled: Boolean(userId),
   });
 
-  const refresh = scoreQuery.refetch;
+  const refresh = refetch;
   return {
-    score: scoreQuery.data ?? null,
-    history: historyQuery.data ?? [],
-    status: scoreQuery.status,
-    error: scoreQuery.error instanceof Error ? scoreQuery.error : null,
+    score: data ?? null,
+    history: historyData ?? [],
+    status: status,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },
-    isRefetching: scoreQuery.isRefetching,
+    isRefetching: isRefetching,
   };
 }
 
@@ -64,17 +68,17 @@ export function useFocusScoreHistory(
   error: Error | null;
   refetch: () => void;
 } {
-  const historyQuery = useQuery({
+  const { data, status, error, refetch: refreshHistory } = useQuery({
     queryKey: focusScoreKeys.history(userId, days),
     queryFn: () => getFocusScoreHistory(userId, days),
     enabled: !!userId,
   });
-  const refresh = historyQuery.refetch;
+  const refresh = refreshHistory;
 
   return {
-    history: historyQuery.data ?? [],
-    status: historyQuery.status,
-    error: historyQuery.error instanceof Error ? historyQuery.error : null,
+    history: data ?? [],
+    status: status,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       refresh();
     },

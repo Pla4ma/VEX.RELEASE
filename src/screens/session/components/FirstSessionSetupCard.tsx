@@ -28,7 +28,7 @@ export function FirstSessionSetupCard({
   personalization,
   isStarting,
   onStart,
-}: FirstSessionSetupCardProps): JSX.Element {
+}: FirstSessionSetupCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const handleStart = () => {
@@ -89,7 +89,7 @@ export function FirstSessionSetupCard({
         </Box>
 
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="lg"
           fullWidth
           onPress={handleStart}

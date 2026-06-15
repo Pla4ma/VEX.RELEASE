@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
 import { FocusCrystalAsset } from './FocusCrystalAsset';
 import { liquidGlassSpacing } from './liquidGlassTokens';
 

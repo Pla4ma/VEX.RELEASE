@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { borderRadius, spacing } from '../../../theme/tokens';
+import { Icon } from '../../../icons/components/Icon';
+import { borderRadius, spacing } from '../../../theme/tokens/radius';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
@@ -15,7 +15,7 @@ interface Day0ActionGridProps {
   onSelect: (mode: Day0Mode) => void;
 }
 
-export function Day0ActionGrid({ onSelect }: Day0ActionGridProps): JSX.Element {
+export function Day0ActionGrid({ onSelect }: Day0ActionGridProps): React.ReactNode {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
       {DAY0_ACTIONS.map((action) => (

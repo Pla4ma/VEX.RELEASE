@@ -3,8 +3,8 @@ import { ScrollView, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box, Text } from '@components/primitives';
-import { useTheme } from '../../../theme';
-import { useNetInfo } from '../../../network';
+import { useTheme } from '../../../theme/ThemeContext';
+import { useNetInfo } from '../../../network/useNetInfo';
 import { useMonthlyReport } from '../hooks';
 import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat';
 import { useAuthStore } from '../../../store';
@@ -17,7 +17,7 @@ import { useFeatureAccess } from '../../liveops-config';
 import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
 
 export const MonthlyFocusReportScreen = withScreenErrorBoundary(
-  function MonthlyFocusReportScreen(): JSX.Element {
+  function MonthlyFocusReportScreen(): React.ReactNode {
     const { theme } = useTheme();
     const navigation =
       useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();

@@ -12,8 +12,8 @@ import {
   sizing,
   spacing,
   typography,
-} from '../../../theme/tokens';
-import { useUnreadNotificationsCount as useUnreadCountQuery } from '../hooks';
+} from $1../../../theme/tokens/radius$1;
+import { useUnreadNotificationsCount as useUnreadCountQuery } from $1../../../theme/tokens/radius$1;
 
 interface NotificationBadgeProps {
   userId: string;

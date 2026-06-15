@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Box } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
 import { Skeleton, SkeletonCard } from '../../../components/ui/Skeleton';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
-export function SessionCompleteSkeleton(): JSX.Element {
+export function SessionCompleteSkeleton(): React.ReactNode {
   const { theme } = useTheme();
 
   return (

@@ -13,7 +13,7 @@ import type { SessionCompletionNavigationParams } from '../../features/session-c
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 export const SessionCompleteScreen = withScreenErrorBoundary(
-  function _SessionCompleteScreen(): React.JSX.Element {
+  function SessionCompleteScreen(): React.JSX.Element {
     const { navigation, parsedRoute } = useSessionCompletionRouteState();
     const recoveredCompletion = useRecoveredSessionCompletion(
       parsedRoute.recoverySessionId,
@@ -55,7 +55,7 @@ function SessionCompleteResolved({
   params,
 }: {
   params: SessionCompletionNavigationParams;
-}): JSX.Element {
+}): React.ReactNode {
   const { user } = useAuthStore();
   const userId = user?.id ?? null;
   const consequences = useSessionCompletionConsequences({

@@ -2,8 +2,8 @@ import React, { memo } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { InputTab } from '../types';
 
 interface InputTypeSelectorProps {
@@ -24,7 +24,7 @@ export const InputTypeSelector = memo(function InputTypeSelector({
   onTabChange,
   disabled,
   hasDrafts,
-}: InputTypeSelectorProps): JSX.Element {
+}: InputTypeSelectorProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

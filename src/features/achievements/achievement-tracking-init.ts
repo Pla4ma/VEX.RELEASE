@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { updateAchievementProgress } from './service';
 import { updateBossDefeatUnique } from './boss-defeat-tracking';
 

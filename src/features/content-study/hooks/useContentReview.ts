@@ -14,26 +14,31 @@ export function useContentReview(contentId: string) {
     createInitialContentReviewState,
   );
 
-  const contentQuery = useQuery({
+  const { data, isPending, error, refetch } = useQuery({
     queryKey: contentStudyQueryKeys.content(contentId),
     queryFn: () => fetchContentById(contentId),
     enabled: !!contentId,
     staleTime: 30 * 1000,
-  });
+    });
+
+
+
+
+
 
   useEffect(() => {
-    if (contentQuery.data) {
+    if (data) {
       setState((prev) => ({
         ...prev,
-        content: contentQuery.data || null,
+        content: data || null,
         editedText:
-          contentQuery.data?.userEditedText ||
-          contentQuery.data?.extractedText ||
+          data?.userEditedText ||
+          data?.extractedText ||
           '',
-        originalText: contentQuery.data?.extractedText || '',
+        originalText: data?.extractedText || '',
         wordCount: (
-          contentQuery.data?.userEditedText ||
-          contentQuery.data?.extractedText ||
+          data?.userEditedText ||
+          data?.extractedText ||
           ''
         )
           .trim()
@@ -41,7 +46,7 @@ export function useContentReview(contentId: string) {
           .filter(Boolean).length,
       }));
     }
-  }, [contentQuery.data]);
+  }, [data]);
 
   const handleExtractingChange = useCallback((isExtracting: boolean) => {
     setState((prev) => ({ ...prev, isExtracting }));
@@ -95,8 +100,8 @@ export function useContentReview(contentId: string) {
     editedText: state.editedText,
     isEditing: state.isEditing,
     isGenerating: state.isGenerating,
-    isLoading: contentQuery.isPending,
-    error: state.error || contentQuery.error?.message || null,
+    isLoading: isPending,
+    error: state.error || error?.message || null,
     canGenerate,
     isProcessing,
     isExtracted:
@@ -108,6 +113,6 @@ export function useContentReview(contentId: string) {
     setEditedText,
     saveEdits,
     generate,
-    refetch: contentQuery.refetch,
+    refetch: refetch,
   };
 }

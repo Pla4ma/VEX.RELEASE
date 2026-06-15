@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable } from 'react-native';
-import { Box, Text, Button, Card } from '../../components/primitives';
+import { Box, Text, Button, Card } from '../../components/primitives/Box';
 import { Avatar } from '../../components/Avatar';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -24,7 +24,7 @@ export function NotificationFilterBar({
   primaryColor: string;
   secondaryBg: string;
   textSecondary: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flexDirection="row" gap={8}>
       {availableFilterTypes.map((filter) => (
@@ -69,7 +69,7 @@ export function NotificationCard({
   onPress: (item: Notification) => void;
   formatTime: (ts: number) => string;
   primaryColor: string;
-}): JSX.Element {
+}): React.ReactNode {
   const config = NOTIFICATION_CONFIG[item.type];
   return (
     <Card
@@ -160,7 +160,7 @@ export function NotificationSectionHeader({
 }: {
   title: string;
   count: number;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   if (count === 0) {return null;}
   return (
     <Box px={4} py={8}>

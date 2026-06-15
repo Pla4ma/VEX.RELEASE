@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionStake } from './SessionStakesBriefing.types';
 import {
   SessionGlyph,
   type SessionGlyphName,
-} from '../../../shared/ui/liquid-glass';
+} from $1../../../shared/ui/liquid-glass/SessionGlyphs$1;
 
 interface StakeCardProps {
   icon: SessionGlyphName;
@@ -24,7 +24,7 @@ export function StakeCard({
   urgency,
   accentColor,
   onPress,
-}: StakeCardProps): JSX.Element {
+}: StakeCardProps): React.ReactNode {
   const { theme } = useTheme();
   const getUrgencyStyles = () => {
     switch (urgency) {

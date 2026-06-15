@@ -25,7 +25,7 @@ export function GatedScreen({
   children,
   fallbackRoute = 'Main',
   fallbackAction = 'Return to Home',
-}: GatedScreenProps): JSX.Element {
+}: GatedScreenProps): React.ReactNode {
   return (
     <FeatureGate
       feature={feature}

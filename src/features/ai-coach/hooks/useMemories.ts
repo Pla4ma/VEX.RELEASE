@@ -39,7 +39,7 @@ export function useCoachMemories(
   type?: MemoryType,
 ): UseCoachMemoriesResult {
   const network = useNetworkStatus();
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error } = useQuery({
     queryKey: type ? memoryKeys.typed(userId, type) : memoryKeys.all(userId),
     queryFn: () => fetchCoachMemories(userId, type),
     enabled: userId.length > 0 && network.isConnected,
@@ -47,14 +47,22 @@ export function useCoachMemories(
     gcTime: 10 * 60 * 1000,
     retry: 2,
     networkMode: 'offlineFirst',
-  });
-  const executeRefetch = query.refetch;
+    });
+
+
+
+
+
+
+
+
+  const executeRefetch = refetch;
 
   return {
-    data: query.data ?? [],
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
+    data: data ?? [],
+    isPending: isPending,
+    isError: isError,
+    error: error,
     refetch: (options?: RefetchOptions) =>
       executeRefetch.call(undefined, options),
     isOffline: !network.isConnected,

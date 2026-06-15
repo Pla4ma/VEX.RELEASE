@@ -4,7 +4,7 @@ import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { FocusScoreDashboardModel } from '../types';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 

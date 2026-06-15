@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
@@ -14,7 +14,7 @@ import { PersonalBestCard } from './PersonalBestCard';
 
 const ESTIMATED_ITEM_SIZE = 88;
 
-function PersonalBestsSkeleton(): JSX.Element {
+function PersonalBestsSkeleton(): React.ReactNode {
   return (
     <GlassCard size="lg" padding={18} radius={26} variant="default">
       <Skeleton width="44%" height={20} borderRadius={8} />
@@ -30,7 +30,7 @@ export function PersonalBestsGrid({
   userId,
 }: {
   userId: string | null;
-}): JSX.Element {
+}): React.ReactNode {
   const query = usePersonalBests(userId);
   const renderItem: ListRenderItem<PersonalBest> = ({ item }) => (
     <PersonalBestCard item={item} />

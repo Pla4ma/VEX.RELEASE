@@ -1,5 +1,5 @@
 import { createDebugger } from './debug';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 const debug = createDebugger('performance:monitor');
 interface PerformanceMemorySnapshot {
   usedJSHeapSize: number;

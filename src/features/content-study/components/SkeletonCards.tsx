@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Skeleton } from './SkeletonBase';
 import { styles } from './skeleton-styles';
 

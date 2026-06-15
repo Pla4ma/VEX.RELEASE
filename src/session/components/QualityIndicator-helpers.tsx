@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 
@@ -61,7 +61,7 @@ export const gradeConfig: Record<
   },
 };
 
-export function QualityIndicatorSkeleton(): JSX.Element {
+export function QualityIndicatorSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -95,7 +95,7 @@ export function QualityIndicatorSkeleton(): JSX.Element {
   );
 }
 
-export function StrictModeBadge(): JSX.Element {
+export function StrictModeBadge(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box
@@ -130,7 +130,7 @@ export function GradeBadge({
   grade: QualityGrade;
   qualityDecreased?: boolean;
   isPaused: boolean;
-}): JSX.Element {
+}): React.ReactNode {
   const config = gradeConfig[grade];
   const scaleValue = useSharedValue(1);
   React.useEffect(() => {

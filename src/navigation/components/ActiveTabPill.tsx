@@ -11,7 +11,7 @@ interface ActiveTabPillProps {
 export function ActiveTabPill({
   pillStyle,
   height,
-}: ActiveTabPillProps): JSX.Element {
+}: ActiveTabPillProps): React.ReactNode {
   return (
     <Animated.View
       pointerEvents="none"
@@ -23,10 +23,7 @@ export function ActiveTabPill({
           left: 12,
           position: 'absolute',
           right: 12,
-          shadowColor: 'rgba(18, 184, 148, 0.12)',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.85,
-          shadowRadius: 6,
+          boxShadow: `0px 2px 6px rgba(18, 184, 148, 0.102)`,
           top: 6,
         },
         pillStyle,

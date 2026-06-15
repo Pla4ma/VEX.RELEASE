@@ -16,7 +16,7 @@ export function TextPasteInput({
   autoFocus = false,
   showCharacterCount = true,
   showMinLengthIndicator = true,
-}: TextPasteInputProps): JSX.Element {
+}: TextPasteInputProps): React.ReactNode {
   const {
     inputRef,
     errors,

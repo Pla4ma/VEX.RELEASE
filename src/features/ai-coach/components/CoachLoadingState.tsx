@@ -13,7 +13,7 @@ import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 
 
-export function CoachLoadingState(): JSX.Element {
+export function CoachLoadingState(): React.ReactNode {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
       <View style={styles.header}>

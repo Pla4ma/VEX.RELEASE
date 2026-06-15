@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { SessionConfig } from '../types';
 import type { NotificationPayload } from './session-notification-types';
 export type { NotificationPayload } from './session-notification-types';

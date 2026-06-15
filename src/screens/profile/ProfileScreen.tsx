@@ -26,7 +26,7 @@ import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 function ProfileBottomSheetBackdrop(
   props: BottomSheetBackdropProps,
-): JSX.Element {
+): React.ReactNode {
   return (
     <BottomSheetBackdrop
       {...props}

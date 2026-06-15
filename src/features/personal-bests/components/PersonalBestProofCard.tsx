@@ -5,9 +5,9 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type PersonalBestProofCardProps = {
   achievedAt: string;
@@ -23,7 +23,7 @@ export function PersonalBestProofCard({
   mode,
   newValue,
   oldValue,
-}: PersonalBestProofCardProps): JSX.Element {
+}: PersonalBestProofCardProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(isReducedMotion ? 1 : 0.98);

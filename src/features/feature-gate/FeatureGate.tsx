@@ -21,7 +21,7 @@ export function FeatureGate({
   children,
   fallback = null,
   mode,
-}: FeatureGateProps): JSX.Element | null {
+}: FeatureGateProps): React.ReactNode | null {
   const { isAvailable } = useFeatureGate(feature, mode);
 
   return isAvailable ? <>{children}</> : <>{fallback}</>;
@@ -40,7 +40,7 @@ export function withFeatureGate<P extends object>(
 ) {
   const { fallback: FallbackComponent, mode } = options;
 
-  return function FeatureGateWrapper(props: P): JSX.Element {
+  return function FeatureGateWrapper(props: P): React.ReactNode {
     return (
       <FeatureGate
         feature={feature}

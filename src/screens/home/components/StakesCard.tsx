@@ -12,7 +12,7 @@ interface StakesCardProps {
   stakes: HomeStakes;
 }
 
-export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
+export function StakesCard({ stakes }: StakesCardProps): React.ReactNode {
   return (
     <GlassCard
       variant="subtle"
@@ -60,7 +60,7 @@ export function StakesCard({ stakes }: StakesCardProps): JSX.Element {
       <Text
         style={{
           color: vexLightGlass.mint[700],
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: '700',
           letterSpacing: 1.2,
           marginBottom: 6,

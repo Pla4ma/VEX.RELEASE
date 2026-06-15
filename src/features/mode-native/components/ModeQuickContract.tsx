@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { QuickContractQuestion } from '../schemas';
 import { useModeQuickContract } from '../hooks';
 import type { Lane } from '../../lane-engine/types';
@@ -25,7 +25,7 @@ export function ModeQuickContract({
   isStarting,
   onStart,
   onBack,
-}: ModeQuickContractProps): JSX.Element {
+}: ModeQuickContractProps): React.ReactNode {
   const contract = useModeQuickContract(lane);
   const { theme } = useTheme();
   const [answers, setAnswers] = useState<Record<string, string>>({});

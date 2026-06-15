@@ -14,7 +14,7 @@ export function FocusScoreSparkline({
   height = 60,
   color,
   max,
-}: FocusScoreSparklineProps): JSX.Element {
+}: FocusScoreSparklineProps): React.ReactNode {
   const { pathD, areaD, numericWidth } = useMemo(() => {
     if (data.length < 2) {
       return { pathD: '', areaD: '', numericWidth: 0 };

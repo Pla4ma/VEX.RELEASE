@@ -26,7 +26,7 @@ export function LiveFocusingWidget({
   onPress,
   compact = false,
   isLoading: _isLoading = false,
-}: LiveFocusingWidgetProps): JSX.Element {
+}: LiveFocusingWidgetProps): React.ReactNode {
   const animatedCount = useCountUp(data.totalCount);
 
   if (compact) {
@@ -78,11 +78,7 @@ export function LiveFocusingWidget({
           borderColor="border.light"
           gap="lg"
           style={{
-            shadowColor: lightColors.text.primary,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.05,
-            shadowRadius: 4,
-            elevation: 2,
+            boxShadow: `0px 2px 4px ${lightColors.text.primary} / 0.05`,
           }}
         >
           {/* Header: live dot + trend */}
@@ -180,4 +176,4 @@ export function LiveFocusingWidget({
   );
 }
 
-export default LiveFocusingWidget;
+export default LiveFocusingWidget;

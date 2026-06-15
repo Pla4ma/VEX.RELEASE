@@ -29,7 +29,7 @@ export function CompanionMemoryTimeline({
   memories,
   onRetry,
   onStartFocus,
-}: CompanionMemoryTimelineProps): JSX.Element {
+}: CompanionMemoryTimelineProps): React.ReactNode {
   const netInfo = NetInfo.useNetInfo();
   const rows = useMemo(() => buildRows(memories), [memories]);
   const renderItem: ListRenderItem<TimelineRow> = ({ item }) => {
@@ -89,7 +89,7 @@ function buildRows(memories: CompanionMemory[]): TimelineRow[] {
   ]);
 }
 
-function MemorySkeleton(): JSX.Element {
+function MemorySkeleton(): React.ReactNode {
   return (
     <Box gap="sm">
       {[0, 1, 2].map((item) => (
@@ -124,7 +124,7 @@ function EmptyTimeline({
   onStartFocus,
 }: {
   onStartFocus: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Card size="md" accessibilityLabel="No companion memories yet">
       <Box gap="sm">
@@ -136,7 +136,7 @@ function EmptyTimeline({
           that matter.
         </Text>
         <Button
-          accessibilityHint="Opens session setup to start a focus session"
+          <Text>accessibilityHint="Opens session setup to start a focus session"</Text>
           accessibilityLabel="Start a focus session"
           accessibilityRole="button"
           onPress={onStartFocus}
@@ -149,7 +149,7 @@ function EmptyTimeline({
   );
 }
 
-function OfflineBanner(): JSX.Element {
+function OfflineBanner(): React.ReactNode {
   return (
     <Card
       size="sm"

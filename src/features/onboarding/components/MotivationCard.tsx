@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { MotivationProfileType } from '../schemas';
 
 export interface MotivationOption {
@@ -60,7 +60,7 @@ export function MotivationCard({
   isSelected: boolean;
   onPress: () => void;
   option: MotivationOption;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const animatedStyle = useAnimatedStyle(() => ({
     backgroundColor: isSelected

@@ -5,7 +5,7 @@
  * Tracks and calculates streak survival metrics.
  */
 
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import type { StreakSurvivalMetrics } from './types';
 
 const streakData = new Map<number, StreakSurvivalMetrics>();

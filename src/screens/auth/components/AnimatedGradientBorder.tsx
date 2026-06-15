@@ -24,7 +24,7 @@ export function AnimatedGradientBorder({
   borderWidth = 1.5,
   borderRadius = 24,
   gradientColors = ['rgba(0,229,255,0.35)', 'rgba(139,92,246,0.25)', 'rgba(0,229,255,0.35)'] as const,
-}: AnimatedGradientBorderProps): JSX.Element {
+}: AnimatedGradientBorderProps): React.ReactNode {
   const rotation = useSharedValue(0);
 
   useEffect(() => {

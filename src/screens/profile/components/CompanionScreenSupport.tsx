@@ -4,7 +4,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Card, Text } from '../../../components/primitives/Box';
 import {
   type CompanionElement,
   type CompanionMood,
@@ -48,7 +48,7 @@ export function StatCard({
 }: {
   label: string;
   value: string;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Card size="sm" style={{ flex: 1 }}>
       <Box alignItems="center" gap="xs">
@@ -72,7 +72,7 @@ export function PhaseProgressBar({
   currentPhase,
 }: {
   currentPhase: CompanionPhase;
-}): JSX.Element {
+}): React.ReactNode {
   const currentIndex = PHASE_ORDER.indexOf(currentPhase);
   return (
     <Box flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -102,7 +102,7 @@ export function ProgressToNext({
   companion,
 }: {
   companion: CompanionState;
-}): JSX.Element {
+}): React.ReactNode {
   if (companion.phase === 'TRANSCENDENT') {
     return (
       <Text variant="bodySmall" color="text.secondary">
@@ -118,7 +118,7 @@ export function ProgressToNext({
   );
 }
 
-export function MoodDot({ mood }: { mood: CompanionMood }): JSX.Element {
+export function MoodDot({ mood }: { mood: CompanionMood }): React.ReactNode {
   const scale = useSharedValue(0);
   React.useEffect(() => {
     scale.value = withSpring(1, { damping: 12, stiffness: 100 });
@@ -140,7 +140,7 @@ export function CompanionScreenSkeleton({
   heroHeight,
 }: {
   heroHeight: number;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flex={1} bg="background.primary">
       <Box

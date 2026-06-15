@@ -15,7 +15,7 @@ export function ChatMessageItem({
   message,
   personaId,
   onActionPress,
-}: ChatMessageItemProps): JSX.Element {
+}: ChatMessageItemProps): React.ReactNode {
   const isCoach = message.type === 'coach';
   const isUser = message.type === 'user';
 

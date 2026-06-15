@@ -6,7 +6,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 
 import { VexMotionSurface } from '../../../components/primitives/VexMotionSurface';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexProofRing } from './VexProofRing';
 import { lightColors } from '@/theme/tokens/colors';
@@ -18,7 +18,7 @@ interface ProofLineProps {
   highlight?: boolean;
 }
 
-function ProofLine({ label, value, highlight }: ProofLineProps): JSX.Element {
+function ProofLine({ label, value, highlight }: ProofLineProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   return (
     <View
@@ -61,7 +61,7 @@ export function VexCompletionProof({
   streakDays,
   streakIncremented,
   testID,
-}: VexCompletionProofProps): JSX.Element {
+}: VexCompletionProofProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const entering = isReducedMotion ? undefined : FadeInUp.duration(500);

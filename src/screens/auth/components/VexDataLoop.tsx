@@ -49,10 +49,7 @@ function StepDot({ active, isReducedMotion }: { active: boolean; isReducedMotion
         height: 8,
         borderRadius: 4,
         backgroundColor: active ? lightColors.semantic.vexGold : 'rgba(245,241,232,0.25)',
-        shadowColor: active ? lightColors.semantic.vexGold : 'transparent',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: active ? 0.9 : 0,
-        shadowRadius: 8,
+        boxShadow: '0px 0px 8px active ? lightColors.semantic.vexGold : 'transparent' / active ? 0.9 : 0',
       },
       style,
     ]} />
@@ -112,7 +109,7 @@ function Connector({ visible }: { visible: boolean }) {
 }
 
 /* ─── Main data loop ─── */
-export function VexDataLoop(): JSX.Element {
+export function VexDataLoop(): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
 
   return (

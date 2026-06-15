@@ -12,7 +12,7 @@ import { HomeMemoryInsight } from './HomeMemoryInsight';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;

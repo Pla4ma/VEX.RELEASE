@@ -18,7 +18,7 @@ interface VexSignalNodeProps {
   index: number;
 }
 
-export function VexSignalNode({ active = false, index }: VexSignalNodeProps): JSX.Element {
+export function VexSignalNode({ active = false, index }: VexSignalNodeProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulseScale = useSharedValue(1);
@@ -86,10 +86,7 @@ export function VexSignalNode({ active = false, index }: VexSignalNodeProps): JS
           backgroundColor: active
             ? theme.colors.semantic.vexCyan
             : theme.colors.text.muted,
-          shadowColor: active ? theme.colors.semantic.vexCyan : 'transparent',
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.5,
-          shadowRadius: active ? 8 : 0,
+          boxShadow: '0px 0px active ? 8 : 0px active ? theme.colors.semantic.vexCyan : 'transparent' / 0.5',
         }}
       />
     </View>

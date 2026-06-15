@@ -1,5 +1,5 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import { withRetry, withTimeout } from '../../../shared/hardening';
+import { withRetry, withTimeout } from '../../../shared/hardening/retry';
 import * as Sentry from '@sentry/react-native';
 import type { UploadResult } from './storage-types';
 import { AnalyticsStorageError } from './storage-types';

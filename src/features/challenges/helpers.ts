@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
 import { ChallengeRewardSchema } from './schemas';
 import type {

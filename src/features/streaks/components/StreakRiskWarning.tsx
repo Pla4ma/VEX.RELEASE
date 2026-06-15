@@ -27,7 +27,7 @@ export function StreakRiskWarning({
   hoursRemaining,
   onStartSession,
   onDismiss,
-}: StreakRiskWarningProps): JSX.Element {
+}: StreakRiskWarningProps): React.ReactNode {
   const getMessage = () => {
     switch (riskLevel) {
       case 'CRITICAL':

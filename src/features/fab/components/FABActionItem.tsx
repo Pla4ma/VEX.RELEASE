@@ -7,7 +7,7 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FABAction } from '../types';
@@ -26,7 +26,7 @@ export function FABActionItem({
   menuProgress,
   actionItemHeight,
   onPress,
-}: FABActionItemProps): JSX.Element {
+}: FABActionItemProps): React.ReactNode {
   const itemStyle = useAnimatedStyle(() => {
     const delay = index * 0.05;
     const adjustedProgress = Math.max(

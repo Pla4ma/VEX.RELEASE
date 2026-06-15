@@ -1,4 +1,4 @@
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { getOrCreateStreak, recordSession } from '../features/streaks/service';
 import { v4 } from '../utils/uuid';
 

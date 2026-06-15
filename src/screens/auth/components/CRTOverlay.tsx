@@ -4,7 +4,7 @@ import { useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
-export function CRTOverlay(): JSX.Element {
+export function CRTOverlay(): React.ReactNode {
   const { width, height } = useWindowDimensions();
 
   return (

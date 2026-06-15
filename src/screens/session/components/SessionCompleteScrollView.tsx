@@ -45,7 +45,7 @@ export function SessionCompleteScrollView({
   insets,
   onReflectContract,
   onOpenReflection,
-}: SessionCompleteScrollViewProps): JSX.Element {
+}: SessionCompleteScrollViewProps): React.ReactNode {
   const isHidden = (surface: CompletionSurface): boolean =>
     policy.hiddenCompletionSurfaces.includes(surface);
 

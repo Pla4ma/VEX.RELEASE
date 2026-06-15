@@ -86,11 +86,13 @@ export async function listRecentlyActiveUsers(supabase: SupabaseClient, userIds?
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
     if (error) throw error;
     const users = data.users ?? [];
+    const useridSet = new Set(userIds);
+    const useridSet = new Set(userIds);
     for (const user of users) {
       if (!user.last_sign_in_at) continue;
       if (new Date(user.last_sign_in_at) < cutoff) continue;
       if (userIds && userIds.length > 0 && !userIds.includes(user.id)) continue;
-      activeUsers.push(user.id);
+      if (userIds && userIds.length > 0 && !useridSet.has(user.id)) continue;
     }
     if (users.length < perPage) break;
     page += 1;

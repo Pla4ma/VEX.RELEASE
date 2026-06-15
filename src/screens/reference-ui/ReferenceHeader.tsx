@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import { Text } from '../../components/primitives/Text';
 import { GlassPill } from '../../components/glass/GlassPill';
 import { ref, type } from './referenceTokens';
@@ -19,7 +19,7 @@ export function ReferenceHeader({
   body,
   mode,
   onAction,
-}: ReferenceHeaderProps): JSX.Element {
+}: ReferenceHeaderProps): React.ReactNode {
   return (
     <View style={{ marginBottom: 12, paddingTop: 2 }}>
       <View

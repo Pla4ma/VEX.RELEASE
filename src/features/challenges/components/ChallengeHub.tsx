@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { useThemeObject } from '../../../theme';
-import { Card, Badge, ProgressBar } from '../../../components';
+import { useThemeObject } from '../../../theme/ThemeContext';
+import { Card, Badge, ProgressBar } from '../../../components/primitives/Card';
 
 import { ChallengeHubSkeleton } from './ChallengeHub.skeleton';
-import { useActiveChallenges, useChallengeSummaries } from '../hooks';
+import { useActiveChallenges, useChallengeSummaries } from '../hooks/challengeQueries';
 import { ChallengeCard } from './ChallengeCard';
 import { type UserChallengeSummary } from '../schemas';
 import { EmptyChallenges } from '../../../shared/ui/primitives/EmptyState.variants';
@@ -114,7 +114,7 @@ export const ChallengeHub = React.memo(({
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>Daily Streak</Text>
-            <Badge variant="warning">3 Days</Badge>
+            <Badge variant="warning"><Text>{'3 Days'}</Text></Badge>
           </View>
           <Text style={styles.streakDescription}>
             Complete daily challenges to maintain your streak and earn bonus rewards!

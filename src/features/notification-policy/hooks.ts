@@ -71,17 +71,21 @@ export function resolveNudgeInput(
 }
 
 export function useNudgeDecision(input: NudgePolicyInput | null) {
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['nudge-decision', input],
     queryFn: () => decideNudge(input ?? FALLBACK_INPUT),
     enabled: input !== null && !input.userMuted,
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? null,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
+    data: data ?? null,
+    isPending: isPending,
+    isError: isError,
+    error: error,
+    refetch: refetch,
   };
 }

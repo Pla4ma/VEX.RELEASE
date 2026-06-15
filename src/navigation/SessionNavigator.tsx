@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { initializeSessionRuntime } from '../app/bootstrap';
 import type { SessionStackParams } from './types';
-import { lightColors } from '../theme/tokens';
+import { lightColors } from '../theme/tokens/colors';
 
 const Stack = createNativeStackNavigator<SessionStackParams>();
 

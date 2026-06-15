@@ -21,7 +21,7 @@ import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 type ProgressMode = 'overview' | 'plan';
 
-export function ProgressScreen(): JSX.Element {
+export function ProgressScreen(): React.ReactNode {
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();

@@ -19,7 +19,7 @@ interface OnboardingLoadingStateProps {
 
 export function OnboardingLoadingState({
   step: _step = 'Loading...',
-}: OnboardingLoadingStateProps): JSX.Element {
+}: OnboardingLoadingStateProps): React.ReactNode {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
       <View style={styles.content}>

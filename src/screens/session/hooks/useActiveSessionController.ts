@@ -18,7 +18,7 @@ import {
 } from '../../../session/hooks/useSession';
 import { resolveSessionMode } from '../../../session/modes';
 import { useAuthStore } from '../../../store';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
 import { useActiveSessionMetrics } from './useActiveSessionMetrics';
 import { useCompanionSession } from './useCompanionSession';

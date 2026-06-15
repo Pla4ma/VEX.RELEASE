@@ -9,7 +9,7 @@ import Animated, {
   FadeOutUp,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { triggerHaptic } from '../../../utils/haptics';
 import {
   REWARD_CONFIG,
@@ -96,11 +96,7 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
         flexDirection: 'row',
         alignItems: 'center',
         gap: theme.spacing[3],
-        shadowColor: theme.colors.text.primary,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
-        elevation: 3,
+        boxShadow: `0px 2px 8px ${theme.colors.text.primary} / 0.08`,
       }, style]}
     >
       <Animated.View style={[{ flex: 1, flexDirection: 'row', alignItems: 'center' }, animatedStyle]}>
@@ -134,4 +130,4 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
 };
 
 export { CompactRewardBadge, type CompactRewardBadgeProps } from './CompactRewardBadge';
-export default MicroRewardBanner;
+export default MicroRewardBanner;

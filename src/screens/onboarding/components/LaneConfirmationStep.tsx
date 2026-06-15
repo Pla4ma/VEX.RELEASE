@@ -49,7 +49,7 @@ export function LaneConfirmationStep({
   celebrating = false,
   onAccept,
   onChooseAnother,
-}: LaneConfirmationStepProps): JSX.Element {
+}: LaneConfirmationStepProps): React.ReactNode {
   const lane = confirmation?.recommendedLane ?? 'minimal_normal';
   const laneLabel = LANE_LABELS[lane];
 
@@ -63,10 +63,7 @@ export function LaneConfirmationStep({
           borderWidth: celebrating ? 2.5 : 1.5,
           gap: 14,
           padding: 22,
-          shadowColor: celebrating ? 'rgba(55,212,188,0.55)' : 'transparent',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: celebrating ? 0.55 : 0,
-          shadowRadius: 28,
+          boxShadow: `0px 8px 28px ${celebrating ? 'rgba(55,212,188,0.55)' : 'transparent'}`,
         }}
       >
         <ModeSigil />

@@ -13,7 +13,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export interface GraceUsesIndicatorProps {
   /** Grace uses remaining */

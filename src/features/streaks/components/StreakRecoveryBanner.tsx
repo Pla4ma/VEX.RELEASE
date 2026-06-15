@@ -12,7 +12,7 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { RecoveryProgress, ComebackKingBadge } from './RecoverySubComponents';
 
 export interface StreakRecoveryBannerProps {
@@ -37,7 +37,7 @@ export function StreakRecoveryBanner({
   sessionsNeeded,
   hoursRemaining,
   isComplete,
-}: StreakRecoveryBannerProps): JSX.Element {
+}: StreakRecoveryBannerProps): React.ReactNode {
   const { theme } = useTheme();
 
   // Don't show if recovery complete

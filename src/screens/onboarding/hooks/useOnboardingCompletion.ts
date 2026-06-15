@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
-import { useOnboardingStore } from '../../../features/onboarding';
+import { useOnboardingStore } from '../../../features/onboarding/store';
 import { useSessionUIStore } from '../../../store/session-state';
 import { triggerHaptic } from '../../../utils/haptics';
 

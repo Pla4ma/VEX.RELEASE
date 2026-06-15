@@ -13,7 +13,7 @@ export function RecentSessionsEmpty({
 }: {
   isFirstRun: boolean;
   onStart: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   if (isFirstRun) {
     return (
       <GlassCard variant="default" padding={20} radius={24}>

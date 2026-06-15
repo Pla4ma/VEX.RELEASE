@@ -2,7 +2,7 @@ import React, {} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusScore } from './hooks-focus-score';
 import { Box, Text, Stack, Button } from '@components/primitives';
-import { useNetInfo } from '../../network';
+import { useNetInfo } from '../../network/useNetInfo';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../navigation/types';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
@@ -10,7 +10,7 @@ import { FocusScoreDashboardSkeleton } from './FocusScoreDashboard-skeleton';
 import { formatDelta, formatHistoryPoint } from './FocusScoreDashboard-helpers';
 
 export const FocusScoreDashboard = withScreenErrorBoundary(
-  function _FocusScoreDashboard(): React.JSX.Element {
+  function FocusScoreDashboardInner(): React.JSX.Element {
     const navigation =
       useNavigation<NativeStackNavigationProp<RootStackParams>>();
     const { score, history, status, error, refetch, isRefetching } =
@@ -26,7 +26,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
         <Box p="md" gap="md" alignItems="center">
           <Text color="error">Error: {error?.message}</Text>
           <Button onPress={() => refetch()} variant="primary">
-            Retry
+            <Text>Retry</Text>
           </Button>
         </Box>
       );
@@ -90,7 +90,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
               {history && history.length > 0 ? (
                 history.slice(-5).map((point, index) => (
                   <Box
-                    key={index}
+                    key={point.id}
                     flexDirection="row"
                     justifyContent="space-between"
                   >
@@ -148,7 +148,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
               }
               variant="secondary"
             >
-              View Monthly Report
+              <Text>View Monthly Report</Text>
             </Button>
           </Box>
         </Stack>

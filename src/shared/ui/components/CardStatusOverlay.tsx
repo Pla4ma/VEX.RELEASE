@@ -74,7 +74,7 @@ export const CardStatusOverlay: React.FC<{
           )}
           {onRetry && (
             <Button
-              variant="outline"
+              <Text>variant="outline"</Text>
               size="sm"
               onPress={onRetry}
               accessibilityLabel="Retry loading"

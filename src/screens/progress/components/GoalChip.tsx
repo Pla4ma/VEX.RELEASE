@@ -6,7 +6,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { buttonTap } from '../../../utils/haptics';
 import { springPresets } from '../../../theme/tokens/motion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -25,7 +25,7 @@ export function GoalChip({
   isSelected,
   isReducedMotion,
   onPress,
-}: GoalChipProps): JSX.Element {
+}: GoalChipProps): React.ReactNode {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({

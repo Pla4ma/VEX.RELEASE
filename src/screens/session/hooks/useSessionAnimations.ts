@@ -16,7 +16,7 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { Circle } from 'react-native-svg';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

@@ -4,9 +4,9 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   Pressable,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { styles } from './CoachScreen.styles';
@@ -24,7 +24,7 @@ import { CoachRecommendationCard } from './CoachRecommendationCard';
 import { useCoachChat } from './useCoachChat';
 
 
-export function CoachScreen(): JSX.Element {
+export function CoachScreen(): React.ReactNode {
   const {
     flashListRef,
     inputText,

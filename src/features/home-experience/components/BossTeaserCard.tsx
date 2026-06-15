@@ -10,7 +10,7 @@ interface BossCardProps {
   rpgBossPlacement: string;
 }
 
-export function BossTeaserCard({ rpgBossPlacement }: BossCardProps): JSX.Element {
+export function BossTeaserCard({ rpgBossPlacement }: BossCardProps): React.ReactNode {
   return (
     <GlassCard variant="subtle">
       <View

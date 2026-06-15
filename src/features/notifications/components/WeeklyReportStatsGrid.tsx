@@ -23,7 +23,7 @@ export function WeeklyReportStatsGrid({
   streakDays,
   bossDamageDealt,
   bestSession,
-}: WeeklyReportStatsGridProps): JSX.Element {
+}: WeeklyReportStatsGridProps): React.ReactNode {
   return (
     <>
       <Box

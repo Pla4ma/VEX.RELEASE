@@ -1,5 +1,5 @@
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { Box, Text } from '../components/primitives';
+import { Box, Text } from '../components/primitives/Box';
 import { createDebugger } from '../utils/debug';
 import { getAnalyticsService } from '../analytics/AnalyticsService';
 import { lightColors } from '@/theme/tokens/colors';

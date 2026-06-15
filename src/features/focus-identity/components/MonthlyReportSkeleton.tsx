@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 
-export function MonthlyReportSkeleton(): JSX.Element {
+export function MonthlyReportSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View

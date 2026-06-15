@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Text } from '../../components';
+import { Text } from '../../components/primitives/Text';
 import {
   milestoneOverlayStyle,
   milestoneCardStyle,
@@ -44,7 +44,7 @@ export function ComboMeterOverlays({
   isIdle,
   comboMinutes,
   warningBg,
-}: ComboOverlayProps): JSX.Element {
+}: ComboOverlayProps): React.ReactNode {
   return (
     <>
       {showMilestone && (

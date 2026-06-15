@@ -20,7 +20,7 @@ export function StudyOSCard({
   completedSessions,
   motivationProfile,
   onOpenStudy,
-}: StudyOSCardProps): JSX.Element {
+}: StudyOSCardProps): React.ReactNode {
   const sessionsRemaining = getSessionsUntilStudyUnlock(
     completedSessions,
     motivationProfile,
@@ -42,7 +42,7 @@ export function StudyOSCard({
           <Text
             style={{
               color: vexLightGlass.mint[700],
-              fontSize: 10,
+              fontSize: 12,
               fontWeight: '700',
               letterSpacing: 1.4,
               textTransform: 'uppercase',
@@ -70,7 +70,7 @@ export function StudyOSCard({
       <Text
         style={{
           color: vexLightGlass.text.secondary,
-          fontSize: 11,
+          fontSize: 12,
           lineHeight: 15,
           marginTop: 6,
         }}

@@ -1,5 +1,5 @@
 import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 
 export const formatTime = (ms: number): string => {
   const minutes = Math.floor(ms / 60000);

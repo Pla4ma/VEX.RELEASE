@@ -21,7 +21,7 @@ export function PersonalStatsGrid({
   stats,
   isLoading,
   onRefresh,
-}: PersonalStatsGridProps): JSX.Element {
+}: PersonalStatsGridProps): React.ReactNode {
   return (
     <View style={{ gap: 10 }}>
       <Text
@@ -53,7 +53,7 @@ export function PersonalStatsGrid({
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 9,
+                fontSize: 12,
                 fontWeight: '700',
                 letterSpacing: 0.3,
                 textTransform: 'uppercase',

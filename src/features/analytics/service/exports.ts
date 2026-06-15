@@ -1,12 +1,13 @@
-import * as repository from '../repository';
+import { createExportJob, updateExportJobProgress, markExportJobFailed } from '../repository/export-jobs';
+import { fetchTimeSeriesData } from '../repository/time-series';
 import { uploadExportData, deleteExportData } from '../repository/storage';
 import {
   withRetry,
   CircuitBreaker,
   classifyError,
-} from '../../../shared/hardening';
+} from '../../../shared/hardening/retry';
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { TimeRange, AnalyticsMetric } from '../schemas';
 
@@ -28,7 +29,7 @@ export async function exportAnalyticsData(
   format: 'json' | 'csv',
   dateRange: { start: number; end: number },
 ) {
-  const exportJob = await repository.createExportJob({
+  const exportJob = await createExportJob({
     id: crypto.randomUUID(),
     userId,
     status: 'pending',
@@ -52,7 +53,7 @@ async function processExportJob(
   const startTime = Date.now();
   try {
     await exportCircuitBreaker.execute(async () => {
-      await repository.updateExportJobProgress(jobId, 5);
+      await updateExportJobProgress(jobId, 5);
       const metricsToFetch = (dataTypes ?? ['sessions', 'xp', 'streaks']).map(
         (type) => {
           switch (type) {
@@ -71,12 +72,12 @@ async function processExportJob(
           }
         },
       );
-      await repository.updateExportJobProgress(jobId, 10);
+      await updateExportJobProgress(jobId, 10);
       const fetchResults = await withRetry(
         async () => {
           return await Promise.all(
             metricsToFetch.map((metric) =>
-              repository.fetchTimeSeriesData(
+              fetchTimeSeriesData(
                 userId,
                 metric,
                 'custom' as TimeRange,
@@ -103,7 +104,7 @@ async function processExportJob(
           },
         },
       );
-      await repository.updateExportJobProgress(jobId, 40);
+      await updateExportJobProgress(jobId, 40);
       const exportData: Record<string, unknown> = {
         metadata: {
           jobId,
@@ -123,7 +124,7 @@ async function processExportJob(
           };
         }
       });
-      await repository.updateExportJobProgress(jobId, 60);
+      await updateExportJobProgress(jobId, 60);
       const uploadResult = await withRetry(
         async () => {
           return await uploadExportData(jobId, exportData, format, userId);
@@ -142,8 +143,8 @@ async function processExportJob(
           },
         },
       );
-      await repository.updateExportJobProgress(jobId, 90);
-      await repository.updateExportJobProgress(
+      await updateExportJobProgress(jobId, 90);
+      await updateExportJobProgress(
         jobId,
         100,
         uploadResult.url,
@@ -177,7 +178,7 @@ async function processExportJob(
       },
       extra: { jobId, userId, format, duration: Date.now() - startTime },
     });
-    await repository.markExportJobFailed(jobId, errorMessage);
+    await markExportJobFailed(jobId, errorMessage);
     try {
       await deleteExportData(jobId, userId, format);
     } catch (deleteError) {

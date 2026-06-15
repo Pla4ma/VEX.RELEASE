@@ -17,7 +17,7 @@ import {
   isFeatureAvailableForNavigation,
 } from '../../features/liveops-config';
 import { getDegradedFeatures } from '../../features/liveops-config/feature-access-store';
-import { useResolvedVexExperienceRuntime } from '../../features/personalization';
+import { useResolvedVexExperienceRuntime } from '../../features/personalization/hooks';
 import { useStreakSummary } from '../../features/streaks/hooks';
 import { trackBossRouteOpened } from '../../features/boss/analytics';
 import {
@@ -27,7 +27,7 @@ import {
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   BossFallback,
   toScreenIntensity,
@@ -36,7 +36,7 @@ import {
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export const BossScreen = (): JSX.Element => {
+export const BossScreen = (): React.ReactNode => {
   const { theme } = useTheme();
   const navigation = useNavigation<Nav>();
   const disclosure = useFeatureAccess();

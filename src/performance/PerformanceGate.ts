@@ -1,6 +1,6 @@
 import { createDebugger } from '../utils/debug';
 import { PerformanceMonitor, type PerformanceMetrics } from '../utils/performance-monitor';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import {
   type PerformanceTargets, type PerformanceGateResult, type PerformanceIssue,
   PRODUCTION_TARGETS, DEVELOPMENT_TARGETS,

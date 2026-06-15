@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function CardHeader({
   children,
@@ -10,7 +10,7 @@ export function CardHeader({
   children: React.ReactNode;
   action?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <View
       style={[
@@ -35,7 +35,7 @@ export function CardFooter({
 }: {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View

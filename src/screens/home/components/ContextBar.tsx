@@ -11,7 +11,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPill } from '../../../components/glass/GlassPill';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { useStreakSummary } from '../../../features/streaks/hooks';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
@@ -53,7 +53,7 @@ function getTimeBasedMessage(): string {
   return 'One session before rest';
 }
 
-export function ContextBar({ userId }: ContextBarProps): JSX.Element {
+export function ContextBar({ userId }: ContextBarProps): React.ReactNode {
   const { data: streak } = useStreakSummary(userId || null);
   const greeting = getGreeting();
   const message = getTimeBasedMessage();

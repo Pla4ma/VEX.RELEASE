@@ -1,6 +1,6 @@
 import * as repository from './repository';
-import { withRetry, TTLCache } from '../../shared/hardening';
-import { eventBus } from '../../events';
+import { withRetry, TTLCache } from '../../shared/hardening/retry';
+import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { Setting, UserPreferences, SettingCategory, SettingValue, SettingsExport, NotificationSettings, CoachSettings, AppearanceSettings, PrivacySettings } from './types';
 import { validateSettingValue, SettingsValidationError } from './settings-validation';

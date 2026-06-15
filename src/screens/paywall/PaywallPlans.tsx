@@ -18,7 +18,7 @@ export function PaywallPlanList({
   plans,
   theme,
   onPurchase,
-}: PaywallPlanListProps): JSX.Element {
+}: PaywallPlanListProps): React.ReactNode {
   return (
     <View style={styles.planList}>
       {plans.map((plan) => (
@@ -40,7 +40,7 @@ function PaywallPlanCard({
   plan,
   theme,
   onPurchase,
-}: PaywallPlanCardProps): JSX.Element {
+}: PaywallPlanCardProps): React.ReactNode {
   const hasTrial = Boolean(plan.packageInfo?.product.introPrice);
 
   return (
@@ -120,7 +120,7 @@ function PaywallPlanCard({
   );
 }
 
-function TrialBadge({ theme }: { theme: Theme }): JSX.Element {
+function TrialBadge({ theme }: { theme: Theme }): React.ReactNode {
   return (
     <View
       style={[

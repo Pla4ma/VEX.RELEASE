@@ -6,7 +6,7 @@ import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { GlassProgressBar } from '../../../components/glass/GlassProgressBar';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import {
   type AtRiskBannerProps,
@@ -132,7 +132,7 @@ export function AtRiskBanner({
               <Text
                 style={{
                   color: vexLightGlass.text.inverse,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: '800',
                   letterSpacing: 0.4,
                 }}

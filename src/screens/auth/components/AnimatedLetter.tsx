@@ -20,7 +20,7 @@ export function AnimatedLetter({
   char,
   index,
   isReducedMotion,
-}: AnimatedLetterProps): JSX.Element {
+}: AnimatedLetterProps): React.ReactNode {
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(12);
   const staggerMs = motionStagger.tight;

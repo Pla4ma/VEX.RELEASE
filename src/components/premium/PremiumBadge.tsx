@@ -10,7 +10,7 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import { Text } from '../primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 import { SupporterBadge } from './SupporterBadge';
@@ -35,7 +35,7 @@ export function PremiumBadge({
   style,
   showGlow = false,
   accessibilityLabel,
-}: PremiumBadgeProps): JSX.Element {
+}: PremiumBadgeProps): React.ReactNode {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
   const scale = useSharedValue(1);

@@ -1,3 +1,13 @@
+const sessions: FirstWeekSession[] = [
+    'SESSION_1',
+    'SESSION_2',
+    'SESSION_3',
+    'SESSION_4',
+    'SESSION_5',
+    'SESSION_6',
+    'SESSION_7',
+  ];
+
 /**
  * First Week Pacing Hooks
  *
@@ -135,15 +145,6 @@ export function useNextSession(
     return null;
   }
 
-  const sessions: FirstWeekSession[] = [
-    'SESSION_1',
-    'SESSION_2',
-    'SESSION_3',
-    'SESSION_4',
-    'SESSION_5',
-    'SESSION_6',
-    'SESSION_7',
-  ];
 
   const currentIndex = sessions.indexOf(progress.currentSession);
   if (currentIndex === -1 || currentIndex >= sessions.length - 1) {
@@ -151,4 +152,4 @@ export function useNextSession(
   }
 
   return sessions[currentIndex + 1] ?? null;
-}
+}

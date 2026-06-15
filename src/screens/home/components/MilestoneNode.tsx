@@ -14,7 +14,7 @@ import { borderRadius } from '../../../theme/tokens';
 
 export type MilestoneState = 'unlocked' | 'current' | 'locked';
 
-export function MilestoneNode({ state }: { state: MilestoneState }): JSX.Element {
+export function MilestoneNode({ state }: { state: MilestoneState }): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(1);
 
@@ -57,10 +57,7 @@ export function MilestoneNode({ state }: { state: MilestoneState }): JSX.Element
           borderRadius: borderRadius.full,
           height: 28,
           justifyContent: 'center',
-          shadowColor: backgroundColor,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: state === 'current' ? 0.5 : 0.28,
-          shadowRadius: state === 'current' ? 12 : 7,
+          boxShadow: '0px 0px state === 'current' ? 12 : 7px backgroundColor / state === 'current' ? 0.5 : 0.28',
           width: 28,
         },
         animatedStyle,

@@ -11,10 +11,10 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { BreathingGlow } from '../../../components/primitives/BreathingGlow';
 import { withAlpha } from '../../../components/premiumStyles';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   AnimatedCircle,
   pulseCompleteHaptic,

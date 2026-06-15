@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStudyPlan } from '../hooks';
 import { UI_TEXT } from '../constants';
-import { useNetInfo } from '../../../network';
+import { useNetInfo } from '../../../network/useNetInfo';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { styles } from './StudyPlanScreen.styles';

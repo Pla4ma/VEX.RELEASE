@@ -33,7 +33,7 @@ export function useComboAnimations({
 }: UseComboAnimationsOptions) {
   const [showMilestone, setShowMilestone] = useState(false);
   const [milestoneMessage, setMilestoneMessage] = useState('');
-  const [lastMilestone, setLastMilestone] = useState(0);
+  const lastMilestoneRef = useRef(0);
   const [showComboBroken, setShowComboBroken] = useState(false);
   const previousComboRef = useRef(comboMinutes);
   const wasPausedRef = useRef(isPaused);
@@ -55,10 +55,11 @@ export function useComboAnimations({
   }, [fireIntensity, glowIntensity, progressWidth, scale, shakeRotation]);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const milestones = [5, 10, 15, 20, 25, 30, 45, 60];
     for (const milestone of milestones) {
-      if (comboMinutes === milestone && milestone > lastMilestone) {
-        setLastMilestone(milestone);
+      if (comboMinutes === milestone && milestone > lastMilestoneRef.current) {
+        lastMilestoneRef.current = milestone;
         setMilestoneMessage(getMilestoneMessage(milestone));
         setShowMilestone(true);
         scale.value = withSequence(
@@ -66,15 +67,19 @@ export function useComboAnimations({
           withSpring(1, { damping: 15 }),
         );
         onMilestoneReached?.(milestone, tier.multiplier);
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setShowMilestone(false);
         }, 3000);
         break;
       }
     }
-  }, [comboMinutes, lastMilestone, tier.multiplier, onMilestoneReached, scale]);
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [comboMinutes, tier.multiplier, onMilestoneReached, scale]);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
     if (
       (isPaused || isIdle) &&
       previousComboRef.current > 0 &&
@@ -83,13 +88,16 @@ export function useComboAnimations({
       if (previousComboRef.current >= 5) {
         setShowComboBroken(true);
         onComboBroken?.(previousComboRef.current);
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setShowComboBroken(false);
         }, 2000);
       }
     }
     previousComboRef.current = comboMinutes;
     wasPausedRef.current = isPaused || isIdle;
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isPaused, isIdle, comboMinutes, onComboBroken]);
 
   useEffect(() => {

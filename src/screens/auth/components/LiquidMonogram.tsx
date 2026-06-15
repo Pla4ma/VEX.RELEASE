@@ -34,7 +34,7 @@ export function LiquidMonogram({ isReducedMotion }: { isReducedMotion: boolean }
         <View style={{ position: 'absolute', bottom: 14, left: 14, width: 6, height: 6, borderRadius: 3, backgroundColor: lightColors.accent.purple }} />
       </View>
       <View style={{ alignItems: 'center', gap: 8 }}>
-        <Text style={{ color: lightColors.accent.blue, fontSize: 11, fontWeight: '600', letterSpacing: 6, textTransform: 'uppercase' }}>— N° 001 —</Text>
+        <Text style={{ color: lightColors.accent.blue, fontSize: 12, fontWeight: '600', letterSpacing: 6, textTransform: 'uppercase' }}>— N° 001 —</Text>
         <Text style={{ color: lightColors.surface.button, fontSize: 32, fontWeight: '200', letterSpacing: 14, fontFamily: SANS }}>VEX</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <View style={{ width: 28, height: 1, backgroundColor: rgbaColors.rgb_125_211_252_0_5 }} />

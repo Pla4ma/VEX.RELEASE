@@ -11,7 +11,7 @@ interface StageProps {
   sharedInput: NewUserContainerInput;
 }
 
-export function NewUserStage({ sharedInput }: StageProps): JSX.Element {
+export function NewUserStage({ sharedInput }: StageProps): React.ReactNode {
   const model = useNewUserContainerModel(sharedInput);
   const data = useNewUserHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;

@@ -9,13 +9,13 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, View, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AppScreen, Text } from '../../components/primitives';
+import { AppScreen, Text } from '../../components/primitives/AppScreen';
 import type { AuthStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store/index';
 import { registerSchema, type RegisterFormData } from './schemas';
-import { EtherealSkyBackground } from './components/ethereal';
+import { EtherealSkyBackground } from './components/ethereal/EtherealSkyBackground';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 import { RegisterFormPanel } from './components/ethereal/RegisterFormPanel';
 import { RegisterHero } from './components/ethereal/RegisterHero';

@@ -3,14 +3,14 @@ import { Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ActiveStreakWager } from './streak-widget-types';
 
 export function MultiplierBadge({
   multiplier,
 }: {
   multiplier: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const color =
     multiplier >= 2
@@ -49,7 +49,7 @@ export function WagerSection({
   currentDays: number;
   activeWager?: ActiveStreakWager | null;
   onWagerPress?: () => void;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   const { theme } = useTheme();
 
   if (currentDays < 3 || !onWagerPress) {

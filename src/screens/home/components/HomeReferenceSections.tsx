@@ -13,7 +13,7 @@ interface HomeReferenceSectionsProps {
 
 export function HomeReferenceSections({
   currentStreak,
-}: HomeReferenceSectionsProps): JSX.Element {
+}: HomeReferenceSectionsProps): React.ReactNode {
   return (
     <View style={{ gap: 10, marginTop: 12 }}>
       <AiCoachCard />

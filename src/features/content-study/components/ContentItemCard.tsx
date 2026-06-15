@@ -3,8 +3,8 @@ import { Pressable, Alert } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import type { StudyContent } from '../types';
 import {
@@ -25,7 +25,7 @@ export function ContentItemCard({
   onPress,
   onDelete,
   index,
-}: ContentItemCardProps): JSX.Element {
+}: ContentItemCardProps): React.ReactNode {
   const { theme } = useTheme();
   const status = STATUS_CONFIG[content.status];
   const typeIcon = SOURCE_TYPE_ICONS[content.sourceType];

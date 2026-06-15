@@ -5,7 +5,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   type SessionListItem,
   type RecentSessionsListProps,
@@ -32,7 +32,7 @@ export function RecentSessionsList({
   onViewAll,
   onSessionPress,
   isLoading = false,
-}: RecentSessionsListProps): JSX.Element {
+}: RecentSessionsListProps): React.ReactNode {
   const { theme } = useTheme();
   const renderItem: ListRenderItem<SessionListItem> = useCallback(
     ({ item }) => (

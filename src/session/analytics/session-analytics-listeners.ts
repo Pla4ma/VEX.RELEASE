@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { capture } from '../../shared/analytics/analytics-service';
 import { SessionEvents } from '../../shared/analytics/analytics-events';
 import { getOrchestratorHandlesCompletion } from './SessionAnalytics';

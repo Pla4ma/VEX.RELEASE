@@ -41,7 +41,7 @@ function AuroraBloom({
   spec: BloomSpec;
   clock: SharedValue<number>;
   intensity: number;
-}): JSX.Element {
+}): React.ReactNode {
   const animatedStyle = useAnimatedStyle(() => {
     const angle = clock.value * Math.PI * 2 + spec.phase;
     const drift = interpolate(clock.value, [0, 0.5, 1], [0, 1, 0]);
@@ -78,7 +78,7 @@ export function AuroraField({
   size,
   intensity = 0.5,
   style,
-}: AuroraFieldProps): JSX.Element {
+}: AuroraFieldProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const clock = useSharedValue(0);
 

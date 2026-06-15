@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { buttonTap } from '../../../utils/haptics';
 import type { ComebackQuestProgress } from '../ComebackQuestSystem';
 
@@ -12,7 +12,7 @@ export function ComebackQuestCompact({
 }: {
   progress: ComebackQuestProgress;
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const completedCount =
     (progress.quest1.completed ? 1 : 0) +

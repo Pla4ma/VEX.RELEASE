@@ -1,5 +1,5 @@
 import { SessionMode, resolveSessionMode } from '../../session/modes';
-import { SessionStatusSchema } from '../../session/types';
+import { SessionStatusSchema } from '../../session/types/enums';
 import { fetchSessionHistoryRows } from './repository';
 import {
   SessionHistoryMetadataSchema,

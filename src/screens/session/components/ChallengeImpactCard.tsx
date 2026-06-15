@@ -7,9 +7,9 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CARD_WIDTH } from './session-consequence-types';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 interface ChallengeImpactCardProps {
   challengeName: string;
@@ -25,7 +25,7 @@ export function ChallengeImpactCard({
   progressAfter,
   target,
   wasCompleted,
-}: ChallengeImpactCardProps): JSX.Element {
+}: ChallengeImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
   const progressAnim = useSharedValue(progressBefore);
 

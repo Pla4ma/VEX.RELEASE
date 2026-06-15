@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import * as Haptics from '../../../utils/haptics';
 import type { BossPreviewCardProps } from './BossPreviewCard.types';
 import { BossPreviewSkeleton, HealthBar, EscapeTimer } from './BossPreviewCard.subcomponents';
@@ -35,7 +35,7 @@ export function BossPreviewCard({
   bountyError = null,
   coinBalance,
   BOUNTY_COST = 50,
-}: BossPreviewCardProps): JSX.Element {
+}: BossPreviewCardProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   if (isLoading) {

@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from './Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { useHaptics } from '../../utils/haptics';
@@ -40,7 +40,7 @@ export function VexLaunchButton({
   style,
   testID,
   ...rest
-}: VexLaunchButtonProps): JSX.Element {
+}: VexLaunchButtonProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const { primaryAction } = useHaptics();
@@ -101,9 +101,7 @@ export function VexLaunchButton({
             borderColor: 'rgba(255, 255, 255, 0.55)',
             alignItems: 'center',
             justifyContent: 'center',
-            shadowColor: vexLightGlass.mint[700],
-            shadowOffset: { width: 0, height: 12 },
-            shadowRadius: 20,
+            boxShadow: `0px 12px 20px ${vexLightGlass.mint[700]}`,
             width: '100%',
             overflow: 'hidden',
             opacity: disabled ? 0.5 : 1,
@@ -152,4 +150,4 @@ export function VexLaunchButton({
   );
 }
 
-void MINT_PRESS;
+void MINT_PRESS;

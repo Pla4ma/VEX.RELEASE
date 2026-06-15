@@ -6,7 +6,7 @@ interface TopEdgeHighlightProps {
   radius: number;
 }
 
-export function TopEdgeHighlight({ intensity, radius }: TopEdgeHighlightProps): JSX.Element {
+export function TopEdgeHighlight({ intensity, radius }: TopEdgeHighlightProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: `rgba(255, 255, 255, ${intensity})`,
@@ -18,7 +18,7 @@ export function TopEdgeHighlight({ intensity, radius }: TopEdgeHighlightProps): 
 
 interface SecondEdgeHighlightProps { radius: number }
 
-export function SecondEdgeHighlight({ radius }: SecondEdgeHighlightProps): JSX.Element {
+export function SecondEdgeHighlight({ radius }: SecondEdgeHighlightProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(255, 255, 255, 0.72)',
@@ -30,7 +30,7 @@ export function SecondEdgeHighlight({ radius }: SecondEdgeHighlightProps): JSX.E
 
 interface BottomEdgeShadowProps { radius: number }
 
-export function BottomEdgeShadow({ radius }: BottomEdgeShadowProps): JSX.Element {
+export function BottomEdgeShadow({ radius }: BottomEdgeShadowProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       backgroundColor: 'rgba(13, 76, 65, 0.18)',
@@ -42,7 +42,7 @@ export function BottomEdgeShadow({ radius }: BottomEdgeShadowProps): JSX.Element
 
 interface GlassBorderProps { color: string; radius: number; width: number }
 
-export function GlassBorder({ color, radius, width }: GlassBorderProps): JSX.Element {
+export function GlassBorder({ color, radius, width }: GlassBorderProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       borderColor: color, borderRadius: radius, borderWidth: width,
@@ -53,7 +53,7 @@ export function GlassBorder({ color, radius, width }: GlassBorderProps): JSX.Ele
 
 interface GlassOuterBorderProps { color: string; radius: number }
 
-export function GlassOuterBorder({ color, radius }: GlassOuterBorderProps): JSX.Element {
+export function GlassOuterBorder({ color, radius }: GlassOuterBorderProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
       borderColor: color, borderRadius: radius + 2, borderWidth: 1.5,

@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CARD_WIDTH } from './session-consequence-types';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass';
+import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 interface RivalImpactCardProps {
   rivalName: string;
@@ -18,7 +18,7 @@ export function RivalImpactCard({
   gapBefore,
   gapAfter,
   minutesGained,
-}: RivalImpactCardProps): JSX.Element {
+}: RivalImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const gainedGround = gapAfter < gapBefore;

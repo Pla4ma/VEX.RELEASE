@@ -23,23 +23,32 @@ export function useSessionHistoryRecords(
   error: Error | null;
   refetch: () => void;
 } {
-  const query = useQuery({
+  const { refetch, data, isPending, isError, error } = useQuery({
     queryKey: ['session-history', userId, limit],
     enabled: Boolean(userId),
     queryFn: async () => {
-      if (!userId) {
-        return EMPTY_HISTORY;
-      }
-      return getSessionHistoryViewModel(userId, limit);
+    if (!userId) {
+    return EMPTY_HISTORY;
+    }
+    return getSessionHistoryViewModel(userId, limit);
     },
-  });
-  const retryHistory = query.refetch;
+    });
+
+
+
+
+
+
+
+
+
+  const retryHistory = refetch;
 
   return {
-    data: query.data ?? EMPTY_HISTORY,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error instanceof Error ? query.error : null,
+    data: data ?? EMPTY_HISTORY,
+    isPending: isPending,
+    isError: isError,
+    error: error instanceof Error ? error : null,
     refetch: () => {
       retryHistory();
     },

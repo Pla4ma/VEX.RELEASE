@@ -1,4 +1,4 @@
-import { DEFAULT_COMPANION_ELEMENT, STEP_TITLES } from './components';
+import { DEFAULT_COMPANION_ELEMENT, STEP_TITLES } from './components/onboarding-flow-data';
 import { DEFAULT_PERSONA_ID } from './components/onboarding-flow-data';
 import type {
   OnboardingGoal,

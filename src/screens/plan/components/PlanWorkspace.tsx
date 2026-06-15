@@ -15,7 +15,7 @@ import { usePlanScreenActions } from '../usePlanScreenActions';
 const PLAN_SECTIONS = ['today', 'week', 'projects', 'study'] as const;
 type PlanSection = typeof PLAN_SECTIONS[number];
 
-export function PlanWorkspace(): JSX.Element {
+export function PlanWorkspace(): React.ReactNode {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const [activeSection, setActiveSection] = useState<PlanSection>('today');
   const todayQuery = useTodayItems(userId);
@@ -34,7 +34,7 @@ export function PlanWorkspace(): JSX.Element {
         <Text
           style={{
             color: vexLightGlass.mint[700],
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '800',
             letterSpacing: 1,
             textTransform: 'uppercase',

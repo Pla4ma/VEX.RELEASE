@@ -26,7 +26,7 @@ export function PaperGrain({ width, height }: { width: number; height: number })
     <View pointerEvents="none" style={{ position: 'absolute', width, height }}>
       {dots.map((d, i) => (
         <View
-          key={i}
+          key={d.id}
           style={{
             position: 'absolute',
             left: `${d.left}%`,

@@ -5,9 +5,9 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';
 
 type SessionHeadlineRewardProps = {
@@ -16,7 +16,7 @@ type SessionHeadlineRewardProps = {
 
 export function SessionHeadlineReward({
   headline,
-}: SessionHeadlineRewardProps): JSX.Element {
+}: SessionHeadlineRewardProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(isReducedMotion ? 1 : 0.96);

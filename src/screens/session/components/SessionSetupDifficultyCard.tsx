@@ -5,7 +5,7 @@ import {
   DifficultySelector,
   type SessionDifficulty,
 } from '../../../features/session-start/components/DifficultySelector';
-import { LiquidGlassCard } from '../../../shared/ui/liquid-glass';
+import { LiquidGlassCard } from '../../../shared/ui/liquid-glass/LiquidGlassCard';
 
 type SessionSetupDifficultyCardProps = {
   disabled: boolean;

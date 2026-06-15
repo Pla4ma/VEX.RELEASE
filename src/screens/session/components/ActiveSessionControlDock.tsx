@@ -6,7 +6,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { formatMultiplier, withAlpha } from '../utils/active-session';
 import { lightColors } from '@/theme/tokens/colors';
 

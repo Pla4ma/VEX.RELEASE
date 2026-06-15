@@ -108,11 +108,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
         style={{
           borderWidth: 2,
           borderColor: theme.colors.error.DEFAULT,
-          shadowColor: theme.colors.error.DEFAULT,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.85,
-          shadowRadius: 15,
-          elevation: 5,
+          boxShadow: `0px 0px 15px ${theme.colors.error.DEFAULT} / 0.85`,
         }}
       >
         <Box alignItems="center" mb={4}>
@@ -162,4 +158,4 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({
 };
 
 export default NearMissIndicator;
-export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from './near-miss-helpers';
+export { NEAR_MISS_THRESHOLD, COMPLETE_THRESHOLD, useIsNearMiss } from './near-miss-helpers';

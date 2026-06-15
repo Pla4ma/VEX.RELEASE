@@ -77,7 +77,7 @@ export function MemoryPanel({
             </Text>
             <Text
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: '500',
                 color:
                   item.confidence >= 0.7
@@ -98,7 +98,7 @@ export function MemoryPanel({
           >
             <Text
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: vexLightGlass.text.disabled,
               }}
             >
@@ -114,7 +114,7 @@ export function MemoryPanel({
             />
             <Text
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: vexLightGlass.text.disabled,
               }}
             >

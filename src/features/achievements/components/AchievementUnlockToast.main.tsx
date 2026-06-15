@@ -133,11 +133,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
           style={{
             borderWidth: 2,
             borderColor: rarityColor,
-            shadowColor: rarityColor,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 12,
-            elevation: 8,
+            boxShadow: `0px 4px 12px ${rarityColor} / 0.3`,
           }}
         >
           <Box flexDirection="row" alignItems="center" gap={3}>
@@ -197,4 +193,4 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
       </Pressable>
     </Animated.View>
   );
-};
+};

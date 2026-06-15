@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type BossIntensity = 'subtle' | 'game-like' | 'intense';
 

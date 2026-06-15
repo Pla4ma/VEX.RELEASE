@@ -12,8 +12,8 @@ interface ElementVisualProps {
 export function ElementVisual({
   element,
   color,
-}: ElementVisualProps): JSX.Element {
-  const visuals: Record<CompanionElement, JSX.Element> = {
+}: ElementVisualProps): React.ReactNode {
+  const visuals: Record<CompanionElement, React.ReactNode> = {
     FLAME: (
       <View style={{ alignItems: 'center' }}>
         <View

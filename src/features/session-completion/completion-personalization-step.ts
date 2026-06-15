@@ -60,13 +60,14 @@ export function detectNewlyUnlockedFeatures(
       totalCompletedSessions: sessionsAfter,
       motivationProfile: profile ?? undefined,
     });
+    const featureSet = new Set(features);
     for (const [key, feat] of Object.entries(after.features)) {
       if (
         feat.isUnlocked &&
         !(before.features[key as keyof typeof before.features]?.isUnlocked)
       ) {
         if (!features.includes(key)) {features.push(key);}
-      }
+        if (!featureSet.has(key)) {features.push(key);}
     }
   } catch (error) {
     Sentry.captureException(error, {

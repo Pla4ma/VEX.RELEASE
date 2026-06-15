@@ -44,7 +44,7 @@ export function OnboardingSetName({
   initialName,
   onContinue,
   onSkip,
-}: OnboardingSetNameProps): JSX.Element {
+}: OnboardingSetNameProps): React.ReactNode {
   const { theme } = useTheme();
   const [name, setName] = useState(initialName || '');
   const [isFocused, setIsFocused] = useState(false);
@@ -158,7 +158,7 @@ export function OnboardingSetName({
         <Animated.View entering={FadeInUp.delay(400).duration(400)}>
           <Box gap="md">
             <Button
-              size="lg"
+              <Text>size="lg"</Text>
               variant="primary"
               fullWidth
               onPress={handleContinue}

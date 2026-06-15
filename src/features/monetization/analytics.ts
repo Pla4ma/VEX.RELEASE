@@ -1,4 +1,4 @@
-import { capture } from '../../shared/analytics';
+import { capture } from '../../shared/analytics/analytics-service';
 import { PurchaseEvents } from '../../shared/monetization/purchase-events';
 
 const SOURCE = 'post_session_streak_shield';

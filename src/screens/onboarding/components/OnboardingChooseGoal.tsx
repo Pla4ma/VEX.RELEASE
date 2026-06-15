@@ -59,7 +59,7 @@ export function OnboardingChooseGoal({
   selectedGoal,
   onSelectGoal,
   onContinue,
-}: OnboardingChooseGoalProps): JSX.Element {
+}: OnboardingChooseGoalProps): React.ReactNode {
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
       <View>

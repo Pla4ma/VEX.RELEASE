@@ -2,7 +2,7 @@ import React from 'react';
 import { ImageBackground, View, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { liquidGlassSpacing } from './liquidGlassTokens';
 
 type LiquidGlassScreenProps = {

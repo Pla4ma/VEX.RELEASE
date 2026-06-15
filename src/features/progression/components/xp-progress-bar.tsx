@@ -64,17 +64,30 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
         y: Math.random() * 20 - 10,
       }));
       setParticles(newParticles);
-      setTimeout(() => setParticles([]), 1000);
+      const timer = setTimeout(() => setParticles([]), 1000);
+      return () => clearTimeout(timer);
     }
   }, [isAnimating, xpJustAdded, progressWidth, pulseAnim]);
 
-  useEffect(() => {
+  const [prevProgressPercent, setPrevProgressPercent] = useState(progressPercent);
+  const [hideTimer, setHideTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+  if (progressPercent !== prevProgressPercent) {
+    setPrevProgressPercent(progressPercent);
     if (progressPercent >= 100) {
       setShowLevelUp(true);
       onLevelUp?.();
-      setTimeout(() => setShowLevelUp(false), 3000);
+      if (hideTimer) clearTimeout(hideTimer);
+      const timer = setTimeout(() => setShowLevelUp(false), 3000);
+      setHideTimer(timer);
     }
-  }, [progressPercent, onLevelUp]);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+  }, [hideTimer]);
 
   const getTierColor = (lvl: number): [string, string] => {
     if (lvl >= 50) {
@@ -155,7 +168,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
           />
 
           <View style={styles.shine} />
-          <View style={[styles.tipGlow, { shadowColor: startColor }]} />
+          <View style={[styles.tipGlow, { boxShadow: `0 0 4px ${startColor}` }]} />
         </Animated.View>
 
         {particles.map((particle) => (
@@ -192,4 +205,4 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       <Text style={styles.totalXp}>Total: {totalXp.toLocaleString()} XP</Text>
     </Animated.View>
   );
-};
+};

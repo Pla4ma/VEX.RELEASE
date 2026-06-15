@@ -22,7 +22,7 @@ export const GlassScreen: React.FC<GlassScreenProps> = React.memo(function Glass
   contentStyle,
   testID,
   variant = 'default',
-}: GlassScreenProps): JSX.Element {
+}: GlassScreenProps): React.ReactNode {
   const insets = useSafeAreaInsets();
 
   return (

@@ -34,23 +34,27 @@ export function useStudySession() {
     null,
   );
 
-  const currentSessionQuery = useQuery({
+  const { data: currentSessionData, isPending: isCurrentPending, isFetching: isCurrentFetching, error: currentError } = useQuery({
     queryKey: studySessionKeys.current(),
     queryFn: () => orchestrator.getSession(),
     staleTime: Infinity,
   });
 
-  const sessionHistoryQuery = useQuery({
+  const { data: sessionHistoryData, isPending: isHistoryPending, isFetching: isHistoryFetching, error: historyError } = useQuery({
     queryKey: studySessionKeys.history(),
     queryFn: () => orchestrator.getSessionHistory(20),
     refetchInterval: 30000,
   });
 
-  const sessionStatsQuery = useQuery({
+  const { data: sessionStatsData, isPending: isStatsPending, isFetching: isStatsFetching, error: statsError } = useQuery({
     queryKey: studySessionKeys.stats(),
     queryFn: () => orchestrator.getSessionStats(),
     refetchInterval: 60000,
   });
+
+  const currentSessionQuery = { data: currentSessionData, isPending: isCurrentPending, isFetching: isCurrentFetching, error: currentError };
+  const sessionHistoryQuery = { data: sessionHistoryData, isPending: isHistoryPending, isFetching: isHistoryFetching, error: historyError };
+  const sessionStatsQuery = { data: sessionStatsData, isPending: isStatsPending, isFetching: isStatsFetching, error: statsError };
 
   const startSessionMutation = useMutation({
     mutationFn: async (config: SessionConfig) => {

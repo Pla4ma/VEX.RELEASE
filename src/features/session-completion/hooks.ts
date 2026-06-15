@@ -6,7 +6,7 @@ import type { SessionStackParams } from '../../navigation/types';
 import type { SessionSummary } from '../../session/types';
 import type { MasteryState } from '../mastery/types';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { detectNewlyUnlockedFeatures } from './completion-personalization-step';
 
 type SessionNavigation = NativeStackNavigationProp<SessionStackParams>;

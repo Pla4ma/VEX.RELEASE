@@ -31,7 +31,7 @@ export function HistoryItem({
   entry: SessionHistoryItem;
   index: number;
   onPress: (entry: SessionHistoryItem) => void;
-}): JSX.Element {
+}): React.ReactNode {
   const isDisabled = entry.summary === null;
 
   return (

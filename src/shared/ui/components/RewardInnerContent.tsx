@@ -21,7 +21,7 @@ export function RewardInnerContent({
   description,
   spacing,
   textColors,
-}: RewardInnerContentProps): JSX.Element {
+}: RewardInnerContentProps): React.ReactNode {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], flex: 1 }}>
       <View style={{

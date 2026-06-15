@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Text, Stack } from '@components/primitives';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { MonthlyFocusReportSummary } from '../types';
 import {
   formatTime,
@@ -23,7 +23,7 @@ export function ReportContent({
   isPremium,
   canOpenPaywall,
   onOpenPaywall,
-}: ReportContentProps): JSX.Element {
+}: ReportContentProps): React.ReactNode {
   const { theme } = useTheme();
   const deltaColor =
     report.scoreDelta >= 0

@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import {
   DIFFICULTY_CONFIG,

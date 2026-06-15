@@ -82,11 +82,7 @@ export const PromptView: React.FC<PromptViewProps> = ({
         style={{
           borderWidth: 3,
           borderColor: theme.colors.error.DEFAULT,
-          shadowColor: theme.colors.error.DEFAULT,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.3,
-          shadowRadius: 20,
-          elevation: 10,
+          boxShadow: `0px 0px 20px ${theme.colors.error.DEFAULT} / 0.3`,
         }}
       >
         <Box alignItems="center" mb={4}>
@@ -163,4 +159,4 @@ export const PromptView: React.FC<PromptViewProps> = ({
       </Box>
     </Animated.View>
   );
-};
+};

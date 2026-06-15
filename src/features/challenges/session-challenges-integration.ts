@@ -5,7 +5,7 @@
  * Listens for session completion events and updates challenge progress.
  */
 
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import {
   useBasicChallengesStatus,
   challengesKeys,

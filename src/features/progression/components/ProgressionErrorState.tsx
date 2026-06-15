@@ -21,7 +21,7 @@ interface ProgressionErrorStateProps {
 export function ProgressionErrorState({
   error,
   onRetry,
-}: ProgressionErrorStateProps): JSX.Element {
+}: ProgressionErrorStateProps): React.ReactNode {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
       <View style={styles.content}>

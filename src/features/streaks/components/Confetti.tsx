@@ -1,3 +1,12 @@
+const colors = [
+    lightColors.semantic.danger,
+    lightColors.semantic.success,
+    lightColors.accent.blue,
+    lightColors.semantic.warning,
+    lightColors.accent.purple,
+    lightColors.accent.pink,
+  ];
+
 import React from 'react';
 import Animated, {
   FadeIn,
@@ -17,7 +26,7 @@ function ConfettiPiece({
 }: {
   index: number;
   color: string;
-}): JSX.Element | null {
+}): React.ReactNode | null {
   const reduceMotion = useReducedMotion();
   const startX = Math.random() * SCREEN_WIDTH;
   const endX = startX + (Math.random() - 0.5) * 200;
@@ -52,15 +61,7 @@ function ConfettiPiece({
   );
 }
 
-export function ConfettiBurst({ count = 50 }: { count?: number }): JSX.Element {
-  const colors = [
-    lightColors.semantic.danger,
-    lightColors.semantic.success,
-    lightColors.accent.blue,
-    lightColors.semantic.warning,
-    lightColors.accent.purple,
-    lightColors.accent.pink,
-  ];
+export function ConfettiBurst({ count = 50 }: { count?: number }): React.ReactNode {
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
@@ -68,4 +69,4 @@ export function ConfettiBurst({ count = 50 }: { count?: number }): JSX.Element {
       ))}
     </>
   );
-}
+}

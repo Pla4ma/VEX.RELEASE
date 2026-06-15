@@ -11,7 +11,7 @@ interface LiveFocusingSkeletonProps {
 
 export function LiveFocusingSkeleton({
   compact = false,
-}: LiveFocusingSkeletonProps): JSX.Element {
+}: LiveFocusingSkeletonProps): React.ReactNode {
   if (compact) {
     return (
       <Box

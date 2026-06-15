@@ -1,4 +1,4 @@
-import { useMutation, type UseMutationResult } from '@tanstack/react-query';
+import { useMutation, useQueryClient, type UseMutationResult } from '@tanstack/react-query';
 import { useUIStore } from '../../store/index';
 import { captureAccountDeletionError } from './analytics';
 import { deleteAccount } from './service';
@@ -14,6 +14,7 @@ export function useDeleteAccount(): UseMutationResult<
   ) => Promise<AccountDeletionResult>;
 } {
   const showToast = useUIStore((state) => state.showToast);
+  const queryClient = useQueryClient();
   const mutation = useMutation<
     AccountDeletionResult,
     Error,
@@ -29,6 +30,7 @@ export function useDeleteAccount(): UseMutationResult<
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries();
       showToast({
         message: 'Your account and local data were deleted.',
         type: 'success',

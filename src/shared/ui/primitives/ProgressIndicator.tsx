@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useFadeIn } from '../hooks/useReanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { progressStyles as styles } from './loadingOverlay.styles';
 
 interface ProgressIndicatorProps {

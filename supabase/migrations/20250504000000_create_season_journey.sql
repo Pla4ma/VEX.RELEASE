@@ -93,25 +93,33 @@ CREATE INDEX IF NOT EXISTS idx_journey_seasons_dates ON journey_seasons(start_da
 
 -- Season Journeys (public read)
 CREATE POLICY "Season journeys are publicly viewable" ON season_journeys
-  FOR SELECT USING (true);
+  FOR SELECT TO authenticated, anon
+  USING (true)
+  WITH CHECK (true);
 
 -- Journey Milestones (public read)
 CREATE POLICY "Journey milestones are publicly viewable" ON journey_milestones
-  FOR SELECT USING (true);
+  FOR SELECT TO authenticated, anon
+  USING (true);
 
 -- User Journeys (user-specific)
 CREATE POLICY "Users can view own journey progress" ON user_journeys
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can update own journey progress" ON user_journeys
-  FOR UPDATE USING (auth.uid() = user_id);
+  FOR UPDATE TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert own journey progress" ON user_journeys
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = user_id);
 
 -- Journey Seasons (public read)
 CREATE POLICY "Journey seasons are publicly viewable" ON journey_seasons
-  FOR SELECT USING (true);
+  FOR SELECT TO authenticated, anon
+  USING (true);
 
 -- ============================================================================
 -- Triggers
@@ -133,6 +141,35 @@ CREATE TRIGGER update_season_journeys_updated_at
 CREATE TRIGGER update_user_journeys_updated_at
   BEFORE UPDATE ON user_journeys
   FOR EACH ROW EXECUTE FUNCTION update_journey_updated_at_column();
+
+-- ============================================================================
+-- Row Level Security
+-- ============================================================================
+ALTER TABLE season_journeys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE journey_milestones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_journeys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE journey_seasons ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY season_journeys_read_all ON season_journeys
+  FOR SELECT TO authenticated, anon
+  USING (true);
+
+CREATE POLICY journey_milestones_read_all ON journey_milestones
+  FOR SELECT TO authenticated, anon
+  USING (true);
+
+CREATE POLICY user_journeys_owner_select ON user_journeys
+  FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
+
+CREATE POLICY user_journeys_owner_write ON user_journeys
+  FOR ALL TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY journey_seasons_read_all ON journey_seasons
+  FOR SELECT TO authenticated, anon
+  USING (true);
 
 -- ============================================================================
 -- Initial Data
@@ -309,6 +346,17 @@ CREATE TABLE IF NOT EXISTS user_journey_claims (
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_journey_claims_user_id ON user_journey_claims(user_id);
+
+ALTER TABLE user_journey_claims ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY user_journey_claims_owner_select ON user_journey_claims
+  FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
+
+CREATE POLICY user_journey_claims_owner_write ON user_journey_claims
+  FOR ALL TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_user_journey_claims_season_journey_id ON user_journey_claims(season_journey_id);
 
 -- RLS for claims

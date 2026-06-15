@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import {
   OnboardingPersistence,
   getPartialData,

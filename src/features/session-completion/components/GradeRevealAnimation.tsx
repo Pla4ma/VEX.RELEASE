@@ -2,9 +2,9 @@ import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { Text } from '../../../components/primitives';
+import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   BurstParticle,
   hexToRgba,
@@ -23,7 +23,7 @@ export function GradeRevealAnimation({
   gradeLetter,
   onComplete,
   sessionMode,
-}: GradeRevealAnimationProps): JSX.Element {
+}: GradeRevealAnimationProps): React.ReactNode {
   const { height } = useWindowDimensions();
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();

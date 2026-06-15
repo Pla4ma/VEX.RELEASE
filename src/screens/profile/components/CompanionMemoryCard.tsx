@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Card, Text } from '../../../components/primitives/Box';
 import type { CompanionMemory } from '../../../features/companion/memory-types';
 
 interface CompanionMemoryCardProps {
@@ -8,7 +8,7 @@ interface CompanionMemoryCardProps {
 
 export function CompanionMemoryCard({
   memory,
-}: CompanionMemoryCardProps): JSX.Element {
+}: CompanionMemoryCardProps): React.ReactNode {
   return (
     <Card
       accessibilityHint="Read-only companion memory"

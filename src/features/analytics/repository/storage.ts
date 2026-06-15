@@ -1,4 +1,4 @@
-import { withRetry, withTimeout } from '../../../shared/hardening';
+import { withRetry, withTimeout } from '../../../shared/hardening/retry';
 import type { DownloadResult } from './storage-types';
 import { AnalyticsStorageError } from './storage-types';
 import {

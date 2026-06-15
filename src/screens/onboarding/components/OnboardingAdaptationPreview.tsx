@@ -6,7 +6,7 @@ import type {
   FocusGoal,
   MotivationProfileType,
 } from '../../../features/onboarding/schemas';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from '../styles';
 import { buildOnboardingAdaptationPreview } from './onboarding-adaptation-preview';
 
@@ -18,7 +18,7 @@ type OnboardingAdaptationPreviewProps = {
 export function OnboardingAdaptationPreview({
   goal,
   motivationStyle,
-}: OnboardingAdaptationPreviewProps): JSX.Element {
+}: OnboardingAdaptationPreviewProps): React.ReactNode {
   const { theme } = useTheme();
   const preview = buildOnboardingAdaptationPreview({ goal, motivationStyle });
 

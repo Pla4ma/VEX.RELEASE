@@ -31,14 +31,8 @@ export function useAccessibilityEnhancements(
   baseProps: Record<string, unknown>,
   customEnhancements?: Partial<EnhancedAccessibilityProps>,
 ): EnhancedAccessibilityProps {
-  const [enhancedProps, setEnhancedProps] =
-    React.useState<EnhancedAccessibilityProps>({});
-  React.useEffect(() => {
-    const enhanced = accessibilityEnhancer.enhanceProps(
-      baseProps,
-      customEnhancements,
-    );
-    setEnhancedProps(enhanced);
-  }, [baseProps, customEnhancements]);
-  return enhancedProps;
+  return React.useMemo(
+    () => accessibilityEnhancer.enhanceProps(baseProps, customEnhancements),
+    [baseProps, customEnhancements],
+  );
 }

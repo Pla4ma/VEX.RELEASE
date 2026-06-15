@@ -14,8 +14,8 @@ import { Text } from '../../../components/primitives/Text';
 import { captureException } from '../../../config/sentry';
 import { useCaptureMutation } from '../../../features/capture/hooks';
 import { useAddPlanItem } from '../../../features/plan/hooks';
-import { Icon } from '../../../icons';
-import { borderRadius, spacing } from '../../../theme/tokens';
+import { Icon } from '../../../icons/components/Icon';
+import { borderRadius, spacing } from '../../../theme/tokens/radius';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import { StandardHitSlops } from '../../../utils/touchTarget';
@@ -45,7 +45,7 @@ export function Day0ActionSheet({
   onSaved,
   showToast,
   userId,
-}: Day0ActionSheetProps): JSX.Element {
+}: Day0ActionSheetProps): React.ReactNode {
   const [text, setText] = useState('');
   const captureMutation = useCaptureMutation(userId);
   const addPlanItem = useAddPlanItem(userId);

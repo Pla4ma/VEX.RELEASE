@@ -1,3 +1,13 @@
+const sparkleOneBaseStyle = {
+    position: 'absolute' as const,
+    right: 12,
+    top: 18,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: vexLightGlass.mint[300],
+  };
+
 /**
  * PNG Mascot Animation Styles
  *
@@ -74,15 +84,6 @@ export function useMascotAnimatedStyles(
     backgroundColor: vexLightGlass.mint[200],
   };
 
-  const sparkleOneBaseStyle = {
-    position: 'absolute' as const,
-    right: 12,
-    top: 18,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: vexLightGlass.mint[300],
-  };
 
   const sparkleTwoBaseStyle = {
     position: 'absolute' as const,

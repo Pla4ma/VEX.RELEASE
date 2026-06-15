@@ -24,7 +24,7 @@ export function LiquidGlassSphereRaw({
   icon,
   style,
   intensity = 1,
-}: LiquidGlassSphereProps): JSX.Element {
+}: LiquidGlassSphereProps): React.ReactNode {
   const raw = COLOR_CONFIGS[color] ?? COLOR_CONFIGS.mint;
   const c: GlassSphereColorConfig = raw as GlassSphereColorConfig;
   const r = size * 0.46;
@@ -38,10 +38,7 @@ export function LiquidGlassSphereRaw({
         {
           height: size,
           width: size,
-          shadowColor: 'rgba(10, 94, 77, 0.25)',
-          shadowOffset: { width: 0, height: size * 0.06 },
-          shadowOpacity: 0.85 * i,
-          shadowRadius: size * 0.12,
+          boxShadow: `0px size * 0.06px size * 0.12px rgba(10, 94, 77, NaN)`,
         },
         style,
       ]}

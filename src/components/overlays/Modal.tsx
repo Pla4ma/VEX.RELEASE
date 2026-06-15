@@ -5,11 +5,11 @@ import {
   type ViewStyle,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { iosShadows } from '@/theme/tokens/shadows';
-import { Box, Text } from '../primitives';
-import { IconButton } from '../../icons';
+import { Box, Text } from '../primitives/Box';
+import { IconButton } from '../../icons/components/IconButton';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 import { useModalAnimation } from './useModalAnimation';

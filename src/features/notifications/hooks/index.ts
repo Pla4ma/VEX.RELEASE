@@ -10,7 +10,7 @@ export const notificationKeys = {
 
 export function useUnreadNotificationsCount(userId: string | null) {
   const queryClient = useQueryClient();
-  const query = useQuery({
+  const { data, isLoading, isError, error, refetch, isPending } = useQuery({
     queryKey: notificationKeys.unreadCount(userId || ''),
     queryFn: () => {
       if (!userId) {
@@ -36,5 +36,5 @@ export function useUnreadNotificationsCount(userId: string | null) {
     });
   }, [queryClient, userId]);
 
-  return query;
+  return { data, isLoading, isError, error, refetch, isPending };
 }

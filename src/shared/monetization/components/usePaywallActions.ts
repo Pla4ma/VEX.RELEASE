@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '@/navigation/types';
-import { capture } from '../../analytics';
+import { capture } from '../../analytics/analytics-service';
 import { PurchaseEvents } from '../purchase-events';
 import type { PurchasesPackageDisplayInfo } from '../revenuecat-types';
 import type { PaywallPlan, PaywallStatusMessage } from './paywall-data';

@@ -137,7 +137,7 @@ export function ActiveCard({
               backgroundColor: lightColors.semantic.stateBlocked,
             }}
           >
-            <Text style={{ color: lightColors.semantic.warning, fontSize: 11, fontWeight: '600' }}>
+            <Text style={{ color: lightColors.semantic.warning, fontSize: 12, fontWeight: '600' }}>
               Blocked
             </Text>
           </View>

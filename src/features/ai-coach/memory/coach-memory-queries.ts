@@ -122,7 +122,10 @@ export async function getMilestoneSummary(userId: string): Promise<{
     acc[m.type] = (acc[m.type] ?? 0) + 1;
     return acc;
   }, {});
-  const topEntry = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0];
+  const topEntry = Object.entries(typeCounts).reduce<[string, number] | null>((max, curr) => {
+    if (!max || curr[1] > max[1]) return curr;
+    return max;
+  }, null);
   let favoriteType: MemoryType | null = null;
   if (topEntry) {
     const parsed = MemoryTypeSchema.safeParse(topEntry[0]);

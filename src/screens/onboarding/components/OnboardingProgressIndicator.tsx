@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { ONBOARDING_PROGRESS_PHASES } from './onboarding-flow-data';
 
 type ProgressPhaseIndex = 0 | 1 | 2;
@@ -22,7 +22,7 @@ export function getProgressPhaseIndex(
 
 export function OnboardingProgressIndicator({
   phaseIndex,
-}: OnboardingProgressIndicatorProps): JSX.Element {
+}: OnboardingProgressIndicatorProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

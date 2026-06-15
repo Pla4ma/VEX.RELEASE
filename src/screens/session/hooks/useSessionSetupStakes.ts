@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useActiveBoss } from '../../../features/boss/hooks';
-import { useActiveChallenges } from '../../../features/challenges/hooks';
+import { useActiveChallenges } from '../../../features/challenges/hooks/challengeQueries';
 import { useStreakSummary } from '../../../features/streaks/hooks';
 import type { SessionStakesBriefingProps } from '../../../features/session-start/components/SessionStakesBriefing';
 import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';

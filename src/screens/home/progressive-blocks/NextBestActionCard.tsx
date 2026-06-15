@@ -20,7 +20,7 @@ export function NextBestActionCard({
         <Text
           style={{
             color: vexLightGlass.mint[700],
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '700',
             letterSpacing: 0.5,
             textTransform: 'uppercase',

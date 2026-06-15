@@ -44,7 +44,7 @@ type FirstSessionViewProps = {
 export function FirstSessionView({
   navigation,
   onBack,
-}: FirstSessionViewProps): JSX.Element {
+}: FirstSessionViewProps): React.ReactNode {
   const personalization = useFirstSessionPersonalization();
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
@@ -101,7 +101,7 @@ export function FirstSessionView({
           Not authenticated
         </Text>
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           onPress={onBack}
           accessibilityLabel="Go back"
           accessibilityRole="button"

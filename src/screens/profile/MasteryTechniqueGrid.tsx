@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Text } from '../../components/primitives';
+import { Card, Text } from '../../components/primitives/Card';
 import { TechniqueBar } from '../../features/mastery/components/TechniqueBar';
 import type { MasteryState } from '../../features/mastery/types';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 
@@ -44,7 +44,7 @@ export function MasteryTechniqueGrid({
   state,
 }: {
   state: MasteryState;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Card

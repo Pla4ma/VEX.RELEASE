@@ -7,11 +7,11 @@ import {
   ContentReviewScreen,
   StudyPlanScreen,
   StudyLibraryScreen,
-} from '../features/content-study/screens';
+} from $1../features/content-study/screens/ContentInputScreen$1;
 
 const Stack = createNativeStackNavigator<ContentStudyStackParamList>();
 
-export function ContentStudyNavigator(): JSX.Element {
+export function ContentStudyNavigator(): React.ReactNode {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ContentInput" component={ContentInputScreen} />

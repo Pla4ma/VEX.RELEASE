@@ -11,7 +11,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './skeleton-styles';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');

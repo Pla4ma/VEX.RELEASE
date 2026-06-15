@@ -48,7 +48,7 @@ export function SessionCompleteFooter({
         {onShare && (
           <Box mb={3}>
             <Button
-              variant="ghost"
+              <Text>variant="ghost"</Text>
               size="md"
               fullWidth
               onPress={onShare}

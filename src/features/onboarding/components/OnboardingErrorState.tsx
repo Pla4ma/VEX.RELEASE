@@ -23,7 +23,7 @@ export function OnboardingErrorState({
   error,
   onRetry,
   onSkip,
-}: OnboardingErrorStateProps): JSX.Element {
+}: OnboardingErrorStateProps): React.ReactNode {
   const getErrorMessage = (): string => {
     const message = error.message.toLowerCase();
 

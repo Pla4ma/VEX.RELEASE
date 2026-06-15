@@ -12,7 +12,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { Icon } from './Icon';
 import type { IconButtonProps } from '../types';
@@ -37,7 +37,7 @@ export function IconButton({
   accessibilityLabel,
   accessibilityHint,
   ...iconProps
-}: IconButtonProps): JSX.Element {
+}: IconButtonProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(1);
@@ -107,7 +107,7 @@ export function createIconButton(
 ) {
   return function NamedIconButton(
     props: Omit<IconButtonProps, 'name'>,
-  ): JSX.Element {
+  ): React.ReactNode {
     return <IconButton name={name} {...defaultProps} {...props} />;
   };
 }

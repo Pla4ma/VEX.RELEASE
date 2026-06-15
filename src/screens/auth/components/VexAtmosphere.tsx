@@ -58,10 +58,7 @@ function DustDot({ m }: { m: DustMote }) {
         height: m.size,
         borderRadius: m.size / 2,
         backgroundColor: color,
-        shadowColor: color,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 4,
+        boxShadow: '0px 0px 4px color / 0.8',
       },
       style,
     ]} />
@@ -79,7 +76,7 @@ function Grain() {
   return (
     <View pointerEvents="none" style={{ position: 'absolute', width, height, opacity: 0.035 }}>
       {dots.map((d, i) => (
-        <View key={i} style={{
+        <View key={d.id} style={{
           position: 'absolute',
           left: `${d.x}%`, top: `${d.y}%`,
           width: d.s, height: d.s,
@@ -132,7 +129,7 @@ export const VexAtmosphere = memo(function VexAtmosphere() {
 
       {/* Floating dust particles */}
       <View style={{ position: 'absolute', width, height }}>
-        {DUST.map((m, i) => (<DustDot key={i} m={m} />))}
+        {DUST.map((m, i) => (<DustDot key={m.id} m={m} />))}
       </View>
 
       {/* Subtle film grain */}

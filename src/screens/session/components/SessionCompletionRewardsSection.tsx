@@ -2,7 +2,7 @@ import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Banner } from '../../../components/Banner';
-import { Box } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
 import { MasteryCard } from '../../../features/mastery/components/MasteryCard';
 import type { MasteryState } from '../../../features/mastery/types';
 import type {

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useTheme } from '../../theme/ThemeContext';
-import { Text } from '../../components';
+import { Text } from '../../components/primitives/Text';
 import type { ComboMeterProps } from './combo-meter-types';
 import {
   COMBO_TIERS,
@@ -39,7 +39,7 @@ export function ComboMeter({
   isIdle,
   onMilestoneReached,
   onComboBroken,
-}: ComboMeterProps): JSX.Element {
+}: ComboMeterProps): React.ReactNode {
   const { theme } = useTheme();
   const tier = getCurrentTier(comboMinutes);
   const tierProgress = getTierProgress(comboMinutes);

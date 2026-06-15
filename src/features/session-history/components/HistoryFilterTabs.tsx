@@ -14,7 +14,7 @@ export function HistoryFilterTabs({
 }: {
   filter: HistoryFilter;
   onChange: (filter: HistoryFilter) => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <View style={{ flexDirection: 'row', gap: spacing[2] }}>
       {FILTERS.map((item) => (

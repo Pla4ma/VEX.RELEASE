@@ -8,7 +8,7 @@ import type {
   PartialPayload,
 } from './session-event-emitter-types';
 import { SessionEventEmitterBase } from './SessionEventEmitterBase';
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('session:events');

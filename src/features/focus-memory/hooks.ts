@@ -3,17 +3,21 @@ import { useQuery } from '@tanstack/react-query';
 import { listActiveMemories } from './service';
 
 export function useActiveFocusMemories(userId: string | null) {
-  const query = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ['focus-memory', userId],
     queryFn: () => listActiveMemories(userId ?? ''),
     enabled: Boolean(userId),
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? [],
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
+    data: data ?? [],
+    isPending: isPending,
+    isError: isError,
+    error: error,
+    refetch: refetch,
   };
 }

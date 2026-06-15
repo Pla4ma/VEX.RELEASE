@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { capture } from '../../shared/analytics/analytics-service';
 import { getCompletionSignal } from '../focus-contract/service';
 import {

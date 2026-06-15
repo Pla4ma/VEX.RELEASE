@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { buttonTap } from '../../utils/haptics';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   BossDamageSkeleton,
   BossIcon,
@@ -28,7 +28,7 @@ export function BossDamagePreview({
   willDefeat,
   onPress,
   isLoading = false,
-}: BossDamagePreviewProps): JSX.Element {
+}: BossDamagePreviewProps): React.ReactNode {
   const { theme } = useTheme();
   if (isLoading) {
     return <BossDamageSkeleton />;

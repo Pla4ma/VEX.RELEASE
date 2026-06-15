@@ -15,7 +15,7 @@ interface MotivationScreenProps {
 export function MotivationScreen({
   onSelect,
   onBack,
-}: MotivationScreenProps): JSX.Element {
+}: MotivationScreenProps): React.ReactNode {
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [selectedStyle, setSelectedStyle] =
     useState<MotivationProfileType | null>(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getSessionOrchestrator } from '../SessionOrchestrator';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { SessionConfig, SessionState } from '../types';
 import type { SessionActions } from './useSessionActions';
 import { createSessionActions } from './useSessionActions';

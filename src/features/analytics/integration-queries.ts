@@ -1,7 +1,8 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import { stateCache, DEFAULT_INTEGRATION_STATE } from './integration-types';
-import * as repository from './repository';
+import { fetchAggregatedStats, fetchDetectedPatterns, deleteOldAnalyticsData } from './repository/stats';
+import { fetchInsights } from './repository/insights';
 
 export async function syncAnalyticsData(
   userId: string,
@@ -16,17 +17,17 @@ export async function syncAnalyticsData(
   let failed = 0;
   try {
     const [stats, _insights, _patterns] = await Promise.all([
-      repository.fetchAggregatedStats(userId, 'today').catch((e) => {
+      fetchAggregatedStats(userId, 'today').catch((e) => {
         errors.push(`Stats fetch failed: ${e.message}`);
         failed++;
         return null;
       }),
-      repository.fetchInsights(userId, { limit: 5 }).catch((e) => {
+      fetchInsights(userId, { limit: 5 }).catch((e) => {
         errors.push(`Insights fetch failed: ${e.message}`);
         failed++;
         return [];
       }),
-      repository.fetchDetectedPatterns(userId).catch((e) => {
+      fetchDetectedPatterns(userId).catch((e) => {
         errors.push(`Patterns fetch failed: ${e.message}`);
         failed++;
         return [];
@@ -86,8 +87,8 @@ export async function getRealtimeAnalytics(
   }
   try {
     const [todayStats, insights] = await Promise.all([
-      repository.fetchAggregatedStats(userId, 'today'),
-      repository.fetchInsights(userId, { unreadOnly: false, limit: 3 }),
+      fetchAggregatedStats(userId, 'today'),
+      fetchInsights(userId, { unreadOnly: false, limit: 3 }),
     ]);
     stateCache.set(userId, {
       sessionCount: todayStats?.metrics?.sessions_completed?.value || 0,
@@ -136,7 +137,7 @@ export async function cleanupAnalyticsData(
   const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
   const errors: string[] = [];
   try {
-    await repository.deleteOldAnalyticsData(userId, cutoff);
+    await deleteOldAnalyticsData(userId, cutoff);
     Sentry.addBreadcrumb({
       category: 'analytics_cleanup',
       message: `Cleaned up analytics data older than ${retentionDays} days`,

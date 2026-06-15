@@ -7,11 +7,11 @@ import {
   type SessionTheme,
 } from '../themes/session-themes';
 import { useStreak } from '../streaks/hooks';
-import { useNetInfo } from '../../network';
+import { useNetInfo } from '../../network/useNetInfo';
 import type { SessionStackParams } from '../../navigation/types';
 import { useAuthStore } from '../../store';
 import { useActiveStudyPlan } from '../content-study/hooks';
-import { useLearningExecutionLayer } from '../learning-execution';
+import { useLearningExecutionLayer } from '../learning-execution/hooks';
 import {
   parseSessionSetupParams,
   buildSessionStartHero,

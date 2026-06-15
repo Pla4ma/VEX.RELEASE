@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useTheme } from '../../theme';
-import { fontFamilies } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeContext';
+import { fontFamilies } from '../../theme/tokens/typography';
 import { EnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import { createSheet } from '@/shared/ui/create-sheet';
 
@@ -35,12 +35,6 @@ export const SessionTimer = React.memo(function SessionTimer({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const sizeStyles = {
-    sm: { fontSize: 24, strokeWidth: 4, size: 80 },
-    md: { fontSize: 36, strokeWidth: 6, size: 120 },
-    lg: { fontSize: 56, strokeWidth: 8, size: 200 },
-    hero: { fontSize: 80, strokeWidth: 12, size: 280 },
-  } as const;
 
   const s = sizeStyles[size];
   const _radius = (s.size - s.strokeWidth) / 2;
@@ -133,6 +127,13 @@ export const SessionTimer = React.memo(function SessionTimer({
   );
 });
 
+const sizeStyles = {
+    sm: { fontSize: 24, strokeWidth: 4, size: 80 },
+    md: { fontSize: 36, strokeWidth: 6, size: 120 },
+    lg: { fontSize: 56, strokeWidth: 8, size: 200 },
+    hero: { fontSize: 80, strokeWidth: 12, size: 280 },
+  } as const;
+
 const styles = createSheet({
   container: {
     justifyContent: 'center',
@@ -161,4 +162,4 @@ const styles = createSheet({
     fontWeight: '600',
     marginTop: 4,
   },
-});
+});

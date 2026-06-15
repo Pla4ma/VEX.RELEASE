@@ -3,8 +3,8 @@ import { Image, Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { LiquidGlassCard } from '../../../shared/ui/liquid-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+import { LiquidGlassCard } from '../../../shared/ui/liquid-glass/LiquidGlassCard';
 
 type SessionSmartPickCardProps = {
   description: string;

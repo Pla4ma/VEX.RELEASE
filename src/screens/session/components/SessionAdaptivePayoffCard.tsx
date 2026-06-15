@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { buildCompletionAdaptivePayoff } from '../../../features/session-completion/adaptive-payoff-service';
 import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
 import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
 import type { SessionSummary } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
 
 type SessionAdaptivePayoffCardProps = {
@@ -24,7 +24,7 @@ export function SessionAdaptivePayoffCard({
   policy,
   studyProgress,
   summary,
-}: SessionAdaptivePayoffCardProps): JSX.Element {
+}: SessionAdaptivePayoffCardProps): React.ReactNode {
   const { theme } = useTheme();
   const payoff = useMemo(
     () =>

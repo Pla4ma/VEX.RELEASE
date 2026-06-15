@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import {
   clearTomorrowPreview,
@@ -9,18 +9,14 @@ import {
 export function useSavedTomorrowPreview(
   userId: string,
 ): TomorrowPreviewData | null {
-  const [preview, setPreview] = useState<TomorrowPreviewData | null>(null);
-
-  useEffect(() => {
+  return useMemo(() => {
     if (!userId) {
-      setPreview(null);
-      return;
+      return null;
     }
 
     const saved = loadTomorrowPreview(userId);
     if (!saved) {
-      setPreview(null);
-      return;
+      return null;
     }
 
     const now = new Date();
@@ -32,11 +28,10 @@ export function useSavedTomorrowPreview(
 
     if (isStale) {
       clearTomorrowPreview(userId);
-      setPreview(null);
-      return;
+      return null;
     }
 
-    const previewData: TomorrowPreviewData = {
+    return {
       actionPrompt: saved.actionPrompt,
       emoji: saved.emoji,
       headline: saved.headline,
@@ -45,8 +40,5 @@ export function useSavedTomorrowPreview(
       subtext: saved.subtext,
       type: saved.type,
     };
-    setPreview(previewData);
   }, [userId]);
-
-  return preview;
 }

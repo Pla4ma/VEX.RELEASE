@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Card, Text } from '../../../components/primitives/Box';
 import type { CompanionMemory } from '../memory-types';
 
 type CompanionMemoryItemProps = {
@@ -9,7 +9,7 @@ type CompanionMemoryItemProps = {
 
 export function CompanionMemoryItem({
   memory,
-}: CompanionMemoryItemProps): JSX.Element {
+}: CompanionMemoryItemProps): React.ReactNode {
   return (
     <Card size="md" accessibilityLabel={`${memory.title}. ${memory.body}`}>
       <Box gap="xs">

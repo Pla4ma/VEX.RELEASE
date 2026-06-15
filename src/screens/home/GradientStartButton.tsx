@@ -12,7 +12,7 @@ import Animated, {
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
@@ -35,7 +35,7 @@ export function GradientStartButton({
   onPress: () => void;
   pulse: boolean;
   title: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   useEffect(() => {
@@ -166,7 +166,7 @@ export function GradientStartButton({
   );
 }
 
-export function SectionHeader({ title }: { title: string }): JSX.Element {
+export function SectionHeader({ title }: { title: string }): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View style={styles.sectionHeader}>

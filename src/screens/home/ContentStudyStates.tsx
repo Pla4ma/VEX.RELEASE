@@ -29,7 +29,7 @@ export function ContentStudyStates({
       <GlassCard variant="premium" padding={20} radius={26}>
         <View style={{ gap: 10 }}>
           <Text style={{
-            color: vexLightGlass.mint[700], fontSize: 11,
+            color: vexLightGlass.mint[700], fontSize: 12,
             fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
           }}>{copy.layerName}</Text>
           <Skeleton width={180} height={20} borderRadius={8} />
@@ -45,7 +45,7 @@ export function ContentStudyStates({
       <GlassCard variant="premium" padding={20} radius={26}>
         <View style={{ gap: 12 }}>
           <Text style={{
-            color: vexLightGlass.mint[700], fontSize: 11,
+            color: vexLightGlass.mint[700], fontSize: 12,
             fontWeight: '700', letterSpacing: 0.5, textTransform: 'uppercase',
           }}>{copy.layerName}</Text>
           <Text style={{

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Defs, RadialGradient, LinearGradient, Stop } from 'react-native-svg';
 
-export function buildGlassDefs(): JSX.Element {
+export function buildGlassDefs(): React.ReactNode {
   return (
     <Defs>
       <RadialGradient cx="42%" cy="38%" id="liquidCore" r="65%">

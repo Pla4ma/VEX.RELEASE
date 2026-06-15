@@ -16,7 +16,7 @@ export function SectionHeader({
   eyebrow,
   title,
   body,
-}: SectionHeaderProps): JSX.Element {
+}: SectionHeaderProps): React.ReactNode {
   return (
     <View style={{ gap: 4 }}>
       {eyebrow ? (
@@ -73,7 +73,7 @@ export function InlineStatusRow({
   label,
   value,
   tone = 'default',
-}: InlineStatusRowProps): JSX.Element {
+}: InlineStatusRowProps): React.ReactNode {
   const accent =
     tone === 'celebration'
       ? vexLightGlass.mint[500]

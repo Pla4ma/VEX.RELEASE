@@ -6,7 +6,7 @@ import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import type { FocusScoreDashboardModel } from '../types';
 import { loadingSkeleton } from './loading-skeleton';
@@ -26,7 +26,7 @@ export function FocusScoreDashboard({
   onRetry,
   onStartSession,
   onOpenMonthlyReport,
-}: FocusScoreDashboardProps): JSX.Element {
+}: FocusScoreDashboardProps): React.ReactNode {
   if (model.isPending) {
     return loadingSkeleton(
       12,

@@ -27,12 +27,13 @@ export function detectGenericPatterns(content: string): {
     'keep it up',
   ];
 
+  const lowercontentSet = new Set(lowerContent);
   for (const phrase of genericPhrases) {
     const pattern = GENERIC_PATTERNS.find((candidate) =>
       candidate.source.includes(phrase.replace(/\s+/g, '\\s+')),
     );
     if (lowerContent.includes(phrase) || pattern?.test(content)) {
-      isGeneric = true;
+    if (lowercontentSet.has(phrase) || pattern?.test(content)) {
       reasons.push(`Generic pattern detected: ${phrase}`);
       if (reasons.length >= 3) {
         break;

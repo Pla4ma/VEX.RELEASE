@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { borderRadius, spacing } from '../../../theme/tokens';
+import { borderRadius, spacing } from '../../../theme/tokens/radius';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import { type } from '../../reference-ui/referenceTokens';
@@ -14,7 +14,7 @@ interface Day0VexOsCardProps {
 
 export function Day0VexOsCard({
   completedActions,
-}: Day0VexOsCardProps): JSX.Element {
+}: Day0VexOsCardProps): React.ReactNode {
   const osPercent = Math.min(19, 5 + completedActions * 7);
 
   return (

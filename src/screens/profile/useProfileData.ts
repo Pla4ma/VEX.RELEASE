@@ -9,7 +9,7 @@ import {
   type MasteryState,
 } from '../../features/mastery/types';
 import { MasteryService } from '../../features/mastery/service';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import type { ProfileStatItem } from '../../screens/profile/components/ProfileStatTile';
 
 export interface UseProfileDataResult {

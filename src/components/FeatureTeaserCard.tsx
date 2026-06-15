@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { getPremiumCardStyle } from './premiumStyles';
 import { Button } from './primitives/Button';
 import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { useDisclosureAnalytics } from '../features/liveops-config';
 import type {
   FeatureKey,
@@ -26,7 +26,7 @@ interface FeatureTeaserCardProps {
   onPress: () => void;
 }
 
-export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
+export function FeatureTeaserCard(props: FeatureTeaserCardProps): React.ReactNode {
   const { theme } = useTheme();
   const analytics = useDisclosureAnalytics();
 

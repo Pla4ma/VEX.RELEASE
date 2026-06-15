@@ -19,8 +19,8 @@ import {
   EtherealSkyBackground,
   GlassSurface,
   SerifTitle,
-} from './components/ethereal';
-import { etherealText } from '@/theme/tokens/ethereal-sky';
+} from $1./components/ethereal/EtherealMedallion$1;
+import { etherealText } from $1./components/ethereal/EtherealMedallion$1;
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 

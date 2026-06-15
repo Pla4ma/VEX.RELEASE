@@ -11,7 +11,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { sizing } from '../../theme/tokens/sizing';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 
@@ -27,7 +27,7 @@ export function NavigationGate({
   featureReason,
   suggestedAction = 'Return to Home',
   suggestedRoute = 'Main',
-}: NavigationGateProps): JSX.Element {
+}: NavigationGateProps): React.ReactNode {
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { theme } = useTheme();

@@ -7,8 +7,8 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 import { lightColors } from '@/theme/tokens/colors';

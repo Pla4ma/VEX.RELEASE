@@ -15,7 +15,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface OnboardingProgressBarProps {
   currentStep: number; // 0-4
@@ -28,7 +28,7 @@ interface OnboardingProgressBarProps {
 export function OnboardingProgressBar({
   currentStep,
   totalSteps,
-}: OnboardingProgressBarProps): JSX.Element {
+}: OnboardingProgressBarProps): React.ReactNode {
   const { theme } = useTheme();
 
   const progress = ((currentStep + 1) / totalSteps) * 100;
@@ -82,7 +82,7 @@ export function OnboardingProgressBar({
 export function OnboardingDots({
   currentStep,
   totalSteps,
-}: OnboardingProgressBarProps): JSX.Element {
+}: OnboardingProgressBarProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

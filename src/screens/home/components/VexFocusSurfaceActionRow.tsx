@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface VexFocusSurfaceActionRowProps {
@@ -11,7 +11,7 @@ interface VexFocusSurfaceActionRowProps {
   onPressPrimary: () => void;
 }
 
-function TimeCapsule(): JSX.Element {
+function TimeCapsule(): React.ReactNode {
   return (
     <View
       style={{
@@ -25,10 +25,7 @@ function TimeCapsule(): JSX.Element {
         minHeight: 32,
         overflow: 'hidden',
         paddingHorizontal: 10,
-        shadowColor: vexLightGlass.glass.shadow,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.45,
-        shadowRadius: 8,
+        boxShadow: '0px 4px 8px vexLightGlass.glass.shadow / 0.45',
       }}
     >
       <View
@@ -60,7 +57,7 @@ function TimeCapsule(): JSX.Element {
 export function VexFocusSurfaceActionRow({
   ctaLabel,
   onPressPrimary,
-}: VexFocusSurfaceActionRowProps): JSX.Element {
+}: VexFocusSurfaceActionRowProps): React.ReactNode {
   return (
     <>
       <View

@@ -5,7 +5,7 @@ interface VariantProps {
   size: number;
 }
 
-export function LensVariant({ size }: VariantProps): JSX.Element {
+export function LensVariant({ size }: VariantProps): React.ReactNode {
   const cx = size / 2;
   const cy = size / 2;
   const r = size * 0.4;

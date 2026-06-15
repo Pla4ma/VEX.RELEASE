@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Text, ProgressBar } from '../../../components';
+import { Text, ProgressBar } from '../../../components/primitives/Text';
 import type { PersonalQuest } from '../recommendation/PersonalQuestGenerator';
 import { getQuestIcon, formatTimeRemaining } from './questCardHelpers';
 import { buttonTap } from '../../../utils/haptics';
@@ -17,7 +17,7 @@ export function DailyQuestCard({
   quest,
   coachName,
   onPress,
-}: DailyQuestCardProps): JSX.Element {
+}: DailyQuestCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   const progressPercent = quest

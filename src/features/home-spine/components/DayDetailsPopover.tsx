@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   EVENT_ICONS,
   EVENT_LABELS,
@@ -15,7 +15,7 @@ export function DayDetailsPopover({
 }: {
   day: DayData;
   onClose: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const formattedDate = day.date.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -79,7 +79,7 @@ export function DayDetailsPopover({
           </Text>
           {day.events.map((event, i) => (
             <Box
-              key={i}
+              key={event.id}
               flexDirection="row"
               alignItems="center"
               gap="sm"

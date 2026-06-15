@@ -111,7 +111,7 @@ export function GlassPillSurface({
   accessibilityLabel,
   accessibilityRole,
   accessibilityHint,
-}: GlassPillSurfaceProps): JSX.Element {
+}: GlassPillSurfaceProps): React.ReactNode {
   const v = selected ? SELECTED_CONFIG : TONE_CONFIG[tone];
   return (
       <View
@@ -125,12 +125,8 @@ export function GlassPillSurface({
           borderColor: v.border,
           borderRadius: height / 2,
           borderWidth: 1.2,
-          elevation: v.elevation,
           overflow: 'hidden',
-          shadowColor: v.shadowColor,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: v.shadowOpacity * 1.3,
-          shadowRadius: v.shadowRadius * 1.15,
+          boxShadow: `0px 4px ${v.shadowRadius * 1.15}px ${v.shadowColor} / ${v.shadowOpacity * 1.3}`,
         },
         style,
       ]}
@@ -185,4 +181,4 @@ export function GlassPillSurface({
   );
 }
 
-export default GlassPillSurface;
+export default GlassPillSurface;

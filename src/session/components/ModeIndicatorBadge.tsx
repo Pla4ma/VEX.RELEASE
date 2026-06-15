@@ -28,7 +28,7 @@ type ModeIndicatorBadgeProps = {
 export function ModeIndicatorBadge({
   chainCount,
   mode,
-}: ModeIndicatorBadgeProps): JSX.Element {
+}: ModeIndicatorBadgeProps): React.ReactNode {
   const suffix =
     mode === SessionMode.SPRINT && chainCount ? ` ${chainCount}/4` : '';
 

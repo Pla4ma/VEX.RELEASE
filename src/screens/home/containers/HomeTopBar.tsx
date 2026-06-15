@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { VexBrandPill } from '../components/VexBrandPill';
@@ -12,7 +12,7 @@ import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export function HomeTopBar(): JSX.Element {
+export function HomeTopBar(): React.ReactNode {
   const navigation = useNavigation<Nav>();
 
   return (
@@ -69,10 +69,7 @@ export function HomeTopBar(): JSX.Element {
           height: 40,
           justifyContent: 'center',
           overflow: 'hidden',
-          shadowColor: vexLightGlass.glass.shadow,
-          shadowOffset: { width: 0, height: 7 },
-          shadowOpacity: 0.16,
-          shadowRadius: 12,
+          boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.16',
           width: 40,
           zIndex: 3,
         }}

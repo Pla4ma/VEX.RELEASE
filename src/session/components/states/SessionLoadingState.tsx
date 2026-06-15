@@ -8,7 +8,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface SessionLoadingStateProps {
   message?: string;

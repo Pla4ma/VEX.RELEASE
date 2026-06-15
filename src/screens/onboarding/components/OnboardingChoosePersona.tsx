@@ -18,7 +18,7 @@ export function OnboardingChoosePersona({
   onSelectPersona,
   onContinue,
   onSkip,
-}: OnboardingChoosePersonaProps): JSX.Element {
+}: OnboardingChoosePersonaProps): React.ReactNode {
   return (
     <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
       <View>

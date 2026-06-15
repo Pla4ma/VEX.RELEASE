@@ -6,7 +6,7 @@
 
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 import { SessionMode } from '../../session/modes';
-import { SessionSummarySchema, type SessionSummary } from '../../session/types';
+import { SessionSummarySchema, type SessionSummary } from '../../session/types/schemas';
 
 export function buildSessionSummaryFromCompletionLedger(
   ledger: CompletionLedger,

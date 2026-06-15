@@ -9,7 +9,7 @@ import Animated, {
 
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export function VexGlassBrand(): React.JSX.Element {
   const { theme } = useTheme();
@@ -35,10 +35,7 @@ export function VexGlassBrand(): React.JSX.Element {
             height: 52,
             borderRadius: 52,
             backgroundColor: theme.colors.semantic.liquidOrange,
-            shadowColor: theme.colors.semantic.liquidOrange,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.8,
-            shadowRadius: 44,
+            boxShadow: '0px 0px 44px theme.colors.semantic.liquidOrange / 0.8',
           },
           glowStyle,
         ]}

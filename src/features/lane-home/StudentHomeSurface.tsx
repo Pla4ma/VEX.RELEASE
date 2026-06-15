@@ -8,7 +8,7 @@ import Animated, {
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { LiquidButton } from '../../components/glass/LiquidButton';
 import type { LaneViewModel } from './service';
 
@@ -108,7 +108,7 @@ export function StudentHomeSurface({ viewModel }: StudentHomeSurfaceProps): Reac
                   />
                 </Box>
                 {tasks.slice(0, 3).map((task, i) => (
-                  <Box key={i} flexDirection="row" alignItems="center" gap="xs">
+                  <Box key={task.title} flexDirection="row" alignItems="center" gap="xs">
                     <Text variant="caption" style={{ fontSize: 12 }}>
                       {task.done ? '✅' : '⬜'}
                     </Text>

@@ -20,7 +20,7 @@ export function HomeStatusBanners({
   completionSync,
   loadError,
   onRetry,
-}: HomeStatusBannersProps): JSX.Element {
+}: HomeStatusBannersProps): React.ReactNode {
   return (
     <>
       {/* Offline banner */}

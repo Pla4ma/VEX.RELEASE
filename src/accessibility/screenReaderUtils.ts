@@ -2,7 +2,7 @@
  * Screen reader announcement and accessible label utilities.
  */
 
-import { eventBus } from '../events';
+import { eventBus } from '../events/EventBus';
 import type { ScreenReaderAnnouncement } from './types';
 
 const announcements: ScreenReaderAnnouncement[] = [];

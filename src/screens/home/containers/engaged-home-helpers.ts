@@ -6,7 +6,7 @@ import type { ExtendedRootStackParams, SessionStackParams } from '../../../navig
 import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import { navigateToMainTab } from '../../../navigation/navigation-helpers';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { NextBestAction } from '../../../features/progression';

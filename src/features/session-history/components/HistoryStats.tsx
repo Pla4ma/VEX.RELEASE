@@ -8,7 +8,7 @@ export function HistoryStats({
   stats,
 }: {
   stats: SessionHistoryStats;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Box flexDirection="row" bg="background.secondary" borderRadius="lg" p="md">
       <Box flex={1} alignItems="center">

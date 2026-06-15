@@ -16,7 +16,7 @@ import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 
-export function WaterRippleBackground(): JSX.Element {
+export function WaterRippleBackground(): React.ReactNode {
   return (
     <View
       pointerEvents="none"

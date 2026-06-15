@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StartSessionButtonProps } from './start-session-button-types';
 
 export function useStartSessionButtonColors(

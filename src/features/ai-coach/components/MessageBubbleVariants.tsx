@@ -1,7 +1,7 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { CoachMessage } from '../types';
 
 export interface SystemMessageBubbleProps {
@@ -12,7 +12,7 @@ export interface SystemMessageBubbleProps {
 export function SystemMessageBubble({
   message,
   index = 0,
-}: SystemMessageBubbleProps): JSX.Element {
+}: SystemMessageBubbleProps): React.ReactNode {
   const { theme } = useTheme();
   const getCategoryIcon = () => {
     switch (message.category) {
@@ -92,7 +92,7 @@ export function UserMessageBubble({
   content,
   timestamp,
   index = 0,
-}: UserMessageBubbleProps): JSX.Element {
+}: UserMessageBubbleProps): React.ReactNode {
   const { theme } = useTheme();
   const formatTime = (ts: number): string => {
     const date = new Date(ts);

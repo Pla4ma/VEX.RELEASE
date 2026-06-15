@@ -3,7 +3,7 @@ import { View, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
@@ -26,7 +26,7 @@ export function PlanStudyView({
   onRetry,
   onAddStudyPlan,
   onSelectStudyPlan,
-}: PlanStudyViewProps): JSX.Element {
+}: PlanStudyViewProps): React.ReactNode {
   if (isLoading) {
     return (
       <View style={{ padding: 20, gap: 12 }}>

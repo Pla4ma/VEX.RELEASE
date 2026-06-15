@@ -3,7 +3,7 @@ import type { NavigationContainerRefWithCurrent } from '@react-navigation/native
 import * as Notifications from 'expo-notifications';
 
 import { addBreadcrumb } from '../../config/sentry';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { trackNotificationOpened } from '../../features/notifications/analytics';
 import { useOnboardingStore } from '../../features/onboarding/store';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';

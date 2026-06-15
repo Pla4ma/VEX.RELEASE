@@ -4,8 +4,8 @@ import {
   getMMKVStorageAdapter,
   getSecureStorage,
   SecureStorageKeys,
-} from '../../persistence';
-import { revenueCatService } from '../../shared/monetization/revenuecat-service';
+} from $1../../persistence/MMKVStorageAdapter$1;
+import { revenueCatService } from $1../../persistence/MMKVStorageAdapter$1;
 import {
   AccountDeletionInputSchema,
   AccountDeletionResultSchema,

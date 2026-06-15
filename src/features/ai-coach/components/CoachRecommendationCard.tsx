@@ -11,7 +11,7 @@ interface CoachRecommendationCardProps {
 
 export function CoachRecommendationCard({
   recommendation,
-}: CoachRecommendationCardProps): JSX.Element {
+}: CoachRecommendationCardProps): React.ReactNode {
   const { track } = useAnalytics();
 
   return (

@@ -8,11 +8,11 @@ import Animated, {
   useReducedMotion,
 } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives';
+import { Box, Text } from '../../../components/primitives/Box';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
 import type { SessionSummary } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type XPEarnAnimationProps = {
   levelProgress: number | null;
@@ -74,7 +74,7 @@ export function XPEarnAnimation({
   levelProgress,
   summary,
   totalXp,
-}: XPEarnAnimationProps): JSX.Element {
+}: XPEarnAnimationProps): React.ReactNode {
   const { theme } = useTheme();
   const reduceMotion = useReducedMotion();
   const progress = useSharedValue(0);

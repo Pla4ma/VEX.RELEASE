@@ -13,7 +13,7 @@ export function NotificationCenter({
   onDismiss,
   onAction,
   onClose,
-}: NotificationCenterProps): JSX.Element {
+}: NotificationCenterProps): React.ReactNode {
   const unreadCount = notifications.filter((n) => !n.read).length;
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.overlay}>

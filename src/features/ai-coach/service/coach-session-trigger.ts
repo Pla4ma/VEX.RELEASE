@@ -1,4 +1,4 @@
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { capture } from '@/shared/analytics';
 import { CoachEvents } from '@/shared/analytics/analytics-events';
 import { createDebugger } from '../../../utils/debug';

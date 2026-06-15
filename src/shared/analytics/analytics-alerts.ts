@@ -1,4 +1,4 @@
-import { capture } from './index';
+import { capture } from './analytics-service';
 import type { RevenueMetrics, RetentionData } from './retention-analytics';
 import type { Funnel } from './funnel-analytics';
 

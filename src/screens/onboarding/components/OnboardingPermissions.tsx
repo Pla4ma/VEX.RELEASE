@@ -25,7 +25,7 @@ interface OnboardingPermissionsProps {
 export function OnboardingPermissions({
   onRequestPermission,
   onContinue,
-}: OnboardingPermissionsProps): JSX.Element {
+}: OnboardingPermissionsProps): React.ReactNode {
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;
   const [status, setStatus] = useState<
@@ -89,7 +89,7 @@ export function OnboardingPermissions({
         <Box gap="md">
           {status === 'idle' && (
             <Button
-              size="lg"
+              <Text>size="lg"</Text>
               variant="primary"
               fullWidth
               onPress={handleRequest}
@@ -104,7 +104,7 @@ export function OnboardingPermissions({
 
           {status === 'granted' && (
             <Button
-              size="lg"
+              <Text>size="lg"</Text>
               variant="primary"
               fullWidth
               onPress={onContinue}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Text } from '../../components/primitives';
+import { Box, Text } from '../../components/primitives/Box';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { GlassPill } from '../../components/glass/GlassPill';
 import { EmptyState } from '../../components/EmptyState';
@@ -30,7 +30,7 @@ function formatDuration(entry: SessionHistoryEntry): string {
 
 const renderSessionCard =
   (_theme: Theme) =>
-  ({ item }: { item: SessionHistoryEntry }): JSX.Element => (
+  ({ item }: { item: SessionHistoryEntry }): React.ReactNode => (
     <View style={{ marginBottom: 10 }}>
       <GlassCard size="md" variant="default" padding={14} radius={20}>
         <Box flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -64,7 +64,7 @@ const renderSessionCard =
             <Text
               style={{
                 color: vexLightGlass.text.tertiary,
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: '600',
               }}
             >

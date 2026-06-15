@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { confirmInitialLane } from '../../../features/lane-engine';
+import { confirmInitialLane } from '../../../features/lane-engine/service';
 import type { Lane, LaneConfirmation } from '../../../features/lane-engine';
 import type { MotivationStyle } from '../../../features/personalization/core-schemas';
 

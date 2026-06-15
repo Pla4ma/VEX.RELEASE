@@ -22,7 +22,7 @@ export function ChallengeCard({
   onClaim,
   onReroll,
   loading = false,
-}: ChallengeCardProps): JSX.Element {
+}: ChallengeCardProps): React.ReactNode {
   const { theme } = useTheme();
   const isActionable =
     challenge.status === 'ACTIVE' || challenge.status === 'COMPLETED';
@@ -120,7 +120,7 @@ export function ChallengeCard({
         >
           {challenge.status === 'COMPLETED' && onClaim && (
             <Button
-              variant="primary"
+              <Text>variant="primary"</Text>
               onPress={onClaim}
               style={styles.actionButton}
               isLoading={loading}

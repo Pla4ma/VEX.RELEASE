@@ -7,7 +7,7 @@ interface CoachLineProps {
   message: string;
 }
 
-export function CoachLineView({ message }: CoachLineProps): JSX.Element {
+export function CoachLineView({ message }: CoachLineProps): React.ReactNode {
   return (
     <View style={{ gap: 4, paddingHorizontal: 2 }}>
       <Text

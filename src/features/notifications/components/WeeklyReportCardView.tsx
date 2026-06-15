@@ -41,7 +41,7 @@ export function WeeklyReportCard({
   comparison,
   onViewAnalytics,
   onShare,
-}: WeeklyReportCardProps): JSX.Element {
+}: WeeklyReportCardProps): React.ReactNode {
   const { theme } = useTheme();
   const isImprovement = comparison.changePercent >= 0;
   const trendEmoji = isImprovement ? '📈' : '📉';
@@ -140,7 +140,7 @@ export function WeeklyReportCard({
         {}
         <Box gap="md">
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="lg"
             onPress={onViewAnalytics}
             fullWidth
@@ -153,7 +153,7 @@ export function WeeklyReportCard({
 
           {onShare && (
             <Button
-              variant="secondary"
+              <Text>variant="secondary"</Text>
               size="md"
               onPress={onShare}
               fullWidth

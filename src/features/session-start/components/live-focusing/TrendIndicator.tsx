@@ -1,3 +1,5 @@
+const icons = { up: '📈', down: '📉', stable: '➡️' };
+
 /**
  * Trend direction indicator with percentage.
  */
@@ -13,8 +15,7 @@ interface TrendIndicatorProps {
 export function TrendIndicator({
   trend,
   percent,
-}: TrendIndicatorProps): JSX.Element {
-  const icons = { up: '📈', down: '📉', stable: '➡️' };
+}: TrendIndicatorProps): React.ReactNode {
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>{icons[trend]}</Text>
@@ -35,4 +36,4 @@ export function TrendIndicator({
       )}
     </Box>
   );
-}
+}

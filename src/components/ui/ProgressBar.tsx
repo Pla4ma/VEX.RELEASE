@@ -7,8 +7,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Text } from '../primitives';
-import { useTheme } from '../../theme';
+import { Text } from '../primitives/Text';
+import { useTheme } from '../../theme/ThemeContext';
 
 interface ProgressBarProps {
   progress: number;

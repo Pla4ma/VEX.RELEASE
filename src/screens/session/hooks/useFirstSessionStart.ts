@@ -6,7 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { SessionStackParams } from '../../../navigation/types';
 import { useSession } from '../../../session/hooks/useSession';
 import { SessionMode } from '../../../session/modes';
-import { SessionConfigSchema } from '../../../session/types';
+import { SessionConfigSchema } from '../../../session/types/schemas';
 import { sessionStart } from '../../../utils/haptics';
 import type { PresetWithIcon } from '../utils/session-setup';
 

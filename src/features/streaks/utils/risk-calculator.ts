@@ -1,5 +1,5 @@
 import { createDebugger } from '../../../utils/debug';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import type { RiskLevel, RiskFactors, RiskAssessment } from './riskTypes';
 import { WEIGHTS, CRITICAL_THRESHOLD } from './riskTypes';
 import {

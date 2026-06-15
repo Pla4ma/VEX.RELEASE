@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator, type ViewStyle } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   type AsyncStatus,
   STATUS_CONFIG,

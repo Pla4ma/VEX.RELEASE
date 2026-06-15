@@ -16,7 +16,7 @@ export function PlanCard({
   isSelected,
   priceString,
   onSelect,
-}: PlanCardProps): JSX.Element {
+}: PlanCardProps): React.ReactNode {
   const { theme } = useTheme();
   const spacing = theme.spacing;
   const radius = theme.borderRadius;
@@ -52,7 +52,7 @@ interface BenefitListProps {
   benefits: ReadonlyArray<readonly [string, string]>;
 }
 
-export function BenefitList({ benefits }: BenefitListProps): JSX.Element {
+export function BenefitList({ benefits }: BenefitListProps): React.ReactNode {
   const { theme } = useTheme();
   const spacing = theme.spacing;
   const radius = theme.borderRadius;

@@ -5,8 +5,8 @@ import { Banner } from '../../components/Banner';
 import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
-import { LiquidGlassCard } from '../../shared/ui/liquid-glass';
+import { useTheme } from '../../theme/ThemeContext';
+import { LiquidGlassCard } from '../../shared/ui/liquid-glass/LiquidGlassCard';
 
 type SmartSuggestion = {
   description: string;

@@ -14,7 +14,7 @@ interface HomeFocusScoreProps {
   onPress: () => void;
 }
 
-export function HomeFocusScore({ onPress }: HomeFocusScoreProps): JSX.Element {
+export function HomeFocusScore({ onPress }: HomeFocusScoreProps): React.ReactNode {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const focusModel = useFocusScoreDashboardModel(userId, 30);
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { usePulseStyle } from './animations';
 import { styles } from './styles';
 import type { SkeletonProps } from './types';
@@ -15,7 +15,7 @@ export function Skeleton({
   animated = true,
   style,
   testID,
-}: SkeletonProps): JSX.Element {
+}: SkeletonProps): React.ReactNode {
   const { theme } = useTheme();
   const pulseStyle = usePulseStyle(animated);
   const variantStyles: Record<

@@ -24,7 +24,7 @@ export function ModeCompletionSurface({
   action,
   onPrimaryAction,
   onSecondaryAction,
-}: ModeCompletionSurfaceProps): JSX.Element {
+}: ModeCompletionSurfaceProps): React.ReactNode {
   const surface: ModeCompletionSurface = useModeCompletion({
     laneOverride: lane,
     topic,

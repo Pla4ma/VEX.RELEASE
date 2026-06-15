@@ -19,7 +19,7 @@ interface PurchaseLoadingStateProps {
 
 export function PurchaseLoadingState({
   productName = 'Product',
-}: PurchaseLoadingStateProps): JSX.Element {
+}: PurchaseLoadingStateProps): React.ReactNode {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
       <View style={styles.content}>

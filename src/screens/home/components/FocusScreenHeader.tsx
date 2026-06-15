@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { LiquidLens } from '../../../components/glass/LiquidLens';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
@@ -14,7 +14,7 @@ interface FocusScreenHeaderProps {
   body?: string;
 }
 
-export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): JSX.Element {
+export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): React.ReactNode {
   return (
     <View style={{ marginBottom: 10, paddingTop: 8, width: '100%' }}>
       <View pointerEvents="none" style={{ opacity: 0.5, position: 'absolute', right: -32, top: -28, zIndex: 0 }}>
@@ -45,10 +45,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
               height: 40,
               justifyContent: 'center',
               overflow: 'hidden',
-              shadowColor: vexLightGlass.glass.shadow,
-              shadowOffset: { width: 0, height: 7 },
-              shadowOpacity: 0.85,
-              shadowRadius: 12,
+              boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.85',
               width: 40,
             }}
           >

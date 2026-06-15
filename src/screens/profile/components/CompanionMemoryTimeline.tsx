@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import React, { useCallback } from 'react';
-import { Box, Card, Text } from '../../../components/primitives';
+import { Box, Card, Text } from '../../../components/primitives/Box';
 import { ErrorState } from '../../../components/states/ErrorState';
 import type { CompanionMemory } from '../../../features/companion/memory-types';
 import { CompanionMemoryCard } from './CompanionMemoryCard';
@@ -18,7 +18,7 @@ export function CompanionMemoryTimeline({
   isPending,
   memories,
   onRetry,
-}: CompanionMemoryTimelineProps): JSX.Element {
+}: CompanionMemoryTimelineProps): React.ReactNode {
   const netInfo = NetInfo.useNetInfo();
   const renderItem: ListRenderItem<CompanionMemory> = useCallback(
     ({ item }) => <CompanionMemoryCard memory={item} />,
@@ -56,7 +56,7 @@ export function CompanionMemoryTimeline({
   );
 }
 
-function MemorySkeleton(): JSX.Element {
+function MemorySkeleton(): React.ReactNode {
   return (
     <Box gap="sm">
       {[0, 1, 2].map((item) => (
@@ -93,7 +93,7 @@ function MemorySkeleton(): JSX.Element {
   );
 }
 
-function EmptyTimeline(): JSX.Element {
+function EmptyTimeline(): React.ReactNode {
   return (
     <Card size="md" accessibilityLabel="No companion memories yet">
       <Box gap="sm">
@@ -109,7 +109,7 @@ function EmptyTimeline(): JSX.Element {
   );
 }
 
-function OfflineBanner(): JSX.Element {
+function OfflineBanner(): React.ReactNode {
   return (
     <Card
       size="sm"

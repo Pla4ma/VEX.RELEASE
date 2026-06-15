@@ -20,7 +20,7 @@ interface BattlePassSeasonHeaderProps {
 export function BattlePassSeasonHeader({
   seasonName,
   daysRemaining,
-}: BattlePassSeasonHeaderProps): JSX.Element {
+}: BattlePassSeasonHeaderProps): React.ReactNode {
   const { theme } = useTheme();
   const isUrgent = daysRemaining <= 7;
 

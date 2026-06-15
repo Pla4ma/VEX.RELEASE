@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './styles';
 import type { DisabledStateProps } from './types';
 
@@ -10,7 +10,7 @@ export function DisabledState({
   children,
   style,
   testID,
-}: DisabledStateProps): JSX.Element {
+}: DisabledStateProps): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View style={[styles.disabledContainer, style]} testID={testID}>

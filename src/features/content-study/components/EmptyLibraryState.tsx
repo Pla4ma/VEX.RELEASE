@@ -57,7 +57,7 @@ export function EmptyLibraryState({
           {error}
         </Text>
         <Button
-          variant="outline"
+          <Text>variant="outline"</Text>
           size="sm"
           mt="md"
           onPress={onRetry}
@@ -87,7 +87,7 @@ export function EmptyLibraryState({
         </Text>
         {!hasContent && (
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="sm"
             mt="md"
             onPress={onAddContent}

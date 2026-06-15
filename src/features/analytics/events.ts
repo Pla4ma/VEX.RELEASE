@@ -3,7 +3,7 @@
  * Event definitions and handlers for analytics system
  */
 
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { Insight, DetectedPattern, ExportJob } from './schemas';
 import { createDebugger } from '../../utils/debug';
 

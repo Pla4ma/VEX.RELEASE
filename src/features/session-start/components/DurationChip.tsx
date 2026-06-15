@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { cardSelection } from '../../../utils/haptics';
 
 export function DurationChip({
@@ -20,7 +20,7 @@ export function DurationChip({
   minutes: number;
   isSelected: boolean;
   onPress: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({

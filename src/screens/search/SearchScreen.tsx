@@ -2,8 +2,8 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import React, { useState, useCallback, useRef } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
+import { useTheme } from '../../theme/ThemeContext';
+import { Box, Text } from '../../components/primitives/Box';
 import { SearchBar } from './components/SearchBar';
 import { CategoriesBar } from './components/CategoriesBar';
 import { RecentSearches } from './components/RecentSearches';

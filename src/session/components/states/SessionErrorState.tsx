@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { SessionErrorActions } from './SessionErrorActions';
 import { styles } from './SessionErrorState.styles';

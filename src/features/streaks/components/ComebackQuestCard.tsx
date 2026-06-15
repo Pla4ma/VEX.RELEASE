@@ -28,7 +28,7 @@ export function ComebackQuestCard({
   progress,
   onStartSession,
   onViewDetails,
-}: ComebackQuestCardProps): JSX.Element {
+}: ComebackQuestCardProps): React.ReactNode {
   const { theme: _theme } = useTheme();
   const isComplete = progress.currentStage === 'COMPLETE';
   const currentQuestNum =
@@ -134,7 +134,7 @@ export function ComebackQuestCard({
 
         {isComplete && (
           <Button
-            variant="primary"
+            <Text>variant="primary"</Text>
             size="lg"
             onPress={onStartSession}
             fullWidth

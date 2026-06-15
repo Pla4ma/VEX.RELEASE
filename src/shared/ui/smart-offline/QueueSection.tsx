@@ -14,7 +14,7 @@ export function QueueSection({
   title: string;
   items: PendingAction[];
   color: string;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   return (

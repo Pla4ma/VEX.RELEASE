@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Pressable, type ViewStyle, type PressableProps } from 'react-native';
-import { Text } from './primitives';
+import { Text } from './primitives/Text';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { buttonTap } from '../utils/haptics';
 import { lightColors } from '@/theme/tokens/colors';

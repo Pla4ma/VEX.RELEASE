@@ -42,7 +42,7 @@ export function HistoryCard({ entry }: { entry: SessionHistoryEntry }) {
         <Text
           style={{
             color: vexLightGlass.text.tertiary,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: '600',
           }}
         >

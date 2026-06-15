@@ -9,9 +9,9 @@ import React from 'react';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Box } from '../../../components/primitives';
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface PerfectSessionBannerProps {
   isPerfect: boolean;
@@ -40,11 +40,7 @@ export function PerfectSessionBanner({
         borderWidth={2}
         borderColor="warning.500"
         style={{
-          shadowColor: theme.colors.warning.DEFAULT,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.3,
-          shadowRadius: 8,
-          elevation: 8,
+          boxShadow: `0px 4px 8px ${theme.colors.warning.DEFAULT} / 0.3`,
         }}
       >
         <LinearGradient
@@ -89,4 +85,4 @@ export function PerfectSessionBanner({
   );
 }
 
-export default PerfectSessionBanner;
+export default PerfectSessionBanner;

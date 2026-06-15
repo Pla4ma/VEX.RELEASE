@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import type { User } from '../../../types/models';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProfileIdentityBlockProps {

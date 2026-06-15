@@ -1,8 +1,8 @@
 import React, { type ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { Card, Button, Text } from '../primitives';
-import { useTheme } from '../../theme';
+import { Card, Button, Text } from '../primitives/Card';
+import { useTheme } from '../../theme/ThemeContext';
 import { AnimatedCoachAvatar } from './AnimatedCoachAvatar';
 
 interface SmartCoachHintProps {
@@ -23,7 +23,7 @@ export function SmartCoachHint({
   onAction,
   mood = 'active',
   children,
-}: SmartCoachHintProps): JSX.Element {
+}: SmartCoachHintProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

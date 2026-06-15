@@ -2,7 +2,7 @@ import { captureSilentFailure } from '../../utils/silent-failure';
 import { MMKV } from 'react-native-mmkv';
 import { z } from 'zod';
 import { createDebugger } from '../../utils/debug';
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import {
   addToSessionHistory,
   getSessionHistory,

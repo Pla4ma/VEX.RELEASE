@@ -3,8 +3,8 @@ import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { TomorrowPreviewPersonalized } from './TomorrowPreviewPersonalized';
 export interface TomorrowPreviewProps {
   streakWillContinue: boolean;
@@ -43,7 +43,7 @@ function EventIcon({
   type,
 }: {
   type: TomorrowPreviewProps['events'][number]['type'];
-}): JSX.Element {
+}): React.ReactNode {
   const iconName =
     type === 'double_xp'
       ? 'fire'
@@ -54,7 +54,7 @@ function EventIcon({
           : 'star';
   return <Icon name={iconName} size="sm" color="secondary" variant="solid" />;
 }
-export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
+export function TomorrowPreview(props: TomorrowPreviewProps): React.ReactNode {
   const { theme } = useTheme();
   const hasEvents = props.events.length > 0;
   const hasChallenges = props.challengesResetting.length > 0;

@@ -20,7 +20,7 @@ interface CompanionPromiseCardProps {
   state: CompanionPromiseHomeState;
 }
 
-export function CompanionPromiseSkeleton(): JSX.Element {
+export function CompanionPromiseSkeleton(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
@@ -76,7 +76,7 @@ export function CompanionPromiseCard({
   onRetry,
   onStart,
   state,
-}: CompanionPromiseCardProps): JSX.Element {
+}: CompanionPromiseCardProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const entering = isReducedMotion ? undefined : FadeInUp.duration(220);
@@ -103,7 +103,7 @@ export function CompanionPromiseCard({
           Reconnect and we will pull the thread back into focus.
         </Text>
         <Button
-          accessibilityHint="Retries loading your companion promise"
+          <Text>accessibilityHint="Retries loading your companion promise"</Text>
           accessibilityLabel="Retry companion promise"
           onPress={onRetry}
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[3] }]}
@@ -178,7 +178,7 @@ export function CompanionPromiseCard({
 
       {state.kind === 'missed' ? (
         <Button
-          accessibilityHint="Dismisses the recovery card"
+          <Text>accessibilityHint="Dismisses the recovery card"</Text>
           accessibilityLabel="Dismiss recovery card"
           onPress={onDismissRecovery}
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[2] }]}

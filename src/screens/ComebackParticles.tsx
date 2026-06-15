@@ -26,7 +26,7 @@ export function Particle({
   duration,
   delay,
   color,
-}: ParticleProps): JSX.Element {
+}: ParticleProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const progress = useSharedValue(0);
 

@@ -10,14 +10,14 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { motionStagger } from '../../../theme/tokens/motion';
 import { VexSignalNode } from './VexSignalNode';
 import { AnimatedGradientBorder } from './AnimatedGradientBorder';
 import { previewSteps, LoopStep } from './LoopStep';
 
-export function FocusLoopPreview(): JSX.Element {
+export function FocusLoopPreview(): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pathProgress = useSharedValue(0);
@@ -82,7 +82,7 @@ export function FocusLoopPreview(): JSX.Element {
           <View style={{ alignItems: 'center', width: 20 }}>
             {previewSteps.map((_, i) => (
               <View
-                key={`node-${i}`}
+                key={`focus-loop-preview-node-${previewSteps[i]?.id ?? i}`}
                 style={{ marginVertical: theme.spacing[1] }}
               >
                 <VexSignalNode active index={i} />
@@ -116,10 +116,7 @@ export function FocusLoopPreview(): JSX.Element {
                     height: 7,
                     borderRadius: 3.5,
                     backgroundColor: cyan,
-                    shadowColor: cyan,
-                    shadowOffset: { width: 0, height: 0 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
+                    boxShadow: '0px 0px 8px cyan / 0.8',
                   },
                   packetStyle,
                 ]}

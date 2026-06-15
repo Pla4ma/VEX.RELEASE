@@ -18,7 +18,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ActiveStudyPlan } from '../hooks/helpers';
 import type { LearningExecutionCopy } from '../../learning-execution';
 
@@ -37,7 +37,7 @@ export function StudyPlanSuggestionCard({
   copy,
   studyPlan,
   onSelect,
-}: StudyPlanSuggestionCardProps): JSX.Element {
+}: StudyPlanSuggestionCardProps): React.ReactNode {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
 

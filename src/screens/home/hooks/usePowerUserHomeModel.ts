@@ -6,17 +6,15 @@ import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
-  useCoachRecommendations,
-  type SessionRecommendation,
-} from '../../../features/ai-coach';
-import { useActiveStudyPlan } from '../../../features/content-study';
-import {
-  buildLearningSessionParams,
-  useLearningExecutionLayer,
-} from '../../../features/learning-execution';
+} from '../../../features/ai-coach/hooks/useRecommendationMutations';
+import { useCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
+import type { SessionRecommendation } from '../../../features/ai-coach/schemas/recommendations';
+import { useActiveStudyPlan } from '../../../features/content-study/hooks/useActiveStudyPlan';
+import { useLearningExecutionLayer } from '../../../features/learning-execution/hooks';
+import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useComebackState } from '../../../features/streaks/hooks';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,

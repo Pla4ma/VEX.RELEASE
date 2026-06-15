@@ -23,7 +23,6 @@ interface SessionSummaryMoodSelectorProps {
 export const SessionSummaryMoodSelector: React.FC<
   SessionSummaryMoodSelectorProps
 > = ({ mood, reflection, onMoodChange, onReflectionChange }) => {
-  const moods: MoodType[] = ['GREAT', 'GOOD', 'NEUTRAL', 'BAD', 'TERRIBLE'];
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -67,6 +66,8 @@ export const SessionSummaryMoodSelector: React.FC<
   );
 };
 
+const moods: MoodType[] = ['GREAT', 'GOOD', 'NEUTRAL', 'BAD', 'TERRIBLE'];
+
 const styles = {
   reflectionSection: { marginBottom: 24 },
   sectionTitle: {
@@ -96,4 +97,4 @@ const styles = {
     minHeight: 100,
     textAlignVertical: 'top' as const,
   },
-};
+};

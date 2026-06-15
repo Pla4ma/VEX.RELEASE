@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ChallengeItem } from './todays-challenges-types';
 
 export function ChallengeProgressRow({
@@ -11,7 +11,7 @@ export function ChallengeProgressRow({
 }: {
   challenge: ChallengeItem;
   onClaim?: (id: string) => void;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const progressPercent = Math.min(
     100,

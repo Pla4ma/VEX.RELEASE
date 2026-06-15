@@ -8,7 +8,7 @@ import {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import type { PurityLabel } from '../utils/active-session';
 
 type UseSessionPurityParams = {
@@ -38,11 +38,10 @@ export function useSessionPurity({
   const momentumScoresRef = useRef<number[]>([]);
   const perfectFocusRotation = useSharedValue(0);
   const perfectFocusBurst = useSharedValue(0);
+  const [prevSessionId, setPrevSessionId] = useState(sessionId);
 
-  const perfectFocusActive =
-    completionPercentage >= 100 && perfectFocusEligible;
-
-  useEffect(() => {
+  if (sessionId !== prevSessionId) {
+    setPrevSessionId(sessionId);
     setPerfectFocusEligible(true);
     setPurityScore(100);
     setPurityLabel('Elite');
@@ -51,7 +50,10 @@ export function useSessionPurity({
     previousPurityLabelRef.current = 'Elite';
     perfectFocusTrackedRef.current = false;
     perfectFocusBurstRef.current = false;
-  }, [sessionId]);
+  }
+
+  const perfectFocusActive =
+    completionPercentage >= 100 && perfectFocusEligible;
 
   useEffect(() => {
     if (heroDensity === 'minimal') {return;}

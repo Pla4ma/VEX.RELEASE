@@ -18,7 +18,7 @@ export function ComebackCard({
   comebackState,
   onStart,
   onClose,
-}: ComebackCardProps): JSX.Element {
+}: ComebackCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -98,7 +98,7 @@ export function ComebackCard({
       ) : null}
 
       <Button
-        size="lg"
+        <Text>size="lg"</Text>
         onPress={onStart}
         accessibilityLabel="Start comeback session"
         accessibilityRole="button"
@@ -107,7 +107,7 @@ export function ComebackCard({
         Start My Comeback Session
       </Button>
       <Button
-        variant="ghost"
+        <Text>variant="ghost"</Text>
         size="lg"
         onPress={onClose}
         accessibilityLabel="Remind me later"

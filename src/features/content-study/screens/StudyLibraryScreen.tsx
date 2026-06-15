@@ -21,7 +21,7 @@ import {
 type ContentStudyNavigationProp =
   NativeStackNavigationProp<ContentStudyStackParamList>;
 
-export function StudyLibraryScreen(): JSX.Element {
+export function StudyLibraryScreen(): React.ReactNode {
   const navigation = useNavigation<ContentStudyNavigationProp>();
   const { content, isLoading, error, refetch, deleteContent } =
     useContentHistory();
@@ -101,7 +101,7 @@ export function StudyLibraryScreen(): JSX.Element {
             </Text>
           </Box>
           <Button
-            variant="outline"
+            <Text>variant="outline"</Text>
             size="sm"
             onPress={() => navigation.navigate('ContentInput', {})}
             accessibilityLabel="Add new content"

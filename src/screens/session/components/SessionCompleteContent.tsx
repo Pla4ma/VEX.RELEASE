@@ -17,7 +17,7 @@ import type { ReflectionStatus } from '../../../features/focus-contract/types';
 import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
 import { useFeatureAccess } from '../../../features/liveops-config';
 import { useOnboardingStore } from '../../../features/onboarding/store';
-import { usePremiumStatus } from '../../../shared/monetization';
+import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat';
 import { FeatureUnlockCelebration } from '../../../features/session-completion/components/FeatureUnlockCelebration';
 
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';

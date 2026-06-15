@@ -7,7 +7,7 @@ import { ReferenceMetric } from '../../reference-ui/ReferenceMetric';
 import { Text } from '../../../components/primitives/Text';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { ref, type } from '../../reference-ui/referenceTokens';
 import { StudyOSCard } from '../StudyOSCard';
 import type { MotivationProfile } from '../../../features/liveops-config/feature-access-types';
@@ -34,7 +34,7 @@ export function ProgressStatCards({
   onOpenMonthlyReport,
   onOpenSession,
   onOpenStudy,
-}: ProgressStatCardsProps): JSX.Element {
+}: ProgressStatCardsProps): React.ReactNode {
   return (
     <>
       <Pressable

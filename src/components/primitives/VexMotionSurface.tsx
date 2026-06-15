@@ -25,7 +25,7 @@ export function VexMotionSurface({
   style,
   testID,
   ...rest
-}: VexMotionSurfaceProps): JSX.Element {
+}: VexMotionSurfaceProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const glowIntensity = useSharedValue(0);
@@ -65,10 +65,7 @@ export function VexMotionSurface({
       return {};
     }
     return {
-      shadowColor: lightColors.semantic.vexCyan,
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: glowIntensity.value,
-      shadowRadius: theme.spacing[3],
+      boxShadow: '0px 0px theme.spacing[3]px lightColors.semantic.vexCyan / glowIntensity.value',
     };
   }, [variant, isReducedMotion, animated]);
 
@@ -87,11 +84,7 @@ export function VexMotionSurface({
         {
           borderRadius,
           overflow: 'hidden',
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: theme.spacing[2] },
-          shadowOpacity:
-            variant === 'elevated' ? theme.opacity[20] : theme.opacity[10],
-          shadowRadius: theme.spacing[6],
+          boxShadow: '0px theme.spacing[2]px theme.spacing[6]px theme.colors.semantic.shadow / variant === 'elevated' ? theme.opacity[20] : theme.opacity[10]',
           ...base,
         },
         animatedStyle,

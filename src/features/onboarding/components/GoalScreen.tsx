@@ -20,7 +20,7 @@ import { Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { FocusGoal, GoalOption } from '../schemas';
 import { GOAL_OPTIONS } from '../service';
 
@@ -42,7 +42,7 @@ function GoalCard({
   isSelected: boolean;
   onPress: () => void;
   index: number;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -113,7 +113,7 @@ export function GoalScreen({
   onSelect,
   onSkip,
   onBack,
-}: GoalScreenProps & { onBack?: () => void }): JSX.Element {
+}: GoalScreenProps & { onBack?: () => void }): React.ReactNode {
   const [selectedGoal, setSelectedGoal] = useState<FocusGoal | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
 

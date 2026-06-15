@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface ChestCardProps {
   label: string;
@@ -24,7 +24,7 @@ export function ChestCard({
   source,
   isOpened,
   onPress,
-}: ChestCardProps): JSX.Element {
+}: ChestCardProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (
@@ -45,11 +45,7 @@ export function ChestCard({
           borderWidth={2}
           borderColor={glow}
           style={{
-            shadowColor: glow,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 12,
-            elevation: 6,
+            boxShadow: `0px 4px 12px ${glow} / 0.3`,
           }}
         >
           <Box
@@ -110,4 +106,4 @@ export function ChestCard({
       </Pressable>
     </Animated.View>
   );
-}
+}

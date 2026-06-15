@@ -1,4 +1,4 @@
-import { TTLCache } from '../../shared/hardening';
+import { TTLCache } from '../../shared/hardening/cache';
 
 export interface IntegrationState {
   sessionCount: number;

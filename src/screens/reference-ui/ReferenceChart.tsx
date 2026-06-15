@@ -2,7 +2,7 @@ import React from 'react';
 import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 import { ref } from './referenceTokens';
 
-export function ReferenceChart(): JSX.Element {
+export function ReferenceChart(): React.ReactNode {
   return (
     <Svg height={56} viewBox="0 0 260 56" width="100%">
       <Defs>

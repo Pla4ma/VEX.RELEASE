@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { ONBOARDING_GOALS } from '../../../features/onboarding';
+import { useTheme } from '../../../theme/ThemeContext';
+import { ONBOARDING_GOALS } from '../../../features/onboarding/constants';
 import { styles } from '../styles';
 
 type StarterPreset = {
@@ -28,7 +28,7 @@ export function RevealStep({
   persona,
   preset,
   progress,
-}: RevealStepProps): JSX.Element {
+}: RevealStepProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

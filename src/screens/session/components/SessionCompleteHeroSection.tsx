@@ -19,7 +19,7 @@ interface SessionCompleteHeroSectionProps {
 export function SessionCompleteHeroSection({
   controller,
   summary,
-}: SessionCompleteHeroSectionProps): JSX.Element {
+}: SessionCompleteHeroSectionProps): React.ReactNode {
   const { width: _width } = useWindowDimensions();
 
   return (

@@ -28,7 +28,7 @@ interface HomeMetricsRowProps {
 export function HomeMetricsRow({
   controller,
   focusScore,
-}: HomeMetricsRowProps): JSX.Element {
+}: HomeMetricsRowProps): React.ReactNode {
   const navigation = useNavigation<Nav>();
 
   return (

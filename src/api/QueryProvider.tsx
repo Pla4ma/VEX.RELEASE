@@ -13,7 +13,7 @@ import {
   onlineManager,
 } from '@tanstack/react-query';
 import { AppState, AppStateStatus } from 'react-native';
-import { getNetInfoAdapter } from '../network';
+import { getNetInfoAdapter } from '../network/NetInfoAdapter';
 
 /**
  * Query client configuration

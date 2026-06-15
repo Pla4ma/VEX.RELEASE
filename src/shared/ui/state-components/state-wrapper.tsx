@@ -17,7 +17,7 @@ export function StateWrapper({
   successProps,
   children,
   testID,
-}: StateWrapperProps): JSX.Element {
+}: StateWrapperProps): React.ReactNode {
   if (isLoading) {
     return <LoadingState {...loadingProps} testID={`${testID}-loading`} />;
   }

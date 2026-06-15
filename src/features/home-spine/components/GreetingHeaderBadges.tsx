@@ -7,7 +7,7 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { CompanionMood } from '../../companion/types';
 
 export function StreakIndicator({
@@ -16,7 +16,7 @@ export function StreakIndicator({
 }: {
   days: number;
   hoursRemaining?: number | null;
-}): JSX.Element {
+}): React.ReactNode {
   const { theme } = useTheme();
   const isAtRisk =
     hoursRemaining !== null &&
@@ -78,7 +78,7 @@ export function StreakIndicator({
   );
 }
 
-export function LevelBadge({ level }: { level: number }): JSX.Element {
+export function LevelBadge({ level }: { level: number }): React.ReactNode {
   const { theme } = useTheme();
   return (
     <Box px="sm" py="xs" borderRadius="full" bg={theme.colors.primary[500]}>

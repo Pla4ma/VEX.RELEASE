@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { buttonTap } from '../utils/haptics';
-import { Text } from './primitives';
+import { Text } from './primitives/Text';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from './Avatar.types';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useOnboardingStore } from '../../../features/onboarding';
+import { useOnboardingStore } from '../../../features/onboarding/store';
 import { SessionMode } from '../../../session/modes';
 import type { MotivationProfileType } from '../../../features/onboarding/schemas';
 

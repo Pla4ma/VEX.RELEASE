@@ -16,7 +16,7 @@ function SectionErrorFallback({
 }: {
   sectionName: string;
   onRetry: () => void;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <Pressable
       onPress={onRetry}
@@ -48,7 +48,7 @@ function SectionErrorFallback({
 export function HomeSectionBoundary({
   children,
   sectionName,
-}: HomeSectionBoundaryProps): JSX.Element {
+}: HomeSectionBoundaryProps): React.ReactNode {
   const [hasError, setHasError] = React.useState(false);
 
   if (hasError) {

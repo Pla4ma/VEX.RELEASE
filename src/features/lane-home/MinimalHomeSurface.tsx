@@ -8,7 +8,7 @@ import Animated, {
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { LiquidButton } from '../../components/glass/LiquidButton';
 import type { LaneViewModel } from './service';
 

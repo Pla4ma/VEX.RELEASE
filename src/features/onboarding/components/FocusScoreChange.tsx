@@ -11,7 +11,7 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface FocusScoreChangeProps {
   before: number;
@@ -24,7 +24,7 @@ interface FocusScoreChangeProps {
 export function FocusScoreChange({
   before,
   after,
-}: FocusScoreChangeProps): JSX.Element {
+}: FocusScoreChangeProps): React.ReactNode {
   const { theme } = useTheme();
   const change = after - before;
   const isIncrease = change > 0;

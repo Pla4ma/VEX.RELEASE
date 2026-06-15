@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { createDebugger } from '../../utils/debug';
 import * as repository from './repository';
 import type { Streak, RiskLevel } from './schemas';

@@ -17,7 +17,7 @@ import Svg, {
 } from 'react-native-svg';
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import {
   type AnimatedCoachAvatarProps,
   getMoodScale,
@@ -29,7 +29,7 @@ export function AnimatedCoachAvatar({
   size = 112,
   mood = 'calm',
   style,
-}: AnimatedCoachAvatarProps): JSX.Element {
+}: AnimatedCoachAvatarProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(0);

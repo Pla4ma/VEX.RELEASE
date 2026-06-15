@@ -5,8 +5,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type Props = { label: string; value: number; max?: 25; color: string };
 
@@ -15,7 +15,7 @@ export function TechniqueBar({
   value,
   max = 25,
   color,
-}: Props): JSX.Element {
+}: Props): React.ReactNode {
   const { theme } = useTheme();
   const [trackWidth, setTrackWidth] = useState(0);
   const progress = useSharedValue(0);

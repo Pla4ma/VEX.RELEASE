@@ -12,7 +12,7 @@ interface FirstContractCardProps {
 export function FirstContractCard({
   suggestedDurationMinutes,
   rhythmLabel,
-}: FirstContractCardProps): JSX.Element {
+}: FirstContractCardProps): React.ReactNode {
   return (
     <GlassCard
       padding={14}
@@ -25,7 +25,7 @@ export function FirstContractCard({
         <Text
           style={{
             color: vexLightGlass.mint[700],
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: '800',
             letterSpacing: 1.4,
             marginBottom: 6,

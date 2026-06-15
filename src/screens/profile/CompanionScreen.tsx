@@ -7,7 +7,7 @@ import Animated, {
   FadeIn,
   useReducedMotion,
 } from 'react-native-reanimated';
-import { Box, Text } from '../../components/primitives';
+import { Box, Text } from '../../components/primitives/Box';
 import { ErrorState } from '../../components/states/ErrorState';
 import {
   type CompanionState,
@@ -19,7 +19,7 @@ import {
 } from '../../features/companion/session-storage';
 import { useCompanionMemories } from '../../features/companion/memory-hooks';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { CompanionMemoryTimeline } from '../../features/companion/components/CompanionMemoryTimeline';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
@@ -43,7 +43,7 @@ type LoadState =
       status: 'success';
     };
 
-export function CompanionScreen(): JSX.Element {
+export function CompanionScreen(): React.ReactNode {
   const { theme } = useTheme();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();

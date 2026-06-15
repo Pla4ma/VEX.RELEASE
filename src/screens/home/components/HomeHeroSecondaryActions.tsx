@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 
 
@@ -14,7 +14,7 @@ export function HomeHeroSecondaryActions({
   rowStyle: object;
   buttonStyle: object;
   textStyle: object;
-}): JSX.Element {
+}): React.ReactNode {
   return (
     <View style={rowStyle}>
       <Pressable

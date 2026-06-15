@@ -11,18 +11,22 @@ import { listStoredStudyPlans } from './repository';
 import type { StudyOsPremiumGate, StudyOsUnlockGate } from './schemas';
 
 export function useStudyOsPlans(userId: string | null, enabled = true) {
-  const query = useQuery({
+  const { data, error, isError, isPending, refetch } = useQuery({
     enabled: Boolean(userId) && enabled,
     queryFn: () => listStoredStudyPlans(userId ?? ''),
     queryKey: ['study-os', userId],
-  });
+    });
+
+
+
+
 
   return {
-    data: query.data ?? [],
-    error: query.error,
-    isError: query.isError,
-    isPending: query.isPending,
-    refetch: query.refetch,
+    data: data ?? [],
+    error: error,
+    isError: isError,
+    isPending: isPending,
+    refetch: refetch,
   };
 }
 

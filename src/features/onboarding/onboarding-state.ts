@@ -1,4 +1,4 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import type { OnboardingState, UnlockedFeature } from './onboarding-types';
 import { FEATURE_UNLOCK_GATES, STEP_ORDER } from './onboarding-gates';
 

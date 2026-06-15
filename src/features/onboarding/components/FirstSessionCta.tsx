@@ -20,7 +20,7 @@ export function FirstSessionCta({
   isAdvancing,
   onStartSession,
   onBack,
-}: FirstSessionCtaProps): JSX.Element {
+}: FirstSessionCtaProps): React.ReactNode {
   const durationOption = DURATION_OPTIONS.find(
     (d) => d.value === selectedDuration,
   );

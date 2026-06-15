@@ -102,7 +102,7 @@ export function UnlockExplainerCard({
         }}
       >
         <Button
-          variant="primary"
+          <Text>variant="primary"</Text>
           size="sm"
           onPress={onHide}
           accessibilityLabel="Got it"
@@ -112,7 +112,7 @@ export function UnlockExplainerCard({
 
         {decision.canHide && (
           <Button
-            variant="secondary"
+            <Text>variant="secondary"</Text>
             size="sm"
             onPress={onHide}
             accessibilityLabel="Hide this feature"
@@ -123,7 +123,7 @@ export function UnlockExplainerCard({
 
         {decision.canHide && onReconsider && (
           <Button
-            variant="ghost"
+            <Text>variant="ghost"</Text>
             size="sm"
             onPress={onReconsider}
             accessibilityLabel="Reconsider later"

@@ -1,8 +1,8 @@
 import React from 'react';
 import { TextInput, Pressable } from 'react-native';
-import { useTheme } from '../../../theme';
-import { Box } from '../../../components/primitives';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Box } from '../../../components/primitives/Box';
+import { Icon } from '../../../icons/components/Icon';
 
 interface SearchBarProps {
   query: string;

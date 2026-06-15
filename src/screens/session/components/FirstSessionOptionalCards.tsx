@@ -7,7 +7,7 @@ import { Text } from '../../../components/primitives/Text';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 import type { CompanionElement } from '../../../features/companion/types';
 import { glow } from '../../../theme/tokens/elevation';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 export function CoachLine({ text }: { text: string }): JSX.Element | null {
   if (!text) {return null;}

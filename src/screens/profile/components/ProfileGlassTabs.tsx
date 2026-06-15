@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 export type ProfileTab = 'stats' | 'mastery' | 'activity';
@@ -33,10 +33,7 @@ export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
         flexDirection: 'row',
         height: 40,
         padding: 3,
-        shadowColor: theme.colors.text.primary,
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 0.12,
-        shadowRadius: 8,
+        boxShadow: '0px 5px 8px theme.colors.text.primary / 0.12',
       }}
     >
       {tabs.map((tab) => {
@@ -60,12 +57,9 @@ export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
               flex: 1,
               height: 34,
               justifyContent: 'center',
-              shadowColor: isActive
+              boxShadow: `0px 4px isActive ? 10 : 0px ${isActive
                 ? theme.colors.primary[500]
-                : 'transparent',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: isActive ? 0.2 : 0,
-              shadowRadius: isActive ? 10 : 0,
+                : 'transparent' ?? 'transparent'}`,
             }}
           >
             <Text

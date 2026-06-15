@@ -7,7 +7,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 interface VexCompanionAuraProps {
@@ -22,7 +22,7 @@ export function VexCompanionAura({
   size = 56,
   laneColor,
   testID,
-}: VexCompanionAuraProps): JSX.Element {
+}: VexCompanionAuraProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(1);

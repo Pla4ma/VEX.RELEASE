@@ -15,7 +15,7 @@ export function GlassSectionHeader({
   title,
   body,
   trailing,
-}: GlassSectionHeaderProps): JSX.Element {
+}: GlassSectionHeaderProps): React.ReactNode {
   return (
     <View
       style={{
@@ -29,7 +29,7 @@ export function GlassSectionHeader({
           <Text
             style={{
               color: vexLightGlass.mint[700],
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: '700',
               letterSpacing: 1.4,
               textTransform: 'uppercase',

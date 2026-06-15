@@ -75,7 +75,7 @@ export function VexEditorialMark({
         <Text
           style={{
             color: rgbaColors.rgb_224_184_112_0_85,
-            fontSize: 10,
+            fontSize: 12,
             fontFamily: SERIF_STACK,
             fontWeight: '500',
             letterSpacing: 5,
@@ -90,7 +90,7 @@ export function VexEditorialMark({
 
       <Animated.View style={[{ flexDirection: 'row', marginTop: 2, height: 140 }, wordBreath]}>
         {letters.map((c, i) => (
-          <VexLetter key={i} char={c} index={i} isReducedMotion={isReducedMotion} />
+          <VexLetter key={c.id} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
 
@@ -120,7 +120,7 @@ export function VexEditorialMark({
         <Text
           style={{
             color: rgbaColors.rgb_224_184_112_0_55,
-            fontSize: 9,
+            fontSize: 12,
             fontFamily: SERIF_STACK,
             fontWeight: '500',
             letterSpacing: 4,

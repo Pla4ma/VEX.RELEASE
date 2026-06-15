@@ -10,8 +10,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { EmptyState, ErrorState, Skeleton } from '../state-components';
-import { useTheme } from '../../../theme';
+import { EmptyState, ErrorState, Skeleton } from '../state-components/empty-state';
+import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './DataList.styles';
 import { ListFooter } from './DataList.ListFooter';
 import { useItemRenderer } from './DataList.useItemRenderer';

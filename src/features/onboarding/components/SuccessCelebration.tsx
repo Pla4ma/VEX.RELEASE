@@ -17,12 +17,12 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 
 /**
  * Animated success celebration
  */
-export function SuccessCelebration(): JSX.Element {
+export function SuccessCelebration(): React.ReactNode {
   const { theme } = useTheme();
 
   const pulseStyle = useAnimatedStyle(() => ({

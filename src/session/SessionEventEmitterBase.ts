@@ -1,4 +1,4 @@
-import { eventBus, type EventChannels } from '../events';
+import { eventBus, type EventChannels } from '../events/EventBus';
 import type { SessionEventChannel } from './types/events';
 import type {
   SessionSummary,

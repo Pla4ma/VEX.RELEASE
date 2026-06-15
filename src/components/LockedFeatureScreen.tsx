@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getPremiumCardStyle } from './premiumStyles';
 import { Button } from './primitives/Button';
 import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
 import { UnlockRequirementRow } from './UnlockRequirementRow';
 import { buttonTap } from '../utils/haptics';
 import { useDisclosureAnalytics } from '../features/liveops-config';
@@ -29,7 +29,7 @@ interface LockedFeatureScreenProps {
 
 export function LockedFeatureScreen(
   props: LockedFeatureScreenProps,
-): JSX.Element {
+): React.ReactNode {
   const { theme } = useTheme();
   const analytics = useDisclosureAnalytics();
 

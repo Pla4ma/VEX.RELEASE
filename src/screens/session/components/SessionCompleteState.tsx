@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Box, Button, Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box, Button, Text } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme/ThemeContext';
 
 type SessionCompleteStateProps = {
   body: string;
@@ -17,7 +17,7 @@ export function SessionCompleteState({
   onPress,
   title,
   variant,
-}: SessionCompleteStateProps): JSX.Element {
+}: SessionCompleteStateProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (
