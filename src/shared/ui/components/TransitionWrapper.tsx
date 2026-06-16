@@ -53,6 +53,7 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
 }) => {
   const reduceMotion = useReducedMotion();
   const [isMounted, setIsMounted] = React.useState(visible);
+  const [prevVisible, setPrevVisible] = React.useState(visible);
   const activeConfig = visible ? enterConfig : exitConfig;
   const handleAnimationComplete = useCallback(() => {
     if (!visible) {
@@ -62,11 +63,12 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
       onEnterComplete?.();
     }
   }, [visible, onExitComplete, onEnterComplete]);
-  useEffect(() => {
-    if (visible && !isMounted) {
+  if (visible !== prevVisible) {
+    setPrevVisible(visible);
+    if (visible) {
       setIsMounted(true);
     }
-  }, [visible, isMounted]);
+  }
   const { progress } = useTransitionAnimation(
     visible,
     activeConfig,

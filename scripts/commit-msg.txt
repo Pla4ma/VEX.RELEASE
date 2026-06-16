@@ -1,10 +1,9 @@
-refactor: extract render functions to components, derive dashboardState
+refactor: derive isMounted in TransitionWrapper, prev-prop pattern
 
-- AnalyticsDashboard: replace dashboardState useState with derived 'state' + isRefreshing
-- Skeleton: extract renderLines to SkeletonLines component
-- Loading: extract renderVariant to VariantDisplay component
-- Remove redundant prev-prop useEffects
+- TransitionWrapper: derive isMounted via prevVisible instead of useEffect chain
+- Skeleton: separate SkeletonLines component for clean separation
+- Loading: separate VariantDisplay component
 
-Score 68 (stable, 0 errors, 809 warnings)
+Score 68, 0 errors, 807 warnings
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>
