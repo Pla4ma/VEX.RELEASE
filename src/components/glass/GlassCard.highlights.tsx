@@ -7,6 +7,16 @@ interface HighlightProps {
   radius?: number;
 }
 
+    const elementStyle_111 = {
+  borderRadius: radius,
+  height: '25%',
+  left: 0,
+  opacity: 0.7,
+  position: 'absolute',
+  right: 0,
+  top: '15%',
+  zIndex: 11,
+};
 export function CardTopHighlight({ color, radius = 999 }: HighlightProps): React.ReactNode {
   return (
     <LinearGradient
@@ -109,16 +119,7 @@ export function CardShineStreak({ radius = 999 }: { radius?: number }): React.Re
       locations={[0, 0.45, 1]}
       pointerEvents="none"
       start={{ x: 0.15, y: 0.45 }}
-      style={{
-        borderRadius: radius,
-        height: '25%',
-        left: 0,
-        opacity: 0.7,
-        position: 'absolute',
-        right: 0,
-        top: '15%',
-        zIndex: 11,
-      }}
+      style={elementStyle_111}
     />
   );
 }

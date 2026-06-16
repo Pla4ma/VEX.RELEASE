@@ -35,9 +35,10 @@ export function getPhase3VerificationSummary(
   results: FeatureVerificationResult[];
   failedFeatures: string[];
 } {
-  const failedFeatures = results
-    .filter((r) => !r.isHidden)
-    .map((r) => r.feature);
+  const failedFeatures: string[] = [];
+  for (const r of results) {
+    if (!r.isHidden) { failedFeatures.push(r.feature); }
+  }
 
   return { passed: failedFeatures.length === 0, results, failedFeatures };
 }

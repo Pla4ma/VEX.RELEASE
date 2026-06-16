@@ -7,7 +7,7 @@ import {
   ContentReviewScreen,
   StudyPlanScreen,
   StudyLibraryScreen,
-} from $1../features/content-study/screens/ContentInputScreen$1;
+} from '../features/content-study/screens/ContentInputScreen';
 
 const Stack = createNativeStackNavigator<ContentStudyStackParamList>();
 

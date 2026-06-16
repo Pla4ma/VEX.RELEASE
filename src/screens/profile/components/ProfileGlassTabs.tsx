@@ -11,6 +11,23 @@ interface ProfileGlassTabsProps {
   onChange: (tab: ProfileTab) => void;
 }
 
+          const elementStyle_46 = {
+  alignItems: 'center',
+  backgroundColor: isActive
+  ? theme.colors.primary[100]
+  : 'transparent',
+  borderColor: isActive
+  ? theme.colors.border.light
+  : 'transparent',
+  borderRadius: 14,
+  borderWidth: isActive ? 1.2 : 0,
+  flex: 1,
+  height: 34,
+  justifyContent: 'center',
+  boxShadow: `0px 4px isActive ? 10 : 0px ${isActive
+  ? theme.colors.primary[500]
+  : 'transparent' ?? 'transparent'}`,
+};
 const tabs = [
   { key: 'stats' as const, label: 'Stats' },
   { key: 'mastery' as const, label: 'Mastery' },
@@ -44,23 +61,7 @@ export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
             accessibilityState={{ selected: isActive }}
             key={tab.key}
             onPress={() => onChange(tab.key)}
-            style={{
-              alignItems: 'center',
-              backgroundColor: isActive
-                ? theme.colors.primary[100]
-                : 'transparent',
-              borderColor: isActive
-                ? theme.colors.border.light
-                : 'transparent',
-              borderRadius: 14,
-              borderWidth: isActive ? 1.2 : 0,
-              flex: 1,
-              height: 34,
-              justifyContent: 'center',
-              boxShadow: `0px 4px isActive ? 10 : 0px ${isActive
-                ? theme.colors.primary[500]
-                : 'transparent' ?? 'transparent'}`,
-            }}
+            style={elementStyle_46}
           >
             <Text
               style={{

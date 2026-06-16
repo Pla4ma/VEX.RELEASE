@@ -14,6 +14,87 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
+
+type Shape = 'circle' | 'square' | 'triangle';
+
+const ParticleShape = ({
+  shape,
+  size,
+  color,
+  animatedStyle,
+  particleStyle,
+  shapeStyle,
+  triangleStyle,
+}: {
+  shape: Shape;
+  size: number;
+  color: string;
+  animatedStyle: object;
+  particleStyle: object;
+  shapeStyle: object;
+  triangleStyle: object;
+}): React.ReactNode => {
+  switch (shape) {
+    case 'circle':
+      return (
+        <Animated.View
+          style={[
+            particleStyle,
+            shapeStyle,
+            {
+              width: size,
+              height: size,
+              backgroundColor: color,
+              borderRadius: size / 2,
+            },
+            animatedStyle,
+          ]}
+        />
+      );
+    case 'square':
+      return (
+        <Animated.View
+          style={[
+            particleStyle,
+            shapeStyle,
+            { width: size, height: size, backgroundColor: color },
+            animatedStyle,
+          ]}
+        />
+      );
+    case 'triangle':
+      return (
+        <Animated.View
+          style={[
+            triangleStyle,
+            {
+              borderLeftWidth: size / 2,
+              borderRightWidth: size / 2,
+              borderBottomWidth: size,
+              borderBottomColor: color,
+            },
+            animatedStyle,
+          ]}
+        />
+      );
+    default:
+      return (
+        <Animated.View
+          style={[
+            particleStyle,
+            shapeStyle,
+            {
+              width: size,
+              height: size,
+              backgroundColor: color,
+              borderRadius: size / 2,
+            },
+            animatedStyle,
+          ]}
+        />
+      );
+  }
+};
 import { ParticleConfig } from './types';
 import {
   particleStyle,
@@ -177,5 +258,15 @@ export function Particle({ config, onComplete }: ParticleProps) {
     }
   };
 
-  return <>{renderShape()}</>;
+  return (
+    <ParticleShape
+      shape={config.shape}
+      size={size}
+      color={config.color}
+      animatedStyle={animatedStyle}
+      particleStyle={particleStyle}
+      shapeStyle={shapeStyle}
+      triangleStyle={triangleStyle}
+    />
+  );
 }

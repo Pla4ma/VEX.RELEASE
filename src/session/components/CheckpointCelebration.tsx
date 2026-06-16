@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -55,12 +55,12 @@ export function CheckpointCelebration({
   const opacity = useSharedValue(0);
   const emojiScale = useSharedValue(0);
   const particleY = useSharedValue(0);
-  const [prevCheckpointKey, setPrevCheckpointKey] = useState(
+  const prevCheckpointKeyRef = useRef(
     `${progressPercent}-${elapsedMinutes}-${lastCheckpoint}`,
   );
   const currentCheckpointKey = `${progressPercent}-${elapsedMinutes}-${lastCheckpoint}`;
-  if (isVisible && currentCheckpointKey !== prevCheckpointKey) {
-    setPrevCheckpointKey(currentCheckpointKey);
+  if (isVisible && currentCheckpointKey !== prevCheckpointKeyRef.current) {
+    prevCheckpointKeyRef.current = currentCheckpointKey;
     const detected = detectCheckpoint(
       progressPercent,
       elapsedMinutes,

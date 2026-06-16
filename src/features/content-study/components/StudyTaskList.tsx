@@ -4,6 +4,15 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Icon } from '../../../icons/components/Icon';
 import type { StudyTaskListProps, StudyTask } from '../types';
+
+function formatDuration(minutes: number): string {
+  if (minutes < 60) {
+    return `${minutes} min`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+}
 import { TaskCard } from './TaskCard';
 import { styles } from './study-task-list-styles';
 
@@ -39,14 +48,6 @@ export const StudyTaskList: React.FC<StudyTaskListProps> = ({
     },
     [completedIds],
   );
-  const formatDuration = (minutes: number): string => {
-    if (minutes < 60) {
-      return `${minutes} min`;
-    }
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-  };
   const completionPercentage =
     tasks.length > 0 ? (completedIds.size / tasks.length) * 100 : 0;
   return (

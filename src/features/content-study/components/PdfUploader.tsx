@@ -4,6 +4,20 @@ import { Skeleton } from '../../../components/ui/Skeleton';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Icon } from '../../../icons/components/Icon';
+
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) {return '0 B';}
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function getFileIcon(mimeType: string): string {
+  if (mimeType.includes('pdf')) {return 'file-pdf';}
+  if (mimeType.includes('text')) {return 'file-text';}
+  return 'file';
+}
 import { captureException } from '../../../config/sentry';
 import * as DocumentPicker from 'expo-document-picker';
 import type { PdfUploaderProps } from '../types';
@@ -62,20 +76,6 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
   const removeFile = useCallback(() => {
     onFileSelect(null);
   }, [onFileSelect]);
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) {return '0 B';}
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-  };
-
-  const getFileIcon = (mimeType: string): string => {
-    if (mimeType.includes('pdf')) {return 'file-pdf';}
-    if (mimeType.includes('text')) {return 'file-text';}
-    return 'file';
-  };
 
   const isOversized = selectedFile ? selectedFile.size > maxSize : false;
   const validation = selectedFile

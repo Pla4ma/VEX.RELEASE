@@ -88,16 +88,17 @@ export interface UserMessageBubbleProps {
   index?: number;
 }
 
+function formatTime(ts: number): string {
+  const date = new Date(ts);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 export function UserMessageBubble({
   content,
   timestamp,
   index = 0,
 }: UserMessageBubbleProps): React.ReactNode {
   const { theme } = useTheme();
-  const formatTime = (ts: number): string => {
-    const date = new Date(ts);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
   return (
     <Animated.View
       entering={FadeInUp.duration(400)

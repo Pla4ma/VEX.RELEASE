@@ -47,27 +47,32 @@ function findNearDoneChallenge(
   progressPercent: number;
   title?: string;
 } {
-  const match = challenges
-    .filter((item) => item.challenge.type === 'DAILY')
-    .map((item) => ({
-      id: item.userChallenge.id,
-      isNearDone:
-        item.challenge.targetValue > 0 &&
-        item.userChallenge.status === 'ACTIVE' &&
-        (item.userChallenge.currentValue / item.challenge.targetValue) * 100 >=
-          70,
-      progressPercent:
-        item.challenge.targetValue > 0
-          ? Math.min(
+  let match: { id: string; isNearDone: boolean; progressPercent: number; title: string } | undefined;
+  for (const item of challenges) {
+    if (item.challenge.type !== 'DAILY') continue;
+    const isNearDone =
+      item.challenge.targetValue > 0 &&
+      item.userChallenge.status === 'ACTIVE' &&
+      (item.userChallenge.currentValue / item.challenge.targetValue) * 100 >=
+        70;
+    if (!isNearDone) continue;
+    const progressPercent =
+      item.challenge.targetValue > 0
+        ? Math.min(
+            100,
+            (item.userChallenge.currentValue / item.challenge.targetValue) *
               100,
-              (item.userChallenge.currentValue / item.challenge.targetValue) *
-                100,
-            )
-          : 0,
-      title: item.challenge.title,
-    }))
-    .filter((item) => item.isNearDone)
-    .sort((left, right) => right.progressPercent - left.progressPercent)[0];
+          )
+        : 0;
+    if (!match || progressPercent > match.progressPercent) {
+      match = {
+        id: item.userChallenge.id,
+        isNearDone: true,
+        progressPercent,
+        title: item.challenge.title,
+      };
+    }
+  }
 
   return match ?? { isNearDone: false, progressPercent: 0 };
 }

@@ -32,13 +32,13 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
   try {
     const history = await fetchXpHistory(userId, { since: startOfDay, limit: 200 });
     const xpEarned = history.reduce((sum, entry) => sum + entry.amount, 0);
-    const sessionsCompleted = new Set(
-      history
-        .filter(
-          (entry) => entry.source === 'SESSION_COMPLETE' && entry.sessionId,
-        )
-        .map((entry) => entry.sessionId),
-    ).size;
+    const completedSessionIds = new Set<string>();
+    for (const entry of history) {
+      if (entry.source === 'SESSION_COMPLETE' && entry.sessionId) {
+        completedSessionIds.add(entry.sessionId);
+      }
+    }
+    const sessionsCompleted = completedSessionIds.size;
     const dailyGoal = 100;
     const goalProgressPercent = Math.min(
       100,

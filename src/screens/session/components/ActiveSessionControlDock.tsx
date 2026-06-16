@@ -31,6 +31,17 @@ type ActiveSessionControlDockProps = {
   onToggleMultiplierInfo: () => void;
 };
 
+            const elementStyle_176 = {
+  minWidth: 84,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 18,
+  borderWidth: 1,
+  paddingHorizontal: 18,
+  paddingVertical: 14,
+  backgroundColor: 'rgba(0,229,255,0.08)',
+  borderColor: 'rgba(0,229,255,0.18)',
+};
 export const ActiveSessionControlDock: React.FC<
   ActiveSessionControlDockProps
 > = ({
@@ -174,17 +185,7 @@ export const ActiveSessionControlDock: React.FC<
             accessibilityHint="Explains how your current streak changes session rewards"
           >
             <Box
-              style={{
-                minWidth: 84,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 18,
-                borderWidth: 1,
-                paddingHorizontal: 18,
-                paddingVertical: 14,
-               backgroundColor: 'rgba(0,229,255,0.08)',
-               borderColor: 'rgba(0,229,255,0.18)',
-             }}
+              style={elementStyle_176}
            >
              <Text variant="label" style={{ color: lightColors.semantic.vexCyan }}>
                 {`${formatMultiplier(streakMultiplier)}x`}

@@ -10,8 +10,8 @@ import {
   ComebackQuestCard,
   TodaysChallengesWidget,
   type ChallengeItem,
-} from $1../../../features/home-spine/components/ComebackQuestCard$1;
-import { StudyPlanSuggestionCard } from $1../../../features/home-spine/components/ComebackQuestCard$1;
+} from '../../../features/home-spine/components/ComebackQuestCard';
+import { StudyPlanSuggestionCard } from '../../../features/home-spine/components/ComebackQuestCard';
 import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
 import type { LearningExecutionCopy } from '../../../features/learning-execution';
 

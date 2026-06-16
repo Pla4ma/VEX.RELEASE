@@ -63,7 +63,13 @@ export function useActiveCoachRecommendations(
         .filter(
           (item) => item.status === 'ACTIVE' && item.expiresAt > Date.now(),
         )
-        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
+        .reduce<SessionRecommendation | null>(
+          (best, item) =>
+            !best || (item.confidence ?? 0) > (best.confidence ?? 0)
+              ? item
+              : best,
+          null,
+        ),
     [data],
   );
   return { data, primaryRecommendation, isPending, isError, error, refetch };

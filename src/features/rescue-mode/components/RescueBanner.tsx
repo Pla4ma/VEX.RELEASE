@@ -15,6 +15,16 @@ interface RescueBannerProps {
   accessibilityHint?: string;
 }
 
+    const elementStyle_56 = {
+  marginHorizontal: theme.spacing[4],
+  marginVertical: theme.spacing[2],
+  padding: theme.spacing[4],
+  borderRadius: theme.borderRadius.lg,
+  backgroundColor: colors.semantic.primarySoft,
+  borderWidth: 1,
+  borderColor: colors.semantic.primary,
+  gap: theme.spacing[2],
+};
 export function RescueBanner({
   eligibility,
   onStartRescue,
@@ -54,16 +64,7 @@ export function RescueBanner({
 
   return (
     <View
-      style={{
-        marginHorizontal: theme.spacing[4],
-        marginVertical: theme.spacing[2],
-        padding: theme.spacing[4],
-        borderRadius: theme.borderRadius.lg,
-        backgroundColor: colors.semantic.primarySoft,
-        borderWidth: 1,
-        borderColor: colors.semantic.primary,
-        gap: theme.spacing[2],
-      }}
+      style={elementStyle_56}
     >
       <Text
         style={{

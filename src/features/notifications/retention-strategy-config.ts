@@ -3,6 +3,23 @@ import { z } from 'zod';
 import { scheduleForLocalTime } from '../ai-coach/utils/timezone';
 import type { RetentionReminderType } from './repository';
 
+const zonedPartsFormatterCache = new Map<string, Intl.DateTimeFormat>();
+function getZonedPartsFormatter(timezone: string): Intl.DateTimeFormat {
+  let formatter = zonedPartsFormatterCache.get(timezone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      hour12: false,
+    });
+    zonedPartsFormatterCache.set(timezone, formatter);
+  }
+  return formatter;
+}
+
 
 export const UserIdSchema = z.string().uuid();
 export const StreakInputSchema = z
@@ -39,14 +56,9 @@ export function zonedParts(
   day: number;
   hour: number;
 } {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: timezone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    hour12: false,
-  }).formatToParts(new Date(timestamp));
+  const parts = getZonedPartsFormatter(timezone).formatToParts(
+    new Date(timestamp),
+  );
   const values = new Map(parts.map((part) => [part.type, part.value]));
   return {
     year: Number(values.get('year')),

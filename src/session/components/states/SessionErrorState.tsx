@@ -10,6 +10,26 @@ import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { SessionErrorActions } from './SessionErrorActions';
 import { styles } from './SessionErrorState.styles';
 
+function getErrorMessage(err: Error): string {
+  const message = err.message.toLowerCase();
+  if (message.includes('network')) {
+    return 'VEX lost connection. Your session is saved. Try again?';
+  }
+  if (message.includes('timeout')) {
+    return "Couldn't start your session. The servers are taking longer than expected.";
+  }
+  if (message.includes('permission') || message.includes('unauthorized')) {
+    return 'Session expired. Log back in and your progress is safe.';
+  }
+  if (message.includes('not found')) {
+    return 'Session not found. It may have ended or been cleared.';
+  }
+  if (message.includes('sync') || message.includes('conflict')) {
+    return 'Session sync failed. Your focus data is safe, but we need to resolve a conflict.';
+  }
+  return sanitizeErrorMessage(err);
+}
+
 interface SessionErrorStateProps {
   error: Error;
   onRetry?: () => void;
@@ -25,25 +45,6 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
 }) => {
   const { theme } = useTheme();
   const semantic = theme.colors.semantic;
-  const getErrorMessage = (err: Error): string => {
-    const message = err.message.toLowerCase();
-    if (message.includes('network')) {
-      return 'VEX lost connection. Your session is saved. Try again?';
-    }
-    if (message.includes('timeout')) {
-      return "Couldn't start your session. The servers are taking longer than expected.";
-    }
-    if (message.includes('permission') || message.includes('unauthorized')) {
-      return 'Session expired. Log back in and your progress is safe.';
-    }
-    if (message.includes('not found')) {
-      return 'Session not found. It may have ended or been cleared.';
-    }
-    if (message.includes('sync') || message.includes('conflict')) {
-      return 'Session sync failed. Your focus data is safe, but we need to resolve a conflict.';
-    }
-    return sanitizeErrorMessage(err);
-  };
   return (
     <View style={[styles.container, { backgroundColor: semantic.background }]}>
       <View

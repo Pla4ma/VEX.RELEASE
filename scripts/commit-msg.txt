@@ -1,9 +1,12 @@
-refactor: derive isMounted in TransitionWrapper, prev-prop pattern
+refactor: extract 70 inline style objects to module-level constants
 
-- TransitionWrapper: derive isMounted via prevVisible instead of useEffect chain
-- Skeleton: separate SkeletonLines component for clean separation
-- Loading: separate VariantDisplay component
+Massive extraction of inline style={{...}} objects with 8+ properties
+to module-level const objects across 70 files. This eliminates per-render
+object allocation and improves readability.
 
-Score 68, 0 errors, 807 warnings
+Fixed files include glass components, auth screens, onboarding, settings,
+session components, navigation, profile, and more.
+
+Score 68, 0 errors, 685 warnings (down from 794)
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

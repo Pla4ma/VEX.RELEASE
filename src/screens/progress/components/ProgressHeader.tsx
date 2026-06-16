@@ -10,6 +10,18 @@ import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
 import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
+        const elementStyle_100 = {
+  alignItems: 'center',
+  backgroundColor: vexLightGlass.glass.fill,
+  borderColor: vexLightGlass.glass.border,
+  borderRadius: 19,
+  borderWidth: 1,
+  height: 38,
+  justifyContent: 'center',
+  overflow: 'hidden',
+  boxShadow: '0px 6px 10px vexLightGlass.glass.shadow / 0.85',
+  width: 38,
+};
 const { width: SCREEN_W } = Dimensions.get('window');
 
 interface ProgressHeaderProps {
@@ -98,18 +110,7 @@ export function ProgressHeader({
           accessibilityLabel="Open notifications"
           accessibilityRole="button"
           onPress={onOpenNotifications}
-          style={{
-            alignItems: 'center',
-            backgroundColor: vexLightGlass.glass.fill,
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: 19,
-            borderWidth: 1,
-            height: 38,
-            justifyContent: 'center',
-            overflow: 'hidden',
-            boxShadow: '0px 6px 10px vexLightGlass.glass.shadow / 0.85',
-            width: 38,
-          }}
+          style={elementStyle_100}
         >
           <GlassBlurLayer intensity={72} radius={19} />
           <Icon

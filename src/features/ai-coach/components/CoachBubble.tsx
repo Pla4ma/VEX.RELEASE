@@ -15,6 +15,15 @@ export interface CoachMessageBubbleProps {
   onActionPress?: (action: string) => void;
 }
 
+function formatTime(timestamp: number): string {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function getPersonaEmoji(): string {
+  return '';
+}
+
 export function CoachMessageBubble({
   message,
   isCoach = true,
@@ -23,18 +32,21 @@ export function CoachMessageBubble({
 }: CoachMessageBubbleProps): React.ReactNode {
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState(false);
-  const formatTime = (timestamp: number): string => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
   const isLongMessage = message.content.length > 200;
   const displayContent =
     expanded || !isLongMessage
       ? message.content
       : message.content.slice(0, 200) + '...';
-  const getPersonaEmoji = () => {
-    return '';
-  };
+  index = 0,
+  onActionPress,
+}: CoachMessageBubbleProps): React.ReactNode {
+  const { theme } = useTheme();
+  const [expanded, setExpanded] = useState(false);
+  const isLongMessage = message.content.length > 200;
+  const displayContent =
+    expanded || !isLongMessage
+      ? message.content
+      : message.content.slice(0, 200) + '...';
   return (
     <Animated.View
       entering={FadeInUp.duration(400)

@@ -64,6 +64,7 @@ function sanitizeParams(
   params: SafeParamMap,
 ): SafeParamMap {
   const sanitized: SafeParamMap = {};
+  const PRIMITIVE_TYPES_SET = new Set(['boolean', 'number']);
   for (const [key, value] of Object.entries(params)) {
     if (typeof value === 'function' || typeof value === 'symbol') {
       continue;
@@ -72,7 +73,7 @@ function sanitizeParams(
       sanitized[key] = value.replace(/[<>]/g, '').slice(0, 1000);
       continue;
     }
-    if (['boolean', 'number'].includes(typeof value) || value === null) {
+    if (PRIMITIVE_TYPES_SET.has(typeof value) || value === null) {
       sanitized[key] = value;
       continue;
     }

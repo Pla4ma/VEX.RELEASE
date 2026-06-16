@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TextInput, ViewStyle } from 'react-native';
 import {
   useAnimatedStyle,
@@ -43,10 +43,18 @@ export function useTextPasteInput({
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const inputRef = useRef<TextInput>(null);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
-  const [warnings, setWarnings] = useState<ValidationError[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const shakeOffset = useSharedValue(0);
+  const validation = useMemo(() => validatePastedText(value), [value]);
+  const errors = validation.errors;
+  const warnings = validation.warnings;
+
+  useEffect(() => {
+    onValidationChange?.(validation.isValid, [
+      ...validation.errors,
+      ...validation.warnings,
+    ]);
+  }, [onValidationChange, validation]);
 
   useEffect(() => {
     if (autoFocus) {
@@ -55,16 +63,6 @@ export function useTextPasteInput({
     }
     return undefined;
   }, [autoFocus]);
-
-  useEffect(() => {
-    const result = validatePastedText(value);
-    setErrors(result.errors);
-    setWarnings(result.warnings);
-    onValidationChange?.(result.isValid, [
-      ...result.errors,
-      ...result.warnings,
-    ]);
-  }, [onValidationChange, value]);
 
   useEffect(() => {
     if (!onAutoSave || !value.trim()) {

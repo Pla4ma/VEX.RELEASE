@@ -21,6 +21,17 @@ interface ColorSchemeToggleProps {
   onTimerFormatChange: (format: TimerFormat) => void;
 }
 
+              const elementStyle_56 = {
+  width: 64,
+  height: 64,
+  borderRadius: 16,
+  marginBottom: 12,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: color.hex,
+  borderWidth: accentColor === color.id ? 3 : 0,
+  borderColor: theme.colors.text.primary,
+};
 export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
   accentColor,
   onAccentColorChange,
@@ -54,17 +65,7 @@ export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
               <Pressable
                 key={color.id}
                 onPress={() => onAccentColorChange(color.id)}
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 16,
-                  marginBottom: 12,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: color.hex,
-                  borderWidth: accentColor === color.id ? 3 : 0,
-                  borderColor: theme.colors.text.primary,
-                }}
+                style={elementStyle_56}
                 accessibilityLabel="Color scheme option"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"

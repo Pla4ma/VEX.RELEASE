@@ -8,6 +8,16 @@ import { lightColors } from '@/theme/tokens/colors';
 import { PasswordField } from './PasswordField';
 import { usePasswordChange } from './usePasswordChange';
 
+              const elementStyle_129 = {
+  flex: 1,
+  backgroundColor: theme.colors.background.secondary,
+  paddingVertical: 12,
+  borderRadius: 8,
+  alignItems: 'center',
+  marginRight: 8,
+  borderWidth: 1,
+  borderColor: theme.colors.border.light,
+};
 export const PasswordChangeSection: React.FC = () => {
   const { theme } = useTheme();
   const {
@@ -127,16 +137,7 @@ export const PasswordChangeSection: React.FC = () => {
             <Box flexDirection="row">
               <Pressable
                 onPress={() => setShowPasswordFields(false)}
-                style={{
-                  flex: 1,
-                  backgroundColor: theme.colors.background.secondary,
-                  paddingVertical: 12,
-                  borderRadius: 8,
-                  alignItems: 'center',
-                  marginRight: 8,
-                  borderWidth: 1,
-                  borderColor: theme.colors.border.light,
-                }}
+                style={elementStyle_129}
                 accessibilityLabel="Cancel password change"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"

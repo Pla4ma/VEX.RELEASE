@@ -9,6 +9,12 @@ import { Icon } from '../../../icons/components/Icon';
 import type { PlanItem } from '../../../features/plan/types';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
+const dateLabelFormatter = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+});
+
 interface PlanWeekViewProps {
   items: PlanItem[];
   isLoading: boolean;
@@ -20,8 +26,7 @@ interface PlanWeekViewProps {
 
 function formatDateLabel(dueDate?: string | null): string {
   if (!dueDate) return 'Unscheduled';
-  return new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-    .format(new Date(dueDate));
+  return dateLabelFormatter.format(new Date(dueDate));
 }
 
 export function PlanWeekView({

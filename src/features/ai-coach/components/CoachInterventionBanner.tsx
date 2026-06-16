@@ -1,6 +1,6 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { buttonTap } from '../../../utils/haptics';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
@@ -16,6 +16,16 @@ import {
 
 export type { InterventionType, Intervention, CoachInterventionBannerProps } from './intervention-types';
 
+    const elementStyle_113 = {
+  marginHorizontal: 16,
+  marginTop: 8,
+  marginBottom: 8,
+  backgroundColor: colors.bg,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: colors.border,
+  overflow: 'hidden',
+};
 export function CoachInterventionBanner({
   intervention,
   coachName,
@@ -24,13 +34,15 @@ export function CoachInterventionBanner({
   onDismiss,
 }: CoachInterventionBannerProps): JSX.Element | null {
   const [isDismissed, setIsDismissed] = useState(false);
-  const [prevInterventionId, setPrevInterventionId] = useState<string | null | undefined>(intervention?.id);
-  const [storage] = useState(
-    () => new MMKVStorageAdapter('coach-interventions'),
-  );
+  const prevInterventionIdRef = useRef<string | null | undefined>(intervention?.id);
+  const storageRef = useRef<MMKVStorageAdapter | null>(null);
+  if (!storageRef.current) {
+    storageRef.current = new MMKVStorageAdapter('coach-interventions');
+  }
+  const storage = storageRef.current;
 
-  if (intervention?.id !== prevInterventionId) {
-    setPrevInterventionId(intervention?.id);
+  if (intervention?.id !== prevInterventionIdRef.current) {
+    prevInterventionIdRef.current = intervention?.id;
     setIsDismissed(false);
   }
 
@@ -109,16 +121,7 @@ export function CoachInterventionBanner({
     <Animated.View
       entering={FadeInDown.duration(400)}
       exiting={FadeOutUp.duration(300)}
-      style={{
-        marginHorizontal: 16,
-        marginTop: 8,
-        marginBottom: 8,
-        backgroundColor: colors.bg,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: colors.border,
-        overflow: 'hidden',
-      }}
+      style={elementStyle_113}
     >
       <View style={{ padding: 16 }}>
         <View

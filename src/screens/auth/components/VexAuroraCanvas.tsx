@@ -6,6 +6,17 @@ import { lightColors } from '@/theme/tokens/colors';
 import { useOrbitalAnimation, renderNoiseGrain } from './VexAuroraCanvas.helpers';
 
 type GD = { x: string; y: string; w: number; h: number; o: number };
+      const elementStyle_118 = {
+  position: 'absolute',
+  top: '34%',
+  alignSelf: 'center',
+  width: 180,
+  height: 180,
+  borderRadius: 9999,
+  borderWidth: 0.5,
+  borderColor: 'rgba(255, 138, 36, 0.06)',
+  opacity: 0.5,
+};
 function _grain(n: number): GD[] {
   const d: GD[] = [];
   for (let i = 0; i < n; i++) { d.push({
@@ -116,17 +127,7 @@ export function VexAtmosphereCanvas(): React.JSX.Element {
 
       {/* Orbital ring 3 — inner */}
       <Animated.View
-        style={{
-          position: 'absolute',
-          top: '34%',
-          alignSelf: 'center',
-          width: 180,
-          height: 180,
-          borderRadius: 9999,
-          borderWidth: 0.5,
-          borderColor: 'rgba(255, 138, 36, 0.06)',
-          opacity: 0.5,
-        }}
+        style={elementStyle_118}
       />
 
       {/* Edge vignette */}

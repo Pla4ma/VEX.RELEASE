@@ -42,8 +42,9 @@ export function validateExportConfig(config: {
   }
 
   const dataTypes = config.dataTypes || [...VALID_DATA_TYPES];
+  const validDataTypesSet = new Set<string>(VALID_DATA_TYPES);
   for (const type of dataTypes) {
-    if (!(VALID_DATA_TYPES as readonly string[]).includes(type)) {
+    if (!validDataTypesSet.has(type)) {
       warnings.push({
         field: 'dataTypes',
         code: 'UNKNOWN_DATA_TYPE',

@@ -15,7 +15,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
+} from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 

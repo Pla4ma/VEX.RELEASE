@@ -88,13 +88,12 @@ function computePatterns(factors: FocusFactors): {
     recency: 'Recency',
   };
 
-  const entries = Object.entries(factors)
-    .filter(([, v]) => v !== undefined && typeof v.score === 'number')
-    .map(([key, v]) => ({
-      key,
-      name: patternMap[key] ?? key,
-      score: v!.score,
-    }));
+  const entries: Array<{ key: string; name: string; score: number }> = [];
+  for (const [key, v] of Object.entries(factors)) {
+    if (v !== undefined && typeof v.score === 'number') {
+      entries.push({ key, name: patternMap[key] ?? key, score: v.score });
+    }
+  }
 
   if (entries.length === 0) {
     return { strongestPattern: 'No data', weakestPattern: 'No data' };
@@ -157,11 +156,13 @@ export async function fetchMonthlyFocusReportInput(
   );
 
   const gradeOrder = ['S', 'A', 'B', 'C', 'D'] as const;
+  const gradeOrderSet = new Set<string>(gradeOrder);
   let bestGrade: 'S' | 'A' | 'B' | 'C' | 'D' = 'D';
   for (const s of typedSessions) {
     if (
       gradeOrder.indexOf(s.grade as (typeof gradeOrder)[number]) <
-      gradeOrder.indexOf(bestGrade)
+      gradeOrder.indexOf(bestGrade) &&
+      gradeOrderSet.has(s.grade as string)
     ) {
       bestGrade = s.grade as typeof bestGrade;
     }

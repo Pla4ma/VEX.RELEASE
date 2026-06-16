@@ -78,14 +78,14 @@ export function useCompanionSession(
       mounted = false;
     };
   }, [userId]);
-  const [prevSessionStartId, setPrevSessionStartId] = useState(sessionId);
+  const prevSessionStartIdRef = useRef(sessionId);
   if (
     serviceRef.current &&
     hasCompanionState &&
     activeSessionRef.current !== sessionId &&
-    sessionId !== prevSessionStartId
+    sessionId !== prevSessionStartIdRef.current
   ) {
-    setPrevSessionStartId(sessionId);
+    prevSessionStartIdRef.current = sessionId;
     serviceRef.current.startSession(totalSeconds / 60);
     activeSessionRef.current = sessionId;
     triggeredMilestonesRef.current = new Set();

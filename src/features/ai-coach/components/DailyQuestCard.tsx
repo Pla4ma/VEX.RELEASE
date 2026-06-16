@@ -13,6 +13,20 @@ interface DailyQuestCardProps {
   onPress?: () => void;
 }
 
+    const elementStyle_31 = {
+  marginHorizontal: theme.spacing[4],
+  marginTop: theme.spacing[4],
+  marginBottom: theme.spacing[2],
+  backgroundColor: isCompleted
+  ? theme.colors.success[500] + '15'
+  : theme.colors.primary[500] + '10',
+  borderRadius: theme.borderRadius.xl,
+  borderWidth: 1,
+  borderColor: isCompleted
+  ? theme.colors.success[500]
+  : theme.colors.primary[500],
+  overflow: 'hidden',
+};
 export function DailyQuestCard({
   quest,
   coachName,
@@ -29,20 +43,7 @@ export function DailyQuestCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400)}
-      style={{
-        marginHorizontal: theme.spacing[4],
-        marginTop: theme.spacing[4],
-        marginBottom: theme.spacing[2],
-        backgroundColor: isCompleted
-          ? theme.colors.success[500] + '15'
-          : theme.colors.primary[500] + '10',
-        borderRadius: theme.borderRadius.xl,
-        borderWidth: 1,
-        borderColor: isCompleted
-          ? theme.colors.success[500]
-          : theme.colors.primary[500],
-        overflow: 'hidden',
-      }}
+      style={elementStyle_31}
     >
       <Pressable
         onPress={() => { buttonTap(); onPress?.(); }}

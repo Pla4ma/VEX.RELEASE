@@ -14,6 +14,16 @@ import { selection } from '../../utils/haptics';
  * Designed to be gentle — always has a skip option.
  */
 
+    const elementStyle_48 = {
+  position: 'absolute',
+  bottom: theme.spacing[24],
+  left: theme.spacing[4],
+  right: theme.spacing[4],
+  backgroundColor: theme.colors.background.elevated,
+  borderRadius: theme.borderRadius.xl,
+  padding: theme.spacing[4],
+  zIndex: 30,
+};
 const MOODS = [
   { emoji: '🔥', label: 'On fire', bonus: 10 },
   { emoji: '💡', label: 'Inspired', bonus: 8 },
@@ -46,16 +56,7 @@ export function CreativeMoodLogger({
     <Animated.View
       entering={SlideInDown.duration(400).springify()}
       exiting={FadeOut.duration(200)}
-      style={{
-        position: 'absolute',
-        bottom: theme.spacing[24],
-        left: theme.spacing[4],
-        right: theme.spacing[4],
-        backgroundColor: theme.colors.background.elevated,
-        borderRadius: theme.borderRadius.xl,
-        padding: theme.spacing[4],
-        zIndex: 30,
-      }}
+      style={elementStyle_48}
     >
       <Box mb="sm">
         <Text variant="label" weight="semibold">

@@ -7,6 +7,17 @@ import type { TextPasteInputProps } from '../types';
 import { CONTENT_STUDY_CONSTANTS } from '../types';
 import { useTextPasteInput } from './useTextPasteInput';
 
+          const elementStyle_84 = {
+  position: 'absolute',
+  top: theme.spacing[3],
+  right: theme.spacing[3],
+  width: 44,
+  height: 44,
+  borderRadius: theme.borderRadius.full,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: theme.colors.semantic.surfaceGlass,
+};
 export function TextPasteInput({
   value,
   onChange,
@@ -82,17 +93,7 @@ export function TextPasteInput({
             accessibilityLabel="Clear study text"
             accessibilityRole="button"
             onPress={clearInput}
-            style={{
-              position: 'absolute',
-              top: theme.spacing[3],
-              right: theme.spacing[3],
-              width: 44,
-              height: 44,
-              borderRadius: theme.borderRadius.full,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: theme.colors.semantic.surfaceGlass,
-            }}
+            style={elementStyle_84}
           >
             <Text color="text.secondary" variant="label">
               x

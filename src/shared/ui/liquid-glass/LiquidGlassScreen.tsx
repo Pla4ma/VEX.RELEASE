@@ -10,6 +10,16 @@ type LiquidGlassScreenProps = {
   style?: ViewStyle;
 };
 
+      const elementStyle_58 = {
+  backgroundColor: theme.colors.semantic.vexGoldSoft,
+  borderRadius: liquidGlassSpacing.screenBottom * 3,
+  bottom: -liquidGlassSpacing.screenBottom,
+  height: liquidGlassSpacing.screenBottom * 6,
+  left: -liquidGlassSpacing.screenBottom,
+  opacity: 0.46,
+  position: 'absolute',
+  width: liquidGlassSpacing.screenBottom * 4,
+};
 export function LiquidGlassScreen({
   children,
   style,
@@ -56,16 +66,7 @@ export function LiquidGlassScreen({
       />
       <View
         pointerEvents="none"
-        style={{
-          backgroundColor: theme.colors.semantic.vexGoldSoft,
-          borderRadius: liquidGlassSpacing.screenBottom * 3,
-          bottom: -liquidGlassSpacing.screenBottom,
-          height: liquidGlassSpacing.screenBottom * 6,
-          left: -liquidGlassSpacing.screenBottom,
-          opacity: 0.46,
-          position: 'absolute',
-          width: liquidGlassSpacing.screenBottom * 4,
-        }}
+        style={elementStyle_58}
       />
       {children}
     </View>

@@ -13,6 +13,16 @@ interface ReferenceHeaderProps {
   onAction?: () => void;
 }
 
+          const elementStyle_42 = {
+  alignItems: 'center',
+  backgroundColor: 'rgba(255, 255, 255, 0.62)',
+  borderColor: 'rgba(255, 255, 255, 0.95)',
+  borderRadius: 20,
+  borderWidth: 1,
+  height: 40,
+  justifyContent: 'center',
+  width: 40,
+};
 export function ReferenceHeader({
   eyebrow,
   title,
@@ -40,16 +50,7 @@ export function ReferenceHeader({
             accessibilityLabel="Open action"
             accessibilityRole="button"
             onPress={onAction}
-            style={{
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.62)',
-              borderColor: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: 20,
-              borderWidth: 1,
-              height: 40,
-              justifyContent: 'center',
-              width: 40,
-            }}
+            style={elementStyle_42}
           >
             <Icon color={ref.ink} name="notification" size="sm" />
           </Pressable>

@@ -124,14 +124,15 @@ export class SmartScheduler {
       }
       hourQuality[hour].push(session.quality);
     });
-    this.userPatterns.peakPerformanceHours = Object.entries(hourQuality)
-      .map(([hour, qualities]) => ({
-        hour: parseInt(hour),
-        quality: qualities.reduce((sum, q) => sum + q, 0) / qualities.length,
-      }))
-      .filter((h) => h.quality > 70)
-      .sort((a, b) => b.quality - a.quality)
-      .slice(0, 3);
+    const peakHours: Array<{ hour: number; quality: number }> = [];
+    for (const [hour, qualities] of Object.entries(hourQuality)) {
+      const avgQuality = qualities.reduce((sum, q) => sum + q, 0) / qualities.length;
+      if (avgQuality > 70) {
+        peakHours.push({ hour: parseInt(hour), quality: avgQuality });
+      }
+    }
+    peakHours.sort((a, b) => b.quality - a.quality);
+    this.userPatterns.peakPerformanceHours = peakHours.slice(0, 3);
     debug.info('Updated user patterns:', this.userPatterns);
   }
   analyzeDeadlines(
@@ -151,32 +152,33 @@ export class SmartScheduler {
       'final',
       'midterm',
     ];
-    return events
-      .filter((event) => {
-        const text = `${event.title} ${event.description || ''}`.toLowerCase();
-        return deadlineKeywords.some((kw) => text.includes(kw));
-      })
-      .map((event) => {
-        const daysUntil = Math.ceil(
-          (event.startTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-        );
-        let urgency: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
-        let suggestedMinutes = 60;
-        if (daysUntil <= 2) {
-          urgency = 'HIGH';
-          suggestedMinutes = 180;
-        } else if (daysUntil <= 7) {
-          urgency = 'MEDIUM';
-          suggestedMinutes = 120;
-        }
-        return {
+    const result: Array<{ title: string; deadline: Date; suggestedStudyTimes: number; urgency: 'HIGH' | 'MEDIUM' | 'LOW' }> = [];
+    const now = new Date();
+    for (const event of events) {
+      const text = `${event.title} ${event.description || ''}`.toLowerCase();
+      if (!deadlineKeywords.some((kw) => text.includes(kw))) continue;
+      const daysUntil = Math.ceil(
+        (event.startTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+      );
+      let urgency: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
+      let suggestedMinutes = 60;
+      if (daysUntil <= 2) {
+        urgency = 'HIGH';
+        suggestedMinutes = 180;
+      } else if (daysUntil <= 7) {
+        urgency = 'MEDIUM';
+        suggestedMinutes = 120;
+      }
+      if (event.startTime > now) {
+        result.push({
           title: event.title,
           deadline: event.startTime,
           suggestedStudyTimes: suggestedMinutes,
           urgency,
-        };
-      })
-      .filter((d) => d.deadline > new Date())
-      .sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
+        });
+      }
+    }
+    result.sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
+    return result;
   }
 }

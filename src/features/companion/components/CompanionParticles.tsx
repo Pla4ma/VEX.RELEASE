@@ -11,6 +11,16 @@ interface CompanionParticlesProps {
   particleContainerStyle: AnimatedStyle;
 }
 
+        const elementStyle_47 = {
+  position: 'absolute',
+  borderRadius: 100,
+  width: p.size,
+  height: p.size,
+  backgroundColor: theme.particle,
+  left: p.left,
+  top: p.top,
+  opacity: p.opacity,
+};
 export const CompanionParticles: React.FC<CompanionParticlesProps> = ({
   count,
   companionSize,
@@ -45,16 +55,7 @@ export const CompanionParticles: React.FC<CompanionParticlesProps> = ({
       {particles.map((p) => (
         <View
           key={p.key}
-          style={{
-            position: 'absolute',
-            borderRadius: 100,
-            width: p.size,
-            height: p.size,
-            backgroundColor: theme.particle,
-            left: p.left,
-            top: p.top,
-            opacity: p.opacity,
-          }}
+          style={elementStyle_47}
         />
       ))}
     </Animated.View>

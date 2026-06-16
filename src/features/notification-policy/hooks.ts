@@ -33,12 +33,14 @@ export function derivePausedCategories(
   userId: string,
   lanes: Lane[],
 ): PausedCategory[] {
-  return lanes
-    .filter((lane) => {
-      const count = getDismissalCountForLane(userId, lane);
-      return count >= DISMISSAL_PAUSE_THRESHOLD;
-    })
-    .map((lane) => LANE_TO_CATEGORY[lane]);
+  const result: PausedCategory[] = [];
+  for (const lane of lanes) {
+    const count = getDismissalCountForLane(userId, lane);
+    if (count >= DISMISSAL_PAUSE_THRESHOLD) {
+      result.push(LANE_TO_CATEGORY[lane]);
+    }
+  }
+  return result;
 }
 
 export function deriveRecentDismissals(userId: string, lane: Lane): number {

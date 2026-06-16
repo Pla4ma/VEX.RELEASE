@@ -9,6 +9,18 @@ interface UnlockRequirementRowProps {
   progressLabel?: string;
 }
 
+    const elementStyle_19 = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  borderWidth: 1,
+  borderColor: theme.colors.border.light,
+  backgroundColor: theme.colors.background.primary,
+  borderRadius: theme.borderRadius.xl,
+  paddingHorizontal: theme.spacing[4],
+  paddingVertical: theme.spacing[3],
+  gap: theme.spacing[3],
+};
 export function UnlockRequirementRow({
   label,
   progressLabel,
@@ -17,18 +29,7 @@ export function UnlockRequirementRow({
 
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderWidth: 1,
-        borderColor: theme.colors.border.light,
-        backgroundColor: theme.colors.background.primary,
-        borderRadius: theme.borderRadius.xl,
-        paddingHorizontal: theme.spacing[4],
-        paddingVertical: theme.spacing[3],
-        gap: theme.spacing[3],
-      }}
+      style={elementStyle_19}
     >
       <Text
         variant="bodySmall"

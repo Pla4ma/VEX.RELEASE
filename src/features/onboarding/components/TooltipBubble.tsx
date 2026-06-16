@@ -12,6 +12,30 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 
+        const elementStyle_109 = {
+  position: 'absolute',
+  [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
+  left: '50%',
+  marginLeft: -10,
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 10,
+  borderRightWidth: 10,
+  borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
+  borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderTopColor:
+  tooltip.arrowDirection === 'up'
+  ? theme.colors.primary[500]
+  : 'transparent',
+  borderBottomColor:
+  tooltip.arrowDirection === 'up'
+  ? 'transparent'
+  : theme.colors.primary[500],
+};
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface Tooltip {
@@ -107,30 +131,7 @@ export function TooltipBubble({
         </Box>
 
         <Box
-          style={{
-            position: 'absolute',
-            [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
-            left: '50%',
-            marginLeft: -10,
-            width: 0,
-            height: 0,
-            backgroundColor: 'transparent',
-            borderStyle: 'solid',
-            borderLeftWidth: 10,
-            borderRightWidth: 10,
-            borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
-            borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
-            borderLeftColor: 'transparent',
-            borderRightColor: 'transparent',
-            borderTopColor:
-              tooltip.arrowDirection === 'up'
-                ? theme.colors.primary[500]
-                : 'transparent',
-            borderBottomColor:
-              tooltip.arrowDirection === 'up'
-                ? 'transparent'
-                : theme.colors.primary[500],
-          }}
+          style={elementStyle_109}
         />
       </Pressable>
     </Animated.View>

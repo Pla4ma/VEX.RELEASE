@@ -15,6 +15,8 @@ const VALID_METRICS = [
   'challenges_completed',
 ] as const;
 
+const VALID_METRICS_SET = new Set<string>(VALID_METRICS);
+
 export function validateMetrics(metrics: string[]): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
@@ -57,7 +59,7 @@ export function validateMetrics(metrics: string[]): ValidationResult {
       continue;
     }
     seenMetrics.add(metric);
-    if (!(VALID_METRICS as readonly string[]).includes(metric)) {
+    if (!VALID_METRICS_SET.has(metric)) {
       invalidMetrics.push(metric);
     }
   }

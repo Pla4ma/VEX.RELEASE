@@ -3,6 +3,10 @@ import { View } from 'react-native';
 
 interface GlassCardHighlightProps { resolvedRadius: number }
 
+  const viewStyle_35 = {
+  backgroundColor: 'rgba(10, 94, 77, 0.08)', borderRadius: 999,
+  bottom: 3.5, height: 1.2, left: 24, position: 'absolute', right: 24, zIndex: 11,
+};
 export function GlassCardTopEdge({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
@@ -33,9 +37,6 @@ export function GlassCardBottomEdge(): React.ReactNode {
 
 export function GlassCardBottomSecondaryEdge(): React.ReactNode {
   return (
-    <View pointerEvents="none" style={{
-      backgroundColor: 'rgba(10, 94, 77, 0.08)', borderRadius: 999,
-      bottom: 3.5, height: 1.2, left: 24, position: 'absolute', right: 24, zIndex: 11,
-    }} />
+    <View pointerEvents="none" style={viewStyle_35} />
   );
 }

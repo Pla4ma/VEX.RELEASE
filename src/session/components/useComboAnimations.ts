@@ -54,11 +54,11 @@ export function useComboAnimations({
     };
   }, [fireIntensity, glowIntensity, progressWidth, scale, shakeRotation]);
 
-  const [prevComboMinutes, setPrevComboMinutes] = useState(comboMinutes);
-  const [prevIsPausedOrIdle, setPrevIsPausedOrIdle] = useState(isPaused || isIdle);
+  const prevComboMinutesRef = useRef(comboMinutes);
+  const prevIsPausedOrIdleRef = useRef(isPaused || isIdle);
 
-  if (comboMinutes !== prevComboMinutes) {
-    setPrevComboMinutes(comboMinutes);
+  if (comboMinutes !== prevComboMinutesRef.current) {
+    prevComboMinutesRef.current = comboMinutes;
     const milestones = [5, 10, 15, 20, 25, 30, 45, 60];
     for (const milestone of milestones) {
       if (comboMinutes === milestone && milestone > lastMilestoneRef.current) {
@@ -82,10 +82,10 @@ export function useComboAnimations({
   }, [showMilestone]);
 
   if (
-    (isPaused || isIdle) !== prevIsPausedOrIdle ||
-    comboMinutes !== prevComboMinutes
+    (isPaused || isIdle) !== prevIsPausedOrIdleRef.current ||
+    comboMinutes !== prevComboMinutesRef.current
   ) {
-    setPrevIsPausedOrIdle(isPaused || isIdle);
+    prevIsPausedOrIdleRef.current = isPaused || isIdle;
     if ((isPaused || isIdle) && previousComboRef.current > 0) {
       if (previousComboRef.current >= 5) {
         setShowComboBroken(true);

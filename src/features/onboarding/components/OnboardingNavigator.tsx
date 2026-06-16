@@ -52,31 +52,6 @@ export function OnboardingNavigator({
     goToPreviousStep();
   }, []);
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 0:
-        return <WelcomeScreen onStart={handleWelcomeStart} />;
-      case 1:
-        return (
-          <MotivationScreen
-            onSelect={handleMotivationSelect}
-            onBack={goToPreviousStep}
-          />
-        );
-      case 2:
-        return (
-          <FirstSessionSetup
-            userName={store.displayName || ''}
-            goal={store.goal}
-            onStartSession={handleSessionStart}
-            onBack={handleSessionBack}
-          />
-        );
-      default:
-        return <WelcomeScreen onStart={handleWelcomeStart} />;
-    }
-  };
-
   const showProgress = currentStep > 0 && currentStep < 3;
 
   return (
@@ -84,7 +59,24 @@ export function OnboardingNavigator({
       {showProgress && (
         <OnboardingDots currentStep={currentStep - 1} totalSteps={2} />
       )}
-      <Box flex={1}>{renderStep()}</Box>
+      <Box flex={1}>
+        {currentStep === 0 && <WelcomeScreen onStart={handleWelcomeStart} />}
+        {currentStep === 1 && (
+          <MotivationScreen
+            onSelect={handleMotivationSelect}
+            onBack={goToPreviousStep}
+          />
+        )}
+        {currentStep === 2 && (
+          <FirstSessionSetup
+            userName={store.displayName || ''}
+            goal={store.goal}
+            onStartSession={handleSessionStart}
+            onBack={handleSessionBack}
+          />
+        )}
+        {currentStep > 2 && <WelcomeScreen onStart={handleWelcomeStart} />}
+      </Box>
     </View>
   );
 }

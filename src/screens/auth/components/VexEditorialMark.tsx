@@ -15,6 +15,18 @@ import { EditorialFlourish } from './EditorialFlourish';
 import { VexLetter } from './VexLetter';
 import { EditorialRule } from './EditorialRule';
 
+        const elementStyle_101 = {
+  fontSize: 14,
+  lineHeight: 22,
+  fontFamily: SERIF_STACK,
+  fontWeight: '400',
+  fontStyle: 'italic',
+  textAlign: 'center',
+  maxWidth: 300,
+  letterSpacing: 0.4,
+  opacity: 0.9,
+  marginTop: 6,
+};
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 const EASE_AMBIENT = Easing.bezier(0.37, 0, 0.63, 1);
 const SERIF_STACK = Platform.select({
@@ -99,18 +111,7 @@ export function VexEditorialMark({
       <Animated.View style={tagStyle}>
         <Text
           color="text.secondary"
-          style={{
-            fontSize: 14,
-            lineHeight: 22,
-            fontFamily: SERIF_STACK,
-            fontWeight: '400',
-            fontStyle: 'italic',
-            textAlign: 'center',
-            maxWidth: 300,
-            letterSpacing: 0.4,
-            opacity: 0.9,
-            marginTop: 6,
-          }}
+          style={elementStyle_101}
         >
           {tagline}
         </Text>

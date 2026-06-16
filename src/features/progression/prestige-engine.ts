@@ -11,9 +11,10 @@ export function canPrestige(
     (track) => track.level >= 50,
   );
   if (!allMaxed) {
-    const maxedTracks = Object.entries(masteryState.tracks)
-      .filter(([_, t]) => t.level >= 50)
-      .map(([name]) => name);
+    const maxedTracks: string[] = [];
+    for (const [name, t] of Object.entries(masteryState.tracks)) {
+      if (t.level >= 50) { maxedTracks.push(name); }
+    }
     return {
       canPrestige: false,
       reason: `Max all 5 tracks first. Maxed: ${maxedTracks.join(', ') || 'none'}`,

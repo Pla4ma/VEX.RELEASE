@@ -32,6 +32,18 @@ interface Day0ActionSheetProps {
   userId: string;
 }
 
+            const elementStyle_152 = {
+  backgroundColor: vexLightGlass.glass.fill,
+  borderColor: vexLightGlass.glass.borderSubtle,
+  borderRadius: borderRadius.xl,
+  borderWidth: 1,
+  color: vexLightGlass.text.primary,
+  fontSize: 16,
+  lineHeight: 22,
+  marginTop: spacing[3],
+  minHeight: 116,
+  padding: spacing[4],
+};
 const MODE_LABELS: Record<Day0Mode, { title: string; prompt: string }> = {
   focus: { title: 'Focus', prompt: 'What needs a clean block?' },
   create: { title: 'Brain Dump', prompt: 'Drop the messy thought here.' },
@@ -150,18 +162,7 @@ export function Day0ActionSheet({
               onChangeText={setText}
               placeholder="Example: I need to start my biology notes without spiraling."
               placeholderTextColor={vexLightGlass.text.disabled}
-              style={{
-                backgroundColor: vexLightGlass.glass.fill,
-                borderColor: vexLightGlass.glass.borderSubtle,
-                borderRadius: borderRadius.xl,
-                borderWidth: 1,
-                color: vexLightGlass.text.primary,
-                fontSize: 16,
-                lineHeight: 22,
-                marginTop: spacing[3],
-                minHeight: 116,
-                padding: spacing[4],
-              }}
+              style={elementStyle_152}
               value={text}
             />
             {mode !== 'create' && plan ? (

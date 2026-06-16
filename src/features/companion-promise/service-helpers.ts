@@ -2,13 +2,23 @@ import type { CompanionPromise, CompletedSessionPromiseInput } from './types';
 
 export const MinimumPromiseMinutes = 5;
 
+const dateKeyFormatterCache = new Map<string, Intl.DateTimeFormat>();
+function getDateKeyFormatter(timeZone: string): Intl.DateTimeFormat {
+  let formatter = dateKeyFormatterCache.get(timeZone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-CA', {
+      day: '2-digit',
+      month: '2-digit',
+      timeZone,
+      year: 'numeric',
+    });
+    dateKeyFormatterCache.set(timeZone, formatter);
+  }
+  return formatter;
+}
+
 export function toDateKey(timestamp: number, timeZone: string): string {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    day: '2-digit',
-    month: '2-digit',
-    timeZone,
-    year: 'numeric',
-  }).formatToParts(new Date(timestamp));
+  const parts = getDateKeyFormatter(timeZone).formatToParts(new Date(timestamp));
   const map = Object.fromEntries(parts.map((part) => [part.type, part.value]));
   return `${map.year}-${map.month}-${map.day}`;
 }

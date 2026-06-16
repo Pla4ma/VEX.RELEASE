@@ -19,7 +19,7 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from $1../../shared/ui/liquid-glass/LiquidGlassCard$1;
+} from '../../shared/ui/liquid-glass/LiquidGlassCard';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 

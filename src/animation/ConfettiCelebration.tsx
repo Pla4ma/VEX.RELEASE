@@ -54,9 +54,9 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({
       delay: Math.random() * 200,
     }));
   }, [particleCount, colors, origin]);
-  const [prevActive, setPrevActive] = useState(active);
-  if (active !== prevActive) {
-    setPrevActive(active);
+  const prevActiveRef = React.useRef(active);
+  if (active !== prevActiveRef.current) {
+    prevActiveRef.current = active;
     if (active && !isReducedMotion) {
       setParticles(generateParticles());
     } else if (!active) {

@@ -6,8 +6,8 @@ import {
   capture,
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
-} from $1../shared/analytics/analytics-service$1;
-import { setupGlobalErrorHandler, setupRejectionHandler } from $1../shared/analytics/analytics-service$1;
+} from '../shared/analytics/analytics-service';
+import { setupGlobalErrorHandler, setupRejectionHandler } from '../shared/analytics/analytics-service';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 import { getMmkvEncryptionKey } from '../persistence/mmkv-key';
 

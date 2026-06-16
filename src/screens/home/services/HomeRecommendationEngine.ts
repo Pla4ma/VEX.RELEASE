@@ -51,9 +51,13 @@ export class HomeRecommendationEngine {
   }
 
   getAllApplicable(): HomeRecommendation[] {
-    return RECOMMENDATION_RULES.filter((rule) =>
-      rule.condition(this.context),
-    ).map((rule) => rule.generate(this.context));
+    const result: HomeRecommendation[] = [];
+    for (const rule of RECOMMENDATION_RULES) {
+      if (rule.condition(this.context)) {
+        result.push(rule.generate(this.context));
+      }
+    }
+    return result;
   }
 
   shouldRefresh(

@@ -60,9 +60,13 @@ export class CoachRecommendationService {
 
   getAllApplicable(): CoachRecommendation[] {
     const persona = this.getPersona();
-    return RECOMMENDATION_RULES.filter((rule) =>
-      rule.condition(this.context),
-    ).map((rule) => rule.generate(this.context, persona));
+    const result: CoachRecommendation[] = [];
+    for (const rule of RECOMMENDATION_RULES) {
+      if (rule.condition(this.context)) {
+        result.push(rule.generate(this.context, persona));
+      }
+    }
+    return result;
   }
 
   shouldRefresh(

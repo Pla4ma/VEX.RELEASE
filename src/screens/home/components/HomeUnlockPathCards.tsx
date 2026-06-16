@@ -17,6 +17,16 @@ interface ActiveUnlockCardProps {
   actionCopy: string;
 }
 
+        const elementStyle_29 = {
+  alignItems: 'center',
+  backgroundColor: vexLightGlass.background.atmosphericFire,
+  borderColor: vexLightGlass.glass.border,
+  borderRadius: borderRadius.full,
+  borderWidth: 1,
+  height: 44,
+  justifyContent: 'center',
+  width: 44,
+};
 export function ActiveUnlockCard({
   item,
   progress,
@@ -27,16 +37,7 @@ export function ActiveUnlockCard({
     <GlassCard padding={16} radius={borderRadius['2xl']} variant="warning">
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
         <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: vexLightGlass.background.atmosphericFire,
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: borderRadius.full,
-            borderWidth: 1,
-            height: 44,
-            justifyContent: 'center',
-            width: 44,
-          }}
+          style={elementStyle_29}
         >
           <Icon color={vexLightGlass.semantic.fireDeep} name="lock" size="sm" />
         </View>

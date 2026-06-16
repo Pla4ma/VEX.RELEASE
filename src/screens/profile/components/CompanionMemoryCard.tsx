@@ -2,6 +2,11 @@ import React from 'react';
 import { Box, Card, Text } from '../../../components/primitives/Box';
 import type { CompanionMemory } from '../../../features/companion/memory-types';
 
+const memoryDateFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+});
+
 interface CompanionMemoryCardProps {
   memory: CompanionMemory;
 }
@@ -46,8 +51,5 @@ export function CompanionMemoryCard({
 }
 
 function formatMemoryDate(date: string): string {
-  return new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-  }).format(new Date(`${date}T00:00:00.000Z`));
+  return memoryDateFormatter.format(new Date(`${date}T00:00:00.000Z`));
 }

@@ -22,7 +22,7 @@ export function generateMasteryChallenges(
     TechniqueKey,
     number,
   ][];
-  const lowestTechnique = techniqueEntries.sort((a, b) => a[1] - b[1])[0];
+  const lowestTechnique = techniqueEntries.reduce<typeof const lowestTechnique = techniqueEntries[number] | undefined>((best, item) => !best || item[1] > best[1] ? item : best, undefined);
   if (!lowestTechnique) {return challenges;}
   const techKey = lowestTechnique[0];
   const techLevel = lowestTechnique[1];

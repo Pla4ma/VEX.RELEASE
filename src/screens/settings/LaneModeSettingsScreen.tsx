@@ -19,10 +19,24 @@ import {
   LiquidGlassHeader,
   LiquidGlassScreen,
   liquidGlassSpacing,
-} from $1../../shared/ui/liquid-glass/LiquidGlassHeader$1;
+} from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 
+                const elementStyle_84 = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  padding: 16,
+  borderRadius: 16,
+  borderWidth: isSelected ? 2 : 1,
+  borderColor: isSelected
+  ? theme.colors.primary[500]
+  : theme.colors.border.DEFAULT,
+  backgroundColor: isSelected
+  ? `${theme.colors.primary[500]}10`
+  : theme.colors.background.secondary,
+  gap: 12,
+};
 const ALL_LANES: Lane[] = [
   'student',
   'game_like',
@@ -82,20 +96,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                 <Pressable
                   key={lane}
                   onPress={() => handleSelectLane(lane)}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: 16,
-                    borderRadius: 16,
-                    borderWidth: isSelected ? 2 : 1,
-                    borderColor: isSelected
-                      ? theme.colors.primary[500]
-                      : theme.colors.border.DEFAULT,
-                    backgroundColor: isSelected
-                      ? `${theme.colors.primary[500]}10`
-                      : theme.colors.background.secondary,
-                    gap: 12,
-                  }}
+                  style={elementStyle_84}
                   accessibilityLabel={`Select ${LANE_LABELS[lane]}`}
                   accessibilityRole="button"
                   accessibilityHint={`Changes your focus mode to ${LANE_LABELS[lane]}`}

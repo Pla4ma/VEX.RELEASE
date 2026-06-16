@@ -92,16 +92,17 @@ export async function getNextAchievements(
   >
 > {
   const achievements = await getAllAchievementsWithProgress(userId);
-  const incomplete = achievements
-    .filter((a) => !a.isUnlocked && !a.isHidden)
-    .map((a) => ({
+  const incomplete: Array<Achievement & { progress: number; remaining: number; percentComplete: number }> = [];
+  for (const a of achievements) {
+    if (a.isUnlocked || a.isHidden) continue;
+    incomplete.push({
       ...a,
       remaining: a.progressMax - a.progress,
       percentComplete: Math.min(100, (a.progress / a.progressMax) * 100),
-    }))
-    .sort((a, b) => b.percentComplete - a.percentComplete)
-    .slice(0, limit);
-  return incomplete;
+    });
+  }
+  incomplete.sort((a, b) => b.percentComplete - a.percentComplete);
+  return incomplete.slice(0, limit);
 }
 
 export function revealHiddenAchievement(achievementId: string): {

@@ -12,8 +12,8 @@ import { useActiveStudyPlan } from '../../../features/content-study/runtime-barr
 import {
   buildLearningSessionParams,
   useLearningExecutionLayer,
-} from $1../../../features/learning-execution/service$1;
-import { useComebackState } from $1../../../features/learning-execution/service$1;
+} from '../../../features/learning-execution/service';
+import { useComebackState } from '../../../features/learning-execution/service';
 import { getNextBestAction } from '../../../features/progression';
 import {
   getFeatureAvailability,

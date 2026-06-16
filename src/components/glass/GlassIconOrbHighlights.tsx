@@ -6,6 +6,16 @@ interface GlassIconOrbHighlightsProps {
   size: number;
 }
 
+      const elementStyle_55 = {
+  backgroundColor: 'rgba(95,230,197,0.38)',
+  borderRadius: size / 2,
+  bottom: size * 0.10,
+  height: size * 0.18,
+  position: 'absolute',
+  right: size * 0.13,
+  transform: [{ rotate: '-18deg' }],
+  width: size * 0.46,
+};
 export function GlassIconOrbHighlights({
   size,
 }: GlassIconOrbHighlightsProps): React.ReactNode {
@@ -53,16 +63,7 @@ export function GlassIconOrbHighlights({
       />
       <View
         pointerEvents="none"
-        style={{
-          backgroundColor: 'rgba(95,230,197,0.38)',
-          borderRadius: size / 2,
-          bottom: size * 0.10,
-          height: size * 0.18,
-          position: 'absolute',
-          right: size * 0.13,
-          transform: [{ rotate: '-18deg' }],
-          width: size * 0.46,
-        }}
+        style={elementStyle_55}
       />
     </>
   );
