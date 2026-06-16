@@ -37,8 +37,15 @@ Deno.serve(async (request) => {
     const prompt = buildPrompt(parsed.data);
     if (llmConfig) {
       const model = getOpenAICompatibleModel('fast', 'auto');
-      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens });
-      return respond(buildTextSuccess(parsed.data, llm.content, model, startedAt, llm.promptTokens, llm.responseTokens), 200, request);
+      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: parsed.data.requestType === 'GENERATE_COACH_MESSAGE' });
+      try {
+        return respond(buildTextSuccess(parsed.data, llm.content, model, startedAt, llm.promptTokens, llm.responseTokens), 200, request);
+      } catch (error) {
+        if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') throw error;
+        const fallbackModel = Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'groq/compound-mini';
+        const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: true });
+        return respond(buildTextSuccess(parsed.data, fallback.content, fallbackModel, startedAt, fallback.promptTokens, fallback.responseTokens), 200, request);
+      }
     }
     if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
     const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);

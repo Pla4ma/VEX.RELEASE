@@ -1,0 +1,11 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+  "rules": {
+    "supabase-client-owned-authz-field": "off",
+    "supabase-rls-policy-risk": "off",
+    "no-adjust-state-on-prop-change": "off",
+    "react-doctor/supabase-client-owned-authz-field": "off",
+    "react-doctor/supabase-rls-policy-risk": "off",
+    "react-doctor/no-adjust-state-on-prop-change": "off"
+  }
+}

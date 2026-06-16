@@ -52,6 +52,7 @@ export async function callOpenAICompatible(params: {
   timeoutMs: number;
   temperature: number;
   maxTokens: number;
+  jsonMode?: boolean;
 }): Promise<OpenAICompatibleResult> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), params.timeoutMs);
@@ -67,6 +68,7 @@ export async function callOpenAICompatible(params: {
         messages: buildMessages(params.systemPrompt, params.userPrompt),
         temperature: params.temperature,
         max_tokens: params.maxTokens,
+        ...(params.jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
       signal: controller.signal,
     });

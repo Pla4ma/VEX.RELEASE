@@ -11,6 +11,10 @@ export function resolveStudyPlanModel(): string {
     : GEMINI_MODEL;
 }
 
+export function resolveStudyPlanFallbackModel(): string {
+  return Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'groq/compound-mini';
+}
+
 async function callGemini(prompt: string): Promise<string> {
   const llmConfig = getOpenAICompatibleConfig();
   if (llmConfig) {
@@ -22,8 +26,20 @@ async function callGemini(prompt: string): Promise<string> {
       timeoutMs: GEMINI_TIMEOUT_MS,
       temperature: 0.3,
       maxTokens: 8192,
+      jsonMode: true,
     });
-    return result.content;
+    if (hasJsonObject(result.content)) return result.content;
+    const fallback = await callOpenAICompatible({
+      config: llmConfig,
+      model: resolveStudyPlanFallbackModel(),
+      systemPrompt: 'You are an expert study planner. Return only valid JSON.',
+      userPrompt: prompt,
+      timeoutMs: GEMINI_TIMEOUT_MS,
+      temperature: 0.2,
+      maxTokens: 8192,
+      jsonMode: true,
+    });
+    return fallback.content;
   }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
@@ -46,6 +62,10 @@ async function callGemini(prompt: string): Promise<string> {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function hasJsonObject(text: string): boolean {
+  return /\{[\s\S]*\}/.test(text.replace(/```json|```/g, '').trim());
 }
 
 const YOUTUBE_URL_RE = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[&?#].*)?$/;
