@@ -1,3 +1,13 @@
+      const elementStyle_89 = {
+  fontSize: 124,
+  fontFamily: SERIF_STACK,
+  fontWeight,
+  color: lightColors.text.secondary,
+  textShadowColor: 'rgba(224,184,112,0.18)',
+  textShadowOffset: { width: 0, height: 0 },
+  textShadowRadius: 8,
+  letterSpacing: 6,
+};
 const ALLOWED_FONT_WEIGHTS = ['300', '400', '500', '600', '700', '800'] as const;
 
 import React, { useEffect } from 'react';
@@ -87,16 +97,7 @@ export function VexLetter({
         {char}
       </Text>
       <Text
-        style={{
-          fontSize: 124,
-          fontFamily: SERIF_STACK,
-          fontWeight,
-          color: lightColors.text.secondary,
-          textShadowColor: 'rgba(224,184,112,0.18)',
-          textShadowOffset: { width: 0, height: 0 },
-          textShadowRadius: 8,
-          letterSpacing: 6,
-        }}
+        style={elementStyle_89}
       >
         {char}
       </Text>

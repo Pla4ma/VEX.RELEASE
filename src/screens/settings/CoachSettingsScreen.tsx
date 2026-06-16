@@ -27,6 +27,17 @@ import {
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
+          const elementStyle_132 = {
+  backgroundColor:
+  theme.colors.error[50] || lightColors.error[50],
+  paddingVertical: 16,
+  paddingHorizontal: 16,
+  borderRadius: 12,
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: theme.colors.error.DEFAULT + '30',
+};
 export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -130,17 +141,7 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
           <Pressable
             onPress={handleResetMemory}
-            style={{
-              backgroundColor:
-                theme.colors.error[50] || lightColors.error[50],
-              paddingVertical: 16,
-              paddingHorizontal: 16,
-              borderRadius: 12,
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: theme.colors.error.DEFAULT + '30',
-            }}
+            style={elementStyle_132}
             accessibilityLabel="Coach setting"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"

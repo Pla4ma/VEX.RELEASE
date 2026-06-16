@@ -14,6 +14,18 @@ interface FocusScreenHeaderProps {
   body?: string;
 }
 
+          const elementStyle_39 = {
+  alignItems: 'center',
+  backgroundColor: vexLightGlass.glass.fill,
+  borderColor: vexLightGlass.glass.border,
+  borderRadius: 19,
+  borderWidth: 1.5,
+  height: 40,
+  justifyContent: 'center',
+  overflow: 'hidden',
+  boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.85',
+  width: 40,
+};
 const viewStyle_59 = { backgroundColor: vexLightGlass.glass.innerHighlight, borderTopLeftRadius: 21, borderTopRightRadius: 21, height: 1.5, left: 8, position: 'absolute', right: 8, top: 1.2 };
 export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): React.ReactNode {
   return (
@@ -37,18 +49,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
             accessibilityLabel="Settings"
             accessibilityRole="button"
             onPress={onSettingsPress}
-            style={{
-              alignItems: 'center',
-              backgroundColor: vexLightGlass.glass.fill,
-              borderColor: vexLightGlass.glass.border,
-              borderRadius: 19,
-              borderWidth: 1.5,
-              height: 40,
-              justifyContent: 'center',
-              overflow: 'hidden',
-              boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.85',
-              width: 40,
-            }}
+            style={elementStyle_39}
           >
             <GlassBlurLayer intensity={72} radius={19} />
             <LinearGradient

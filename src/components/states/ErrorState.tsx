@@ -42,6 +42,19 @@ export interface ErrorStateProps {
 /**
  * ErrorState component
  */
+        const elementStyle_76 = {
+  width: 64,
+  height: 64,
+  borderRadius: 32,
+  backgroundColor:
+  theme?.colors?.semantic?.vexCyanSoft ||
+  rgbaColors.rgb_0_229_255_0_08,
+  borderColor:
+  theme?.colors?.semantic?.vexCyan || lightColors.semantic.vexCyan,
+  borderWidth: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 export const ErrorState: React.FC<ErrorStateProps> = ({
   title = 'Something went wrong',
   description = 'We ran into an issue. Please try again.',
@@ -74,19 +87,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       {/* Error Icon */}
       <Box mb="lg">
         <Box
-          style={{
-            width: 64,
-            height: 64,
-            borderRadius: 32,
-            backgroundColor:
-              theme?.colors?.semantic?.vexCyanSoft ||
-              rgbaColors.rgb_0_229_255_0_08,
-            borderColor:
-              theme?.colors?.semantic?.vexCyan || lightColors.semantic.vexCyan,
-            borderWidth: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={elementStyle_76}
         >
           <Icon
             name="x-circle"

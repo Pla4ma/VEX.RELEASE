@@ -12,6 +12,9 @@ import { Text } from '../../../components/primitives/Text';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
+      const textStyle_31 = {
+  fontSize: 88, fontWeight: '800', color: lightColors.surface.button, letterSpacing: -2, fontFamily: SANS, textShadowColor: rgbaColors.rgb_34_211_238_0_55, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 24
+};
 const SANS = Platform.select({ ios: 'SF Pro Display', android: 'Roboto', default: 'Inter' }) ?? 'Inter';
 
 export function LiquidMonogram({ isReducedMotion }: { isReducedMotion: boolean }): React.JSX.Element {

@@ -12,6 +12,16 @@ interface FloatingDropletsProps {
   size?: number;
 }
 
+        const elementStyle_48 = {
+  position: 'absolute',
+  width: d.size,
+  height: d.size,
+  borderRadius: d.size / 2,
+  backgroundColor: `rgba(255, 255, 255, ${opacity * 0.85})`,
+  left: spread + d.xOffset - d.size / 2,
+  top: spread * 0.5 + d.yOffset - d.size / 2,
+  boxShadow: `0px 1px 3px rgba(136, 213, 197, NaN)`,
+};
 export const FloatingDroplets: React.FC<FloatingDropletsProps> = ({
   count = 3,
   top,
@@ -46,16 +56,7 @@ export const FloatingDroplets: React.FC<FloatingDropletsProps> = ({
       {droplets.map((d) => (
         <View
           key={d.key}
-          style={{
-            position: 'absolute',
-            width: d.size,
-            height: d.size,
-            borderRadius: d.size / 2,
-            backgroundColor: `rgba(255, 255, 255, ${opacity * 0.85})`,
-            left: spread + d.xOffset - d.size / 2,
-            top: spread * 0.5 + d.yOffset - d.size / 2,
-            boxShadow: `0px 1px 3px rgba(136, 213, 197, NaN)`,
-          }}
+          style={elementStyle_48}
         />
       ))}
     </View>

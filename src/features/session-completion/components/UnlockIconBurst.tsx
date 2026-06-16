@@ -14,6 +14,16 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, timingPresets } from '../../../theme/tokens/motion';
 import { borderRadius } from '../../../theme/tokens/radius';
 
+      const elementStyle_72 = {
+  alignItems: 'center',
+  backgroundColor: `${color}18`,
+  borderColor: `${color}44`,
+  borderRadius: borderRadius.full,
+  borderWidth: 2,
+  height: 88,
+  justifyContent: 'center',
+  width: 88,
+};
 export function UnlockIconBurst({
   icon,
   color,
@@ -70,16 +80,7 @@ export function UnlockIconBurst({
       </Animated.View>
       <Animated.View
         entering={FadeIn.delay(150).duration(400)}
-        style={{
-          alignItems: 'center',
-          backgroundColor: `${color}18`,
-          borderColor: `${color}44`,
-          borderRadius: borderRadius.full,
-          borderWidth: 2,
-          height: 88,
-          justifyContent: 'center',
-          width: 88,
-        }}
+        style={elementStyle_72}
       >
         <Text style={{ fontSize: 40 }}>{icon}</Text>
       </Animated.View>

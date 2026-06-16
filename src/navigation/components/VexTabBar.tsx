@@ -9,6 +9,16 @@ import { GlassBlurLayer } from '../../components/glass/GlassBlurLayer';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { TabButton } from './TabButton';
 
+        const elementStyle_138 = {
+  backgroundColor: 'rgba(10, 94, 77, 0.06)',
+  borderBottomLeftRadius: 36,
+  borderBottomRightRadius: 36,
+  bottom: 1.2,
+  height: 1.2,
+  left: 24,
+  position: 'absolute',
+  right: 24,
+};
 const PULSE_START_HOUR = 18;
 const PULSE_DURATION_MS = 2000;
 
@@ -136,16 +146,7 @@ export function VexTabBar({
         {/* Bottom glass edge shadow */}
         <View
           pointerEvents="none"
-          style={{
-            backgroundColor: 'rgba(10, 94, 77, 0.06)',
-            borderBottomLeftRadius: 36,
-            borderBottomRightRadius: 36,
-            bottom: 1.2,
-            height: 1.2,
-            left: 24,
-            position: 'absolute',
-            right: 24,
-          }}
+          style={elementStyle_138}
         />
         <View
           style={{

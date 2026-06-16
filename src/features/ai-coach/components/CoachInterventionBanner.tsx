@@ -16,6 +16,16 @@ import {
 
 export type { InterventionType, Intervention, CoachInterventionBannerProps } from './intervention-types';
 
+    const elementStyle_113 = {
+  marginHorizontal: 16,
+  marginTop: 8,
+  marginBottom: 8,
+  backgroundColor: colors.bg,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: colors.border,
+  overflow: 'hidden',
+};
 export function CoachInterventionBanner({
   intervention,
   coachName,
@@ -111,16 +121,7 @@ export function CoachInterventionBanner({
     <Animated.View
       entering={FadeInDown.duration(400)}
       exiting={FadeOutUp.duration(300)}
-      style={{
-        marginHorizontal: 16,
-        marginTop: 8,
-        marginBottom: 8,
-        backgroundColor: colors.bg,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: colors.border,
-        overflow: 'hidden',
-      }}
+      style={elementStyle_113}
     >
       <View style={{ padding: 16 }}>
         <View

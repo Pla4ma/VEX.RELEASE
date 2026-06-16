@@ -23,6 +23,17 @@ interface BossCombatHUDViewProps {
   onActivateAbility: () => void;
 }
 
+        const elementStyle_60 = {
+  position: 'absolute',
+  top: -theme.spacing[10],
+  left: 0,
+  right: 0,
+  backgroundColor: theme.colors.success.DEFAULT,
+  paddingVertical: theme.spacing[2],
+  paddingHorizontal: theme.spacing[3],
+  borderRadius: theme.borderRadius.lg,
+  alignItems: 'center',
+};
 export function BossCombatHUDView({
   phaseColor,
   healthPercent,
@@ -58,17 +69,7 @@ export function BossCombatHUDView({
     >
       {showToast && (
         <View
-          style={{
-            position: 'absolute',
-            top: -theme.spacing[10],
-            left: 0,
-            right: 0,
-            backgroundColor: theme.colors.success.DEFAULT,
-            paddingVertical: theme.spacing[2],
-            paddingHorizontal: theme.spacing[3],
-            borderRadius: theme.borderRadius.lg,
-            alignItems: 'center',
-          }}
+          style={elementStyle_60}
         >
           <Text variant="bodySmall" color={theme.colors.text.inverse}>
             +{damageDealt} damage

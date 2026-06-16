@@ -16,6 +16,17 @@ interface ElementCardProps {
   delay: number;
 }
 
+            const elementStyle_96 = {
+  position: 'absolute',
+  top: theme.spacing[3],
+  right: theme.spacing[3],
+  width: 24,
+  height: 24,
+  borderRadius: 12,
+  backgroundColor: themeColors.primary,
+  justifyContent: 'center',
+  alignItems: 'center',
+};
 export function ElementCard({
   element,
   isSelected,
@@ -94,17 +105,7 @@ export function ElementCard({
 
           {isSelected && (
             <View
-              style={{
-                position: 'absolute',
-                top: theme.spacing[3],
-                right: theme.spacing[3],
-                width: 24,
-                height: 24,
-                borderRadius: 12,
-                backgroundColor: themeColors.primary,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
+              style={elementStyle_96}
             >
               <Icon name="check" size={14} color={lightColors.text.inverse} variant="solid" />
             </View>

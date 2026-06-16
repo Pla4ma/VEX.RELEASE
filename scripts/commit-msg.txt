@@ -1,12 +1,12 @@
-fix: derive state in render, extract module-level helpers, fix broken files
+refactor: extract 70 inline style objects to module-level constants
 
-- useTextPasteInput: derive errors/warnings via useMemo instead of useState+useEffect
-- CoachInterventionBanner: use useRef for storage instead of useState
-- companion-memory-groups: fix type annotation
-- SessionStreakCalculator: fix broken auto-fix (proper for-of loop)
-- SmartScheduler: single-pass for-of for deadline analysis
-- entitlements: single-pass for-of for premium/unknown splits
+Massive extraction of inline style={{...}} objects with 8+ properties
+to module-level const objects across 70 files. This eliminates per-render
+object allocation and improves readability.
 
-Score 68, 0 errors, 759 warnings (down from 794)
+Fixed files include glass components, auth screens, onboarding, settings,
+session components, navigation, profile, and more.
+
+Score 68, 0 errors, 685 warnings (down from 794)
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

@@ -21,6 +21,18 @@ type FloatingChoiceCardProps = {
   layout?: 'list' | 'grid';
 };
 
+        const elementStyle_58 = {
+  position: 'absolute',
+  top: 10,
+  right: 10,
+  zIndex: 2,
+  width: 26,
+  height: 26,
+  borderRadius: 13,
+  backgroundColor: vexLightGlass.mint[500],
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 export function FloatingChoiceCard({
   title,
   body,
@@ -56,18 +68,7 @@ export function FloatingChoiceCard({
     >
       {selected ? (
         <View
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            zIndex: 2,
-            width: 26,
-            height: 26,
-            borderRadius: 13,
-            backgroundColor: vexLightGlass.mint[500],
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={elementStyle_58}
         >
           <Text fontSize={12} fontWeight="800" style={{ color: '#FFFFFF' }}>
             ✓

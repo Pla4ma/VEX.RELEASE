@@ -19,6 +19,17 @@ interface VariantConfig {
   core: string;
 }
 
+        const elementStyle_148 = {
+  alignItems: 'center',
+  backgroundColor: 'rgba(255, 255, 255, 0.82)',
+  borderColor: 'rgba(255, 255, 255, 0.94)',
+  borderRadius: size / 2,
+  borderWidth: 1,
+  height: coreSize,
+  justifyContent: 'center',
+  boxShadow: `0px 6px 14px rgba(13, 76, 65, 0.128)`,
+  width: coreSize,
+};
 function resolveVariant(variant: NonNullable<GlassIconOrbProps['variant']>): VariantConfig {
   switch (variant) {
     case 'cyan':
@@ -146,17 +157,7 @@ export function GlassIconOrb({
           }}
         />
         <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.82)',
-            borderColor: 'rgba(255, 255, 255, 0.94)',
-            borderRadius: size / 2,
-            borderWidth: 1,
-            height: coreSize,
-            justifyContent: 'center',
-            boxShadow: `0px 6px 14px rgba(13, 76, 65, 0.128)`,
-            width: coreSize,
-          }}
+          style={elementStyle_148}
         >
           {children}
         </View>

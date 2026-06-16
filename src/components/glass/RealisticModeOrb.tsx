@@ -10,6 +10,16 @@ interface RealisticModeOrbProps {
   size?: number;
 }
 
+      const elementStyle_61 = {
+  backgroundColor: vexLightGlass.glass.innerHighlight,
+  borderRadius: size * 0.08,
+  height: size * 0.08,
+  left: size * 0.24,
+  position: 'absolute',
+  top: size * 0.16,
+  transform: [{ rotate: '-13deg' }],
+  width: size * 0.34,
+};
 const ORB_ASSETS: Record<RealisticModeOrbMode, ImageSourcePropType> = {
   sprint: require('../../../assets/water/vex_orb_sprint_orange_v1.png'),
   light: require('../../../assets/water/vex_orb_light_focus_v1.png'),
@@ -59,16 +69,7 @@ export function RealisticModeOrb({
         }}
       />
       <View
-        style={{
-          backgroundColor: vexLightGlass.glass.innerHighlight,
-          borderRadius: size * 0.08,
-          height: size * 0.08,
-          left: size * 0.24,
-          position: 'absolute',
-          top: size * 0.16,
-          transform: [{ rotate: '-13deg' }],
-          width: size * 0.34,
-        }}
+        style={elementStyle_61}
       />
     </View>
   );

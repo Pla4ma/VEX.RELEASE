@@ -21,6 +21,18 @@ interface CircularProgressProps {
   accessibilityLabel?: string;
 }
 
+        const elementStyle_76 = {
+  borderBottomColor: 'transparent',
+  borderColor: circleColor,
+  borderLeftColor: 'transparent',
+  borderRadius: size / 2,
+  borderRightColor: circleColor,
+  borderTopColor: circleColor,
+  borderWidth: strokeWidth,
+  height: size,
+  transform: [{ rotate: '-45deg' }],
+  width: size,
+};
 const clampProgress = (value: number): number =>
   Math.max(0, Math.min(1, value));
 
@@ -74,18 +86,7 @@ export const CircularProgress = React.memo<CircularProgressProps>(function Circu
           }}
         />
         <View
-          style={{
-            borderBottomColor: 'transparent',
-            borderColor: circleColor,
-            borderLeftColor: 'transparent',
-            borderRadius: size / 2,
-            borderRightColor: circleColor,
-            borderTopColor: circleColor,
-            borderWidth: strokeWidth,
-            height: size,
-            transform: [{ rotate: '-45deg' }],
-            width: size,
-          }}
+          style={elementStyle_76}
         />
       </Animated.View>
       {showPercentage ? (

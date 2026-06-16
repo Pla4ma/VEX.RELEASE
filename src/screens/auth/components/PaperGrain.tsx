@@ -2,6 +2,16 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
+        const elementStyle_29 = {
+  position: 'absolute',
+  left: `${d.left}%`,
+  top: `${d.top}%`,
+  width: d.size,
+  height: d.size,
+  borderRadius: d.size / 2,
+  backgroundColor: PALETTE_CREAM,
+  opacity: d.alpha,
+};
 const PALETTE_CREAM = lightColors.text.secondary;
 
 /**
@@ -27,16 +37,7 @@ export function PaperGrain({ width, height }: { width: number; height: number })
       {dots.map((d, i) => (
         <View
           key={d.id}
-          style={{
-            position: 'absolute',
-            left: `${d.left}%`,
-            top: `${d.top}%`,
-            width: d.size,
-            height: d.size,
-            borderRadius: d.size / 2,
-            backgroundColor: PALETTE_CREAM,
-            opacity: d.alpha,
-          }}
+          style={elementStyle_29}
         />
       ))}
     </View>

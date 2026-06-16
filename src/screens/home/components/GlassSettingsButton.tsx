@@ -8,6 +8,16 @@ interface GlassSettingsButtonProps {
   onPress: () => void;
 }
 
+        const elementStyle_52 = {
+  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+  borderTopLeftRadius: 21,
+  borderTopRightRadius: 21,
+  height: 1.5,
+  left: 8,
+  position: 'absolute',
+  right: 8,
+  top: 1.2,
+};
 export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): React.ReactNode {
   return (
     <View
@@ -50,16 +60,7 @@ export function GlassSettingsButton({ onPress }: GlassSettingsButtonProps): Reac
         />
         <View
           pointerEvents="none"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            borderTopLeftRadius: 21,
-            borderTopRightRadius: 21,
-            height: 1.5,
-            left: 8,
-            position: 'absolute',
-            right: 8,
-            top: 1.2,
-          }}
+          style={elementStyle_52}
         />
         <Icon
           color={vexLightGlass.text.primary}

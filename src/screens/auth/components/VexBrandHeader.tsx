@@ -15,6 +15,18 @@ import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { brandShadowTokens } from '@/theme/tokens/shadows';
 
+      const elementStyle_54 = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+  marginBottom: theme.spacing[2],
+  paddingHorizontal: theme.spacing[4],
+  paddingVertical: theme.spacing[1],
+  borderRadius: 9999,
+  backgroundColor: rgbaColors.rgb_255_255_255_0_03,
+  borderWidth: 0.5,
+  borderColor: rgbaColors.rgb_255_255_255_0_05,
+};
 function StatusDot(): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
   const pulse = useSharedValue(isReducedMotion ? 0.6 : 0.25);
@@ -52,18 +64,7 @@ export function VexBrandHeader(): React.JSX.Element {
     <View style={{ alignItems: 'center', gap: theme.spacing[1] }}>
       {/* Status pill */}
       <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 8,
-          marginBottom: theme.spacing[2],
-          paddingHorizontal: theme.spacing[4],
-          paddingVertical: theme.spacing[1],
-          borderRadius: 9999,
-          backgroundColor: rgbaColors.rgb_255_255_255_0_03,
-          borderWidth: 0.5,
-          borderColor: rgbaColors.rgb_255_255_255_0_05,
-        }}
+        style={elementStyle_54}
       >
         <StatusDot />
         <Text
