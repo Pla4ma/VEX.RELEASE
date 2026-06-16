@@ -10,7 +10,8 @@ import Animated, {
   type AnimatedStyle,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { skeletonStyles } from './Skeleton.styles';
+import { SkeletonLines } from './SkeletonLines';
 
 type SkeletonWidth = number | `${number}%` | 'auto';
 
@@ -23,49 +24,6 @@ interface SkeletonProps {
   spacing?: number;
   animate?: boolean;
 }
-
-interface SkeletonLinesProps {
-  lines: number;
-  width: SkeletonWidth;
-  height: number;
-  borderRadius: number;
-  spacing: number;
-  lineStyle: object;
-  backgroundColor: string;
-}
-
-const SkeletonLines: React.FC<SkeletonLinesProps> = ({
-  lines,
-  width,
-  height,
-  borderRadius,
-  spacing,
-  lineStyle,
-  backgroundColor,
-}) => {
-  const lineArray = Array.from({ length: lines }, (_, i) => i);
-  const LineWrapper = Platform.OS === 'web' ? View : Animated.View;
-  return (
-    <>
-      {lineArray.map((_, index) => (
-        <LineWrapper
-          key={`skeleton-line-wrapper-${index}-${lineArray.length}`}
-          style={[
-            styles.skeleton,
-            {
-              width,
-              height,
-              borderRadius,
-              backgroundColor,
-              marginBottom: index < lines - 1 ? spacing : 0,
-            },
-            lineStyle,
-          ]}
-        />
-      ))}
-    </>
-  );
-};
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   width = '100%',
@@ -117,7 +75,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     ? { opacity: animate ? 0.5 : 0.3 }
     : animatedOpacityStyle;
   return (
-    <View style={styles.container}>
+    <View style={skeletonStyles.container}>
       <SkeletonLines
         lines={lines}
         width={width}
@@ -157,19 +115,19 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
   return (
     <CardWrapper
       style={[
-        styles.card,
+        skeletonStyles.card,
         { backgroundColor: theme.colors.semantic.surfaceGlass },
         cardStyle,
       ]}
     >
-      <View style={styles.cardHeader}>
+      <View style={skeletonStyles.cardHeader}>
         <Skeleton width={40} height={40} variant="circular" animate={false} />
-        <View style={styles.cardHeaderText}>
+        <View style={skeletonStyles.cardHeaderText}>
           <Skeleton width={120} height={16} animate={false} />
           <Skeleton width={80} height={12} animate={false} />
         </View>
       </View>
-      <View style={styles.cardContent}>
+      <View style={skeletonStyles.cardContent}>
         {Array.from({ length: lines }).map((_, i) => (
           <Skeleton
             key={i}
@@ -188,11 +146,11 @@ export const SkeletonList: React.FC<{
   itemHeight?: number;
 }> = ({ count = 5, itemHeight = 72 }) => {
   return (
-    <View style={styles.list}>
+    <View style={skeletonStyles.list}>
       {Array.from({ length: count }).map((_, index) => (
-        <View key={index} style={[styles.listItem, { height: itemHeight }]}>
+        <View key={index} style={[skeletonStyles.listItem, { height: itemHeight }]}>
           <Skeleton width={48} height={48} variant="circular" />
-          <View style={styles.listItemContent}>
+          <View style={skeletonStyles.listItemContent}>
             <Skeleton width={150} height={16} />
             <Skeleton width={100} height={12} />
           </View>
@@ -202,20 +160,3 @@ export const SkeletonList: React.FC<{
     </View>
   );
 };
-
-const styles = createSheet({
-  container: { width: '100%' },
-  skeleton: { overflow: 'hidden' },
-  card: { borderRadius: 12, padding: 16, marginVertical: 8 },
-  cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  cardHeaderText: { marginLeft: 12, gap: 4 },
-  cardContent: { gap: 8 },
-  list: { gap: 8 },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  listItemContent: { flex: 1, gap: 4 },
-});

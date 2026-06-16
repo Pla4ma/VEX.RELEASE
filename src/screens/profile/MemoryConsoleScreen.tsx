@@ -6,8 +6,8 @@ import {
   deleteMemory,
   useActiveFocusMemories,
   useMemoryConsoleVisibility,
-} from $1../../features/focus-memory/service$1;
-import type { FocusMemory } from $1../../features/focus-memory/service$1;
+} from '../../features/focus-memory/service';
+import type { FocusMemory } from '../../features/focus-memory/service';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
 import { Box, Card, Text } from '../../components/primitives';

@@ -5,8 +5,8 @@ import { Text } from '../../../components/primitives/Text';
 import {
   ONBOARDING_GOALS,
   type OnboardingGoal,
-} from $1../../../features/onboarding/constants$1;
-import { useTheme } from $1../../../features/onboarding/constants$1;
+} from '../../../features/onboarding/constants';
+import { useTheme } from '../../../features/onboarding/constants';
 import { styles } from '../styles';
 import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 

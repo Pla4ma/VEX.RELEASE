@@ -7,8 +7,8 @@ import type { HomeController } from '../hooks/home-controller-types';
 import {
   HomeExperiencePrelude,
   useHomeExperienceModel,
-} from $1../../../features/home-experience/components/HomeExperiencePrelude$1;
-import type { HomeSurfaceMap } from $1../../../features/home-experience/components/HomeExperiencePrelude$1;
+} from '../../../features/home-experience/components/HomeExperiencePrelude';
+import type { HomeSurfaceMap } from '../../../features/home-experience/components/HomeExperiencePrelude';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
 import { type } from '../../reference-ui/referenceTokens';

@@ -9,8 +9,8 @@ export type OnboardingRouteProp = RouteProp<
 import {
   useOnboardingStore,
   type OnboardingGoal,
-} from $1../../../features/onboarding/store$1;
-import { useAuthStore } from $1../../../features/onboarding/store$1;
+} from '../../../features/onboarding/store';
+import { useAuthStore } from '../../../features/onboarding/store';
 import { useOnboardingLane } from './useOnboardingLane';
 import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
