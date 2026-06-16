@@ -1,5 +1,6 @@
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
+import { hasJsonObject } from '../_shared/vex-ai-output.ts';
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') || '';
 const GEMINI_MODEL = 'gemini-2.5-pro';
@@ -62,10 +63,6 @@ async function callGemini(prompt: string): Promise<string> {
   } finally {
     clearTimeout(timeout);
   }
-}
-
-function hasJsonObject(text: string): boolean {
-  return /\{[\s\S]*\}/.test(text.replace(/```json|```/g, '').trim());
 }
 
 const YOUTUBE_URL_RE = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[&?#].*)?$/;
