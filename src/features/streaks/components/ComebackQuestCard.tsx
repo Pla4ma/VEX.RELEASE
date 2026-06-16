@@ -133,8 +133,7 @@ export function ComebackQuestCard({
         )}
 
         {isComplete && (
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             onPress={onStartSession}
             fullWidth

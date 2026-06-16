@@ -46,8 +46,7 @@ export function PaywallFooterActions({
         </Button>
       ) : null}
       {isPremium ? (
-        <Button
-          <Text>variant="secondary"</Text>
+        <Button variant="secondary"
           size="lg"
           fullWidth
           isDisabled
@@ -58,8 +57,7 @@ export function PaywallFooterActions({
           Already Premium
         </Button>
       ) : null}
-      <Button
-        <Text>variant="ghost"</Text>
+      <Button variant="ghost"
         size="sm"
         onPress={onRestore}
         accessibilityLabel="Restore purchases"

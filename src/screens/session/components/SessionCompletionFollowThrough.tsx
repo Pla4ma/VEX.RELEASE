@@ -2,7 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import type { SessionSummary } from '../../../session/types';
 import { useTheme } from '../../../theme/ThemeContext';

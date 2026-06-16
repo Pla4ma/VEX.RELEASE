@@ -101,8 +101,7 @@ export function UnlockExplainerCard({
           gap: theme.spacing[2],
         }}
       >
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="sm"
           onPress={onHide}
           accessibilityLabel="Got it"
@@ -111,8 +110,7 @@ export function UnlockExplainerCard({
         </Button>
 
         {decision.canHide && (
-          <Button
-            <Text>variant="secondary"</Text>
+          <Button variant="secondary"
             size="sm"
             onPress={onHide}
             accessibilityLabel="Hide this feature"
@@ -122,8 +120,7 @@ export function UnlockExplainerCard({
         )}
 
         {decision.canHide && onReconsider && (
-          <Button
-            <Text>variant="ghost"</Text>
+          <Button variant="ghost"
             size="sm"
             onPress={onReconsider}
             accessibilityLabel="Reconsider later"

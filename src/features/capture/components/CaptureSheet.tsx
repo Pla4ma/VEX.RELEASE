@@ -161,8 +161,7 @@ export function CaptureSheet({
             </Text>
           )}
 
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             fullWidth
             style={{ marginTop: spacing[5] }}

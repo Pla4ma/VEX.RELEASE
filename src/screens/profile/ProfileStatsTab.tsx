@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
 import { RealisticModeOrb } from '../../components/glass/RealisticModeOrb';
 import { VexAssetImage } from '../../components/glass/VexAssetImage';

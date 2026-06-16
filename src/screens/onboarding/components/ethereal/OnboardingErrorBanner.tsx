@@ -39,7 +39,7 @@ export function OnboardingErrorBanner({
         {message}
       </Text>
       <Button
-        <Text>accessibilityLabel="Try finishing onboarding again"</Text>
+        accessibilityLabel="Try finishing onboarding again"
         onPress={onRetry}
         variant="ghost"
       >

@@ -37,8 +37,7 @@ export function SessionSummaryUnavailable({
       </Text>
       <Box width="100%" mt={24}>
         {onRetry ? (
-          <Button
-            <Text>variant="secondary"</Text>
+          <Button variant="secondary"
             size="lg"
             fullWidth
             onPress={onRetry}
@@ -51,8 +50,7 @@ export function SessionSummaryUnavailable({
         ) : null}
       </Box>
       <Box width="100%" mt={onRetry ? 12 : 24}>
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="lg"
           fullWidth
           onPress={onDone}

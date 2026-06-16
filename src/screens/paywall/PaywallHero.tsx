@@ -64,8 +64,7 @@ export function PaywallHero({
             {isPremium ? 'Premium is active' : VALUE_PROPOSITION}
           </Text>
         </View>
-        <Button
-          <Text>variant="ghost"</Text>
+        <Button variant="ghost"
           onPress={onClose}
           accessibilityLabel="Close paywall"
           accessibilityRole="button"

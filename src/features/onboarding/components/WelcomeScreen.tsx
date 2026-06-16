@@ -145,8 +145,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode 
           entering={isReducedMotion ? undefined : FadeInUp.duration(500).delay(800)}
           style={{ width: '100%' }}
         >
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             fullWidth
             onPress={() => onStart(selectedPath)}

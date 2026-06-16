@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text, Card } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 

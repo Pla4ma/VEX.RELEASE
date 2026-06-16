@@ -155,8 +155,7 @@ export function OnboardingNotificationPermissionCard({
         </Text>
       ) : (
         <View style={[styles.actions, { gap: theme.spacing[3] }]}>
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             onPress={() => {
               handleEnableReminders();
             }}
@@ -169,8 +168,7 @@ export function OnboardingNotificationPermissionCard({
           >
             Yes, remind me
           </Button>
-          <Button
-            <Text>variant="ghost"</Text>
+          <Button variant="ghost"
             onPress={() => {
               handleMaybeLater();
             }}

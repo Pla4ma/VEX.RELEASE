@@ -2,10 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { SessionSummary } from '../../../session/types';
 import { triggerHaptic } from '../../../utils/haptics';
-import {
-  getCompanionService,
-  type CompanionService,
-} from '../../../features/companion/service';
+import { getCompanionService, type CompanionService } from '../../../features/companion/service';
 import type { CompanionState } from '../../../features/companion/types';
 import { loadCompanionState } from '../../../features/companion/session-storage';
 import type { UseCompanionSessionInput, UseCompanionSessionResult } from './useCompanionSessionTypes';

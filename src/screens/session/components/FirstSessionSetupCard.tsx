@@ -88,8 +88,7 @@ export function FirstSessionSetupCard({
           </Text>
         </Box>
 
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="lg"
           fullWidth
           onPress={handleStart}

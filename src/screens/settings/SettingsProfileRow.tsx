@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Theme } from '../../theme';
-import { Box, Text, Card } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
 import { Icon } from '../../icons/components/Icon';

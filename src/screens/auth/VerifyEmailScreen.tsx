@@ -129,8 +129,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
                 color={theme.colors.success.DEFAULT}
               />
             </Box>
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               onPress={handleContinue}
               style={{ marginTop: 32 }}
               accessibilityLabel="Continue to login"
@@ -157,8 +156,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
               />
 
               {/* Submit button */}
-              <Button
-                <Text>variant="primary"</Text>
+              <Button variant="primary"
                 onPress={handleSubmit}
                 isLoading={isLoading}
                 disabled={isLoading || code.length !== 6}
@@ -173,8 +171,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
               {/* Resend */}
               <Box alignItems="center" style={{ marginTop: 24 }}>
                 {canResend ? (
-                  <Button
-                    <Text>variant="ghost"</Text>
+                  <Button variant="ghost"
                     size="sm"
                     onPress={handleResend}
                     accessibilityLabel="Resend verification code"

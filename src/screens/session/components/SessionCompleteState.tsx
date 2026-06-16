@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Button, Text } from '../../../components/primitives/Box';
+import { Box, Button } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 
 type SessionCompleteStateProps = {

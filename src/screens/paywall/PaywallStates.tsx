@@ -84,8 +84,7 @@ export function PaywallErrorState({
         >
           Having trouble? Try again or contact support
         </Text>
-        <Button
-          <Text>variant="ghost"</Text>
+        <Button variant="ghost"
           size="sm"
           onPress={onRestore}
           accessibilityLabel="Restore purchases"
@@ -116,8 +115,7 @@ export function PaywallUnavailableState({
         description="Premium is not purchasable from this screen until RevenueCat offerings load. The free focus loop still works."
         onRetry={onRetry}
       />
-      <Button
-        <Text>variant="ghost"</Text>
+      <Button variant="ghost"
         size="sm"
         onPress={onRestore}
         accessibilityLabel="Restore purchases"

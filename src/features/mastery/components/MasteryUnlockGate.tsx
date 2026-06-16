@@ -109,7 +109,7 @@ export function MasteryUnlockGate({
 
         {onNavigateToMastery && (
           <Button
-            <Text>size="sm"</Text>
+            size="sm"
             variant="outline"
             onPress={onNavigateToMastery}
             accessibilityLabel="View mastery progression"

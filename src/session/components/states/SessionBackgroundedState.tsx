@@ -122,8 +122,7 @@ export function SessionBackgroundedState({
           </Animated.View>
         )}
         <Box gap="sm" width="100%">
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             onPress={() => handleAction('resume', onResume)}
             disabled={selectedAction !== null}
@@ -134,8 +133,7 @@ export function SessionBackgroundedState({
           >
             Resume Session
           </Button>
-          <Button
-            <Text>variant="secondary"</Text>
+          <Button variant="secondary"
             size="md"
             onPress={() => handleAction('pause', onPause)}
             disabled={selectedAction !== null}
@@ -146,8 +144,7 @@ export function SessionBackgroundedState({
             Pause & Review
           </Button>
           <Box flexDirection="row" gap="sm">
-            <Button
-              <Text>variant="ghost"</Text>
+            <Button variant="ghost"
               size="sm"
               style={{ flex: 1 }}
               onPress={() => handleAction('end', onEnd)}
@@ -158,8 +155,7 @@ export function SessionBackgroundedState({
             >
               End Session
             </Button>
-            <Button
-              <Text>variant="ghost"</Text>
+            <Button variant="ghost"
               size="sm"
               style={{ flex: 1 }}
               onPress={() => handleAction('abandon', onAbandon)}

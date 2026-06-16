@@ -8,7 +8,8 @@ import Animated from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { iosShadows } from '@/theme/tokens/shadows';
-import { Box, Text } from '../primitives/Box';
+import { Box } from '../primitives/Box'
+import { Text } from '../primitives/Text';
 import { IconButton } from '../../icons/components/IconButton';
 import { createSheet } from '@/shared/ui/create-sheet';
 

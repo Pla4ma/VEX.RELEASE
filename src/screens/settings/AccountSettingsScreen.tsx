@@ -4,7 +4,8 @@ import { KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-nat
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { useAuthStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';

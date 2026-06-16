@@ -1,7 +1,8 @@
 import NetInfo from '@react-native-community/netinfo';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import React, { useCallback } from 'react';
-import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Box, Card } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { ErrorState } from '../../../components/states/ErrorState';
 import type { CompanionMemory } from '../../../features/companion/memory-types';
 import { CompanionMemoryCard } from './CompanionMemoryCard';

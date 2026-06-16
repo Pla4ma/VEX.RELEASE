@@ -66,8 +66,10 @@ export function detectNewlyUnlockedFeatures(
         feat.isUnlocked &&
         !(before.features[key as keyof typeof before.features]?.isUnlocked)
       ) {
-        if (!features.includes(key)) {features.push(key);}
-        if (!featureSet.has(key)) {features.push(key);}
+        if (!featureSet.has(key)) {
+          features.push(key);
+        }
+      }
     }
   } catch (error) {
     Sentry.captureException(error, {

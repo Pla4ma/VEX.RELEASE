@@ -144,7 +144,7 @@ export function OnboardingFlowLayout({
         <View style={footerStyle}>
           {step > 0 ? (
             <Button
-              <Text>accessibilityHint="Returns to the previous onboarding step"</Text>
+              accessibilityHint="Returns to the previous onboarding step"
               accessibilityLabel="Back"
               accessibilityRole="button"
               onPress={onBack}
@@ -156,7 +156,7 @@ export function OnboardingFlowLayout({
             <View />
           )}
           <Button
-            <Text>accessibilityHint="Moves to the next onboarding step"</Text>
+            accessibilityHint="Moves to the next onboarding step"
             accessibilityLabel="Continue"
             accessibilityRole="button"
             isDisabled={isContinueDisabled}

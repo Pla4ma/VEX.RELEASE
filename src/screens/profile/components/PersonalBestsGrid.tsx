@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';

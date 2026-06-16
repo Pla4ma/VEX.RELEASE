@@ -2,7 +2,8 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 import React, { useCallback } from 'react';
 import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
 
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { ChallengeHub } from '../../features/challenges/components/ChallengeHub';
 import { useClaimChallengeReward } from '../../features/challenges/hooks/challengeMutations';
 import { useAuthStore } from '../../store';

@@ -79,8 +79,7 @@ export function ChallengesErrorState({
         Couldn't load challenges
       </Text>
       {onRetry ? (
-        <Button
-          <Text>variant="outline"</Text>
+        <Button variant="outline"
           size="sm"
           onPress={onRetry}
           accessibilityLabel="Retry loading challenges"

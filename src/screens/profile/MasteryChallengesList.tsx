@@ -98,7 +98,7 @@ function ChallengeCard({
         </View>
         {challenge.status === 'COMPLETED' && (
           <Button
-            <Text>size="sm"</Text>
+            size="sm"
             variant="primary"
             onPress={onClaim}
             accessibilityLabel={`Claim reward for ${challenge.title}`}

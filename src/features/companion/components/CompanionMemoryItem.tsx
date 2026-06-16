@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Box, Card } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import type { CompanionMemory } from '../memory-types';
 
 type CompanionMemoryItemProps = {

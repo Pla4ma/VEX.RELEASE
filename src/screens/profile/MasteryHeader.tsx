@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { MasteryRankBadge } from '../../features/mastery/components/MasteryRankBadge';
 import {
   getMasteryRankDisplay,
@@ -162,4 +163,4 @@ export function MasteryHeader({
       </Box>
     </Card>
   );
-}
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { getElementThemeColors } from './companion-evolution-types';
 import type { EvolutionPhase, CompanionEvolutionCeremonyProps } from './companion-evolution-types';

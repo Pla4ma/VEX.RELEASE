@@ -9,7 +9,8 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text } from '../primitives/Box';
+import { Box } from '../primitives/Box'
+import { Text } from '../primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';

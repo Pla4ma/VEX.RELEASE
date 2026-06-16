@@ -81,8 +81,7 @@ export function ChallengeList({
           <Text style={styles.errorTitle}>Failed to Load Challenges</Text>
           <Text style={styles.errorMessage}>{sanitizeErrorMessage(error)}</Text>
           {onRetry && (
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               onPress={onRetry}
               style={styles.retryButton}
               accessibilityLabel="Retry loading challenges"
@@ -113,8 +112,7 @@ export function ChallengeList({
               : 'Try a different filter'}
           </Text>
           {filter !== 'ALL' && onRefresh && (
-            <Button
-              <Text>variant="secondary"</Text>
+            <Button variant="secondary"
               onPress={onRefresh}
               style={styles.retryButton}
               accessibilityLabel="Show all challenges"

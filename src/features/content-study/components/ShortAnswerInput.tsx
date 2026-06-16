@@ -47,7 +47,7 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
             maxLength={500}
           />
           <Button
-            <Text>size="sm"</Text>
+            size="sm"
             onPress={onSubmit}
             disabled={!value.trim()}
             accessibilityLabel="Submit answer"

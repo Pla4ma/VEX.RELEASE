@@ -130,8 +130,7 @@ export function StudyQuizBreak({
       ))}
 
       <Box flexDirection="row" gap="sm" mt="sm">
-        <Button
-          <Text>variant="secondary"</Text>
+        <Button variant="secondary"
           onPress={onSkip}
           accessibilityLabel="Skip study quiz"
           accessibilityRole="button"
@@ -139,8 +138,7 @@ export function StudyQuizBreak({
         >
           Skip
         </Button>
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           onPress={() => onClose(correctAnswers)}
           accessibilityLabel="Submit study quiz"
           accessibilityRole="button"

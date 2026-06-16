@@ -86,7 +86,7 @@ export function VexSignalNode({ active = false, index }: VexSignalNodeProps): Re
           backgroundColor: active
             ? theme.colors.semantic.vexCyan
             : theme.colors.text.muted,
-          boxShadow: '0px 0px active ? 8 : 0px active ? theme.colors.semantic.vexCyan : 'transparent' / 0.5',
+          boxShadow: active ? '0px 0px 8px ' + theme.colors.semantic.vexCyan : '0px 0px 0px transparent',
         }}
       />
     </View>

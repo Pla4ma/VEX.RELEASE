@@ -98,7 +98,7 @@ export function ComebackCard({
       ) : null}
 
       <Button
-        <Text>size="lg"</Text>
+        size="lg"
         onPress={onStart}
         accessibilityLabel="Start comeback session"
         accessibilityRole="button"
@@ -106,8 +106,7 @@ export function ComebackCard({
       >
         Start My Comeback Session
       </Button>
-      <Button
-        <Text>variant="ghost"</Text>
+      <Button variant="ghost"
         size="lg"
         onPress={onClose}
         accessibilityLabel="Remind me later"

@@ -57,7 +57,7 @@ export function MilestoneNode({ state }: { state: MilestoneState }): React.React
           borderRadius: borderRadius.full,
           height: 28,
           justifyContent: 'center',
-          boxShadow: '0px 0px state === 'current' ? 12 : 7px backgroundColor / state === 'current' ? 0.5 : 0.28',
+          boxShadow: state === 'current' ? '0px 0px 12px rgba(255,100,50,0.5)' : '0px 0px 7px rgba(0,0,0,0.28)',
           width: 28,
         },
         animatedStyle,

@@ -12,16 +12,7 @@ import Svg, { Circle, G, Text as SvgText } from 'react-native-svg';
 
 import { styles } from './xp-progress-bar.styles';
 import { lightColors } from '@/theme/tokens/colors';
-
-interface XpProgressBarProps {
-  currentXp: number;
-  threshold: number;
-  level: number;
-  totalXp: number;
-  isAnimating?: boolean;
-  xpJustAdded?: number;
-  onLevelUp?: () => void;
-}
+import type { XpProgressBarProps } from './xp-progress-bar-types';
 
 const { width } = Dimensions.get('window');
 const BAR_WIDTH = width - 48;
@@ -205,4 +196,4 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       <Text style={styles.totalXp}>Total: {totalXp.toLocaleString()} XP</Text>
     </Animated.View>
   );
-};
+};

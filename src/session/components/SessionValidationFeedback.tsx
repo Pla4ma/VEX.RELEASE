@@ -113,8 +113,7 @@ export function SessionValidationFeedback({
                 </Box>
               ))}
               {onFixError && (
-                <Button
-                  <Text>variant="ghost"</Text>
+                <Button variant="ghost"
                   size="sm"
                   onPress={() => onFixError(field)}
                   style={{ alignSelf: 'flex-start', marginTop: 4 }}
@@ -153,8 +152,7 @@ export function SessionValidationFeedback({
                   {warning.message}
                 </Text>
                 {onDismissWarning && (
-                  <Button
-                    <Text>variant="ghost"</Text>
+                  <Button variant="ghost"
                     size="sm"
                     onPress={() => onDismissWarning(warning.field)}
                     style={{ alignSelf: 'flex-start', marginTop: 2 }}

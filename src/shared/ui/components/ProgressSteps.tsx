@@ -35,9 +35,8 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
   ];
   return (
     <View style={containerStyle}>
-      {' '}
       {steps.map((step, index) => {
-        <Text>const isLast = index === steps.length - 1;</Text>
+        const isLast = index === steps.length - 1;
         const isCompleted = index < currentStep || step.status === 'completed';
         const isActive = index === currentStep || step.status === 'active';
         let effectiveStatus: StepStatus = step.status;
@@ -52,9 +51,8 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
         }
         return (
           <React.Fragment key={step.id}>
-            {' '}
             <StepIndicator
-              <Text>status={effectiveStatus}</Text>
+              status={effectiveStatus}
               index={index}
               size={size}
               variant={variant}
@@ -71,10 +69,10 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
                 orientation={orientation}
                 theme={theme}
               />
-            )}{' '}
+            )}
           </React.Fragment>
         );
-      })}{' '}
+      })}
     </View>
   );
 };

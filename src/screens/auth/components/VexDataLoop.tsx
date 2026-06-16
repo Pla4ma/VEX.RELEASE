@@ -49,7 +49,7 @@ function StepDot({ active, isReducedMotion }: { active: boolean; isReducedMotion
         height: 8,
         borderRadius: 4,
         backgroundColor: active ? lightColors.semantic.vexGold : 'rgba(245,241,232,0.25)',
-        boxShadow: '0px 0px 8px active ? lightColors.semantic.vexGold : 'transparent' / active ? 0.9 : 0',
+        boxShadow: active ? '0px 0px 8px ' + lightColors.semantic.vexGold : '0px 0px 0px transparent',
       },
       style,
     ]} />

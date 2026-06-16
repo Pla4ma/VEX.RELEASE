@@ -164,7 +164,7 @@ export function ReportCards({
       {/* Share / Close buttons */}
       <Animated.View entering={SlideInDown.delay(500).duration(300)}>
         <Button
-          <Text>onPress={onShare}</Text>
+          onPress={onShare}
           variant="primary"
           style={{ marginBottom: theme.spacing[4] }}
         >

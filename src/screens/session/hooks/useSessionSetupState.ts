@@ -1,17 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  shouldAutoApplySmartSuggestion,
-  shouldOpenCustomizationByDefault,
-} from '../../../features/session-start/service';
+import { shouldAutoApplySmartSuggestion, shouldOpenCustomizationByDefault } from '../../../features/session-start/service';
 import type { MasteryState } from '../../../features/mastery/types';
 import type { SessionStackParams } from '../../../navigation/types';
 import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 import { SessionMode, resolveSessionMode } from '../../../session/modes';
-import {
-  PRESETS,
-  type PresetWithIcon,
-  type SmartSuggestion,
-} from '../utils/session-setup';
+import { PRESETS, type PresetWithIcon, type SmartSuggestion } from '../utils/session-setup';
 import {
   restoreSessionDraft,
   saveSessionDraft,

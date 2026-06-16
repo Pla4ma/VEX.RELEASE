@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { Skeleton, SkeletonList } from '../../shared/ui/primitives/Skeleton';
 import { ErrorState } from '../../components/states/ErrorState';
 import { EmptyNotifications } from '../../shared/ui/primitives/EmptyState.variants';

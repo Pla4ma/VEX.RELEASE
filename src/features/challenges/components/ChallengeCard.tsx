@@ -119,8 +119,7 @@ export function ChallengeCard({
           ]}
         >
           {challenge.status === 'COMPLETED' && onClaim && (
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               onPress={onClaim}
               style={styles.actionButton}
               isLoading={loading}

@@ -5,7 +5,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';

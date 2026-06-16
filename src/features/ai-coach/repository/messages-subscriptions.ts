@@ -43,7 +43,7 @@ export function subscribeToCoachMessages(
   onReconnect?: () => void,
 ) {
   const channelName = `coach-messages-${userId}`;
-  return supabase
+  const channel = supabase
     .channel(channelName)
     .on(
       'postgres_changes',
@@ -58,6 +58,7 @@ export function subscribeToCoachMessages(
     .subscribe((status) =>
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
+  return () => { void channel.unsubscribe(); };
 }
 
 export function subscribeToCoachState(
@@ -66,7 +67,7 @@ export function subscribeToCoachState(
   onReconnect?: () => void,
 ) {
   const channelName = `coach-state-${userId}`;
-  return supabase
+  const channel = supabase
     .channel(channelName)
     .on(
       'postgres_changes',
@@ -81,6 +82,7 @@ export function subscribeToCoachState(
     .subscribe((status) =>
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
+  return () => { void channel.unsubscribe(); };
 }
 
 export function subscribeToComebackPlan(
@@ -89,7 +91,7 @@ export function subscribeToComebackPlan(
   onReconnect?: () => void,
 ) {
   const channelName = `coach-comeback-${userId}`;
-  return supabase
+  const channel = supabase
     .channel(channelName)
     .on(
       'postgres_changes',
@@ -104,6 +106,7 @@ export function subscribeToComebackPlan(
     .subscribe((status) =>
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
+  return () => { void channel.unsubscribe(); };
 }
 
 export function subscribeToRecommendations(
@@ -112,7 +115,7 @@ export function subscribeToRecommendations(
   onReconnect?: () => void,
 ) {
   const channelName = `coach-recommendations-${userId}`;
-  return supabase
+  const channel = supabase
     .channel(channelName)
     .on(
       'postgres_changes',
@@ -127,6 +130,7 @@ export function subscribeToRecommendations(
     .subscribe((status) =>
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
+  return () => { void channel.unsubscribe(); };
 }
 
 /**
@@ -146,7 +150,7 @@ export function subscribeToCoachRealtime(
   onReconnect?: () => void,
 ) {
   const channelName = `coach-realtime-${userId}`;
-  return supabase
+  const channel = supabase
     .channel(channelName)
     .on(
       'postgres_changes',
@@ -191,4 +195,5 @@ export function subscribeToCoachRealtime(
     .subscribe((status) =>
       handleSubscriptionStatus(channelName, status, onReconnect),
     );
+  return () => { void channel.unsubscribe(); };
 }

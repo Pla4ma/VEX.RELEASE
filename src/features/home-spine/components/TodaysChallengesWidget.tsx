@@ -131,8 +131,7 @@ export function TodaysChallengesWidget({
                     </Box>
                   ))}
                   {/* View All button */}
-                  <Button
-                    <Text>variant="ghost"</Text>
+                  <Button variant="ghost"
                     size="sm"
                     onPress={onViewAll}
                     style={{ alignSelf: 'center' }}

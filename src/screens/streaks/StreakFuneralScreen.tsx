@@ -134,8 +134,7 @@ export const StreakFuneralScreen: React.FC = () => {
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(1000)}>
           <Box gap="md">
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               size="lg"
               fullWidth
               onPress={handleStartFresh}
@@ -145,8 +144,7 @@ export const StreakFuneralScreen: React.FC = () => {
             >
               Start fresh — new rhythm
             </Button>
-            <Button
-              <Text>variant="ghost"</Text>
+            <Button variant="ghost"
               size="sm"
               fullWidth
               onPress={handleReminisce}

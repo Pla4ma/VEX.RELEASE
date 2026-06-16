@@ -42,7 +42,7 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): React.ReactNode 
                 borderWidth: 1.2,
                 height: 24,
                 justifyContent: 'center',
-                boxShadow: '0px 2px 6px active ? vexLightGlass.mint[300] : 'transparent' / active ? 0.50 : 0',
+                boxShadow: active ? '0px 2px 6px ' + vexLightGlass.mint[300] : '0px 2px 6px transparent',
                 width: 24,
               }}
             >
