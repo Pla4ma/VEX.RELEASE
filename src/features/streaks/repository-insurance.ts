@@ -16,9 +16,7 @@ export async function fetchActiveInsurance(
     .from(INSURANCE_TABLE)
     .select(
       'id, user_id, streak_days_protected, cost, purchased_at, expires_at, used, used_at'
-    )
-    .eq('user_id', userId)
-    .eq('used', false)
+    )    .eq('used', false)
     .gt('expires_at', new Date().toISOString())
     .order('purchased_at', { ascending: false })
     .limit(1)
@@ -67,9 +65,7 @@ export async function fetchActiveGamble(
     .from(GAMBLE_TABLE)
     .select(
       'id, user_id, streak_days_at_risk, started_at, session_id, status, required_grade, actual_grade, bonus_xp_if_won, settled_at'
-    )
-    .eq('user_id', userId)
-    .eq('status', 'ACTIVE')
+    )    .eq('status', 'ACTIVE')
     .single();
   if (error) {
     if (error.code === 'PGRST116') {
@@ -120,9 +116,7 @@ export async function settleGamble(
 export async function fetchAvailableTokens(userId: string): Promise<number> {
   const { count, error } = await supabase
     .from(TOKEN_TABLE)
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .eq('used', false);
+    .select('*', { count: 'exact', head: true })    .eq('used', false);
   if (error) {
     throw error;
   }

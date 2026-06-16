@@ -119,7 +119,7 @@ export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
         </Box>
       </Button>
 
-      <Animated.View style={[pulseStyle]}>
+      <Animated.View style={pulseStyle}>
         <Box
           p={3}
           borderRadius={12}

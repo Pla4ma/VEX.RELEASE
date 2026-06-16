@@ -199,6 +199,28 @@
         "last_turn_id": "019ec90f-86ff-7c11-86ef-60b0c9a2b161",
         "last_thread_id": null
       }
+    },
+    "019ecdbd-624f-7fb2-b85e-db5f0702db8e": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|retest says `.env.server` still has same non-unified-looking key: ```txt keylen=71 startsfreellmapi=false base=http://167.71.255.199:3001/v1 model=auto bearer=401 invalid api key x-api-key=401 invalid api key ``` so either: - you updated supabase secrets, but not local `.env.server` - `.env.server` has different key than dashboard - freellmapi unified key on your instance does not use repo format, but server still rejects it need simplest check: open `.env.server`. first chars of `llm_api_key` must be: ```txt freellmapi- ``` no quotes. no spaces. if you only updated supabase secrets, local retest will still fail. then deployed edge may use new secret, but local `.env.server` won’t. to retest deployed, need deploy functions first: ```bash npx supabase functions deploy ai-coach npx supabase functions deploy ai npx supabase functions deploy content-study ``` then test app ai coach.",
+        "first_seen_at": "2026-06-16T00:48:54.563Z",
+        "last_seen_at": "2026-06-16T00:48:54.563Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ecde6-7fb1-7281-8450-5fdac0bfd77f",
+        "last_thread_id": null
+      },
+      "last_signature": "sloppy-fallback-diff-stop|019ecdbd-624f-7fb2-b85e-db5f0702db8e|no-thread|019ecdbd-73b4-7d20-b3bc-39a29fea9d3f|C:\\Users\\jonat\\.codex\\sessions\\2026\\06\\15\\rollout-2026-06-15T20-03-22-019ecdbd-624f-7fb2-b85e-db5f0702db8e.jsonl|yes ai coach uses gemini server side key path 'src features ai coach pipeline pipeline ts' supabase function 'ai coach' 'supabase functions ai coach index ts' 'gemini_api_key' gemini 'gemini 1 5 flash' other ai features i found ai coach messages personalized coach copy persona aware streak session context coach interventions streak risk comeback window session complete nudges ai backed recommendations home coach surfaces recommendation cards and intervention banners shared ai endpoints 'generate_coach_message' 'generate_session_summary' 'generate_comeback_prompt' 'generate_streak_risk_nudge' 'generate_weekly_reflection' content study upload paste pdf youtube content gemini 'gemini 2 5 pro' study plan tasks quiz items session plan study quiz session integration generated study plans feed session setup and quiz breaks coach memory presence stores coach memory and derives insights but not every memory path is necessarily llm backed important nuance app has two ai edge function styles 'supabase functions ai coach index ts' active direct coach function 'gemini 1 5 flash' 'supabase functions ai index ts' generic multi endpoint ai function using 'gemini_model_flash' 'gemini_model_pro' but client search mostly shows current app invoking 'ai coach' directly|path scripts fix many js line for now just identify complex fix source untracked",
+      "updated_at": "2026-06-16T00:06:55.405Z"
+    },
+    "019ecdc6-d44b-7b92-bd99-4d43c48807c3": {
+      "ordinary_no_progress_guard": {
+        "fingerprint": "ordinary|{\"suggestions\":[{\"title\":\"close the auth and session rls holes before next build\",\"description\":\"today’s supabase advisors still flag anonymous-access and rls gaps on core auth/session data, while phase 16 remains the blocking launch gate in notion. the repo already has earlier hardening migrations, so this is a concrete unfinished release blocker rather than a new audit.\",\"prompt\":\"inspect the current supabase security advisors for vex official and fix the remaining auth/session policy gaps in this repo. add the missing migration(s) for `public.users`, `public.user_sessions`, and any adjacent anon-exposed auth tables, update checks or generated types if needed, and summarize exactly what was fixed versus what still requires dashboard-only changes.\",\"appid\":\"asdk_app_6943c531f50c8191b40bcd2ca978c780\"},{\"title\":\"finish the focus score and streak alert launch polish\",\"description\":\"your latest commit today was a broad react-doctor sweep, and the repo is still dirty in `focusscorecardcontent.tsx` and `streakcriticalalert.tsx`. that lines up with the launch checklist pressure: these look like the kind of last-mile ui/accessibility fixes you are already in the middle of and can hand off immediately.\",\"prompt\":\"use the current dirty state of this repo to finish the launch-polish pass on `src/features/focus-identity/components/focusscorecardcontent.tsx` and `src/features/streaks/components/streakcriticalalert.tsx`. bring both into vex compliance with token-only styling, reduced-motion-safe reanimated behavior, full accessibility metadata, and no regressions, then run the relevant typecheck/verification on the touched surface and report what changed.\",\"appid\":\"asdk_app_69d3e5ee6a708191baa733f7b8931995\"}]}",
+        "first_seen_at": "2026-06-16T00:20:56.250Z",
+        "last_seen_at": "2026-06-16T00:20:56.250Z",
+        "repeat_count": 1,
+        "last_turn_id": "019ecdc6-d593-79d0-b179-e7bd5fb71389",
+        "last_thread_id": null
+      }
     }
   }
 }

@@ -148,10 +148,20 @@ export function useStreakFuneralNavigation({
     return unsubscribe;
   }, [userId, totalCompletedSessions]);
 
+  const showStreakFuneralRef = useRef(showStreakFuneral);
+  const streakFuneralDataRef = useRef(streakFuneralData);
+
   useEffect(() => {
+    showStreakFuneralRef.current = showStreakFuneral;
+    streakFuneralDataRef.current = streakFuneralData;
+  });
+
+  useEffect(() => {
+    const currentShow = showStreakFuneralRef.current;
+    const currentData = streakFuneralDataRef.current;
     if (
-      !showStreakFuneral ||
-      !streakFuneralData ||
+      !currentShow ||
+      !currentData ||
       !isAuthenticated ||
       !hasCompletedOnboarding
     ) {
@@ -167,7 +177,7 @@ export function useStreakFuneralNavigation({
     }
 
     setLastFuneralShown();
-    navigationRef.navigate('StreakFuneral', streakFuneralData);
+    navigationRef.navigate('StreakFuneral', currentData);
     setShowStreakFuneral(false);
     setStreakFuneralData(null);
   }, [
@@ -175,7 +185,5 @@ export function useStreakFuneralNavigation({
     isAuthenticated,
     isNavigationReady,
     navigationRef,
-    showStreakFuneral,
-    streakFuneralData,
   ]);
 }

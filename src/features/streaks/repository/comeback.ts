@@ -11,9 +11,7 @@ export async function fetchExistingComebackQuest(
 ): Promise<ComebackQuest | null> {
   const { data, error } = await supabase
     .from('comeback_quests')
-    .select('id,user_id,stage,days_absent,streak_before_break,quest1_completed,quest2_completed,quest3_completed,all_quests_completed,rewards_claimed,phoenix_badge_earned,created_at,updated_at')
-    .eq('user_id', userId)
-    .eq('all_quests_completed', false)
+    .select('id,user_id,stage,days_absent,streak_before_break,quest1_completed,quest2_completed,quest3_completed,all_quests_completed,rewards_claimed,phoenix_badge_earned,created_at,updated_at')    .eq('all_quests_completed', false)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -87,9 +85,7 @@ export async function fetchLastCompletedSession(
 ): Promise<{ completed_at: string } | null> {
   const { data, error } = await supabase
     .from('sessions')
-    .select('completed_at')
-    .eq('user_id', userId)
-    .eq('status', 'COMPLETED')
+    .select('completed_at')    .eq('status', 'COMPLETED')
     .order('completed_at', { ascending: false })
     .limit(1)
     .single();
@@ -102,9 +98,7 @@ export async function fetchUserStreakBeforeBreak(
 ): Promise<number> {
   const { data, error } = await supabase
     .from('user_streaks')
-    .select('streak_before_break')
-    .eq('user_id', userId)
-    .single();
+    .select('streak_before_break')    .single();
   if (error) {return 0;}
   return (data?.streak_before_break ?? 0) as number;
 }

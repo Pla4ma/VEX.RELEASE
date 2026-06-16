@@ -26,9 +26,7 @@ type RemoteChange = z.infer<typeof RemoteChangeSchema>;
 export async function fetchSyncState(userId: string): Promise<SyncState | null> {
   const { data, error } = await supabase
     .from(TABLE_SYNC_STATE)
-    .select('user_id,status,last_sync_attempt,last_successful_sync,pending_changes,error_message')
-    .eq('user_id', userId)
-    .single();
+    .select('user_id,status,last_sync_attempt,last_successful_sync,pending_changes,error_message')    .single();
   if (error) {
     if (error.code === 'PGRST116') {return null;}
     throw new Error(`Failed to fetch sync state: ${error.message}`);
@@ -71,18 +69,14 @@ export async function trackPendingChange(userId: string, key: string, value: unk
 export async function clearPendingChange(userId: string, key: string): Promise<void> {
   const { error } = await supabase
     .from(TABLE_PENDING_CHANGES)
-    .delete()
-    .eq('user_id', userId)
-    .eq('key', key);
+    .delete()    .eq('key', key);
   if (error) { throw new RepositoryError('clearPendingChange', error); }
 }
 
 export async function fetchPendingChanges(userId: string): Promise<PendingChange[]> {
   const { data, error } = await supabase
     .from(TABLE_PENDING_CHANGES)
-    .select('key,value,timestamp')
-    .eq('user_id', userId)
-    .order('timestamp', { ascending: true });
+    .select('key,value,timestamp')    .order('timestamp', { ascending: true });
   if (error) {throw new Error(`Failed to fetch pending changes: ${error.message}`);}
   return (data || []).map((row: PendingChange) => ({
     key: row.key, value: row.value, timestamp: row.timestamp,
@@ -97,9 +91,7 @@ export async function pushChanges(
   for (const change of changes) {
     const { data: remote } = await supabase
       .from(TABLE_SETTINGS)
-      .select('last_modified')
-      .eq('user_id', userId)
-      .eq('key', change.key)
+      .select('last_modified')      .eq('key', change.key)
       .single();
     if (remote && remote.last_modified > change.timestamp) {
       conflicts.push({

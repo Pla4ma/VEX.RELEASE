@@ -1,0 +1,9 @@
+fix: doctor diagnostics - prev-prop pattern, redundant user_id filters, analytics dashboard
+
+- Apply prev-prop pattern to useEffects that adjust state on prop change
+- Remove redundant .eq('user_id', userId) clauses (rely on RLS)
+- Derive state in render for AnalyticsDashboard
+- Suppress lint with eslint-disable where migration is intentional
+- Update analytics/session lifecycle hooks
+
+Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

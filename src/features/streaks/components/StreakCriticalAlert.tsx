@@ -54,7 +54,7 @@ export function StreakCriticalAlert({
       accessibilityRole="button"
       accessibilityHint="Double tap to start a session now"
     >
-      <Animated.View style={[pulseStyle]}>
+      <Animated.View style={pulseStyle}>
         <Box
           px="lg"
           py="md"
@@ -63,7 +63,7 @@ export function StreakCriticalAlert({
             borderBottomColor: theme.colors.error.DEFAULT,
           }}
         >
-          <Animated.View style={[shakeStyle]}>
+          <Animated.View style={shakeStyle}>
             <Box alignItems="center" gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
                 <Icon

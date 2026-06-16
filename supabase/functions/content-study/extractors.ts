@@ -1,10 +1,30 @@
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
+import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') || '';
 const GEMINI_MODEL = 'gemini-2.5-pro';
 const GEMINI_TIMEOUT_MS = 60000;
 
+export function resolveStudyPlanModel(): string {
+  return getOpenAICompatibleConfig()
+    ? getOpenAICompatibleModel('pro', 'auto')
+    : GEMINI_MODEL;
+}
+
 async function callGemini(prompt: string): Promise<string> {
+  const llmConfig = getOpenAICompatibleConfig();
+  if (llmConfig) {
+    const result = await callOpenAICompatible({
+      config: llmConfig,
+      model: resolveStudyPlanModel(),
+      systemPrompt: 'You are an expert study planner. Return only valid JSON.',
+      userPrompt: prompt,
+      timeoutMs: GEMINI_TIMEOUT_MS,
+      temperature: 0.3,
+      maxTokens: 8192,
+    });
+    return result.content;
+  }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
   try {

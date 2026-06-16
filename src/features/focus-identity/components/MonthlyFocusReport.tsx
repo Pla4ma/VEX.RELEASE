@@ -43,6 +43,12 @@ export function MonthlyFocusReport({
     refetch: refresh,
   } = useMonthlyReport(userId, year, month);
   const [hasPublishedView, setHasPublishedView] = React.useState(false);
+  const [prevReportId, setPrevReportId] = React.useState(report?.id);
+
+  if (report && report.id !== prevReportId) {
+    setPrevReportId(report.id);
+    setHasPublishedView(false);
+  }
 
   React.useEffect(() => {
     if (report && !hasPublishedView) {

@@ -143,26 +143,29 @@ export function useSessionSetupState(
     userId,
   ]);
 
-  useEffect(() => {
-    if (!hasHydratedDraft || hasAutoAppliedSuggestion) {return;}
+  const [prevAutoApplyKey, setPrevAutoApplyKey] = useState(
+    `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`,
+  );
+  const currentAutoApplyKey = `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`;
+  if (
+    !hasAutoAppliedSuggestion &&
+    hasHydratedDraft &&
+    currentAutoApplyKey !== prevAutoApplyKey
+  ) {
+    setPrevAutoApplyKey(currentAutoApplyKey);
     if (
-      !shouldAutoApplySmartSuggestion({
+      shouldAutoApplySmartSuggestion({
         hasSavedDraft,
         params: params ?? {},
         smartSuggestionPresetId: smartSuggestion?.preset.id ?? null,
-      })
-    ) {return;}
-    if (!smartSuggestion) {return;}
-    setSelectedPreset(smartSuggestion.preset);
-    setSelectedCategory(smartSuggestion.preset.category ?? 'standard');
-    setHasAutoAppliedSuggestion(true);
-  }, [
-    hasAutoAppliedSuggestion,
-    hasHydratedDraft,
-    hasSavedDraft,
-    params,
-    smartSuggestion,
-  ]);
+      }) &&
+      smartSuggestion
+    ) {
+      setSelectedPreset(smartSuggestion.preset);
+      setSelectedCategory(smartSuggestion.preset.category ?? 'standard');
+      setHasAutoAppliedSuggestion(true);
+    }
+  }
 
   useEffect(() => {
     if (!userId || !hasHydratedDraft) {return;}

@@ -23,9 +23,7 @@ export async function fetchStreakSummary(
   return executeWithFallback('fetchStreakSummary', async () => {
     const { data: streakData, error: streakError } = await supabase
       .from('streaks')
-      .select(tableColumns('streaks'))
-      .eq('user_id', userId)
-      .single();
+      .select(tableColumns('streaks'))      .single();
 
     if (streakError) {
       if (streakError.code === 'PGRST116') {
@@ -63,9 +61,7 @@ export async function fetchStreakEnhanced(
   return executeWithFallback('fetchStreak', async () => {
     const { data, error } = await supabase
       .from('streaks')
-      .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')
-      .eq('user_id', userId)
-      .single();
+      .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')      .single();
     if (error) {
       throw error;
     }
@@ -120,9 +116,7 @@ export async function updateStreakEnhanced(
   return executeWithFallback('updateStreak', async () => {
     const { data, error } = await supabase
       .from('streaks')
-      .update({ ...updates, updated_at: Date.now() })
-      .eq('user_id', userId)
-      .select(tableColumns('streaks'))
+      .update({ ...updates, updated_at: Date.now() })      .select(tableColumns('streaks'))
       .single();
     if (error) {
       throw error;

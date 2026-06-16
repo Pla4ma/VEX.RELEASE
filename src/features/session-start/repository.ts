@@ -25,9 +25,7 @@ export async function getDifficultyPreference(
 
     const { data, error } = await supabase
       .from('difficulty_preferences')
-      .select('user_id,current_difficulty,suggested_difficulty,last_suggestion_at,suggestion_dismissed_at,times_shown,times_accepted,updated_at')
-      .eq('user_id', userId)
-      .single();
+      .select('user_id,current_difficulty,suggested_difficulty,last_suggestion_at,suggestion_dismissed_at,times_shown,times_accepted,updated_at')      .single();
 
     if (error) {
       if (error.code === 'PGRST116') {

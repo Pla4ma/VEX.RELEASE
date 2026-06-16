@@ -20,9 +20,7 @@ export async function fetchActiveRepairQuestEnhanced(
   return executeWithFallback('fetchActiveRepairQuest', async () => {
     const { data, error } = await supabase
       .from('streak_repair_quests')
-      .select('id,user_id,previous_streak,target_restore_days,sessions_completed,sessions_required,started_at,expires_at,status,session_ids,completed_at')
-      .eq('user_id', userId)
-      .eq('status', 'ACTIVE')
+      .select('id,user_id,previous_streak,target_restore_days,sessions_completed,sessions_required,started_at,expires_at,status,session_ids,completed_at')      .eq('status', 'ACTIVE')
       .single();
     if (error) {
       if (error.code === 'PGRST116') {

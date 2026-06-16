@@ -8,9 +8,7 @@ import { tableColumns } from '../../lib/repository/tableColumns';
 export async function fetchStreak(userId: string): Promise<Streak | null> {
   const { data, error } = await supabase
     .from('streaks')
-    .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')
-    .eq('user_id', userId)
-    .single();
+    .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')    .single();
   if (error) {
     if (error.code === 'PGRST116') {
       return null;
@@ -73,9 +71,7 @@ export async function updateStreak(
       shields_available: updates.shieldsAvailable,
       grace_period_used: updates.gracePeriodUsed,
       updated_at: Date.now(),
-    })
-    .eq('user_id', userId)
-    .select(tableColumns('streaks'))
+    })    .select(tableColumns('streaks'))
     .single();
   if (error) {
     throw new RepositoryError('updateStreak', error);
@@ -129,9 +125,7 @@ export async function getAvailableShield(
 ): Promise<string | null> {
   const { data, error } = await supabase
     .from('streak_shields')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('used', false)
+    .select('id')    .eq('used', false)
     .order('created_at', { ascending: true })
     .limit(1)
     .maybeSingle();

@@ -19,7 +19,6 @@ export async function fetchActiveRepairQuest(
   const { data, error } = await supabase
     .from('streak_repair_quests')
     .select('id,user_id,previous_streak,target_restore_days,sessions_completed,sessions_required,started_at,expires_at,status,session_ids,completed_at')
-    .eq('user_id', userId)
     .eq('status', 'ACTIVE')
     .single();
   if (error) {

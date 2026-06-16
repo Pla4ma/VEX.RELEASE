@@ -40,21 +40,32 @@ export function AnalyticsDashboard({
   } = useSessionHeatmapData(userId, weeks);
   const { data: insights, isLoading: insightsLoading } = useInsights(userId, { limit: 5 });
 
+  const [prevDataError, setPrevDataError] = React.useState(dataError);
+  const [prevDataErrorObj, setPrevDataErrorObj] = React.useState(dataErrorObj);
+
+  if (dataError !== prevDataError || dataErrorObj !== prevDataErrorObj) {
+    setPrevDataError(dataError);
+    setPrevDataErrorObj(dataErrorObj);
+    if (dataError && dataErrorObj) {
+      const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
+      setDashboardState('error');
+      setError({
+        title: 'Failed to load analytics',
+        message: analyticsError.message,
+        recoverable: true,
+        action: () => { refetchData(); },
+      });
+    }
+  }
+
   React.useEffect(() => {
     if (!dataError || !dataErrorObj) {return;}
     const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
-    setDashboardState('error');
-    setError({
-      title: 'Failed to load analytics',
-      message: analyticsError.message,
-      recoverable: true,
-      action: () => { refetchData(); },
-    });
     Sentry.captureException(analyticsError, {
       tags: { component: 'AnalyticsDashboard', operation: 'fetchData' },
       extra: { userId, timeRange, metrics: selectedMetrics },
     });
-  }, [dataError, dataErrorObj, refetchData, selectedMetrics, timeRange, userId]);
+  }, [dataError, dataErrorObj, userId, timeRange, selectedMetrics]);
 
   const state = useMemo<DashboardState>(() => {
     if (dataLoading || insightsLoading) {return 'loading';}

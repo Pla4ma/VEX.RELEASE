@@ -2,6 +2,7 @@ import { buildCorsHeaders } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
+import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
 
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
 const httpRequest = globalThis.fetch.bind(globalThis);
@@ -23,8 +24,9 @@ Deno.serve(async (request) => {
   const parsed = AIRequestSchema.safeParse(body);
   if (!parsed.success) return respond(buildError(readRequestType(body), startedAt, 'INVALID_REQUEST', 'Invalid AI request payload', false), 400, request);
   if (parsed.data.userId !== auth.user.id) return respond(buildError(parsed.data.requestType, startedAt, 'FORBIDDEN', 'Request user does not match auth token', false), 403, request);
+  const llmConfig = getOpenAICompatibleConfig();
   const apiKey = Deno.env.get('GEMINI_API_KEY');
-  if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_API_ERROR', 'Missing Gemini configuration', true), 200, request);
+  if (!llmConfig && !apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if (parsed.data.requestType === 'GENERATE_COACH_MESSAGE' && supabaseUrl && serviceRoleKey) {
@@ -33,10 +35,16 @@ Deno.serve(async (request) => {
   }
   try {
     const prompt = buildPrompt(parsed.data);
+    if (llmConfig) {
+      const model = getOpenAICompatibleModel('fast', 'auto');
+      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens });
+      return respond(buildTextSuccess(parsed.data, llm.content, model, startedAt, llm.promptTokens, llm.responseTokens), 200, request);
+    }
+    if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
     const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);
     return respond(buildSuccess(parsed.data, gemini, startedAt), 200, request);
   } catch (error) {
-    return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_API_ERROR', error instanceof Error ? error.message : 'Gemini request failed', true), 200, request);
+    return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', error instanceof Error ? error.message : 'LLM request failed', true), 200, request);
   }
 });
 
@@ -62,6 +70,15 @@ async function callGemini(apiKey: string, systemPrompt: string, userPrompt: stri
 function buildSuccess(request: AIRequest, gemini: GeminiResponse, startedAt: number) {
   const rawText = gemini.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('\n') ?? '';
   const metadata = { model: 'gemini-1.5-flash', processingTimeMs: Date.now() - startedAt, promptTokens: gemini.usageMetadata?.promptTokenCount, responseTokens: gemini.usageMetadata?.candidatesTokenCount, cached: false };
+  return buildTextPayload(request, rawText, metadata);
+}
+
+function buildTextSuccess(request: AIRequest, rawText: string, model: string, startedAt: number, promptTokens?: number, responseTokens?: number) {
+  const metadata = { model, processingTimeMs: Date.now() - startedAt, promptTokens, responseTokens, cached: false };
+  return buildTextPayload(request, rawText, metadata);
+}
+
+function buildTextPayload(request: AIRequest, rawText: string, metadata: { model: string; processingTimeMs: number; promptTokens?: number; responseTokens?: number; cached: boolean }) {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const structuredData = CoachPayloadSchema.parse(parseJsonBlock(rawText));
     return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };

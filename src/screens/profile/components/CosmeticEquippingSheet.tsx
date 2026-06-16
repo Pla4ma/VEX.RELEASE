@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Modal, Pressable, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -46,10 +46,14 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
 }) => {
   const { theme } = useTheme();
   const { showToast } = useUIStore();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(currentEquippedId ?? null);
   const [isEquipping, setIsEquipping] = useState(false);
   const slideUp = useSharedValue(0);
-  React.useEffect(() => {
+  const prevVisibleRef = useRef(visible);
+  const prevEquippedIdRef = useRef(currentEquippedId);
+
+  if (visible !== prevVisibleRef.current) {
+    prevVisibleRef.current = visible;
     if (visible) {
       slideUp.value = withSpring(1, { damping: 15 });
       setSelectedId(currentEquippedId ?? null);
@@ -57,7 +61,10 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
       slideUp.value = 0;
       setSelectedId(null);
     }
-  }, [visible, slideUp, currentEquippedId]);
+  } else if (currentEquippedId !== prevEquippedIdRef.current && visible) {
+    prevEquippedIdRef.current = currentEquippedId;
+    setSelectedId(currentEquippedId ?? null);
+  }
   const modalStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: (1 - slideUp.value) * 400 }],
   }));

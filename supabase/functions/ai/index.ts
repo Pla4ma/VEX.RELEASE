@@ -4,6 +4,7 @@ import { AI_TIMEOUTS, FALLBACK_CONTENT, GENERATION_CONFIG, MODEL_BY_USE_CASE, SY
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { callGemini } from './gemini.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
+import { getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
 
 function jsonResponse(payload: unknown, status: number, corsHeaders: Record<string, string>): Response {
   return new Response(JSON.stringify(payload), {
@@ -76,12 +77,13 @@ function getRouteSlug(url: string): string {
 
 async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
   const startedAt = Date.now();
+  const llmConfig = getOpenAICompatibleConfig();
   const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
-  if (!geminiApiKey) return buildFallbackResponse(request, 'Missing GEMINI_API_KEY', 0, 503);
+  if (!llmConfig && !geminiApiKey) return buildFallbackResponse(request, 'Missing LLM configuration', 0, 503);
 
   try {
     const model = resolveModel(request.requestType);
-    const content = await callGemini({ apiKey: geminiApiKey, model, systemPrompt: resolveSystemPrompt(request.requestType), userPrompt: renderPromptTemplate(request), timeoutMs: resolveTimeout(request.requestType), generationConfig: resolveGenerationConfig(request.requestType) });
+    const content = await callGemini({ apiKey: geminiApiKey ?? '', model, systemPrompt: resolveSystemPrompt(request.requestType), userPrompt: renderPromptTemplate(request), timeoutMs: resolveTimeout(request.requestType), generationConfig: resolveGenerationConfig(request.requestType) });
     return {
       success: true,
       requestType: request.requestType,
@@ -95,6 +97,8 @@ async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
 }
 
 function resolveModel(requestType: AIRequest['requestType']): string {
+  const llmConfig = getOpenAICompatibleConfig();
+  if (llmConfig) return getOpenAICompatibleModel(requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION' ? 'pro' : 'fast', 'auto');
   return Deno.env.get(requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION' ? 'GEMINI_MODEL_PRO' : 'GEMINI_MODEL_FLASH') || MODEL_BY_USE_CASE[requestType] || 'gemini-2.5-flash';
 }
 

@@ -54,8 +54,11 @@ export function useComboAnimations({
     };
   }, [fireIntensity, glowIntensity, progressWidth, scale, shakeRotation]);
 
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
+  const [prevComboMinutes, setPrevComboMinutes] = useState(comboMinutes);
+  const [prevIsPausedOrIdle, setPrevIsPausedOrIdle] = useState(isPaused || isIdle);
+
+  if (comboMinutes !== prevComboMinutes) {
+    setPrevComboMinutes(comboMinutes);
     const milestones = [5, 10, 15, 20, 25, 30, 45, 60];
     for (const milestone of milestones) {
       if (comboMinutes === milestone && milestone > lastMilestoneRef.current) {
@@ -67,38 +70,37 @@ export function useComboAnimations({
           withSpring(1, { damping: 15 }),
         );
         onMilestoneReached?.(milestone, tier.multiplier);
-        timer = setTimeout(() => {
-          setShowMilestone(false);
-        }, 3000);
         break;
       }
     }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [comboMinutes, tier.multiplier, onMilestoneReached, scale]);
+  }
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    if (
-      (isPaused || isIdle) &&
-      previousComboRef.current > 0 &&
-      !wasPausedRef.current
-    ) {
+    if (!showMilestone) {return;}
+    const timer = setTimeout(() => setShowMilestone(false), 3000);
+    return () => clearTimeout(timer);
+  }, [showMilestone]);
+
+  if (
+    (isPaused || isIdle) !== prevIsPausedOrIdle ||
+    comboMinutes !== prevComboMinutes
+  ) {
+    setPrevIsPausedOrIdle(isPaused || isIdle);
+    if ((isPaused || isIdle) && previousComboRef.current > 0) {
       if (previousComboRef.current >= 5) {
         setShowComboBroken(true);
         onComboBroken?.(previousComboRef.current);
-        timer = setTimeout(() => {
-          setShowComboBroken(false);
-        }, 2000);
       }
     }
     previousComboRef.current = comboMinutes;
     wasPausedRef.current = isPaused || isIdle;
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [isPaused, isIdle, comboMinutes, onComboBroken]);
+  }
+
+  useEffect(() => {
+    if (!showComboBroken) {return;}
+    const timer = setTimeout(() => setShowComboBroken(false), 2000);
+    return () => clearTimeout(timer);
+  }, [showComboBroken]);
 
   useEffect(() => {
     progressWidth.value = withTiming(tierProgress, { duration: 500 });

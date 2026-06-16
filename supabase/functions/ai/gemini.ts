@@ -1,5 +1,6 @@
 import { SAFETY_SETTINGS, RETRY_CONFIG } from '../../../src/shared/ai/ai-constants.ts';
 import type { AIRequest, GeminiAPIResponse } from '../../../src/shared/ai/ai-types.ts';
+import { callOpenAICompatible, getOpenAICompatibleConfig } from '../_shared/openai-compatible.ts';
 
 const httpRequest = globalThis.fetch.bind(globalThis);
 
@@ -7,6 +8,19 @@ export async function callGemini(params: {
   apiKey: string; model: string; systemPrompt: string; userPrompt: string;
   timeoutMs: number; generationConfig: Record<string, number>;
 }): Promise<string> {
+  const llmConfig = getOpenAICompatibleConfig();
+  if (llmConfig) {
+    const content = await callOpenAICompatible({
+      config: llmConfig,
+      model: params.model,
+      systemPrompt: params.systemPrompt,
+      userPrompt: params.userPrompt,
+      timeoutMs: params.timeoutMs,
+      temperature: params.generationConfig.temperature ?? 0.4,
+      maxTokens: params.generationConfig.maxOutputTokens ?? 800,
+    });
+    return sanitizeContent(content.content);
+  }
   let attempt = 0;
   let lastError: Error | null = null;
   while (attempt < RETRY_CONFIG.MAX_RETRIES) {

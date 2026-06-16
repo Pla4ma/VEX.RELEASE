@@ -86,7 +86,7 @@ export const PromptView: React.FC<PromptViewProps> = ({
         }}
       >
         <Box alignItems="center" mb={4}>
-          <Animated.View style={[shakeStyle]}>
+          <Animated.View style={shakeStyle}>
             <Text
               variant="h2"
               color={riskInfo.color}

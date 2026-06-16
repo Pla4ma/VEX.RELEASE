@@ -1,4 +1,4 @@
-export { getRateLimitClient, resetRateLimitClient } from './rate-limit-client';
+export { getRateLimitClient, resetRateLimitClient } from './rate-limit-client.ts';
 
 export interface RateLimitConfig {
   maxRequests: number;

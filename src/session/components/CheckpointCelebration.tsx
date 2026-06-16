@@ -55,10 +55,12 @@ export function CheckpointCelebration({
   const opacity = useSharedValue(0);
   const emojiScale = useSharedValue(0);
   const particleY = useSharedValue(0);
-  useEffect(() => {
-    if (!isVisible) {
-      return;
-    }
+  const [prevCheckpointKey, setPrevCheckpointKey] = useState(
+    `${progressPercent}-${elapsedMinutes}-${lastCheckpoint}`,
+  );
+  const currentCheckpointKey = `${progressPercent}-${elapsedMinutes}-${lastCheckpoint}`;
+  if (isVisible && currentCheckpointKey !== prevCheckpointKey) {
+    setPrevCheckpointKey(currentCheckpointKey);
     const detected = detectCheckpoint(
       progressPercent,
       elapsedMinutes,
@@ -72,7 +74,7 @@ export function CheckpointCelebration({
       );
       setParticles(generateParticles(20));
     }
-  }, [progressPercent, elapsedMinutes, isVisible, lastCheckpoint]);
+  }
   useEffect(() => {
     if (showCelebration) {
       scale.value = 0;

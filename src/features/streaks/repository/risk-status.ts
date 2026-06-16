@@ -44,9 +44,7 @@ export async function fetchRiskStatusEnhanced(
   return executeWithFallback('fetchRiskStatus', async () => {
     const { data, error } = await supabase
       .from('streak_risk_status')
-      .select('user_id,current_days,hours_remaining,minutes_remaining,risk_level,flame_health_percent,is_at_risk,is_critical,notifications_sent,last_updated')
-      .eq('user_id', userId)
-      .single();
+      .select('user_id,current_days,hours_remaining,minutes_remaining,risk_level,flame_health_percent,is_at_risk,is_critical,notifications_sent,last_updated')      .single();
     if (error) {
       if (error.code === 'PGRST116') {
         return null;

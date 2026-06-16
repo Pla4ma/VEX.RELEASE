@@ -45,14 +45,22 @@ export function useCompanionSession(
     setEventLabel(label);
     setTimeout(() => setEventLabel(null), 1400);
   }, []);
-  useEffect(() => {
+  const [prevUserId, setPrevUserId] = useState(userId);
+  if (userId !== prevUserId) {
+    setPrevUserId(userId);
     if (!userId) {
       setState(null);
       setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!userId) {
       return;
     }
     let mounted = true;
-    setIsLoaded(false);
     loadCompanionState(userId)
       .then((loaded) => {
         if (!mounted) {
@@ -70,14 +78,14 @@ export function useCompanionSession(
       mounted = false;
     };
   }, [userId]);
-  useEffect(() => {
-    if (
-      !serviceRef.current ||
-      !hasCompanionState ||
-      activeSessionRef.current === sessionId
-    ) {
-      return;
-    }
+  const [prevSessionStartId, setPrevSessionStartId] = useState(sessionId);
+  if (
+    serviceRef.current &&
+    hasCompanionState &&
+    activeSessionRef.current !== sessionId &&
+    sessionId !== prevSessionStartId
+  ) {
+    setPrevSessionStartId(sessionId);
     serviceRef.current.startSession(totalSeconds / 60);
     activeSessionRef.current = sessionId;
     triggeredMilestonesRef.current = new Set();
@@ -94,7 +102,7 @@ export function useCompanionSession(
           }
         : current,
     );
-  }, [hasCompanionState, sessionId, totalSeconds]);
+  }
   useEffect(() => {
     const service = serviceRef.current;
     if (!service || !hasCompanionState) {

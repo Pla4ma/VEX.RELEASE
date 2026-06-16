@@ -53,7 +53,7 @@ export function FocusScoreCardContent({
       disabled={!onPress}
       onPress={handlePress}
     >
-      <Animated.View style={[animatedStyles]}>
+      <Animated.View style={animatedStyles}>
         <GlassCard padding={padding} radius={22} variant="default">
           <View
             style={{

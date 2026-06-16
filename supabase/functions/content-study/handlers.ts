@@ -7,7 +7,7 @@
 
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { SubmitContentSchema, GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
-import { generateStudyPlan } from './extractors.ts';
+import { generateStudyPlan, resolveStudyPlanModel } from './extractors.ts';
 export { handleExtract } from './handlers-extract.ts';
 
 const MAX_CONTENT_LENGTH = 50000;
@@ -150,7 +150,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
     const geminiResponse = await generateStudyPlan(textToProcess, content.title || undefined);
     const parsed = parseStudyPlanResponse(geminiResponse);
     const { data: generation, error: genError } = await supabase.from('study_generations').insert({
-      content_id: validated.contentId, user_id: userId, model: 'gemini-2.5-pro', processing_time_ms: Date.now() - startTime,
+      content_id: validated.contentId, user_id: userId, model: resolveStudyPlanModel(), processing_time_ms: Date.now() - startTime,
       summary: parsed.summary, key_concepts: parsed.keyConcepts, tasks: parsed.tasks, quiz_items: parsed.quizItems, session_plan: parsed.sessionPlan,
     }).select().single();
     if (genError) {
