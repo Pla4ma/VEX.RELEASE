@@ -66,8 +66,14 @@ export function calculateFocusScoreUpdate(
   ) {delta = 12;}
 
   const newScore = clampScore(input.previousScore + delta);
-  const topPositive = [...factorEntries].sort((a, b) => b.delta - a.delta)[0]!;
-  const topNegative = [...factorEntries].sort((a, b) => a.delta - b.delta)[0]!;
+  const topPositive = factorEntries.reduce<typeof factorEntries[number]>(
+    (best, entry) => (best.delta < entry.delta ? entry : best),
+    factorEntries[0]!,
+  );
+  const topNegative = factorEntries.reduce<typeof factorEntries[number]>(
+    (worst, entry) => (worst.delta > entry.delta ? entry : worst),
+    factorEntries[0]!,
+  );
   const userFacingReason =
     delta >= 0
       ? `Clean momentum. ${FACTOR_LABELS[topPositive.key]} pushed your Focus Score forward.`

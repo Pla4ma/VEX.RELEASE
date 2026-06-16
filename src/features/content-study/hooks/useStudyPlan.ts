@@ -89,9 +89,11 @@ export function useStudyPlan(generationId: string) {
     mutationFn: async ({ taskId }: { taskId: string }) => {
       const sessions =
         await studySessionManager.getSessionsForGeneration(generationId);
-      const latestSession = [...sessions].sort(
-        (a, b) => b.startTime - a.startTime,
-      )[0];
+      const latestSession = sessions.reduce<typeof sessions[number] | undefined>(
+        (best, session) =>
+          !best || session.startTime > best.startTime ? session : best,
+        undefined,
+      );
 
       if (!latestSession) {
         throw new Error('Study plan progress could not be found.');

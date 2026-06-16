@@ -5,9 +5,23 @@ export function getUserTimezone(_userId: string): string {
   return deviceTimezone || 'UTC';
 }
 
+const timezoneFormatterCache = new Map<string, Intl.DateTimeFormat>();
+function getTimezoneFormatter(
+  locale: string,
+  options: Intl.DateTimeFormatOptions,
+): Intl.DateTimeFormat {
+  const key = `${locale}|${JSON.stringify(options)}`;
+  let formatter = timezoneFormatterCache.get(key);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, options);
+    timezoneFormatterCache.set(key, formatter);
+  }
+  return formatter;
+}
+
 export function isValidTimezone(timezone: string): boolean {
   try {
-    Intl.DateTimeFormat(undefined, { timeZone: timezone });
+    getTimezoneFormatter(undefined, { timeZone: timezone });
     return true;
   } catch (error) {
     captureSilentFailure(error, {
@@ -20,7 +34,7 @@ export function isValidTimezone(timezone: string): boolean {
 }
 
 export function getTimezoneOffsetMinutes(date: Date, timezone: string): number {
-  const parts = new Intl.DateTimeFormat('en-US', {
+  const parts = getTimezoneFormatter('en-US', {
     timeZone: timezone,
     year: 'numeric',
     month: '2-digit',
@@ -59,7 +73,7 @@ export function formatInTimezone(
 ): string {
   const d = typeof date === 'number' ? new Date(date) : date;
   if (format === 'yyyy-MM-dd') {
-    return new Intl.DateTimeFormat('en-CA', {
+    return getTimezoneFormatter('en-CA', {
       timeZone: timezone,
       year: 'numeric',
       month: '2-digit',
@@ -67,11 +81,11 @@ export function formatInTimezone(
     }).format(d);
   }
   if (format === 'H') {
-    return new Intl.DateTimeFormat('en-US', {
+    return getTimezoneFormatter('en-US', {
       timeZone: timezone,
       hour: 'numeric',
       hour12: false,
     }).format(d);
   }
-  return new Intl.DateTimeFormat('en-US', { timeZone: timezone }).format(d);
+  return getTimezoneFormatter('en-US', { timeZone: timezone }).format(d);
 }

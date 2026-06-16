@@ -1,16 +1,14 @@
-refactor: replace prev-state with useRef for unused reads
+perf: hoist Intl.DateTimeFormat, dedupe with Set, replace .sort()[0] with reduce
 
-Apply React's official "store the previous prop in a ref" pattern across:
-- ConfettiCelebration: prevActive ref
-- CoachInterventionBanner: prevInterventionId ref
-- AnalyticsDashboard: prevDataError refs
-- MonthlyFocusReport: prevReportId ref
-- CheckpointCelebration: prevCheckpointKey ref
-- TransitionWrapper: prevVisible ref
-- useSessionSetupState: prevAutoApplyKey ref
-- useCompanionSession: prevSessionStartId ref
-- useComboAnimations: prevComboMinutes refs
+- Hoist DateTimeFormat to module scope where possible
+- Add timezone-aware formatter cache for per-timezone formatters
+- Replace .indexOf/.includes inside loops with Set lookups
+- Replace .sort()[0] with .reduce() for min/max selection
+- Extract helper functions from components to module scope
+  (prefer-module-scope-pure-function)
+- Destructured useQuery results in useActiveIntervention
+- Extracted renderItem to renderPersonalBest (module scope)
 
-Score 67-68, 0 errors, 791 warnings
+Score 68, 0 errors, 799 warnings
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

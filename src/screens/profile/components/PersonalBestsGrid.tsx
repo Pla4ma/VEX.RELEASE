@@ -9,6 +9,10 @@ import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { usePersonalBests } from '../../../features/personal-bests/hooks';
 import type { PersonalBest } from '../../../features/personal-bests/types';
+
+const renderPersonalBest: ListRenderItem<PersonalBest> = ({ item }) => (
+  <PersonalBestCard item={item} />
+);
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { PersonalBestCard } from './PersonalBestCard';
 
@@ -32,9 +36,6 @@ export function PersonalBestsGrid({
   userId: string | null;
 }): React.ReactNode {
   const query = usePersonalBests(userId);
-  const renderItem: ListRenderItem<PersonalBest> = ({ item }) => (
-    <PersonalBestCard item={item} />
-  );
   if (query.isPending) {
     return <PersonalBestsSkeleton />;
   }
@@ -110,7 +111,7 @@ export function PersonalBestsGrid({
         data={query.data}
         estimatedItemSize={ESTIMATED_ITEM_SIZE}
         keyExtractor={(item: PersonalBest) => item.id}
-        renderItem={renderItem}
+        renderItem={renderPersonalBest}
         scrollEnabled={false}
       />
     </View>

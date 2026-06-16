@@ -5,6 +5,13 @@
  * streak risk state without importing the streaks feature hook.
  */
 
+const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+const streakTimeFormatter = new Intl.DateTimeFormat(locale, {
+  hour: 'numeric',
+  minute: '2-digit',
+  hour12: true,
+});
+
 export interface StreakSummary {
   currentDays: number;
   shieldAvailable: boolean;
@@ -54,12 +61,7 @@ export function calculateQualifyingWindow(
     (tomorrow6am.getTime() - now.getTime()) / (1000 * 60 * 60),
   );
 
-  const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-  const timeLabel = new Intl.DateTimeFormat(locale, {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  }).format(tomorrow6am);
+  const timeLabel = streakTimeFormatter.format(tomorrow6am);
 
   return {
     hoursUntilOpen,

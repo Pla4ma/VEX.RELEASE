@@ -4,6 +4,11 @@ import type { RecoveryType } from '../types';
 import { buttonTap } from '../../utils/haptics';
 import { styles } from './RecoveryPrompt.styles';
 
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  return `${mins} minutes`;
+}
+
 interface RecoveryOption {
   type: RecoveryType;
   label: string;
@@ -64,10 +69,6 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
       available: timeLost > 0,
     },
   ];
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    return `${mins} minutes`;
-  };
   return (
     <Modal
       visible={isVisible}

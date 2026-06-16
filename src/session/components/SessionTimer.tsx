@@ -7,6 +7,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
+
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
 import { fontFamilies } from '../../theme/tokens/typography';
 import { EnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import { createSheet } from '@/shared/ui/create-sheet';
@@ -28,13 +34,6 @@ export const SessionTimer = React.memo(function SessionTimer({
   const { theme } = useTheme();
   const progress = Math.min(elapsedSeconds / totalSeconds, 1);
   const remainingSeconds = Math.max(totalSeconds - elapsedSeconds, 0);
-
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
 
   const s = sizeStyles[size];
   const _radius = (s.size - s.strokeWidth) / 2;

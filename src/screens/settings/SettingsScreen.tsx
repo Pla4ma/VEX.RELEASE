@@ -1,5 +1,9 @@
 import React from 'react';
 import { ScrollView, Pressable, Linking } from 'react-native';
+
+const openPrivacyPolicy = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/privacy');
+const openTerms = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/terms');
+const openSupport = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/support');
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme, ThemeMode } from '../../theme/ThemeContext';
@@ -44,9 +48,6 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     !isFeatureHidden('wagers');
 
   const handleThemeChange = (newMode: ThemeMode) => setMode(newMode);
-  const openPrivacyPolicy = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/privacy');
-  const openTerms = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/terms');
-  const openSupport = () => Linking.openURL('https://pla4ma.github.io/VEX.RELEASE/support');
 
   const settingGroups = buildSettingsGroups({
     streakReminders, setStreakReminders: (v) => setPreference('streakReminders', v),

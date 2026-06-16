@@ -157,11 +157,13 @@ export async function fetchMonthlyFocusReportInput(
   );
 
   const gradeOrder = ['S', 'A', 'B', 'C', 'D'] as const;
+  const gradeOrderSet = new Set<string>(gradeOrder);
   let bestGrade: 'S' | 'A' | 'B' | 'C' | 'D' = 'D';
   for (const s of typedSessions) {
     if (
       gradeOrder.indexOf(s.grade as (typeof gradeOrder)[number]) <
-      gradeOrder.indexOf(bestGrade)
+      gradeOrder.indexOf(bestGrade) &&
+      gradeOrderSet.has(s.grade as string)
     ) {
       bestGrade = s.grade as typeof bestGrade;
     }

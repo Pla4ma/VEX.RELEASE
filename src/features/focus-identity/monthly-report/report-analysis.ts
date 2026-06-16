@@ -46,6 +46,7 @@ function determineBestGrade(
   grades: string[],
 ): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
   const gradeOrder = ['F', 'D', 'C', 'B', 'A', 'A+'] as const;
+  const gradeOrderSet = new Set<string>(gradeOrder);
   let bestGrade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' = 'F';
 
   for (const grade of grades) {
@@ -53,7 +54,7 @@ function determineBestGrade(
     const newIndex = gradeOrder.indexOf(grade as (typeof gradeOrder)[number]);
     if (
       newIndex > currentIndex &&
-      gradeOrder.includes(grade as (typeof gradeOrder)[number])
+      gradeOrderSet.has(grade as (typeof gradeOrder)[number])
     ) {
       bestGrade = grade as 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
     }
