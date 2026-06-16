@@ -38,7 +38,7 @@ export function useActiveIntervention(
     () => new Set<string>(),
   );
 
-  const stateQuery = useQuery({
+  const { data: stateData, error: stateError, refetch: refetchState, isLoading: stateLoading, isPending: statePending, isError: stateIsError } = useQuery({
     queryKey: userId
       ? COACH_QUERY_KEYS.state(userId)
       : [...COACH_QUERY_KEYS.all, 'state', 'anonymous'],
@@ -49,7 +49,7 @@ export function useActiveIntervention(
     retryDelay: RETRY_CONFIG.retryDelay,
   });
 
-  const profileQuery = useQuery({
+  const { data: profileData, error: profileError, refetch: refetchProfile, isLoading: profileLoading, isPending: profilePending, isError: profileIsError } = useQuery({
     queryKey: userId
       ? COACH_QUERY_KEYS.profile(userId)
       : [...COACH_QUERY_KEYS.all, 'profile', 'anonymous'],
@@ -60,7 +60,7 @@ export function useActiveIntervention(
     retryDelay: RETRY_CONFIG.retryDelay,
   });
 
-  const messagesQuery = useQuery({
+  const { data: messagesData, error: messagesError, refetch: refetchMessages, isLoading: messagesLoading, isPending: messagesPending, isError: messagesIsError } = useQuery({
     queryKey: userId
       ? COACH_QUERY_KEYS.history(userId, 20)
       : [...COACH_QUERY_KEYS.all, 'history', 'anonymous', 20],
@@ -74,17 +74,17 @@ export function useActiveIntervention(
   const error = useMemo(
     () =>
       normalizeError(
-        stateQuery.error ?? profileQuery.error ?? messagesQuery.error,
+        stateError ?? profileError ?? messagesError,
       ),
-    [messagesQuery.error, profileQuery.error, stateQuery.error],
+    [messagesError, profileError, stateError],
   );
 
   const intervention = useMemo(() => {
     const candidate = buildActiveIntervention({
       userId,
-      state: stateQuery.data ?? null,
-      profile: profileQuery.data ?? null,
-      messages: messagesQuery.data ?? [],
+      state: stateData ?? null,
+      profile: profileData ?? null,
+      messages: messagesData ?? [],
     });
     if (!candidate || dismissedIds.has(candidate.id)) {
       return null;
@@ -92,9 +92,9 @@ export function useActiveIntervention(
     return candidate;
   }, [
     dismissedIds,
-    messagesQuery.data,
-    profileQuery.data,
-    stateQuery.data,
+    messagesData,
+    profileData,
+    stateData,
     userId,
   ]);
 
@@ -109,9 +109,9 @@ export function useActiveIntervention(
   const refetch = useCallback(async (): Promise<void> => {
     try {
       await Promise.all([
-        stateQuery.refetch(),
-        profileQuery.refetch(),
-        messagesQuery.refetch(),
+        refetchState(),
+        refetchProfile(),
+        refetchMessages(),
       ]);
     } catch (refetchError) {
       captureSilentFailure(refetchError, {
@@ -120,17 +120,14 @@ export function useActiveIntervention(
         type: 'network',
       });
     }
-  }, [messagesQuery, profileQuery, stateQuery]);
+  }, [refetchState, refetchProfile, refetchMessages]);
 
   return {
     intervention,
     data: intervention,
-    isLoading:
-      stateQuery.isLoading || profileQuery.isLoading || messagesQuery.isLoading,
-    isPending:
-      stateQuery.isPending || profileQuery.isPending || messagesQuery.isPending,
-    isError:
-      stateQuery.isError || profileQuery.isError || messagesQuery.isError,
+    isLoading: stateLoading || profileLoading || messagesLoading,
+    isPending: statePending || profilePending || messagesPending,
+    isError: stateIsError || profileIsError || messagesIsError,
     error,
     refetch,
     dismiss,
