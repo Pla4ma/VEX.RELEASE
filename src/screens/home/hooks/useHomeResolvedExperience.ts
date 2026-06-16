@@ -3,8 +3,8 @@ import { useOnboardingStore } from '../../../features/onboarding/store';
 import {
   useResolvedVexExperienceRuntime,
   type VexExperienceRuntimeInput,
-} from $1../../../features/personalization/hooks$1;
-import { useFirstWeekExperience } from $1../../../features/personalization/hooks$1;
+} from '../../../features/personalization/hooks';
+import { useFirstWeekExperience } from '../../../features/personalization/hooks';
 import {
   recordBehaviorSignal,
 } from '../../../features/personalization/behavior-signal-store';

@@ -5,8 +5,8 @@ import {
   PdfUploader,
   TextPasteInput,
   YouTubeInput,
-} from $1./ExtractionProgress$1;
-import type { ContentSourceType, InputTab } from $1./ExtractionProgress$1;
+} from './ExtractionProgress';
+import type { ContentSourceType, InputTab } from './ExtractionProgress';
 
 const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {
   paste: 'PASTE',

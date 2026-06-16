@@ -8,11 +8,11 @@ import {
   usePaywall,
   usePremiumStatus,
   type PurchasesPackageDisplayInfo,
-} from $1../../shared/monetization/use-revenuecat$1;
+} from '../../shared/monetization/use-revenuecat';
 import {
   PurchaseEvents,
   createPaywallProperties,
-} from $1../../shared/monetization/use-revenuecat$1;
+} from '../../shared/monetization/use-revenuecat';
 import {
   FEATURE_HIGHLIGHT_MAP,
   buildPackageSelection,

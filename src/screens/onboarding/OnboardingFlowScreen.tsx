@@ -34,8 +34,8 @@ import {
   FloatingChoiceCard,
   OnboardingCinematicIntro,
   SerifTitle,
-} from $1./components/ethereal/EtherealOnboardingShell$1;
-import { LaneChoiceStep } from $1./components/ethereal/EtherealOnboardingShell$1;
+} from './components/ethereal/EtherealOnboardingShell';
+import { LaneChoiceStep } from './components/ethereal/EtherealOnboardingShell';
 import { LaneConfirmationStep } from './components/LaneConfirmationStep';
 import type { Lane } from '../../features/lane-engine';
 import { MASCOT_COPY, STEP_EYEBROW, STEP_TITLES, GUIDE_COPY } from './onboarding-flow-copy';

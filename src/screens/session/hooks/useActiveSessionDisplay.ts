@@ -3,8 +3,8 @@ import { resolveSessionMode } from '../../../session/modes';
 import {
   getLanePresentationPolicy,
   useInitialLane,
-} from $1../../../features/lane-engine/presentation$1;
-import { useReducedMotion } from $1../../../features/lane-engine/presentation$1;
+} from '../../../features/lane-engine/presentation';
+import { useReducedMotion } from '../../../features/lane-engine/presentation';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import {
   getActiveSessionTargetLabel,

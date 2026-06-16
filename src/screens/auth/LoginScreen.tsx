@@ -20,7 +20,7 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 import {
   EtherealAuthButtons,
   EtherealSkyBackground,
-} from $1./components/ethereal/EtherealAuthButtons$1;
+} from './components/ethereal/EtherealAuthButtons';
 import type { EtherealAuthProvider } from './components/ethereal';
 import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';

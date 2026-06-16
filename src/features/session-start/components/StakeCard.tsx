@@ -6,7 +6,7 @@ import type { SessionStake } from './SessionStakesBriefing.types';
 import {
   SessionGlyph,
   type SessionGlyphName,
-} from $1../../../shared/ui/liquid-glass/SessionGlyphs$1;
+} from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 interface StakeCardProps {
   icon: SessionGlyphName;
