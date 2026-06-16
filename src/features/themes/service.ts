@@ -16,9 +16,11 @@ export async function getOwnedSessionThemeIds(
   userId: string,
 ): Promise<string[]> {
   userId;
-  return SESSION_THEMES.filter((theme) => theme.isFree).map(
-    (theme) => theme.id,
-  );
+  const result: string[] = [];
+  for (const theme of SESSION_THEMES) {
+    if (theme.isFree) { result.push(theme.id); }
+  }
+  return result;
 }
 
 export async function getSelectableThemes(

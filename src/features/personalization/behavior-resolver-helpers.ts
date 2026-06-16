@@ -40,9 +40,11 @@ export function hasSurfacesDismissedMultipleTimes(
       dismissCounts.set(key, (dismissCounts.get(key) ?? 0) + 1);
     }
   }
-  return Array.from(dismissCounts.entries())
-    .filter(([, count]) => count >= DISMISS_THRESHOLD)
-    .map(([key]) => key);
+  const result: string[] = [];
+  for (const [key, count] of dismissCounts.entries()) {
+    if (count >= DISMISS_THRESHOLD) { result.push(key); }
+  }
+  return result;
 }
 
 export function hasSurfacesClickedMultipleTimes(
@@ -55,7 +57,9 @@ export function hasSurfacesClickedMultipleTimes(
       clickCounts.set(key, (clickCounts.get(key) ?? 0) + 1);
     }
   }
-  return Array.from(clickCounts.entries())
-    .filter(([, count]) => count >= CLICK_TO_REINFORCE_THRESHOLD)
-    .map(([key]) => key);
+  const result: string[] = [];
+  for (const [key, count] of clickCounts.entries()) {
+    if (count >= CLICK_TO_REINFORCE_THRESHOLD) { result.push(key); }
+  }
+  return result;
 }

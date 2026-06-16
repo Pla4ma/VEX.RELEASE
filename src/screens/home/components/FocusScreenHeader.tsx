@@ -14,6 +14,7 @@ interface FocusScreenHeaderProps {
   body?: string;
 }
 
+const viewStyle_59 = { backgroundColor: vexLightGlass.glass.innerHighlight, borderTopLeftRadius: 21, borderTopRightRadius: 21, height: 1.5, left: 8, position: 'absolute', right: 8, top: 1.2 };
 export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): React.ReactNode {
   return (
     <View style={{ marginBottom: 10, paddingTop: 8, width: '100%' }}>
@@ -57,7 +58,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
               start={{ x: 0, y: 0 }}
               style={{ borderTopLeftRadius: 19, borderTopRightRadius: 19, height: '62%', left: 0, position: 'absolute', right: 0, top: 0 }}
             />
-            <View pointerEvents="none" style={{ backgroundColor: vexLightGlass.glass.innerHighlight, borderTopLeftRadius: 21, borderTopRightRadius: 21, height: 1.5, left: 8, position: 'absolute', right: 8, top: 1.2 }} />
+            <View pointerEvents="none" style={viewStyle_59} />
             <Icon color={vexLightGlass.text.primary} name="gear" size="sm" variant="outline" />
           </Pressable>
         ) : null}

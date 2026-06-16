@@ -8,10 +8,11 @@ function buildLearnedItems(input: WhatVEXLearnedInput): LearnedItem[] {
 
   const builders = buildInsightBuilders(input, now);
 
-  const prioritized = builders
-    .filter((b) => b.condition())
-    .map((b) => b.build())
-    .sort((a, b) => {
+  const prioritized: LearnedItem[] = [];
+  for (const b of builders) {
+    if (b.condition()) { prioritized.push(b.build()); }
+  }
+  prioritized.sort((a, b) => {
       const aScore =
         (a.insightCategory !== 'general' ? 10 : 0) +
         (a.confidence === 'strong' ? 3 : a.confidence === 'medium' ? 2 : 1);

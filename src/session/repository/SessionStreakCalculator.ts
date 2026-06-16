@@ -7,11 +7,13 @@ export function calculateSessionStreaks(history: SessionHistoryEntry[]): {
   if (history.length === 0) {return { currentStreak: 0, longestStreak: 0 };}
 
   const sorted = [...history].sort((a, b) => b.startedAt - a.startedAt);
-  const completedDays = new Set(
-    sorted
-      .filter((h) => h.status === 'COMPLETED' || h.status === 'PARTIAL')
-      .map((h) => new Date(h.startedAt).toDateString()),
-  );
+  const completedDayStrings: string[] = [];
+  for (const h of sorted) {
+    if (h.status === 'COMPLETED' || h.status === 'PARTIAL') {
+      completedDayStrings.push(new Date(h.startedAt).toDateString());
+    }
+  }
+  const completedDays = new Set(completedDayStrings);
   const completedDaysArray = Array.from(completedDays);
   if (completedDaysArray.length === 0)
     {return { currentStreak: 0, longestStreak: 0 };}

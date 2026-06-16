@@ -89,9 +89,10 @@ export function verifyContentStudyIntegration(): {
     persistence: true, // Persistence is always available
   };
 
-  const missing = Object.entries(checks)
-    .filter(([, passed]) => !passed)
-    .map(([name]) => name);
+  const missing: string[] = [];
+  for (const [name, passed] of Object.entries(checks)) {
+    if (!passed) { missing.push(name); }
+  }
 
   return {
     isComplete: missing.length === 0,

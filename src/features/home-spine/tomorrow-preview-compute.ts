@@ -75,7 +75,7 @@ export function computeTomorrowPreview(
     buildChallengeCandidate(input),
   ].filter((candidate): candidate is TomorrowPreviewData => candidate !== null);
   const preview =
-    candidates.sort((a, b) => a.priority - b.priority)[0] ??
+    candidates.reduce<typeof candidates[number] | undefined>((best, item) => !best || item.priority < best.priority ? item : best, undefined) ??
     buildFallback(input);
   saveTomorrowPreview(input.userId, preview);
   return preview;

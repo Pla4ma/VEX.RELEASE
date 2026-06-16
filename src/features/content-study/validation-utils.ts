@@ -36,11 +36,11 @@ export function isValidFileType(mimeType: string): boolean {
 export function formatValidationErrors(
   errors: import('./types').ValidationError[],
 ): string {
-  const errorMessages = errors
-    .filter((e) => e.severity === 'error')
-    .map((e) => e.message);
-  const warningMessages = errors
-    .filter((e) => e.severity === 'warning')
-    .map((e) => `Warning: ${e.message}`);
+  const errorMessages: string[] = [];
+  const warningMessages: string[] = [];
+  for (const e of errors) {
+    if (e.severity === 'error') { errorMessages.push(e.message); }
+    if (e.severity === 'warning') { warningMessages.push(`Warning: ${e.message}`); }
+  }
   return [...errorMessages, ...warningMessages].join('\n');
 }

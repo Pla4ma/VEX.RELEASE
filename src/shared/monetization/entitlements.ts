@@ -48,16 +48,15 @@ export function getEntitlementAccessState(
   entitlements: readonly EntitlementInfo[],
 ): EntitlementAccessState {
   const active = entitlements.filter((entitlement) => entitlement.isActive);
-  const premiumEntitlementIds = active
-    .filter((entitlement) =>
-      isPremiumEntitlementIdentifier(entitlement.identifier),
-    )
-    .map((entitlement) => entitlement.identifier);
-  const unknownActiveEntitlementIds = active
-    .filter(
-      (entitlement) => !isPremiumEntitlementIdentifier(entitlement.identifier),
-    )
-    .map((entitlement) => entitlement.identifier);
+  const premiumEntitlementIds: string[] = [];
+  const unknownActiveEntitlementIds: string[] = [];
+  for (const entitlement of active) {
+    if (isPremiumEntitlementIdentifier(entitlement.identifier)) {
+      premiumEntitlementIds.push(entitlement.identifier);
+    } else {
+      unknownActiveEntitlementIds.push(entitlement.identifier);
+    }
+  }
 
   return {
     isPremium: premiumEntitlementIds.length > 0,

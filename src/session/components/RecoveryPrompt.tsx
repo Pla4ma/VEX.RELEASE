@@ -92,7 +92,7 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
 
           <View style={styles.options}>
             {recoveryOptions
-              .filter((opt) => opt.available)
+              .reduce<typeof recoveryOptions>((acc, opt) => { if (opt.available) acc.push(opt); return acc; }, [])
               .map((option) => (
                 <Pressable
                   key={option.type}

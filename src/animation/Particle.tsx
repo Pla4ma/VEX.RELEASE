@@ -9,6 +9,53 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 
+const ParticleShape = ({
+  shape,
+  size,
+  color,
+}: {
+  shape: 'circle' | 'square' | 'triangle';
+  size: number;
+  color: string;
+}): React.ReactNode => {
+  switch (shape) {
+    case 'circle':
+      return (
+        <View
+          style={{
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            backgroundColor: color,
+          }}
+        />
+      );
+    case 'square':
+      return (
+        <View style={{ width: size, height: size, backgroundColor: color }} />
+      );
+    case 'triangle':
+      return (
+        <View
+          style={{
+            width: 0,
+            height: 0,
+            borderLeftWidth: size / 2,
+            borderRightWidth: size / 2,
+            borderBottomWidth: size,
+            borderBottomColor: color,
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
+          }}
+        />
+      );
+  }
+};
+  withDecay,
+  withDelay,
+  runOnJS,
+} from 'react-native-reanimated';
+
 
 export interface ParticleConfig {
   id: number;
@@ -68,45 +115,10 @@ export const Particle: React.FC<{
     ],
     opacity: opacity.value,
   }));
-  const renderShape = () => {
-    const size = config.size;
-    const color = config.color;
-    switch (config.shape) {
-      case 'circle':
-        return (
-          <View
-            style={{
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              backgroundColor: color,
-            }}
-          />
-        );
-      case 'square':
-        return (
-          <View style={{ width: size, height: size, backgroundColor: color }} />
-        );
-      case 'triangle':
-        return (
-          <View
-            style={{
-              width: 0,
-              height: 0,
-              borderLeftWidth: size / 2,
-              borderRightWidth: size / 2,
-              borderBottomWidth: size,
-              borderBottomColor: color,
-              borderLeftColor: 'transparent',
-              borderRightColor: 'transparent',
-            }}
-          />
-        );
-    }
-  };
+  const shapeElement = <ParticleShape shape={config.shape} size={config.size} color={config.color} />;
   return (
     <Animated.View style={[particleStyle, animatedStyle]}>
-      {renderShape()}
+      {shapeElement}
     </Animated.View>
   );
 };

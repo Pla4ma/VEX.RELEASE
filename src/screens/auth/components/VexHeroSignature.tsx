@@ -23,6 +23,7 @@ import {
   glowStyleTealAccent,
 } from './VexHeroSignature.paths';
 
+const elementStyle_175 = { fontSize: 14, lineHeight: 20, fontWeight: '400', textAlign: 'center', maxWidth: 280, letterSpacing: 0.6, opacity: 0.85, marginTop: 4 };
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 
 /* --- AURUM-style gold flourish above the wordmark --- */
@@ -173,7 +174,7 @@ export function VexHeroSignature({
       <Animated.View style={tagStyle}>
         <Text
           color="text.secondary"
-          style={{ fontSize: 14, lineHeight: 20, fontWeight: '400', textAlign: 'center', maxWidth: 280, letterSpacing: 0.6, opacity: 0.85, marginTop: 4 }}
+          style={elementStyle_175}
         >
           {tagline}
         </Text>

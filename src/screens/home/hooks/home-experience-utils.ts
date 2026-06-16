@@ -63,15 +63,21 @@ export function computeDaysSinceTimestamp(ts: number): number {
 }
 
 export function computeCompletedDurations(sessions: SessionEntry[]): number[] {
-  return sessions
-    .map((s) => s.effectiveDuration ?? s.duration ?? 0)
-    .filter((d) => d > 0);
+  const result: number[] = [];
+  for (const s of sessions) {
+    const d = s.effectiveDuration ?? s.duration ?? 0;
+    if (d > 0) { result.push(d); }
+  }
+  return result;
 }
 
 export function computeAbandonedDurations(sessions: SessionEntry[]): number[] {
-  return sessions
-    .map((s) => s.effectiveDuration ?? s.duration ?? 0)
-    .filter((d) => d > 0);
+  const result: number[] = [];
+  for (const s of sessions) {
+    const d = s.effectiveDuration ?? s.duration ?? 0;
+    if (d > 0) { result.push(d); }
+  }
+  return result;
 }
 
 export function computePreferredMode(

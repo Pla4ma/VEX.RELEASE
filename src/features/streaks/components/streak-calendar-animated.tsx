@@ -105,11 +105,6 @@ export function StreakCalendarAnimated({
     0,
   );
 
-  const renderEmptyDays = () =>
-    Array.from({ length: firstDayOfMonth }, (_, i) => (
-      <View key={`empty-${i}`} style={styles.dayEmpty} />
-    ));
-
   const renderDay = (day: number) => {
     const isToday =
       day === today && month === currentMonth && year === currentYear;
@@ -152,7 +147,9 @@ export function StreakCalendarAnimated({
         ))}
       </View>
       <View style={styles.calendar}>
-        {renderEmptyDays()}
+        {Array.from({ length: firstDayOfMonth }, (_, i) => (
+          <View key={`empty-${i}`} style={styles.dayEmpty} />
+        ))}
         {Array.from({ length: daysInMonth }, (_, i) => renderDay(i + 1))}
       </View>
       <View style={styles.legend}>

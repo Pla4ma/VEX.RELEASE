@@ -165,19 +165,20 @@ export async function fetchReEngagementCandidates(
   if (error) {
     throw new RepositoryError('fetchReEngagementCandidates', error);
   }
-  return (data ?? [])
-    .map((row) => {
-      const record = row as ReEngagementRow;
-      const lastSessionAt = Number(record.last_qualifying_session_at);
-      const currentDays = Number(record.current_days ?? 0);
-      const longestDays = Number(record.longest_days ?? 0);
-      return {
-        userId: String(record.user_id),
+  const result: Array<{ userId: string; lastSessionAt: number; previousStreak: number }> = [];
+  for (const row of data ?? []) {
+    const record = row as ReEngagementRow;
+    const lastSessionAt = Number(record.last_qualifying_session_at);
+    const currentDays = Number(record.current_days ?? 0);
+    const longestDays = Number(record.longest_days ?? 0);
+    const userId = String(record.user_id);
+    if (userId.length > 0 && Number.isFinite(lastSessionAt)) {
+      result.push({
+        userId,
         lastSessionAt,
         previousStreak: Math.max(currentDays, longestDays),
-      };
-    })
-    .filter(
-      (row) => row.userId.length > 0 && Number.isFinite(row.lastSessionAt),
-    );
+      });
+    }
+  }
+  return result;
 }

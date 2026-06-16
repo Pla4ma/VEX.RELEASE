@@ -1,14 +1,14 @@
-perf: hoist Intl.DateTimeFormat, dedupe with Set, replace .sort()[0] with reduce
+fix: combine filter+map chains into single-pass for-of, fix .sort()[0] patterns
 
-- Hoist DateTimeFormat to module scope where possible
-- Add timezone-aware formatter cache for per-timezone formatters
-- Replace .indexOf/.includes inside loops with Set lookups
-- Replace .sort()[0] with .reduce() for min/max selection
-- Extract helper functions from components to module scope
-  (prefer-module-scope-pure-function)
-- Destructured useQuery results in useActiveIntervention
-- Extracted renderItem to renderPersonalBest (module scope)
+- js-combine-iterations: Converted .filter().map() chains to single-pass for-of
+  loops in 15+ files (feature-gate, content-study, memory-candidate, themes,
+  HomeRecommendationEngine, prestige-engine, personalization, notification-policy,
+  monthly-report, SmartScheduler, entitlements, home-experience-utils,
+  service-daily-progress, SessionStreakCalculator, ToastContainer, RecoveryPrompt)
+- js-min-max-loop: Converted .sort((a,b)=>b.X-a.X)[0] to reduce() in
+  mastery/challenge-generator, tomorrow-preview-compute
+- Fixed broken SessionStreakCalculator from earlier auto-fix attempt
 
-Score 68, 0 errors, 799 warnings
+Score 68, 0 errors, 761 warnings (down from 794)
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

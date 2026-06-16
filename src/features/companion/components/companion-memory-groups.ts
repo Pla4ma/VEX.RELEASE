@@ -47,7 +47,10 @@ export function groupCompanionMemories(
     groups.set(title, [...(groups.get(title) ?? []), memory]);
   });
 
-  return (['Today', 'Yesterday', 'This Week', 'Earlier'] as const)
-    .map((title) => ({ data: groups.get(title) ?? [], title }))
-    .filter((group) => group.data.length > 0);
+  const result: CompanionMemoryGroup[] = [];
+  for (const title of ['Today', 'Yesterday', 'This Week', 'Earlier'] as const) {
+    const data = groups.get(title) ?? [];
+    if (data.length > 0) { result.push({ data, title }); }
+  }
+  return result;
 }

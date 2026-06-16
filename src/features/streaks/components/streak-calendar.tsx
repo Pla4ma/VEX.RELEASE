@@ -4,6 +4,10 @@ import { useStreakCalendar } from '../hooks';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 
+function EmptyDay({ index }: { index: number }) {
+  return <View key={`empty-${index}`} style={styles.day} />;
+}
+
 interface StreakCalendarProps {
   userId: string;
   month: number;
@@ -67,11 +71,6 @@ export function StreakCalendar({
       </View>
     );
   };
-  const renderEmptyDays = () => {
-    return Array.from({ length: firstDayOfMonth }, (_, i) => (
-      <View key={`empty-${i}`} style={styles.day} />
-    ));
-  };
   return (
     <View style={styles.container}>
       {}
@@ -99,7 +98,7 @@ export function StreakCalendar({
 
       {}
       <View style={styles.calendar}>
-        {renderEmptyDays()}
+        {Array.from({ length: firstDayOfMonth }, (_, i) => <EmptyDay key={`empty-${i}`} index={i} />)}
         {Array.from({ length: daysInMonth }, (_, i) => renderDay(i + 1))}
       </View>
 

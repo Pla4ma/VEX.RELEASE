@@ -125,12 +125,8 @@ export function useMultiFeatureGate(
   return {
     isAvailable,
     featureStates,
-    availableFeatures: featureStates
-      .filter((s) => s.isAvailable)
-      .map((s) => s.feature),
-    unavailableFeatures: featureStates
-      .filter((s) => !s.isAvailable)
-      .map((s) => s.feature),
+    availableFeatures: featureStates.reduce<string[]>((acc, s) => { if (s.isAvailable) acc.push(s.feature); return acc; }, []),
+    unavailableFeatures: featureStates.reduce<string[]>((acc, s) => { if (!s.isAvailable) acc.push(s.feature); return acc; }, []),
   };
 }
 
