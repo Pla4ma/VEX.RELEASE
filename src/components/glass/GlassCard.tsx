@@ -61,8 +61,10 @@ export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard
         {
           backgroundColor: v.background, borderColor: v.border,
           borderRadius: resolvedRadius, borderWidth: 1.35, elevation: 3, overflow: 'hidden',
-          boxShadow: `0px 10px 22px ${v.shadowColor, shadowOffset: v.shadowOffset, shadowOpacity: v.shadowOpacity, shadowRadius: v.shadowRadius, }, glowMint ? { shadowColor: 'rgba(18, 184, 148, 0.22)'}`,
-        } : null,
+          boxShadow: glowMint
+            ? '0px 10px 22px rgba(18, 184, 148, 0.22)'
+            : `0px 10px 22px ${v.shadowColor}`,
+        },
         style,
       ]}
     >

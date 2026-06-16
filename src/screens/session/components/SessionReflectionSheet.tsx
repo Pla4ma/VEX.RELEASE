@@ -102,8 +102,7 @@ export function SessionReflectionSheet({
           />
         </Box>
         <Box mt={20} gap={12}>
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             fullWidth
             onPress={onFinish}
@@ -113,8 +112,7 @@ export function SessionReflectionSheet({
           >
             Finish
           </Button>
-          <Button
-            <Text>variant="ghost"</Text>
+          <Button variant="ghost"
             size="md"
             fullWidth
             onPress={onSkip}

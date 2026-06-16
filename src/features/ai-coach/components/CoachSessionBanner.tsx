@@ -113,7 +113,7 @@ export function CoachSessionBanner({
         flexDirection: 'row',
         alignItems: 'center',
         gap: theme.spacing[2],
-        boxShadow: '0px 2px 4px theme.colors.text.primary + '20' / 0.1',
+        boxShadow: '0px 2px 4px ' + theme.colors.text.primary + '20',
         elevation: 3,
         zIndex: 10,
       }}

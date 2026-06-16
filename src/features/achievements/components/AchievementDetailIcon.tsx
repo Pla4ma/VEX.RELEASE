@@ -52,7 +52,7 @@ export const AchievementDetailIcon: React.FC<AchievementDetailIconProps> = ({
             borderColor: isUnlocked
               ? rarityColor
               : theme.colors.border.DEFAULT,
-            boxShadow: '0px 0px isUnlocked ? 20 : 0px isUnlocked ? rarityColor : 'transparent' / isUnlocked ? 0.5 : 0',
+            boxShadow: isUnlocked ? '0px 0px 20px ' + rarityColor : '0px 0px 0px transparent',
             elevation: isUnlocked ? 10 : 0,
           }}
         >

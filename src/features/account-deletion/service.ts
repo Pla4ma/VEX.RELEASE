@@ -2,10 +2,9 @@ import { clearSentryUser } from '../../config/sentry';
 import {
   getDefaultStorageAdapter,
   getMMKVStorageAdapter,
-  getSecureStorage,
-  SecureStorageKeys,
 } from '../../persistence/MMKVStorageAdapter';
-import { revenueCatService } from '../../persistence/MMKVStorageAdapter';
+import { getSecureStorage, SecureStorageKeys } from '../../persistence/SecureStorage';
+import { revenueCatService } from '../../shared/monetization/revenuecat-service';
 import {
   AccountDeletionInputSchema,
   AccountDeletionResultSchema,

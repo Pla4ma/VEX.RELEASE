@@ -7,7 +7,8 @@ import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   NotificationLoadingState,

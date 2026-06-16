@@ -16,7 +16,8 @@ import { Box } from './Box';
 import { Text } from './Text';
 import { Icon } from '../../icons/components/Icon';
 import { useTheme } from '../../theme/ThemeContext';
-import { ErrorState, Skeleton } from '../../shared/ui/state-components/error-state';
+import { ErrorState } from '../../shared/ui/state-components/error-state';
+import { Skeleton } from '../../shared/ui/primitives';
 
 interface FeatureScreenProps {
   title: string;

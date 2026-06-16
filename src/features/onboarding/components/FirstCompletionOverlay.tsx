@@ -88,8 +88,7 @@ function ComebackCTA({ onPress }: { onPress: () => void }): React.ReactNode {
         <Text variant="body" color="text.secondary" textAlign="center">
           Come back tomorrow and VEX will be ready.
         </Text>
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="lg"
           fullWidth
           onPress={onPress}

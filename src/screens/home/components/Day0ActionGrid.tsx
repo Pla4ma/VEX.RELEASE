@@ -3,7 +3,8 @@ import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { borderRadius, spacing } from '../../../theme/tokens/radius';
+import { borderRadius } from '../../../theme/tokens/radius';
+import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';

@@ -56,8 +56,7 @@ export function EmptyLibraryState({
         >
           {error}
         </Text>
-        <Button
-          <Text>variant="outline"</Text>
+        <Button variant="outline"
           size="sm"
           mt="md"
           onPress={onRetry}
@@ -86,8 +85,7 @@ export function EmptyLibraryState({
             : 'No study content yet'}
         </Text>
         {!hasContent && (
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="sm"
             mt="md"
             onPress={onAddContent}

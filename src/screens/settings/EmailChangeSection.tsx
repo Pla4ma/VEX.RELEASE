@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text, Card } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { useUIStore } from '../../store/index';
 import { lightColors } from '@/theme/tokens/colors';
 

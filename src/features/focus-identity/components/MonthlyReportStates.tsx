@@ -41,7 +41,7 @@ export function MonthlyReportErrorState({
         {message}
       </Text>
       <Button
-        <Text>onPress={onRetry}</Text>
+        onPress={onRetry}
         variant="primary"
         style={{ marginBottom: theme.spacing[4] }}
       >

@@ -67,8 +67,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(
           <Text variant="h4" color="error.DEFAULT" mb="md">
             Not authenticated
           </Text>
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             onPress={() => navigation.goBack()}
             accessibilityLabel="Go back"
             accessibilityRole="button"

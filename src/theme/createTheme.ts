@@ -5,7 +5,8 @@
  */
 
 import type { Theme } from './types';
-import { getColors, typography, fontFamilies, fontWeights } from './tokens/colors';
+import { getColors } from './tokens/colors';
+import { fontFamilies, fontWeights, typography } from './tokens/typography';
 import { spacing } from './tokens/spacing';
 import { borderRadius } from './tokens/radius';
 import { iosShadows } from './tokens/shadows';

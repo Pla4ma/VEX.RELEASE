@@ -115,8 +115,7 @@ export function YouTubeVideoPreview({
             {extractionError}
           </Text>
           {onExtract && (
-            <Button
-              <Text>variant="ghost"</Text>
+            <Button variant="ghost"
               size="sm"
               onPress={onExtract}
               accessibilityLabel="Retry loading video"

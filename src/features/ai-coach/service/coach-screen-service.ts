@@ -1,8 +1,8 @@
 import {
   FALLBACK_HOME_MESSAGES,
-  resolveCoachActionIntent,
   type CoachActionIntent,
 } from '../../coach-presence/copy';
+import { resolveCoachActionIntent } from '../../coach-presence/service';
 import { ACTION_LABELS } from '../../coach-presence/copy';
 import { getAvailabilityFor } from "../../liveops-config";
 import { fetchCoachState } from "../repository/state";

@@ -11,7 +11,8 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { BreathingGlow } from '../../../components/primitives/BreathingGlow';
 import { withAlpha } from '../../../components/premiumStyles';
 import { useTheme } from '../../../theme/ThemeContext';

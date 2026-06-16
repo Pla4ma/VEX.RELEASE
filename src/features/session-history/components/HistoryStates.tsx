@@ -35,7 +35,7 @@ export function HistoryEmptyState({
         Finish a focus block and VEX will track the rhythm you actually built.
       </Text>
       <Button
-        <Text>accessibilityHint="Starts setup for a new focus session"</Text>
+        accessibilityHint="Starts setup for a new focus session"
         accessibilityLabel="Start a focus session"
         accessibilityRole="button"
         onPress={onStart}

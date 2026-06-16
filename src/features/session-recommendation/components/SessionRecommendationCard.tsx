@@ -27,6 +27,7 @@ export function SessionRecommendationCard({
   showDismiss = true,
 }: SessionRecommendationCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const acceptVariant = recommendation.fallback ? 'outline' : 'primary';
 
   const getSessionModeColor = (mode: string): string => {
     const colors: Record<string, string> = {
@@ -154,7 +155,7 @@ export function SessionRecommendationCard({
         alignItems="center"
       >
         <Button
-          <Text>variant={recommendation.fallback ? 'outline' : 'primary'}</Text>
+          variant={acceptVariant}
           size="sm"
           onPress={onAccept}
           style={{ flex: 1, marginRight: showDismiss ? theme.spacing[2] : 0 }}

@@ -89,7 +89,7 @@ export function OnboardingPermissions({
         <Box gap="md">
           {status === 'idle' && (
             <Button
-              <Text>size="lg"</Text>
+              size="lg"
               variant="primary"
               fullWidth
               onPress={handleRequest}
@@ -104,7 +104,7 @@ export function OnboardingPermissions({
 
           {status === 'granted' && (
             <Button
-              <Text>size="lg"</Text>
+              size="lg"
               variant="primary"
               fullWidth
               onPress={onContinue}

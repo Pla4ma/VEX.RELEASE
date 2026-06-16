@@ -98,8 +98,7 @@ export function OnboardingResumePrompt({
               </Animated.View>
             )}
             <Box gap="sm">
-              <Button
-                <Text>variant="primary"</Text>
+              <Button variant="primary"
                 size="lg"
                 onPress={handleResume}
                 disabled={selectedAction !== null}
@@ -110,8 +109,7 @@ export function OnboardingResumePrompt({
               >
                 Continue Setup →
               </Button>
-              <Button
-                <Text>variant="secondary"</Text>
+              <Button variant="secondary"
                 size="md"
                 onPress={handleRestart}
                 disabled={selectedAction !== null}
@@ -122,8 +120,7 @@ export function OnboardingResumePrompt({
               >
                 Start Fresh
               </Button>
-              <Button
-                <Text>variant="ghost"</Text>
+              <Button variant="ghost"
                 size="sm"
                 onPress={handleDismiss}
                 disabled={selectedAction !== null}

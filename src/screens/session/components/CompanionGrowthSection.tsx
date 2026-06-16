@@ -92,8 +92,7 @@ export function CompanionGrowthSection({
         <Text variant="caption" color={theme.colors.text.secondary} mt={1}>
           Your session is safe. Retry the companion growth sync.
         </Text>
-        <Button
-          <Text>variant="secondary"</Text>
+        <Button variant="secondary"
           onPress={load}
           style={{ marginTop: theme.spacing[3] }}
           accessibilityLabel="Retry loading"

@@ -160,8 +160,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
         </View>
       )}
       <View style={styles.fileActions}>
-        <Button
-          <Text>variant="ghost"</Text>
+        <Button variant="ghost"
           size="sm"
           onPress={onRemove}
           accessibilityLabel="Remove file"

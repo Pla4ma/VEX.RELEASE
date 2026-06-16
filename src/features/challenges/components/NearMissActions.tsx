@@ -68,8 +68,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
     </Animated.View>
 
     <Box gap={3}>
-      <Button
-        <Text>variant="primary"</Text>
+      <Button variant="primary"
         size="md"
         fullWidth
         onPress={onAcknowledge}
@@ -80,8 +79,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
         I'll Get It Next Time
       </Button>
       {onViewNextChallenge && (
-        <Button
-          <Text>variant="outline"</Text>
+        <Button variant="outline"
           size="md"
           fullWidth
           onPress={onViewNextChallenge}

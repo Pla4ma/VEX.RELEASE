@@ -150,7 +150,7 @@ export function AdaptiveDifficultyBanner({
         {/* Actions */}
         <View style={{ flexDirection: 'row', gap: theme.spacing[2] }}>
           <Button
-            <Text>onPress={() => onAccept(suggestedDifficulty)}</Text>
+            onPress={() => onAccept(suggestedDifficulty)}
             variant="primary"
             style={{ flex: 1 }}
           >

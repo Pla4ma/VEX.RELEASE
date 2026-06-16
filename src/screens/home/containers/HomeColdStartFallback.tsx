@@ -83,7 +83,7 @@ export function HomeColdStartFallback({
         </View>
 
         <Button
-          <Text>accessibilityHint="Opens setup for your first focus session."</Text>
+          accessibilityHint="Opens setup for your first focus session."
           accessibilityLabel="Start first session"
           accessibilityRole="button"
           fullWidth

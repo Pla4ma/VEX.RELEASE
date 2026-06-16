@@ -12,29 +12,7 @@ import Svg, { Circle, G, Text as SvgText } from 'react-native-svg';
 
 import { styles } from './xp-progress-bar.styles';
 import { lightColors } from '@/theme/tokens/colors';
-
-function getTierColor(lvl: number): [string, string] {
-  if (lvl >= 50) {
-    return [lightColors.semantic.vexGold, lightColors.semantic.warning];
-  }
-  if (lvl >= 25) {
-    return [lightColors.text.disabled, lightColors.text.disabled];
-  }
-  if (lvl >= 10) {
-    return [lightColors.text.muted, lightColors.text.muted];
-  }
-  return [lightColors.semantic.success, lightColors.semantic.success];
-}
-
-interface XpProgressBarProps {
-  currentXp: number;
-  threshold: number;
-  level: number;
-  totalXp: number;
-  isAnimating?: boolean;
-  xpJustAdded?: number;
-  onLevelUp?: () => void;
-}
+import type { XpProgressBarProps } from './xp-progress-bar-types';
 
 const { width } = Dimensions.get('window');
 const BAR_WIDTH = width - 48;
@@ -101,6 +79,19 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       if (hideTimer) clearTimeout(hideTimer);
     };
   }, [hideTimer]);
+
+  const getTierColor = (lvl: number): [string, string] => {
+    if (lvl >= 50) {
+      return [lightColors.semantic.vexGold, lightColors.semantic.warning];
+    }
+    if (lvl >= 25) {
+      return [lightColors.text.disabled, lightColors.text.disabled];
+    }
+    if (lvl >= 10) {
+      return [lightColors.text.muted, lightColors.text.muted];
+    }
+    return [lightColors.semantic.success, lightColors.semantic.success];
+  };
 
   const [startColor, endColor] = getTierColor(level);
 
@@ -205,4 +196,4 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       <Text style={styles.totalXp}>Total: {totalXp.toLocaleString()} XP</Text>
     </Animated.View>
   );
-};
+};

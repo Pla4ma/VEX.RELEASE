@@ -8,7 +8,8 @@ import Animated, {
   useReducedMotion,
 } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
 import type { SessionSummary } from '../../../session/types';

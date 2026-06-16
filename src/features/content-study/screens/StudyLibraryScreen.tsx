@@ -100,8 +100,7 @@ export function StudyLibraryScreen(): React.ReactNode {
               {content.length} saved {content.length === 1 ? 'item' : 'items'}
             </Text>
           </Box>
-          <Button
-            <Text>variant="outline"</Text>
+          <Button variant="outline"
             size="sm"
             onPress={() => navigation.navigate('ContentInput', {})}
             accessibilityLabel="Add new content"

@@ -113,8 +113,7 @@ export function CompanionRevealScreen({
         entering={FadeInUp.duration(400).delay(800)}
         style={{ width: '100%' }}
       >
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="lg"
           fullWidth
           onPress={onContinue}

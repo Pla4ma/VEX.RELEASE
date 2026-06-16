@@ -31,7 +31,7 @@ export function ReportEmptyState({
           Complete focus sessions this month to generate your first monthly report.
         </Text>
         <Button
-          <Text>onPress={onStartSession}</Text>
+          onPress={onStartSession}
           variant="primary"
           accessibilityLabel="Start a session"
           accessibilityRole="button"

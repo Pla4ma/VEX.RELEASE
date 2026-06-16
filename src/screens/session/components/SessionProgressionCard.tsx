@@ -123,8 +123,7 @@ export function SessionProgressionCard({
               </Text>
             ) : null}
             {rewardError ? (
-              <Button
-                <Text>variant="outline"</Text>
+              <Button variant="outline"
                 size="sm"
                 onPress={onRetryRewards}
                 accessibilityLabel="Retry loading progress"

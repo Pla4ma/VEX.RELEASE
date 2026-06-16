@@ -158,7 +158,7 @@ export function OnboardingSetName({
         <Animated.View entering={FadeInUp.delay(400).duration(400)}>
           <Box gap="md">
             <Button
-              <Text>size="lg"</Text>
+              size="lg"
               variant="primary"
               fullWidth
               onPress={handleContinue}

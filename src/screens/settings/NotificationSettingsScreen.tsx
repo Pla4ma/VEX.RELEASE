@@ -4,7 +4,8 @@ import { ScrollView, Pressable, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text, Card } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';

@@ -9,7 +9,8 @@ import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AppScreen, Text } from '../../components/primitives/AppScreen';
+import { AppScreen } from '../../components/primitives/AppScreen';
+import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
@@ -19,8 +20,8 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 import {
   EtherealAuthButtons,
-  EtherealSkyBackground,
 } from './components/ethereal/EtherealAuthButtons';
+import { EtherealSkyBackground } from './components/ethereal/EtherealSkyBackground';
 import type { EtherealAuthProvider } from './components/ethereal';
 import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';

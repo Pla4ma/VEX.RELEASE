@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../components/primitives/Box';
+import { Box, Card } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { MasteryRankBadge } from '../../features/mastery/components/MasteryRankBadge';
 import {
   getMasteryRankDisplay,
@@ -11,19 +12,6 @@ import {
 import { Icon } from '../../icons/components/Icon';
 import { useTheme } from '../../theme/ThemeContext';
 
-          const elementStyle_39 = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: theme.spacing[3],
-  padding: theme.spacing[3],
-  borderRadius: 12,
-  backgroundColor: isCurrent
-  ? `${rankDisplay.color}15`
-  : theme.colors.background.secondary,
-  borderWidth: isCurrent ? 1 : 0,
-  borderColor: isCurrent ? rankDisplay.color : undefined,
-  opacity: isUnlocked ? 1 : 0.5,
-};
 const RANK_UNLOCKS: Record<MasteryRank, string[]> = {
   APPRENTICE: ['All base session modes', 'Basic boss encounters'],
   ADEPT: ['DEEP_WORK mode unlocked', 'Advanced boss tier 3-4 access'],
@@ -50,7 +38,19 @@ export function RankUnlocks({
         return (
           <View
             key={rank}
-            style={elementStyle_39}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: theme.spacing[3],
+              padding: theme.spacing[3],
+              borderRadius: 12,
+              backgroundColor: isCurrent
+                ? `${rankDisplay.color}15`
+                : theme.colors.background.secondary,
+              borderWidth: isCurrent ? 1 : 0,
+              borderColor: isCurrent ? rankDisplay.color : undefined,
+              opacity: isUnlocked ? 1 : 0.5,
+            }}
           >
             <Text fontSize={24}>{rankDisplay.icon}</Text>
             <View style={{ flex: 1 }}>
@@ -163,4 +163,4 @@ export function MasteryHeader({
       </Box>
     </Card>
   );
-}
+}

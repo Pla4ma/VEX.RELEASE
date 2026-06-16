@@ -76,8 +76,7 @@ export function CompanionDetailScreen(): React.ReactNode {
         <Text variant="body" color="text.secondary" mt={2}>
           VEX kept the session safe. Retry the companion profile.
         </Text>
-        <Button
-          <Text>variant="secondary"</Text>
+        <Button variant="secondary"
           onPress={load}
           style={{ marginTop: theme.spacing[4] }}
           accessibilityLabel="Retry loading companion"

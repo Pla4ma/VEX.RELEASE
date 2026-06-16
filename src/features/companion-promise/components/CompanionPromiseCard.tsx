@@ -103,7 +103,7 @@ export function CompanionPromiseCard({
           Reconnect and we will pull the thread back into focus.
         </Text>
         <Button
-          <Text>accessibilityHint="Retries loading your companion promise"</Text>
+          accessibilityHint="Retries loading your companion promise"
           accessibilityLabel="Retry companion promise"
           onPress={onRetry}
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[3] }]}
@@ -178,7 +178,7 @@ export function CompanionPromiseCard({
 
       {state.kind === 'missed' ? (
         <Button
-          <Text>accessibilityHint="Dismisses the recovery card"</Text>
+          accessibilityHint="Dismisses the recovery card"
           accessibilityLabel="Dismiss recovery card"
           onPress={onDismissRecovery}
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[2] }]}

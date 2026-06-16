@@ -2,7 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { borderRadius, spacing } from '../../../theme/tokens/radius';
+import { borderRadius } from '../../../theme/tokens/radius';
+import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import { type } from '../../reference-ui/referenceTokens';

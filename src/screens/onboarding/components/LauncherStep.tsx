@@ -92,7 +92,7 @@ export function LauncherStep({
         </View>
         <View style={styles.fullWidth}>
           <Button
-            <Text>fullWidth</Text>
+            fullWidth
             onPress={() =>
               onFinishOnboarding(
                 'Your first session is complete. Come back tomorrow.',

@@ -3,7 +3,8 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text } from '../../components/primitives/Box';
+import { Box } from '../../components/primitives/Box'
+import { Text } from '../../components/primitives/Text';
 import { SearchBar } from './components/SearchBar';
 import { CategoriesBar } from './components/CategoriesBar';
 import { RecentSearches } from './components/RecentSearches';

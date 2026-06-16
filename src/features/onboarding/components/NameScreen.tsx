@@ -155,8 +155,7 @@ export function NameScreen({
             entering={FadeInUp.duration(400).delay(400)}
             style={{ width: '100%' }}
           >
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               size="lg"
               fullWidth
               onPress={handleContinue}

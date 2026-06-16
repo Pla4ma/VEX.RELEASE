@@ -91,8 +91,7 @@ export function VipPaywallScreen(): React.ReactNode {
                 : 'Premium adds deeper coach memory, progress intelligence, and advanced work systems. The free focus loop stays useful.'}
             </Text>
           </View>
-          <Button
-            <Text>variant="ghost"</Text>
+          <Button variant="ghost"
             onPress={handleClose}
             size="sm"
             accessibilityLabel="Close Premium paywall"
@@ -149,8 +148,7 @@ export function VipPaywallScreen(): React.ReactNode {
           </View>
         )}
 
-        <Button
-          <Text>variant="ghost"</Text>
+        <Button variant="ghost"
           size="sm"
           onPress={handleRestore}
           accessibilityLabel="Restore purchases"
@@ -161,7 +159,7 @@ export function VipPaywallScreen(): React.ReactNode {
         </Button>
         {!isPremium && !isLoading && !error ? (
           <Button
-            <Text>onPress={handlePurchase}</Text>
+            onPress={handlePurchase}
             variant="primary"
             size="lg"
             fullWidth

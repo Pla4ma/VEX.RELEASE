@@ -14,13 +14,11 @@ import { FormField } from '../../shared/ui/components/FormField';
 import { VexActivationButton } from './components/VexPrimaryButton';
 import type { AuthStackParams } from '../../navigation';
 import { useForgotPasswordForm } from './useForgotPasswordForm';
-import {
-  EtherealMedallion,
-  EtherealSkyBackground,
-  GlassSurface,
-  SerifTitle,
-} from './components/ethereal/EtherealMedallion';
-import { etherealText } from './components/ethereal/EtherealMedallion';
+import { EtherealMedallion } from './components/ethereal/EtherealMedallion';
+import { EtherealSkyBackground } from './components/ethereal/EtherealSkyBackground';
+import { GlassSurface } from './components/ethereal/GlassSurface';
+import { SerifTitle } from './components/ethereal/SerifTitle';
+import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 

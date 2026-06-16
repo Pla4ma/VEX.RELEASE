@@ -4,10 +4,9 @@ import { createDebugger } from '../utils/debug';
 import {
   analyticsService,
   capture,
-  initializeAnalyticsEventBridge,
-  ProductAnalyticsEvents,
 } from '../shared/analytics/analytics-service';
-import { setupGlobalErrorHandler, setupRejectionHandler } from '../shared/analytics/analytics-service';
+import { initializeAnalyticsEventBridge, ProductAnalyticsEvents } from '../shared/analytics';
+import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors/globalErrorHandlers';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
 import { getMmkvEncryptionKey } from '../persistence/mmkv-key';
 

@@ -98,8 +98,7 @@ export function ErrorFallback({
         {message}
         {offlineNotice}
       </Text>
-      <Button
-        <Text>variant="primary"</Text>
+      <Button variant="primary"
         onPress={onRetry}
         style={{ width: '100%', maxWidth: 280 }}
         accessibilityLabel="Try again"
@@ -109,8 +108,7 @@ export function ErrorFallback({
         Try Again
       </Button>
       {onGoBack && (
-        <Button
-          <Text>variant="ghost"</Text>
+        <Button variant="ghost"
           onPress={onGoBack}
           style={{ width: '100%', maxWidth: 280, marginTop: theme.spacing[3] }}
           accessibilityLabel="Go back"

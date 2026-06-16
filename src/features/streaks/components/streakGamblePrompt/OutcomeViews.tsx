@@ -101,8 +101,7 @@ export const WonView: React.FC<WonViewProps> = ({ outcome, onDismiss }) => {
           </Box>
 
           <Box mt={5}>
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               size="md"
               onPress={onDismiss}
               accessibilityLabel="Continue after streak outcome"
@@ -175,8 +174,7 @@ export const LostView: React.FC<LostViewProps> = ({
           </Box>
 
           <Box mt={5}>
-            <Button
-              <Text>variant="primary"</Text>
+            <Button variant="primary"
               size="md"
               onPress={onDismiss}
               accessibilityLabel="Start fresh after streak loss"

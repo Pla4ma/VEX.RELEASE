@@ -1,6 +1,7 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Box, Card } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import {
   type CompanionMood,
   type CompanionState,

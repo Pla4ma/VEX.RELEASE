@@ -84,7 +84,7 @@ export function VexMotionSurface({
         {
           borderRadius,
           overflow: 'hidden',
-          boxShadow: '0px theme.spacing[2]px theme.spacing[6]px theme.colors.semantic.shadow / variant === 'elevated' ? theme.opacity[20] : theme.opacity[10]',
+          boxShadow: `0px ${theme.spacing[2]}px ${theme.spacing[6]}px ${theme.colors.semantic.shadow} / ${variant === 'elevated' ? theme.opacity[20] : theme.opacity[10]}`,
           ...base,
         },
         animatedStyle,

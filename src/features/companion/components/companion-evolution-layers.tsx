@@ -2,7 +2,8 @@ import React from 'react';
 import { Dimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import type { AnimatedStyle } from 'react-native-reanimated';
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import type { CompanionPhase } from '../types';
 import { lightColors } from '@/theme/tokens/colors';
 

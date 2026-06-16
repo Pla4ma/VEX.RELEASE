@@ -129,8 +129,7 @@ export function SessionConflictState({
           {}
           {onMerge && (
             <Animated.View entering={FadeIn.delay(300)}>
-              <Button
-                <Text>variant="ghost"</Text>
+              <Button variant="ghost"
                 size="md"
                 onPress={() => handleResolveOption('merge')}
                 isLoading={isResolving && selectedOption === 'merge'}

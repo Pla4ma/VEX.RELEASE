@@ -1,6 +1,5 @@
 import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import type { UseQueryResult } from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { getNextBestAction } from '../../../features/progression/next-best-action';
@@ -9,10 +8,10 @@ import type { SessionStackParams } from '../../../navigation/types';
 import { getNextUnlockFeature } from '../hooks/home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
-import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions, stubCoachMutations } from '../hooks/home-controller-stubs';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import { computeActivatingState } from './ActivatingHomeContainer.state';
+import { buildActivatingController } from './ActivatingHomeContainer.controller';
 import type { Nav, ActivatingContainerInput } from './ActivatingHomeContainer.types';
 
 export function useActivatingContainerModel(
@@ -30,8 +29,6 @@ export function useActivatingContainerModel(
   } = input;
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((s) => s.homeHighlight);
-  const completionSync = useSessionUIStore((s) => s.completionSync);
-  const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
   const {
     streakData,
@@ -42,8 +39,6 @@ export function useActivatingContainerModel(
     progressPercent,
     isFirstRun,
   } = computeActivatingState(disclosure, streakQuery, progressionQuery, historyQuery);
-
-  const stubActions = useMemo(() => stubNavigationActions(), []);
 
   const openSetup = useCallback(
     (params: SessionStackParams['SessionSetup'] = {}): void => {
@@ -137,22 +132,16 @@ export function useActivatingContainerModel(
   });
 
   const isLoading = disclosure.isPending;
-  const controller: HomeController = {
-    user: null,
+  const controller = buildActivatingController({
     userId,
     isOnline,
     isLoading,
     isFirstRun,
-    loadError: disclosure.error as Error | null,
-    homeHighlight,
-    completionSync,
-    clearHomeHighlight,
     currentStreak,
     currentXp,
     todayFocusMinutes,
     progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation: null,
     homeSpine,
     returnReason,
     disclosure,
@@ -160,28 +149,11 @@ export function useActivatingContainerModel(
     streakQuery,
     progressionQuery,
     historyQuery,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
-    learningExecutionLayer: stubLearningExecutionLayer(),
-    comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: createStubQuery() as UseQueryResult,
-    shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
-    shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
     openSetup,
     openProgress,
-    openSocial: stubActions.openSocial,
     openPlan,
     openCoach,
-    openContentStudy: openSetup as () => void,
-    continueStudyPlan: openSetup as () => void,
-    createRecommendation: stubCoachMutations()
-      .createRecommendation as HomeController['createRecommendation'],
-    updateRecommendationStatus: stubCoachMutations()
-      .updateRecommendationStatus as HomeController['updateRecommendationStatus'],
-    retryAll: disclosure.refetchAll as () => Promise<unknown>,
-    features: disclosure.features,
-  };
+  });
 
   return {
     userId,

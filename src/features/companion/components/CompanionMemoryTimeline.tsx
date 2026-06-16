@@ -136,7 +136,7 @@ function EmptyTimeline({
           that matter.
         </Text>
         <Button
-          <Text>accessibilityHint="Opens session setup to start a focus session"</Text>
+          accessibilityHint="Opens session setup to start a focus session"
           accessibilityLabel="Start a focus session"
           accessibilityRole="button"
           onPress={onStartFocus}

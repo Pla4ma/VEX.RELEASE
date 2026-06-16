@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { MasteryRank } from '../types';
 import { lightColors } from '@/theme/tokens/colors';
@@ -102,4 +103,4 @@ export function MasteryRankBadge({
       ) : null}
     </Box>
   );
-}
+}

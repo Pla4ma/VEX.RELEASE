@@ -43,8 +43,7 @@ export function EmptyVault({ onGetChest }: EmptyVaultProps): React.ReactNode {
           purity scores give better rewards.
         </Text>
 
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           size="lg"
           onPress={onGetChest}
           accessibilityLabel="Start a session"

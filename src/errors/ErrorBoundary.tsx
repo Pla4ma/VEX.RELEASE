@@ -1,16 +1,12 @@
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { Box, Text } from '../components/primitives/Box';
+import { Box } from '../components/primitives/Box';
+import { Text } from '../components/primitives/Text';
 import { createDebugger } from '../utils/debug';
 import { getAnalyticsService } from '../analytics/AnalyticsService';
 import { lightColors } from '@/theme/tokens/colors';
-
 import { categorizeError, calculateRetryDelay } from './ErrorBoundary.helpers';
 import { ErrorFallback } from './ErrorFallback';
-import type {
-  ErrorBoundaryProps,
-  ErrorState,
-  ErrorCategory,
-} from './ErrorBoundary.types';
+import type { ErrorBoundaryProps, ErrorState, ErrorCategory } from './ErrorBoundary.types';
 
 const debug = createDebugger('error');
 

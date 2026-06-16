@@ -66,17 +66,17 @@ export function getProgressionGuide(
     .slice(0, 5)
     .map((a) => a.achievement);
   const categoryProgress: Record<string, number> = {};
-  const unlockedidSet = new Set(unlockedIds);
+  const unlockedIdSet = new Set(unlockedIds);
   for (const category of ALL_CATEGORIES) {
     const categoryAchievements = ALL_ACHIEVEMENTS.filter(
       (a) => a.category === category,
     );
     const unlockedInCategory = categoryAchievements.filter((a) =>
-      unlockedIds.includes(a.id),
-      unlockedidSet.has(a.id),
+      unlockedIdSet.has(a.id),
+    );
     categoryProgress[category] =
       categoryAchievements.length > 0
-        ? (unlockedInCategory / categoryAchievements.length) * 100
+        ? (unlockedInCategory.length / categoryAchievements.length) * 100
         : 0;
   }
   const totalPoints = unlockedIds.reduce((sum, id) => {

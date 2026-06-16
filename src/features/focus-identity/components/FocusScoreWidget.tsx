@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFocusScore } from '../hooks-focus-score';
-import { Box, Text, Stack, Skeleton } from '../../../components/primitives/Box';
+import { Box, Stack, Skeleton } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';

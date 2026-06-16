@@ -58,8 +58,7 @@ export function SessionSetupFooter({
         {selectedThemeLabel ? ` · ${selectedThemeLabel}` : ''}
       </Text>
 
-      <Button
-        <Text>variant="primary"</Text>
+      <Button variant="primary"
         size="lg"
         onPress={onStart}
         isLoading={isStarting}

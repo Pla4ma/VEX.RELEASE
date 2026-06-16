@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 
-import { Box, Card, Text } from '../../../components/primitives/Box';
+import { Box, Card } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
 

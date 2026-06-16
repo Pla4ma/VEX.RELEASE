@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { buildCompletionAdaptivePayoff } from '../../../features/session-completion/adaptive-payoff-service';
 import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';

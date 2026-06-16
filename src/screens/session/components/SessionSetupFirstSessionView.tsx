@@ -100,8 +100,7 @@ export function FirstSessionView({
         <Text variant="h4" color="error.DEFAULT" mb="md">
           Not authenticated
         </Text>
-        <Button
-          <Text>variant="primary"</Text>
+        <Button variant="primary"
           onPress={onBack}
           accessibilityLabel="Go back"
           accessibilityRole="button"

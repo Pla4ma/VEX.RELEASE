@@ -163,8 +163,7 @@ export function StreakMilestoneModal({
                     {`Share my ${milestone}-day streak`}
                   </Button>
                 )}
-                <Button
-                  <Text>variant="primary"</Text>
+                <Button variant="primary"
                   size="lg"
                   fullWidth
                   onPress={onDismiss}

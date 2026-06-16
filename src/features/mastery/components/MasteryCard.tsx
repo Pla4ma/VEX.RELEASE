@@ -165,7 +165,7 @@ export function MasteryCard({
               </View>
               {challenge.status === 'COMPLETED' ? (
                 <Button
-                  <Text>size="sm"</Text>
+                  size="sm"
                   variant="outline"
                   onPress={() => handleClaim(challenge.id)}
                   accessibilityLabel="Claim reward"

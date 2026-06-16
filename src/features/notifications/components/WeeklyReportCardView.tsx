@@ -139,8 +139,7 @@ export function WeeklyReportCard({
 
         {}
         <Box gap="md">
-          <Button
-            <Text>variant="primary"</Text>
+          <Button variant="primary"
             size="lg"
             onPress={onViewAnalytics}
             fullWidth
@@ -152,8 +151,7 @@ export function WeeklyReportCard({
           </Button>
 
           {onShare && (
-            <Button
-              <Text>variant="secondary"</Text>
+            <Button variant="secondary"
               size="md"
               onPress={onShare}
               fullWidth

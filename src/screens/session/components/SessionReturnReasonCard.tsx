@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Text } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Text } from '../../../components/primitives/Text';
 import type { Theme } from '../../../theme/types';
 
 type SessionReturnReasonCardProps = {

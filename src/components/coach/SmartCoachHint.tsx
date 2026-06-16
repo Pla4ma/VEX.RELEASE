@@ -1,7 +1,9 @@
 import React, { type ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { Card, Button, Text } from '../primitives/Card';
+import { Card } from '../primitives/Card';
+import { Button } from '../primitives/Button';
+import { Text } from '../primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';
 import { AnimatedCoachAvatar } from './AnimatedCoachAvatar';
 

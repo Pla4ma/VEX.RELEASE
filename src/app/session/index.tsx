@@ -15,7 +15,8 @@ import { SessionPresets } from '../../session/components/SessionPresets';
 import { SessionLoadingState } from '../../session/components/states/SessionLoadingState';
 import type { SessionPreset } from '../../session/types';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { useTheme, type Theme } from '../../theme/ThemeContext';
+import { useTheme } from '../../theme/ThemeContext';
+import type { Theme } from '../../theme/themeCoreTypes';
 import { useAuthStore } from '../../store/authStore';
 
 export default function SessionHomeScreen() {

@@ -160,8 +160,7 @@ export function StreakBrokenModal({
                 borderTopColor: theme.colors.border.light,
               }}
             >
-              <Button
-                <Text>variant="primary"</Text>
+              <Button variant="primary"
                 size="lg"
                 fullWidth
                 onPress={onStartFresh}
@@ -171,8 +170,7 @@ export function StreakBrokenModal({
               >
                 🔥 Start Fresh
               </Button>
-              <Button
-                <Text>variant="ghost"</Text>
+              <Button variant="ghost"
                 size="md"
                 fullWidth
                 onPress={onDismiss}
