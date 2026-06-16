@@ -16,6 +16,7 @@ type OpenAIUsage = {
 type OpenAIResponse = {
   choices?: OpenAIChoice[];
   output_text?: string;
+  model?: string;
   usage?: OpenAIUsage;
 };
 
@@ -26,6 +27,9 @@ export type OpenAICompatibleConfig = {
 
 export type OpenAICompatibleResult = {
   content: string;
+  model: string;
+  provider: 'freellmapi';
+  fallbackUsed: boolean;
   promptTokens?: number;
   responseTokens?: number;
 };
@@ -78,6 +82,9 @@ export async function callOpenAICompatible(params: {
     if (!content) throw new Error('LLM returned no content');
     return {
       content: content.replace(/\s+/g, ' ').trim(),
+      model: payload.model ?? params.model,
+      provider: 'freellmapi',
+      fallbackUsed: false,
       promptTokens: payload.usage?.prompt_tokens,
       responseTokens: payload.usage?.completion_tokens,
     };
@@ -103,6 +110,7 @@ function parseOpenAIResponse(value: unknown): OpenAIResponse {
   return {
     choices,
     output_text: typeof value.output_text === 'string' ? value.output_text : undefined,
+    model: typeof value.model === 'string' ? value.model : undefined,
     usage,
   };
 }

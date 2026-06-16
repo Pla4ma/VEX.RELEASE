@@ -1,9 +1,10 @@
-refactor: derive isMounted in TransitionWrapper, prev-prop pattern
+perf: combine filter+map+filter chains into single-pass loops
 
-- TransitionWrapper: derive isMounted via prevVisible instead of useEffect chain
-- Skeleton: separate SkeletonLines component for clean separation
-- Loading: separate VariantDisplay component
+- EventEmitter: use for...of loops instead of filter().map()
+- achievements/stats: single-pass for loop with sort
+- ai-coach CoachRecommendationService: single-pass loop
+- ai-coach messages-crud: single-pass loop with dedupe
 
-Score 68, 0 errors, 807 warnings
+Score 68, 0 errors, 802 warnings
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

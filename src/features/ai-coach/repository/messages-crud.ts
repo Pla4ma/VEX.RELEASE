@@ -187,10 +187,12 @@ export async function fetchCoachHistory(
 
   const messages = CoachMessageSchema.array().parse(data || []);
 
-  const mutedCategories = messages
-    .filter((m) => m.status === 'DISMISSED')
-    .map((m) => m.category)
-    .filter((v, i, a) => a.indexOf(v) === i);
+  const mutedCategories: string[] = [];
+  for (const m of messages) {
+    if (m.status === 'DISMISSED' && !mutedCategories.includes(m.category)) {
+      mutedCategories.push(m.category);
+    }
+  }
 
   return { messages, mutedCategories };
 }

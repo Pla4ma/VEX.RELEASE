@@ -163,17 +163,25 @@ export function createNamespacedEmitter(namespace: string): EventEmitter {
       baseEmitter.hasListeners(`${namespace}:${event}`),
     listenerCount: (event: string) =>
       baseEmitter.listenerCount(`${namespace}:${event}`),
-    eventNames: () =>
-      baseEmitter
-        .eventNames()
-        .filter((name) => name.startsWith(`${namespace}:`))
-        .map((name) => name.replace(`${namespace}:`, '')),
-    removeAllListeners: (event?: string) =>
-      event
-        ? baseEmitter.removeAllListeners(`${namespace}:${event}`)
-        : baseEmitter
-            .eventNames()
-            .filter((name) => name.startsWith(`${namespace}:`))
-            .forEach((name) => baseEmitter.removeAllListeners(name)),
+    eventNames: () => {
+      const result: string[] = [];
+      for (const name of baseEmitter.eventNames()) {
+        if (name.startsWith(`${namespace}:`)) {
+          result.push(name.replace(`${namespace}:`, ''));
+        }
+      }
+      return result;
+    },
+    removeAllListeners: (event?: string) => {
+      if (event) {
+        baseEmitter.removeAllListeners(`${namespace}:${event}`);
+        return;
+      }
+      for (const name of baseEmitter.eventNames()) {
+        if (name.startsWith(`${namespace}:`)) {
+          baseEmitter.removeAllListeners(name);
+        }
+      }
+    },
   } as EventEmitter;
 }

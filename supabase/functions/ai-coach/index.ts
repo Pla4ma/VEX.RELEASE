@@ -3,6 +3,8 @@ import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
 import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
+import { buildCoachSystemPrompt } from '../_shared/vex-ai-prompt.ts';
+import { extractJsonObject, stripAiMarkdown } from '../_shared/vex-ai-output.ts';
 
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
 const httpRequest = globalThis.fetch.bind(globalThis);
@@ -39,12 +41,12 @@ Deno.serve(async (request) => {
       const model = getOpenAICompatibleModel('fast', 'auto');
       const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: parsed.data.requestType === 'GENERATE_COACH_MESSAGE' });
       try {
-        return respond(buildTextSuccess(parsed.data, llm.content, model, startedAt, llm.promptTokens, llm.responseTokens), 200, request);
+        return respond(buildTextSuccess(parsed.data, llm.content, llm.model, startedAt, false, llm.promptTokens, llm.responseTokens), 200, request);
       } catch (error) {
         if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') throw error;
         const fallbackModel = Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'groq/compound-mini';
         const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: true });
-        return respond(buildTextSuccess(parsed.data, fallback.content, fallbackModel, startedAt, fallback.promptTokens, fallback.responseTokens), 200, request);
+        return respond(buildTextSuccess(parsed.data, fallback.content, fallback.model, startedAt, true, fallback.promptTokens, fallback.responseTokens), 200, request);
       }
     }
     if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
@@ -59,7 +61,7 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const persona = request.context.personaStyle ?? 'MENTOR';
     const recent = (request.context.recentSessionOutcomes ?? []).map((e, i) => `#${i + 1}: score=${e.score}, quality=${e.focusQuality ?? e.score}, duration=${e.durationMinutes ?? 0}m`).join('; ') || 'none';
-    return { system: `You are VEX AI Coach in ${persona} persona. Return ONLY valid JSON with keys message, tone, urgency, optional actionLabel, optional action (START_SESSION, VIEW_PROGRESS, VIEW_SETTINGS, START_COMEBACK, VIEW_BOSS, VIEW_CHALLENGES, VIEW_SQUAD, VIEW_SHOP, OPEN_COACH, OPEN_CONTENT_STUDY, NONE).`, user: `Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. Hours=${request.context.hoursSinceLastSession ?? 0}. Inactive=${request.context.daysInactive ?? 0}. Recent3=${recent}.`, maxOutputTokens: 150 };
+    return { system: buildCoachSystemPrompt(persona), user: `Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. Hours=${request.context.hoursSinceLastSession ?? 0}. Inactive=${request.context.daysInactive ?? 0}. Recent3=${recent}.`, maxOutputTokens: 150 };
   }
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
 }
@@ -80,12 +82,12 @@ function buildSuccess(request: AIRequest, gemini: GeminiResponse, startedAt: num
   return buildTextPayload(request, rawText, metadata);
 }
 
-function buildTextSuccess(request: AIRequest, rawText: string, model: string, startedAt: number, promptTokens?: number, responseTokens?: number) {
-  const metadata = { model, processingTimeMs: Date.now() - startedAt, promptTokens, responseTokens, cached: false };
+function buildTextSuccess(request: AIRequest, rawText: string, model: string, startedAt: number, fallbackUsed: boolean, promptTokens?: number, responseTokens?: number) {
+  const metadata = { model, provider: 'freellmapi', fallbackUsed, processingTimeMs: Date.now() - startedAt, promptTokens, responseTokens, cached: false };
   return buildTextPayload(request, rawText, metadata);
 }
 
-function buildTextPayload(request: AIRequest, rawText: string, metadata: { model: string; processingTimeMs: number; promptTokens?: number; responseTokens?: number; cached: boolean }) {
+function buildTextPayload(request: AIRequest, rawText: string, metadata: { model: string; provider?: string; fallbackUsed?: boolean; processingTimeMs: number; promptTokens?: number; responseTokens?: number; cached: boolean }) {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const structuredData = CoachPayloadSchema.parse(parseJsonBlock(rawText));
     return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };
@@ -98,12 +100,12 @@ function buildError(requestType: AIRequest['requestType'], startedAt: number, co
 }
 
 function parseJsonBlock(text: string): unknown {
-  const matched = stripMarkdown(text).match(/\{[\s\S]*\}/);
-  if (!matched) throw new Error('Gemini API error: invalid JSON response');
-  return JSON.parse(matched[0]) as unknown;
+  const matched = extractJsonObject(text);
+  if (!matched) throw new Error('LLM returned non-JSON content');
+  return JSON.parse(matched) as unknown;
 }
 
-function stripMarkdown(text: string): string { return text.replace(/```json|```/g, '').replace(/\*\*/g, '').trim(); }
+function stripMarkdown(text: string): string { return stripAiMarkdown(text); }
 
 function readRequestType(rawBody: unknown): AIRequest['requestType'] {
   if (typeof rawBody !== 'object' || rawBody === null || !('requestType' in rawBody)) return 'GENERATE_COACH_MESSAGE';
