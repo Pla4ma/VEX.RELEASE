@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   shouldAutoApplySmartSuggestion,
   shouldOpenCustomizationByDefault,
@@ -143,16 +143,16 @@ export function useSessionSetupState(
     userId,
   ]);
 
-  const [prevAutoApplyKey, setPrevAutoApplyKey] = useState(
+  const prevAutoApplyKeyRef = useRef(
     `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`,
   );
   const currentAutoApplyKey = `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`;
   if (
     !hasAutoAppliedSuggestion &&
     hasHydratedDraft &&
-    currentAutoApplyKey !== prevAutoApplyKey
+    currentAutoApplyKey !== prevAutoApplyKeyRef.current
   ) {
-    setPrevAutoApplyKey(currentAutoApplyKey);
+    prevAutoApplyKeyRef.current = currentAutoApplyKey;
     if (
       shouldAutoApplySmartSuggestion({
         hasSavedDraft,

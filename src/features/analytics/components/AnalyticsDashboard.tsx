@@ -40,12 +40,12 @@ export function AnalyticsDashboard({
   } = useSessionHeatmapData(userId, weeks);
   const { data: insights, isLoading: insightsLoading } = useInsights(userId, { limit: 5 });
 
-  const [prevDataError, setPrevDataError] = React.useState(dataError);
-  const [prevDataErrorObj, setPrevDataErrorObj] = React.useState(dataErrorObj);
+  const prevDataErrorRef = React.useRef(dataError);
+  const prevDataErrorObjRef = React.useRef(dataErrorObj);
 
-  if (dataError !== prevDataError || dataErrorObj !== prevDataErrorObj) {
-    setPrevDataError(dataError);
-    setPrevDataErrorObj(dataErrorObj);
+  if (dataError !== prevDataErrorRef.current || dataErrorObj !== prevDataErrorObjRef.current) {
+    prevDataErrorRef.current = dataError;
+    prevDataErrorObjRef.current = dataErrorObj;
     if (dataError && dataErrorObj) {
       const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
       setError({

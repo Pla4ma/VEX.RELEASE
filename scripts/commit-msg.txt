@@ -1,10 +1,16 @@
-perf: combine filter+map+filter chains into single-pass loops
+refactor: replace prev-state with useRef for unused reads
 
-- EventEmitter: use for...of loops instead of filter().map()
-- achievements/stats: single-pass for loop with sort
-- ai-coach CoachRecommendationService: single-pass loop
-- ai-coach messages-crud: single-pass loop with dedupe
+Apply React's official "store the previous prop in a ref" pattern across:
+- ConfettiCelebration: prevActive ref
+- CoachInterventionBanner: prevInterventionId ref
+- AnalyticsDashboard: prevDataError refs
+- MonthlyFocusReport: prevReportId ref
+- CheckpointCelebration: prevCheckpointKey ref
+- TransitionWrapper: prevVisible ref
+- useSessionSetupState: prevAutoApplyKey ref
+- useCompanionSession: prevSessionStartId ref
+- useComboAnimations: prevComboMinutes refs
 
-Score 68, 0 errors, 802 warnings
+Score 67-68, 0 errors, 791 warnings
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>
