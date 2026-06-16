@@ -1,0 +1,945 @@
+src/animation/Particle.tsx(57,1): error TS1109: Expression expected.
+src/animation/Particle.tsx(57,3): error TS1434: Unexpected keyword or identifier.
+src/components/glass/GlassCard.tsx(64,66): error TS1005: '}' expected.
+src/components/glass/GlassCard.tsx(64,69): error TS1005: ',' expected.
+src/components/glass/GlassCard.tsx(90,1): error TS1160: Unterminated template literal.
+src/components/primitives/VexMotionSurface.tsx(87,109): error TS1005: ',' expected.
+src/components/primitives/VexMotionSurface.tsx(87,117): error TS1005: ',' expected.
+src/components/primitives/VexMotionSurface.tsx(87,159): error TS1005: ':' expected.
+src/errors/ErrorFallback.tsx(122,38): error TS1003: Identifier expected.
+src/errors/ErrorFallback.tsx(122,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/errors/ErrorFallback.tsx(123,15): error TS1005: ')' expected.
+src/errors/ErrorFallback.tsx(127,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/errors/ErrorFallback.tsx(129,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/errors/ErrorFallback.tsx(133,36): error TS1003: Identifier expected.
+src/errors/ErrorFallback.tsx(138,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/errors/ErrorFallback.tsx(144,38): error TS1003: Identifier expected.
+src/errors/ErrorFallback.tsx(149,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/errors/ErrorFallback.tsx(153,9): error TS1128: Declaration or statement expected.
+src/errors/ErrorFallback.tsx(154,7): error TS1109: Expression expected.
+src/errors/ErrorFallback.tsx(154,8): error TS1128: Declaration or statement expected.
+src/errors/ErrorFallback.tsx(155,5): error TS1128: Declaration or statement expected.
+src/errors/ErrorFallback.tsx(156,3): error TS1109: Expression expected.
+src/errors/ErrorFallback.tsx(157,1): error TS1128: Declaration or statement expected.
+src/events/ChallengeManager.ts(55,31): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(55,54): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(55,63): error TS1005: ';' expected.
+src/events/ChallengeManager.ts(56,11): error TS1005: ':' expected.
+src/events/ChallengeManager.ts(56,36): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(57,9): error TS1003: Identifier expected.
+src/events/ChallengeManager.ts(58,5): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,10): error TS1359: Identifier expected. 'const' is a reserved word that cannot be used here.
+src/events/ChallengeManager.ts(58,16): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,26): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,29): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,33): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,59): error TS1005: ',' expected.
+src/events/ChallengeManager.ts(58,61): error TS1136: Property assignment expected.
+src/features/achievements/achievement-helpers.ts(80,12): error TS1005: ')' expected.
+src/features/achievements/components/AchievementDetailIcon.tsx(55,83): error TS1005: ',' expected.
+src/features/achievements/components/AchievementDetailIcon.tsx(55,94): error TS1005: ',' expected.
+src/features/achievements/components/AchievementDetailIcon.tsx(55,119): error TS1005: ':' expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(58,5): error TS2657: JSX expressions must have one parent element.
+src/features/achievements/components/AchievementDetailSheet.tsx(111,34): error TS1003: Identifier expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(111,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/achievements/components/AchievementDetailSheet.tsx(118,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/achievements/components/AchievementDetailSheet.tsx(120,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/achievements/components/AchievementDetailSheet.tsx(123,32): error TS1003: Identifier expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(130,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/achievements/components/AchievementDetailSheet.tsx(133,7): error TS1005: ')' expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(134,5): error TS1109: Expression expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(135,3): error TS1109: Expression expected.
+src/features/achievements/components/AchievementDetailSheet.tsx(136,1): error TS1128: Declaration or statement expected.
+src/features/ai-coach/components/CoachBubble.tsx(42,1): error TS1109: Expression expected.
+src/features/ai-coach/components/CoachBubble.tsx(42,2): error TS1128: Declaration or statement expected.
+src/features/ai-coach/components/CoachBubble.tsx(42,4): error TS1434: Unexpected keyword or identifier.
+src/features/ai-coach/components/CoachBubble.tsx(42,27): error TS1128: Declaration or statement expected.
+src/features/ai-coach/components/CoachBubble.tsx(42,28): error TS1128: Declaration or statement expected.
+src/features/ai-coach/components/CoachBubble.tsx(42,46): error TS1005: ';' expected.
+src/features/ai-coach/components/CoachSessionBanner.tsx(116,62): error TS1005: ',' expected.
+src/features/ai-coach/components/CoachSessionBanner.tsx(116,64): error TS1005: ':' expected.
+src/features/ai-coach/message/message-quality-scoring.ts(148,1): error TS1005: '}' expected.
+src/features/capture/components/CaptureSheet.tsx(165,36): error TS1003: Identifier expected.
+src/features/capture/components/CaptureSheet.tsx(165,38): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/features/capture/components/CaptureSheet.tsx(165,42): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/capture/components/CaptureSheet.tsx(173,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/capture/components/CaptureSheet.tsx(175,13): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/capture/components/CaptureSheet.tsx(176,9): error TS1005: ')' expected.
+src/features/capture/components/CaptureSheet.tsx(176,11): error TS1109: Expression expected.
+src/features/capture/components/CaptureSheet.tsx(177,7): error TS1109: Expression expected.
+src/features/capture/components/CaptureSheet.tsx(178,5): error TS1128: Declaration or statement expected.
+src/features/capture/components/CaptureSheet.tsx(179,3): error TS1109: Expression expected.
+src/features/capture/components/CaptureSheet.tsx(180,1): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeCard.tsx(123,38): error TS1003: Identifier expected.
+src/features/challenges/components/ChallengeCard.tsx(123,40): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/challenges/components/ChallengeCard.tsx(124,15): error TS1005: ')' expected.
+src/features/challenges/components/ChallengeCard.tsx(131,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/challenges/components/ChallengeCard.tsx(133,15): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/features/challenges/components/ChallengeCard.tsx(155,9): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeCard.tsx(156,7): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeCard.tsx(156,8): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeCard.tsx(157,5): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeCard.tsx(158,3): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeCard.tsx(159,1): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeList.tsx(85,38): error TS1003: Identifier expected.
+src/features/challenges/components/ChallengeList.tsx(85,40): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/features/challenges/components/ChallengeList.tsx(91,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/challenges/components/ChallengeList.tsx(93,15): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/challenges/components/ChallengeList.tsx(95,9): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeList.tsx(96,7): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeList.tsx(97,5): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeList.tsx(117,40): error TS1003: Identifier expected.
+src/features/challenges/components/ChallengeList.tsx(117,42): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/features/challenges/components/ChallengeList.tsx(123,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/challenges/components/ChallengeList.tsx(125,15): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/challenges/components/ChallengeList.tsx(127,9): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeList.tsx(128,7): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeList.tsx(129,5): error TS1109: Expression expected.
+src/features/challenges/components/ChallengeList.tsx(130,3): error TS1128: Declaration or statement expected.
+src/features/challenges/components/ChallengeList.tsx(154,1): error TS1128: Declaration or statement expected.
+src/features/challenges/components/NearMissActions.tsx(72,32): error TS1003: Identifier expected.
+src/features/challenges/components/NearMissActions.tsx(72,34): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/challenges/components/NearMissActions.tsx(79,7): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/challenges/components/NearMissActions.tsx(81,9): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/features/challenges/components/NearMissActions.tsx(81,15): error TS1005: ',' expected.
+src/features/challenges/components/NearMissActions.tsx(82,28): error TS1005: ',' expected.
+src/features/challenges/components/NearMissActions.tsx(84,34): error TS1003: Identifier expected.
+src/features/challenges/components/NearMissActions.tsx(91,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/challenges/components/NearMissActions.tsx(94,8): error TS1128: Declaration or statement expected.
+src/features/challenges/components/NearMissActions.tsx(95,5): error TS1128: Declaration or statement expected.
+src/features/challenges/components/NearMissActions.tsx(102,3): error TS1128: Declaration or statement expected.
+src/features/challenges/components/NearMissActions.tsx(102,5): error TS1109: Expression expected.
+src/features/challenges/components/NearMissActions.tsx(103,1): error TS1109: Expression expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(106,75): error TS1003: Identifier expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(106,77): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(107,11): error TS1005: ')' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(109,77): error TS1005: ':' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(113,9): error TS1128: Declaration or statement expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(114,7): error TS1109: Expression expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(115,5): error TS1109: Expression expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(181,64): error TS1003: Identifier expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(181,66): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(182,11): error TS1005: ')' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(184,77): error TS1005: ':' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(187,19): error TS1005: ';' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(187,23): error TS1005: '(' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(188,9): error TS1005: ';' expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(189,7): error TS1109: Expression expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(189,9): error TS1128: Declaration or statement expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(190,5): error TS1128: Declaration or statement expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(191,3): error TS1109: Expression expected.
+src/features/companion-promise/components/CompanionPromiseCard.tsx(192,1): error TS1128: Declaration or statement expected.
+src/features/companion/components/CompanionMemoryTimeline.tsx(139,81): error TS1003: Identifier expected.
+src/features/companion/components/CompanionMemoryTimeline.tsx(139,83): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/companion/components/CompanionMemoryTimeline.tsx(144,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/companion/components/CompanionMemoryTimeline.tsx(146,11): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/features/companion/components/CompanionMemoryTimeline.tsx(147,7): error TS1005: ')' expected.
+src/features/companion/components/CompanionMemoryTimeline.tsx(148,5): error TS1109: Expression expected.
+src/features/companion/components/CompanionMemoryTimeline.tsx(149,3): error TS1109: Expression expected.
+src/features/content-study/components/EmptyLibraryState.tsx(60,34): error TS1003: Identifier expected.
+src/features/content-study/components/EmptyLibraryState.tsx(60,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/content-study/components/EmptyLibraryState.tsx(61,11): error TS1005: ')' expected.
+src/features/content-study/components/EmptyLibraryState.tsx(68,15): error TS1005: ';' expected.
+src/features/content-study/components/EmptyLibraryState.tsx(69,9): error TS1128: Declaration or statement expected.
+src/features/content-study/components/EmptyLibraryState.tsx(70,7): error TS1109: Expression expected.
+src/features/content-study/components/EmptyLibraryState.tsx(71,5): error TS1109: Expression expected.
+src/features/content-study/components/EmptyLibraryState.tsx(90,36): error TS1003: Identifier expected.
+src/features/content-study/components/EmptyLibraryState.tsx(90,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/content-study/components/EmptyLibraryState.tsx(91,13): error TS1005: ')' expected.
+src/features/content-study/components/EmptyLibraryState.tsx(98,17): error TS1005: ';' expected.
+src/features/content-study/components/EmptyLibraryState.tsx(98,22): error TS1434: Unexpected keyword or identifier.
+src/features/content-study/components/EmptyLibraryState.tsx(99,11): error TS1128: Declaration or statement expected.
+src/features/content-study/components/EmptyLibraryState.tsx(100,9): error TS1109: Expression expected.
+src/features/content-study/components/EmptyLibraryState.tsx(101,7): error TS1128: Declaration or statement expected.
+src/features/content-study/components/EmptyLibraryState.tsx(102,5): error TS1109: Expression expected.
+src/features/content-study/components/EmptyLibraryState.tsx(106,1): error TS1128: Declaration or statement expected.
+src/features/content-study/components/PdfUploaderFileCard.tsx(164,32): error TS1003: Identifier expected.
+src/features/content-study/components/PdfUploaderFileCard.tsx(164,34): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/content-study/components/PdfUploaderFileCard.tsx(170,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/content-study/components/PdfUploaderFileCard.tsx(172,11): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/content-study/components/PdfUploaderFileCard.tsx(173,7): error TS1005: ')' expected.
+src/features/content-study/components/PdfUploaderFileCard.tsx(174,5): error TS1109: Expression expected.
+src/features/content-study/components/PdfUploaderFileCard.tsx(175,3): error TS1109: Expression expected.
+src/features/content-study/components/PdfUploaderFileCard.tsx(176,1): error TS1128: Declaration or statement expected.
+src/features/content-study/components/ShortAnswerInput.tsx(50,28): error TS1003: Identifier expected.
+src/features/content-study/components/ShortAnswerInput.tsx(50,30): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/content-study/components/ShortAnswerInput.tsx(56,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/content-study/components/ShortAnswerInput.tsx(58,13): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/features/content-study/components/ShortAnswerInput.tsx(59,11): error TS17002: Expected corresponding JSX closing tag for 'KeyboardAvoidingView'.
+src/features/content-study/components/ShortAnswerInput.tsx(60,7): error TS1005: ')' expected.
+src/features/content-study/components/ShortAnswerInput.tsx(61,5): error TS1109: Expression expected.
+src/features/content-study/components/ShortAnswerInput.tsx(62,3): error TS1109: Expression expected.
+src/features/content-study/components/ShortAnswerInput.tsx(63,1): error TS1128: Declaration or statement expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(119,36): error TS1003: Identifier expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(119,38): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/content-study/components/YouTubeVideoPreview.tsx(120,15): error TS1005: ')' expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(125,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/content-study/components/YouTubeVideoPreview.tsx(127,15): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/content-study/components/YouTubeVideoPreview.tsx(129,9): error TS1128: Declaration or statement expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(130,7): error TS1109: Expression expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(130,8): error TS1128: Declaration or statement expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(131,5): error TS1128: Declaration or statement expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(132,3): error TS1109: Expression expected.
+src/features/content-study/components/YouTubeVideoPreview.tsx(133,1): error TS1128: Declaration or statement expected.
+src/features/content-study/screens/StudyLibraryScreen.tsx(104,36): error TS1003: Identifier expected.
+src/features/content-study/screens/StudyLibraryScreen.tsx(104,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/content-study/screens/StudyLibraryScreen.tsx(110,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/content-study/screens/StudyLibraryScreen.tsx(112,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/content-study/screens/StudyLibraryScreen.tsx(114,7): error TS1005: ')' expected.
+src/features/content-study/screens/StudyLibraryScreen.tsx(116,7): error TS2657: JSX expressions must have one parent element.
+src/features/content-study/screens/StudyLibraryScreen.tsx(167,5): error TS1128: Declaration or statement expected.
+src/features/content-study/screens/StudyLibraryScreen.tsx(168,3): error TS1109: Expression expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(44,32): error TS1003: Identifier expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(44,34): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/focus-identity/components/MonthlyReportStates.tsx(45,9): error TS1005: ')' expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(46,16): error TS1136: Property assignment expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(47,7): error TS1109: Expression expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(48,13): error TS1005: ';' expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(49,7): error TS1128: Declaration or statement expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(53,5): error TS1128: Declaration or statement expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(54,3): error TS1109: Expression expected.
+src/features/focus-identity/components/MonthlyReportStates.tsx(55,1): error TS1128: Declaration or statement expected.
+src/features/focus-identity/components/ReportCards.tsx(167,34): error TS1003: Identifier expected.
+src/features/focus-identity/components/ReportCards.tsx(167,36): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/focus-identity/components/ReportCards.tsx(170,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/focus-identity/components/ReportCards.tsx(172,11): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/features/focus-identity/components/ReportCards.tsx(176,7): error TS1128: Declaration or statement expected.
+src/features/focus-identity/components/ReportCards.tsx(177,5): error TS1109: Expression expected.
+src/features/focus-identity/components/ReportCards.tsx(177,7): error TS1109: Expression expected.
+src/features/focus-identity/components/ReportCards.tsx(178,3): error TS1109: Expression expected.
+src/features/home-spine/components/DayCheckRow.tsx(45,77): error TS1005: ',' expected.
+src/features/home-spine/components/DayCheckRow.tsx(45,88): error TS1005: ',' expected.
+src/features/home-spine/components/DayCheckRow.tsx(45,110): error TS1005: ':' expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(83,34): error TS1003: Identifier expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(83,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/home-spine/components/TodaysChallengesStates.tsx(84,11): error TS1005: ')' expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(90,15): error TS1005: ';' expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(91,9): error TS1128: Declaration or statement expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(92,7): error TS1109: Expression expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(92,9): error TS1128: Declaration or statement expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(93,5): error TS1128: Declaration or statement expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(94,3): error TS1109: Expression expected.
+src/features/home-spine/components/TodaysChallengesStates.tsx(95,1): error TS1128: Declaration or statement expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(135,42): error TS1003: Identifier expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(135,44): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(135,48): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/home-spine/components/TodaysChallengesWidget.tsx(142,19): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/home-spine/components/TodaysChallengesWidget.tsx(144,21): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(145,19): error TS1003: Identifier expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(187,7): error TS1128: Declaration or statement expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(188,5): error TS1109: Expression expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(189,3): error TS1109: Expression expected.
+src/features/home-spine/components/TodaysChallengesWidget.tsx(190,1): error TS1128: Declaration or statement expected.
+src/features/mastery/challenge-generator.ts(25,58): error TS1109: Expression expected.
+src/features/mastery/components/MasteryCard.tsx(168,34): error TS1003: Identifier expected.
+src/features/mastery/components/MasteryCard.tsx(168,36): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/mastery/components/MasteryCard.tsx(169,19): error TS1005: ')' expected.
+src/features/mastery/components/MasteryCard.tsx(170,28): error TS1136: Property assignment expected.
+src/features/mastery/components/MasteryCard.tsx(170,31): error TS1005: ';' expected.
+src/features/mastery/components/MasteryCard.tsx(170,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/mastery/components/MasteryCard.tsx(170,59): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/features/mastery/components/MasteryCard.tsx(174,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/mastery/components/MasteryCard.tsx(176,19): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/mastery/components/MasteryCard.tsx(177,23): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/features/mastery/components/MasteryCard.tsx(180,10): error TS1128: Declaration or statement expected.
+src/features/mastery/components/MasteryCard.tsx(180,11): error TS1128: Declaration or statement expected.
+src/features/mastery/components/MasteryCard.tsx(181,7): error TS1128: Declaration or statement expected.
+src/features/mastery/components/MasteryCard.tsx(182,5): error TS1109: Expression expected.
+src/features/mastery/components/MasteryCard.tsx(183,3): error TS1109: Expression expected.
+src/features/mastery/components/MasteryCard.tsx(184,1): error TS1128: Declaration or statement expected.
+src/features/mastery/components/MasteryUnlockGate.tsx(112,28): error TS1003: Identifier expected.
+src/features/mastery/components/MasteryUnlockGate.tsx(112,30): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/mastery/components/MasteryUnlockGate.tsx(118,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/mastery/components/MasteryUnlockGate.tsx(120,13): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/features/mastery/components/MasteryUnlockGate.tsx(142,7): error TS1128: Declaration or statement expected.
+src/features/mastery/components/MasteryUnlockGate.tsx(143,5): error TS1109: Expression expected.
+src/features/mastery/components/MasteryUnlockGate.tsx(144,3): error TS1109: Expression expected.
+src/features/mastery/components/MasteryUnlockGate.tsx(145,1): error TS1128: Declaration or statement expected.
+src/features/monthly-report/components/report-content-helpers.tsx(89,38): error TS1003: Identifier expected.
+src/features/monthly-report/components/report-content-helpers.tsx(89,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/monthly-report/components/report-content-helpers.tsx(90,9): error TS1005: ')' expected.
+src/features/monthly-report/components/report-content-helpers.tsx(96,16): error TS1005: ';' expected.
+src/features/monthly-report/components/report-content-helpers.tsx(96,21): error TS1005: '(' expected.
+src/features/monthly-report/components/report-content-helpers.tsx(97,7): error TS1005: ')' expected.
+src/features/monthly-report/components/report-content-helpers.tsx(98,5): error TS1109: Expression expected.
+src/features/monthly-report/components/report-content-helpers.tsx(99,3): error TS1109: Expression expected.
+src/features/monthly-report/components/ReportEmptyState.tsx(34,41): error TS1003: Identifier expected.
+src/features/monthly-report/components/ReportEmptyState.tsx(34,43): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/monthly-report/components/ReportEmptyState.tsx(39,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/monthly-report/components/ReportEmptyState.tsx(41,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/monthly-report/components/ReportEmptyState.tsx(42,7): error TS1005: ')' expected.
+src/features/monthly-report/components/ReportEmptyState.tsx(43,5): error TS1109: Expression expected.
+src/features/monthly-report/components/ReportEmptyState.tsx(44,3): error TS1109: Expression expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(143,36): error TS1003: Identifier expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(143,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/notifications/components/WeeklyReportCardView.tsx(150,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/notifications/components/WeeklyReportCardView.tsx(152,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/notifications/components/WeeklyReportCardView.tsx(156,40): error TS1003: Identifier expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(156,42): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/notifications/components/WeeklyReportCardView.tsx(157,15): error TS1005: ')' expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(164,21): error TS1005: ';' expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(165,13): error TS1128: Declaration or statement expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(166,11): error TS1109: Expression expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(167,9): error TS1128: Declaration or statement expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(168,7): error TS1109: Expression expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(169,5): error TS1109: Expression expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(170,3): error TS1109: Expression expected.
+src/features/notifications/components/WeeklyReportCardView.tsx(171,1): error TS1128: Declaration or statement expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(117,34): error TS1003: Identifier expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(117,36): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/CompanionRevealScreen.tsx(124,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/CompanionRevealScreen.tsx(126,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/CompanionRevealScreen.tsx(127,7): error TS1005: ')' expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(131,25): error TS1005: ',' expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(132,16): error TS1136: Property assignment expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(133,7): error TS1109: Expression expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(146,7): error TS1128: Declaration or statement expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(147,5): error TS1109: Expression expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(148,3): error TS1109: Expression expected.
+src/features/onboarding/components/CompanionRevealScreen.tsx(149,1): error TS1128: Declaration or statement expected.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(92,34): error TS1003: Identifier expected.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(92,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(99,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/FirstCompletionOverlay.tsx(101,11): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(102,7): error TS1005: ')' expected.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(103,5): error TS1109: Expression expected.
+src/features/onboarding/components/FirstCompletionOverlay.tsx(104,3): error TS1109: Expression expected.
+src/features/onboarding/components/FirstResultScreen.tsx(145,34): error TS1003: Identifier expected.
+src/features/onboarding/components/FirstResultScreen.tsx(145,36): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/FirstResultScreen.tsx(152,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/FirstResultScreen.tsx(154,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/FirstResultScreen.tsx(155,7): error TS1005: ')' expected.
+src/features/onboarding/components/FirstResultScreen.tsx(156,5): error TS1109: Expression expected.
+src/features/onboarding/components/FirstResultScreen.tsx(157,3): error TS1109: Expression expected.
+src/features/onboarding/components/NameScreen.tsx(159,38): error TS1003: Identifier expected.
+src/features/onboarding/components/NameScreen.tsx(159,40): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/NameScreen.tsx(167,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/NameScreen.tsx(169,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/NameScreen.tsx(170,13): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/features/onboarding/components/NameScreen.tsx(190,11): error TS17002: Expected corresponding JSX closing tag for 'KeyboardAvoidingView'.
+src/features/onboarding/components/NameScreen.tsx(191,7): error TS1005: ')' expected.
+src/features/onboarding/components/NameScreen.tsx(192,5): error TS1109: Expression expected.
+src/features/onboarding/components/NameScreen.tsx(193,3): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(102,40): error TS1003: Identifier expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(102,42): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(110,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/OnboardingResumePrompt.tsx(112,17): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(114,42): error TS1003: Identifier expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(114,44): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(122,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/OnboardingResumePrompt.tsx(124,17): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(126,38): error TS1003: Identifier expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(126,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(127,17): error TS1005: ')' expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(129,42): error TS1005: ',' expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(134,22): error TS1005: ';' expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(134,26): error TS1005: '(' expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(135,15): error TS1005: ';' expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(136,13): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(140,11): error TS1128: Declaration or statement expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(141,9): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(142,7): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(143,5): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(144,3): error TS1109: Expression expected.
+src/features/onboarding/components/OnboardingResumePrompt.tsx(145,1): error TS1128: Declaration or statement expected.
+src/features/onboarding/components/WelcomeScreen.tsx(149,36): error TS1003: Identifier expected.
+src/features/onboarding/components/WelcomeScreen.tsx(149,38): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/onboarding/components/WelcomeScreen.tsx(156,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/onboarding/components/WelcomeScreen.tsx(158,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/WelcomeScreen.tsx(159,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/onboarding/components/WelcomeScreen.tsx(160,7): error TS1005: ')' expected.
+src/features/onboarding/components/WelcomeScreen.tsx(161,5): error TS1109: Expression expected.
+src/features/onboarding/components/WelcomeScreen.tsx(162,3): error TS1109: Expression expected.
+src/features/progression/first-week-pacing/progression-service.ts(138,5): error TS1005: 'try' expected.
+src/features/progression/first-week-pacing/progression-service.ts(146,1): error TS1472: 'catch' or 'finally' expected.
+src/features/progression/mastery-unlocks.ts(151,1): error TS1128: Declaration or statement expected.
+src/features/session-completion/completion-personalization-step.ts(72,5): error TS1005: 'try' expected.
+src/features/session-completion/completion-personalization-step.ts(80,1): error TS1472: 'catch' or 'finally' expected.
+src/features/session-completion/completion-personalization-step.ts(130,1): error TS1005: '}' expected.
+src/features/session-history/components/HistoryStates.tsx(38,71): error TS1003: Identifier expected.
+src/features/session-history/components/HistoryStates.tsx(38,73): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session-history/components/HistoryStates.tsx(39,9): error TS1005: ')' expected.
+src/features/session-history/components/HistoryStates.tsx(44,15): error TS1005: ';' expected.
+src/features/session-history/components/HistoryStates.tsx(45,7): error TS1128: Declaration or statement expected.
+src/features/session-history/components/HistoryStates.tsx(46,5): error TS1109: Expression expected.
+src/features/session-history/components/HistoryStates.tsx(47,3): error TS1109: Expression expected.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(157,74): error TS1003: Identifier expected.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(157,76): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(161,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(163,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(165,9): error TS1005: ')' expected.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(170,7): error TS1128: Declaration or statement expected.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(171,5): error TS1109: Expression expected.
+src/features/session-recommendation/components/SessionRecommendationCard.tsx(172,3): error TS1109: Expression expected.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(153,64): error TS1003: Identifier expected.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(153,66): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(156,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(158,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(162,11): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(164,9): error TS1005: ')' expected.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(166,7): error TS1128: Declaration or statement expected.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(167,5): error TS1109: Expression expected.
+src/features/session-start/components/AdaptiveDifficultyBanner.tsx(168,3): error TS1109: Expression expected.
+src/features/session/StudyQuizBreak.tsx(80,5): error TS2657: JSX expressions must have one parent element.
+src/features/session/StudyQuizBreak.tsx(134,36): error TS1003: Identifier expected.
+src/features/session/StudyQuizBreak.tsx(134,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session/StudyQuizBreak.tsx(139,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/session/StudyQuizBreak.tsx(141,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/session/StudyQuizBreak.tsx(143,34): error TS1003: Identifier expected.
+src/features/session/StudyQuizBreak.tsx(148,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/session/StudyQuizBreak.tsx(151,7): error TS1005: ')' expected.
+src/features/session/StudyQuizBreak.tsx(152,5): error TS1109: Expression expected.
+src/features/session/StudyQuizBreak.tsx(153,3): error TS1109: Expression expected.
+src/features/streaks/components/ComebackQuestCard.tsx(137,36): error TS1003: Identifier expected.
+src/features/streaks/components/ComebackQuestCard.tsx(137,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/ComebackQuestCard.tsx(144,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/ComebackQuestCard.tsx(146,13): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/streaks/components/ComebackQuestCard.tsx(164,7): error TS1128: Declaration or statement expected.
+src/features/streaks/components/ComebackQuestCard.tsx(165,5): error TS1109: Expression expected.
+src/features/streaks/components/ComebackQuestCard.tsx(166,3): error TS1109: Expression expected.
+src/features/streaks/components/ComebackQuestCard.tsx(167,1): error TS1128: Declaration or statement expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(164,40): error TS1003: Identifier expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(164,42): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(171,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(173,17): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(175,38): error TS1003: Identifier expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(175,40): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(182,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(184,17): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(185,15): error TS17002: Expected corresponding JSX closing tag for 'Modal'.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(186,11): error TS1005: ')' expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(187,9): error TS1109: Expression expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(188,7): error TS1109: Expression expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(189,5): error TS1109: Expression expected.
+src/features/streaks/components/StreakBrokenModal/StreakBrokenModal.tsx(190,3): error TS1109: Expression expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(105,38): error TS1003: Identifier expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(105,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(111,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(113,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(115,11): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(116,7): error TS1005: ')' expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(117,5): error TS1109: Expression expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(118,3): error TS1109: Expression expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(119,1): error TS1128: Declaration or statement expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(179,38): error TS1003: Identifier expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(179,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(185,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(187,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(189,11): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(190,7): error TS1005: ')' expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(191,5): error TS1109: Expression expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(192,3): error TS1109: Expression expected.
+src/features/streaks/components/streakGamblePrompt/OutcomeViews.tsx(193,1): error TS1128: Declaration or statement expected.
+src/features/streaks/components/StreakMilestoneModal.tsx(167,42): error TS1003: Identifier expected.
+src/features/streaks/components/StreakMilestoneModal.tsx(167,44): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/features/streaks/components/StreakMilestoneModal.tsx(174,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/streaks/components/StreakMilestoneModal.tsx(176,19): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/features/streaks/components/StreakMilestoneModal.tsx(178,15): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/features/streaks/components/StreakMilestoneModal.tsx(180,11): error TS17002: Expected corresponding JSX closing tag for 'Modal'.
+src/features/streaks/components/StreakMilestoneModal.tsx(181,7): error TS1005: ')' expected.
+src/features/streaks/components/StreakMilestoneModal.tsx(182,5): error TS1109: Expression expected.
+src/features/streaks/components/StreakMilestoneModal.tsx(183,3): error TS1109: Expression expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(105,34): error TS1003: Identifier expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(105,36): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(109,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(111,11): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(113,9): error TS1005: ')' expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(115,38): error TS1003: Identifier expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(119,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(126,34): error TS1003: Identifier expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(130,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(134,7): error TS1128: Declaration or statement expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(135,5): error TS1109: Expression expected.
+src/features/unlock-explainer/components/UnlockExplainerCard.tsx(136,3): error TS1109: Expression expected.
+src/screens/auth/components/VexDataLoop.tsx(52,74): error TS1005: ',' expected.
+src/screens/auth/components/VexDataLoop.tsx(52,85): error TS1005: ',' expected.
+src/screens/auth/components/VexDataLoop.tsx(52,106): error TS1005: ':' expected.
+src/screens/auth/components/VexSignalNode.tsx(89,90): error TS1005: ',' expected.
+src/screens/auth/components/VexSignalNode.tsx(89,101): error TS1005: ',' expected.
+src/screens/auth/components/VexSignalNode.tsx(89,109): error TS1005: ':' expected.
+src/screens/auth/ResetPasswordScreen.tsx(118,38): error TS1003: Identifier expected.
+src/screens/auth/ResetPasswordScreen.tsx(118,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/auth/ResetPasswordScreen.tsx(119,15): error TS1005: ')' expected.
+src/screens/auth/ResetPasswordScreen.tsx(124,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/auth/ResetPasswordScreen.tsx(126,15): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/screens/auth/ResetPasswordScreen.tsx(127,13): error TS17002: Expected corresponding JSX closing tag for 'KeyboardAvoidingView'.
+src/screens/auth/ResetPasswordScreen.tsx(128,11): error TS1005: ';' expected.
+src/screens/auth/ResetPasswordScreen.tsx(155,40): error TS1003: Identifier expected.
+src/screens/auth/ResetPasswordScreen.tsx(155,42): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/auth/ResetPasswordScreen.tsx(163,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/auth/ResetPasswordScreen.tsx(165,17): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/screens/auth/ResetPasswordScreen.tsx(166,13): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(167,11): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(167,13): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(168,9): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(168,10): error TS1128: Declaration or statement expected.
+src/screens/auth/ResetPasswordScreen.tsx(169,7): error TS1128: Declaration or statement expected.
+src/screens/auth/ResetPasswordScreen.tsx(170,5): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(171,3): error TS1109: Expression expected.
+src/screens/auth/ResetPasswordScreen.tsx(172,1): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(133,38): error TS1003: Identifier expected.
+src/screens/auth/VerifyEmailScreen.tsx(133,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/auth/VerifyEmailScreen.tsx(134,15): error TS1005: ')' expected.
+src/screens/auth/VerifyEmailScreen.tsx(139,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/auth/VerifyEmailScreen.tsx(141,15): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/screens/auth/VerifyEmailScreen.tsx(142,13): error TS17002: Expected corresponding JSX closing tag for 'KeyboardAvoidingView'.
+src/screens/auth/VerifyEmailScreen.tsx(143,11): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(161,40): error TS1003: Identifier expected.
+src/screens/auth/VerifyEmailScreen.tsx(161,42): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/auth/VerifyEmailScreen.tsx(169,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/auth/VerifyEmailScreen.tsx(171,17): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/screens/auth/VerifyEmailScreen.tsx(174,20): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(174,40): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(174,47): error TS1136: Property assignment expected.
+src/screens/auth/VerifyEmailScreen.tsx(174,65): error TS1005: ',' expected.
+src/screens/auth/VerifyEmailScreen.tsx(176,19): error TS1003: Identifier expected.
+src/screens/auth/VerifyEmailScreen.tsx(177,21): error TS1005: ',' expected.
+src/screens/auth/VerifyEmailScreen.tsx(177,26): error TS1005: ',' expected.
+src/screens/auth/VerifyEmailScreen.tsx(177,34): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(177,42): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(178,25): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(184,28): error TS1005: ';' expected.
+src/screens/auth/VerifyEmailScreen.tsx(185,19): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(186,17): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(186,19): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(190,18): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(191,15): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(192,13): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(193,11): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(193,13): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(194,9): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(194,10): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(195,7): error TS1128: Declaration or statement expected.
+src/screens/auth/VerifyEmailScreen.tsx(196,5): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(197,3): error TS1109: Expression expected.
+src/screens/auth/VerifyEmailScreen.tsx(198,1): error TS1128: Declaration or statement expected.
+src/screens/ComebackCard.tsx(101,24): error TS1003: Identifier expected.
+src/screens/ComebackCard.tsx(101,26): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/ComebackCard.tsx(102,9): error TS1005: ')' expected.
+src/screens/ComebackCard.tsx(107,15): error TS1005: ';' expected.
+src/screens/ComebackCard.tsx(107,18): error TS1434: Unexpected keyword or identifier.
+src/screens/ComebackCard.tsx(108,7): error TS1128: Declaration or statement expected.
+src/screens/ComebackCard.tsx(110,30): error TS1003: Identifier expected.
+src/screens/ComebackCard.tsx(116,7): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/ComebackCard.tsx(119,5): error TS1128: Declaration or statement expected.
+src/screens/ComebackCard.tsx(120,3): error TS1109: Expression expected.
+src/screens/companion/CompanionDetailScreen.tsx(80,36): error TS1003: Identifier expected.
+src/screens/companion/CompanionDetailScreen.tsx(80,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/companion/CompanionDetailScreen.tsx(81,11): error TS1005: ')' expected.
+src/screens/companion/CompanionDetailScreen.tsx(82,18): error TS1136: Property assignment expected.
+src/screens/companion/CompanionDetailScreen.tsx(88,9): error TS1128: Declaration or statement expected.
+src/screens/companion/CompanionDetailScreen.tsx(89,7): error TS1109: Expression expected.
+src/screens/companion/CompanionDetailScreen.tsx(90,5): error TS1109: Expression expected.
+src/screens/companion/CompanionDetailScreen.tsx(121,1): error TS1128: Declaration or statement expected.
+src/screens/home/components/MilestoneNode.tsx(60,42): error TS1005: ',' expected.
+src/screens/home/components/MilestoneNode.tsx(60,49): error TS1005: ',' expected.
+src/screens/home/components/MilestoneNode.tsx(60,91): error TS1005: ':' expected.
+src/screens/home/components/MilestoneNode.tsx(60,98): error TS1005: ',' expected.
+src/screens/home/components/MilestoneNode.tsx(60,113): error TS1005: ':' expected.
+src/screens/home/containers/HomeColdStartFallback.tsx(86,78): error TS1003: Identifier expected.
+src/screens/home/containers/HomeColdStartFallback.tsx(86,80): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/home/containers/HomeColdStartFallback.tsx(93,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/home/containers/HomeColdStartFallback.tsx(95,11): error TS17002: Expected corresponding JSX closing tag for 'AppScreen'.
+src/screens/home/containers/HomeColdStartFallback.tsx(96,7): error TS1005: ')' expected.
+src/screens/home/containers/HomeColdStartFallback.tsx(97,5): error TS1109: Expression expected.
+src/screens/home/containers/HomeColdStartFallback.tsx(98,3): error TS1109: Expression expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(42,66): error TS1003: Identifier expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(42,68): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(43,9): error TS1005: ')' expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(46,13): error TS1005: ';' expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(47,7): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(48,5): error TS1109: Expression expected.
+src/screens/onboarding/components/ethereal/OnboardingErrorBanner.tsx(49,3): error TS1109: Expression expected.
+src/screens/onboarding/components/LauncherStep.tsx(95,28): error TS1003: Identifier expected.
+src/screens/onboarding/components/LauncherStep.tsx(95,30): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/LauncherStep.tsx(106,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/LauncherStep.tsx(108,13): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/LauncherStep.tsx(109,9): error TS1005: ')' expected.
+src/screens/onboarding/components/LauncherStep.tsx(110,7): error TS1109: Expression expected.
+src/screens/onboarding/components/LauncherStep.tsx(111,5): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(147,80): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(147,82): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(148,15): error TS1005: ')' expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(152,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(154,15): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(154,21): error TS1005: ',' expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(155,11): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(155,13): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(159,72): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(165,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(168,9): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(169,7): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(169,9): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(169,15): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(170,5): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(170,7): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(171,3): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingFlowLayout.tsx(184,1): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(125,5): error TS2657: JSX expressions must have one parent element.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(159,36): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(159,38): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(160,13): error TS1005: ')' expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(169,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(171,13): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(173,34): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(182,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(185,9): error TS1005: ')' expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(186,7): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(187,5): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(188,3): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingNotificationPermissionCard.tsx(189,1): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(92,30): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(92,32): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/onboarding/components/OnboardingPermissions.tsx(100,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingPermissions.tsx(102,15): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/onboarding/components/OnboardingPermissions.tsx(103,12): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/screens/onboarding/components/OnboardingPermissions.tsx(107,30): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(107,32): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/onboarding/components/OnboardingPermissions.tsx(108,15): error TS1005: ')' expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(116,13): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(117,11): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(146,9): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(147,7): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(148,5): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(149,3): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingPermissions.tsx(150,1): error TS1128: Declaration or statement expected.
+src/screens/onboarding/components/OnboardingSetName.tsx(161,30): error TS1003: Identifier expected.
+src/screens/onboarding/components/OnboardingSetName.tsx(161,32): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/onboarding/components/OnboardingSetName.tsx(169,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/onboarding/components/OnboardingSetName.tsx(171,15): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/onboarding/components/OnboardingSetName.tsx(186,11): error TS17002: Expected corresponding JSX closing tag for 'KeyboardAvoidingView'.
+src/screens/onboarding/components/OnboardingSetName.tsx(187,7): error TS1005: ')' expected.
+src/screens/onboarding/components/OnboardingSetName.tsx(188,5): error TS1109: Expression expected.
+src/screens/onboarding/components/OnboardingSetName.tsx(189,3): error TS1109: Expression expected.
+src/screens/paywall/PaywallFooterActions.tsx(50,36): error TS1003: Identifier expected.
+src/screens/paywall/PaywallFooterActions.tsx(50,38): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/paywall/PaywallFooterActions.tsx(51,11): error TS1005: ')' expected.
+src/screens/paywall/PaywallFooterActions.tsx(58,19): error TS1005: ';' expected.
+src/screens/paywall/PaywallFooterActions.tsx(59,9): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallFooterActions.tsx(60,7): error TS1109: Expression expected.
+src/screens/paywall/PaywallFooterActions.tsx(60,9): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallFooterActions.tsx(62,30): error TS1003: Identifier expected.
+src/screens/paywall/PaywallFooterActions.tsx(68,7): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/paywall/PaywallFooterActions.tsx(71,5): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallFooterActions.tsx(72,3): error TS1109: Expression expected.
+src/screens/paywall/PaywallFooterActions.tsx(73,1): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallHero.tsx(68,32): error TS1003: Identifier expected.
+src/screens/paywall/PaywallHero.tsx(68,34): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/paywall/PaywallHero.tsx(73,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/paywall/PaywallHero.tsx(75,11): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/screens/paywall/PaywallHero.tsx(76,7): error TS1109: Expression expected.
+src/screens/paywall/PaywallHero.tsx(78,24): error TS1005: ',' expected.
+src/screens/paywall/PaywallHero.tsx(134,5): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallHero.tsx(134,7): error TS1109: Expression expected.
+src/screens/paywall/PaywallHero.tsx(135,3): error TS1109: Expression expected.
+src/screens/paywall/PaywallHero.tsx(136,1): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallStates.tsx(88,32): error TS1003: Identifier expected.
+src/screens/paywall/PaywallStates.tsx(88,34): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/paywall/PaywallStates.tsx(94,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/paywall/PaywallStates.tsx(96,11): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/paywall/PaywallStates.tsx(97,7): error TS1005: ')' expected.
+src/screens/paywall/PaywallStates.tsx(98,5): error TS1109: Expression expected.
+src/screens/paywall/PaywallStates.tsx(99,3): error TS1109: Expression expected.
+src/screens/paywall/PaywallStates.tsx(120,30): error TS1003: Identifier expected.
+src/screens/paywall/PaywallStates.tsx(120,32): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/paywall/PaywallStates.tsx(121,9): error TS1005: ')' expected.
+src/screens/paywall/PaywallStates.tsx(127,17): error TS1005: ';' expected.
+src/screens/paywall/PaywallStates.tsx(128,7): error TS1128: Declaration or statement expected.
+src/screens/paywall/PaywallStates.tsx(129,5): error TS1109: Expression expected.
+src/screens/paywall/PaywallStates.tsx(130,3): error TS1109: Expression expected.
+src/screens/profile/MasteryChallengesList.tsx(101,28): error TS1003: Identifier expected.
+src/screens/profile/MasteryChallengesList.tsx(101,30): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/screens/profile/MasteryChallengesList.tsx(107,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/profile/MasteryChallengesList.tsx(109,13): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/screens/profile/MasteryChallengesList.tsx(111,7): error TS1128: Declaration or statement expected.
+src/screens/profile/MasteryChallengesList.tsx(112,5): error TS1109: Expression expected.
+src/screens/profile/MasteryChallengesList.tsx(113,3): error TS1109: Expression expected.
+src/screens/profile/MasteryChallengesList.tsx(114,1): error TS1128: Declaration or statement expected.
+src/screens/rewards/components/EmptyVault.tsx(47,34): error TS1003: Identifier expected.
+src/screens/rewards/components/EmptyVault.tsx(47,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/rewards/components/EmptyVault.tsx(53,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/rewards/components/EmptyVault.tsx(55,11): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/rewards/components/EmptyVault.tsx(56,7): error TS1005: ')' expected.
+src/screens/rewards/components/EmptyVault.tsx(57,5): error TS1109: Expression expected.
+src/screens/rewards/components/EmptyVault.tsx(58,3): error TS1109: Expression expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(59,34): error TS1003: Identifier expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(59,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/ActiveSessionGuardStates.tsx(60,11): error TS1005: ')' expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(63,14): error TS1005: ';' expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(64,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(65,7): error TS1109: Expression expected.
+src/screens/session/components/ActiveSessionGuardStates.tsx(66,5): error TS1109: Expression expected.
+src/screens/session/components/CompanionGrowthSection.tsx(96,36): error TS1003: Identifier expected.
+src/screens/session/components/CompanionGrowthSection.tsx(96,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/CompanionGrowthSection.tsx(97,11): error TS1005: ')' expected.
+src/screens/session/components/CompanionGrowthSection.tsx(98,18): error TS1136: Property assignment expected.
+src/screens/session/components/CompanionGrowthSection.tsx(104,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/CompanionGrowthSection.tsx(105,7): error TS1109: Expression expected.
+src/screens/session/components/CompanionGrowthSection.tsx(106,5): error TS1109: Expression expected.
+src/screens/session/components/CompanionGrowthSection.tsx(186,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/FirstSessionSetupCard.tsx(92,34): error TS1003: Identifier expected.
+src/screens/session/components/FirstSessionSetupCard.tsx(92,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/FirstSessionSetupCard.tsx(100,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/FirstSessionSetupCard.tsx(102,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/FirstSessionSetupCard.tsx(103,7): error TS1005: ')' expected.
+src/screens/session/components/FirstSessionSetupCard.tsx(104,5): error TS1109: Expression expected.
+src/screens/session/components/FirstSessionSetupCard.tsx(105,3): error TS1109: Expression expected.
+src/screens/session/components/SessionCompleteFooter.tsx(51,36): error TS1003: Identifier expected.
+src/screens/session/components/SessionCompleteFooter.tsx(51,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionCompleteFooter.tsx(52,15): error TS1005: ')' expected.
+src/screens/session/components/SessionCompleteFooter.tsx(58,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/SessionCompleteFooter.tsx(60,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionCompleteFooter.tsx(61,13): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/session/components/SessionCompleteFooter.tsx(90,7): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionCompleteFooter.tsx(91,5): error TS1109: Expression expected.
+src/screens/session/components/SessionCompleteFooter.tsx(92,3): error TS1109: Expression expected.
+src/screens/session/components/SessionCompleteFooter.tsx(93,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionProgressionCard.tsx(127,40): error TS1003: Identifier expected.
+src/screens/session/components/SessionProgressionCard.tsx(127,42): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionProgressionCard.tsx(133,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/SessionProgressionCard.tsx(135,17): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/session/components/SessionProgressionCard.tsx(138,9): error TS1005: ')' expected.
+src/screens/session/components/SessionProgressionCard.tsx(139,7): error TS1109: Expression expected.
+src/screens/session/components/SessionProgressionCard.tsx(139,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionProgressionCard.tsx(140,5): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionProgressionCard.tsx(141,3): error TS1109: Expression expected.
+src/screens/session/components/SessionProgressionCard.tsx(142,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionReflectionSheet.tsx(106,36): error TS1003: Identifier expected.
+src/screens/session/components/SessionReflectionSheet.tsx(106,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionReflectionSheet.tsx(113,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/SessionReflectionSheet.tsx(115,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionReflectionSheet.tsx(117,34): error TS1003: Identifier expected.
+src/screens/session/components/SessionReflectionSheet.tsx(117,36): error TS17002: Expected corresponding JSX closing tag for 'BottomSheet'.
+src/screens/session/components/SessionReflectionSheet.tsx(118,13): error TS1005: ')' expected.
+src/screens/session/components/SessionReflectionSheet.tsx(126,11): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionReflectionSheet.tsx(127,9): error TS1109: Expression expected.
+src/screens/session/components/SessionReflectionSheet.tsx(128,7): error TS1109: Expression expected.
+src/screens/session/components/SessionReflectionSheet.tsx(129,5): error TS1109: Expression expected.
+src/screens/session/components/SessionReflectionSheet.tsx(130,3): error TS1109: Expression expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(104,34): error TS1003: Identifier expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(104,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(105,11): error TS1005: ')' expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(110,14): error TS1005: ';' expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(111,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(112,7): error TS1109: Expression expected.
+src/screens/session/components/SessionSetupFirstSessionView.tsx(113,5): error TS1109: Expression expected.
+src/screens/session/components/SessionSetupFooter.tsx(62,32): error TS1003: Identifier expected.
+src/screens/session/components/SessionSetupFooter.tsx(62,34): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionSetupFooter.tsx(63,9): error TS1005: ')' expected.
+src/screens/session/components/SessionSetupFooter.tsx(67,29): error TS1136: Property assignment expected.
+src/screens/session/components/SessionSetupFooter.tsx(71,15): error TS1005: ';' expected.
+src/screens/session/components/SessionSetupFooter.tsx(72,7): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionSetupFooter.tsx(73,5): error TS1109: Expression expected.
+src/screens/session/components/SessionSetupFooter.tsx(74,3): error TS1109: Expression expected.
+src/screens/session/components/SessionSetupFooter.tsx(75,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(41,38): error TS1003: Identifier expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(41,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionSummaryUnavailable.tsx(48,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/SessionSummaryUnavailable.tsx(50,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionSummaryUnavailable.tsx(51,11): error TS1005: ';' expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(52,7): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(55,34): error TS1003: Identifier expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(55,36): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionSummaryUnavailable.tsx(64,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(65,7): error TS1109: Expression expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(66,5): error TS1109: Expression expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(67,3): error TS1109: Expression expected.
+src/screens/session/components/SessionSummaryUnavailable.tsx(68,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionThemeSelector.tsx(68,36): error TS1003: Identifier expected.
+src/screens/session/components/SessionThemeSelector.tsx(68,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionThemeSelector.tsx(69,13): error TS1005: ')' expected.
+src/screens/session/components/SessionThemeSelector.tsx(73,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/SessionThemeSelector.tsx(75,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/SessionThemeSelector.tsx(76,9): error TS1005: ')' expected.
+src/screens/session/components/SessionThemeSelector.tsx(77,7): error TS1109: Expression expected.
+src/screens/session/components/SessionThemeSelector.tsx(77,9): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionThemeSelector.tsx(130,7): error TS2657: JSX expressions must have one parent element.
+src/screens/session/components/SessionThemeSelector.tsx(173,5): error TS1128: Declaration or statement expected.
+src/screens/session/components/SessionThemeSelector.tsx(174,3): error TS1109: Expression expected.
+src/screens/session/components/SessionThemeSelector.tsx(175,1): error TS1128: Declaration or statement expected.
+src/screens/session/components/StudyProgressPanel.tsx(157,28): error TS1003: Identifier expected.
+src/screens/session/components/StudyProgressPanel.tsx(157,30): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/StudyProgressPanel.tsx(163,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/session/components/StudyProgressPanel.tsx(165,13): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/components/StudyProgressPanel.tsx(167,36): error TS1003: Identifier expected.
+src/screens/session/components/StudyProgressPanel.tsx(167,38): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/session/components/StudyProgressPanel.tsx(168,13): error TS1005: ')' expected.
+src/screens/session/components/StudyProgressPanel.tsx(169,35): error TS1005: ',' expected.
+src/screens/session/components/StudyProgressPanel.tsx(175,11): error TS1128: Declaration or statement expected.
+src/screens/session/components/StudyProgressPanel.tsx(176,9): error TS1109: Expression expected.
+src/screens/session/components/StudyProgressPanel.tsx(177,7): error TS1109: Expression expected.
+src/screens/session/components/StudyProgressPanel.tsx(178,5): error TS1109: Expression expected.
+src/screens/session/components/StudyProgressPanel.tsx(179,3): error TS1109: Expression expected.
+src/screens/session/SessionSetupScreen.tsx(71,36): error TS1003: Identifier expected.
+src/screens/session/SessionSetupScreen.tsx(71,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/session/SessionSetupScreen.tsx(72,13): error TS1005: ')' expected.
+src/screens/session/SessionSetupScreen.tsx(72,22): error TS1136: Property assignment expected.
+src/screens/session/SessionSetupScreen.tsx(72,25): error TS1005: ';' expected.
+src/screens/session/SessionSetupScreen.tsx(72,47): error TS1128: Declaration or statement expected.
+src/screens/session/SessionSetupScreen.tsx(77,16): error TS1005: ';' expected.
+src/screens/session/SessionSetupScreen.tsx(78,11): error TS1128: Declaration or statement expected.
+src/screens/session/SessionSetupScreen.tsx(79,9): error TS1109: Expression expected.
+src/screens/session/SessionSetupScreen.tsx(80,7): error TS1109: Expression expected.
+src/screens/session/SessionSetupScreen.tsx(81,5): error TS1128: Declaration or statement expected.
+src/screens/session/SessionSetupScreen.tsx(94,3): error TS1128: Declaration or statement expected.
+src/screens/session/SessionSetupScreen.tsx(94,4): error TS1128: Declaration or statement expected.
+src/screens/session/SessionSetupScreen.tsx(96,1): error TS1109: Expression expected.
+src/screens/streaks/StreakFuneralScreen.tsx(138,38): error TS1003: Identifier expected.
+src/screens/streaks/StreakFuneralScreen.tsx(138,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/streaks/StreakFuneralScreen.tsx(145,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/streaks/StreakFuneralScreen.tsx(147,15): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/screens/streaks/StreakFuneralScreen.tsx(149,36): error TS1003: Identifier expected.
+src/screens/streaks/StreakFuneralScreen.tsx(149,38): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/screens/streaks/StreakFuneralScreen.tsx(156,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/screens/streaks/StreakFuneralScreen.tsx(158,15): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/screens/streaks/StreakFuneralScreen.tsx(159,11): error TS1005: ')' expected.
+src/screens/streaks/StreakFuneralScreen.tsx(160,9): error TS1109: Expression expected.
+src/screens/streaks/StreakFuneralScreen.tsx(163,7): error TS1128: Declaration or statement expected.
+src/screens/streaks/StreakFuneralScreen.tsx(164,5): error TS1109: Expression expected.
+src/screens/streaks/StreakFuneralScreen.tsx(165,3): error TS1109: Expression expected.
+src/screens/streaks/StreakFuneralScreen.tsx(166,1): error TS1128: Declaration or statement expected.
+src/session/components/SessionPresets.tsx(26,7): error TS1128: Declaration or statement expected.
+src/session/components/SessionPresets.tsx(108,1): error TS1128: Declaration or statement expected.
+src/session/components/SessionPresets.tsx(118,1): error TS1005: ':' expected.
+src/session/components/SessionValidationFeedback.tsx(117,40): error TS1003: Identifier expected.
+src/session/components/SessionValidationFeedback.tsx(117,42): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/session/components/SessionValidationFeedback.tsx(118,19): error TS1005: ')' expected.
+src/session/components/SessionValidationFeedback.tsx(119,19): error TS1005: ',' expected.
+src/session/components/SessionValidationFeedback.tsx(119,28): error TS1136: Property assignment expected.
+src/session/components/SessionValidationFeedback.tsx(119,31): error TS1005: ',' expected.
+src/session/components/SessionValidationFeedback.tsx(119,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/SessionValidationFeedback.tsx(119,51): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/session/components/SessionValidationFeedback.tsx(124,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/SessionValidationFeedback.tsx(126,19): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/SessionValidationFeedback.tsx(128,15): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/session/components/SessionValidationFeedback.tsx(129,12): error TS1005: ';' expected.
+src/session/components/SessionValidationFeedback.tsx(130,9): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(131,7): error TS1109: Expression expected.
+src/session/components/SessionValidationFeedback.tsx(131,8): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(157,42): error TS1003: Identifier expected.
+src/session/components/SessionValidationFeedback.tsx(157,44): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/SessionValidationFeedback.tsx(164,19): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/SessionValidationFeedback.tsx(166,21): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/SessionValidationFeedback.tsx(167,18): error TS1005: ',' expected.
+src/session/components/SessionValidationFeedback.tsx(169,13): error TS1005: ')' expected.
+src/session/components/SessionValidationFeedback.tsx(170,11): error TS1109: Expression expected.
+src/session/components/SessionValidationFeedback.tsx(170,12): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(171,9): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(172,7): error TS1109: Expression expected.
+src/session/components/SessionValidationFeedback.tsx(172,8): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(173,5): error TS1128: Declaration or statement expected.
+src/session/components/SessionValidationFeedback.tsx(174,3): error TS1109: Expression expected.
+src/session/components/SessionValidationFeedback.tsx(175,1): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(126,36): error TS1003: Identifier expected.
+src/session/components/states/SessionBackgroundedState.tsx(126,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/states/SessionBackgroundedState.tsx(134,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/states/SessionBackgroundedState.tsx(136,13): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/session/components/states/SessionBackgroundedState.tsx(138,38): error TS1003: Identifier expected.
+src/session/components/states/SessionBackgroundedState.tsx(138,40): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/states/SessionBackgroundedState.tsx(139,13): error TS1005: ')' expected.
+src/session/components/states/SessionBackgroundedState.tsx(140,22): error TS1136: Property assignment expected.
+src/session/components/states/SessionBackgroundedState.tsx(140,25): error TS1005: ';' expected.
+src/session/components/states/SessionBackgroundedState.tsx(141,38): error TS1005: ',' expected.
+src/session/components/states/SessionBackgroundedState.tsx(141,46): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(147,11): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(150,36): error TS1003: Identifier expected.
+src/session/components/states/SessionBackgroundedState.tsx(150,38): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/states/SessionBackgroundedState.tsx(152,22): error TS1136: Property assignment expected.
+src/session/components/states/SessionBackgroundedState.tsx(152,33): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(153,24): error TS1136: Property assignment expected.
+src/session/components/states/SessionBackgroundedState.tsx(153,27): error TS1005: ';' expected.
+src/session/components/states/SessionBackgroundedState.tsx(153,56): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(154,40): error TS1005: ',' expected.
+src/session/components/states/SessionBackgroundedState.tsx(154,48): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(159,19): error TS1005: ';' expected.
+src/session/components/states/SessionBackgroundedState.tsx(160,13): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(162,36): error TS1003: Identifier expected.
+src/session/components/states/SessionBackgroundedState.tsx(170,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/states/SessionBackgroundedState.tsx(173,11): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionBackgroundedState.tsx(174,9): error TS1109: Expression expected.
+src/session/components/states/SessionBackgroundedState.tsx(175,7): error TS1109: Expression expected.
+src/session/components/states/SessionBackgroundedState.tsx(176,5): error TS1109: Expression expected.
+src/session/components/states/SessionBackgroundedState.tsx(177,3): error TS1109: Expression expected.
+src/session/components/states/SessionBackgroundedState.tsx(178,1): error TS1128: Declaration or statement expected.
+src/session/components/states/SessionConflictState.tsx(133,38): error TS1003: Identifier expected.
+src/session/components/states/SessionConflictState.tsx(133,40): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/session/components/states/SessionConflictState.tsx(134,17): error TS1005: ')' expected.
+src/session/components/states/SessionConflictState.tsx(141,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/session/components/states/SessionConflictState.tsx(143,17): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/session/components/states/SessionConflictState.tsx(144,15): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/session/components/states/SessionConflictState.tsx(145,12): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/session/components/states/SessionConflictState.tsx(146,11): error TS17002: Expected corresponding JSX closing tag for 'Box'.
+src/session/components/states/SessionConflictState.tsx(147,7): error TS1005: ')' expected.
+src/session/components/states/SessionConflictState.tsx(148,5): error TS1109: Expression expected.
+src/session/components/states/SessionConflictState.tsx(149,3): error TS1109: Expression expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(95,34): error TS1003: Identifier expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(95,36): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/shared/monetization/components/VipPaywallScreen.tsx(101,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/monetization/components/VipPaywallScreen.tsx(103,13): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/shared/monetization/components/VipPaywallScreen.tsx(106,9): error TS1005: ')' expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(153,32): error TS1003: Identifier expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(159,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/monetization/components/VipPaywallScreen.tsx(164,43): error TS1003: Identifier expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(171,11): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/monetization/components/VipPaywallScreen.tsx(175,7): error TS1128: Declaration or statement expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(176,5): error TS1109: Expression expected.
+src/shared/monetization/components/VipPaywallScreen.tsx(177,3): error TS1109: Expression expected.
+src/shared/ui/components/CardStatusOverlay.tsx(77,38): error TS1003: Identifier expected.
+src/shared/ui/components/CardStatusOverlay.tsx(77,40): error TS17015: Expected corresponding closing tag for JSX fragment.
+src/shared/ui/components/CardStatusOverlay.tsx(77,44): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/CardStatusOverlay.tsx(83,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/CardStatusOverlay.tsx(85,15): error TS17002: Expected corresponding JSX closing tag for 'Animated.View'.
+src/shared/ui/components/CardStatusOverlay.tsx(87,9): error TS1128: Declaration or statement expected.
+src/shared/ui/components/CardStatusOverlay.tsx(87,11): error TS1109: Expression expected.
+src/shared/ui/components/CardStatusOverlay.tsx(88,7): error TS1109: Expression expected.
+src/shared/ui/components/CardStatusOverlay.tsx(88,9): error TS1128: Declaration or statement expected.
+src/shared/ui/components/CardStatusOverlay.tsx(88,15): error TS1128: Declaration or statement expected.
+src/shared/ui/components/CardStatusOverlay.tsx(89,5): error TS1128: Declaration or statement expected.
+src/shared/ui/components/CardStatusOverlay.tsx(90,3): error TS1109: Expression expected.
+src/shared/ui/components/CardStatusOverlay.tsx(91,1): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ErrorFallback.tsx(102,32): error TS1003: Identifier expected.
+src/shared/ui/components/ErrorFallback.tsx(102,34): error TS17002: Expected corresponding JSX closing tag for 'ScrollView'.
+src/shared/ui/components/ErrorFallback.tsx(103,9): error TS1005: ')' expected.
+src/shared/ui/components/ErrorFallback.tsx(104,16): error TS1136: Property assignment expected.
+src/shared/ui/components/ErrorFallback.tsx(104,41): error TS1005: ';' expected.
+src/shared/ui/components/ErrorFallback.tsx(109,13): error TS1005: ';' expected.
+src/shared/ui/components/ErrorFallback.tsx(110,7): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ErrorFallback.tsx(111,17): error TS1005: ',' expected.
+src/shared/ui/components/ErrorFallback.tsx(113,32): error TS1003: Identifier expected.
+src/shared/ui/components/ErrorFallback.tsx(119,9): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/ErrorFallback.tsx(122,8): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ErrorFallback.tsx(123,5): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ErrorFallback.tsx(124,3): error TS1109: Expression expected.
+src/shared/ui/components/ErrorFallback.tsx(125,1): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ProgressSteps.tsx(57,45): error TS1003: Identifier expected.
+src/shared/ui/components/ProgressSteps.tsx(57,47): error TS17002: Expected corresponding JSX closing tag for 'React.Fragment'.
+src/shared/ui/components/ProgressSteps.tsx(58,15): error TS1005: ')' expected.
+src/shared/ui/components/ProgressSteps.tsx(61,25): error TS1005: ',' expected.
+src/shared/ui/components/ProgressSteps.tsx(62,26): error TS1005: ',' expected.
+src/shared/ui/components/ProgressSteps.tsx(63,32): error TS1005: ',' expected.
+src/shared/ui/components/ProgressSteps.tsx(65,40): error TS1005: '{' expected.
+src/shared/ui/components/ProgressSteps.tsx(65,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/ProgressSteps.tsx(65,77): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/shared/ui/components/ProgressSteps.tsx(67,14): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/ProgressSteps.tsx(75,13): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/shared/ui/components/ProgressSteps.tsx(77,8): error TS1005: ',' expected.
+src/shared/ui/components/ProgressSteps.tsx(77,9): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ProgressSteps.tsx(78,5): error TS1128: Declaration or statement expected.
+src/shared/ui/components/ProgressSteps.tsx(79,3): error TS1109: Expression expected.
+src/shared/ui/components/ProgressSteps.tsx(80,1): error TS1128: Declaration or statement expected.
+src/shared/ui/components/StepIndicator.tsx(131,21): error TS1137: Expression or comma expected.
+src/shared/ui/components/StepIndicator.tsx(153,30): error TS1003: Identifier expected.
+src/shared/ui/components/StepIndicator.tsx(159,5): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/StepIndicator.tsx(167,35): error TS1003: Identifier expected.
+src/shared/ui/components/StepIndicator.tsx(167,37): error TS17002: Expected corresponding JSX closing tag for 'View'.
+src/shared/ui/components/StepIndicator.tsx(168,15): error TS1005: ')' expected.
+src/shared/ui/components/StepIndicator.tsx(179,13): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/shared/ui/components/StepIndicator.tsx(182,15): error TS17002: Expected corresponding JSX closing tag for 'Pressable'.
+src/shared/ui/components/StepIndicator.tsx(183,13): error TS1005: ',' expected.
+src/shared/ui/components/StepIndicator.tsx(183,17): error TS1005: ':' expected.
+src/shared/ui/components/StepIndicator.tsx(194,9): error TS1128: Declaration or statement expected.
+src/shared/ui/components/StepIndicator.tsx(195,7): error TS1109: Expression expected.
+src/shared/ui/components/StepIndicator.tsx(195,8): error TS1128: Declaration or statement expected.
+src/shared/ui/components/StepIndicator.tsx(196,5): error TS1128: Declaration or statement expected.
+src/shared/ui/components/StepIndicator.tsx(197,3): error TS1109: Expression expected.
+src/shared/ui/components/StepIndicator.tsx(198,1): error TS1128: Declaration or statement expected.
