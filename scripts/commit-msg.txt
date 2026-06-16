@@ -1,14 +1,12 @@
-fix: combine filter+map chains into single-pass for-of, fix .sort()[0] patterns
+fix: derive state in render, extract module-level helpers, fix broken files
 
-- js-combine-iterations: Converted .filter().map() chains to single-pass for-of
-  loops in 15+ files (feature-gate, content-study, memory-candidate, themes,
-  HomeRecommendationEngine, prestige-engine, personalization, notification-policy,
-  monthly-report, SmartScheduler, entitlements, home-experience-utils,
-  service-daily-progress, SessionStreakCalculator, ToastContainer, RecoveryPrompt)
-- js-min-max-loop: Converted .sort((a,b)=>b.X-a.X)[0] to reduce() in
-  mastery/challenge-generator, tomorrow-preview-compute
-- Fixed broken SessionStreakCalculator from earlier auto-fix attempt
+- useTextPasteInput: derive errors/warnings via useMemo instead of useState+useEffect
+- CoachInterventionBanner: use useRef for storage instead of useState
+- companion-memory-groups: fix type annotation
+- SessionStreakCalculator: fix broken auto-fix (proper for-of loop)
+- SmartScheduler: single-pass for-of for deadline analysis
+- entitlements: single-pass for-of for premium/unknown splits
 
-Score 68, 0 errors, 761 warnings (down from 794)
+Score 68, 0 errors, 759 warnings (down from 794)
 
 Co-authored-by: CommandCodeBot <noreply@commandcode.ai>

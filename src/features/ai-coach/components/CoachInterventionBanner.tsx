@@ -25,9 +25,11 @@ export function CoachInterventionBanner({
 }: CoachInterventionBannerProps): JSX.Element | null {
   const [isDismissed, setIsDismissed] = useState(false);
   const prevInterventionIdRef = useRef<string | null | undefined>(intervention?.id);
-  const [storage] = useState(
-    () => new MMKVStorageAdapter('coach-interventions'),
-  );
+  const storageRef = useRef<MMKVStorageAdapter | null>(null);
+  if (!storageRef.current) {
+    storageRef.current = new MMKVStorageAdapter('coach-interventions');
+  }
+  const storage = storageRef.current;
 
   if (intervention?.id !== prevInterventionIdRef.current) {
     prevInterventionIdRef.current = intervention?.id;
