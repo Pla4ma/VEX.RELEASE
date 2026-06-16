@@ -24,6 +24,24 @@ const sizeMap: Record<LoadingSize, number> = {
   xl: 48,
 };
 
+interface VariantDisplayProps {
+  variant: LoadingVariant;
+  size: number;
+  color: string;
+}
+
+const VariantDisplay: React.FC<VariantDisplayProps> = ({ variant, size, color }) => {
+  switch (variant) {
+    case 'dots':
+      return <Dots size={size} color={color} />;
+    case 'pulse':
+      return <Pulse size={size} color={color} />;
+    case 'spinner':
+    default:
+      return <Spinner size={size} color={color} />;
+  }
+};
+
 export const Loading: React.FC<LoadingProps> = ({
   variant = 'spinner',
   size = 'md',
@@ -39,17 +57,6 @@ export const Loading: React.FC<LoadingProps> = ({
   if (!visible) {
     return null;
   }
-  const renderVariant = () => {
-    switch (variant) {
-      case 'dots':
-        return <Dots size={sizeValue} color={color} />;
-      case 'pulse':
-        return <Pulse size={sizeValue} color={color} />;
-      case 'spinner':
-      default:
-        return <Spinner size={sizeValue} color={color} />;
-    }
-  };
   const content = (
     <Box
       justifyContent="center"
@@ -59,7 +66,7 @@ export const Loading: React.FC<LoadingProps> = ({
       accessibilityRole="progressbar"
       accessibilityLabel={accessibilityLabel || text || 'Loading'}
     >
-      {renderVariant()}
+      <VariantDisplay variant={variant} size={sizeValue} color={color} />
       {text && (
         <Text variant="body" color="text.secondary">
           {text}

@@ -27,7 +27,7 @@ export function AnalyticsDashboard({
   const queryClient = useQueryClient();
   const [selectedMetrics, setSelectedMetrics] = useState<string[]>(initialMetrics);
   const [timeRange, setTimeRange] = useState<DashboardTimeRange>(initialTimeRange);
-  const [dashboardState, setDashboardState] = useState<DashboardState>('idle');
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<DashboardError | null>(null);
   const weeks = useMemo(() => timeRangeToWeeks(timeRange), [timeRange]);
   const analyticsMetrics = selectedMetrics as AnalyticsMetric[];
@@ -48,7 +48,6 @@ export function AnalyticsDashboard({
     setPrevDataErrorObj(dataErrorObj);
     if (dataError && dataErrorObj) {
       const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
-      setDashboardState('error');
       setError({
         title: 'Failed to load analytics',
         message: analyticsError.message,
@@ -75,10 +74,8 @@ export function AnalyticsDashboard({
     return 'ready';
   }, [analyticsData, dataError, dataLoading, insightsLoading]);
 
-  React.useEffect(() => { setDashboardState(state); }, [state]);
-
   const handleRefresh = useCallback(async () => {
-    setDashboardState('loading');
+    setIsRefreshing(true);
     try {
       await Promise.all([
         refetchData(),
@@ -88,6 +85,8 @@ export function AnalyticsDashboard({
       Sentry.addBreadcrumb({ category: 'analytics_dashboard', message: 'Dashboard refreshed', level: 'info' });
     } catch (err) {
       captureSilentFailure(err, { feature: 'analytics', operation: 'ui-fallback', type: 'ui' });
+    } finally {
+      setIsRefreshing(false);
     }
   }, [queryClient, refetchData, refetchHeatmap, userId]);
 
@@ -139,7 +138,7 @@ export function AnalyticsDashboard({
           selected={analyticsMetrics}
           onChange={handleMetricsChange}
           maxSelection={5}
-          disabled={dashboardState === 'loading'}
+          disabled={state === 'loading' || isRefreshing}
         />
       </View>
       <ScrollView
@@ -147,7 +146,7 @@ export function AnalyticsDashboard({
         contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl
-            refreshing={dashboardState === 'loading'}
+            refreshing={isRefreshing}
             onRefresh={handleRefresh}
             tintColor={lightColors.semantic.primary}
           />
@@ -156,7 +155,7 @@ export function AnalyticsDashboard({
       >
         <ErrorBoundary onReset={handleRefresh}>
           <DashboardContent
-            state={dashboardState}
+            state={state}
             analyticsData={analyticsData}
             heatmapData={heatmapData}
             heatmapLoading={heatmapLoading}

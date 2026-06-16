@@ -7,10 +7,13 @@ import Animated, {
   withRepeat,
   withSequence,
   withTiming,
+  type AnimatedStyle,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
+
 type SkeletonWidth = number | `${number}%` | 'auto';
+
 interface SkeletonProps {
   width?: SkeletonWidth;
   height?: number;
@@ -20,6 +23,50 @@ interface SkeletonProps {
   spacing?: number;
   animate?: boolean;
 }
+
+interface SkeletonLinesProps {
+  lines: number;
+  width: SkeletonWidth;
+  height: number;
+  borderRadius: number;
+  spacing: number;
+  lineStyle: object;
+  backgroundColor: string;
+}
+
+const SkeletonLines: React.FC<SkeletonLinesProps> = ({
+  lines,
+  width,
+  height,
+  borderRadius,
+  spacing,
+  lineStyle,
+  backgroundColor,
+}) => {
+  const lineArray = Array.from({ length: lines }, (_, i) => i);
+  const LineWrapper = Platform.OS === 'web' ? View : Animated.View;
+  return (
+    <>
+      {lineArray.map((_, index) => (
+        <LineWrapper
+          key={`skeleton-line-wrapper-${index}-${lineArray.length}`}
+          style={[
+            styles.skeleton,
+            {
+              width,
+              height,
+              borderRadius,
+              backgroundColor,
+              marginBottom: index < lines - 1 ? spacing : 0,
+            },
+            lineStyle,
+          ]}
+        />
+      ))}
+    </>
+  );
+};
+
 export const Skeleton: React.FC<SkeletonProps> = ({
   width = '100%',
   height = 16,
@@ -51,7 +98,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const animatedOpacityStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
-  const getBorderRadius = () => {
+  const getBorderRadius = (): number => {
     if (borderRadius !== undefined) {
       return borderRadius;
     }
@@ -66,34 +113,27 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         return 4;
     }
   };
-  const renderLines = () => {
-    const lineArray = Array.from({ length: lines }, (_, i) => i);
-    const LineWrapper = Platform.OS === 'web' ? View : Animated.View;
-    const lineStyle = Platform.OS === 'web'
-      ? { opacity: animate ? 0.5 : 0.3 }
-      : animatedOpacityStyle;
-    return lineArray.map((_, index) => (
-      <LineWrapper
-        key={`skeleton-line-wrapper-${index}-${lineArray.length}`}
-        style={[
-          styles.skeleton,
-          {
-            width,
-            height,
-            borderRadius: getBorderRadius(),
-            backgroundColor: theme.colors.surface.selected,
-            marginBottom: index < lines - 1 ? spacing : 0,
-          },
-          lineStyle,
-        ]}
+  const lineStyle: object = Platform.OS === 'web'
+    ? { opacity: animate ? 0.5 : 0.3 }
+    : animatedOpacityStyle;
+  return (
+    <View style={styles.container}>
+      <SkeletonLines
+        lines={lines}
+        width={width}
+        height={height}
+        borderRadius={getBorderRadius()}
+        spacing={spacing}
+        lineStyle={lineStyle}
+        backgroundColor={theme.colors.surface.selected}
       />
-    ));
-  };
-  return <View style={styles.container}>{renderLines()}</View>;
+    </View>
+  );
 };
+
 export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
   lines = 3,
-  height = 120,
+  height: _height = 120,
 }) => {
   const { theme } = useTheme();
   const opacity = useSharedValue(0.3);
@@ -107,7 +147,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
       true,
     );
   }, [opacity]);
-  const animatedOpacityStyle = useAnimatedStyle(() => ({
+  const animatedOpacityStyle: AnimatedStyle<{ opacity: number }> = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
   const CardWrapper = Platform.OS === 'web' ? View : Animated.View;
@@ -142,6 +182,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
     </CardWrapper>
   );
 };
+
 export const SkeletonList: React.FC<{
   count?: number;
   itemHeight?: number;
@@ -161,6 +202,7 @@ export const SkeletonList: React.FC<{
     </View>
   );
 };
+
 const styles = createSheet({
   container: { width: '100%' },
   skeleton: { overflow: 'hidden' },
