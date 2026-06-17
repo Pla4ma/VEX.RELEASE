@@ -126,7 +126,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
               {Array.from({ length: skeletonCount }).map((_, i) => (
                 <Skeleton
                   key={i}
-                  variant="card"
+                  variant="rounded"
                   height={80}
                   style={{ marginBottom: 12 }}
                 />

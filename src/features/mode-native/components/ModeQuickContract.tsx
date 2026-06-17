@@ -20,20 +20,7 @@ interface ModeQuickContractProps {
   onBack: () => void;
 }
 
-                  const elementStyle_94 = {
-  minHeight: 52,
-  paddingHorizontal: theme.spacing[4],
-  paddingVertical: theme.spacing[3],
-  backgroundColor: theme.colors.background.secondary,
-  borderRadius: theme.borderRadius.md,
-  borderWidth: 1,
-  borderColor:
-  (answers[q.key] ?? '').trim().length >= 3
-  ? theme.colors.primary[500]
-  : theme.colors.border.light,
-  color: theme.colors.text.primary,
-  fontSize: theme.typography.body.medium.fontSize,
-};
+                  
 export function ModeQuickContract({
   lane,
   isStarting,
@@ -42,6 +29,8 @@ export function ModeQuickContract({
 }: ModeQuickContractProps): React.ReactNode {
   const contract = useModeQuickContract(lane);
   const { theme } = useTheme();
+
+  
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -106,7 +95,20 @@ export function ModeQuickContract({
                     placeholderTextColor={theme.colors.text.tertiary}
                     accessibilityLabel={q.label}
                     accessibilityHint={`Enter your ${q.label.toLowerCase()}`}
-                    style={elementStyle_94}
+                    style={{
+  minHeight: 52,
+  paddingHorizontal: theme.spacing[4],
+  paddingVertical: theme.spacing[3],
+  backgroundColor: theme.colors.background.secondary,
+  borderRadius: theme.borderRadius.md,
+  borderWidth: 1,
+  borderColor:
+  (answers[q.key] ?? '').trim().length >= 3
+  ? theme.colors.primary[500]
+  : theme.colors.border.light,
+  color: theme.colors.text.primary,
+  fontSize: theme.typography.body.medium.fontSize,
+}}
                   />
                 </Box>
               ))}

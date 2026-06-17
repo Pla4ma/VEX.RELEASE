@@ -8,8 +8,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
+import { rgbaColors } from '../../../theme/tokens/rgba-colors';
+import { animationDuration } from '../../../theme/tokens/timing';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { sessionStart } from '../../../utils/haptics';
 
 export function StreakCriticalAlert({
@@ -22,28 +26,37 @@ export function StreakCriticalAlert({
   onStartSession: () => void;
 }): React.ReactNode {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const pulseStyle = useAnimatedStyle(() => ({
-    backgroundColor: withRepeat(
-      withSequence(
-        withTiming(`${theme.colors.error.DEFAULT}40`, { duration: 400 }),
-        withTiming(`${theme.colors.error.DEFAULT}20`, { duration: 400 }),
-      ),
-      -1,
-      true,
-    ),
+    backgroundColor: isReducedMotion
+      ? rgbaColors.rgb_239_68_68_0_15
+      : withRepeat(
+          withSequence(
+            withTiming(rgbaColors.rgb_239_68_68_0_3, {
+              duration: animationDuration.slow,
+            }),
+            withTiming(rgbaColors.rgb_239_68_68_0_15, {
+              duration: animationDuration.slow,
+            }),
+          ),
+          -1,
+          true,
+        ),
   }));
   const shakeStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateX: withRepeat(
-          withSequence(
-            withTiming(-2, { duration: 50 }),
-            withTiming(2, { duration: 50 }),
-            withTiming(0, { duration: 50 }),
-          ),
-          5,
-          true,
-        ),
+        translateX: isReducedMotion
+          ? 0
+          : withRepeat(
+              withSequence(
+                withTiming(-2, { duration: animationDuration.fast }),
+                withTiming(2, { duration: animationDuration.fast }),
+                withTiming(0, { duration: animationDuration.fast }),
+              ),
+              5,
+              true,
+            ),
       },
     ],
   }));
@@ -53,6 +66,7 @@ export function StreakCriticalAlert({
       accessibilityLabel={`Last chance: save your ${streakDays}-day streak`}
       accessibilityRole="button"
       accessibilityHint="Double tap to start a session now"
+      style={getMinTouchTargetStyle()}
     >
       <Animated.View style={pulseStyle}>
         <Box

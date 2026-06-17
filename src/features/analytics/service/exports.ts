@@ -4,8 +4,8 @@ import { uploadExportData, deleteExportData } from '../repository/storage';
 import {
   withRetry,
   CircuitBreaker,
-  classifyError,
 } from '../../../shared/hardening/retry';
+import { classifyError } from '../../../shared/hardening/error-utils';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';

@@ -7,7 +7,7 @@ export function getUserTimezone(_userId: string): string {
 
 const timezoneFormatterCache = new Map<string, Intl.DateTimeFormat>();
 function getTimezoneFormatter(
-  locale: string,
+  locale: string | undefined,
   options: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat {
   const key = `${locale}|${JSON.stringify(options)}`;

@@ -51,11 +51,6 @@ const ParticleShape = ({
       );
   }
 };
-  withDecay,
-  withDelay,
-  runOnJS,
-} from 'react-native-reanimated';
-
 
 export interface ParticleConfig {
   id: number;

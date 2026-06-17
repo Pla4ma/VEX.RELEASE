@@ -11,9 +11,9 @@ import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/
 import { useActiveStudyPlan } from '../../../features/content-study/runtime-barrel';
 import {
   buildLearningSessionParams,
-  useLearningExecutionLayer,
 } from '../../../features/learning-execution/service';
-import { useComebackState } from '../../../features/learning-execution/service';
+import { useComebackState } from '../../../features/streaks/streakQueries';
+import { useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
 import { getNextBestAction } from '../../../features/progression';
 import {
   getFeatureAvailability,

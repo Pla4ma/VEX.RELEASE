@@ -17,16 +17,7 @@ type CompanionSessionLayerProps = {
   totalSeconds: number;
 };
 
-        const elementStyle_59 = {
-  backgroundColor: theme.colors.background.overlay,
-  borderColor: theme.colors.border.light,
-  borderRadius: theme.spacing[6],
-  borderWidth: 1,
-  paddingHorizontal: theme.spacing[4],
-  paddingVertical: theme.spacing[2],
-  position: 'absolute',
-  top: theme.spacing[10],
-};
+        
 export function CompanionSessionLayer({
   companionState,
   elapsedSeconds,
@@ -37,6 +28,8 @@ export function CompanionSessionLayer({
   totalSeconds,
 }: CompanionSessionLayerProps): React.ReactNode {
   const { theme } = useTheme();
+
+  
 
   return (
     <View
@@ -67,7 +60,16 @@ export function CompanionSessionLayer({
         <Animated.View
           entering={FadeIn.duration(140)}
           exiting={FadeOut.duration(180)}
-          style={elementStyle_59}
+          style={{
+  backgroundColor: theme.colors.background.overlay,
+  borderColor: theme.colors.border.light,
+  borderRadius: theme.spacing[6],
+  borderWidth: 1,
+  paddingHorizontal: theme.spacing[4],
+  paddingVertical: theme.spacing[2],
+  position: 'absolute',
+  top: theme.spacing[10],
+}}
         >
           <Text variant="label" color={theme.colors.text.inverse}>
             {eventLabel}

@@ -9,7 +9,18 @@ interface UnlockRequirementRowProps {
   progressLabel?: string;
 }
 
-    const elementStyle_19 = {
+    
+export function UnlockRequirementRow({
+  label,
+  progressLabel,
+}: UnlockRequirementRowProps): React.ReactNode {
+  const { theme } = useTheme();
+
+  
+
+  return (
+    <View
+      style={{
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -20,16 +31,7 @@ interface UnlockRequirementRowProps {
   paddingHorizontal: theme.spacing[4],
   paddingVertical: theme.spacing[3],
   gap: theme.spacing[3],
-};
-export function UnlockRequirementRow({
-  label,
-  progressLabel,
-}: UnlockRequirementRowProps): React.ReactNode {
-  const { theme } = useTheme();
-
-  return (
-    <View
-      style={elementStyle_19}
+}}
     >
       <Text
         variant="bodySmall"

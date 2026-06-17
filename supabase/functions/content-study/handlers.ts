@@ -152,6 +152,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
     const { data: generation, error: genError } = await supabase.from('study_generations').insert({
       content_id: validated.contentId, user_id: userId, model: resolveStudyPlanModel(), processing_time_ms: Date.now() - startTime,
       summary: parsed.summary, key_concepts: parsed.keyConcepts, tasks: parsed.tasks, quiz_items: parsed.quizItems, session_plan: parsed.sessionPlan,
+      is_llm_generated: true,
     }).select().single();
     if (genError) {
       throw new Error('Failed to save study generation');
@@ -167,7 +168,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
 export async function handleStatus(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
   const contentId = new URL(req.url).pathname.split('/').pop();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
-  const { data: content, error } = await supabase.from('study_content').select('id, user_id, source_type, source_url, original_filename, storage_path, title, extracted_text, extracted_length, language, user_edited_text, is_user_edited, status, error_message, generation_count_today, last_generation_date, deleted_at, created_at, updated_at, extracted_at, study_generations(id, content_id, user_id, model, generation_version, processing_time_ms, summary, key_concepts, tasks, quiz_items, session_plan, user_rating, was_helpful, times_used, last_used_at, deleted_at, created_at, updated_at)').eq('id', contentId).eq('user_id', userId).single();
+  const { data: content, error } = await supabase.from('study_content').select('id, user_id, source_type, source_url, original_filename, storage_path, title, extracted_text, extracted_length, language, user_edited_text, is_user_edited, status, error_message, generation_count_today, last_generation_date, deleted_at, created_at, updated_at, extracted_at, study_generations(id, content_id, user_id, model, generation_version, processing_time_ms, summary, key_concepts, tasks, quiz_items, session_plan, user_rating, was_helpful, times_used, last_used_at, is_llm_generated, deleted_at, created_at, updated_at)').eq('id', contentId).eq('user_id', userId).single();
   if (error || !content) return json({ success: false, error: 'Not found' }, 400);
   return json({ success: true, contentId: content.id, status: content.status, extractedLength: content.extracted_length, errorMessage: content.error_message, generation: content.study_generations?.[0] || null });
 }

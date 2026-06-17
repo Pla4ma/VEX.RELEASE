@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { useReducedMotion } from '@/hooks';
 import { useTheme } from '@/theme';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { Particle, type ParticleConfig } from './Particle';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface ConfettiCelebrationProps {
   active: boolean;
@@ -14,7 +12,6 @@ interface ConfettiCelebrationProps {
   duration?: number;
   onComplete?: () => void;
   colors?: string[];
-  origin?: { x: number; y: number };
 }
 
 const DEFAULT_COLORS = [
@@ -33,8 +30,9 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({
   particleCount = 50,
   onComplete,
   colors = DEFAULT_COLORS,
-  origin = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 3 },
 }) => {
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
+  const origin = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 3 };
   const [particles, setParticles] = React.useState<ParticleConfig[]>([]);
   const { isReducedMotion } = useReducedMotion();
   useTheme();

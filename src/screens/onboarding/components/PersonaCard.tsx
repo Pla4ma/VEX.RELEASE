@@ -114,7 +114,7 @@ export function PersonaCard({
           {(isSelected || showExamples) && (
             <Box gap="sm">
               {persona.examples.map((example, i) => (
-                <ExampleMessage key={example.id} text={example} delay={i * 200} />
+                <ExampleMessage key={`example-${i}`} text={example} delay={i * 200} />
               ))}
             </Box>
           )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, Dimensions } from 'react-native';
+import { View, Pressable, useWindowDimensions } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { VexBrandPill } from '../../home/components/VexBrandPill';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
@@ -10,20 +10,6 @@ import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
 import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-        const elementStyle_100 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.glass.fill,
-  borderColor: vexLightGlass.glass.border,
-  borderRadius: 19,
-  borderWidth: 1,
-  height: 38,
-  justifyContent: 'center',
-  overflow: 'hidden',
-  boxShadow: '0px 6px 10px vexLightGlass.glass.shadow / 0.85',
-  width: 38,
-};
-const { width: SCREEN_W } = Dimensions.get('window');
-
 interface ProgressHeaderProps {
   onOpenNotifications: () => void;
 }
@@ -31,6 +17,7 @@ interface ProgressHeaderProps {
 export function ProgressHeader({
   onOpenNotifications,
 }: ProgressHeaderProps): React.ReactNode {
+  const { width: SCREEN_W } = useWindowDimensions();
   return (
     <View style={{ width: '100%', marginBottom: 10, position: 'relative' }}>
       {/* Liquid analytics atmosphere at top of progress screen */}
@@ -110,7 +97,7 @@ export function ProgressHeader({
           accessibilityLabel="Open notifications"
           accessibilityRole="button"
           onPress={onOpenNotifications}
-          style={elementStyle_100}
+          style={{}}
         >
           <GlassBlurLayer intensity={72} radius={19} />
           <Icon

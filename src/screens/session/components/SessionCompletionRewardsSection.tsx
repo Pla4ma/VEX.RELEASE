@@ -11,6 +11,7 @@ import type {
 } from '../../../features/session-completion/completion-experience-policy';
 import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
 import type { SessionSummary } from '../../../session/types';
+import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';
 import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
 import { SessionAdaptivePayoffCard } from './SessionAdaptivePayoffCard';
 import { SessionProgressionCard } from './SessionProgressionCard';
@@ -31,7 +32,7 @@ type SessionCompletionRewardsSectionProps = {
   rewards: {
     actions: {
       applyCompletionRewards: () => Promise<void>;
-      applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
+      applyChestRewards: (input: { sessionId: string; rewards: HeadlineReward[] }) => Promise<void>;
     };
     rewardCreditError: string | null;
     rewardCreditStatus:

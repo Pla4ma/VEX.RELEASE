@@ -8,10 +8,12 @@
 import React from 'react';
 import {
   ComebackQuestCard,
-  TodaysChallengesWidget,
-  type ChallengeItem,
 } from '../../../features/home-spine/components/ComebackQuestCard';
-import { StudyPlanSuggestionCard } from '../../../features/home-spine/components/ComebackQuestCard';
+import type {
+  ChallengeItem,
+} from '../../../features/home-spine/components/todays-challenges-types';
+import { TodaysChallengesWidget } from '../../../features/home-spine/components/TodaysChallengesWidget';
+import { StudyPlanSuggestionCard } from '../../../features/content-study/components/StudyPlanSuggestionCard';
 import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
 import type { LearningExecutionCopy } from '../../../features/learning-execution';
 

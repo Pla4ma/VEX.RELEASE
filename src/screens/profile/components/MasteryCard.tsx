@@ -54,7 +54,12 @@ export const MasteryCard: React.FC<MasteryCardProps> = ({
   }
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable
+      onPress={onPress}
+      accessibilityLabel="View mastery details"
+      accessibilityRole="button"
+      accessibilityHint="Opens full mastery profile"
+    >
       <GlassCard padding={18} radius={24} variant="default">
         <View
           pointerEvents="none"

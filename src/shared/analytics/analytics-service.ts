@@ -192,3 +192,6 @@ export {
   isFeatureEnabled,
   getFeatureFlag,
 } from './analytics-shorthand';
+
+export type PurchaseEvent = string;
+export const RetentionEvents = { RETURN_SESSION: 'return_session' as const, COMEBACK_TRIGGERED: 'comeback_triggered' as const };

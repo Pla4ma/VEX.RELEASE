@@ -14,7 +14,26 @@ interface DailyQuestCardProps {
   onPress?: () => void;
 }
 
-    const elementStyle_31 = {
+    
+export function DailyQuestCard({
+  quest,
+  coachName,
+  onPress,
+}: DailyQuestCardProps): React.ReactNode {
+  const { theme } = useTheme();
+
+  
+
+  const progressPercent = quest
+    ? Math.min(100, Math.round((quest.current / quest.target) * 100))
+    : 0;
+
+  const isCompleted = quest ? quest.current >= quest.target : false;
+
+  return (
+    <Animated.View
+      entering={FadeInUp.duration(400)}
+      style={{
   marginHorizontal: theme.spacing[4],
   marginTop: theme.spacing[4],
   marginBottom: theme.spacing[2],
@@ -27,24 +46,7 @@ interface DailyQuestCardProps {
   ? theme.colors.success[500]
   : theme.colors.primary[500],
   overflow: 'hidden',
-};
-export function DailyQuestCard({
-  quest,
-  coachName,
-  onPress,
-}: DailyQuestCardProps): React.ReactNode {
-  const { theme } = useTheme();
-
-  const progressPercent = quest
-    ? Math.min(100, Math.round((quest.current / quest.target) * 100))
-    : 0;
-
-  const isCompleted = quest ? quest.current >= quest.target : false;
-
-  return (
-    <Animated.View
-      entering={FadeInUp.duration(400)}
-      style={elementStyle_31}
+}}
     >
       <Pressable
         onPress={() => { buttonTap(); onPress?.(); }}
@@ -129,7 +131,7 @@ export function DailyQuestCard({
                 </View>
                 <ProgressBar
                   progress={progressPercent / 100}
-                  fillColor={
+                  color={
                     isCompleted
                       ? theme.colors.success[500]
                       : theme.colors.primary[500]

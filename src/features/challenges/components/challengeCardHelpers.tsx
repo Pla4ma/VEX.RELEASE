@@ -1,4 +1,3 @@
-import { Text } from 'react-native';
 import { Badge } from '../../../components/Badge';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';
@@ -8,13 +7,13 @@ export function getStatusBadge(
 ): React.ReactNode {
   switch (status) {
     case 'COMPLETED':
-      return <Badge variant="success"><Text>{'Ready to Claim'}</Text></Badge>;
+      return <Badge variant="success">Ready to Claim</Badge>;
     case 'CLAIMED':
-      return <Badge variant="secondary"><Text>{'Claimed'}</Text></Badge>;
+      return <Badge variant="secondary">Claimed</Badge>;
     case 'EXPIRED':
-      return <Badge variant="error"><Text>{'Expired'}</Text></Badge>;
+      return <Badge variant="error">Expired</Badge>;
     case 'REROLLED':
-      return <Badge variant="secondary"><Text>{'Rerolled'}</Text></Badge>;
+      return <Badge variant="secondary">Rerolled</Badge>;
     default:
       return null;
   }

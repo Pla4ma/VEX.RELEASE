@@ -187,3 +187,5 @@ export const SessionEventSchema = z.object({
   data: z.record(z.unknown()).optional(),
 });
 export type SessionEvent = z.infer<typeof SessionEventSchema>;
+
+

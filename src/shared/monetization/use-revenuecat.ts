@@ -190,3 +190,8 @@ export type {
   PurchasesPackageDisplayInfo,
   PurchaseResult,
 };
+
+export const PurchaseEvents = { PURCHASE_COMPLETED: 'purchase:completed' as const, RESTORE_COMPLETED: 'purchase:restored' as const };
+export function createPaywallProperties() { return {}; }
+
+

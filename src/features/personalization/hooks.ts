@@ -97,3 +97,5 @@ export function useResolvedVexExperienceRuntime(
     input.overrideBossEngagement,
   ]);
 }
+
+export { useFirstWeekExperience } from './useFirstWeekExperience';

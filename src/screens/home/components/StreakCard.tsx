@@ -5,6 +5,7 @@ import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface StreakCardProps {
   currentStreak: number;
@@ -53,7 +54,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
                 alignItems: 'center',
                 backgroundColor:
                   index < Math.min(currentStreak, 7)
-                    ? '#0A9B8A'
+                    ? vexLightGlass.mint[600]
                     : 'rgba(16,35,31,0.10)',
                 borderRadius: 999,
                 height: 22,
@@ -62,7 +63,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
               }}
             >
               <Icon
-                color="#FFFFFF"
+                color={vexLightGlass.text.inverse}
                 name="check"
                 size="xs"
                 variant="solid"
@@ -70,7 +71,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
             </View>
             <Text
               style={{
-                color: '#6B8F85',
+                color: vexLightGlass.text.tertiary,
                 fontSize: 12,
                 fontWeight: '700',
               }}
@@ -82,7 +83,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
       </View>
       <Text
         style={{
-          color: '#6B8F85',
+          color: vexLightGlass.text.tertiary,
           fontSize: 12,
           fontWeight: '600',
         }}

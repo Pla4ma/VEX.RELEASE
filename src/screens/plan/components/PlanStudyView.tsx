@@ -68,6 +68,9 @@ export function PlanStudyView({
           entering={FadeInUp.delay(index * 60)}
         >
           <Pressable
+            accessibilityLabel={`Select study plan ${plan.name}`}
+            accessibilityRole="button"
+            accessibilityHint="Opens the study plan detail view"
             onPress={() => onSelectStudyPlan(plan.id)}
             style={({ pressed }) => ({
               backgroundColor: pressed

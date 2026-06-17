@@ -19,9 +19,9 @@ import { SettingsSectionGroup } from './SettingsSectionGroup';
 import { buildSettingsGroups } from './buildSettingsGroups';
 import {
   LiquidGlassHeader,
-  LiquidGlassScreen,
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 

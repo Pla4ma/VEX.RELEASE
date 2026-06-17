@@ -4,11 +4,13 @@ import {
   useResolvedVexExperienceRuntime,
   type VexExperienceRuntimeInput,
 } from '../../../features/personalization/hooks';
-import { useFirstWeekExperience } from '../../../features/personalization/hooks';
+import {
+  useFirstWeekExperience,
+  type UseFirstWeekInput,
+} from '../../../features/personalization/useFirstWeekExperience';
 import {
   recordBehaviorSignal,
 } from '../../../features/personalization/behavior-signal-store';
-import type {} from '../../../features/personalization/schemas';
 import type { HomeController } from './home-controller-types';
 import { useHomeLaneProfile } from './useHomeLaneProfile';
 import type {
@@ -101,30 +103,38 @@ export function useHomeResolvedExperience(
     primaryGoal,
   });
 
-  const firstWeekExperience = useFirstWeekExperience({
-    completedSessions: totalCompletedSessions,
-    daysSinceOnboarding,
-    daysSinceLastSession,
-    motivationStyle: motivationStyle as
-      | 'calm'
-      | 'friendly'
-      | 'coach_led'
-      | 'study_focused'
-      | 'game_like'
-      | 'intense'
-      | undefined,
-    primaryGoal,
-    bossEngagement: behaviorStats.bossChallengeEngagement,
-    studyUsageRatio: behaviorStats.studyUsageRatio,
-    isPremium: false,
-    laneProfile,
-    featureAvailable: {
-      boss: featureAvailability.boss,
-      premium: featureAvailability.premium,
-      social: false,
-      study: featureAvailability.study,
-    },
-  });
+  const firstWeekInput = useMemo<UseFirstWeekInput>(
+    () => ({
+      completedSessions: totalCompletedSessions,
+      daysSinceOnboarding,
+      daysSinceLastSession,
+      motivationStyle,
+      primaryGoal,
+      bossEngagement: behaviorStats.bossChallengeEngagement,
+      studyUsageRatio: behaviorStats.studyUsageRatio,
+      isPremium: Boolean(features.premium_paywall?.isUnlocked),
+      laneProfile,
+      featureAvailable: {
+        boss: Boolean(features.boss_tab?.isUnlocked),
+        premium: Boolean(features.premium_paywall?.isUnlocked),
+        social: false,
+        study: Boolean(features.content_study?.isUnlocked),
+      },
+    }),
+    [
+      totalCompletedSessions,
+      daysSinceOnboarding,
+      daysSinceLastSession,
+      motivationStyle,
+      primaryGoal,
+      behaviorStats.bossChallengeEngagement,
+      behaviorStats.studyUsageRatio,
+      features,
+      laneProfile,
+    ],
+  );
+
+  const firstWeekResult = useFirstWeekExperience(firstWeekInput);
 
   const userStage = resolveUserStage(totalCompletedSessions);
 
@@ -133,13 +143,13 @@ export function useHomeResolvedExperience(
       motivationStyle,
       primaryGoal,
       gamificationIntensity: resolveGamificationIntensity(motivationStyle),
-      studyLayerName: firstWeekExperience.studyLayerLabel,
+      studyLayerName: firstWeekResult.studyLayerLabel,
       userStage,
     }),
     [
       motivationStyle,
       primaryGoal,
-      firstWeekExperience.studyLayerLabel,
+      firstWeekResult.studyLayerLabel,
       userStage,
     ],
   );
@@ -166,14 +176,14 @@ export function useHomeResolvedExperience(
   return useMemo(
     () => ({
       resolvedExperience,
-      firstWeekExperience,
+      firstWeekExperience: firstWeekResult,
       laneProfile,
       personalizationProfile: canonicalProfile,
       behaviorStats: canonicalBehavior,
     }),
     [
       resolvedExperience,
-      firstWeekExperience,
+      firstWeekResult,
       laneProfile,
       canonicalProfile,
       canonicalBehavior,

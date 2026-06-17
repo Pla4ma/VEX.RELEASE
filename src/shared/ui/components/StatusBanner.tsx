@@ -95,7 +95,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
             ) : (
               <Text
                 style={{
-                  color: isError ? '#C0392B' : color,
+                  color: isError ? vexLightGlass.semantic.danger : color,
                   fontSize: 16,
                   fontWeight: '700',
                 }}
@@ -108,7 +108,7 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
             <Text
               variant="bodySmall"
               style={{
-                color: isError ? '#C0392B' : vexLightGlass.text.primary,
+                color: isError ? vexLightGlass.semantic.danger : vexLightGlass.text.primary,
                 fontWeight: '700',
                 fontSize: 14,
               }}

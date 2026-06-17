@@ -8,7 +8,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { Button, Card, Text } from '../../../components/primitives/Button';
+import { Button } from '../../../components/primitives/Button';
+import { Card } from '../../../components/primitives/Card';
+import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme/ThemeContext';

@@ -26,3 +26,5 @@ export const ONBOARDING_GOALS: Array<{
     description: 'Begin gently without losing the day.',
   },
 ];
+
+export { useTheme } from '../../theme/ThemeContext';

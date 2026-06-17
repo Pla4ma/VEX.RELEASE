@@ -14,7 +14,7 @@ import type { ExtendedRootStackParams } from '../navigation/types';
 import { useSessionUIStore } from '../store/session-state';
 import { useTheme } from '../theme/ThemeContext';
 import { Particle } from './ComebackParticles';
-import { capture, RetentionEvents } from '../shared/analytics/analytics-service';
+import { capture } from '../shared/analytics/analytics-service';
 import { ComebackCard } from './ComebackCard';
 
 type ComebackNavigationProp = NativeStackNavigationProp<
@@ -34,7 +34,7 @@ export function ComebackScreen(): React.ReactNode {
   const comebackState = route.params.comebackState;
 
   useEffect(() => {
-    capture(RetentionEvents.COMEBACK_OFFER_VIEWED, {
+    capture('comeback_offer_viewed', {
       days_absent: comebackState.daysAbsent,
       reward_multiplier: comebackState.rewardMultiplier,
       streak_before: comebackState.streakBefore,
@@ -60,7 +60,7 @@ export function ComebackScreen(): React.ReactNode {
   };
 
   const startComeback = () => {
-    capture(RetentionEvents.COMEBACK_OFFER_ACCEPTED, {
+    capture('comeback_offer_accepted', {
       days_absent: comebackState.daysAbsent,
       reward_multiplier: comebackState.rewardMultiplier,
       streak_restore: comebackState.streakRestoreEligible,

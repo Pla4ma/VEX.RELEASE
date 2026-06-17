@@ -56,3 +56,33 @@ export async function withRetry<T>(
   fullConfig.onExhausted?.(finalError);
   throw finalError;
 }
+
+export { CircuitBreaker } from './circuit-breaker';
+
+export async function withTimeout<T>(fn: () => Promise<T>, timeoutMs: number, _label?: string): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs)
+  );
+  return Promise.race([fn(), timeout]);
+}
+
+export function classifyError(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+export class TTLCache<V = unknown, K = string> {
+  private cache = new Map<K, { value: V; expiry: number }>();
+  constructor(private ttlMs: number) {}
+  get(key: K): V | undefined {
+    const entry = this.cache.get(key);
+    if (!entry) return undefined;
+    if (Date.now() > entry.expiry) { this.cache.delete(key); return undefined; }
+    return entry.value;
+  }
+  set(key: K, value: V): void {
+    this.cache.set(key, { value, expiry: Date.now() + this.ttlMs });
+  }
+  delete(key: K): void { this.cache.delete(key); }
+  clear(): void { this.cache.clear(); }
+}

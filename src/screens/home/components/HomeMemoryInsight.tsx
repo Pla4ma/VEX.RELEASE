@@ -1,5 +1,6 @@
 import React from 'react';
-import { useMemoryPanel, MemoryPanel } from '../../../features/focus-memory/useMemoryPanel';
+import { View } from 'react-native';
+import { useMemoryPanel } from '../../../features/focus-memory/useMemoryPanel';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
 
@@ -23,10 +24,12 @@ export function HomeMemoryInsight({
   if (data.items.length === 0) {return null;}
 
   return (
-    <MemoryPanel
-      items={data.items}
-      onHide={hideMemory}
-      onAccept={acceptMemory}
-    />
+    <View style={{ padding: 16 }}>
+      {data.items.map((item: unknown, i: number) => (
+        <View key={i} style={{ padding: 8, borderBottomWidth: 1, borderColor: '#eee' }}>
+          {String(item)}
+        </View>
+      ))}
+    </View>
   );
 }

@@ -3,10 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface GlassCardHighlightProps { resolvedRadius: number }
 
-    const elementStyle_75 = {
-  borderRadius: resolvedRadius, height: '18%', left: 0, opacity: 0.52,
-  position: 'absolute', right: 0, top: '10%', zIndex: 11,
-};
+    
 export function GlassCardTopLight({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return (
     <LinearGradient
@@ -77,7 +74,10 @@ export function GlassCardShineStreak({ resolvedRadius }: GlassCardHighlightProps
     <LinearGradient
       colors={['rgba(255, 255, 255, 0.22)', 'rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0)']}
       end={{ x: 0.85, y: 0.55 }} locations={[0, 0.45, 1]} pointerEvents="none" start={{ x: 0.15, y: 0.45 }}
-      style={elementStyle_75}
+      style={{
+        borderRadius: resolvedRadius, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+        opacity: 0.38,
+      }}
     />
   );
 }

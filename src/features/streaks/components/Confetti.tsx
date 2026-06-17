@@ -14,11 +14,8 @@ import Animated, {
   withTiming,
   useReducedMotion,
 } from 'react-native-reanimated';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
-
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function ConfettiPiece({
   index,
@@ -28,6 +25,7 @@ function ConfettiPiece({
   color: string;
 }): React.ReactNode | null {
   const reduceMotion = useReducedMotion();
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
   const startX = Math.random() * SCREEN_WIDTH;
   const endX = startX + (Math.random() - 0.5) * 200;
   const duration = 2000 + Math.random() * 1000;

@@ -79,7 +79,7 @@ export function YouTubeVideoPreview({
                 {videoInfo.channelName}
               </Text>
             )}
-            {videoInfo.duration > 0 && (
+            {videoInfo.duration != null && videoInfo.duration > 0 && (
               <View style={styles.durationBadge}>
                 <Icon
                   name="clock"
@@ -92,7 +92,7 @@ export function YouTubeVideoPreview({
                     { color: theme.colors.text.muted },
                   ]}
                 >
-                  {formatDuration(videoInfo.duration)}
+                  {formatDuration(videoInfo.duration ?? 0)}
                 </Text>
               </View>
             )}

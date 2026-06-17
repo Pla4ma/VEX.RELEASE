@@ -12,16 +12,7 @@ import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-        const elementStyle_96 = {
-  backgroundColor: vexLightGlass.glass.innerHighlight,
-  borderTopLeftRadius: 21,
-  borderTopRightRadius: 21,
-  height: 1,
-  left: 8,
-  position: 'absolute',
-  right: 8,
-  top: 1,
-};
+        
 export function HomeTopBar(): React.ReactNode {
   const navigation = useNavigation<Nav>();
 
@@ -104,7 +95,7 @@ export function HomeTopBar(): React.ReactNode {
         />
         <View
           pointerEvents="none"
-          style={elementStyle_96}
+          style={{}}
         />
         <Icon
           color={vexLightGlass.text.primary}

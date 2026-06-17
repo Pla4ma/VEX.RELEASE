@@ -11,18 +11,7 @@ interface ProfileActionsRowProps {
   onLogout: () => void;
 }
 
-    const elementStyle_30 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.glass.fillSubtle,
-  borderColor: vexLightGlass.glass.innerHighlight,
-  borderRadius: 999,
-  borderWidth: 1.5,
-  height: 44,
-  justifyContent: 'center',
-  boxShadow: '0px 7px 14px vexLightGlass.glass.shadowStrong / 0.85',
-  overflow: 'hidden',
-  width: 44,
-};
+    
 function GlassIconButton({
   onPress,
   label,
@@ -40,7 +29,7 @@ function GlassIconButton({
       accessibilityLabel={label}
       accessibilityRole="button"
       onPress={onPress}
-      style={elementStyle_30}
+      style={{}}
     >
       <GlassBlurLayer intensity={72} radius={999} />
       <Icon color={vexLightGlass.text.primary} name={iconName} size="md" />

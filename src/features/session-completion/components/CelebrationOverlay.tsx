@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, Pressable, View } from 'react-native';
+import { Pressable, View, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -27,7 +27,6 @@ import { GLOW_COLORS, GLOW_PARTICLES } from './feature-unlock-helpers';
 
 const CARD_WIDTH_OFFSET = 48;
 const CARD_MAX_WIDTH = 380;
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface CelebrationOverlayProps {
   featureColor: string;
@@ -47,6 +46,7 @@ export function CelebrationOverlay({
   onDismiss,
 }: CelebrationOverlayProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const [showEvidence, setShowEvidence] = useState(false);
 
   const cardTranslateY = useSharedValue(isReducedMotion ? 0 : 120);

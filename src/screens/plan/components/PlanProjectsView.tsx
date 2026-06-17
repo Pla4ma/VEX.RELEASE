@@ -68,6 +68,9 @@ export function PlanProjectsView({
           entering={FadeInUp.delay(index * 60)}
         >
           <Pressable
+            accessibilityLabel={`Select project ${project.name}`}
+            accessibilityRole="button"
+            accessibilityHint="Opens the project details view"
             onPress={() => onSelectProject(project.id)}
             style={({ pressed }) => ({
               backgroundColor: pressed

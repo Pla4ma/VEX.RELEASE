@@ -26,7 +26,7 @@ function SectionErrorFallback({
       <GlassCard variant="subtle" style={{ marginBottom: 12 }}>
         <Text
           variant="bodySmall"
-          style={{ color: '#C0392B', fontSize: 14, fontWeight: '500' }}
+          style={{ color: vexLightGlass.semantic.danger, fontSize: 14, fontWeight: '500' }}
         >
           {sectionName} did not load.
         </Text>

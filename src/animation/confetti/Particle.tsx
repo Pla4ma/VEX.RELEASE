@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -15,87 +15,8 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 
-type Shape = 'circle' | 'square' | 'triangle';
-
-const ParticleShape = ({
-  shape,
-  size,
-  color,
-  animatedStyle,
-  particleStyle,
-  shapeStyle,
-  triangleStyle,
-}: {
-  shape: Shape;
-  size: number;
-  color: string;
-  animatedStyle: object;
-  particleStyle: object;
-  shapeStyle: object;
-  triangleStyle: object;
-}): React.ReactNode => {
-  switch (shape) {
-    case 'circle':
-      return (
-        <Animated.View
-          style={[
-            particleStyle,
-            shapeStyle,
-            {
-              width: size,
-              height: size,
-              backgroundColor: color,
-              borderRadius: size / 2,
-            },
-            animatedStyle,
-          ]}
-        />
-      );
-    case 'square':
-      return (
-        <Animated.View
-          style={[
-            particleStyle,
-            shapeStyle,
-            { width: size, height: size, backgroundColor: color },
-            animatedStyle,
-          ]}
-        />
-      );
-    case 'triangle':
-      return (
-        <Animated.View
-          style={[
-            triangleStyle,
-            {
-              borderLeftWidth: size / 2,
-              borderRightWidth: size / 2,
-              borderBottomWidth: size,
-              borderBottomColor: color,
-            },
-            animatedStyle,
-          ]}
-        />
-      );
-    default:
-      return (
-        <Animated.View
-          style={[
-            particleStyle,
-            shapeStyle,
-            {
-              width: size,
-              height: size,
-              backgroundColor: color,
-              borderRadius: size / 2,
-            },
-            animatedStyle,
-          ]}
-        />
-      );
-  }
-};
-import { ParticleConfig } from './types';
+import { ParticleShape } from './ParticleShape';
+import type { ParticleConfig } from './types';
 import {
   particleStyle,
   shapeStyle,
@@ -103,14 +24,13 @@ import {
   FRICTION,
 } from './constants';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-
 interface ParticleProps {
   config: ParticleConfig;
   onComplete: (id: number) => void;
 }
 
 export function Particle({ config, onComplete }: ParticleProps) {
+  const { height: SCREEN_HEIGHT } = useWindowDimensions();
   const animatedX = useSharedValue(config.x);
   const animatedY = useSharedValue(config.y);
   const animatedRotation = useSharedValue(config.rotation);
@@ -193,75 +113,10 @@ export function Particle({ config, onComplete }: ParticleProps) {
     opacity: animatedOpacity.value,
   }));
 
-  const renderShape = () => {
-    const size = config.size;
-
-    switch (config.shape) {
-      case 'circle':
-        return (
-          <Animated.View
-            style={[
-              particleStyle,
-              shapeStyle,
-              {
-                width: size,
-                height: size,
-                backgroundColor: config.color,
-                borderRadius: size / 2,
-              },
-              animatedStyle,
-            ]}
-          />
-        );
-      case 'square':
-        return (
-          <Animated.View
-            style={[
-              particleStyle,
-              shapeStyle,
-              { width: size, height: size, backgroundColor: config.color },
-              animatedStyle,
-            ]}
-          />
-        );
-      case 'triangle':
-        return (
-          <Animated.View
-            style={[
-              triangleStyle,
-              {
-                borderLeftWidth: size / 2,
-                borderRightWidth: size / 2,
-                borderBottomWidth: size,
-                borderBottomColor: config.color,
-              },
-              animatedStyle,
-            ]}
-          />
-        );
-      default:
-        return (
-          <Animated.View
-            style={[
-              particleStyle,
-              shapeStyle,
-              {
-                width: size,
-                height: size,
-                backgroundColor: config.color,
-                borderRadius: size / 2,
-              },
-              animatedStyle,
-            ]}
-          />
-        );
-    }
-  };
-
   return (
     <ParticleShape
       shape={config.shape}
-      size={size}
+      size={config.size}
       color={config.color}
       animatedStyle={animatedStyle}
       particleStyle={particleStyle}

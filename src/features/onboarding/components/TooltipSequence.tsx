@@ -1,20 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { TooltipBubble, TooltipOverlay, type Tooltip } from './TooltipBubble';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
-interface TooltipSequenceProps {
-  hasStreak: boolean;
-  hasBoss: boolean;
-  onComplete: () => void;
-}
 
 export function TooltipSequence({
   hasStreak: _hasStreak,
   hasBoss,
   onComplete,
-}: TooltipSequenceProps): React.ReactNode {
+}: {
+  hasStreak: boolean;
+  hasBoss: boolean;
+  onComplete: () => void;
+}): React.ReactNode {
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const [currentTooltipIndex, setCurrentTooltipIndex] = useState(0);
 
   const tooltips: Tooltip[] = [

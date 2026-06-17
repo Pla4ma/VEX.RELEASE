@@ -15,12 +15,9 @@ import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
 import { TOGGLE_ROWS } from './privacy-toggle-data';
 import type { ToggleKey } from './privacy-toggle-data';
-import {
-  LiquidGlassCard,
-  LiquidGlassHeader,
-  LiquidGlassScreen,
-  liquidGlassSpacing,
-} from '../../shared/ui/liquid-glass/LiquidGlassCard';
+import { LiquidGlassCard } from '../../shared/ui/liquid-glass/LiquidGlassCard';
+import { LiquidGlassHeader, liquidGlassSpacing } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 

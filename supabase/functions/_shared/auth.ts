@@ -88,10 +88,16 @@ export async function verifyAuthorizedUser(
     };
   }
 
+  // NOTE: Supabase JWTs do NOT contain email_confirmed_at — only the
+  // /auth/v1/user endpoint exposes it. Local JWT verification cannot determine
+  // email confirmation status. Edge functions requiring verified email MUST
+  // use the remote path (omit SUPABASE_JWT_SECRET env) or call /auth/v1/user
+  // themselves. We reject anonymous users here as a minimal guard.
+  const isAnonymous = !!payload.is_anonymous;
   const user: AuthUser = {
     id: payload.sub,
     email: payload.email ?? null,
-    emailVerified: true,
+    emailVerified: !isAnonymous,
     role: appMeta.role ?? null,
     banned: appMeta.banned === true,
   };

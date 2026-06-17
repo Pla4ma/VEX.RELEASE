@@ -3,11 +3,9 @@ import type { HomeController } from './home-controller-types';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import { useBaseHomeData } from './useBaseHomeData';
 import { getFeatureAvailability } from '../../../features/liveops-config';
-import {
-  useActiveChallenges,
-  useClaimChallengeReward,
-} from '../../../features/challenges/hooks/challengeQueries';
-import { useActiveIntervention } from '../../../features/challenges/hooks/challengeQueries';
+import { useActiveChallenges } from '../../../features/challenges/hooks/challengeQueries';
+import { useClaimChallengeReward } from '../../../features/challenges/hooks/challengeMutations';
+import { useActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { useToast } from '../../../shared/ui/components/Toast';
 import type { EngagedHomeData } from './home-data-types';
 

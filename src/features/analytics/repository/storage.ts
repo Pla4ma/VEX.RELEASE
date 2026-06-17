@@ -22,11 +22,13 @@ export async function downloadExportData(
     const path = `${userId}/${jobId}.${format}`;
     return await withRetry(
       async () => {
-        const { data, error } = await withTimeout(
-          supabase.storage.from(bucket).download(path),
+        const result = await withTimeout(
+          supabase.storage.from(bucket).download(path) as unknown as () => Promise<{ data: Blob | null; error: { message: string; name: string } | null }>,
           30000,
           'Storage download timeout',
         );
+        const data = result.data;
+        const error = result.error;
         if (error) {
           throw new AnalyticsStorageError(
             `Download failed: ${error.message}`,

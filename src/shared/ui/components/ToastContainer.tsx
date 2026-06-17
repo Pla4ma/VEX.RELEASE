@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewStyle, Dimensions } from 'react-native';
+import { View, ViewStyle, useWindowDimensions } from 'react-native';
 import { styles } from './Toast.styles';
 import { ToastComponent } from './ToastComponent';
 import type { ToastPosition, ToastItem, ToastContainerProps } from './Toast.types';
@@ -36,7 +36,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   toasts,
   onDismiss,
 }) => {
-  const { height } = Dimensions.get('window');
+  const { height } = useWindowDimensions();
   const grouped = groupToastsByPosition(toasts);
   const activePositions = POSITIONS.filter((p) => grouped[p] && grouped[p]!.length > 0);
 

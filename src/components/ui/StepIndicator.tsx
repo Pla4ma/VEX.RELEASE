@@ -12,16 +12,7 @@ interface StepIndicatorProps {
   accessibilityLabel?: string;
 }
 
-            const elementStyle_44 = {
-  alignItems: 'center',
-  backgroundColor: fillColor,
-  borderColor: isCurrent ? stepColor : fillColor,
-  borderRadius: 14,
-  borderWidth: isCurrent ? 2 : 0,
-  height: 28,
-  justifyContent: 'center',
-  width: 28,
-};
+            
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   steps,
   currentStep,
@@ -30,6 +21,8 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   accessibilityLabel,
 }) => {
   const { theme } = useTheme();
+
+  
   const stepColor = color ?? theme.colors.semantic.primary;
   return (
     <View
@@ -52,7 +45,16 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
             style={{ alignItems: 'center', flex: 1, flexDirection: 'row' }}
           >
             <View
-              style={elementStyle_44}
+              style={{
+  alignItems: 'center',
+  backgroundColor: fillColor,
+  borderColor: isCurrent ? stepColor : fillColor,
+  borderRadius: 14,
+  borderWidth: isCurrent ? 2 : 0,
+  height: 28,
+  justifyContent: 'center',
+  width: 28,
+}}
               accessibilityLabel={
                 isCompleted
                   ? `Step ${index + 1} completed`

@@ -8,8 +8,8 @@ export type OnboardingRouteProp = RouteProp<
 >;
 import {
   useOnboardingStore,
-  type OnboardingGoal,
 } from '../../../features/onboarding/store';
+import type { OnboardingGoal } from '../../../features/onboarding/schemas';
 import { useAuthStore } from '../../../features/onboarding/store';
 import { useOnboardingLane } from './useOnboardingLane';
 import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';

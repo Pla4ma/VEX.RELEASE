@@ -11,23 +11,11 @@ interface VexFocusSurfaceActionRowProps {
   onPressPrimary: () => void;
 }
 
-    const elementStyle_16 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.glass.fill,
-  borderColor: vexLightGlass.glass.border,
-  borderRadius: 999,
-  borderWidth: 1.2,
-  flexDirection: 'row',
-  gap: 4,
-  minHeight: 32,
-  overflow: 'hidden',
-  paddingHorizontal: 10,
-  boxShadow: '0px 4px 8px vexLightGlass.glass.shadow / 0.45',
-};
+    
 function TimeCapsule(): React.ReactNode {
   return (
     <View
-      style={elementStyle_16}
+      style={{}}
     >
       <View
         pointerEvents="none"

@@ -125,3 +125,4 @@ export const useOnboardingStore = create(
     },
   ),
 );
+export { useAuthStore } from '../../store';

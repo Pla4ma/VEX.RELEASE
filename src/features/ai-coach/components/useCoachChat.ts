@@ -82,6 +82,7 @@ export function useCoachChat() {
       }, 100);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [chatMessages]);
 
   const handleSend = useCallback(() => {

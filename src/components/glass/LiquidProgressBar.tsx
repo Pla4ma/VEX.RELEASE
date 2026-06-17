@@ -13,19 +13,7 @@ interface LiquidProgressBarProps {
   fillColor?: string;
 }
 
-  const elementStyle_28 = {
-  position: 'absolute',
-  top,
-  left,
-  right,
-  bottom,
-  width,
-  height,
-  borderRadius: height / 2,
-  backgroundColor: trackColor,
-  overflow: 'hidden',
-  boxShadow: `0px 1px 4px rgba(136, 213, 197, 0.2125)`,
-};
+  
 export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
   progress,
   width = 200,
@@ -39,7 +27,15 @@ export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
 }) => (
   <View
     pointerEvents="none"
-    style={elementStyle_28}
+    style={{
+      position: 'absolute',
+      top, left, right, bottom,
+      width, height,
+      borderRadius: height / 2,
+      backgroundColor: trackColor,
+      overflow: 'hidden',
+      boxShadow: '0px 1px 4px rgba(136, 213, 197, 0.2125)',
+    }}
   >
     <View
       style={{

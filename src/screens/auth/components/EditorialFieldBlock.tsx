@@ -1,12 +1,3 @@
-const microLabelStyle: TextStyle = {
-    color: rgbaColors.rgb_224_184_112_0_85,
-    fontSize: 9,
-    fontFamily: SERIF_STACK,
-    fontWeight: '500',
-    letterSpacing: 3.5,
-    textTransform: 'uppercase',
-  };
-
 import React from 'react';
 import { Platform, View, type TextStyle } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -18,6 +9,15 @@ const SERIF_STACK = Platform.select({
   android: 'Noto Serif',
   default: 'Georgia',
 }) ?? 'Georgia';
+
+const microLabelStyle: TextStyle = {
+  color: rgbaColors.rgb_224_184_112_0_85,
+  fontSize: 9,
+  fontFamily: SERIF_STACK,
+  fontWeight: '500',
+  letterSpacing: 3.5,
+  textTransform: 'uppercase',
+};
 
 /**
  * EditorialFieldBlock — a serif micro-label (small caps, wide letter-spacing,
@@ -51,4 +51,4 @@ export function EditorialFieldBlock({
       {error ? <Text style={errorStyle}>{error}</Text> : null}
     </View>
   );
-}
+}

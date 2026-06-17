@@ -8,17 +8,7 @@ interface ActiveTabPillProps {
   height: number;
 }
 
-      const elementStyle_32 = {
-  backgroundColor: 'rgba(66, 207, 174, 0.10)',
-  borderColor: 'rgba(255, 255, 255, 0.72)',
-  borderRadius: 999,
-  borderWidth: 1,
-  bottom: 0,
-  left: 0,
-  position: 'absolute',
-  right: 0,
-  top: 0,
-};
+      
 export function ActiveTabPill({
   pillStyle,
   height,
@@ -41,7 +31,7 @@ export function ActiveTabPill({
       ]}
     >
       <View
-        style={elementStyle_32}
+        style={{}}
       />
       <LinearGradient
         colors={['rgba(255, 255, 255, 0.42)', 'rgba(255, 255, 255, 0.06)']}

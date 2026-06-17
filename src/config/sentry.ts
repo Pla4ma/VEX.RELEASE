@@ -53,7 +53,15 @@ function createSentryIntegrations(): NonNullable<
     [];
 
   integrations.push(Sentry.reactNativeTracingIntegration());
-  integrations.push(Sentry.mobileReplayIntegration());
+  // Mobile Replay with aggressive masking — this app handles coaching data,
+  // study content, user behavior, and private uploaded/pasted content.
+  // maskAllText + maskAllImages prevents sensitive screen state from being
+  // captured in replay payloads. Screen-level blocking rules below target
+  // auth/content-study/coach surfaces specifically.
+  integrations.push(Sentry.mobileReplayIntegration({
+    maskAllText: true,
+    maskAllImages: true,
+  }));
   integrations.push(Sentry.feedbackIntegration());
 
   return integrations;

@@ -21,18 +21,7 @@ interface CircularProgressProps {
   accessibilityLabel?: string;
 }
 
-        const elementStyle_76 = {
-  borderBottomColor: 'transparent',
-  borderColor: circleColor,
-  borderLeftColor: 'transparent',
-  borderRadius: size / 2,
-  borderRightColor: circleColor,
-  borderTopColor: circleColor,
-  borderWidth: strokeWidth,
-  height: size,
-  transform: [{ rotate: '-45deg' }],
-  width: size,
-};
+        
 const clampProgress = (value: number): number =>
   Math.max(0, Math.min(1, value));
 
@@ -47,11 +36,25 @@ export const CircularProgress = React.memo<CircularProgressProps>(function Circu
   accessibilityLabel,
 }) {
   const { theme } = useTheme();
+
   const reducedMotion = useReducedMotion();
   const animatedValue = useSharedValue(0);
   const nextProgress = clampProgress(progress);
   const circleColor = color ?? theme.colors.semantic.primary;
   const bgCircleColor = backgroundColor ?? theme.colors.semantic.border;
+
+  const elementStyle_76 = {
+    borderBottomColor: 'transparent',
+    borderColor: circleColor,
+    borderLeftColor: 'transparent',
+    borderRadius: size / 2,
+    borderRightColor: circleColor,
+    borderTopColor: circleColor,
+    borderWidth: strokeWidth,
+    height: size,
+    transform: [{ rotate: '-45deg' }],
+    width: size,
+  };
 
   useEffect(() => {
     if (reducedMotion) {
@@ -86,7 +89,7 @@ export const CircularProgress = React.memo<CircularProgressProps>(function Circu
           }}
         />
         <View
-          style={elementStyle_76}
+          style={{}}
         />
       </Animated.View>
       {showPercentage ? (

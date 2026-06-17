@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import type { AnimatedStyle } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box'
@@ -10,13 +10,13 @@ import { lightColors } from '@/theme/tokens/colors';
 import { PHASE_NAMES, PHASE_EMOJIS } from './companion-evolution-types';
 import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
 export const GlowLayer: React.FC<{
   glowStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
   ceremonyPhase: EvolutionPhase;
-}> = ({ glowStyle, themeColors, ceremonyPhase }) => (
+}> = ({ glowStyle, themeColors, ceremonyPhase }) => {
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
+  return (
   <>
     <Animated.View
       style={[
@@ -46,7 +46,8 @@ export const GlowLayer: React.FC<{
       />
     )}
   </>
-);
+  );
+};
 
 export const FlashLayer: React.FC<{ flashStyle: AnimatedStyle }> = ({
   flashStyle,

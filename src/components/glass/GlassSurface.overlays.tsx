@@ -4,11 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface TopHighlightProps { color: string; stop: number; radius: number }
 
-  const viewStyle_56 = {
-  backgroundColor: color, borderRadius: radius,
-  bottom: -10, left: -10, opacity: opacity * 1.4,
-  position: 'absolute', right: -10, top: -10,
-};
 export function TopHighlight({ color, stop, radius }: TopHighlightProps): React.ReactNode {
   return (
     <LinearGradient
@@ -59,6 +54,10 @@ interface GlassGlowProps { color: string; opacity: number; radius: number }
 
 export function GlassGlow({ color, opacity, radius }: GlassGlowProps): React.ReactNode {
   return (
-    <View pointerEvents="none" style={viewStyle_56} />
+    <View pointerEvents="none" style={{
+      backgroundColor: color, borderRadius: radius,
+      bottom: -10, left: -10, opacity: opacity * 1.4,
+      position: 'absolute', right: -10, top: -10,
+    }} />
   );
 }

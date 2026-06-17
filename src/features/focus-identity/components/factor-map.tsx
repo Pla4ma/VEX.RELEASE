@@ -43,7 +43,7 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
           <LiquidGlassSphere
             color="pearl"
             icon={
-              <Icon color="#0C765F" name="chart" size="sm" variant="solid" />
+              <Icon color={vexLightGlass.mint[700]} name="chart" size="sm" variant="solid" />
             }
             intensity={0.88}
             size={40}
@@ -73,7 +73,7 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
                 color={mapOrbToSphereColor(factor.orb)}
                 icon={
                   <Icon
-                    color="#0C765F"
+                    color={vexLightGlass.mint[700]}
                     name={factor.icon}
                     size="xs"
                     variant="solid"

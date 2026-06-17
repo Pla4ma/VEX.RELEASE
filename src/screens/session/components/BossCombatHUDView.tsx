@@ -23,17 +23,7 @@ interface BossCombatHUDViewProps {
   onActivateAbility: () => void;
 }
 
-        const elementStyle_60 = {
-  position: 'absolute',
-  top: -theme.spacing[10],
-  left: 0,
-  right: 0,
-  backgroundColor: theme.colors.success.DEFAULT,
-  paddingVertical: theme.spacing[2],
-  paddingHorizontal: theme.spacing[3],
-  borderRadius: theme.borderRadius.lg,
-  alignItems: 'center',
-};
+        
 export function BossCombatHUDView({
   phaseColor,
   healthPercent,
@@ -52,6 +42,8 @@ export function BossCombatHUDView({
   onActivateAbility,
 }: BossCombatHUDViewProps): React.ReactNode {
   const { theme } = useTheme();
+
+  
   return (
     <View
       style={{
@@ -69,7 +61,17 @@ export function BossCombatHUDView({
     >
       {showToast && (
         <View
-          style={elementStyle_60}
+          style={{
+  position: 'absolute',
+  top: -theme.spacing[10],
+  left: 0,
+  right: 0,
+  backgroundColor: theme.colors.success.DEFAULT,
+  paddingVertical: theme.spacing[2],
+  paddingHorizontal: theme.spacing[3],
+  borderRadius: theme.borderRadius.lg,
+  alignItems: 'center',
+}}
         >
           <Text variant="bodySmall" color={theme.colors.text.inverse}>
             +{damageDealt} damage

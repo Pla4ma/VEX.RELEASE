@@ -52,9 +52,9 @@ export function useStudySession() {
     refetchInterval: 60000,
   });
 
-  const currentSessionQuery = { data: currentSessionData, isPending: isCurrentPending, isFetching: isCurrentFetching, error: currentError };
-  const sessionHistoryQuery = { data: sessionHistoryData, isPending: isHistoryPending, isFetching: isHistoryFetching, error: historyError };
-  const sessionStatsQuery = { data: sessionStatsData, isPending: isStatsPending, isFetching: isStatsFetching, error: statsError };
+  const currentSessionQuery = { data: currentSessionData, isPending: isCurrentPending, isFetching: isCurrentFetching, isLoading: isCurrentPending && isCurrentFetching, error: currentError };
+  const sessionHistoryQuery = { data: sessionHistoryData, isPending: isHistoryPending, isFetching: isHistoryFetching, isLoading: isHistoryPending && isHistoryFetching, error: historyError };
+  const sessionStatsQuery = { data: sessionStatsData, isPending: isStatsPending, isFetching: isStatsFetching, isLoading: isStatsPending && isStatsFetching, error: statsError };
 
   const startSessionMutation = useMutation({
     mutationFn: async (config: SessionConfig) => {

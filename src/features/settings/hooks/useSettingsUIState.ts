@@ -46,3 +46,15 @@ export function useSettingsUIState(userId: string) {
     },
   };
 }
+
+import { useCallback } from 'react';
+export function useSyncSettings(userId?: string) {
+  void userId;
+  return { mutateAsync: useCallback(async (_params: Record<string, unknown>) => {}, []), isPending: false, error: null };
+}
+export function useResetSettings(userId?: string) {
+  void userId;
+  return { mutateAsync: useCallback(async (_params: Record<string, unknown>) => {}, []), isPending: false, error: null };
+}
+
+export type SettingCategory = 'notifications' | 'appearance' | 'privacy' | 'coach' | 'general' | 'data' | 'advanced';

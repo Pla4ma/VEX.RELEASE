@@ -7,6 +7,7 @@ import {
   useProgressionSummary,
 } from '../../../features/progression/hooks';
 import type { SessionSummary } from '../../../session/types';
+import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';
 import { triggerHaptic } from '../../../utils/haptics';
 
 const RETRY_DELAYS_MS = [500, 1000, 2000] as const;
@@ -35,8 +36,8 @@ interface SessionRewardSyncInput {
     isMounted: boolean;
     streakDays: number;
   }) => unknown;
-  applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
-  creditSessionRewards: (userId: string, rewards: any[]) => Promise<any[]>;
+  applyChestRewards: (input: { sessionId: string; rewards: HeadlineReward[] }) => Promise<void>;
+  creditSessionRewards: (userId: string, rewards: HeadlineReward[]) => Promise<HeadlineReward[]>;
   focusedDuration: number;
   focusPurityScore: number;
   primarySquadId: string | null;

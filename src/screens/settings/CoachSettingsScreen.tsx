@@ -22,25 +22,17 @@ import { CoachToneSelector, type CoachLanguage } from './CoachToneSelector';
 import { lightColors } from '@/theme/tokens/colors';
 import {
   LiquidGlassHeader,
-  LiquidGlassScreen,
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
-          const elementStyle_132 = {
-  backgroundColor:
-  theme.colors.error[50] || lightColors.error[50],
-  paddingVertical: 16,
-  paddingHorizontal: 16,
-  borderRadius: 12,
-  flexDirection: 'row',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: theme.colors.error.DEFAULT + '30',
-};
+          
 export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
+
+  
   const insets = useSafeAreaInsets();
   const { showToast } = useUIStore();
   const [selectedPersona, setSelectedPersona] =
@@ -142,7 +134,17 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
           <Pressable
             onPress={handleResetMemory}
-            style={elementStyle_132}
+            style={{
+  backgroundColor:
+  theme.colors.error[50] || lightColors.error[50],
+  paddingVertical: 16,
+  paddingHorizontal: 16,
+  borderRadius: 12,
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: theme.colors.error.DEFAULT + '30',
+}}
             accessibilityLabel="Coach setting"
             accessibilityRole="button"
             accessibilityHint="Double tap to change setting"

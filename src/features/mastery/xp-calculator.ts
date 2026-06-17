@@ -1,4 +1,5 @@
 import type { MasteryState } from './types';
+export type { MasteryState } from './types';
 
 export function calculateTechniqueXp(
   sessionMinutes: number,
@@ -19,4 +20,16 @@ export function calculateTechniqueXp(
       ? Math.floor(20 * (1 + (1 - bossHealthPercent)))
       : 0,
   };
+}
+
+const RANK_DISPLAY: Record<string, { title: string; icon: string }> = {
+  APPRENTICE: { title: 'Apprentice', icon: '🟢' },
+  ADEPT: { title: 'Adept', icon: '🔵' },
+  EXPERT: { title: 'Expert', icon: '🟣' },
+  MASTER: { title: 'Master', icon: '🟠' },
+  GRANDMASTER: { title: 'Grandmaster', icon: '⭐' },
+};
+
+export function getMasteryRankDisplay(rank: string): { title: string; icon: string } {
+  return RANK_DISPLAY[rank] ?? { title: rank, icon: '📊' };
 }

@@ -17,6 +17,7 @@ import React, {
 import { useColorScheme } from 'react-native';
 
 import type { Theme, ThemeContextValue, ThemeMode, ThemeConfig } from './types';
+export type { ThemeMode } from './types';
 import { createTheme } from './createTheme';
 import { ThemeService } from './ThemeService';
 import { defaultThemeConfig } from './config';

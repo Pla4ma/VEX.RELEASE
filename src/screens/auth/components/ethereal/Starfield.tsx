@@ -12,17 +12,7 @@ type Star = {
   color: string;
 };
 
-          const elementStyle_54 = {
-  position: 'absolute',
-  left,
-  top,
-  width: size,
-  height: size,
-  borderRadius: size / 2,
-  backgroundColor: s.color,
-  boxShadow: '0px 0px s.r * 6px s.color / 0.9',
-  opacity: 0.8,
-};
+          
 const STAR_COUNT = 38;
 const STAR_PALETTE = ['#FFFFFF', '#E7F1FB', '#FFE9C2', '#FFD9E0'];
 
@@ -61,9 +51,9 @@ export function Starfield(): React.JSX.Element {
 
         return (
           <View
-            key={s.id}
+            key={`star-${i}`}
             pointerEvents="none"
-            style={elementStyle_54}
+            style={{}}
           />
         );
       })}

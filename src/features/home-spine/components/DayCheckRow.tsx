@@ -48,7 +48,7 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): React.ReactNode 
             >
               {active ? (
                 <Icon
-                  color="#0C765F"
+                  color={vexLightGlass.mint[700]}
                   name="check"
                   size="xs"
                   variant="solid"

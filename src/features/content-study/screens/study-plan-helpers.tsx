@@ -153,7 +153,7 @@ export function SessionPlanSection({ sessionPlan }: { sessionPlan: SessionPlan }
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
             <View style={styles.focusAreas}>
               {sessionPlan.focusAreas.map((area, index) => (
-                <View key={area.id} style={styles.focusAreaTag}>
+                <View key={`area-${index}`} style={styles.focusAreaTag}>
                   <Text style={styles.focusAreaText}>{area}</Text>
                 </View>
               ))}

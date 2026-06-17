@@ -32,8 +32,7 @@ export async function uploadExportData(
     }
     return await withRetry(
       async () => {
-        const { data: _uploadData, error } = await withTimeout(
-          supabase.storage
+        const { data: _uploadData, error } = await withTimeout(() => supabase.storage
             .from(bucket)
             .upload(path, blob, {
               contentType: format === 'json' ? 'application/json' : 'text/csv',
@@ -60,13 +59,13 @@ export async function uploadExportData(
         }
         const { data: urlData } = await supabase.storage
           .from(bucket)
-          .createSignedUrl(path, 7 * 24 * 60 * 60);
+          .createSignedUrl(path, 3600); // 1 hour TTL — export data is user-sensitive
         return {
           url: urlData?.signedUrl || '',
           size: fileSize,
           checksum,
           uploadedAt: Date.now(),
-          expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          expiresAt: Date.now() + 3600 * 1000,
         };
       },
       {
@@ -101,8 +100,7 @@ async function uploadLargeFile(
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       onProgress?.((attempt - 1) * 20);
-      const { data: _data, error } = await withTimeout(
-        supabase.storage
+      const { data: _data, error } = await withTimeout(() => supabase.storage
           .from(bucket)
           .upload(path, blob, {
             contentType: blob.type,
@@ -137,13 +135,13 @@ async function uploadLargeFile(
       onProgress?.(100);
       const { data: urlData } = await supabase.storage
         .from(bucket)
-        .createSignedUrl(path, 7 * 24 * 60 * 60);
+        .createSignedUrl(path, 3600); // 1 hour TTL
       return {
         url: urlData?.signedUrl || '',
         size: blob.size,
         checksum,
         uploadedAt: Date.now(),
-        expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        expiresAt: Date.now() + 3600 * 1000,
       };
     } catch (error) {
       if (attempt === maxAttempts) {

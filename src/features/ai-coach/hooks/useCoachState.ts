@@ -92,7 +92,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
   const handleRetry = useCallback(() => {
     setIsRetrying(true);
     refetch().finally(() => setIsRetrying(false));
-  }, [query]);
+  }, [refetch]);
   return {
     data: data ?? null,
     isLoading: isPending,

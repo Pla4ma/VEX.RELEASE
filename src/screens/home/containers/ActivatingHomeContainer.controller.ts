@@ -1,7 +1,11 @@
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useSessionUIStore } from '../../../store/session-state';
 import { createStubQuery, stubLearningExecutionLayer, stubCoachMutations, stubNavigationActions } from '../hooks/home-controller-stubs';
-import type { HomeController } from '../hooks/home-controller-types';
+import type { HomeController, SessionHistoryResult } from '../hooks/home-controller-types';
+import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
+import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { SessionHistoryEntry } from '../../../session/types';
 
 export function buildActivatingController(params: {
   userId: string;
@@ -12,15 +16,15 @@ export function buildActivatingController(params: {
   currentXp: number;
   todayFocusMinutes: number;
   progressPercent: number;
-  latestSession: any;
-  homeSpine: any;
+  latestSession: SessionHistoryEntry | null;
+  homeSpine: HomeSpineModel;
   returnReason: HomeController['returnReason'];
-  disclosure: any;
-  runtime: any;
-  streakQuery: any;
-  progressionQuery: any;
-  historyQuery: any;
-  openSetup: (params?: any) => void;
+  disclosure: FeatureAccessResult;
+  runtime: HomeFeatureRuntime;
+  streakQuery: UseQueryResult;
+  progressionQuery: UseQueryResult;
+  historyQuery: SessionHistoryResult;
+  openSetup: HomeController['openSetup'];
   openProgress: () => void;
   openPlan: () => void;
   openCoach: () => void;

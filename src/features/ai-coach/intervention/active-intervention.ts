@@ -11,6 +11,7 @@ export interface ActiveIntervention {
   type: InterventionType;
   message: string;
   actionLabel: string;
+  priority: number;
   hoursRemaining?: number;
   metadata: Record<string, unknown>;
 }
@@ -70,6 +71,7 @@ export function buildActiveIntervention(input: {
           ? `Your streak breaks in ${hoursRemaining}h. Start a 15-min session now.`
           : `Streak at risk. ${hoursRemaining} hours to complete today's session.`,
       actionLabel: 'Start 15-min Session',
+      priority: 10,
       hoursRemaining,
       metadata: { suggestedDuration: 15 * 60, suggestedMode: 'LIGHT_FOCUS' },
     };
@@ -86,6 +88,7 @@ export function buildActiveIntervention(input: {
       type: 'BURNOUT',
       message: `You've had ${Math.max(5, sessionsLast24h)} sessions today. A shorter session protects your quality score.`,
       actionLabel: 'Start Recovery Session',
+      priority: 8,
       metadata: { suggestedDuration: 15 * 60, suggestedMode: 'LIGHT_FOCUS' },
     };
   }
@@ -101,6 +104,7 @@ export function buildActiveIntervention(input: {
       type: 'BOSS_FINISH',
       message: 'One focused session can finish the active boss.',
       actionLabel: 'Deal the Killing Blow',
+      priority: 7,
       metadata: { suggestedDuration: 45 * 60, suggestedMode: 'DEEP_WORK' },
     };
   }
@@ -113,6 +117,7 @@ export function buildActiveIntervention(input: {
       message:
         'Your XP growth slowed this week. A longer session today breaks the plateau.',
       actionLabel: 'Try a Longer Session',
+      priority: 6,
       metadata: { suggestedDuration: 45 * 60 },
     };
   }

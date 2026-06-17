@@ -17,16 +17,7 @@ interface StakeCardProps {
   onPress?: () => void;
 }
 
-      const elementStyle_61 = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: theme.spacing[3],
-  padding: theme.spacing[3],
-  backgroundColor: styles.bgColor,
-  borderRadius: theme.borderRadius.lg,
-  borderWidth: 1,
-  borderColor: styles.borderColor,
-};
+      
 export function StakeCard({
   icon,
   title,
@@ -36,6 +27,8 @@ export function StakeCard({
   onPress,
 }: StakeCardProps): React.ReactNode {
   const { theme } = useTheme();
+
+  
   const getUrgencyStyles = () => {
     switch (urgency) {
       case 'critical':
@@ -69,7 +62,16 @@ export function StakeCard({
   return (
     <CardWrapper onPress={onPress} accessibilityLabel={title}>
       <View
-        style={elementStyle_61}
+        style={{
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: theme.spacing[3],
+  padding: theme.spacing[3],
+  backgroundColor: styles.bgColor,
+  borderRadius: theme.borderRadius.lg,
+  borderWidth: 1,
+  borderColor: styles.borderColor,
+}}
       >
         <View
           style={{

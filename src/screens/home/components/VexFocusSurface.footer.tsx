@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Icon } from '../../../icons/components/Icon';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface VexFocusFooterProps {
   ctaLabel: string;
@@ -18,20 +19,20 @@ export function VexFocusFooter({ ctaLabel, onPressPrimary }: VexFocusFooterProps
             accessibilityHint="Opens the recommended next VEX action"
             label={ctaLabel}
             onPress={onPressPrimary}
-            rightIcon={<Icon color="#FFFFFF" name="arrowRight" size="sm" variant="solid" />}
+            rightIcon={<Icon color={vexLightGlass.text.inverse} name="arrowRight" size="sm" variant="solid" />}
             size="md"
             variant="primary"
           />
         </View>
-        <Text style={{ color: '#6B8F85', fontSize: 13, fontWeight: '600' }}>~30 min</Text>
+        <Text style={{ color: vexLightGlass.text.tertiary, fontSize: 13, fontWeight: '600' }}>~30 min</Text>
       </View>
 
       <View style={{
         alignItems: 'center', flexDirection: 'row', gap: 6,
         marginTop: 10, zIndex: 2,
       }}>
-        <Icon color="#6B8F85" name="chevronRight" size="xs" variant="solid" />
-        <Text style={{ color: '#6B8F85', fontSize: 12, fontWeight: '500' }}>
+        <Icon color={vexLightGlass.text.tertiary} name="chevronRight" size="xs" variant="solid" />
+        <Text style={{ color: vexLightGlass.text.tertiary, fontSize: 12, fontWeight: '500' }}>
           Next move is saved. Open the thread.
         </Text>
       </View>

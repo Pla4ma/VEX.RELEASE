@@ -4,21 +4,21 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
-    const elementStyle_10 = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: theme.spacing[3],
-  padding: theme.spacing[3],
-  backgroundColor: theme.colors.background.primary,
-  borderRadius: theme.borderRadius.lg,
-  borderWidth: 1,
-  borderColor: theme.colors.border.light,
-};
+    
 export function EmptyStakesMessage(): React.ReactNode {
   const { theme } = useTheme();
   return (
     <View
-      style={elementStyle_10}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: theme.spacing[4],
+        gap: theme.spacing[3],
+        borderRadius: theme.borderRadius.lg,
+        backgroundColor: theme.colors.background.secondary,
+        borderWidth: 1,
+        borderColor: theme.colors.semantic.border,
+      }}
     >
       <SessionGlyph name="stake" size={36} />
       <View style={{ flex: 1 }}>

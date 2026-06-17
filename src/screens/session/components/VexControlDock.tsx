@@ -17,19 +17,7 @@ interface VexControlDockProps {
   testID?: string;
 }
 
-          const elementStyle_115 = {
-  width: 0,
-  height: 0,
-  backgroundColor: 'transparent',
-  borderStyle: 'solid',
-  borderLeftWidth: 14,
-  borderRightWidth: 0,
-  borderTopWidth: 8,
-  borderBottomWidth: 8,
-  borderLeftColor: theme.colors.semantic.vexCyan,
-  borderTopColor: 'transparent',
-  borderBottomColor: 'transparent',
-};
+          
 function DockButton({
   onPress,
   children,
@@ -94,6 +82,8 @@ export function VexControlDock({
 }: VexControlDockProps): React.ReactNode {
   const { theme } = useTheme();
 
+  
+
   return (
     <View
       testID={testID}
@@ -126,7 +116,19 @@ export function VexControlDock({
       >
         {isPaused ? (
           <View
-            style={elementStyle_115}
+            style={{
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 14,
+  borderRightWidth: 0,
+  borderTopWidth: 8,
+  borderBottomWidth: 8,
+  borderLeftColor: theme.colors.semantic.vexCyan,
+  borderTopColor: 'transparent',
+  borderBottomColor: 'transparent',
+}}
           />
         ) : (
           <View style={{ flexDirection: 'row', gap: 3 }}>

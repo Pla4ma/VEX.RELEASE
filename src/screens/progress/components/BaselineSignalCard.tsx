@@ -13,18 +13,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { GoalChip } from './GoalChip';
 
-          const elementStyle_117 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.mint[50],
-  borderColor: vexLightGlass.mint[200],
-  borderRadius: 16,
-  borderWidth: 1,
-  flexDirection: 'row',
-  gap: 8,
-  marginTop: 4,
-  paddingHorizontal: 14,
-  paddingVertical: 10,
-};
+          
 const GOAL_ICONS: Record<FocusGoal, string> = {
   WORK: 'target',
   STUDY: 'book',
@@ -127,7 +116,7 @@ export function BaselineSignalCard(): React.ReactNode {
 
         {goal ? (
           <View
-            style={elementStyle_117}
+            style={{}}
           >
             <Icon
               color={vexLightGlass.mint[700]}

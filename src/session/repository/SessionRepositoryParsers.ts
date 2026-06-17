@@ -6,10 +6,10 @@ import {
   SessionStateSchema,
   SessionStatusSchema,
   SessionSummarySchema,
-  type SessionHistoryEntry,
   type SessionState,
   type SessionSummary,
 } from '../types/schemas';
+import type { SessionHistoryEntry } from '../types';
 
 const SessionHistoryEntrySchema = z
   .object({

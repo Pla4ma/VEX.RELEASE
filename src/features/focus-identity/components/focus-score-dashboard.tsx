@@ -41,7 +41,7 @@ export function FocusScoreDashboard({
           <LiquidGlassSphere
             color="pearl"
             icon={
-              <Icon color="#DFA44A" name="exclamation-triangle" size="md" variant="solid" />
+              <Icon color={vexLightGlass.semantic.warning} name="exclamation-triangle" size="md" variant="solid" />
             }
             intensity={0.65}
             size={44}
@@ -86,7 +86,7 @@ export function FocusScoreDashboard({
           <LiquidGlassSphere
             color="cyan"
             icon={
-              <Icon color="#0E7490" name="bolt" size="md" variant="solid" />
+              <Icon color={vexLightGlass.semantic.info} name="bolt" size="md" variant="solid" />
             }
             intensity={0.7}
             size={44}
@@ -130,7 +130,7 @@ export function FocusScoreDashboard({
                 size="sm"
                 variant="primary"
                 rightIcon={
-                  <Icon color="#FFFFFF" name="arrowRight" size="sm" variant="solid" />
+                  <Icon color={vexLightGlass.text.inverse} name="arrowRight" size="sm" variant="solid" />
                 }
               />
             </View>

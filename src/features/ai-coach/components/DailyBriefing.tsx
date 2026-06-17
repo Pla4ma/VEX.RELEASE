@@ -146,7 +146,7 @@ export function DailyBriefing({
             <Box flexDirection="row" flexWrap="wrap" gap="xs">
               {stats.map((stat, i) => (
                 <Box
-                  key={stat.id}
+                  key={`${stat}-${i}`}
                   px="sm"
                   py="xs"
                   bg="semantic.backgroundElevated"

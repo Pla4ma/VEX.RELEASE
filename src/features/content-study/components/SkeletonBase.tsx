@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {
   View,
-  Dimensions,
+  useWindowDimensions,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
@@ -13,8 +13,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './skeleton-styles';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface SkeletonProps {
   width?: number | string;
@@ -30,6 +28,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   style,
 }) => {
   const { theme } = useTheme();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const shimmerAnim = useSharedValue(-1);
   useEffect(() => {
     shimmerAnim.value = withRepeat(

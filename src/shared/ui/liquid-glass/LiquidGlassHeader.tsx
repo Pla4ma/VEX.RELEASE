@@ -5,7 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { FocusCrystalAsset } from './FocusCrystalAsset';
 import { liquidGlassSpacing } from './liquidGlassTokens';
-
+export { liquidGlassSpacing };
 type LiquidGlassHeaderProps = {
   eyebrow: string;
   title: string;
@@ -63,3 +63,4 @@ export function LiquidGlassHeader({
     </View>
   );
 }
+

@@ -90,7 +90,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
               {history && history.length > 0 ? (
                 history.slice(-5).map((point, index) => (
                   <Box
-                    key={point.id}
+                    key={`point-${index}`}
                     flexDirection="row"
                     justifyContent="space-between"
                   >

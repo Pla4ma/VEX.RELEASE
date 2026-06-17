@@ -65,7 +65,7 @@ export function AppScreen({
   );
   if (!keyboardAvoiding) {
     return screen;
-  }
+}
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

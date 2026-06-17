@@ -3,9 +3,9 @@ import React from 'react';
 import { useCompanionPromise } from '../../../features/companion-promise/hooks';
 import {
   CoachPresenceCard,
-  useCoachPresence,
 } from '../../../features/coach-presence/components/CoachPresenceCard';
-import type { FeatureAccessMap } from '../../../features/coach-presence/components/CoachPresenceCard';
+import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
+import { useCoachPresence } from '../../../features/coach-presence/hooks';
 import { HomeCompanionWidget } from './HomeCompanionWidget';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { useHomeCompanion } from '../hooks/useHomeCompanion';

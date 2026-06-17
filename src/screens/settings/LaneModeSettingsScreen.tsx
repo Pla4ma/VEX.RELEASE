@@ -17,26 +17,13 @@ import {
 } from '../onboarding/components/LaneConfirmationStep';
 import {
   LiquidGlassHeader,
-  LiquidGlassScreen,
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 
-                const elementStyle_84 = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  padding: 16,
-  borderRadius: 16,
-  borderWidth: isSelected ? 2 : 1,
-  borderColor: isSelected
-  ? theme.colors.primary[500]
-  : theme.colors.border.DEFAULT,
-  backgroundColor: isSelected
-  ? `${theme.colors.primary[500]}10`
-  : theme.colors.background.secondary,
-  gap: 12,
-};
+                
 const ALL_LANES: Lane[] = [
   'student',
   'game_like',
@@ -58,6 +45,7 @@ const LANE_DESCRIPTIONS: Record<Lane, string> = {
 export const LaneModeSettingsScreen = withScreenErrorBoundary(
   function LaneModeSettingsScreen({ navigation }: Props): React.ReactNode {
     const { theme } = useTheme();
+
     const insets = useSafeAreaInsets();
     const chosenLane = useOnboardingStore(
       (s: { chosenLane: Lane | null }) => s.chosenLane,
@@ -96,7 +84,7 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                 <Pressable
                   key={lane}
                   onPress={() => handleSelectLane(lane)}
-                  style={elementStyle_84}
+                  style={{}}
                   accessibilityLabel={`Select ${LANE_LABELS[lane]}`}
                   accessibilityRole="button"
                   accessibilityHint={`Changes your focus mode to ${LANE_LABELS[lane]}`}

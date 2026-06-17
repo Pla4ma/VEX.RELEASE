@@ -14,19 +14,8 @@ interface FocusScreenHeaderProps {
   body?: string;
 }
 
-          const elementStyle_39 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.glass.fill,
-  borderColor: vexLightGlass.glass.border,
-  borderRadius: 19,
-  borderWidth: 1.5,
-  height: 40,
-  justifyContent: 'center',
-  overflow: 'hidden',
-  boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.85',
-  width: 40,
-};
-const viewStyle_59 = { backgroundColor: vexLightGlass.glass.innerHighlight, borderTopLeftRadius: 21, borderTopRightRadius: 21, height: 1.5, left: 8, position: 'absolute', right: 8, top: 1.2 };
+          
+const viewStyle_59 = { backgroundColor: vexLightGlass.glass.innerHighlight, borderTopLeftRadius: 21, borderTopRightRadius: 21, height: 1.5, left: 8, position: 'absolute' as const, right: 8, top: 1.2 };
 export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderProps): React.ReactNode {
   return (
     <View style={{ marginBottom: 10, paddingTop: 8, width: '100%' }}>
@@ -36,7 +25,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
       <View pointerEvents="none" style={{ opacity: 0.48, position: 'absolute', right: 48, top: -12, zIndex: 0 }}>
         <FloatingDroplets count={5} opacity={0.48} size={52} />
       </View>
-      <View pointerEvents="none" style={{ opacity: 0.45, position: 'absolute', right: 12, top: 8, zIndex: 0 }}>
+      <View pointerEvents="none" style={{ opacity: 0.45, position: 'absolute' as const, right: 12, top: 8, zIndex: 0 }}>
         <WaterBubble size={28} opacity={0.5} />
       </View>
       <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -49,7 +38,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
             accessibilityLabel="Settings"
             accessibilityRole="button"
             onPress={onSettingsPress}
-            style={elementStyle_39}
+            style={{}}
           >
             <GlassBlurLayer intensity={72} radius={19} />
             <LinearGradient
@@ -57,7 +46,7 @@ export function FocusScreenHeader({ onSettingsPress, body }: FocusScreenHeaderPr
               end={{ x: 0, y: 1 }}
               locations={[0, 0.55]}
               start={{ x: 0, y: 0 }}
-              style={{ borderTopLeftRadius: 19, borderTopRightRadius: 19, height: '62%', left: 0, position: 'absolute', right: 0, top: 0 }}
+              style={{ borderTopLeftRadius: 19, borderTopRightRadius: 19, height: '62%', left: 0, position: 'absolute' as const, right: 0, top: 0 }}
             />
             <View pointerEvents="none" style={viewStyle_59} />
             <Icon color={vexLightGlass.text.primary} name="gear" size="sm" variant="outline" />

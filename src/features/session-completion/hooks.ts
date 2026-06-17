@@ -5,6 +5,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { SessionStackParams } from '../../navigation/types';
 import type { SessionSummary } from '../../session/types';
 import type { MasteryState } from '../mastery/types';
+import type { HeadlineReward } from './headline-reward.schemas';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
 import { detectNewlyUnlockedFeatures } from './completion-personalization-step';
@@ -98,7 +99,7 @@ export function useSessionCompleteController({
   rewards: {
     actions: {
       applyCompletionRewards: () => Promise<void>;
-      applyChestRewards: (input: { sessionId: string; rewards: any[] }) => Promise<void>;
+      applyChestRewards: (input: { sessionId: string; rewards: HeadlineReward[] }) => Promise<void>;
       handleRevealComplete: () => void;
       setLevelUpCelebration: React.Dispatch<React.SetStateAction<LevelUpCelebrationState>>;
     };
@@ -135,7 +136,7 @@ export function useSessionCompleteController({
   const rewards = useMemo(() => ({
     actions: {
       applyCompletionRewards: async (): Promise<void> => {},
-      applyChestRewards: async (input: { sessionId: string; rewards: any[] }): Promise<void> => {},
+      applyChestRewards: async (input: { sessionId: string; rewards: HeadlineReward[] }): Promise<void> => {},
       handleRevealComplete: () => {},
       setLevelUpCelebration,
     },

@@ -31,16 +31,7 @@ interface ToneConfig {
   gradientBottom: string;
 }
 
-      const elementStyle_167 = {
-  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  borderTopLeftRadius: height / 2,
-  borderTopRightRadius: height / 2,
-  height: 1.2,
-  left: 6,
-  position: 'absolute',
-  right: 6,
-  top: 1,
-};
+      
 const TONE_CONFIG: Record<GlassPillTone, ToneConfig> = {
   neutral: {
     fill: 'rgba(255, 255, 255, 0.74)',
@@ -175,7 +166,7 @@ export function GlassPillSurface({
       />
       <View
         pointerEvents="none"
-        style={elementStyle_167}
+        style={{}}
       />
       {children}
     </View>

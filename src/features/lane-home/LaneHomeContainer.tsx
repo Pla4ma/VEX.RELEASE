@@ -1,4 +1,4 @@
-import React from 'react';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { useHomeViewModel } from '../../screens/home/hooks/useHomeViewModel';
@@ -14,10 +14,10 @@ import { buildLaneViewModel } from './service';
 import type { LaneViewModel } from './service';
 
 const CAPTURE_ACTIONS = [
-  { id: 'braindump', label: 'Brain Dump', icon: 'message-circle', color: '#12BFA0', priority: 1 },
-  { id: 'voice', label: 'Voice Note', icon: 'mic', color: '#3B82F6', priority: 2 },
-  { id: 'photo', label: 'Photo', icon: 'camera', color: '#F97316', priority: 3 },
-  { id: 'link', label: 'Link', icon: 'link', color: '#8B5CF6', priority: 4 },
+  { id: 'braindump', label: 'Brain Dump', icon: 'message-circle', color: vexLightGlass.mint[500], priority: 1 },
+  { id: 'voice', label: 'Voice Note', icon: 'mic', color: vexLightGlass.semantic.info, priority: 2 },
+  { id: 'photo', label: 'Photo', icon: 'camera', color: vexLightGlass.semantic.fire, priority: 3 },
+  { id: 'link', label: 'Link', icon: 'link', color: vexLightGlass.semantic.accent, priority: 4 },
 ];
 
 export function LaneHomeContainer(): React.JSX.Element {

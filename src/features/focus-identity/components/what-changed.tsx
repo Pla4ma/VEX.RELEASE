@@ -39,10 +39,9 @@ export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
         <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
           <LiquidGlassSphere
             color="pearl"
-            icon={
-              <Icon
-                color="#0C765F"
-                name="activity"
+            icon={                <Icon
+                    color={vexLightGlass.mint[700]}
+                    name="activity"
                 size="sm"
                 variant="solid"
               />
@@ -73,9 +72,8 @@ export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
             >
               <LiquidGlassSphere
                 color={mapOrbToSphereColor(change.orb)}
-                icon={
-                  <Icon
-                    color="#0C765F"
+                icon={                    <Icon
+                    color={vexLightGlass.mint[700]}
                     name={change.icon}
                     size="xs"
                     variant="solid"

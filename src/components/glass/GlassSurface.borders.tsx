@@ -7,16 +7,7 @@ interface BorderProps {
   width: number;
 }
 
-    const elementStyle_36 = {
-  borderColor: color,
-  borderRadius: radius + 1,
-  borderWidth: 1,
-  bottom: -2,
-  left: -2,
-  position: 'absolute',
-  right: -2,
-  top: -2,
-};
+    
 export function GlassBorder({ color, radius, width }: BorderProps): React.ReactNode {
   return (
     <View
@@ -44,7 +35,7 @@ export function GlassOuterBorder({ color, radius }: OuterBorderProps): React.Rea
   return (
     <View
       pointerEvents="none"
-      style={elementStyle_36}
+      style={{}}
     />
   );
 }

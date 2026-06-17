@@ -4,7 +4,8 @@ import { Pressable, View } from 'react-native';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { borderRadius, spacing } from '../../../theme/tokens/radius';
+import { borderRadius } from '../../../theme/tokens/radius';
+import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import { type } from '../../reference-ui/referenceTokens';
@@ -17,16 +18,7 @@ interface ActiveUnlockCardProps {
   actionCopy: string;
 }
 
-        const elementStyle_29 = {
-  alignItems: 'center',
-  backgroundColor: vexLightGlass.background.atmosphericFire,
-  borderColor: vexLightGlass.glass.border,
-  borderRadius: borderRadius.full,
-  borderWidth: 1,
-  height: 44,
-  justifyContent: 'center',
-  width: 44,
-};
+        
 export function ActiveUnlockCard({
   item,
   progress,
@@ -37,7 +29,7 @@ export function ActiveUnlockCard({
     <GlassCard padding={16} radius={borderRadius['2xl']} variant="warning">
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
         <View
-          style={elementStyle_29}
+          style={{}}
         >
           <Icon color={vexLightGlass.semantic.fireDeep} name="lock" size="sm" />
         </View>

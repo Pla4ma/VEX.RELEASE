@@ -112,7 +112,7 @@ export function FocusScoreHomeWidget({
             <LiquidGlassSphere
               color="cyan"
               icon={
-                <Icon color="#0E7490" name="bolt" size="sm" variant="solid" />
+                <Icon color={vexLightGlass.semantic.info} name="bolt" size="sm" variant="solid" />
               }
               intensity={0.88}
               size={52}

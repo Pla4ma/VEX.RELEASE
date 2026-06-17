@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, Dimensions, Pressable } from 'react-native';
+import { View, Text, Modal, Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -19,8 +19,6 @@ import {
 import { levelUpStyles as styles } from './level-up-styles';
 import { lightColors } from '@/theme/tokens/colors';
 
-const { width, height } = Dimensions.get('window');
-
 export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
   isVisible,
   previousLevel,
@@ -35,6 +33,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
   const rotateAnim = useSharedValue(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
+  const { width, height } = useWindowDimensions();
 
   if (isVisible !== prevIsVisible) {
     setPrevIsVisible(isVisible);

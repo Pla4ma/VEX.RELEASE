@@ -6,10 +6,6 @@ interface TopEdgeHighlightProps {
   radius: number;
 }
 
-  const viewStyle_57 = {
-  borderColor: color, borderRadius: radius + 2, borderWidth: 1.5,
-  bottom: -3, left: -3, position: 'absolute', right: -3, top: -3,
-};
 export function TopEdgeHighlight({ intensity, radius }: TopEdgeHighlightProps): React.ReactNode {
   return (
     <View pointerEvents="none" style={{
@@ -59,6 +55,9 @@ interface GlassOuterBorderProps { color: string; radius: number }
 
 export function GlassOuterBorder({ color, radius }: GlassOuterBorderProps): React.ReactNode {
   return (
-    <View pointerEvents="none" style={viewStyle_57} />
+    <View pointerEvents="none" style={{
+      borderColor: color, borderRadius: radius + 2, borderWidth: 1.5,
+      bottom: -3, left: -3, position: 'absolute', right: -3, top: -3,
+    }} />
   );
 }

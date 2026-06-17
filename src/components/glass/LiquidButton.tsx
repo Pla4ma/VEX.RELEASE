@@ -35,17 +35,7 @@ interface LiquidButtonProps {
   testID?: string;
 }
 
-        const elementStyle_126 = {
-  alignItems: 'center',
-  bottom: 0,
-  flexDirection: 'row',
-  gap: 8,
-  justifyContent: 'center',
-  left: 0,
-  position: 'absolute',
-  right: 0,
-  top: 0,
-};
+        
 export function LiquidButton({
   label,
   onPress,
@@ -135,7 +125,9 @@ export function LiquidButton({
           colors={v.gradientColors as readonly [string, string, ...string[]]}
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
-          style={elementStyle_126}
+          style={{
+            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          }}
         />
 
         <LiquidButtonGlassEffects variant={variant} isPrimary={isPrimary} />

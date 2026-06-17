@@ -6,6 +6,7 @@ import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
+import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface ProjectAtlasCardProps {
   title?: string;
@@ -52,7 +53,7 @@ export function ProjectAtlasCard({
         <LiquidGlassSphere
           color="cyan"
           icon={
-            <Icon color="#0E7490" name="book" size="sm" strokeWidth="thin" variant="outline" />
+            <Icon color={vexLightGlass.semantic.info} name="book" size="sm" strokeWidth="thin" variant="outline" />
           }
           intensity={0.92}
           size={52}
@@ -60,7 +61,7 @@ export function ProjectAtlasCard({
         <View style={{ flex: 1 }}>
           <Text
             style={{
-              color: '#0A1F1A',
+              color: vexLightGlass.text.primary,
               fontSize: 15,
               fontWeight: '800',
               letterSpacing: -0.2,
@@ -70,7 +71,7 @@ export function ProjectAtlasCard({
           </Text>
           <Text
             style={{
-              color: '#3D5A52',
+              color: vexLightGlass.text.secondary,
               fontSize: 12,
               fontWeight: '400',
             }}
@@ -78,7 +79,7 @@ export function ProjectAtlasCard({
             {subtitle}
           </Text>
         </View>
-        <Icon color="#6B8F85" name="chevronRight" size="sm" strokeWidth="thin" variant="outline" />
+        <Icon color={vexLightGlass.text.tertiary} name="chevronRight" size="sm" strokeWidth="thin" variant="outline" />
       </View>
     </GlassCard>
   );

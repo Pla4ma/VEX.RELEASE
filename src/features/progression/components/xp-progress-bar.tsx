@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -14,8 +14,6 @@ import { styles } from './xp-progress-bar.styles';
 import { lightColors } from '@/theme/tokens/colors';
 import type { XpProgressBarProps } from './xp-progress-bar-types';
 
-const { width } = Dimensions.get('window');
-const BAR_WIDTH = width - 48;
 const BAR_HEIGHT = 24;
 
 export const XpProgressBar: React.FC<XpProgressBarProps> = ({
@@ -30,6 +28,8 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
   const progressAnim = useSharedValue(0);
   const pulseAnim = useSharedValue(1);
   const [showLevelUp, setShowLevelUp] = useState(false);
+  const { width } = useWindowDimensions();
+  const BAR_WIDTH = width - 48;
   const [particles, setParticles] = useState<
     Array<{ id: number; x: number; y: number }>
   >([]);
@@ -56,8 +56,9 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({
       }));
       setParticles(newParticles);
       const timer = setTimeout(() => setParticles([]), 1000);
-      return () => clearTimeout(timer);
+      return () => { clearTimeout(timer); };
     }
+    return undefined;
   }, [isAnimating, xpJustAdded, progressWidth, pulseAnim]);
 
   const [prevProgressPercent, setPrevProgressPercent] = useState(progressPercent);

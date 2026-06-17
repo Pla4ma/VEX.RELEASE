@@ -115,7 +115,7 @@ export function PathSelectionCard({
                 justifyContent: 'center',
               }}
             >
-              <Icon name="check" size={16} color="#FFFFFF" />
+              <Icon name="check" size={16} color={vexLightGlass.text.inverse} />
             </Animated.View>
           )}
         </View>

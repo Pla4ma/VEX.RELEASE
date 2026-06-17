@@ -15,16 +15,7 @@ interface EmptyStateProps {
   accessibilityLabel?: string;
 }
 
-      const elementStyle_40 = {
-  width: 72,
-  height: 72,
-  borderRadius: 36,
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: theme.colors.semantic.vexCyanSoft,
-  borderColor: theme.colors.semantic.border,
-  borderWidth: 1,
-};
+      
 export function EmptyState({
   iconName,
   title,
@@ -34,6 +25,8 @@ export function EmptyState({
   accessibilityLabel,
 }: EmptyStateProps): React.ReactNode {
   const { theme } = useTheme();
+
+  
 
   return (
     <View
@@ -48,7 +41,16 @@ export function EmptyState({
       accessibilityRole="text"
     >
       <View
-        style={elementStyle_40}
+        style={{
+  width: 72,
+  height: 72,
+  borderRadius: 36,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: theme.colors.semantic.vexCyanSoft,
+  borderColor: theme.colors.semantic.border,
+  borderWidth: 1,
+}}
       >
         <Icon
           name={iconName}

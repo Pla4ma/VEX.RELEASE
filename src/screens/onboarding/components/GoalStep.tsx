@@ -4,9 +4,9 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import {
   ONBOARDING_GOALS,
-  type OnboardingGoal,
-} from '../../../features/onboarding/constants';
-import { useTheme } from '../../../features/onboarding/constants';
+  } from '../../../features/onboarding/constants';
+import { useTheme } from '../../../theme/ThemeContext';
+import type { OnboardingGoal } from '../../../features/onboarding/schemas';
 import { styles } from '../styles';
 import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 

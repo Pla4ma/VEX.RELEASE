@@ -16,6 +16,10 @@ import {
 
 type Subscription = ReturnType<typeof subscribeToCoachMessages>;
 
+function cleanupSubscription(subscription: Subscription): void {
+  subscription();
+}
+
 export function useRealtimeCoachMessages(userId: string) {
   const queryClient = useQueryClient();
   const subscriptionRef = useRef<Subscription | null>(null);
@@ -68,7 +72,7 @@ export function useRealtimeCoachMessages(userId: string) {
     });
     subscriptionRef.current = subscription;
     return () => {
-      subscription.unsubscribe();
+      cleanupSubscription(subscription);
     };
   }, [userId, queryClient]);
 
@@ -87,7 +91,7 @@ export function useRealtimeCoachState(userId: string) {
       queryClient.setQueryData(COACH_QUERY_KEYS.state(userId), record.new);
     });
     return () => {
-      subscription.unsubscribe();
+      cleanupSubscription(subscription);
     };
   }, [userId, queryClient]);
 }
@@ -105,7 +109,7 @@ export function useRealtimeComebackPlan(userId: string) {
       });
     });
     return () => {
-      subscription.unsubscribe();
+      cleanupSubscription(subscription);
     };
   }, [userId, queryClient]);
 }
@@ -123,7 +127,7 @@ export function useRealtimeRecommendations(userId: string) {
       });
     });
     return () => {
-      subscription.unsubscribe();
+      cleanupSubscription(subscription);
     };
   }, [userId, queryClient]);
 }

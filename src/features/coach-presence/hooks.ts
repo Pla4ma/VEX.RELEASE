@@ -60,7 +60,7 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
 
   const fallbackMemory = enabled ? UNAVAILABLE_MEMORY : EMPTY_MEMORY;
   const memorySummary = data ?? fallbackMemory;
-  const data = memorySummary
+  const presence = memorySummary
     ? buildCoachPresence({
         companion: input.companion,
         featureAvailability: {
@@ -80,7 +80,7 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
     : undefined;
 
   return {
-    data,
+    data: presence,
     error: error,
     isError: isError,
     isPending: isPending,

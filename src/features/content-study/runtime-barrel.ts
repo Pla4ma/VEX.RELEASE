@@ -138,3 +138,5 @@ export {
 // Visibility Gate
 export { buildContentStudyVisibility } from './content-study-visibility';
 export type { ContentStudyVisibility } from './content-study-visibility';
+
+export { useLearningExecutionLayer } from '../learning-execution/hooks';

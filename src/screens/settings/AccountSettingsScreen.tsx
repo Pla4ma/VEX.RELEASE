@@ -14,9 +14,9 @@ import { TwoFactorSection } from './TwoFactorSection';
 import { PasswordChangeSection } from './PasswordChangeSection';
 import {
   LiquidGlassHeader,
-  LiquidGlassScreen,
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 

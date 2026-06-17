@@ -139,7 +139,7 @@ export function AtRiskBanner({
               >
                 START
               </Text>
-              <Icon color="#FFFFFF" name="arrowRight" size="xs" variant="solid" />
+              <Icon color={vexLightGlass.text.inverse} name="arrowRight" size="xs" variant="solid" />
             </View>
           </View>
           <View style={{ marginTop: 12 }}>

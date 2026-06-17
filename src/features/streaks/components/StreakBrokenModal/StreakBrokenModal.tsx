@@ -1,6 +1,6 @@
 import { captureSilentFailure } from '../../../../utils/silent-failure';
 import React from 'react';
-import { Modal, Dimensions } from 'react-native';
+import { Modal, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { Box } from '../../../../components/primitives/Box';
@@ -18,8 +18,6 @@ import {
 } from './Subcomponents';
 import { RestoreStreakCard } from './RestoreStreakCard';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
 export function StreakBrokenModal({
   visible,
   brokenStreakDays,
@@ -36,6 +34,7 @@ export function StreakBrokenModal({
 }: StreakBrokenModalProps): React.ReactNode {
   const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
   const [isRestoring, setIsRestoring] = useState(false);
   const [restoreError, setRestoreError] = useState<string | null>(null);
 

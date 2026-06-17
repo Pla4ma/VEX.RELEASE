@@ -101,7 +101,7 @@ export function ScoreChartSvg({
         const isLatest = i === history.length - 1;
         return (
           <Circle
-            key={`point-${history[i]?.id ?? i}`}
+            key={`point-${i}`}
             cx={x}
             cy={y}
             r={isLatest ? 6 : 4}

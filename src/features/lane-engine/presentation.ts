@@ -1,5 +1,7 @@
-import { LanePresentationPolicySchema } from './presentation-schemas';
+export { useInitialLane } from './hooks';
+export { useReducedMotion } from '../../hooks/useReducedMotion';
 import type { Lane, LanePresentationPolicy } from './presentation-types';
+import { LanePresentationPolicySchema } from './presentation-schemas';
 
 type BaseLanePresentationPolicy = Omit<
   LanePresentationPolicy,

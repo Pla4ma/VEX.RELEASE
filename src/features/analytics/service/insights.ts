@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { fetchTimeSeriesData } from '../repository/time-series';
-import { createInsight } from '../repository/insights';
+import { createInsight as persistInsight } from '../repository/insights';
 import {
   ComparativeStatsSchema,
   InsightSchema,
@@ -82,7 +82,7 @@ async function createInsight(
     actionPayload: validated.actionPayload,
     relatedMetrics: validated.relatedMetrics,
   });
-  await createInsight(insight);
+  await persistInsight(insight);
   eventBus.publish('analytics:insight_generated', {
     userId: validated.userId,
     insightId: insight.id,

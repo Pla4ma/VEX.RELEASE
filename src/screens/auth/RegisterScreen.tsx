@@ -9,7 +9,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, View, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AppScreen, Text } from '../../components/primitives/AppScreen';
+import { AppScreen } from '../../components/primitives/AppScreen';
+import { Text } from '../../components/primitives/Text';
 import type { AuthStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { useToast } from '../../shared/ui/components/Toast';

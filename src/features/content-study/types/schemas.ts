@@ -83,6 +83,7 @@ export const StudyGenerationSchema = z.object({
   lastAccessedAt: z.string().optional(),
   accessCount: z.number(),
   isArchived: z.boolean(),
+  isLlmGenerated: z.boolean().default(true),
 });
 
 export const SubmitFeedbackRequestSchema = z.object({

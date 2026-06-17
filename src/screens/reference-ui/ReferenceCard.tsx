@@ -13,16 +13,7 @@ interface ReferenceCardProps {
   style?: ViewStyle;
 }
 
-        const elementStyle_39 = {
-  backgroundColor: railColor,
-  borderRadius: 999,
-  height: 3,
-  left: 18,
-  opacity: glow ? 0.32 : 0.24,
-  position: 'absolute',
-  right: 80,
-  top: 2,
-};
+        
 export function ReferenceCard({
   accent,
   asset,
@@ -47,7 +38,7 @@ export function ReferenceCard({
       {glow || accent === 'fire' ? (
         <View
           pointerEvents="none"
-          style={elementStyle_39}
+          style={{}}
         />
       ) : null}
       {showAsset ? (

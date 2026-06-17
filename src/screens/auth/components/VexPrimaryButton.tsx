@@ -15,17 +15,7 @@ type VexActivationButtonProps = {
   onPress: () => void;
 };
 
-        const elementStyle_50 = {
-  alignItems: 'center',
-  backgroundColor: etherealButton.googleFill,
-  borderColor: etherealButton.googleBorder,
-  borderWidth: 1,
-  justifyContent: 'center',
-  minHeight: 62,
-  minWidth: 296,
-  paddingHorizontal: theme.spacing[6],
-  boxShadow: '0px 12px 24px etherealButton.buttonShadow / 0.42',
-};
+        
 export function VexActivationButton({
   label,
   loadingLabel,
@@ -33,6 +23,8 @@ export function VexActivationButton({
   onPress,
 }: VexActivationButtonProps): React.JSX.Element {
   const { theme } = useTheme();
+
+  
   const { handlePressIn, handlePressOut } = useButtonPressHandlers(true);
 
   return (
@@ -59,7 +51,17 @@ export function VexActivationButton({
         ]}
       >
         <View
-          style={elementStyle_50}
+          style={{
+  alignItems: 'center',
+  backgroundColor: etherealButton.googleFill,
+  borderColor: etherealButton.googleBorder,
+  borderWidth: 1,
+  justifyContent: 'center',
+  minHeight: 62,
+  minWidth: 296,
+  paddingHorizontal: theme.spacing[6],
+  boxShadow: '0px 12px 24px etherealButton.buttonShadow / 0.42',
+}}
         >
           <View
             pointerEvents="none"

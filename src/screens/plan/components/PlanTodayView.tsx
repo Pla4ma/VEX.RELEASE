@@ -22,21 +22,7 @@ interface PlanTodayViewProps {
   onStartSession: (itemId: string, title: string) => void;
 }
 
-            const elementStyle_98 = {
-  width: 24,
-  height: 24,
-  borderRadius: 12,
-  borderWidth: 2,
-  borderColor: item.status === 'done'
-  ? vexLightGlass.mint[500]
-  : vexLightGlass.glass.border,
-  backgroundColor: item.status === 'done'
-  ? vexLightGlass.mint[500]
-  : 'transparent',
-  alignItems: 'center',
-  justifyContent: 'center',
-  ...getMinTouchTargetStyle(),
-};
+            
 export function PlanTodayView({
   items,
   isLoading,
@@ -111,7 +97,7 @@ export function PlanTodayView({
               accessibilityRole="button"
               accessibilityState={{ checked: item.status === 'done' }}
               onPress={() => onCompleteItem(item.id)}
-              style={elementStyle_98}
+              style={{}}
             >
               {item.status === 'done' && (
                 <Icon

@@ -13,16 +13,7 @@ import { lightColors } from '@/theme/tokens/colors';
  * Extracted orbital animation setup and noise grain rendering
  */
 
-        const elementStyle_42 = {
-  position: 'absolute',
-  top: `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  width: 2 + Math.random() * 3,
-  height: 2 + Math.random() * 3,
-  borderRadius: 1,
-  backgroundColor: lightColors.text.inverse,
-  opacity: Math.random() * 0.5,
-};
+        
 export function useOrbitalAnimation(isReducedMotion: boolean) {
   const orbital = useSharedValue(0);
 
@@ -50,7 +41,7 @@ export function renderNoiseGrain(): React.JSX.Element {
       {Array.from({ length: 40 }).map((_, i) => (
         <View
           key={i}
-          style={elementStyle_42}
+          style={{}}
         />
       ))}
     </View>

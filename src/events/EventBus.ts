@@ -4,6 +4,7 @@ import {
   type EventHandler,
 } from './EventEmitter';
 import type { EventChannels } from './EventTypes';
+export type { EventChannels } from './EventTypes';
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('events:bus');
 const isDevRuntime = typeof __DEV__ !== 'undefined' && __DEV__;

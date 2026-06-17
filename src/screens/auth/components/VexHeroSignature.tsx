@@ -23,7 +23,7 @@ import {
   glowStyleTealAccent,
 } from './VexHeroSignature.paths';
 
-const elementStyle_175 = { fontSize: 14, lineHeight: 20, fontWeight: '400', textAlign: 'center', maxWidth: 280, letterSpacing: 0.6, opacity: 0.85, marginTop: 4 };
+
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 
 /* --- AURUM-style gold flourish above the wordmark --- */
@@ -43,7 +43,7 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
         <Defs>
           <SvgLinearGradient id="flourishGrad" x1="0" y1="0" x2="1" y2="0">
             {FLOURISH_GRADIENT_STOPS.map((s, i) => (
-              <Stop key={s.id} offset={s.offset} stopColor={s.stopColor} />
+              <Stop key={`stop-${i}`} offset={s.offset} stopColor={s.stopColor} />
             ))}
           </SvgLinearGradient>
         </Defs>
@@ -167,14 +167,14 @@ export function VexHeroSignature({
       <Flourish isReducedMotion={isReducedMotion} />
       <Animated.View style={[{ flexDirection: 'row', marginTop: 4, height: 100 }, wordBreath]}>
         {title.split('').map((c, i) => (
-          <VexLetter key={c.id} char={c} index={i} isReducedMotion={isReducedMotion} />
+          <VexLetter key={`title-${i}`} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
       <Underline isReducedMotion={isReducedMotion} />
       <Animated.View style={tagStyle}>
         <Text
           color="text.secondary"
-          style={elementStyle_175}
+          style={{}}
         >
           {tagline}
         </Text>

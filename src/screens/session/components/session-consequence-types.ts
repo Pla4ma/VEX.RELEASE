@@ -2,6 +2,7 @@ import { Dimensions } from 'react-native';
 
 export const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export const CARD_WIDTH = SCREEN_WIDTH * 0.7;
+export const getCardWidth = (screenWidth: number): number => screenWidth * 0.7;
 
 export interface SessionConsequenceCardsProps {
   bossConsequence?: {

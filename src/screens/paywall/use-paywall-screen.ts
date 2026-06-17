@@ -12,7 +12,7 @@ import {
 import {
   PurchaseEvents,
   createPaywallProperties,
-} from '../../shared/monetization/use-revenuecat';
+} from '../../shared/monetization/purchase-events';
 import {
   FEATURE_HIGHLIGHT_MAP,
   buildPackageSelection,

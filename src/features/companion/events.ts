@@ -125,23 +125,32 @@ export function emitCompanionMilestone(
  * Subscribe to companion events
  */
 export function subscribeToCompanionEvents() {
+  const unsubs: Array<() => void> = [];
   return {
-    onStateChanged: (callback: (data: Record<string, unknown>) => void) =>
-      eventBus.subscribe(
+    cleanup: () => unsubs.forEach((fn) => fn()),
+    onStateChanged: (callback: (data: Record<string, unknown>) => void) => {
+      const unsub = eventBus.subscribe(
         'companion:state_changed',
         callback as (data: unknown) => void,
-      ),
-
-    onEvolution: (callback: (data: Record<string, unknown>) => void) =>
-      eventBus.subscribe(
+      );
+      unsubs.push(unsub);
+      return unsub;
+    },
+    onEvolution: (callback: (data: Record<string, unknown>) => void) => {
+      const unsub = eventBus.subscribe(
         'companion:evolution',
         callback as (data: unknown) => void,
-      ),
-
-    onMilestone: (callback: (data: Record<string, unknown>) => void) =>
-      eventBus.subscribe(
+      );
+      unsubs.push(unsub);
+      return unsub;
+    },
+    onMilestone: (callback: (data: Record<string, unknown>) => void) => {
+      const unsub = eventBus.subscribe(
         'companion:milestone_reached',
         callback as (data: unknown) => void,
-      ),
+      );
+      unsubs.push(unsub);
+      return unsub;
+    },
   };
 }

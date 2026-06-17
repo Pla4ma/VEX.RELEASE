@@ -78,13 +78,13 @@ export function GoalChip({
         })}
       >
         <Icon
-          color={isSelected ? '#FFFFFF' : vexLightGlass.mint[700]}
+          color={isSelected ? vexLightGlass.text.inverse : vexLightGlass.mint[700]}
           name={icon}
           size="sm"
         />
         <Text
           style={{
-            color: isSelected ? '#FFFFFF' : vexLightGlass.text.primary,
+            color: isSelected ? vexLightGlass.text.inverse : vexLightGlass.text.primary,
             fontSize: 13,
             fontWeight: isSelected ? '800' : '700',
           }}

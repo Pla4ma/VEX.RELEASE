@@ -16,9 +16,9 @@ import { NotificationScheduleSection } from './NotificationScheduleSection';
 import { notificationGroups } from './notification-groups';
 import {
   LiquidGlassHeader,
-  LiquidGlassScreen,
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
+import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 
 type Props = NativeStackScreenProps<
   SettingsStackParams,

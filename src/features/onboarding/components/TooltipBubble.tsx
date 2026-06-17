@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Dimensions } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -11,32 +11,6 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-
-        const elementStyle_109 = {
-  position: 'absolute',
-  [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
-  left: '50%',
-  marginLeft: -10,
-  width: 0,
-  height: 0,
-  backgroundColor: 'transparent',
-  borderStyle: 'solid',
-  borderLeftWidth: 10,
-  borderRightWidth: 10,
-  borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
-  borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
-  borderLeftColor: 'transparent',
-  borderRightColor: 'transparent',
-  borderTopColor:
-  tooltip.arrowDirection === 'up'
-  ? theme.colors.primary[500]
-  : 'transparent',
-  borderBottomColor:
-  tooltip.arrowDirection === 'up'
-  ? 'transparent'
-  : theme.colors.primary[500],
-};
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface Tooltip {
   id: number;
@@ -60,6 +34,9 @@ export function TooltipBubble({
   onDismiss: () => void;
 }): React.ReactNode | null {
   const { theme } = useTheme();
+  const { width: SCREEN_WIDTH } = useWindowDimensions();
+
+  
 
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
@@ -131,7 +108,30 @@ export function TooltipBubble({
         </Box>
 
         <Box
-          style={elementStyle_109}
+          style={{
+  position: 'absolute',
+  [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
+  left: '50%',
+  marginLeft: -10,
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 10,
+  borderRightWidth: 10,
+  borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
+  borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderTopColor:
+  tooltip.arrowDirection === 'up'
+  ? theme.colors.primary[500]
+  : 'transparent',
+  borderBottomColor:
+  tooltip.arrowDirection === 'up'
+  ? 'transparent'
+  : theme.colors.primary[500],
+}}
         />
       </Pressable>
     </Animated.View>

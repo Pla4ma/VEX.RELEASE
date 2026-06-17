@@ -27,7 +27,7 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ score }) => {
         <LiquidGlassSphere
           color="cyan"
           icon={
-            <Icon color="#0E7490" name="bolt" size="md" strokeWidth="thin" variant="outline" />
+            <Icon color={vexLightGlass.semantic.info} name="bolt" size="md" strokeWidth="thin" variant="outline" />
           }
           intensity={0.75}
           size={44}
@@ -76,7 +76,7 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ score }) => {
           label="Start session"
           onPress={() => {}}
           rightIcon={
-            <Icon color="#FFFFFF" name="arrowRight" size="sm" variant="solid" />
+            <Icon color={vexLightGlass.text.inverse} name="arrowRight" size="sm" variant="solid" />
           }
           size="sm"
           variant="primary"

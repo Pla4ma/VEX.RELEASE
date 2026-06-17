@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import Svg, {
   Circle,
   Defs,
@@ -9,9 +9,8 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 
-const { width, height } = Dimensions.get('window');
-
 export function LiquidGlassBackdrop(): React.ReactNode {
+  const { width, height } = useWindowDimensions();
   return (
     <Svg
       height={height}

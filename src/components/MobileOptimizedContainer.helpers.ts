@@ -14,11 +14,9 @@ export const isTablet = width > 768;
  */
 export const getResponsiveFontSize = (baseSize: number): number => {
   if (isSmallScreen) {
-    // Reduce font sizes by ~10% on small screens
     return Math.round(baseSize * 0.9);
   }
   if (isTablet) {
-    // Increase slightly on tablets
     return Math.round(baseSize * 1.1);
   }
   return baseSize;

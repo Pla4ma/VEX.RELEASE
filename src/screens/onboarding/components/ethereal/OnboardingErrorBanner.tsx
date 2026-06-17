@@ -5,6 +5,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import { vexLightGlass } from '../../../../theme/tokens/vex-light-glass';
+
 import { Text } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
 
@@ -29,7 +31,7 @@ export function OnboardingErrorBanner({
         gap: 8,
       }}
     >
-      <Text fontSize={13} fontWeight="700" style={{ color: '#7A3E0F' }}>
+      <Text fontSize={13} fontWeight="700" style={{ color: vexLightGlass.semantic.fireDeep }}>
         Setup status
       </Text>
       <Text

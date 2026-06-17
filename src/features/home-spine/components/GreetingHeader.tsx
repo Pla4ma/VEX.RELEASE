@@ -31,19 +31,7 @@ export interface GreetingHeaderProps {
   unreadNotificationCount?: number;
 }
 
-                const elementStyle_131 = {
-  position: 'absolute',
-  top: 4,
-  right: 4,
-  minWidth: 18,
-  height: 18,
-  borderRadius: 9,
-  backgroundColor: theme.colors.error.DEFAULT,
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderWidth: 2,
-  borderColor: theme.colors.background.primary,
-};
+                
 function getGreeting(hour: number): string {
   if (hour < 12) {
     return 'Good morning';
@@ -71,6 +59,8 @@ export function GreetingHeader({
   unreadNotificationCount = 0,
 }: GreetingHeaderProps): React.ReactNode {
   const { theme } = useTheme();
+
+  
   const hour = new Date().getHours();
   const greeting = useMemo(() => getGreeting(hour), [hour]);
 
@@ -142,7 +132,19 @@ export function GreetingHeader({
               />
               {hasUnread && (
                 <Box
-                  style={elementStyle_131}
+                  style={{
+  position: 'absolute',
+  top: 4,
+  right: 4,
+  minWidth: 18,
+  height: 18,
+  borderRadius: 9,
+  backgroundColor: theme.colors.error.DEFAULT,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 2,
+  borderColor: theme.colors.background.primary,
+}}
                 >
                   <Text
                     variant="caption"

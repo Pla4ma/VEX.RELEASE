@@ -37,16 +37,7 @@ export function CoachMessageBubble({
     expanded || !isLongMessage
       ? message.content
       : message.content.slice(0, 200) + '...';
-  index = 0,
-  onActionPress,
-}: CoachMessageBubbleProps): React.ReactNode {
-  const { theme } = useTheme();
-  const [expanded, setExpanded] = useState(false);
-  const isLongMessage = message.content.length > 200;
-  const displayContent =
-    expanded || !isLongMessage
-      ? message.content
-      : message.content.slice(0, 200) + '...';
+
   return (
     <Animated.View
       entering={FadeInUp.duration(400)

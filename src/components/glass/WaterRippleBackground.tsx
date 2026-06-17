@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, {
   Circle,
@@ -14,9 +14,8 @@ import Svg, {
 } from 'react-native-svg';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
-const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
-
 export function WaterRippleBackground(): React.ReactNode {
+  const { width: SCREEN_W, height: SCREEN_H } = useWindowDimensions();
   return (
     <View
       pointerEvents="none"

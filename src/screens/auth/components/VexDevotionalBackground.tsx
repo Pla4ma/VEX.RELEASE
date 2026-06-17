@@ -84,7 +84,7 @@ export const VexDevotionalBackground = memo(function VexDevotionalBackground(): 
 
         <Group>
           {curves.map((d, i) => (
-            <FlowCurve key={d.id} d={d} spec={CURVE_STROKES[i]!} isReducedMotion={isReducedMotion} />
+            <FlowCurve key={`curve-${i}`} d={d} spec={CURVE_STROKES[i]!} isReducedMotion={isReducedMotion} />
           ))}
         </Group>
       </Canvas>

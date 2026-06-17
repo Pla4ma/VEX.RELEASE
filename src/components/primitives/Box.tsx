@@ -16,6 +16,9 @@ export type { BoxProps } from './BoxProps';
 /**
  * Box component
  */
+export { Card as Card } from './Card';
+export { Button as Button } from './Button';
+
 export function Box({
   flex,
   flexDirection,

@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Dimensions, ScrollView } from 'react-native';
+import { ScrollView, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Animated, {
@@ -32,7 +32,9 @@ import {
   type SessionMoodEntry,
 } from './components/CompanionStatsBar';
 
-const HERO_HEIGHT = Dimensions.get('window').height * 0.6;
+function getHeroHeight(screenHeight: number): number {
+  return screenHeight * 0.6;
+}
 
 type LoadState =
   | { status: 'empty' }
@@ -46,6 +48,8 @@ type LoadState =
 
 export function CompanionScreen(): React.ReactNode {
   const { theme } = useTheme();
+  const { height: screenHeight } = useWindowDimensions();
+  const heroHeight = getHeroHeight(screenHeight);
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const reducedMotion = useReducedMotion();
@@ -78,7 +82,7 @@ export function CompanionScreen(): React.ReactNode {
   }, [load]);
 
   if (loadState.status === 'loading') {
-    return <CompanionScreenSkeleton heroHeight={HERO_HEIGHT} />;
+    return <CompanionScreenSkeleton heroHeight={heroHeight} />;
   }
   if (loadState.status === 'empty') {
     return (
@@ -117,7 +121,7 @@ export function CompanionScreen(): React.ReactNode {
     >
       <Animated.View entering={fadeIn}>
         <Box
-          height={HERO_HEIGHT}
+          height={heroHeight}
           bg="background.secondary"
           justifyContent="center"
           alignItems="center"

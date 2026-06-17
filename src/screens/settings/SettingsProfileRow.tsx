@@ -37,7 +37,7 @@ export function SettingsProfileRow({
           </Text>
           <Box flexDirection="row" mt={8}>
             <Badge variant="primary" size="sm" leftIcon="star">
-              <Text>Pro</Text>
+              Pro
             </Badge>
           </Box>
         </Box>

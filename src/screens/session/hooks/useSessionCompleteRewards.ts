@@ -2,19 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useProgressionSummary } from '../../../features/progression/hooks';
 import type { SessionSummary } from '../../../session/types';
+import type { HeadlineReward } from '../../../features/session-completion/headline-reward.schemas';
 import { useSessionRewardSync } from './useSessionRewardSync';
 type ProgressionSummaryData = NonNullable<
   ReturnType<typeof useProgressionSummary>['data']
 >;
 
 // Mock functions for applyChestRewards and creditSessionRewards
-const applyChestRewards = async (input: { sessionId: string; rewards: any[] }) => {
+const applyChestRewards = async (input: { sessionId: string; rewards: HeadlineReward[] }) => {
   // In archived economy system, this would call the progression service
   // For now, just log
   console.debug('[SessionCompleteRewards] applyChestRewards called', input);
 };
 
-const creditSessionRewards = async (userId: string, rewards: any[]) => {
+const creditSessionRewards = async (userId: string, rewards: HeadlineReward[]) => {
   // In archived economy system, this would call the progression service
   // For now, just return the rewards
   console.debug('[SessionCompleteRewards] creditSessionRewards called', { userId, rewards });

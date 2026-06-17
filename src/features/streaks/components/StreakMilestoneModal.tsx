@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Modal, ScrollView, Dimensions } from 'react-native';
+import { Modal, ScrollView, useWindowDimensions } from 'react-native';
 import Animated, {
   FadeInUp,
 } from 'react-native-reanimated';
@@ -10,8 +10,6 @@ import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { ConfettiBurst } from './Confetti';
 import { StreakFlame, RewardItem } from './StreakFlame';
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export interface StreakMilestoneModalProps {
   visible: boolean;
@@ -29,6 +27,7 @@ export function StreakMilestoneModal({
   onShare,
 }: StreakMilestoneModalProps): React.ReactNode {
   const { theme } = useTheme();
+  const { height: SCREEN_HEIGHT } = useWindowDimensions();
 
   useEffect(() => {
     if (visible) {

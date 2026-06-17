@@ -11,16 +11,7 @@ interface TinyBubbleClusterProps {
   spread?: number;
 }
 
-        const elementStyle_49 = {
-  position: 'absolute',
-  width: b.size,
-  height: b.size,
-  borderRadius: b.size / 2,
-  backgroundColor: `rgba(199, 245, 233, ${opacity * 0.72})`,
-  left: spread + b.xOffset - b.size / 2,
-  top: spread * 0.5 + b.yOffset - b.size / 2,
-  boxShadow: `0px 0px 2px rgba(136, 213, 197, NaN)`,
-};
+        
 export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
   count = 4,
   top,
@@ -57,7 +48,16 @@ export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
       {bubbles.map((b) => (
         <View
           key={b.key}
-          style={elementStyle_49}
+          style={{
+            position: 'absolute',
+            width: b.size,
+            height: b.size,
+            borderRadius: b.size / 2,
+            backgroundColor: `rgba(199, 245, 233, ${opacity * 0.72})`,
+            left: spread + b.xOffset - b.size / 2,
+            top: spread * 0.5 + b.yOffset - b.size / 2,
+            boxShadow: '0px 0px 2px rgba(136, 213, 197, 0.3)',
+          }}
         />
       ))}
     </View>

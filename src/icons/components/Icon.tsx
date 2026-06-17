@@ -148,7 +148,7 @@ export function Icon({
           <G>
             {pathData.split(' M').map((path, index) => {
               const d = index === 0 ? path : `M${path}`;
-              return <Path key={path.id} d={d} />;
+              return <Path key={`path-${index}`} d={d} />;
             })}
           </G>
         )}

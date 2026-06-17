@@ -104,7 +104,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           <View style={styles.bonusesSection}>
             <Text style={styles.sectionTitle}>Bonus Awards</Text>
             {summary.bonuses.map((bonus, index) => (
-              <View key={bonus.id} style={styles.bonusItem}>
+              <View key={`bonus-${index}`} style={styles.bonusItem}>
                 <Text style={styles.bonusIcon}>🏆</Text>
                 <View style={styles.bonusInfo}>
                   <Text style={styles.bonusType}>{bonus.type}</Text>

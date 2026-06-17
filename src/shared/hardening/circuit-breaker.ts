@@ -101,3 +101,10 @@ export class CircuitBreaker {
     };
   }
 }
+
+export class AnalyticsStorageError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AnalyticsStorageError';
+  }
+}

@@ -18,10 +18,10 @@ const CAPTURE_TYPES: Array<{
   icon: string;
   color: string;
 }> = [
-  { type: 'voice', label: 'Voice', icon: 'mic', color: '#FF8A24' },
-  { type: 'photo', label: 'Photo', icon: 'camera', color: '#54AEEA' },
-  { type: 'link', label: 'Link', icon: 'link', color: '#18B894' },
-  { type: 'braindump', label: 'Note', icon: 'file-text', color: '#8B5CF6' },
+  { type: 'voice', label: 'Voice', icon: 'mic', color: vexLightGlass.semantic.fire },
+  { type: 'photo', label: 'Photo', icon: 'camera', color: vexLightGlass.semantic.info },
+  { type: 'link', label: 'Link', icon: 'link', color: vexLightGlass.mint[500] },
+  { type: 'braindump', label: 'Note', icon: 'file-text', color: vexLightGlass.semantic.accent },
 ];
 
 interface CaptureTypeSelectorProps {

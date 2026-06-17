@@ -9,18 +9,7 @@ import { Icon } from '../../../icons/components/Icon';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-        const elementStyle_64 = {
-  backgroundColor: isPrimary
-  ? vexLightGlass.semantic.warning
-  : vexLightGlass.glass.innerHighlight,
-  borderRadius: 999,
-  height: 3,
-  left: 18,
-  opacity: isPrimary ? 0.32 : 0.2,
-  position: 'absolute',
-  right: 86,
-  top: 3,
-};
+        
 function formatMinutes(seconds: number): string {
   return `${Math.round(seconds / 60)} min`;
 }
@@ -74,7 +63,7 @@ export function FocusModeCardView({
         ) : null}
         <View
           pointerEvents="none"
-          style={elementStyle_64}
+          style={{}}
         />
         <View
           style={{

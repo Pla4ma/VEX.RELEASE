@@ -8,16 +8,7 @@ interface NotificationButtonProps {
   onPress: () => void;
 }
 
-      const elementStyle_47 = {
-  backgroundColor: 'rgba(255, 255, 255, 0.92)',
-  borderTopLeftRadius: 21,
-  borderTopRightRadius: 21,
-  height: 1,
-  left: 8,
-  position: 'absolute',
-  right: 8,
-  top: 1,
-};
+      
 export function NotificationButton({ onPress }: NotificationButtonProps): React.ReactNode {
   return (
     <Pressable
@@ -55,7 +46,7 @@ export function NotificationButton({ onPress }: NotificationButtonProps): React.
       />
       <View
         pointerEvents="none"
-        style={elementStyle_47}
+        style={{}}
       />
       <Icon
         color={vexLightGlass.text.primary}

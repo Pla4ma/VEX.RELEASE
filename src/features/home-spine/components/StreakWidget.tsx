@@ -68,7 +68,7 @@ export function StreakWidget({
               <LiquidGlassSphere
                 color="coral"
                 icon={
-                  <Icon color="#C2410C" name="fire" size="sm" variant="solid" />
+                  <Icon color={vexLightGlass.semantic.fireDeep} name="fire" size="sm" variant="solid" />
                 }
                 intensity={0.88}
                 size={48}

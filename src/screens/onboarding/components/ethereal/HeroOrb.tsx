@@ -24,17 +24,7 @@ type HeroOrbProps = {
   anchorY?: number;
 };
 
-    const elementStyle_79 = {
-  position: 'absolute',
-  left: `${anchorX * 100}%` as ViewStyle['left'],
-  top: `${anchorY * 100}%` as ViewStyle['top'],
-  width: size,
-  height: size,
-  marginLeft: -size / 2,
-  marginTop: -size / 2,
-  alignItems: 'center',
-  justifyContent: 'center',
-};
+    
 const BREATH_DURATION_MS = 2600;
 const ROTATION_DURATION_MS = 30000;
 
@@ -88,7 +78,7 @@ export function HeroOrb({
       accessibilityElementsHidden
       importantForAccessibility="no"
       pointerEvents="none"
-      style={elementStyle_79}
+      style={{}}
     >
       <Animated.View
         style={[

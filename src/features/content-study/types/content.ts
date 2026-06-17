@@ -54,4 +54,5 @@ export interface StudyGeneration {
   lastAccessedAt?: string;
   accessCount: number;
   isArchived: boolean;
+  isLlmGenerated: boolean;
 }

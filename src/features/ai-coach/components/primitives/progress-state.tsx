@@ -24,7 +24,7 @@ export function StepProgress({ steps, currentStep }: StepProgressProps) {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
         return (
-          <View key={step.label} style={styles.stepItem}>
+          <View key={step} style={styles.stepItem}>
             <View
               style={[
                 styles.stepCircle,
