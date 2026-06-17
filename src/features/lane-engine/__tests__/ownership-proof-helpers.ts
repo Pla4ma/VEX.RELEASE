@@ -10,7 +10,7 @@ export function profile(lane: Lane): LaneProfile {
   return resolveInitialLane({ manualOverride: lane, observedAt });
 }
 
-export function summary(): SessionSummary {
+export function summary(overrides?: Partial<SessionSummary>): SessionSummary {
   return {
     actualDuration: 1_500,
     baseScore: 80,
@@ -37,14 +37,15 @@ export function summary(): SessionSummary {
     streakIncreased: true,
     streakMaintained: true,
     timeBonus: 0,
+    pauses: 0,
     userId: 'user-1',
     userLevel: 1,
     vsAverage: 0,
     vsBest: 0,
     xpEarned: 0,
+    ...overrides,
   };
 }
-
 export function available(): FeatureAvailability {
   return {
     canNavigate: true,

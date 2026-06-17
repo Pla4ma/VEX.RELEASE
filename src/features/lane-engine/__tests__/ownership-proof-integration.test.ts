@@ -85,11 +85,11 @@ describe('Lane Engine ownership proof – consumer integration', () => {
       laneProfile: student,
       streakAction: 'extended',
       streakDays: 1,
-      summary: summary(),
+      summary: summary({ finalScore: 90 }),
       xpDelta: 10,
     });
     expect(completion.laneProfile.primaryLane).toBe('student');
-    expect(completion.userFacingSummary.displayTitle).toContain('Study');
+    expect(completion.userFacingSummary.displayTitle).toContain('Clean work');
 
     const coach = buildCoachPresence({
       companion: null,

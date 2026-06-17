@@ -21,7 +21,7 @@ describe('Lane Engine — confirmation & overrides', () => {
     expect(result.confidence).toBeGreaterThan(0.5);
   });
 
-  it('game-like onboarding recommends Run mode via LaneConfirmation', () => {
+  it('game-like onboarding recommends Quest mode via LaneConfirmation', () => {
     const result = confirmInitialLane({
       primaryGoal: 'personal',
       motivationStyle: 'game_like',
@@ -29,11 +29,11 @@ describe('Lane Engine — confirmation & overrides', () => {
     });
 
     expect(result.recommendedLane).toBe('game_like');
-    expect(result.userFacingName).toBe('Run');
-    expect(result.reason).toContain('Run Mode');
+    expect(result.userFacingName).toBe('Quest');
+    expect(result.reason).toContain('Quest Mode');
   });
 
-  it('creative/deep onboarding recommends Project mode via LaneConfirmation', () => {
+  it('creative/deep onboarding recommends Create mode via LaneConfirmation', () => {
     const result = confirmInitialLane({
       primaryGoal: 'creative',
       motivationStyle: 'coach_led',
@@ -41,10 +41,10 @@ describe('Lane Engine — confirmation & overrides', () => {
     });
 
     expect(result.recommendedLane).toBe('deep_creative');
-    expect(result.userFacingName).toBe('Project');
+    expect(result.userFacingName).toBe('Create');
   });
 
-  it('calm/minimal onboarding recommends Clean mode via LaneConfirmation', () => {
+  it('calm/minimal onboarding recommends Focus mode via LaneConfirmation', () => {
     const result = confirmInitialLane({
       primaryGoal: 'personal',
       motivationStyle: 'calm',
@@ -52,7 +52,7 @@ describe('Lane Engine — confirmation & overrides', () => {
     });
 
     expect(result.recommendedLane).toBe('minimal_normal');
-    expect(result.userFacingName).toBe('Clean');
+    expect(result.userFacingName).toBe('Focus');
   });
 
   it('manual override wins with confidence 1.0 and behavior cannot override silently', () => {
