@@ -71,6 +71,27 @@ function rowToProgress(row: OnboardingProfileRow): OnboardingProgress {
   });
 }
 
+function progressToRow(
+  userId: string,
+  progress: OnboardingProgress,
+) {
+  return {
+    user_id: z.string().uuid().parse(userId),
+    status: progress.status,
+    steps: progress.steps,
+    first_session: progress.firstSession,
+    permissions: progress.permissions,
+    goal: progress.goal ?? null,
+    focus_duration: progress.focusDuration ?? null,
+    display_name: progress.displayName ?? null,
+    persona: progress.persona ?? null,
+    element: progress.element ?? null,
+    motivation_profile: progress.motivationProfile ?? null,
+    chosen_lane: progress.chosenLane ?? null,
+    updated_at: new Date().toISOString(),
+  };
+}
+
 // ── Public API ──────────────────────────────────────────────────────────
 
 async function getProgress(
@@ -96,17 +117,7 @@ async function saveProgress(
   const parsed = OnboardingProgressSchema.parse(progress);
   const { error } = await getSupabaseClient()
     .from('onboarding_profiles')
-    .upsert(
-      {
-        user_id: z.string().uuid().parse(userId),
-        status: parsed.status,
-        steps: parsed.steps,
-        first_session: parsed.firstSession,
-        permissions: parsed.permissions,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id' },
-    );
+    .upsert(progressToRow(userId, parsed), { onConflict: 'user_id' });
   if (error) {
     throw new OnboardingRepositoryError('saveProgress', error);
   }

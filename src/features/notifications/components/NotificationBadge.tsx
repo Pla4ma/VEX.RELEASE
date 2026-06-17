@@ -12,7 +12,37 @@ import { sizing } from '../../../theme/tokens/sizing';
 import { spacing } from '../../../theme/tokens/spacing';
 import type { UseQueryResult } from '@tanstack/react-query';
 function useUnreadNotificationsCount(_userId: string | null): UseQueryResult<number> {
-  return { data: 0, isPending: false, isLoading: false, isError: false, error: null, isLoadingError: false, isRefetchError: false, isSuccess: true, status: 'success', fetchStatus: 'idle', refetch: () => Promise.resolve({ data: 0 } as any), isFetched: true, isFetchedAfterMount: true, isFetching: false, isInitialLoading: false, isPaused: false, isPlaceholderData: false, isPreviousData: false, isRefetching: false, isStale: false, isEnabled: true, promise: Promise.resolve({ data: 0 } as any), dataUpdatedAt: Date.now(), errorUpdatedAt: 0, failureCount: 0, failureReason: null, errorUpdateCount: 0, fetchFailureCount: 0, isFetchedAfterReconnect: false } as UseQueryResult<number>;
+  return {
+    data: 0,
+    dataUpdatedAt: Date.now(),
+    error: null,
+    errorUpdatedAt: 0,
+    failureCount: 0,
+    failureReason: null,
+    fetchStatus: 'idle',
+    isError: false,
+    isFetched: true,
+    isFetchedAfterMount: true,
+    isFetching: false,
+    isInitialLoading: false,
+    isLoading: false,
+    isLoadingError: false,
+    isPaused: false,
+    isPlaceholderData: false,
+    isPreviousData: false,
+    isRefetchError: false,
+    isRefetching: false,
+    isStale: false,
+    isSuccess: true,
+    isPending: false,
+    isEnabled: true,
+    errorUpdateCount: 0,
+    promise: Promise.resolve(0) as unknown as Promise<number>,
+    refetch: () => Promise.resolve({} as UseQueryResult<number>),
+    status: 'success',
+    fetchFailureCount: 0,
+    isFetchedAfterReconnect: false,
+  } as unknown as UseQueryResult<number>;
 }
 
 interface NotificationBadgeProps {

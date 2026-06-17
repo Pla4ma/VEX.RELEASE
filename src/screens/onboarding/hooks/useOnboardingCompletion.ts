@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
 import { useOnboardingStore } from '../../../features/onboarding/store';
+import { useSyncOnboardingProgress } from '../../../features/onboarding/hooks';
 import { useSessionUIStore } from '../../../store/session-state';
 import { triggerHaptic } from '../../../utils/haptics';
 
@@ -13,6 +14,7 @@ export function useOnboardingCompletion(userId: string) {
     (state) => state.showHomeHighlight,
   );
   const disclosureAnalytics = useDisclosureAnalytics();
+  const { syncFromStore, isSyncing } = useSyncOnboardingProgress(userId);
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
   const completedRef = useRef(false);
@@ -36,6 +38,8 @@ export function useOnboardingCompletion(userId: string) {
             'Start one clean focus block and VEX will begin tailoring the next action around your progress.',
           tone: 'celebration',
         });
+        // Sync onboarding profile to Supabase for cross-device persistence
+        await syncFromStore();
         triggerHaptic('success').catch(() => {
           // Haptic failure is non-critical — safe to swallow in onboarding completion
         });
@@ -56,6 +60,7 @@ export function useOnboardingCompletion(userId: string) {
       disclosureAnalytics,
       showHomeHighlight,
       userId,
+      syncFromStore,
     ],
   );
 

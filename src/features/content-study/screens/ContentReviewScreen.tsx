@@ -4,6 +4,7 @@
  */
 
 import { captureSilentFailure } from '../../../utils/silent-failure';
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback } from 'react';
 import {
   View,
@@ -189,3 +190,5 @@ export function ContentReviewScreen() {
     </SafeAreaView>
   );
 }
+
+export default withScreenErrorBoundary(ContentReviewScreen, 'ContentReview');

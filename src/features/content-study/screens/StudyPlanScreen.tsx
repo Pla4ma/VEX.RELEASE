@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
@@ -192,3 +193,5 @@ export function StudyPlanScreen() {
     </SafeAreaView>
   );
 }
+
+export default withScreenErrorBoundary(StudyPlanScreen, 'StudyPlan');

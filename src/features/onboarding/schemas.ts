@@ -167,6 +167,15 @@ export const OnboardingProgressSchema = z
       notificationAsked: z.boolean(),
       notificationGranted: z.boolean(),
     }),
+
+    // Full profile fields (optional for backward compatibility)
+    goal: z.string().optional(),
+    focusDuration: z.number().int().optional(),
+    displayName: z.string().optional(),
+    persona: z.string().optional(),
+    element: z.string().optional(),
+    motivationProfile: MotivationProfileSchema.optional(),
+    chosenLane: z.string().optional(),
   })
   .strict();
 

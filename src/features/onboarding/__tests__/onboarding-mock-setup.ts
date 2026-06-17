@@ -54,6 +54,9 @@ jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
     getItem: jest.fn(() => null),
     setItem: jest.fn(),
     removeItem: jest.fn(),
+    getItemSync: jest.fn(() => null),
+    setItemSync: jest.fn(),
+    removeItemSync: jest.fn(),
   }),
 }));
 

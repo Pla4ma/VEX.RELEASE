@@ -55,30 +55,30 @@ describe('LaneConfirmationStep', () => {
         observedAt,
       });
       expect(result.recommendedLane).toBe('game_like');
-      expect(result.userFacingName).toBe('Run');
-      expect(result.reason).toContain('Run Mode');
+      expect(result.userFacingName).toBe('Quest');
+      expect(result.reason).toContain('Quest Mode');
     });
 
-    it('deep_creative lane recommends "Project Mode"', () => {
+    it('deep_creative lane recommends "Create Mode"', () => {
       const result = confirmInitialLane({
         primaryGoal: 'creative',
         motivationStyle: 'coach_led',
         observedAt,
       });
       expect(result.recommendedLane).toBe('deep_creative');
-      expect(result.userFacingName).toBe('Project');
-      expect(result.reason).toContain('Project Mode');
+      expect(result.userFacingName).toBe('Create');
+      expect(result.reason).toContain('Create Mode');
     });
 
-    it('minimal user recommends "Clean Mode"', () => {
+    it('minimal user recommends "Focus Mode"', () => {
       const result = confirmInitialLane({
         primaryGoal: 'personal',
         motivationStyle: 'calm',
         observedAt,
       });
       expect(result.recommendedLane).toBe('minimal_normal');
-      expect(result.userFacingName).toBe('Clean');
-      expect(result.reason).toContain('Clean Mode');
+      expect(result.userFacingName).toBe('Focus');
+      expect(result.reason).toContain('Focus Mode');
     });
 
     it('all confirmations include "You can change this anytime"', () => {
