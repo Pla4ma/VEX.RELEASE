@@ -1,5 +1,5 @@
 import type { NavigationProp } from '@react-navigation/native';
-import type { ExtendedRootStackParams } from './param-types';
+import type { ExtendedRootStackParams, RootStackParams, MainStackParams, SessionStackParams, SettingsStackParams } from './param-types';
 import { getFeatureAvailabilityFor } from '../features/liveops-config/FeatureFlagService';
 import type {
   FeatureAccess,
@@ -72,7 +72,9 @@ export function openFeature<T extends keyof ExtendedRootStackParams>(
   }
 
   try {
-    navigation.navigate(targetRoute as string, targetParams as object);
+    // Type-safe navigation using the route name directly from generic
+    // T extends keyof ExtendedRootStackParams, so targetRoute is already a valid route name
+    (navigation.navigate as (name: T, params: ExtendedRootStackParams[T]) => void)(targetRoute, targetParams);
     return { ...base, success: true, navigated: true, fallbackTaken: false };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -91,7 +93,8 @@ export function openFeature<T extends keyof ExtendedRootStackParams>(
 
     if (options?.fallbackRoute && options.fallbackRoute !== targetRoute) {
       try {
-        navigation.navigate(options.fallbackRoute, options.fallbackParams as object);
+        // fallbackRoute is a string route name, params are Record<string, unknown>
+        navigation.navigate(options.fallbackRoute, options.fallbackParams ?? {});
         return { ...base, navigated: false, fallbackTaken: true };
       } catch (error: unknown) {
         return { ...base, navigated: false, fallbackTaken: false };
