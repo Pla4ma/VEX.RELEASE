@@ -1,4 +1,5 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import {
@@ -170,3 +171,5 @@ export function ContentInputScreen(): React.ReactNode {
     </AppScreen>
   );
 }
+
+export default withScreenErrorBoundary(ContentInputScreen, 'ContentInput');

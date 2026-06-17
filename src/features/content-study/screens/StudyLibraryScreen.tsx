@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback, useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
@@ -167,4 +168,4 @@ export function StudyLibraryScreen(): React.ReactNode {
   );
 }
 
-export default StudyLibraryScreen;
+export default withScreenErrorBoundary(StudyLibraryScreen, 'StudyLibrary');

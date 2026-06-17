@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import {
   View,
   Text,
@@ -151,4 +152,4 @@ export function CoachScreen(): React.ReactNode {
   );
 }
 
-export default CoachScreen;
+export default withScreenErrorBoundary(CoachScreen, 'Coach');
