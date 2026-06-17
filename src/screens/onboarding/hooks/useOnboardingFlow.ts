@@ -15,12 +15,14 @@ import { useOnboardingLane } from './useOnboardingLane';
 import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
 import { buildOnboardingHandlers } from './onboarding-flow-handlers';
+import type { RootStackParams } from '../../../navigation/param-types';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
 export function useOnboardingFlow(routeStep?: number) {
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const draft = useOnboardingStore((state) =>
     userId ? state.getDraft(userId) : undefined,
   );
