@@ -7,6 +7,33 @@ import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
+/**
+ * Turns a numeric stat (progress + streak) into a one-sentence narrative.
+ * The minutes number stays the focal point; this sentence gives the
+ * number its meaning instead of leaving it as a stat monument.
+ */
+export function focusNarrative(
+  progressPercent: number,
+  streak: number,
+): string {
+  if (progressPercent >= 100) {
+    return streak > 0
+      ? 'Daily goal cleared. Today is already a win for the run.'
+      : 'Daily goal cleared. VEX will use this to plan tomorrow.';
+  }
+  if (progressPercent >= 60) {
+    return streak > 0
+      ? `Past the midpoint of today's goal. Day ${streak} is moving.`
+      : 'Past the midpoint of today. The shape of a run is forming.';
+  }
+  if (progressPercent > 0) {
+    return 'Early in today. Each clean block adds to the rest.';
+  }
+  return streak > 0
+    ? `Day ${streak} is active. The first block sets the rest of the day.`
+    : 'No focus yet today. One short block is enough to start.';
+}
+
 const WHITE_SOFT = rgbaColors.rgb_255_255_255_0_18;
 
 export function HeroLoadingState({

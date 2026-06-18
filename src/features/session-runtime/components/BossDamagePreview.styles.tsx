@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
   useSharedValue,
 } from 'react-native-reanimated';
+import { springPresets } from '../../../theme/tokens/motion';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -51,8 +52,8 @@ export function BossIcon({ willDefeat }: { willDefeat: boolean }): React.ReactNo
     if (willDefeat && !isReducedMotion) {
       scaleValue.value = withRepeat(
         withSequence(
-          withSpring(1.3, { damping: 3, stiffness: 200 }),
-          withSpring(1.1, { damping: 3, stiffness: 200 }),
+          withSpring(1.3, springPresets.lively),
+          withSpring(1.1, springPresets.lively),
         ),
         -1,
         true,

@@ -13,6 +13,7 @@ import {
   HeroFocusBlock,
   HeroLoadingState,
   HeroOnboardPanel,
+  focusNarrative,
 } from './HomeHero.helpers';
 
 const WHITE_MUTED = rgbaColors.rgb_255_255_255_0_72;
@@ -131,6 +132,14 @@ export function HomeHero({
             </Text>
             <Text color={theme.colors.text.inverse} style={focusValueStyle}>
               {formatMinutes(todayFocusMinutes)}
+            </Text>
+            <Text
+              variant="bodySmall"
+              color={WHITE_MUTED}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {focusNarrative(progressPercent, currentStreak)}
             </Text>
             <StreakBadge
               days={currentStreak}

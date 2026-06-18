@@ -8,6 +8,7 @@ import Animated, {
   withSequence,
   withSpring,
 } from 'react-native-reanimated';
+import { springPresets } from '../../../theme/tokens/motion';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -95,8 +96,8 @@ export function DefeatCelebration(): React.ReactNode {
     }
     scale.value = withRepeat(
       withSequence(
-        withSpring(1.05, { damping: 2, stiffness: 150 }),
-        withSpring(1, { damping: 2, stiffness: 150 }),
+        withSpring(1.05, springPresets.lively),
+        withSpring(1, springPresets.settle),
       ),
       -1,
       true,
