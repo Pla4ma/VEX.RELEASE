@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
 
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { NavigationProp } from '@react-navigation/native';
+import type { RootStackParams } from '../../../navigation/types';
 
 import type { SessionStackParams } from '../../../navigation/types';
 import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
@@ -106,7 +108,7 @@ export function useFirstSessionStart({
           }, 120);
         }
 
-        navigateToSessionStackScreen(navigation as any, 'ActiveSession', {
+        navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'ActiveSession', {
           sessionId: session.id,
           selectedThemeId: 'default',
         });

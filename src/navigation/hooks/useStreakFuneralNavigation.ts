@@ -6,6 +6,8 @@ import { eventBus } from '../../events/EventBus';
 import { getStreakService } from '../../streaks/StreakService';
 
 import type { ExtendedRootStackParams } from '../types';
+import type { RootStackParams } from '../types';
+import type { NavigationProp } from '@react-navigation/native';
 import { navigateToRootScreen } from '../navigation-helpers';
 
 interface StreakFuneralData {
@@ -178,7 +180,7 @@ export function useStreakFuneralNavigation({
     }
 
     setLastFuneralShown();
-    navigateToRootScreen(navigationRef as any, 'StreakFuneral', currentData);
+    navigateToRootScreen(navigationRef as unknown as NavigationProp<RootStackParams>, 'StreakFuneral', currentData);
     setShowStreakFuneral(false);
     setStreakFuneralData(null);
   }, [
