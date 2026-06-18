@@ -121,8 +121,8 @@ export async function verifyAuthorizedUser(
           emailVerified = !!rawUser.email_confirmed_at;
         }
       } catch {
-        // If fetch fails, fall back to local check (conservative)
-        emailVerified = !isAnonymous;
+        // If fetch fails, FAIL CLOSED — do not grant email verified status
+        emailVerified = false;
       }
     }
   }
