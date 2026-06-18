@@ -51,7 +51,7 @@ export function buildPostSessionStoryViewModel(input: {
     headline: hasPersonalBest
       ? {
           type: 'personal_best',
-          title: `Personal best. ${input.personalBest!.purityScore} purity in ${input.personalBest!.sessionMode}.`,
+          title: `Personal best. ${input.personalBest?.purityScore ?? 0} purity in ${input.personalBest?.sessionMode ?? ''}.`,
         }
       : {
           type: 'xp_earned',
@@ -61,11 +61,11 @@ export function buildPostSessionStoryViewModel(input: {
     newlyUnlockedFeatures: input.newlyUnlockedFeatures ?? [],
     personalBestProof: hasPersonalBest
       ? {
-          achievedAt: input.personalBest!.achievedAt,
-          durationBucket: input.personalBest!.durationBucket,
-          mode: input.personalBest!.sessionMode,
-          newValue: input.personalBest!.purityScore,
-          oldValue: input.personalBest!.previousBest,
+          achievedAt: input.personalBest?.achievedAt ?? '',
+          durationBucket: input.personalBest?.durationBucket ?? '',
+          mode: input.personalBest?.sessionMode ?? '',
+          newValue: input.personalBest?.purityScore ?? 0,
+          oldValue: input.personalBest?.previousBest ?? 0,
         }
       : undefined,
     sessionId: input.ledger.sessionId,

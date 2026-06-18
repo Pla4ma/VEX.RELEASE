@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import type { NavigationProp } from '@react-navigation/native';
 import type { SessionStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 
@@ -43,31 +44,29 @@ export function useNavigationCallbacks(params: {
           (setupParams as SessionStackParams['SessionSetup'] | undefined)?.source ?? 'home',
         );
       }
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: (setupParams ?? {}) as SessionStackParams['SessionSetup'],
-      });
+      navigateToSessionStackScreen(navigation as never, 'SessionSetup', (setupParams ?? {}) as SessionStackParams['SessionSetup']);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate('Main', { screen: 'Progress' }),
+    () => navigateToMainTab(navigation as never, 'Progress'),
     [navigation],
   );
 
   const openSocial = useCallback(() => {
-    navigation.navigate(
-      'Main',
+    navigateToMainTab(
+      navigation as never,
+      'Profile',
       canNavigateSocial
-        ? { screen: 'Profile', params: { tab: 'social' } }
-        : { screen: 'Profile', params: { tab: 'stats' } },
+        ? { tab: 'social' }
+        : { tab: 'stats' },
     );
   }, [canNavigateSocial, navigation]);
 
   const openContentStudy = useCallback(() => {
     if (!canNavigateContentStudy) { openSetup(); return; }
-    navigation.navigate('ContentStudy');
+    navigateToMainStackScreen(navigation as never, 'ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

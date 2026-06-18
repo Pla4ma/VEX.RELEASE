@@ -10,6 +10,7 @@ import { useActiveBoss, useBossTemplates } from '../../features/boss/hooks';
 import { useProgressionSummary } from '../../features/progression/hooks';
 import { useStreakMultiplier } from '../../features/streaks/hooks';
 import type { ExtendedRootStackParams } from '../../navigation/types';
+import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import type { useTheme } from '../../theme';
 import { BossScreenSections } from './BossScreenSections';
 
@@ -103,7 +104,7 @@ export function BossScreenContent({
           encounter={encounter}
           onLaunchAttack={(minutes) => {
             if (levelLocked) {return;}
-            navigation.navigate('SessionStack', {
+            navigateToRootScreen(navigation, 'SessionStack', {
               screen: 'SessionSetup',
               params: {
                 presetId:
@@ -113,7 +114,7 @@ export function BossScreenContent({
                       ? 'pomodoro'
                       : 'deep',
               },
-            });
+            })
           }}
           progressionLevel={level}
           streakMultiplier={streakMultiplier}

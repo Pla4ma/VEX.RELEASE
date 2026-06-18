@@ -45,7 +45,7 @@ export function MetricSelector({
       if (!acc[metric.category]) {
         acc[metric.category] = [];
       }
-      acc[metric.category]!.push(metric);
+      acc[metric.category]?.push(metric); // ponytail: asserted non-null by set-if-missing guard above
       return acc;
     },
     {} as Record<string, typeof AVAILABLE_METRICS>,

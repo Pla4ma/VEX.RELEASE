@@ -13,10 +13,10 @@ import type { AvatarProps, AvatarShape } from './Avatar.types';
 function getInitials(name: string): string {
   const parts = name.trim().split(' ');
   if (parts.length === 1) {
-    return parts[0]!.charAt(0).toUpperCase();
+    return parts[0]?.charAt(0).toUpperCase() ?? ''; // ponytail: split(' ') always yields >=1 element
   }
   return (
-    parts[0]!.charAt(0) + parts[parts.length - 1]!.charAt(0)
+    (parts[0]?.charAt(0) ?? '') + (parts[parts.length - 1]?.charAt(0) ?? '')
   ).toUpperCase();
 }
 

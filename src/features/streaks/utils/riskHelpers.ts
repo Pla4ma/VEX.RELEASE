@@ -15,13 +15,13 @@ export function analyzePattern(
   const gaps: number[] = [];
   for (let i = 1; i < sessionHistory.length; i++) {
     const gap =
-      (sessionHistory[i]!.timestamp - sessionHistory[i - 1]!.timestamp) /
+      ((sessionHistory[i]?.timestamp ?? 0) - (sessionHistory[i - 1]?.timestamp ?? 0)) /
       (DAY_HOURS * 60 * 60 * 1000);
     gaps.push(gap);
   }
   let increasingCount = 0;
   for (let i = 1; i < gaps.length; i++) {
-    if (gaps[i]! > gaps[i - 1]!) {
+    if ((gaps[i] ?? 0) > (gaps[i - 1] ?? 0)) {
       increasingCount++;
     }
   }

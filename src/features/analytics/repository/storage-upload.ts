@@ -9,6 +9,7 @@ import {
   calculateChecksum,
   convertToCSV,
   isRetryableStorageError,
+  EXPORT_SIGNED_URL_TTL_SECONDS,
 } from './storage-helpers';
 
 export async function uploadExportData(
@@ -59,13 +60,13 @@ export async function uploadExportData(
         }
         const { data: urlData } = await supabase.storage
           .from(bucket)
-          .createSignedUrl(path, 3600); // 1 hour TTL — export data is user-sensitive
+          .createSignedUrl(path, EXPORT_SIGNED_URL_TTL_SECONDS);
         return {
           url: urlData?.signedUrl || '',
           size: fileSize,
           checksum,
           uploadedAt: Date.now(),
-          expiresAt: Date.now() + 3600 * 1000,
+          expiresAt: Date.now() + EXPORT_SIGNED_URL_TTL_SECONDS * 1000,
         };
       },
       {

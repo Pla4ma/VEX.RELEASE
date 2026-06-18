@@ -7,6 +7,7 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type HomeNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -49,25 +50,23 @@ export function useHomeNavigationActions(input: {
         analytics.trackFirstSessionStarted(userId, params?.source ?? 'home');
       }
 
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: params ?? {},
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params ?? {});
     },
     [analytics, completedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate('Main', { screen: 'Progress' }),
+    () => navigateToMainTab(navigation, 'Progress'),
     [navigation],
   );
   const openSocial = useCallback(
     () =>
-      navigation.navigate(
-        'Main',
+      navigateToMainTab(
+        navigation,
+        'Profile',
         canNavigateSocial
-          ? { screen: 'Profile', params: { tab: 'social' } }
-          : { screen: 'Profile', params: { tab: 'stats' } },
+          ? { tab: 'social' }
+          : { tab: 'stats' },
       ),
     [canNavigateSocial, navigation],
   );
@@ -76,7 +75,7 @@ export function useHomeNavigationActions(input: {
       openSetup();
       return;
     }
-    navigation.navigate('ContentStudy');
+    navigateToMainStackScreen(navigation, 'ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (learningTarget) {
@@ -88,7 +87,7 @@ export function useHomeNavigationActions(input: {
       return;
     }
 
-    navigation.navigate('ContentStudy', {
+    navigateToMainStackScreen(navigation, 'ContentStudy', {
       screen: 'StudyPlan',
       params: {
         generationId: activeStudyPlan.generationId,

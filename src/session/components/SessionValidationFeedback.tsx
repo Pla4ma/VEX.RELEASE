@@ -45,7 +45,7 @@ export function SessionValidationFeedback({
       if (!acc[error.field]) {
         acc[error.field] = [];
       }
-      acc[error.field]!.push(error);
+      acc[error.field]?.push(error); // ponytail: asserted non-null by set-if-missing guard above
       return acc;
     },
     {},

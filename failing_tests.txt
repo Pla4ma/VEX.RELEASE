@@ -1,0 +1,96 @@
+FAIL src/features/ai-coach/__tests__/service/message-generator.test.ts
+FAIL src/privacy/__tests__/data-deletion.test.ts
+FAIL src/features/session-completion/__tests__/learning-execution-return-plan.test.ts
+FAIL src/features/session-completion/__tests__/service-story-and-summary.test.ts
+FAIL src/features/analytics/__tests__/integration-analytics.test.ts
+FAIL src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx
+FAIL src/features/content-study/__tests__/syncQueueManager.test.ts
+FAIL src/performance/__tests__/performanceGateEval.test.ts
+    - Status: FAILED·
+FAIL src/features/ai-coach/__tests__/service/coach-state-machine.test.ts
+FAIL src/features/ai-coach/__tests__/transition-auto.test.ts
+FAIL src/features/session-runtime/__tests__/complete-abandon.test.ts
+FAIL src/features/session-completion/__tests__/focus-identity-updates.test.ts
+FAIL src/__tests__/launch-schema-reconciliation.test.ts
+FAIL src/features/challenges/__tests__/basic-challenges-service.test.ts
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-performance.test.ts
+FAIL src/features/session-runtime/__tests__/create-start.test.ts
+FAIL src/features/session-runtime/__tests__/state-error-history.test.ts
+FAIL src/features/session-completion/__tests__/ui-display-source-of-truth.test.ts
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts
+FAIL src/features/integration/__tests__/integration-social-feed-helpers.test.ts
+FAIL src/features/feature-gate/__tests__/feature-gate-verification.test.ts
+FAIL src/features/session-completion/__tests__/ledger-service-grading.test.ts
+FAIL src/features/session-completion/__tests__/repository.test.ts
+FAIL src/features/ai-coach/__tests__/notification-budget-quiet.test.ts
+FAIL src/features/session/__tests__/purity-viewmodel.test.ts
+FAIL src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts
+FAIL src/features/session/__tests__/session-stakes-display.test.ts
+FAIL src/features/ai-coach/__tests__/message-quality-validation.test.ts
+FAIL src/features/session-runtime/__tests__/pause-resume.test.ts
+FAIL src/shared/monetization/__tests__/revenuecat-helpers.test.ts
+FAIL src/features/streaks/__tests__/StreakEvolutionStateDisplay.test.ts
+FAIL src/features/session-completion/__tests__/completion-subsystems-features.test.ts
+FAIL src/features/session-completion/__tests__/offline-sync-processors.test.ts
+FAIL src/features/challenges/__tests__/challenges-error-classes.test.ts
+FAIL src/theme/tokens/__tests__/ethereal-sky.test.ts
+FAIL src/shared/ui/components/__tests__/micro-reward-helpers.test.ts
+FAIL src/shared/hardening/__tests__/retry.test.ts (5.457 s)
+      √ marks content as FAILED when storage write fails (1 ms)
+    [2026-06-18T02:37:12.842Z] [monetization:paywall-sm] Paywall transition: purchasing -> PURCHASE_FAILED
+    [2026-06-18T02:37:12.852Z] [monetization:paywall-sm] Paywall transition: restoring -> RESTORE_FAILED
+      √ PURCHASE_FAILED transitions to failed with error (1 ms)
+FAIL src/shared/monetization/utils/__tests__/purchase-validation.test.ts
+FAIL src/features/focus-identity/__tests__/FocusScoreDashboard.test.tsx
+FAIL src/features/challenges/__tests__/basic-challenges-status.test.ts
+FAIL src/features/ai-coach/__tests__/service/behavior-analytics.test.ts
+FAIL src/features/account-deletion/__tests__/account-deletion-comprehensive.test.ts
+FAIL src/features/analytics/__tests__/integration-session-sync.test.ts
+FAIL src/features/account-deletion/__tests__/service.test.ts
+FAIL src/store/__tests__/auth-profile-storage.test.ts
+FAIL src/features/ai-coach/__tests__/service/message-generator.test.ts
+FAIL src/privacy/__tests__/data-deletion.test.ts
+FAIL src/features/session-completion/__tests__/learning-execution-return-plan.test.ts
+FAIL src/features/session-completion/__tests__/service-story-and-summary.test.ts
+FAIL src/features/analytics/__tests__/integration-analytics.test.ts
+FAIL src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx
+FAIL src/features/content-study/__tests__/syncQueueManager.test.ts
+FAIL src/performance/__tests__/performanceGateEval.test.ts
+    - Status: FAILED·
+FAIL src/features/ai-coach/__tests__/service/coach-state-machine.test.ts
+FAIL src/features/ai-coach/__tests__/transition-auto.test.ts
+FAIL src/features/session-runtime/__tests__/complete-abandon.test.ts
+FAIL src/features/session-completion/__tests__/focus-identity-updates.test.ts
+FAIL src/__tests__/launch-schema-reconciliation.test.ts
+FAIL src/features/challenges/__tests__/basic-challenges-service.test.ts
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-performance.test.ts
+FAIL src/features/session-runtime/__tests__/create-start.test.ts
+FAIL src/features/session-runtime/__tests__/state-error-history.test.ts
+FAIL src/features/session-completion/__tests__/ui-display-source-of-truth.test.ts
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts
+FAIL src/features/integration/__tests__/integration-social-feed-helpers.test.ts
+FAIL src/features/feature-gate/__tests__/feature-gate-verification.test.ts
+FAIL src/features/session-completion/__tests__/ledger-service-grading.test.ts
+FAIL src/features/session-completion/__tests__/repository.test.ts
+FAIL src/features/ai-coach/__tests__/notification-budget-quiet.test.ts
+FAIL src/features/session/__tests__/purity-viewmodel.test.ts
+FAIL src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts
+FAIL src/features/session/__tests__/session-stakes-display.test.ts
+FAIL src/features/ai-coach/__tests__/message-quality-validation.test.ts
+FAIL src/features/session-runtime/__tests__/pause-resume.test.ts
+FAIL src/shared/monetization/__tests__/revenuecat-helpers.test.ts
+FAIL src/features/streaks/__tests__/StreakEvolutionStateDisplay.test.ts
+FAIL src/features/session-completion/__tests__/completion-subsystems-features.test.ts
+FAIL src/features/session-completion/__tests__/offline-sync-processors.test.ts
+FAIL src/features/challenges/__tests__/challenges-error-classes.test.ts
+FAIL src/theme/tokens/__tests__/ethereal-sky.test.ts
+FAIL src/shared/ui/components/__tests__/micro-reward-helpers.test.ts
+FAIL src/shared/hardening/__tests__/retry.test.ts (5.457 s)
+FAIL src/shared/monetization/utils/__tests__/purchase-validation.test.ts
+FAIL src/features/focus-identity/__tests__/FocusScoreDashboard.test.tsx
+FAIL src/features/challenges/__tests__/basic-challenges-status.test.ts
+FAIL src/features/ai-coach/__tests__/service/behavior-analytics.test.ts
+FAIL src/features/account-deletion/__tests__/account-deletion-comprehensive.test.ts
+FAIL src/features/analytics/__tests__/integration-session-sync.test.ts
+FAIL src/features/account-deletion/__tests__/service.test.ts
+FAIL src/store/__tests__/auth-profile-storage.test.ts

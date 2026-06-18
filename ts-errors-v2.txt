@@ -1,0 +1,86 @@
+src/features/session-runtime/components/SessionValidationFeedback.tsx(17,26): error TS2307: Cannot find module '../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(9,26): error TS2307: Cannot find module '../../../events' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/integration/coach-handlers.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/RewardAdapter.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-calculation.ts(1,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session-runtime/integration/session-reward-helpers.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-helpers.ts(5,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session-runtime/integration/session-reward-recovery.ts(7,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(50,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(55,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(59,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(63,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(73,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(83,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionRewardHandlers.ts(2,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(73,50): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(91,60): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(106,50): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/orchestrator-accessors.ts(11,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCompletion.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCore.ts(2,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCore.ts(9,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionLifecycle.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionRecovery.ts(1,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionRecovery.ts(9,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionTimer.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-io.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager-helpers.ts(1,39): error TS2307: Cannot find module '../../persistence/MMKVStorageAdapter' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager-helpers.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager.ts(1,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager.ts(4,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-history.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-storage.ts(1,39): error TS2307: Cannot find module '../../persistence/MMKVStorageAdapter' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-summaries.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-sync-queue.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/SessionRepository.ts(6,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/SessionRepository.ts(7,38): error TS2307: Cannot find module '../../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitter.ts(11,26): error TS2307: Cannot find module '../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitter.ts(12,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitterBase.ts(1,46): error TS2307: Cannot find module '../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitterBase.ts(15,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/SessionOrchestratorBase.ts(18,30): error TS2307: Cannot find module '../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/SessionOrchestratorBase.ts(19,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(4,48): error TS2307: Cannot find module '../services/realtimeSubscriptions' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(5,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(6,38): error TS2307: Cannot find module '../utils/silent-failure' or its corresponding type declarations.
+src/features/session/hooks/build-return-args.ts(3,42): error TS2307: Cannot find module '../../../session/types/interfaces' or its corresponding type declarations.
+src/features/session/hooks/build-return-args.ts(4,15): error TS2724: '"../../../session/SessionOrchestrator"' has no exported member named 'SessionOrchestrator'. Did you mean 'getSessionOrchestrator'?
+src/features/session/hooks/useStudySession.return.ts(3,21): error TS2307: Cannot find module '../../../session/' or its corresponding type declarations.
+src/features/session/hooks/useStudySession.ts(14,40): error TS2307: Cannot find module '../../../session/orchestrator-factory' or its corresponding type declarations.
+src/features/session/hooks/useStudySession.ts(82,55): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(85,21): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(86,18): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(87,27): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(88,30): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(99,56): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(102,21): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(103,18): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(104,27): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(105,30): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(116,54): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(121,11): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(125,23): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(126,20): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(127,32): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ status: "COMPLETED" | "PREPARING" | "STARTING" | "ACTIVE" | "PAUSED" | "BACKGROUNDED" | "INTERRUPTION_RISK" | "DEGRADED" | "COMPLETING" | "PARTIAL" | "ABANDONED" | "FAILED" | "RECOVERING" | "CONFLICT"; ... 61 more ...; lastActiveAt?: number | undefined; }'.
+src/features/session/hooks/useStudySession.ts(128,29): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(132,23): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(133,20): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(134,32): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ status: "COMPLETED" | "PREPARING" | "STARTING" | "ACTIVE" | "PAUSED" | "BACKGROUNDED" | "INTERRUPTION_RISK" | "DEGRADED" | "COMPLETING" | "PARTIAL" | "ABANDONED" | "FAILED" | "RECOVERING" | "CONFLICT"; ... 61 more ...; lastActiveAt?: number | undefined; }'.
+src/features/session/hooks/useStudySession.ts(135,29): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(136,32): error TS18046: 'sessionState' is of type 'unknown'.
+src/screens/home/containers/useHomeScreenInnerEffects.ts(10,50): error TS2307: Cannot find module '../../../session/analytics/SessionAnalytics' or its corresponding type declarations.
+src/screens/session/ActiveSessionBottomControls.tsx(2,37): error TS2307: Cannot find module '../../session/components/InterruptionWarning' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.layers.tsx(4,39): error TS2307: Cannot find module '../../session/components/CompanionSessionLayer' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.layers.tsx(5,34): error TS2307: Cannot find module '../../session/components/DeepWorkVignette' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.tsx(3,39): error TS2307: Cannot find module '../../session/components/CompanionSessionLayer' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.tsx(4,34): error TS2307: Cannot find module '../../session/components/DeepWorkVignette' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(6,38): error TS2307: Cannot find module '../../../session/components/states/SessionDegradedState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(7,35): error TS2307: Cannot find module '../../../session/components/states/SessionEmptyState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(8,35): error TS2307: Cannot find module '../../../session/components/states/SessionErrorState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionModeOverlays.tsx(11,36): error TS2307: Cannot find module '../../../session/components/ModeIndicatorBadge' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionProgressRingInner.tsx(12,27): error TS2307: Cannot find module '../../../session/components/PurityHUD' or its corresponding type declarations.

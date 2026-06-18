@@ -25,6 +25,7 @@ import {
   type BossEngagementInputs,
 } from '../../features/boss/boss-engagement-signals';
 import type { ExtendedRootStackParams } from '../../navigation/types';
+import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
@@ -115,7 +116,7 @@ export const BossScreen = (): React.ReactNode => {
       <BossFallback
         intensity={toScreenIntensity(bossIntensity)}
         onStartSession={() =>
-          navigation.navigate('SessionStack', {
+          navigateToRootScreen(navigation, 'SessionStack', {
             screen: 'SessionSetup',
             params: {},
           })

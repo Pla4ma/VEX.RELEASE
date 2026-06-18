@@ -1,0 +1,373 @@
+{
+  "navigation": [
+    {
+      "file": "src/navigation/hooks/useStreakFuneralNavigation.ts",
+      "line": 181,
+      "issue": "Unsafe `as any` cast on navigationRef — defeats the type-safe navigateToRootScreen helper",
+      "code": "navigateToRootScreen(navigationRef as any, 'StreakFuneral', currentData)"
+    },
+    {
+      "file": "src/navigation/navigation-helpers.ts",
+      "line": 46,
+      "issue": "Function-level type cast on `navigation.navigate` — bypasses React Navigation's type system even though the outer function is generic-typed",
+      "code": "(navigation.navigate as (name: Route, params: RootStackParams[Route]) => void)(route, params)"
+    },
+    {
+      "file": "src/navigation/navigation-helpers.ts",
+      "line": 48,
+      "issue": "Same function-level type cast pattern for zero-param navigation",
+      "code": "(navigation.navigate as (name: Route) => void)(route)"
+    },
+    {
+      "file": "src/features/content-study/screens/ContentInputScreen.tsx",
+      "line": 92,
+      "issue": "String literal screen name in navigate() — not type-checked against navigator param types",
+      "code": "navigation.navigate('ContentReview', { contentId: result.contentId })"
+    },
+    {
+      "file": "src/features/content-study/screens/ContentReviewScreen.tsx",
+      "line": 63,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('StudyPlan', { generationId: result.generationId, contentId: result.contentId })"
+    },
+    {
+      "file": "src/features/content-study/screens/StudyLibraryScreen.tsx",
+      "line": 49,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('ContentReview', { contentId })"
+    },
+    {
+      "file": "src/features/content-study/screens/StudyLibraryScreen.tsx",
+      "line": 106,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('ContentInput', {})"
+    },
+    {
+      "file": "src/features/content-study/screens/StudyLibraryScreen.tsx",
+      "line": 163,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('ContentInput', {})"
+    },
+    {
+      "file": "src/screens/home/FocusScreen.tsx",
+      "line": 64,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('Settings', { screen: 'SettingsMain' })"
+    },
+    {
+      "file": "src/screens/home/FocusScreen.tsx",
+      "line": 69,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('FocusScoreDashboard')"
+    },
+    {
+      "file": "src/screens/home/components/HomeMetricsRow.tsx",
+      "line": 59,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('FocusScoreDashboard')"
+    },
+    {
+      "file": "src/screens/home/containers/HomeColdStartFallback.tsx",
+      "line": 29,
+      "issue": "String literal screen name in navigate() with nested navigator",
+      "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { source: 'onboarding_first_session' } })"
+    },
+    {
+      "file": "src/screens/home/containers/HomeTopBar.tsx",
+      "line": 63,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('Notifications')"
+    },
+    {
+      "file": "src/screens/notifications/NotificationsScreen.tsx",
+      "line": 49,
+      "issue": "String literal screen name in navigate()",
+      "code": "navigation.navigate('Settings', { screen: 'NotificationSettings' })"
+    },
+    {
+      "file": "src/screens/plan/usePlanScreenActions.ts",
+      "line": 22,
+      "issue": "String literal screen name in navigate() (repeated across lines 22, 37, 46, 53, 58, 68)",
+      "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { source: 'plan' } })"
+    }
+  ],
+  "events": [
+    {
+      "file": "src/events/EventBus.ts",
+      "line": 87,
+      "issue": "publishUntyped() accepts channel: string and data: unknown — allows publishing any event without type checking, bypassing EventChannels type map",
+      "code": "private publishUntyped(channel: string, data: unknown): void"
+    },
+    {
+      "file": "src/events/EventEmitter.ts",
+      "line": 21,
+      "issue": "on() method uses untyped event parameter (event: string) — generic T is not constrained by EventChannels",
+      "code": "on<T = unknown>(event: string, handler: EventHandler<T>, options?)"
+    },
+    {
+      "file": "src/events/EventEmitter.ts",
+      "line": 38,
+      "issue": "once() method has same untyped event parameter issue",
+      "code": "once<T = unknown>(event: string, handler: EventHandler<T>)"
+    },
+    {
+      "file": "src/events/types/analytics-extended.ts",
+      "line": 13,
+      "issue": "Pervasive `[key: string]: unknown` index signatures on all 15 event type interfaces — defeats the purpose of typed event payloads",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/events/types/onboarding.ts",
+      "line": 9,
+      "issue": "[key: string]: unknown index signature on all onboarding event types",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/events/types/reward.ts",
+      "line": 7,
+      "issue": "[key: string]: unknown index signature on reward event types",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/events/types/subscription.ts",
+      "line": 15,
+      "issue": "[key: string]: unknown index signature on subscription event types",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/shared/analytics/analytics-event-properties.ts",
+      "line": 2,
+      "issue": "BaseEventProperties uses [key: string]: unknown — all analytics events inherit open-ended typing",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/logging/Logger.ts",
+      "line": 11,
+      "issue": "LogContext uses [key: string]: unknown — weak typing on structured logging",
+      "code": "[key: string]: unknown"
+    },
+    {
+      "file": "src/components/primitives/theme-values.ts",
+      "line": 2,
+      "issue": "ThemeColors type uses [key: string]: unknown — theme color access is untyped",
+      "code": "export type ThemeColors = { [key: string]: unknown }"
+    },
+    {
+      "file": "src/components/primitives/theme-values.ts",
+      "line": 11,
+      "issue": "ThemeValue type uses [key: string]: unknown",
+      "code": "[key: string]: unknown"
+    }
+  ],
+  "tokens": [
+    {
+      "file": "src/components/glass/FocusModeOrb.tsx",
+      "line": 58,
+      "issue": "Hardcoded hex color in SVG gradient — should reference design token",
+      "hardcoded_value": "#0A5E4D"
+    },
+    {
+      "file": "src/components/glass/FocusModeOrb.tsx",
+      "line": 63,
+      "issue": "Hardcoded hex color in SVG gradient",
+      "hardcoded_value": "#FFFFFF"
+    },
+    {
+      "file": "src/components/glass/GlassProgressBar.tsx",
+      "line": 26,
+      "issue": "Hardcoded hex colors for progress bar gradient — not using design tokens",
+      "hardcoded_value": "#DFA44A"
+    },
+    {
+      "file": "src/components/glass/GlassSurface.tsx",
+      "line": 41,
+      "issue": "Hardcoded default prop color for accent top bar",
+      "hardcoded_value": "#42CFAE"
+    },
+    {
+      "file": "src/components/glass/LiquidGlassBackdrop.tsx",
+      "line": 24,
+      "issue": "Hardcoded hex colors in SVG gradient defs",
+      "hardcoded_value": "#FFFFFF"
+    },
+    {
+      "file": "src/components/glass/LiquidGlassObject.defs.tsx",
+      "line": 8,
+      "issue": "Hardcoded hex color in liquid core gradient",
+      "hardcoded_value": "#FFFFFF"
+    },
+    {
+      "file": "src/components/glass/LiquidGlassObject.bubble.tsx",
+      "line": 19,
+      "issue": "Hardcoded fill color on specular highlight",
+      "hardcoded_value": "#FFFFFF"
+    },
+    {
+      "file": "src/components/glass/LiquidGlassSphere.defs.tsx",
+      "line": 23,
+      "issue": "Hardcoded shadow gradient color",
+      "hardcoded_value": "#0A5E4D"
+    },
+    {
+      "file": "src/components/glass/WaterRippleBackground.tsx",
+      "line": 57,
+      "issue": "Hardcoded stroke color in SVG",
+      "hardcoded_value": "#18B894"
+    },
+    {
+      "file": "src/components/glass/WaterRippleBackground.tsx",
+      "line": 65,
+      "issue": "Hardcoded stroke color in SVG",
+      "hardcoded_value": "#5FEDC7"
+    },
+    {
+      "file": "src/screens/auth/components/VexGlassInput.tsx",
+      "line": 126,
+      "issue": "Hardcoded color in inline style",
+      "hardcoded_value": "#092A27"
+    },
+    {
+      "file": "src/screens/ethereal/AnimatedVexMark.tsx",
+      "line": 33,
+      "issue": "Hardcoded stroke color on SVG path",
+      "hardcoded_value": "#0A0A0A"
+    },
+    {
+      "file": "src/features/home-experience/components/HomeExperiencePrelude.tsx",
+      "line": 109,
+      "issue": "Hardcoded white color in conditional inline style",
+      "hardcoded_value": "#FFFFFF"
+    },
+    {
+      "file": "src/components/glass/GlassSectionHeader.tsx",
+      "line": 32,
+      "issue": "Hardcoded fontSize in StyleSheet",
+      "hardcoded_value": "fontSize: 12"
+    },
+    {
+      "file": "src/components/glass/GlassSectionHeader.tsx",
+      "line": 44,
+      "issue": "Hardcoded fontSize in StyleSheet",
+      "hardcoded_value": "fontSize: 22"
+    },
+    {
+      "file": "src/components/glass/GlassPill.tsx",
+      "line": 28,
+      "issue": "Hardcoded font sizes in size config — should derive from typography scale",
+      "hardcoded_value": "fontSize: 11, 12, 14"
+    },
+    {
+      "file": "src/components/LevelUpCelebration.tsx",
+      "line": 84,
+      "issue": "Hardcoded fontSize for level number display",
+      "hardcoded_value": "fontSize: 84"
+    },
+    {
+      "file": "src/components/primitives/VexLaunchButton.tsx",
+      "line": 139,
+      "issue": "Hardcoded fontSize in inline style",
+      "hardcoded_value": "fontSize: 16"
+    },
+    {
+      "file": "src/components/primitives/VexLaunchButton.tsx",
+      "line": 143,
+      "issue": "Hardcoded fontSize and rgba color in inline style",
+      "hardcoded_value": "fontSize: 12, color: rgba(255, 255, 255, 0.85)"
+    },
+    {
+      "file": "src/app/session/index.tsx",
+      "line": 144,
+      "issue": "Hardcoded fontSize in StyleSheet",
+      "hardcoded_value": "fontSize: 16"
+    },
+    {
+      "file": "src/features/ai-coach/components/CoachInterventionBanner.tsx",
+      "line": 159,
+      "issue": "Hardcoded fontSize in inline style",
+      "hardcoded_value": "fontSize: 15"
+    },
+    {
+      "file": "src/features/ai-coach/components/CoachLoadingState.tsx",
+      "line": 75,
+      "issue": "Hardcoded fontSize in StyleSheet",
+      "hardcoded_value": "fontSize: 14"
+    },
+    {
+      "file": "src/features/premium/PremiumSurface.toneLocked.tsx",
+      "line": 46,
+      "issue": "Hardcoded fontSize in inline style (pattern repeated across PremiumSurface variants)",
+      "hardcoded_value": "fontSize: 12"
+    },
+    {
+      "file": "src/features/premium/PremiumSurface.toneLocked.tsx",
+      "line": 60,
+      "issue": "Hardcoded fontSize in inline style",
+      "hardcoded_value": "fontSize: 18"
+    }
+  ],
+  "accessibility": [
+    {
+      "file": "src/features/fab/components/FloatingActionButton.tsx",
+      "line": 97,
+      "issue": "Pressable backdrop without accessibilityLabel or accessibilityRole — screen readers cannot identify this dismiss action",
+      "code": "<Pressable onPress={toggleMenu} style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }} />"
+    },
+    {
+      "file": "src/features/notifications/components/NotificationCenter.tsx",
+      "line": 20,
+      "issue": "Pressable overlay without accessibilityLabel or accessibilityRole — touch target for closing notification center is unlabeled",
+      "code": "<Pressable style={StyleSheet.absoluteFill} onPress={onClose} />"
+    },
+    {
+      "file": "src/features/ai-coach/components/ChatInputBar.tsx",
+      "line": 33,
+      "issue": "Pressable send button without accessibilityLabel — users cannot identify the send action",
+      "code": "<Pressable style={...} onPress={onSend} />"
+    },
+    {
+      "file": "src/features/ai-coach/components/ChatMessageItem.tsx",
+      "line": 65,
+      "issue": "Pressable action button inside chat bubble without accessibilityLabel",
+      "code": "<Pressable style={...} onPress={...} />"
+    }
+  ],
+  "realtime": [
+    {
+      "file": "src/features/ai-coach/repository/messages-subscriptions.ts",
+      "line": 142,
+      "issue": "subscribeToCoachRealtime returns cleanup function but is not a React hook — callers must remember to invoke cleanup; no enforcement of useEffect cleanup pattern",
+      "code": "return () => { void channel.unsubscribe(); };"
+    },
+    {
+      "file": "src/features/notifications/repository/notifications.ts",
+      "line": 164,
+      "issue": "subscribeToNotificationCenter uses manual ref-counting for channel lifecycle — complex cleanup logic could leak if refCount desyncs",
+      "code": "const channel = supabase.channel(channelName).on('postgres_changes', ...).subscribe()"
+    },
+    {
+      "file": "src/services/realtimeBroadcast.ts",
+      "line": 62,
+      "issue": "Channel name includes Date.now() timestamp — creates unique channel names that prevent channel reuse and may cause connection count pressure",
+      "code": "const newChannel = client.channel(`${fullChannelName}:tx:${Date.now()}`)"
+    },
+    {
+      "file": "src/services/realtimeSubscriptions.ts",
+      "line": 49,
+      "issue": "subscribeToFeedChanges returns Promise<() => void> — async cleanup requires await before unsubscribing, easy to forget",
+      "code": "export async function subscribeToFeedChanges(userId, callback): Promise<() => void>"
+    },
+    {
+      "file": "src/services/realtimeSubscriptions.ts",
+      "line": 84,
+      "issue": "subscribeToSquadChanges returns Promise<() => void> — same async cleanup issue",
+      "code": "export async function subscribeToSquadChanges(squadId, callback): Promise<() => void>"
+    },
+    {
+      "file": "src/services/realtimeSubscriptions.ts",
+      "line": 124,
+      "issue": "subscribeToGuildQuests returns Promise<() => void> — same async cleanup issue",
+      "code": "export async function subscribeToGuildQuests(guildId, callback): Promise<() => void>"
+    }
+  ],
+  "haptics": []
+}

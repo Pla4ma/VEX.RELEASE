@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { SessionStackParams, ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -29,16 +30,13 @@ export function useActivatingNavigation(params: ActivatingNavigationParams) {
           params?.source ?? 'home',
         );
       }
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: params ?? {},
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params ?? {});
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigation.navigate('Main', { screen: 'Progress' });
+    navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
   const openNextAction = useCallback((): void => {

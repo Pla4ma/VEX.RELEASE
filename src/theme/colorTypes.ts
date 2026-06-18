@@ -65,6 +65,12 @@ export interface ColorPalette {
     orange: string;
     pink: string;
     teal: string;
+    active: string;
+    settled: string;
+    rescue: string;
+    editorial: string;
+    premium: string;
+    reflection: string;
   };
   semantic: SemanticColors;
 }

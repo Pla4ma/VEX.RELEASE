@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../../navigation/types';
+import { navigateToMainStackScreen, navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import { useFeatureGate } from '../../../features/feature-gate/hooks';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveStudyPlan } from '../../../features/content-study';
@@ -46,7 +47,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   );
   const _openChallenges = (): void => {
     if (canNavChallenges) {
-      navigation.navigate('Challenges');
+      navigateToMainStackScreen(navigation as never, 'Challenges');
       return;
     }
     controller.openSetup();
@@ -72,7 +73,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     sm.progress_detail !== 'tiny_tease';
   const handleFocusScorePress = (): void => {
     if (isNewOrActivating || !canOpenProgressDetail) {return;}
-    navigation.navigate('FocusScoreDashboard');
+    navigateToRootScreen(navigation, 'FocusScoreDashboard');
   };
 
   const todaysChallenges: ChallengeItem[] = isAvailable

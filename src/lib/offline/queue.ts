@@ -190,7 +190,7 @@ export function pruneExpiredEntries(): void {
   const cutoff = Date.now() - OFFLINE_QUEUE_TTL_MS;
   const before = queue.length;
   for (let i = queue.length - 1; i >= 0; i -= 1) {
-    if (queue[i]!.createdAt < cutoff) {queue.splice(i, 1);}
+    if ((queue[i]?.createdAt ?? 0) < cutoff) {queue.splice(i, 1);}
   }
   if (queue.length < before) {
     notifyListeners();

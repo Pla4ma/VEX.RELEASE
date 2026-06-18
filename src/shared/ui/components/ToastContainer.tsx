@@ -38,7 +38,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
 }) => {
   const { height } = useWindowDimensions();
   const grouped = groupToastsByPosition(toasts);
-  const activePositions = POSITIONS.filter((p) => grouped[p] && grouped[p]!.length > 0);
+  const activePositions = POSITIONS.filter((p) => grouped[p] && (grouped[p]?.length ?? 0) > 0);
 
   return (
     <>
@@ -56,7 +56,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
             ]}
             pointerEvents="box-none"
           >
-            {grouped[position]!.map((toast, index) => (
+            {(grouped[position] ?? []).map((toast, index) => (
               <ToastComponent
                 key={toast.id}
                 toast={toast}

@@ -4,6 +4,7 @@ import {
   isFeatureAvailableForNavigation,
 } from '../../../features/liveops-config';
 import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
+import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 
 export type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -43,7 +44,7 @@ export function openChallenges(
   if (
     isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))
   ) {
-    navigation.navigate('Challenges');
+    navigateToMainStackScreen(navigation, 'Challenges');
     return;
   }
   controller.openSetup();
@@ -57,7 +58,7 @@ export function openCompanion(
   if (
     isFeatureAvailableForNavigation(getFeatureAvailability(companionAccess))
   ) {
-    navigation.navigate('CompanionDetail');
+    navigateToMainStackScreen(navigation, 'CompanionDetail');
     return;
   }
   controller.openSetup();

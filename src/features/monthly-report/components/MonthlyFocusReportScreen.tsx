@@ -13,6 +13,7 @@ import { ReportSkeleton } from './ReportSkeleton';
 import { ReportContent } from './ReportContent';
 import { ReportEmptyState } from './ReportEmptyState';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import { useFeatureAccess } from '../../liveops-config';
 import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
 
@@ -39,10 +40,10 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     const handleOpenPaywall = () => {
       if (monthlyReportAction !== 'paywall') {
-        navigation.navigate('SessionStack', { screen: 'SessionSetup' });
+        navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup' });
         return;
       }
-      navigation.navigate('Paywall', {
+      navigateToRootScreen(navigation, 'Paywall', {
         source: 'monthly-report',
         gatedFeature: 'monthly-report',
       });
@@ -106,7 +107,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
       return (
         <ReportEmptyState
           isOffline={isOffline}
-          onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup' })}
+          onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup' })}
         />
       );
     }

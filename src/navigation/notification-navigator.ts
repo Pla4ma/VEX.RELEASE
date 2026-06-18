@@ -10,6 +10,13 @@ import {
 } from './notification-routing-types';
 import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
 import { resolveNotificationAction } from './notification-resolver';
+import {
+  navigateToRootScreen,
+  navigateToMainTab,
+  navigateToMainStackScreen,
+} from './navigation-helpers';
+import type { NavigationProp } from '@react-navigation/native';
+import type { RootStackParams, MainStackParams } from './param-types';
 
 export function navigateFromSafeIntent(
   navigation: NotificationNavigation,
@@ -24,33 +31,33 @@ export function navigateFromSafeIntent(
       return navigateToRescueSession(navigation, params);
     case 'OPEN_BOSS': {
       if (!canUseFeature(featureAccess, 'boss_tab')) {return blocked('Boss');}
-      navigation.navigate('Boss', undefined);
+      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Boss');
       return { success: true, screen: 'Boss' };
     }
     case 'OPEN_PROGRESS':
-      navigation.navigate('Main', { screen: 'Progress' });
+      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Progress');
       return { success: true, screen: 'Progress' };
     case 'OPEN_PROFILE':
-      navigation.navigate('Main', { screen: 'Profile' });
+      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Profile');
       return { success: true, screen: 'Profile' };
     case 'OPEN_COACH': {
       if (!canUseFeature(featureAccess, 'ai_coach_advanced'))
         {return blocked('AICoach');}
-      navigation.navigate('AICoach', undefined);
+      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'AICoach');
       return { success: true, screen: 'AICoach' };
     }
     case 'OPEN_STUDY_LAYER': {
       if (!canUseFeature(featureAccess, 'content_study'))
         {return blocked('ContentStudy');}
-      navigation.navigate('ContentStudy', undefined);
+      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'ContentStudy');
       return { success: true, screen: 'ContentStudy' };
     }
     case 'OPEN_SETTINGS':
-      navigation.navigate('Settings', undefined);
+      navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Settings');
       return { success: true, screen: 'Settings' };
     case 'OPEN_HOME':
     default:
-      navigation.navigate('Main', { screen: 'Home' });
+      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Home');
       return { success: true, screen: 'Home' };
   }
 }

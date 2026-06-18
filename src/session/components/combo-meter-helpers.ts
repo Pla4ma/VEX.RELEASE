@@ -54,11 +54,11 @@ export const COMBO_TIERS: ComboTierConfig[] = [
 
 export function getCurrentTier(combo: number): ComboTierConfig {
   for (let i = COMBO_TIERS.length - 1; i >= 0; i--) {
-    if (combo >= COMBO_TIERS[i]!.minCombo) {
-      return COMBO_TIERS[i]!;
+    if (combo >= (COMBO_TIERS[i]?.minCombo ?? 0)) {
+      return COMBO_TIERS[i] ?? COMBO_TIERS[0]!; // ponytail: COMBO_TIERS is non-empty const
     }
   }
-  return COMBO_TIERS[0]!;
+  return COMBO_TIERS[0]!; // ponytail: COMBO_TIERS is non-empty const
 }
 
 export function getTierProgress(combo: number): number {

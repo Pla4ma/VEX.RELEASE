@@ -6,6 +6,7 @@ import {
 import { trackInterventionActioned } from '../../../features/ai-coach/analytics';
 import { eventBus } from '../../../events/EventBus';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
@@ -71,9 +72,9 @@ export function HomeInterventionBanner({
       const { suggestedDurationSeconds, presetMode } =
         buildInterventionSessionParams(normalized);
 
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: { suggestedDurationSeconds, presetMode },
+      navigateToSessionStackScreen(navigation, 'SessionSetup', {
+        suggestedDurationSeconds,
+        presetMode,
       });
     },
     [userId, navigation],

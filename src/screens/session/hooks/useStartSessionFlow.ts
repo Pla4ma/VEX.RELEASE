@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react-native';
 import { getSprintChainService } from '../../../features/session/SprintChainService';
 import { startStreakRestoreQuest } from '../../../features/streaks/restore-quest';
 import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import { SessionMode } from '../../../session/modes';
 import { useSession } from '../../../session/hooks/useSession';
 import { SessionConfigSchema } from '../../../session/types/schemas';
@@ -127,7 +128,7 @@ export function useStartSessionFlow({
         }, 120);
       }
 
-      navigation.navigate('ActiveSession', {
+      navigateToSessionStackScreen(navigation as any, 'ActiveSession', {
         sessionId: session.id,
         selectedThemeId: selectedThemeOwned ? selectedThemeId : 'default',
       });

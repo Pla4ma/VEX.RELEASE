@@ -26,16 +26,16 @@ export function useSessionSetupState(
   const initialPreset = useMemo(() => {
     if (params?.presetId) {
       return (
-        PRESETS.find((preset) => preset.id === params.presetId) ?? PRESETS[1]!
+        PRESETS.find((preset) => preset.id === params.presetId) ?? PRESETS[1]! // ponytail: PRESETS has >= 2 entries
       );
     }
-    return PRESETS[1]!;
+    return PRESETS[1]!; // ponytail: PRESETS has >= 2 entries
   }, [params?.presetId]);
   const [selectedPreset, setSelectedPreset] = useState<PresetWithIcon>(
-    initialPreset!,
+    initialPreset!, // ponytail: initialPreset always set by useMemo
   );
   const [selectedCategory, setSelectedCategory] = useState(
-    initialPreset!.category ?? 'standard',
+    initialPreset?.category ?? 'standard',
   );
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [customDuration, setCustomDuration] = useState(

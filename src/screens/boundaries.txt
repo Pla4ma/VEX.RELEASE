@@ -1,0 +1,75 @@
+analytics\AnalyticsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+analytics\AnalyticsScreen.tsx:export default withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+auth\ForgotPasswordScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+auth\ForgotPasswordScreen.tsx:export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+auth\LoginScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+auth\LoginScreen.tsx:export default withScreenErrorBoundary(LoginScreen, 'Login');
+auth\RegisterScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+auth\RegisterScreen.tsx:export default withScreenErrorBoundary(RegisterScreen, 'Register');
+auth\ResetPasswordScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+auth\ResetPasswordScreen.tsx:export default withScreenErrorBoundary(ResetPasswordScreen, 'ResetPassword');
+auth\VerifyEmailScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+auth\VerifyEmailScreen.tsx:export default withScreenErrorBoundary(VerifyEmailScreen, 'VerifyEmail');
+boss\BossScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+boss\BossScreen.tsx:export default withScreenErrorBoundary(BossScreen, 'Boss');
+challenges\ChallengesScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+challenges\ChallengesScreen.tsx:export default withScreenErrorBoundary(ChallengesScreen, 'Challenges');
+ComebackScreen.tsx:import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
+ComebackScreen.tsx:export default withScreenErrorBoundary(ComebackScreen, 'Comeback');
+companion\CompanionDetailScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+companion\CompanionDetailScreen.tsx:export default withScreenErrorBoundary(
+home\FocusScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+home\FocusScreen.tsx:export default withScreenErrorBoundary(FocusScreen, 'Focus');
+home\HomeScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+home\HomeScreen.tsx:export const HomeScreen = withScreenErrorBoundary(
+home\__tests__\home-screen-command-mocks.tsx:  withScreenErrorBoundary: (Component: React.ComponentType<unknown>) =>
+home\__tests__\home-screen-recommendations-helpers.tsx:  withScreenErrorBoundary: (Component: React.ComponentType<unknown>) =>
+notifications\NotificationsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+notifications\NotificationsScreen.tsx:export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');
+onboarding\OnboardingFlowScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+onboarding\OnboardingFlowScreen.tsx:export default withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');paywall\PaywallScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+paywall\PaywallScreen.tsx:export const PaywallScreen = withScreenErrorBoundary(
+plan\PlanScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+plan\PlanScreen.tsx:export const PlanScreen = withScreenErrorBoundary(PlanScreenContent, 'Plan');
+profile\AchievementsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+profile\AchievementsScreen.tsx:export default withScreenErrorBoundary(AchievementsScreen, 'Achievements');
+profile\CompanionScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+profile\CompanionScreen.tsx:export default withScreenErrorBoundary(CompanionScreen, 'Companion');
+profile\MasteryScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+profile\MasteryScreen.tsx:export default withScreenErrorBoundary(MasteryScreen, 'Mastery');
+profile\MemoryConsoleScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+profile\MemoryConsoleScreen.tsx:export default withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
+profile\ProfileScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+profile\ProfileScreen.tsx:export default withScreenErrorBoundary(ProfileScreen, 'Profile');
+progress\ProgressScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+progress\ProgressScreen.tsx:export default withScreenErrorBoundary(ProgressScreen, 'Progress');
+rewards\VaultScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+rewards\VaultScreen.tsx:export default withScreenErrorBoundary(VaultScreen, 'Vault');
+search\SearchScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+search\SearchScreen.tsx:export default withScreenErrorBoundary(SearchScreen, 'Search');
+session\ActiveSessionScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+session\ActiveSessionScreen.tsx:export const ActiveSessionScreen = withScreenErrorBoundary(
+session\SessionCompleteScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+session\SessionCompleteScreen.tsx:export const SessionCompleteScreen = withScreenErrorBoundary(
+session\SessionHistoryScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+session\SessionHistoryScreen.tsx:export default withScreenErrorBoundary(SessionHistoryScreen, 'SessionHistory');
+session\SessionSetupScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+session\SessionSetupScreen.tsx:export const SessionSetupScreen = withScreenErrorBoundary(
+settings\AccountSettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\AccountSettingsScreen.tsx:export default withScreenErrorBoundary(
+settings\AppearanceSettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\AppearanceSettingsScreen.tsx:export default withScreenErrorBoundary(
+settings\CoachSettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\CoachSettingsScreen.tsx:export default withScreenErrorBoundary(CoachSettingsScreen, 'CoachSettings');
+settings\DataExportScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\DataExportScreen.tsx:export const DataExportScreen = withScreenErrorBoundary(
+settings\LaneModeSettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\LaneModeSettingsScreen.tsx:export const LaneModeSettingsScreen = withScreenErrorBoundary(
+settings\NotificationSettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\NotificationSettingsScreen.tsx:export default withScreenErrorBoundary(
+settings\PrivacySettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\PrivacySettingsScreen.tsx:export default withScreenErrorBoundary(
+settings\SettingsScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+settings\SettingsScreen.tsx:export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
+streaks\StreakFuneralScreen.tsx:import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+streaks\StreakFuneralScreen.tsx:export default withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');

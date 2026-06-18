@@ -115,7 +115,7 @@ export function validatePurchase(
   if (userHistory.recentPurchases.length > 0) {
     const lastPurchase =
       userHistory.recentPurchases[userHistory.recentPurchases.length - 1];
-    const timeSinceLast = purchase.purchasedAt - lastPurchase!.purchasedAt;
+    const timeSinceLast = purchase.purchasedAt - (lastPurchase?.purchasedAt ?? 0);
     if (timeSinceLast < 10000) {
       result.errors.push({
         field: 'velocity',

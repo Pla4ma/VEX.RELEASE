@@ -9,6 +9,7 @@ import type { ExtendedRootStackParams, SessionStackParams } from '../../../navig
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
+  navigateToMainStackScreen,
 } from '../../../navigation/navigation-helpers';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 import { buildLearningSessionParams } from '../../../features/learning-execution/service';
@@ -66,7 +67,7 @@ export function usePowerUserNavigation(params: {
       openSetup();
       return;
     }
-    navigation.navigate('ContentStudy');
+    navigateToMainStackScreen(navigation, 'ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

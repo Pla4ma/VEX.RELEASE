@@ -13,6 +13,7 @@ import type { AchievementCategory, AchievementRarity } from '@/features/achievem
 import { useAuthStore } from '../../store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ExtendedRootStackParams } from '@/navigation/types';
+import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import { AchievementsHeader } from './AchievementProgressBar';
 import { CategoryTabs, FilterSortBar, type FilterType, type SortType } from './AchievementSearchFilter';
 import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementWithStatus } from './AchievementCategorySection';
@@ -34,7 +35,7 @@ export const AchievementsScreen = React.memo(() => {
   const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStatus | null>(null);
 
   const handleStartSession = useCallback(() => {
-    navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
+    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} });
   }, [navigation]);
 
   const filteredAchievements = useMemo(() => {

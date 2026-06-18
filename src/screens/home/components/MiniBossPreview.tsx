@@ -17,6 +17,7 @@ import { useHaptics } from '../../../utils/haptics';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 import {
@@ -55,7 +56,7 @@ export function MiniBossPreview({
   const handlePress = () => {
     if (!canNavigate) {return;}
     haptics.medium();
-    navigation.navigate('Boss');
+    navigateToMainStackScreen(navigation, 'Boss');
   };
 
   if (!showCombat) {

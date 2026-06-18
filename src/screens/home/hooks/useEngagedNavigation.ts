@@ -3,6 +3,7 @@ import type { FeatureAccessResult } from '../../../features/liveops-config';
 import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 import type { SessionStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { Nav } from './engaged-home-types';
 
 interface EngagedNavigationParams {
@@ -40,25 +41,23 @@ export function useEngagedNavigation(params: EngagedNavigationParams) {
           params?.source ?? 'home',
         );
       }
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: params ?? {},
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params ?? {});
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback(
-    () => navigation.navigate('Main', { screen: 'Progress' }),
+    () => navigateToMainTab(navigation, 'Progress'),
     [navigation],
   );
 
   const openSocial = useCallback(() => {
-    navigation.navigate(
-      'Main',
+    navigateToMainTab(
+      navigation,
+      'Profile',
       canNavigateSocial
-        ? { screen: 'Profile', params: { tab: 'social' } }
-        : { screen: 'Profile', params: { tab: 'stats' } },
+        ? { tab: 'social' }
+        : { tab: 'stats' },
     );
   }, [canNavigateSocial, navigation]);
 
@@ -67,7 +66,7 @@ export function useEngagedNavigation(params: EngagedNavigationParams) {
       openSetup();
       return;
     }
-    navigation.navigate('ContentStudy');
+    navigateToMainStackScreen(navigation, 'ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
 
   const continueStudyPlan = useCallback(() => {

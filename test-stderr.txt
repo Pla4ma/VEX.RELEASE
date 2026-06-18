@@ -1,0 +1,2195 @@
+  console.warn
+    [2026-06-18T00:03:30.880Z] [session-completion:offline-sync-storage] Failed to load fallback storage: TypeError: Cannot read properties of undefined (reading 'get')
+        at Object.get [as getItemSync] (C:\Users\jonat\CascadeProjects\vex-app-old\src\privacy\__tests__\data-deletion.test.ts:46:47)
+        at FallbackStorageManager.getItemSync [as loadFromStorage] (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:105:30)
+        at new loadFromStorage (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:49:10)
+        at Object.<anonymous> (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:130:32)
+        at Runtime._execModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1439:24)
+        at Runtime._loadModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1022:12)
+        at Runtime.requireModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:882:12)
+        at Runtime.requireModuleOrMock (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1048:21)
+        at Object.require (C:\Users\jonat\CascadeProjects\vex-app-old\src\privacy\__tests__\data-deletion.test.ts:10:1)
+        at Runtime._execModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1439:24)
+        at Runtime._loadModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1022:12)
+        at Runtime.requireModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:882:12)
+        at jestAdapter (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:77:13)
+        at runTestInternal (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at FallbackStorageManager.warn [as loadFromStorage] (src/features/session-completion/offline-sync-storage.ts:115:13)
+      at new loadFromStorage (src/features/session-completion/offline-sync-storage.ts:49:10)
+      at Object.<anonymous> (src/features/session-completion/offline-sync-storage.ts:130:32)
+      at Object.require (src/privacy/__tests__/data-deletion.test.ts:10:1)
+
+  console.warn
+    [2026-06-18T00:03:30.909Z] [session-completion:offline-sync-storage] Failed to save fallback storage: TypeError: Cannot read properties of undefined (reading 'set')
+        at Object.set [as setItemSync] (C:\Users\jonat\CascadeProjects\vex-app-old\src\privacy\__tests__\data-deletion.test.ts:52:19)
+        at FallbackStorageManager.setItemSync [as saveToStorage] (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:123:15)
+        at FallbackStorageManager.saveToStorage [as loadFromStorage] (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:117:12)
+        at new loadFromStorage (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:49:10)
+        at Object.<anonymous> (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\session-completion\offline-sync-storage.ts:130:32)
+        at Runtime._execModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1439:24)
+        at Runtime._loadModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1022:12)
+        at Runtime.requireModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:882:12)
+        at Runtime.requireModuleOrMock (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1048:21)
+        at Object.require (C:\Users\jonat\CascadeProjects\vex-app-old\src\privacy\__tests__\data-deletion.test.ts:10:1)
+        at Runtime._execModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1439:24)
+        at Runtime._loadModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:1022:12)
+        at Runtime.requireModule (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runtime\build\index.js:882:12)
+        at jestAdapter (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:77:13)
+        at runTestInternal (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\jest-runner\build\runTest.js:444:34)
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at FallbackStorageManager.warn [as saveToStorage] (src/features/session-completion/offline-sync-storage.ts:125:13)
+      at FallbackStorageManager.saveToStorage [as loadFromStorage] (src/features/session-completion/offline-sync-storage.ts:117:12)
+      at new loadFromStorage (src/features/session-completion/offline-sync-storage.ts:49:10)
+      at Object.<anonymous> (src/features/session-completion/offline-sync-storage.ts:130:32)
+      at Object.require (src/privacy/__tests__/data-deletion.test.ts:10:1)
+
+  console.info
+    [2026-06-18T00:03:30.925Z] [onboarding:repository] Onboarding state saved { userId: '550e8400-e29b-41d4-a716-446655440000', step: 3 }
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:30.934Z] [onboarding:repository] Onboarding state cleared { userId: '550e8400-e29b-41d4-a716-446655440000' }
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+FAIL src/privacy/__tests__/data-deletion.test.ts
+  User can delete/reset personalization data
+    × onboarding store reset clears all profile data (2 ms)
+    √ onboarding repository clear removes persisted keys (16 ms)
+    √ offline sync storage clear removes all pending entries (2 ms)
+
+  ● User can delete/reset personalization data › onboarding store reset clears all profile data
+
+    TypeError: mmkvStorage.setItemSync is not a function
+
+    [0m [90m 82 |[39m           mmkvStorage[33m.[39mgetItemSync(name) [33m?[39m[33m?[39m [36mnull[39m[33m,[39m
+     [90m 83 |[39m         setItem[33m:[39m (name[33m:[39m string[33m,[39m value[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m
+    [31m[1m>[22m[39m[90m 84 |[39m           mmkvStorage[33m.[39msetItemSync(name[33m,[39m value)[33m,[39m
+     [90m    |[39m                       [31m[1m^[22m[39m
+     [90m 85 |[39m         removeItem[33m:[39m (name[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m
+     [90m 86 |[39m           mmkvStorage[33m.[39mremoveItemSync(name)[33m,[39m
+     [90m 87 |[39m       }))[33m,[39m[0m
+
+      at Object.setItemSync [as setItem] (src/features/onboarding/store.ts:84:23)
+      at Object.setItem (node_modules/zustand/middleware.js:304:22)
+      at setItem (node_modules/zustand/middleware.js:495:22)
+      at useBoundStore.api.setState (node_modules/zustand/middleware.js:503:12)
+      at Object.setState (src/privacy/__tests__/data-deletion.test.ts:97:24)
+
+  console.warn
+    [2026-06-18T00:03:31.823Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/progression/repository.ts:11:35)
+      at Object.require (src/features/progression/repository/progression-repository.ts:1:1)
+      at Object.require (src/features/progression/service-operation.ts:3:1)
+      at Object.require (src/features/progression/service-xp-core.ts:11:1)
+      at Object.require (src/features/progression/service.ts:3:1)
+      at Object.require (src/progression/ProgressionService.ts:1:1)
+      at Object.require (src/features/session-completion/completion-subsystems.ts:5:1)
+      at Object.require (src/features/session-completion/completion-orchestrator.ts:10:1)
+      at Object.require (src/features/session-completion/service.ts:1:1)
+      at Object.<anonymous> (src/features/session-completion/__tests__/learning-execution-return-plan.test.ts:1:1)
+
+FAIL src/features/session-completion/__tests__/learning-execution-return-plan.test.ts
+  learning execution completion return plan
+    × uses plan wording instead of school-only copy for tied follow-ups (2 ms)
+
+  ● learning execution completion return plan › uses plan wording instead of school-only copy for tied follow-ups
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "plan"
+    Received string:    "VEX saved this as a progress signal. Session banked cleanly Your next study step is ready from this progress signal. Next useful action"
+
+    [0m [90m 17 |[39m     ][33m.[39mjoin([32m' '[39m)[33m;[39m
+     [90m 18 |[39m
+    [31m[1m>[22m[39m[90m 19 |[39m     expect(joined)[33m.[39mtoContain([32m'plan'[39m)[33m;[39m
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 20 |[39m     expect(joined[33m.[39mtoLowerCase())[33m.[39mnot[33m.[39mtoMatch([35m/study|quiz|homework/[39m)[33m;[39m
+     [90m 21 |[39m   })[33m;[39m
+     [90m 22 |[39m })[33m;[39m[0m
+
+      at Object.toContain (src/features/session-completion/__tests__/learning-execution-return-plan.test.ts:19:20)
+
+  console.warn
+    [2026-06-18T00:03:32.352Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/progression/repository.ts:11:35)
+      at Object.require (src/features/progression/repository/progression-repository.ts:1:1)
+      at Object.require (src/features/progression/service-operation.ts:3:1)
+      at Object.require (src/features/progression/service-xp-core.ts:11:1)
+      at Object.require (src/features/progression/service.ts:3:1)
+      at Object.require (src/progression/ProgressionService.ts:1:1)
+      at Object.require (src/features/session-completion/completion-subsystems.ts:5:1)
+      at Object.require (src/features/session-completion/completion-orchestrator.ts:10:1)
+      at Object.require (src/features/session-completion/service.ts:1:1)
+      at Object.require (src/features/session-completion/__tests__/service-story-and-summary.test.ts:2:1)
+
+FAIL src/features/session-completion/__tests__/service-story-and-summary.test.ts
+  buildPostSessionStoryViewModel
+    √ builds view model (1 ms)
+    √ uses degradedSystems fallback
+  parseSessionCompletionParams
+    × parses valid navigation params (2 ms)
+    √ parses recovery params
+    √ returns fallback for null (1 ms)
+    √ returns fallback for unknown shape (1 ms)
+  buildSessionSummaryFromCompletionLedger
+    √ builds summary (1 ms)
+    √ calculates completion percentage
+    √ handles zero target (1 ms)
+    √ handles UNKNOWN mode
+
+  ● parseSessionCompletionParams › parses valid navigation params
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 43 |[39m   it([32m'parses valid navigation params'[39m[33m,[39m () [33m=>[39m {
+     [90m 44 |[39m     [36mconst[39m r [33m=[39m parseSessionCompletionParams({ sessionId[33m:[39m [33mSESSION_UUID[39m[33m,[39m summary[33m:[39m { sessionId[33m:[39m [33mSESSION_UUID[39m } })[33m;[39m
+    [31m[1m>[22m[39m[90m 45 |[39m     expect(r[33m.[39mparams)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                          [31m[1m^[22m[39m
+     [90m 46 |[39m     expect(r[33m.[39mrecoverySessionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m 47 |[39m   })[33m;[39m
+     [90m 48 |[39m   it([32m'parses recovery params'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/service-story-and-summary.test.ts:45:26)
+
+PASS src/features/session-completion/__tests__/completion-orchestrator-edge.test.ts
+  orchestrateSessionCompletion edge cases
+    √ continues with degraded state when non-critical system fails (23 ms)
+    √ validates event input schema (6 ms)
+    √ subscribes to session:completed at most once
+  final release invalidation protection
+    √ does not invalidate economy wallet queries after completion (2 ms)
+    √ still invalidates XP/progress queries after completion (2 ms)
+
+FAIL src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx
+  useOnboardingCompletion
+    × completes onboarding even when the goal draft is missing (26 ms)
+
+  ● useOnboardingCompletion › completes onboarding even when the goal draft is missing
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "user-1"
+
+    Number of calls: 0
+
+    [0m [90m 61 |[39m     })[33m;[39m
+     [90m 62 |[39m
+    [31m[1m>[22m[39m[90m 63 |[39m     expect(mockCompleteOnboarding)[33m.[39mtoHaveBeenCalledWith([32m'user-1'[39m)[33m;[39m
+     [90m    |[39m                                    [31m[1m^[22m[39m
+     [90m 64 |[39m     expect(mockTrackOnboardingCompleted)[33m.[39mtoHaveBeenCalledWith([32m'user-1'[39m)[33m;[39m
+     [90m 65 |[39m     expect(mockShowHomeHighlight)[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 66 |[39m   })[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx:63:36)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.warn
+    [2026-06-18T00:03:33.473Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/ai-coach/repository/personas.ts:11:35)
+      at Object.require (src/features/ai-coach/repository/index.ts:12:1)
+      at Object.require (src/features/ai-coach/repository.ts:16:1)
+      at Object.require (src/features/ai-coach/service/message-generator.ts:8:1)
+      at Object.require (src/features/ai-coach/__tests__/service/message-generator.test.ts:2:1)
+
+FAIL src/features/ai-coach/__tests__/service/message-generator.test.ts
+  Message Generator
+    × generates message from template (1 ms)
+    √ returns null when user is muted
+    × validates generated content (1 ms)
+
+  ● Message Generator › generates message from template
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 44 |[39m       preferredDelivery[33m:[39m [32m'BOTH'[39m[33m,[39m
+     [90m 45 |[39m     })[33m;[39m
+    [31m[1m>[22m[39m[90m 46 |[39m     expect(message)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 47 |[39m     expect(message[33m?[39m[33m.[39mcontent)[33m.[39mtoContain([32m'User'[39m)[33m;[39m
+     [90m 48 |[39m   })[33m;[39m
+     [90m 49 |[39m[0m
+
+      at Object.toBeNull (src/features/ai-coach/__tests__/service/message-generator.test.ts:46:25)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Message Generator › validates generated content
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Matcher error: received value must not be null nor undefined
+
+    Received has value: undefined
+
+    [0m [90m 89 |[39m       preferredDelivery[33m:[39m [32m'BOTH'[39m[33m,[39m
+     [90m 90 |[39m     })[33m;[39m
+    [31m[1m>[22m[39m[90m 91 |[39m     expect(message[33m?[39m[33m.[39mcontent)[33m.[39mnot[33m.[39mtoContain([32m'<script>'[39m)[33m;[39m
+     [90m    |[39m                                  [31m[1m^[22m[39m
+     [90m 92 |[39m   })[33m;[39m
+     [90m 93 |[39m })[33m;[39m
+     [90m 94 |[39m[0m
+
+      at Object.toContain (src/features/ai-coach/__tests__/service/message-generator.test.ts:91:34)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.info
+    [2026-06-18T00:03:33.911Z] [navigation:deep-links] Parsed deep link: vex://session?presetId=123 -> session
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:33.914Z] [navigation:deep-links] Parsed deep link: https://vex.app/boss -> boss
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:33.917Z] [navigation:deep-links] Failed to parse deep link: not-a-valid-url
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:33.918Z] [navigation:deep-links] Parsed deep link: vex://profile/user-123 -> profile
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:33.919Z] [navigation:deep-links] Parsed deep link: vex://invite?code=ABC12345 -> invite
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+PASS src/navigation/__tests__/deep-links-parse.test.ts
+  Deep Links – parsing and navigation
+    parseDeepLink
+      √ parses valid vex:// URL (4 ms)
+      √ parses valid https:// URL (1 ms)
+      √ returns error for invalid scheme (1 ms)
+      √ returns error for unknown path
+      √ returns error for invalid URL (1 ms)
+      √ parses path parameters (1 ms)
+      √ parses query parameters (1 ms)
+    deepLinkToNavigationParams
+      √ converts session link (1 ms)
+      √ converts boss link
+      √ converts duels link
+      √ converts squad link
+      √ converts profile link (1 ms)
+      √ converts invite link
+      √ converts shop link
+      √ converts coach link
+      √ converts settings link (1 ms)
+      √ converts study link
+
+  console.warn
+    [2026-06-18T00:03:34.195Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/ai-coach/repository/personas.ts:11:35)
+      at Object.require (src/features/ai-coach/repository/index.ts:12:1)
+      at Object.require (src/features/ai-coach/repository.ts:16:1)
+      at Object.require (src/features/ai-coach/service/coach-state-machine.ts:5:1)
+      at Object.require (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:2:1)
+
+FAIL src/features/ai-coach/__tests__/service/coach-state-machine.test.ts
+  Coach State Machine
+    determineOptimalState
+      √ returns COLD_START for new users with no data (2 ms)
+      √ returns COMEBACK_MODE when comeback is active (1 ms)
+      √ returns STREAK_AT_RISK when streak is at risk (9 ms)
+      × returns LOW_CONFIDENCE for users with 5-19 data points (3 ms)
+      × returns HIGH_CONFIDENCE for users with 20+ data points (1 ms)
+    transitionState
+      √ successfully transitions between valid states (1 ms)
+      √ throws StateTransitionError for invalid transitions (2 ms)
+      √ allows forced transitions when bypassing validation
+      √ executes entry and exit actions (1 ms)
+    checkAutoTransitions
+      × auto-transitions when max duration exceeded (1 ms)
+      √ does not auto-transition when within duration
+
+  ● Coach State Machine › determineOptimalState › returns LOW_CONFIDENCE for users with 5-19 data points
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "LOW_CONFIDENCE"
+    Received: "STREAK_AT_RISK"
+
+    [0m [90m 70 |[39m       })[33m;[39m
+     [90m 71 |[39m       [36mconst[39m state [33m=[39m [36mawait[39m determineOptimalState(mockUserId[33m,[39m profile)[33m;[39m
+    [31m[1m>[22m[39m[90m 72 |[39m       expect(state)[33m.[39mtoBe([32m'LOW_CONFIDENCE'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 73 |[39m     })[33m;[39m
+     [90m 74 |[39m
+     [90m 75 |[39m     it([32m'returns HIGH_CONFIDENCE for users with 20+ data points'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.toBe (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:72:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Coach State Machine › determineOptimalState › returns HIGH_CONFIDENCE for users with 20+ data points
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "HIGH_CONFIDENCE"
+    Received: "STREAK_AT_RISK"
+
+    [0m [90m 81 |[39m       })[33m;[39m
+     [90m 82 |[39m       [36mconst[39m state [33m=[39m [36mawait[39m determineOptimalState(mockUserId[33m,[39m profile)[33m;[39m
+    [31m[1m>[22m[39m[90m 83 |[39m       expect(state)[33m.[39mtoBe([32m'HIGH_CONFIDENCE'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 84 |[39m     })[33m;[39m
+     [90m 85 |[39m   })[33m;[39m
+     [90m 86 |[39m[0m
+
+      at Object.toBe (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:83:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Coach State Machine › checkAutoTransitions › auto-transitions when max duration exceeded
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 150 |[39m       )[33m;[39m
+     [90m 151 |[39m       [36mconst[39m newState [33m=[39m [36mawait[39m checkAutoTransitions(mockUserId)[33m;[39m
+    [31m[1m>[22m[39m[90m 152 |[39m       expect(newState)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                            [31m[1m^[22m[39m
+     [90m 153 |[39m       expect(newState[33m?[39m[33m.[39mcurrentState)[33m.[39mnot[33m.[39mtoBe([32m'STREAK_AT_RISK'[39m)[33m;[39m
+     [90m 154 |[39m     })[33m;[39m
+     [90m 155 |[39m[0m
+
+      at Object.toBeNull (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:152:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.warn
+    [2026-06-18T00:03:34.602Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/challenges/repository-helpers.ts:11:36)
+      at Object.require (src/features/challenges/repository.ts:2:1)
+      at Object.require (src/features/challenges/basic-challenges-operations.ts:6:1)
+      at Object.require (src/features/challenges/basic-challenges-service.ts:10:1)
+      at Object.require (src/features/challenges/__tests__/basic-challenges-service.test.ts:2:1)
+
+  console.debug
+    [2026-06-18T00:03:34.633Z] [events:bus] [EventBus] publish: challenge:completed {"userId":"user-123","challengeId":"basic-daily-001","completedAt":1781741014633}
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2026-06-18T00:03:34.635Z] [events:bus] [EventBus] publish: challenge:completed {"userId":"user-123","challengeId":"basic-daily-001","completedAt":1781741014635}
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+FAIL src/features/challenges/__tests__/basic-challenges-service.test.ts
+  Basic Challenges Service - Launch Scope
+    Launch Scope Requirements
+      × should support daily challenge only (2 ms)
+      × should support weekly challenge only (1 ms)
+      √ should update progress from sessions (3 ms)
+      √ should integrate with reward ledger for completion (1 ms)
+      √ should provide one clear CTA per challenge (1 ms)
+
+  ● Basic Challenges Service - Launch Scope › Launch Scope Requirements › should support daily challenge only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "basic-daily-001"
+    Received: undefined
+
+    [0m [90m 40 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m service[33m.[39mgetOrCreateBasicDailyChallenge(mockUserId)[33m;[39m
+     [90m 41 |[39m       expect(result)[33m.[39mtoBeTruthy()[33m;[39m
+    [31m[1m>[22m[39m[90m 42 |[39m       expect(result[33m?[39m[33m.[39mchallengeId)[33m.[39mtoBe([32m'basic-daily-001'[39m)[33m;[39m
+     [90m    |[39m                                   [31m[1m^[22m[39m
+     [90m 43 |[39m       expect(result[33m?[39m[33m.[39mrequiredCount)[33m.[39mtoBe([35m1[39m)[33m;[39m
+     [90m 44 |[39m       expect(mockRepository[33m.[39mcreateUserChallenge)[33m.[39mtoHaveBeenCalledWith(
+     [90m 45 |[39m         mockUserId[33m,[39m[0m
+
+      at Object.toBe (src/features/challenges/__tests__/basic-challenges-service.test.ts:42:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Basic Challenges Service - Launch Scope › Launch Scope Requirements › should support weekly challenge only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "basic-weekly-001"
+    Received: undefined
+
+    [0m [90m 64 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m service[33m.[39mgetOrCreateBasicWeeklyChallenge(mockUserId)[33m;[39m
+     [90m 65 |[39m       expect(result)[33m.[39mtoBeTruthy()[33m;[39m
+    [31m[1m>[22m[39m[90m 66 |[39m       expect(result[33m?[39m[33m.[39mchallengeId)[33m.[39mtoBe([32m'basic-weekly-001'[39m)[33m;[39m
+     [90m    |[39m                                   [31m[1m^[22m[39m
+     [90m 67 |[39m       expect(result[33m?[39m[33m.[39mrequiredCount)[33m.[39mtoBe([35m5[39m)[33m;[39m
+     [90m 68 |[39m       expect(mockRepository[33m.[39mcreateUserChallenge)[33m.[39mtoHaveBeenCalledWith(
+     [90m 69 |[39m         mockUserId[33m,[39m[0m
+
+      at Object.toBe (src/features/challenges/__tests__/basic-challenges-service.test.ts:66:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.warn
+    [2026-06-18T00:03:34.981Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/analytics/repository/insights.ts:6:35)
+      at Object.require (src/features/analytics/integration-queries.ts:5:1)
+      at Object.require (src/features/analytics/integration.ts:2:1)
+      at Object.require (src/features/analytics/__tests__/integration-analytics.test.ts:1:1)
+
+  console.warn
+    [2026-06-18T00:03:35.010Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/analytics/repository/time-series.ts:20:35)
+      at Object.require (src/features/analytics/repository/index.ts:3:1)
+      at Object.require (src/features/analytics/__tests__/integration-analytics.test.ts:6:1)
+
+  console.debug
+    [2024-01-15T12:00:00.000Z] [events:bus] [EventBus] publish: analytics:data_refreshed {"userId":"user-123","metrics":["boss_damage_dealt"]}
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2024-01-15T12:00:00.000Z] [events:bus] [EventBus] publish: analytics:data_refreshed {"userId":"user-123","metrics":["boss_damage_dealt"]}
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2024-01-15T12:00:00.000Z] [events:bus] [EventBus] publish: analytics:data_refreshed {"userId":"user-123","metrics":["items_crafted","coins_spent"]}
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+FAIL src/features/analytics/__tests__/integration-analytics.test.ts
+  AnalyticsIntegration – boss, crafting, init
+    trackBossEncounter
+      × should track boss damage and generate insights on win (5 ms)
+      √ should not generate insights on loss (1 ms)
+    trackItemCrafted
+      × should track item crafting and coin spending (2 ms)
+    initializeAnalytics
+      × should initialize successfully with data (1 ms)
+      × should handle initialization failure (1 ms)
+
+  ● AnalyticsIntegration – boss, crafting, init › trackBossEncounter › should track boss damage and generate insights on win
+
+    expect(received).toHaveBeenCalledWith(...expected)
+
+    Expected: ArrayContaining [ObjectContaining {"metric_type": "boss_damage_dealt", "user_id": "user-123", "value": 1500}]
+
+    Number of calls: 0
+
+    [0m [90m 47 |[39m         duration[33m:[39m [35m600[39m[33m,[39m
+     [90m 48 |[39m       })[33m;[39m
+    [31m[1m>[22m[39m[90m 49 |[39m       expect(repository[33m.[39mbulkInsertAnalyticsEvents)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                    [31m[1m^[22m[39m
+     [90m 50 |[39m         expect[33m.[39marrayContaining([
+     [90m 51 |[39m           expect[33m.[39mobjectContaining({
+     [90m 52 |[39m             user_id[33m:[39m [32m'user-123'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/analytics/__tests__/integration-analytics.test.ts:49:52)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › trackItemCrafted › should track item crafting and coin spending
+
+    expect(received).toHaveBeenCalledWith(...expected)
+
+    Expected: ArrayContaining [ObjectContaining {"metric_type": "items_crafted", "user_id": "user-123", "value": 1}, ObjectContaining {"metric_type": "coins_spent", "user_id": "user-123", "value": 500}]
+
+    Number of calls: 0
+
+    [0m [90m 83 |[39m         coinsSpent[33m:[39m [35m500[39m[33m,[39m
+     [90m 84 |[39m       })[33m;[39m
+    [31m[1m>[22m[39m[90m 85 |[39m       expect(repository[33m.[39mbulkInsertAnalyticsEvents)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                    [31m[1m^[22m[39m
+     [90m 86 |[39m         expect[33m.[39marrayContaining([
+     [90m 87 |[39m           expect[33m.[39mobjectContaining({
+     [90m 88 |[39m             user_id[33m:[39m [32m'user-123'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/analytics/__tests__/integration-analytics.test.ts:85:52)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › initializeAnalytics › should initialize successfully with data
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 111 |[39m       (repository[33m.[39mfetchDetectedPatterns [36mas[39m jest[33m.[39m[33mMock[39m)[33m.[39mmockResolvedValue([])[33m;[39m
+     [90m 112 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m initializeAnalytics([32m'user-123'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 113 |[39m       expect(result[33m.[39msuccess)[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m     |[39m                              [31m[1m^[22m[39m
+     [90m 114 |[39m       expect(result[33m.[39minitialData)[33m.[39mtoBeDefined()[33m;[39m
+     [90m 115 |[39m       expect(result[33m.[39minitialData[33m?[39m[33m.[39mtodayStats[33m.[39msessions)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m 116 |[39m       expect(result[33m.[39minitialData[33m?[39m[33m.[39mstreak)[33m.[39mtoBe([35m0[39m)[33m;[39m[0m
+
+      at Object.toBe (src/features/analytics/__tests__/integration-analytics.test.ts:113:30)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › initializeAnalytics › should handle initialization failure
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Database unavailable"
+    Received string:    "Sync failed: Cannot read properties of undefined (reading 'catch')"
+
+    [0m [90m 122 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m initializeAnalytics([32m'user-123'[39m)[33m;[39m
+     [90m 123 |[39m       expect(result[33m.[39msuccess)[33m.[39mtoBe([36mfalse[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 124 |[39m       expect(result[33m.[39merror)[33m.[39mtoContain([32m'Database unavailable'[39m)[33m;[39m
+     [90m     |[39m                            [31m[1m^[22m[39m
+     [90m 125 |[39m     })[33m;[39m
+     [90m 126 |[39m   })[33m;[39m
+     [90m 127 |[39m })[33m;[39m[0m
+
+      at Object.toContain (src/features/analytics/__tests__/integration-analytics.test.ts:124:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.warn
+    [2026-06-18T00:03:35.326Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/challenges/repository-helpers.ts:11:36)
+      at Object.require (src/features/challenges/repository.ts:2:1)
+      at Object.require (src/features/challenges/service.ts:3:1)
+      at Object.require (src/features/challenges/__tests__/reroll-eligibility.test.ts:2:1)
+
+PASS src/features/challenges/__tests__/reroll-eligibility.test.ts
+  Challenges Service — checkRerollEligibility
+    √ should allow free reroll within limit (1 ms)
+    √ should require paid reroll after free limit
+
+FAIL src/features/analytics/__tests__/integration-session-sync.test.ts
+  ● Test suite failed to run
+
+    ReferenceError: C:\Users\jonat\CascadeProjects\vex-app-old\src\features\analytics\__tests__\integration-session-sync.test.ts: The module factory of `jest.mock()` is not allowed to reference any out-of-scope variables.
+    Invalid variable access: bulkInsertAnalyticsEventsMock
+    Allowed objects: AbortController, AbortSignal, AggregateError, Array, ArrayBuffer, AsyncDisposableStack, Atomics, BigInt, BigInt64Array, BigUint64Array, Blob, Boolean, BroadcastChannel, Buffer, ByteLengthQueuingStrategy, CloseEvent, CompressionStream, CountQueuingStrategy, Crypto, CryptoKey, CustomEvent, DOMException, DataView, Date, DecompressionStream, DisposableStack, Error, EvalError, Event, EventTarget, File, FinalizationRegistry, Float16Array, Float32Array, Float64Array, FormData, Function, Generator, GeneratorFunction, Headers, Infinity, Int16Array, Int32Array, Int8Array, InternalError, Intl, Iterator, JSON, Map, Math, MessageChannel, MessageEvent, MessagePort, NaN, Navigator, Number, Object, Performance, PerformanceEntry, PerformanceMark, PerformanceMeasure, PerformanceObserver, PerformanceObserverEntryList, PerformanceResourceTiming, Promise, Proxy, RangeError, ReadableByteStreamController, ReadableStream, ReadableStreamBYOBReader, ReadableStreamBYOBRequest, ReadableStreamDefaultController, ReadableStreamDefaultReader, ReferenceError, Reflect, RegExp, Request, Response, Set, SharedArrayBuffer, String, SubtleCrypto, SuppressedError, Symbol, SyntaxError, TextDecoder, TextDecoderStream, TextEncoder, TextEncoderStream, TransformStream, TransformStreamDefaultController, TypeError, URIError, URL, URLPattern, URLSearchParams, Uint16Array, Uint32Array, Uint8Array, Uint8ClampedArray, WeakMap, WeakRef, WeakSet, WebAssembly, WebSocket, WritableStream, WritableStreamDefaultController, WritableStreamDefaultWriter, __dirname, __filename, arguments, atob, btoa, clearImmediate, clearInterval, clearTimeout, console, crypto, decodeURI, decodeURIComponent, encodeURI, encodeURIComponent, escape, eval, expect, exports, fetch, global, globalThis, isFinite, isNaN, jest, module, navigator, parseFloat, parseInt, performance, process, queueMicrotask, require, setImmediate, setInterval, setTimeout, structuredClone, undefined, unescape.
+    Note: This is a precaution to guard against uninitialized mock variables. If it is ensured that the mock is required lazily, variable names prefixed with `mock` (case insensitive) are permitted.
+
+    [0m [90m 16 |[39m
+     [90m 17 |[39m jest[33m.[39mmock([32m'../repository/stats'[39m[33m,[39m () [33m=>[39m ({
+    [31m[1m>[22m[39m[90m 18 |[39m   bulkInsertAnalyticsEvents[33m:[39m bulkInsertAnalyticsEventsMock[33m,[39m
+     [90m    |[39m                              [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+     [90m 19 |[39m   fetchAggregatedStats[33m:[39m fetchAggregatedStatsMock[33m,[39m
+     [90m 20 |[39m   fetchDetectedPatterns[33m:[39m fetchDetectedPatternsMock[33m,[39m
+     [90m 21 |[39m   fetchInsights[33m:[39m fetchInsightsMock[33m,[39m[0m
+
+      at File.buildCodeFrameError (node_modules/@babel/core/src/transformation/file/file.ts:251:12)
+      at NodePath.buildError [as buildCodeFrameError] (node_modules/@babel/traverse/src/path/index.ts:161:21)
+      at call (node_modules/@babel/traverse/src/visitors.ts:299:14)
+      at NodePath.call [as _call] (node_modules/@babel/traverse/src/path/context.ts:36:20)
+      at NodePath.call (node_modules/@babel/traverse/src/path/context.ts:21:18)
+      at NodePath.call [as visit] (node_modules/@babel/traverse/src/path/context.ts:97:31)
+      at TraversalContext.visit [as visitQueue] (node_modules/@babel/traverse/src/context.ts:161:16)
+      at TraversalContext.visitQueue [as visitMultiple] (node_modules/@babel/traverse/src/context.ts:109:17)
+      at TraversalContext.visitMultiple [as visit] (node_modules/@babel/traverse/src/context.ts:192:19)
+      at visit (node_modules/@babel/traverse/src/traverse-node.ts:208:17)
+      at NodePath.visit (node_modules/@babel/traverse/src/path/context.ts:104:33)
+      at TraversalContext.visit [as visitQueue] (node_modules/@babel/traverse/src/context.ts:161:16)
+      at TraversalContext.visitQueue [as visitSingle] (node_modules/@babel/traverse/src/context.ts:119:19)
+      at TraversalContext.visitSingle [as visit] (node_modules/@babel/traverse/src/context.ts:194:19)
+      at visit (node_modules/@babel/traverse/src/traverse-node.ts:208:17)
+      at traverse (node_modules/@babel/traverse/src/index.ts:84:15)
+      at transformFile (node_modules/@babel/core/src/transformation/index.ts:120:15)
+          at transformFile.next (<anonymous>)
+      at transformFile (node_modules/@babel/core/src/transformation/index.ts:50:12)
+          at run.next (<anonymous>)
+      at transform (node_modules/@babel/core/src/transform.ts:29:20)
+          at transform.next (<anonymous>)
+      at evaluateSync (node_modules/gensync/index.js:251:28)
+      at sync (node_modules/gensync/index.js:89:14)
+      at fn (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+      at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:545:31)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:674:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:726:19)
+
+  console.warn
+    [2026-06-18T00:03:35.858Z] [config:supabase] [Supabase] Jest environment detected — using mock client
+
+    [0m [90m 35 |[39m       [36mreturn[39m[33m;[39m
+     [90m 36 |[39m     }
+    [31m[1m>[22m[39m[90m 37 |[39m     originalConsoleWarn([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 38 |[39m   }[33m;[39m
+     [90m 39 |[39m }
+     [90m 40 |[39m[0m
+
+      at console.originalConsoleWarn [as warn] (src/__tests__/setup/testLifecycle.ts:37:5)
+      at Object.warn (src/utils/debug.ts:106:17)
+      at warn (src/config/supabase.ts:36:11)
+      at createSupabaseClient (src/config/supabase.ts:64:22)
+      at Object.<anonymous> (src/features/challenges/repository-helpers.ts:11:36)
+      at Object.require (src/features/challenges/__tests__/challenges-error-classes.test.ts:15:1)
+
+FAIL src/features/challenges/__tests__/challenges-error-classes.test.ts
+  Error Classes
+    √ ChallengeError stores code and context (2 ms)
+    √ ChallengeNotFoundError includes challengeId (1 ms)
+    √ ChallengeNotActiveError includes challengeId and status (1 ms)
+    √ RerollNotAllowedError is a ChallengeError
+    √ RerollLimitExceededError is a ChallengeError
+    √ InsufficientGemsForRerollError is a ChallengeError (1 ms)
+  RepositoryError
+    √ stores operation and originalError
+    × handles non-Error originalError
+
+  ● RepositoryError › handles non-Error originalError
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "string error"
+    Received string:    "[test] Unknown error"
+
+    [0m [90m 66 |[39m   it([32m'handles non-Error originalError'[39m[33m,[39m () [33m=>[39m {
+     [90m 67 |[39m     [36mconst[39m err [33m=[39m [36mnew[39m [33mRepositoryError[39m([32m'test'[39m[33m,[39m [32m'string error'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 68 |[39m     expect(err[33m.[39mmessage)[33m.[39mtoContain([32m'string error'[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 69 |[39m   })[33m;[39m
+     [90m 70 |[39m })[33m;[39m
+     [90m 71 |[39m[0m
+
+      at Object.toContain (src/features/challenges/__tests__/challenges-error-classes.test.ts:68:25)
+
+  console.debug
+    [2026-06-18T00:03:36.116Z] [events:bus] [EventBus] publish: session-recommendation:performance {"recommendedDuration":40,"actualDuration":20,"recommendedMode":"FOCUS","actualMode":"FOCUS","sessio
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2026-06-18T00:03:36.119Z] [events:bus] [EventBus] publish: session-recommendation:performance {"recommendedDuration":25,"actualDuration":25,"recommendedMode":"FOCUS","actualMode":"FOCUS","sessio
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2026-06-18T00:03:36.121Z] [events:bus] [EventBus] publish: session-recommendation:blocked {"blockReason":"Test","inputs":{"timeOfDay":10,"streakUrgency":"none","recoveryStatus":"none","isFir
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+  console.debug
+    [2026-06-18T00:03:36.122Z] [events:bus] [EventBus] publish: session-recommendation:dismissed {"duration":25,"mode":"FOCUS","confidence":0.8,"isFallback":false,"inputs":{"timeOfDay":10,"streakUr
+
+      at Object.debug (src/utils/debug.ts:93:17)
+
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts
+  Analytics tracking
+    √ trackRecommendationPerformance computes correct duration accuracy (4 ms)
+    √ trackRecommendationPerformance with exact match has 0 accuracy (1 ms)
+    √ trackRecommendationBlocked emits at warning level (2 ms)
+    × trackRecommendationDismissed works with no reason (1 ms)
+  sessionRecommendationKeys
+    √ current key includes userId
+    √ analytics key includes userId
+    √ all keys start with base
+  Full pipeline integration
+    √ first-session input produces a valid, non-blocked recommendation (1 ms)
+    √ active session input always blocks regardless of other params
+    √ default input with no time match produces a fallback recommendation (1 ms)
+
+  ● Analytics tracking › trackRecommendationDismissed works with no reason
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "session-recommendation:dismissed", ObjectContaining {"dismissReason": undefined}
+
+    Number of calls: 0
+
+    [0m [90m 115 |[39m     trackRecommendationDismissed(rec[33m,[39m makeInput())[33m;[39m
+     [90m 116 |[39m
+    [31m[1m>[22m[39m[90m 117 |[39m     expect(eventBus[33m.[39memit)[33m.[39mtoHaveBeenCalledWith(
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 118 |[39m       [32m'session-recommendation:dismissed'[39m[33m,[39m
+     [90m 119 |[39m       expect[33m.[39mobjectContaining({ dismissReason[33m:[39m undefined })[33m,[39m
+     [90m 120 |[39m     )[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts:117:27)
+
+FAIL src/features/session-runtime/__tests__/pause-resume.test.ts
+  pauseSession
+    √ should delegate pause to orchestrator (1 ms)
+    √ should pass reason to orchestrator (1 ms)
+    × should emit notification when enabled (1 ms)
+  resumeSession
+    √ should delegate resume to orchestrator
+    × should emit notification when enabled (1 ms)
+
+  ● pauseSession › should emit notification when enabled
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "SESSION_PAUSED", "Session Paused", "USER_INITIATED", "normal"
+
+    Number of calls: 0
+
+    [0m [90m 32 |[39m     [36mawait[39m ctx[33m.[39mservice[33m.[39mpauseSession([32m'USER_INITIATED'[39m)[33m;[39m
+     [90m 33 |[39m     [36mconst[39m emitter [33m=[39m require([32m'../SessionEventEmitter'[39m)[33m.[39mgetSessionEventEmitter()[33m;[39m
+    [31m[1m>[22m[39m[90m 34 |[39m     expect(emitter[33m.[39memitNotification)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 35 |[39m       [32m'SESSION_PAUSED'[39m[33m,[39m
+     [90m 36 |[39m       [32m'Session Paused'[39m[33m,[39m
+     [90m 37 |[39m       [32m'USER_INITIATED'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/pause-resume.test.ts:34:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● resumeSession › should emit notification when enabled
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "SESSION_RESUMED", "Session Resumed", "Your session is now active", "normal"
+
+    Number of calls: 0
+
+    [0m [90m 52 |[39m     [36mawait[39m ctx[33m.[39mservice[33m.[39mresumeSession()[33m;[39m
+     [90m 53 |[39m     [36mconst[39m emitter [33m=[39m require([32m'../SessionEventEmitter'[39m)[33m.[39mgetSessionEventEmitter()[33m;[39m
+    [31m[1m>[22m[39m[90m 54 |[39m     expect(emitter[33m.[39memitNotification)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 55 |[39m       [32m'SESSION_RESUMED'[39m[33m,[39m
+     [90m 56 |[39m       [32m'Session Resumed'[39m[33m,[39m
+     [90m 57 |[39m       [32m'Your session is now active'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/pause-resume.test.ts:54:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/ledger-service-grading.test.ts
+  buildCompletionLedger grading paths
+    √ calculates S grade for perfect session (1 ms)
+    × calculates D grade for poor session and abandoned session (1 ms)
+    √ handles recovery session and strict mode scoring (1 ms)
+
+  ● buildCompletionLedger grading paths › calculates D grade for poor session and abandoned session
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "sessionId"
+        ],
+        "message": "Required"
+      },
+      {
+        "expected": "'synced' | 'pending_sync' | 'failed_sync'",
+        "received": "undefined",
+        "code": "invalid_type",
+        "path": [
+          "offlineSyncStatus"
+        ],
+        "message": "Required"
+      }
+    ]
+
+    [0m [90m  96 |[39m   }[33m;[39m
+     [90m  97 |[39m
+    [31m[1m>[22m[39m[90m  98 |[39m   [36mreturn[39m [33mCompletionLedgerSchema[39m[33m.[39mparse(ledger)[33m;[39m
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m  99 |[39m }
+     [90m 100 |[39m[0m
+
+      at Object.get error [as error] (node_modules/zod/v3/types.cjs:45:31)
+      at ZodObject.parse (node_modules/zod/v3/types.cjs:120:22)
+      at parse (src/features/session-completion/ledger-service.ts:98:33)
+      at Object.<anonymous> (src/features/session-completion/__tests__/ledger-service-grading.test.ts:48:44)
+
+FAIL src/features/session/__tests__/purity-viewmodel.test.ts
+  buildPurityState
+    √ assigns EXCELLENT for score >= 90 (1 ms)
+    √ assigns CRITICAL for score < 25 (1 ms)
+    √ clamps score to 0-100 range
+  buildSessionViewModel
+    √ builds complete view model (1 ms)
+  Active Session Modes
+    getActiveSessionConfig
+      × returns config for each mode (1 ms)
+      √ returns light focus config as fallback
+    getModeSpecificUI
+      √ returns UI config for each mode (2 ms)
+    canPause
+      √ allows pause in light focus mode with conditions met
+      √ disallows pause in sprint mode (1 ms)
+      √ disallows pause when max pauses reached
+      √ disallows pause before minimum focus time
+    canBackground
+      √ allows background in creative mode
+      √ disallows background in sprint mode
+      √ disallows background when exceeding limit (1 ms)
+    mode configurations
+      √ sprint mode has correct strict settings
+      √ deep work mode has correct settings
+      √ creative mode allows many pauses
+
+  ● Active Session Modes › getActiveSessionConfig › returns config for each mode
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "PLAN"
+    Received: "FLOW"
+
+    [0m [90m 100 |[39m         [36mconst[39m config [33m=[39m getActiveSessionConfig(mode)[33m;[39m
+     [90m 101 |[39m         expect(config)[33m.[39mtoBeDefined()[33m;[39m
+    [31m[1m>[22m[39m[90m 102 |[39m         expect(config[33m.[39mmode)[33m.[39mtoBe(mode)[33m;[39m
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 103 |[39m       })[33m;[39m
+     [90m 104 |[39m     })[33m;[39m
+     [90m 105 |[39m     it([32m'returns light focus config as fallback'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at toBe (src/features/session/__tests__/purity-viewmodel.test.ts:102:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/features/session/__tests__/purity-viewmodel.test.ts:99:34)
+
+FAIL src/features/session-completion/__tests__/focus-identity-updates.test.ts
+  focus identity updates once
+    √ focus identity update is called exactly once per completion (1 ms)
+    × focus identity called with correct user id and grade (1 ms)
+
+  ● focus identity updates once › focus identity called with correct user id and grade
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "user-123", ObjectContaining {"grade": "A", "quality": 90}
+    Received: "user-123", {"focusScoreDelta": 8, "grade": "A", "sessionId": "550e8400-e29b-41d4-a716-446655440000"}
+
+    Number of calls: 1
+
+    [0m [90m 30 |[39m     [36mawait[39m applyCompletionSubsystems({ ledger[33m,[39m summary })[33m;[39m
+     [90m 31 |[39m
+    [31m[1m>[22m[39m[90m 32 |[39m     expect(focusIdentityUpdateMock)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 33 |[39m       [32m'user-123'[39m[33m,[39m
+     [90m 34 |[39m       expect[33m.[39mobjectContaining({
+     [90m 35 |[39m         grade[33m:[39m [32m'A'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-completion/__tests__/focus-identity-updates.test.ts:32:37)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-runtime/__tests__/create-start.test.ts
+  createSession
+    √ should create a new session with valid config (1 ms)
+    √ should reject session when orchestrator throws validation error (3 ms)
+    √ should reject session with duration above maximum (1 ms)
+    √ should delegate createSession to orchestrator
+    × should call eventEmitter.attach on create
+  startSession
+    √ should delegate startSession to orchestrator (1 ms)
+    × should default countdown to 0
+    √ should reject starting when orchestrator throws not found
+    √ should reject starting already active session (1 ms)
+
+  ● createSession › should call eventEmitter.attach on create
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "test-session-123", "test-user-123"
+
+    Number of calls: 0
+
+    [0m [90m 50 |[39m     [36mconst[39m emitter [33m=[39m getSessionEventEmitter()[33m;[39m
+     [90m 51 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mcreateSession(mockSessionConfig)[33m;[39m
+    [31m[1m>[22m[39m[90m 52 |[39m     expect(emitter[33m.[39mattach)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 53 |[39m       [32m'test-session-123'[39m[33m,[39m
+     [90m 54 |[39m       mockUserId[33m,[39m
+     [90m 55 |[39m     )[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/create-start.test.ts:52:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● startSession › should default countdown to 0
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: 0
+    Received: called with 0 arguments
+
+    Number of calls: 1
+
+    [0m [90m 65 |[39m   it([32m'should default countdown to 0'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 66 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mstartSession()[33m;[39m
+    [31m[1m>[22m[39m[90m 67 |[39m     expect(ctx[33m.[39mmockOrchestrator[33m.[39mstartSession)[33m.[39mtoHaveBeenCalledWith([35m0[39m)[33m;[39m
+     [90m    |[39m                                               [31m[1m^[22m[39m
+     [90m 68 |[39m   })[33m;[39m
+     [90m 69 |[39m
+     [90m 70 |[39m   it([32m'should reject starting when orchestrator throws not found'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/create-start.test.ts:67:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-runtime/__tests__/state-error-history.test.ts
+  getCurrentSession
+    √ should return current session from orchestrator (1 ms)
+    √ should return null when no session (1 ms)
+  error handling
+    √ should handle repository save failure (3 ms)
+    √ should throw error when no user is set (1 ms)
+  session history
+    × should retrieve session history with limit (1 ms)
+
+  ● session history › should retrieve session history with limit
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 2
+    Received length: 0
+    Received array:  []
+
+    [0m [90m 67 |[39m     ctx[33m.[39mmockRepository[33m.[39mgetSessionHistory[33m.[39mmockResolvedValue(mockHistory)[33m;[39m
+     [90m 68 |[39m     [36mconst[39m history [33m=[39m [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mgetSessionHistory([35m10[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 69 |[39m     expect(history)[33m.[39mtoHaveLength([35m2[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 70 |[39m     expect(ctx[33m.[39mmockRepository[33m.[39mgetSessionHistory)[33m.[39mtoHaveBeenCalledWith([35m10[39m)[33m;[39m
+     [90m 71 |[39m   })[33m;[39m
+     [90m 72 |[39m })[33m;[39m[0m
+
+      at Object.toHaveLength (src/features/session-runtime/__tests__/state-error-history.test.ts:69:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/repository.test.ts
+  Session completion repository
+    × creates completion ledger successfully (1 ms)
+    × returns existing ledger on duplicate idempotency key conflict (1 ms)
+    × throws repository error on invalid create response and Supabase error (5 ms)
+    × fetches by idempotency key and session id, including not found (1 ms)
+    √ reports session completion and updates sync status (1 ms)
+    √ throws repository error when sync status update fails
+
+  ● Session completion repository › creates completion ledger successfully
+
+    invalid-response
+
+    [0m [90m 39 |[39m
+     [90m 40 |[39m   [36mif[39m ([33m![39mparsed[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 41 |[39m     [36mthrow[39m [36mnew[39m [33mError[39m([32m'invalid-response'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 42 |[39m   }
+     [90m 43 |[39m
+     [90m 44 |[39m   [36mreturn[39m { [33m...[39mparsed[33m.[39mdata[33m,[39m offlineSyncStatus[33m:[39m [32m'synced'[39m [36mas[39m [36mconst[39m }[33m;[39m[0m
+
+      at mapRowToCompletionLedger (src/features/session-completion/mappers.ts:41:11)
+      at src/features/session-completion/repository.ts:90:34
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Session completion repository › returns existing ledger on duplicate idempotency key conflict
+
+    SessionCompletionRepositoryError: Session completion repository failed during create:[object Object]
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     }
+    [31m[1m>[22m[39m[90m 83 |[39m     [36mthrow[39m [36mnew[39m [33mSessionCompletionRepositoryError[39m([32m'create'[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 84 |[39m   }
+     [90m 85 |[39m
+     [90m 86 |[39m   [36mif[39m ([33m![39mdata) {[0m
+
+      at src/features/session-completion/repository.ts:83:11
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Session completion repository › throws repository error on invalid create response and Supabase error
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Session completion repository failed during create:invalid-response"
+    Received message:   "invalid-response"
+
+        [0m [90m 39 |[39m
+         [90m 40 |[39m   [36mif[39m ([33m![39mparsed[33m.[39msuccess) {
+        [31m[1m>[22m[39m[90m 41 |[39m     [36mthrow[39m [36mnew[39m [33mError[39m([32m'invalid-response'[39m)[33m;[39m
+         [90m    |[39m           [31m[1m^[22m[39m
+         [90m 42 |[39m   }
+         [90m 43 |[39m
+         [90m 44 |[39m   [36mreturn[39m { [33m...[39mparsed[33m.[39mdata[33m,[39m offlineSyncStatus[33m:[39m [32m'synced'[39m [36mas[39m [36mconst[39m }[33m;[39m[0m
+
+      at mapRowToCompletionLedger (src/features/session-completion/mappers.ts:41:11)
+      at src/features/session-completion/repository.ts:90:34
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at Object.toThrow (node_modules/expect/build/index.js:218:22)
+      at Object.toThrow (src/features/session-completion/__tests__/repository.test.ts:82:59)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+  ● Session completion repository › fetches by idempotency key and session id, including not found
+
+    expect(received).resolves.toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: null
+
+      at node_modules/expect/build/index.js:177:75
+
+FAIL src/features/session-completion/__tests__/completion-subsystems-features.test.ts
+  applyCompletionSubsystems
+    × skips feature-dependent subsystems when feature is locked (2 ms)
+
+  ● applyCompletionSubsystems › skips feature-dependent subsystems when feature is locked
+
+    expect(received).toBeNull()
+
+    Received: "companion-session-complete"
+
+    [0m [90m 110 |[39m       [32m'companion'[39m[33m,[39m
+     [90m 111 |[39m     ])[33m;[39m
+    [31m[1m>[22m[39m[90m 112 |[39m     expect(result[33m.[39mledger[33m.[39mcompanionReactionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                                               [31m[1m^[22m[39m
+     [90m 113 |[39m     expect(result[33m.[39mledger[33m.[39mdailyMissionResult[33m.[39mstatus)[33m.[39mtoBe([32m'unchanged'[39m)[33m;[39m
+     [90m 114 |[39m     expect(mockCompleteSession)[33m.[39mnot[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 115 |[39m   })[33m;[39m[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/completion-subsystems-features.test.ts:112:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts
+  applyCompletionSubsystems
+    √ keeps the ledger when rewards fail and marks the story degraded (1 ms)
+    √ captures Focus Score failure and still awards downstream systems (1 ms)
+    × skips feature-dependent subsystems when feature is locked (1 ms)
+
+  ● applyCompletionSubsystems › skips feature-dependent subsystems when feature is locked
+
+    expect(received).toBeNull()
+
+    Received: "companion-session-complete"
+
+    [0m [90m  95 |[39m       [32m'companion'[39m[33m,[39m
+     [90m  96 |[39m     ])[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m     expect(result[33m.[39mledger[33m.[39mcompanionReactionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                                               [31m[1m^[22m[39m
+     [90m  98 |[39m     expect(result[33m.[39mledger[33m.[39mdailyMissionResult[33m.[39mstatus)[33m.[39mtoBe([32m'unchanged'[39m)[33m;[39m
+     [90m  99 |[39m     expect(require([32m'./helpers'[39m)[33m.[39mmockCompleteSession)[33m.[39mnot[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 100 |[39m   })[33m;[39m[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts:97:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  console.info
+    [2026-06-18T00:03:38.632Z] [ai-coach:memory-repo] Created memory: STUDY_PATTERN for user 123e4567-e89b-12d3-a456-426614174000
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.info
+    [2026-06-18T00:03:38.635Z] [ai-coach:memory-repo] Created memory: STUDY_PATTERN for user 123e4567-e89b-12d3-a456-426614174000
+
+      at Object.info (src/utils/debug.ts:100:17)
+
+  console.error
+    [2026-06-18T00:03:38.639Z] [ai-coach:memory-repo] Failed to create memory: Error: [object Object]
+        at Object.error (C:\Users\jonat\CascadeProjects\vex-app-old\src\utils\debug.ts:113:44)
+        at error (C:\Users\jonat\CascadeProjects\vex-app-old\src\features\ai-coach\repository\memories-core.ts:81:11)
+        at Generator.next (<anonymous>)
+        at asyncGeneratorStep (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+        at _next (C:\Users\jonat\CascadeProjects\vex-app-old\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+
+    [0m [90m 28 |[39m       [36mreturn[39m[33m;[39m
+     [90m 29 |[39m     }
+    [31m[1m>[22m[39m[90m 30 |[39m     originalConsoleError([33m...[39margs)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 31 |[39m   }[33m;[39m
+     [90m 32 |[39m
+     [90m 33 |[39m   testConsole[33m.[39mwarn [33m=[39m ([33m...[39margs[33m:[39m unknown[]) [33m=>[39m {[0m
+
+      at console.originalConsoleError [as error] (src/__tests__/setup/testLifecycle.ts:30:5)
+      at Object.error (src/utils/debug.ts:114:17)
+      at error (src/features/ai-coach/repository/memories-core.ts:81:11)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+PASS src/features/ai-coach/__tests__/memories-repository.test.ts
+  coach memories repository
+    √ creates and validates a memory row (3 ms)
+    √ throws on invalid Supabase response shape (3 ms)
+    √ throws on Supabase create error (3 ms)
+    √ returns user memories in repository order (1 ms)
+    √ increments referenced count with an explicit update
+
+FAIL src/features/feature-gate/__tests__/feature-gate-verification.test.ts
+  getPhase3VerificationSummary
+    √ returns passed=true when all checks pass (1 ms)
+    √ returns passed=false when isHidden is false
+    × returns passed=false when hasNoTab fails (1 ms)
+    √ returns passed=true for empty results (1 ms)
+    √ collects multiple failed features
+    √ preserves the results array reference
+
+  ● getPhase3VerificationSummary › returns passed=false when hasNoTab fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    [0m [90m 60 |[39m     ][33m;[39m
+     [90m 61 |[39m     [36mconst[39m summary [33m=[39m getPhase3VerificationSummary(results)[33m;[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     expect(summary[33m.[39mpassed)[33m.[39mtoBe([36mfalse[39m)[33m;[39m
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 63 |[39m     expect(summary[33m.[39mfailedFeatures)[33m.[39mtoContain([32m'rankings'[39m)[33m;[39m
+     [90m 64 |[39m   })[33m;[39m
+     [90m 65 |[39m[0m
+
+      at Object.toBe (src/features/feature-gate/__tests__/feature-gate-verification.test.ts:62:28)
+
+FAIL src/features/session-runtime/__tests__/complete-abandon.test.ts
+  completeSession
+    √ should complete session and return summary (1 ms)
+    √ should delegate completion to orchestrator (1 ms)
+    √ should handle partial completion
+  abandonSession
+    √ should delegate abandon to orchestrator with reason (1 ms)
+    × should delegate abandon without reason
+    √ should not call completeSession when abandoning (1 ms)
+
+  ● abandonSession › should delegate abandon without reason
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: undefined
+    Received: called with 0 arguments
+
+    Number of calls: 1
+
+    [0m [90m 55 |[39m   it([32m'should delegate abandon without reason'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 56 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mabandonSession()[33m;[39m
+    [31m[1m>[22m[39m[90m 57 |[39m     expect(ctx[33m.[39mmockOrchestrator[33m.[39mabandonSession)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                 [31m[1m^[22m[39m
+     [90m 58 |[39m       undefined[33m,[39m
+     [90m 59 |[39m     )[33m;[39m
+     [90m 60 |[39m   })[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/complete-abandon.test.ts:57:49)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/offline-sync-processors.test.ts
+  session completion offline processors
+    × XP_ADD calls addXP with correct args (1 ms)
+    × STREAK_RECORD calls recordSession
+
+  ● session completion offline processors › XP_ADD calls addXP with correct args
+
+    TypeError: (0 , _offlineSyncProcessors.createXpAddProcessor) is not a function
+
+    [0m [90m 60 |[39m     })[33m;[39m
+     [90m 61 |[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     [36mawait[39m createXpAddProcessor()(entry)[33m;[39m
+     [90m    |[39m                               [31m[1m^[22m[39m
+     [90m 63 |[39m
+     [90m 64 |[39m     expect(getProgressionService)[33m.[39mtoHaveBeenCalledWith(
+     [90m 65 |[39m       [32m'550e8400-e29b-41d4-a716-446655440001'[39m[33m,[39m[0m
+
+      at Object.<anonymous> (src/features/session-completion/__tests__/offline-sync-processors.test.ts:62:31)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+  ● session completion offline processors › STREAK_RECORD calls recordSession
+
+    TypeError: (0 , _offlineSyncProcessors.createStreakRecordProcessor) is not a function
+
+    [0m [90m 79 |[39m     })[33m;[39m
+     [90m 80 |[39m
+    [31m[1m>[22m[39m[90m 81 |[39m     [36mawait[39m createStreakRecordProcessor()(entry)[33m;[39m
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 82 |[39m
+     [90m 83 |[39m     expect(getStreakService)[33m.[39mtoHaveBeenCalledWith(
+     [90m 84 |[39m       [32m'550e8400-e29b-41d4-a716-446655440001'[39m[33m,[39m[0m
+
+      at Object.<anonymous> (src/features/session-completion/__tests__/offline-sync-processors.test.ts:81:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+FAIL src/features/integration/__tests__/integration-social-feed-helpers.test.ts
+  integration
+    social-feed-helpers.ts – notification titles / bodies / generateId
+      √ getNotificationTitle returns correct title for known types (1 ms)
+      √ getNotificationTitle returns default for unknown types (1 ms)
+      √ getNotificationBody returns streak-specific body
+      √ getNotificationBody returns level-specific body
+      √ getNotificationBody returns boss-specific body (1 ms)
+      × getNotificationBody returns default for unknown types
+      √ generateId returns a unique non-empty string (1 ms)
+    social-feed-helpers.ts – awardCompetitionRewards
+      √ awards GEMS + TITLE for rank 1 (1 ms)
+      √ awards 50 GEMS for rank 2
+      √ awards 25 GEMS for rank 3
+      √ awards 10 GEMS for top 10% (rank 4 of 50) (1 ms)
+      √ awards no rewards for rank below top 10%
+
+  ● integration › social-feed-helpers.ts – notification titles / bodies / generateId › getNotificationBody returns default for unknown types
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Check out the app for details!"
+    Received: "Check out the app for details"
+
+    [0m [90m 84 |[39m       expect(
+     [90m 85 |[39m         getNotificationBody({ [33m...[39mbase[33m,[39m activityType[33m:[39m [32m'SOMETHING_ELSE'[39m })[33m,[39m
+    [31m[1m>[22m[39m[90m 86 |[39m       )[33m.[39mtoBe([32m'Check out the app for details!'[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 87 |[39m     })[33m;[39m
+     [90m 88 |[39m
+     [90m 89 |[39m     it([32m'generateId returns a unique non-empty string'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.toBe (src/features/integration/__tests__/integration-social-feed-helpers.test.ts:86:9)
+
+FAIL src/shared/monetization/__tests__/revenuecat-helpers.test.ts
+  revenuecat-helpers
+    buildError
+      √ creates a RevenueCatError with code and message (1 ms)
+      √ creates errors for all error codes (1 ms)
+    mapOfferingToDisplayInfo
+      √ maps empty offering
+      √ maps available packages (1 ms)
+      × maps named package slots
+      √ maps product with intro price (1 ms)
+      √ maps product with discounts
+      √ filters out null packages from availablePackages
+
+  ● revenuecat-helpers › mapOfferingToDisplayInfo › maps named package slots
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "prod-annual"
+    Received: "prod-monthly"
+
+    [0m [90m 92 |[39m       [36mconst[39m result [33m=[39m mapOfferingToDisplayInfo(offering)[33m;[39m
+     [90m 93 |[39m       expect(result[33m.[39mannual)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+    [31m[1m>[22m[39m[90m 94 |[39m       expect(result[33m.[39mannual[33m![39m[33m.[39mproduct[33m.[39midentifier)[33m.[39mtoBe([32m'prod-annual'[39m)[33m;[39m
+     [90m    |[39m                                                 [31m[1m^[22m[39m
+     [90m 95 |[39m       expect(result[33m.[39mlifetime)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m 96 |[39m       expect(result[33m.[39mlifetime[33m![39m[33m.[39mproduct[33m.[39mprice)[33m.[39mtoBe([35m299.99[39m)[33m;[39m
+     [90m 97 |[39m     })[33m;[39m[0m
+
+      at Object.toBe (src/shared/monetization/__tests__/revenuecat-helpers.test.ts:94:49)
+
+Summary of all failing tests
+FAIL src/privacy/__tests__/data-deletion.test.ts
+  ● User can delete/reset personalization data › onboarding store reset clears all profile data
+
+    TypeError: mmkvStorage.setItemSync is not a function
+
+    [0m [90m 82 |[39m           mmkvStorage[33m.[39mgetItemSync(name) [33m?[39m[33m?[39m [36mnull[39m[33m,[39m
+     [90m 83 |[39m         setItem[33m:[39m (name[33m:[39m string[33m,[39m value[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m
+    [31m[1m>[22m[39m[90m 84 |[39m           mmkvStorage[33m.[39msetItemSync(name[33m,[39m value)[33m,[39m
+     [90m    |[39m                       [31m[1m^[22m[39m
+     [90m 85 |[39m         removeItem[33m:[39m (name[33m:[39m string)[33m:[39m [36mvoid[39m [33m=>[39m
+     [90m 86 |[39m           mmkvStorage[33m.[39mremoveItemSync(name)[33m,[39m
+     [90m 87 |[39m       }))[33m,[39m[0m
+
+      at Object.setItemSync [as setItem] (src/features/onboarding/store.ts:84:23)
+      at Object.setItem (node_modules/zustand/middleware.js:304:22)
+      at setItem (node_modules/zustand/middleware.js:495:22)
+      at useBoundStore.api.setState (node_modules/zustand/middleware.js:503:12)
+      at Object.setState (src/privacy/__tests__/data-deletion.test.ts:97:24)
+
+FAIL src/features/session-completion/__tests__/learning-execution-return-plan.test.ts
+  ● learning execution completion return plan › uses plan wording instead of school-only copy for tied follow-ups
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "plan"
+    Received string:    "VEX saved this as a progress signal. Session banked cleanly Your next study step is ready from this progress signal. Next useful action"
+
+    [0m [90m 17 |[39m     ][33m.[39mjoin([32m' '[39m)[33m;[39m
+     [90m 18 |[39m
+    [31m[1m>[22m[39m[90m 19 |[39m     expect(joined)[33m.[39mtoContain([32m'plan'[39m)[33m;[39m
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 20 |[39m     expect(joined[33m.[39mtoLowerCase())[33m.[39mnot[33m.[39mtoMatch([35m/study|quiz|homework/[39m)[33m;[39m
+     [90m 21 |[39m   })[33m;[39m
+     [90m 22 |[39m })[33m;[39m[0m
+
+      at Object.toContain (src/features/session-completion/__tests__/learning-execution-return-plan.test.ts:19:20)
+
+FAIL src/features/session-completion/__tests__/service-story-and-summary.test.ts
+  ● parseSessionCompletionParams › parses valid navigation params
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 43 |[39m   it([32m'parses valid navigation params'[39m[33m,[39m () [33m=>[39m {
+     [90m 44 |[39m     [36mconst[39m r [33m=[39m parseSessionCompletionParams({ sessionId[33m:[39m [33mSESSION_UUID[39m[33m,[39m summary[33m:[39m { sessionId[33m:[39m [33mSESSION_UUID[39m } })[33m;[39m
+    [31m[1m>[22m[39m[90m 45 |[39m     expect(r[33m.[39mparams)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                          [31m[1m^[22m[39m
+     [90m 46 |[39m     expect(r[33m.[39mrecoverySessionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m 47 |[39m   })[33m;[39m
+     [90m 48 |[39m   it([32m'parses recovery params'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/service-story-and-summary.test.ts:45:26)
+
+FAIL src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx
+  ● useOnboardingCompletion › completes onboarding even when the goal draft is missing
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "user-1"
+
+    Number of calls: 0
+
+    [0m [90m 61 |[39m     })[33m;[39m
+     [90m 62 |[39m
+    [31m[1m>[22m[39m[90m 63 |[39m     expect(mockCompleteOnboarding)[33m.[39mtoHaveBeenCalledWith([32m'user-1'[39m)[33m;[39m
+     [90m    |[39m                                    [31m[1m^[22m[39m
+     [90m 64 |[39m     expect(mockTrackOnboardingCompleted)[33m.[39mtoHaveBeenCalledWith([32m'user-1'[39m)[33m;[39m
+     [90m 65 |[39m     expect(mockShowHomeHighlight)[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 66 |[39m   })[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/screens/onboarding/hooks/__tests__/useOnboardingCompletion.test.tsx:63:36)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/ai-coach/__tests__/service/message-generator.test.ts
+  ● Message Generator › generates message from template
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 44 |[39m       preferredDelivery[33m:[39m [32m'BOTH'[39m[33m,[39m
+     [90m 45 |[39m     })[33m;[39m
+    [31m[1m>[22m[39m[90m 46 |[39m     expect(message)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 47 |[39m     expect(message[33m?[39m[33m.[39mcontent)[33m.[39mtoContain([32m'User'[39m)[33m;[39m
+     [90m 48 |[39m   })[33m;[39m
+     [90m 49 |[39m[0m
+
+      at Object.toBeNull (src/features/ai-coach/__tests__/service/message-generator.test.ts:46:25)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Message Generator › validates generated content
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Matcher error: received value must not be null nor undefined
+
+    Received has value: undefined
+
+    [0m [90m 89 |[39m       preferredDelivery[33m:[39m [32m'BOTH'[39m[33m,[39m
+     [90m 90 |[39m     })[33m;[39m
+    [31m[1m>[22m[39m[90m 91 |[39m     expect(message[33m?[39m[33m.[39mcontent)[33m.[39mnot[33m.[39mtoContain([32m'<script>'[39m)[33m;[39m
+     [90m    |[39m                                  [31m[1m^[22m[39m
+     [90m 92 |[39m   })[33m;[39m
+     [90m 93 |[39m })[33m;[39m
+     [90m 94 |[39m[0m
+
+      at Object.toContain (src/features/ai-coach/__tests__/service/message-generator.test.ts:91:34)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/ai-coach/__tests__/service/coach-state-machine.test.ts
+  ● Coach State Machine › determineOptimalState › returns LOW_CONFIDENCE for users with 5-19 data points
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "LOW_CONFIDENCE"
+    Received: "STREAK_AT_RISK"
+
+    [0m [90m 70 |[39m       })[33m;[39m
+     [90m 71 |[39m       [36mconst[39m state [33m=[39m [36mawait[39m determineOptimalState(mockUserId[33m,[39m profile)[33m;[39m
+    [31m[1m>[22m[39m[90m 72 |[39m       expect(state)[33m.[39mtoBe([32m'LOW_CONFIDENCE'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 73 |[39m     })[33m;[39m
+     [90m 74 |[39m
+     [90m 75 |[39m     it([32m'returns HIGH_CONFIDENCE for users with 20+ data points'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.toBe (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:72:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Coach State Machine › determineOptimalState › returns HIGH_CONFIDENCE for users with 20+ data points
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "HIGH_CONFIDENCE"
+    Received: "STREAK_AT_RISK"
+
+    [0m [90m 81 |[39m       })[33m;[39m
+     [90m 82 |[39m       [36mconst[39m state [33m=[39m [36mawait[39m determineOptimalState(mockUserId[33m,[39m profile)[33m;[39m
+    [31m[1m>[22m[39m[90m 83 |[39m       expect(state)[33m.[39mtoBe([32m'HIGH_CONFIDENCE'[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 84 |[39m     })[33m;[39m
+     [90m 85 |[39m   })[33m;[39m
+     [90m 86 |[39m[0m
+
+      at Object.toBe (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:83:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Coach State Machine › checkAutoTransitions › auto-transitions when max duration exceeded
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 150 |[39m       )[33m;[39m
+     [90m 151 |[39m       [36mconst[39m newState [33m=[39m [36mawait[39m checkAutoTransitions(mockUserId)[33m;[39m
+    [31m[1m>[22m[39m[90m 152 |[39m       expect(newState)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                            [31m[1m^[22m[39m
+     [90m 153 |[39m       expect(newState[33m?[39m[33m.[39mcurrentState)[33m.[39mnot[33m.[39mtoBe([32m'STREAK_AT_RISK'[39m)[33m;[39m
+     [90m 154 |[39m     })[33m;[39m
+     [90m 155 |[39m[0m
+
+      at Object.toBeNull (src/features/ai-coach/__tests__/service/coach-state-machine.test.ts:152:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/challenges/__tests__/basic-challenges-service.test.ts
+  ● Basic Challenges Service - Launch Scope › Launch Scope Requirements › should support daily challenge only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "basic-daily-001"
+    Received: undefined
+
+    [0m [90m 40 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m service[33m.[39mgetOrCreateBasicDailyChallenge(mockUserId)[33m;[39m
+     [90m 41 |[39m       expect(result)[33m.[39mtoBeTruthy()[33m;[39m
+    [31m[1m>[22m[39m[90m 42 |[39m       expect(result[33m?[39m[33m.[39mchallengeId)[33m.[39mtoBe([32m'basic-daily-001'[39m)[33m;[39m
+     [90m    |[39m                                   [31m[1m^[22m[39m
+     [90m 43 |[39m       expect(result[33m?[39m[33m.[39mrequiredCount)[33m.[39mtoBe([35m1[39m)[33m;[39m
+     [90m 44 |[39m       expect(mockRepository[33m.[39mcreateUserChallenge)[33m.[39mtoHaveBeenCalledWith(
+     [90m 45 |[39m         mockUserId[33m,[39m[0m
+
+      at Object.toBe (src/features/challenges/__tests__/basic-challenges-service.test.ts:42:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Basic Challenges Service - Launch Scope › Launch Scope Requirements › should support weekly challenge only
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "basic-weekly-001"
+    Received: undefined
+
+    [0m [90m 64 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m service[33m.[39mgetOrCreateBasicWeeklyChallenge(mockUserId)[33m;[39m
+     [90m 65 |[39m       expect(result)[33m.[39mtoBeTruthy()[33m;[39m
+    [31m[1m>[22m[39m[90m 66 |[39m       expect(result[33m?[39m[33m.[39mchallengeId)[33m.[39mtoBe([32m'basic-weekly-001'[39m)[33m;[39m
+     [90m    |[39m                                   [31m[1m^[22m[39m
+     [90m 67 |[39m       expect(result[33m?[39m[33m.[39mrequiredCount)[33m.[39mtoBe([35m5[39m)[33m;[39m
+     [90m 68 |[39m       expect(mockRepository[33m.[39mcreateUserChallenge)[33m.[39mtoHaveBeenCalledWith(
+     [90m 69 |[39m         mockUserId[33m,[39m[0m
+
+      at Object.toBe (src/features/challenges/__tests__/basic-challenges-service.test.ts:66:35)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/analytics/__tests__/integration-analytics.test.ts
+  ● AnalyticsIntegration – boss, crafting, init › trackBossEncounter › should track boss damage and generate insights on win
+
+    expect(received).toHaveBeenCalledWith(...expected)
+
+    Expected: ArrayContaining [ObjectContaining {"metric_type": "boss_damage_dealt", "user_id": "user-123", "value": 1500}]
+
+    Number of calls: 0
+
+    [0m [90m 47 |[39m         duration[33m:[39m [35m600[39m[33m,[39m
+     [90m 48 |[39m       })[33m;[39m
+    [31m[1m>[22m[39m[90m 49 |[39m       expect(repository[33m.[39mbulkInsertAnalyticsEvents)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                    [31m[1m^[22m[39m
+     [90m 50 |[39m         expect[33m.[39marrayContaining([
+     [90m 51 |[39m           expect[33m.[39mobjectContaining({
+     [90m 52 |[39m             user_id[33m:[39m [32m'user-123'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/analytics/__tests__/integration-analytics.test.ts:49:52)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › trackItemCrafted › should track item crafting and coin spending
+
+    expect(received).toHaveBeenCalledWith(...expected)
+
+    Expected: ArrayContaining [ObjectContaining {"metric_type": "items_crafted", "user_id": "user-123", "value": 1}, ObjectContaining {"metric_type": "coins_spent", "user_id": "user-123", "value": 500}]
+
+    Number of calls: 0
+
+    [0m [90m 83 |[39m         coinsSpent[33m:[39m [35m500[39m[33m,[39m
+     [90m 84 |[39m       })[33m;[39m
+    [31m[1m>[22m[39m[90m 85 |[39m       expect(repository[33m.[39mbulkInsertAnalyticsEvents)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                    [31m[1m^[22m[39m
+     [90m 86 |[39m         expect[33m.[39marrayContaining([
+     [90m 87 |[39m           expect[33m.[39mobjectContaining({
+     [90m 88 |[39m             user_id[33m:[39m [32m'user-123'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/analytics/__tests__/integration-analytics.test.ts:85:52)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › initializeAnalytics › should initialize successfully with data
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 111 |[39m       (repository[33m.[39mfetchDetectedPatterns [36mas[39m jest[33m.[39m[33mMock[39m)[33m.[39mmockResolvedValue([])[33m;[39m
+     [90m 112 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m initializeAnalytics([32m'user-123'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 113 |[39m       expect(result[33m.[39msuccess)[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m     |[39m                              [31m[1m^[22m[39m
+     [90m 114 |[39m       expect(result[33m.[39minitialData)[33m.[39mtoBeDefined()[33m;[39m
+     [90m 115 |[39m       expect(result[33m.[39minitialData[33m?[39m[33m.[39mtodayStats[33m.[39msessions)[33m.[39mtoBe([35m0[39m)[33m;[39m
+     [90m 116 |[39m       expect(result[33m.[39minitialData[33m?[39m[33m.[39mstreak)[33m.[39mtoBe([35m0[39m)[33m;[39m[0m
+
+      at Object.toBe (src/features/analytics/__tests__/integration-analytics.test.ts:113:30)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● AnalyticsIntegration – boss, crafting, init › initializeAnalytics › should handle initialization failure
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Database unavailable"
+    Received string:    "Sync failed: Cannot read properties of undefined (reading 'catch')"
+
+    [0m [90m 122 |[39m       [36mconst[39m result [33m=[39m [36mawait[39m initializeAnalytics([32m'user-123'[39m)[33m;[39m
+     [90m 123 |[39m       expect(result[33m.[39msuccess)[33m.[39mtoBe([36mfalse[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 124 |[39m       expect(result[33m.[39merror)[33m.[39mtoContain([32m'Database unavailable'[39m)[33m;[39m
+     [90m     |[39m                            [31m[1m^[22m[39m
+     [90m 125 |[39m     })[33m;[39m
+     [90m 126 |[39m   })[33m;[39m
+     [90m 127 |[39m })[33m;[39m[0m
+
+      at Object.toContain (src/features/analytics/__tests__/integration-analytics.test.ts:124:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/analytics/__tests__/integration-session-sync.test.ts
+  ● Test suite failed to run
+
+    ReferenceError: C:\Users\jonat\CascadeProjects\vex-app-old\src\features\analytics\__tests__\integration-session-sync.test.ts: The module factory of `jest.mock()` is not allowed to reference any out-of-scope variables.
+    Invalid variable access: bulkInsertAnalyticsEventsMock
+    Allowed objects: AbortController, AbortSignal, AggregateError, Array, ArrayBuffer, AsyncDisposableStack, Atomics, BigInt, BigInt64Array, BigUint64Array, Blob, Boolean, BroadcastChannel, Buffer, ByteLengthQueuingStrategy, CloseEvent, CompressionStream, CountQueuingStrategy, Crypto, CryptoKey, CustomEvent, DOMException, DataView, Date, DecompressionStream, DisposableStack, Error, EvalError, Event, EventTarget, File, FinalizationRegistry, Float16Array, Float32Array, Float64Array, FormData, Function, Generator, GeneratorFunction, Headers, Infinity, Int16Array, Int32Array, Int8Array, InternalError, Intl, Iterator, JSON, Map, Math, MessageChannel, MessageEvent, MessagePort, NaN, Navigator, Number, Object, Performance, PerformanceEntry, PerformanceMark, PerformanceMeasure, PerformanceObserver, PerformanceObserverEntryList, PerformanceResourceTiming, Promise, Proxy, RangeError, ReadableByteStreamController, ReadableStream, ReadableStreamBYOBReader, ReadableStreamBYOBRequest, ReadableStreamDefaultController, ReadableStreamDefaultReader, ReferenceError, Reflect, RegExp, Request, Response, Set, SharedArrayBuffer, String, SubtleCrypto, SuppressedError, Symbol, SyntaxError, TextDecoder, TextDecoderStream, TextEncoder, TextEncoderStream, TransformStream, TransformStreamDefaultController, TypeError, URIError, URL, URLPattern, URLSearchParams, Uint16Array, Uint32Array, Uint8Array, Uint8ClampedArray, WeakMap, WeakRef, WeakSet, WebAssembly, WebSocket, WritableStream, WritableStreamDefaultController, WritableStreamDefaultWriter, __dirname, __filename, arguments, atob, btoa, clearImmediate, clearInterval, clearTimeout, console, crypto, decodeURI, decodeURIComponent, encodeURI, encodeURIComponent, escape, eval, expect, exports, fetch, global, globalThis, isFinite, isNaN, jest, module, navigator, parseFloat, parseInt, performance, process, queueMicrotask, require, setImmediate, setInterval, setTimeout, structuredClone, undefined, unescape.
+    Note: This is a precaution to guard against uninitialized mock variables. If it is ensured that the mock is required lazily, variable names prefixed with `mock` (case insensitive) are permitted.
+
+    [0m [90m 16 |[39m
+     [90m 17 |[39m jest[33m.[39mmock([32m'../repository/stats'[39m[33m,[39m () [33m=>[39m ({
+    [31m[1m>[22m[39m[90m 18 |[39m   bulkInsertAnalyticsEvents[33m:[39m bulkInsertAnalyticsEventsMock[33m,[39m
+     [90m    |[39m                              [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+     [90m 19 |[39m   fetchAggregatedStats[33m:[39m fetchAggregatedStatsMock[33m,[39m
+     [90m 20 |[39m   fetchDetectedPatterns[33m:[39m fetchDetectedPatternsMock[33m,[39m
+     [90m 21 |[39m   fetchInsights[33m:[39m fetchInsightsMock[33m,[39m[0m
+
+      at File.buildCodeFrameError (node_modules/@babel/core/src/transformation/file/file.ts:251:12)
+      at NodePath.buildError [as buildCodeFrameError] (node_modules/@babel/traverse/src/path/index.ts:161:21)
+      at call (node_modules/@babel/traverse/src/visitors.ts:299:14)
+      at NodePath.call [as _call] (node_modules/@babel/traverse/src/path/context.ts:36:20)
+      at NodePath.call (node_modules/@babel/traverse/src/path/context.ts:21:18)
+      at NodePath.call [as visit] (node_modules/@babel/traverse/src/path/context.ts:97:31)
+      at TraversalContext.visit [as visitQueue] (node_modules/@babel/traverse/src/context.ts:161:16)
+      at TraversalContext.visitQueue [as visitMultiple] (node_modules/@babel/traverse/src/context.ts:109:17)
+      at TraversalContext.visitMultiple [as visit] (node_modules/@babel/traverse/src/context.ts:192:19)
+      at visit (node_modules/@babel/traverse/src/traverse-node.ts:208:17)
+      at NodePath.visit (node_modules/@babel/traverse/src/path/context.ts:104:33)
+      at TraversalContext.visit [as visitQueue] (node_modules/@babel/traverse/src/context.ts:161:16)
+      at TraversalContext.visitQueue [as visitSingle] (node_modules/@babel/traverse/src/context.ts:119:19)
+      at TraversalContext.visitSingle [as visit] (node_modules/@babel/traverse/src/context.ts:194:19)
+      at visit (node_modules/@babel/traverse/src/traverse-node.ts:208:17)
+      at traverse (node_modules/@babel/traverse/src/index.ts:84:15)
+      at transformFile (node_modules/@babel/core/src/transformation/index.ts:120:15)
+          at transformFile.next (<anonymous>)
+      at transformFile (node_modules/@babel/core/src/transformation/index.ts:50:12)
+          at run.next (<anonymous>)
+      at transform (node_modules/@babel/core/src/transform.ts:29:20)
+          at transform.next (<anonymous>)
+      at evaluateSync (node_modules/gensync/index.js:251:28)
+      at sync (node_modules/gensync/index.js:89:14)
+      at fn (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+      at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:545:31)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:674:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:726:19)
+
+FAIL src/features/challenges/__tests__/challenges-error-classes.test.ts
+  ● RepositoryError › handles non-Error originalError
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "string error"
+    Received string:    "[test] Unknown error"
+
+    [0m [90m 66 |[39m   it([32m'handles non-Error originalError'[39m[33m,[39m () [33m=>[39m {
+     [90m 67 |[39m     [36mconst[39m err [33m=[39m [36mnew[39m [33mRepositoryError[39m([32m'test'[39m[33m,[39m [32m'string error'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 68 |[39m     expect(err[33m.[39mmessage)[33m.[39mtoContain([32m'string error'[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 69 |[39m   })[33m;[39m
+     [90m 70 |[39m })[33m;[39m
+     [90m 71 |[39m[0m
+
+      at Object.toContain (src/features/challenges/__tests__/challenges-error-classes.test.ts:68:25)
+
+FAIL src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts
+  ● Analytics tracking › trackRecommendationDismissed works with no reason
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "session-recommendation:dismissed", ObjectContaining {"dismissReason": undefined}
+
+    Number of calls: 0
+
+    [0m [90m 115 |[39m     trackRecommendationDismissed(rec[33m,[39m makeInput())[33m;[39m
+     [90m 116 |[39m
+    [31m[1m>[22m[39m[90m 117 |[39m     expect(eventBus[33m.[39memit)[33m.[39mtoHaveBeenCalledWith(
+     [90m     |[39m                           [31m[1m^[22m[39m
+     [90m 118 |[39m       [32m'session-recommendation:dismissed'[39m[33m,[39m
+     [90m 119 |[39m       expect[33m.[39mobjectContaining({ dismissReason[33m:[39m undefined })[33m,[39m
+     [90m 120 |[39m     )[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-recommendation/__tests__/session-recommendation-analytics-hooks-integration-comprehensive.test.ts:117:27)
+
+FAIL src/features/session-runtime/__tests__/pause-resume.test.ts
+  ● pauseSession › should emit notification when enabled
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "SESSION_PAUSED", "Session Paused", "USER_INITIATED", "normal"
+
+    Number of calls: 0
+
+    [0m [90m 32 |[39m     [36mawait[39m ctx[33m.[39mservice[33m.[39mpauseSession([32m'USER_INITIATED'[39m)[33m;[39m
+     [90m 33 |[39m     [36mconst[39m emitter [33m=[39m require([32m'../SessionEventEmitter'[39m)[33m.[39mgetSessionEventEmitter()[33m;[39m
+    [31m[1m>[22m[39m[90m 34 |[39m     expect(emitter[33m.[39memitNotification)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 35 |[39m       [32m'SESSION_PAUSED'[39m[33m,[39m
+     [90m 36 |[39m       [32m'Session Paused'[39m[33m,[39m
+     [90m 37 |[39m       [32m'USER_INITIATED'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/pause-resume.test.ts:34:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● resumeSession › should emit notification when enabled
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "SESSION_RESUMED", "Session Resumed", "Your session is now active", "normal"
+
+    Number of calls: 0
+
+    [0m [90m 52 |[39m     [36mawait[39m ctx[33m.[39mservice[33m.[39mresumeSession()[33m;[39m
+     [90m 53 |[39m     [36mconst[39m emitter [33m=[39m require([32m'../SessionEventEmitter'[39m)[33m.[39mgetSessionEventEmitter()[33m;[39m
+    [31m[1m>[22m[39m[90m 54 |[39m     expect(emitter[33m.[39memitNotification)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 55 |[39m       [32m'SESSION_RESUMED'[39m[33m,[39m
+     [90m 56 |[39m       [32m'Session Resumed'[39m[33m,[39m
+     [90m 57 |[39m       [32m'Your session is now active'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/pause-resume.test.ts:54:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/ledger-service-grading.test.ts
+  ● buildCompletionLedger grading paths › calculates D grade for poor session and abandoned session
+
+    ZodError: [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "sessionId"
+        ],
+        "message": "Required"
+      },
+      {
+        "expected": "'synced' | 'pending_sync' | 'failed_sync'",
+        "received": "undefined",
+        "code": "invalid_type",
+        "path": [
+          "offlineSyncStatus"
+        ],
+        "message": "Required"
+      }
+    ]
+
+    [0m [90m  96 |[39m   }[33m;[39m
+     [90m  97 |[39m
+    [31m[1m>[22m[39m[90m  98 |[39m   [36mreturn[39m [33mCompletionLedgerSchema[39m[33m.[39mparse(ledger)[33m;[39m
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m  99 |[39m }
+     [90m 100 |[39m[0m
+
+      at Object.get error [as error] (node_modules/zod/v3/types.cjs:45:31)
+      at ZodObject.parse (node_modules/zod/v3/types.cjs:120:22)
+      at parse (src/features/session-completion/ledger-service.ts:98:33)
+      at Object.<anonymous> (src/features/session-completion/__tests__/ledger-service-grading.test.ts:48:44)
+
+FAIL src/features/session/__tests__/purity-viewmodel.test.ts
+  ● Active Session Modes › getActiveSessionConfig › returns config for each mode
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "PLAN"
+    Received: "FLOW"
+
+    [0m [90m 100 |[39m         [36mconst[39m config [33m=[39m getActiveSessionConfig(mode)[33m;[39m
+     [90m 101 |[39m         expect(config)[33m.[39mtoBeDefined()[33m;[39m
+    [31m[1m>[22m[39m[90m 102 |[39m         expect(config[33m.[39mmode)[33m.[39mtoBe(mode)[33m;[39m
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 103 |[39m       })[33m;[39m
+     [90m 104 |[39m     })[33m;[39m
+     [90m 105 |[39m     it([32m'returns light focus config as fallback'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at toBe (src/features/session/__tests__/purity-viewmodel.test.ts:102:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (src/features/session/__tests__/purity-viewmodel.test.ts:99:34)
+
+FAIL src/features/session-completion/__tests__/focus-identity-updates.test.ts
+  ● focus identity updates once › focus identity called with correct user id and grade
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "user-123", ObjectContaining {"grade": "A", "quality": 90}
+    Received: "user-123", {"focusScoreDelta": 8, "grade": "A", "sessionId": "550e8400-e29b-41d4-a716-446655440000"}
+
+    Number of calls: 1
+
+    [0m [90m 30 |[39m     [36mawait[39m applyCompletionSubsystems({ ledger[33m,[39m summary })[33m;[39m
+     [90m 31 |[39m
+    [31m[1m>[22m[39m[90m 32 |[39m     expect(focusIdentityUpdateMock)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 33 |[39m       [32m'user-123'[39m[33m,[39m
+     [90m 34 |[39m       expect[33m.[39mobjectContaining({
+     [90m 35 |[39m         grade[33m:[39m [32m'A'[39m[33m,[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-completion/__tests__/focus-identity-updates.test.ts:32:37)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-runtime/__tests__/create-start.test.ts
+  ● createSession › should call eventEmitter.attach on create
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "test-session-123", "test-user-123"
+
+    Number of calls: 0
+
+    [0m [90m 50 |[39m     [36mconst[39m emitter [33m=[39m getSessionEventEmitter()[33m;[39m
+     [90m 51 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mcreateSession(mockSessionConfig)[33m;[39m
+    [31m[1m>[22m[39m[90m 52 |[39m     expect(emitter[33m.[39mattach)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 53 |[39m       [32m'test-session-123'[39m[33m,[39m
+     [90m 54 |[39m       mockUserId[33m,[39m
+     [90m 55 |[39m     )[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/create-start.test.ts:52:28)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● startSession › should default countdown to 0
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: 0
+    Received: called with 0 arguments
+
+    Number of calls: 1
+
+    [0m [90m 65 |[39m   it([32m'should default countdown to 0'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 66 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mstartSession()[33m;[39m
+    [31m[1m>[22m[39m[90m 67 |[39m     expect(ctx[33m.[39mmockOrchestrator[33m.[39mstartSession)[33m.[39mtoHaveBeenCalledWith([35m0[39m)[33m;[39m
+     [90m    |[39m                                               [31m[1m^[22m[39m
+     [90m 68 |[39m   })[33m;[39m
+     [90m 69 |[39m
+     [90m 70 |[39m   it([32m'should reject starting when orchestrator throws not found'[39m[33m,[39m [36masync[39m () [33m=>[39m {[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/create-start.test.ts:67:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-runtime/__tests__/state-error-history.test.ts
+  ● session history › should retrieve session history with limit
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 2
+    Received length: 0
+    Received array:  []
+
+    [0m [90m 67 |[39m     ctx[33m.[39mmockRepository[33m.[39mgetSessionHistory[33m.[39mmockResolvedValue(mockHistory)[33m;[39m
+     [90m 68 |[39m     [36mconst[39m history [33m=[39m [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mgetSessionHistory([35m10[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 69 |[39m     expect(history)[33m.[39mtoHaveLength([35m2[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 70 |[39m     expect(ctx[33m.[39mmockRepository[33m.[39mgetSessionHistory)[33m.[39mtoHaveBeenCalledWith([35m10[39m)[33m;[39m
+     [90m 71 |[39m   })[33m;[39m
+     [90m 72 |[39m })[33m;[39m[0m
+
+      at Object.toHaveLength (src/features/session-runtime/__tests__/state-error-history.test.ts:69:21)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/repository.test.ts
+  ● Session completion repository › creates completion ledger successfully
+
+    invalid-response
+
+    [0m [90m 39 |[39m
+     [90m 40 |[39m   [36mif[39m ([33m![39mparsed[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 41 |[39m     [36mthrow[39m [36mnew[39m [33mError[39m([32m'invalid-response'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 42 |[39m   }
+     [90m 43 |[39m
+     [90m 44 |[39m   [36mreturn[39m { [33m...[39mparsed[33m.[39mdata[33m,[39m offlineSyncStatus[33m:[39m [32m'synced'[39m [36mas[39m [36mconst[39m }[33m;[39m[0m
+
+      at mapRowToCompletionLedger (src/features/session-completion/mappers.ts:41:11)
+      at src/features/session-completion/repository.ts:90:34
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Session completion repository › returns existing ledger on duplicate idempotency key conflict
+
+    SessionCompletionRepositoryError: Session completion repository failed during create:[object Object]
+
+    [0m [90m 81 |[39m       }
+     [90m 82 |[39m     }
+    [31m[1m>[22m[39m[90m 83 |[39m     [36mthrow[39m [36mnew[39m [33mSessionCompletionRepositoryError[39m([32m'create'[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 84 |[39m   }
+     [90m 85 |[39m
+     [90m 86 |[39m   [36mif[39m ([33m![39mdata) {[0m
+
+      at src/features/session-completion/repository.ts:83:11
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+  ● Session completion repository › throws repository error on invalid create response and Supabase error
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Session completion repository failed during create:invalid-response"
+    Received message:   "invalid-response"
+
+        [0m [90m 39 |[39m
+         [90m 40 |[39m   [36mif[39m ([33m![39mparsed[33m.[39msuccess) {
+        [31m[1m>[22m[39m[90m 41 |[39m     [36mthrow[39m [36mnew[39m [33mError[39m([32m'invalid-response'[39m)[33m;[39m
+         [90m    |[39m           [31m[1m^[22m[39m
+         [90m 42 |[39m   }
+         [90m 43 |[39m
+         [90m 44 |[39m   [36mreturn[39m { [33m...[39mparsed[33m.[39mdata[33m,[39m offlineSyncStatus[33m:[39m [32m'synced'[39m [36mas[39m [36mconst[39m }[33m;[39m[0m
+
+      at mapRowToCompletionLedger (src/features/session-completion/mappers.ts:41:11)
+      at src/features/session-completion/repository.ts:90:34
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at Object.toThrow (node_modules/expect/build/index.js:218:22)
+      at Object.toThrow (src/features/session-completion/__tests__/repository.test.ts:82:59)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+  ● Session completion repository › fetches by idempotency key and session id, including not found
+
+    expect(received).resolves.toMatchObject(expected)
+
+    Matcher error: received value must be a non-null object
+
+    Received has value: null
+
+      at node_modules/expect/build/index.js:177:75
+
+FAIL src/features/session-completion/__tests__/completion-subsystems-features.test.ts
+  ● applyCompletionSubsystems › skips feature-dependent subsystems when feature is locked
+
+    expect(received).toBeNull()
+
+    Received: "companion-session-complete"
+
+    [0m [90m 110 |[39m       [32m'companion'[39m[33m,[39m
+     [90m 111 |[39m     ])[33m;[39m
+    [31m[1m>[22m[39m[90m 112 |[39m     expect(result[33m.[39mledger[33m.[39mcompanionReactionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                                               [31m[1m^[22m[39m
+     [90m 113 |[39m     expect(result[33m.[39mledger[33m.[39mdailyMissionResult[33m.[39mstatus)[33m.[39mtoBe([32m'unchanged'[39m)[33m;[39m
+     [90m 114 |[39m     expect(mockCompleteSession)[33m.[39mnot[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 115 |[39m   })[33m;[39m[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/completion-subsystems-features.test.ts:112:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts
+  ● applyCompletionSubsystems › skips feature-dependent subsystems when feature is locked
+
+    expect(received).toBeNull()
+
+    Received: "companion-session-complete"
+
+    [0m [90m  95 |[39m       [32m'companion'[39m[33m,[39m
+     [90m  96 |[39m     ])[33m;[39m
+    [31m[1m>[22m[39m[90m  97 |[39m     expect(result[33m.[39mledger[33m.[39mcompanionReactionId)[33m.[39mtoBeNull()[33m;[39m
+     [90m     |[39m                                               [31m[1m^[22m[39m
+     [90m  98 |[39m     expect(result[33m.[39mledger[33m.[39mdailyMissionResult[33m.[39mstatus)[33m.[39mtoBe([32m'unchanged'[39m)[33m;[39m
+     [90m  99 |[39m     expect(require([32m'./helpers'[39m)[33m.[39mmockCompleteSession)[33m.[39mnot[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 100 |[39m   })[33m;[39m[0m
+
+      at Object.toBeNull (src/features/session-completion/__tests__/completion-subsystems/failure-degradation.test.ts:97:47)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/feature-gate/__tests__/feature-gate-verification.test.ts
+  ● getPhase3VerificationSummary › returns passed=false when hasNoTab fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+    [0m [90m 60 |[39m     ][33m;[39m
+     [90m 61 |[39m     [36mconst[39m summary [33m=[39m getPhase3VerificationSummary(results)[33m;[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     expect(summary[33m.[39mpassed)[33m.[39mtoBe([36mfalse[39m)[33m;[39m
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 63 |[39m     expect(summary[33m.[39mfailedFeatures)[33m.[39mtoContain([32m'rankings'[39m)[33m;[39m
+     [90m 64 |[39m   })[33m;[39m
+     [90m 65 |[39m[0m
+
+      at Object.toBe (src/features/feature-gate/__tests__/feature-gate-verification.test.ts:62:28)
+
+FAIL src/features/session-runtime/__tests__/complete-abandon.test.ts
+  ● abandonSession › should delegate abandon without reason
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: undefined
+    Received: called with 0 arguments
+
+    Number of calls: 1
+
+    [0m [90m 55 |[39m   it([32m'should delegate abandon without reason'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 56 |[39m     [36mawait[39m ctx[33m.[39mmockOrchestrator[33m.[39mabandonSession()[33m;[39m
+    [31m[1m>[22m[39m[90m 57 |[39m     expect(ctx[33m.[39mmockOrchestrator[33m.[39mabandonSession)[33m.[39mtoHaveBeenCalledWith(
+     [90m    |[39m                                                 [31m[1m^[22m[39m
+     [90m 58 |[39m       undefined[33m,[39m
+     [90m 59 |[39m     )[33m;[39m
+     [90m 60 |[39m   })[33m;[39m[0m
+
+      at Object.toHaveBeenCalledWith (src/features/session-runtime/__tests__/complete-abandon.test.ts:57:49)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL src/features/session-completion/__tests__/offline-sync-processors.test.ts
+  ● session completion offline processors › XP_ADD calls addXP with correct args
+
+    TypeError: (0 , _offlineSyncProcessors.createXpAddProcessor) is not a function
+
+    [0m [90m 60 |[39m     })[33m;[39m
+     [90m 61 |[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     [36mawait[39m createXpAddProcessor()(entry)[33m;[39m
+     [90m    |[39m                               [31m[1m^[22m[39m
+     [90m 63 |[39m
+     [90m 64 |[39m     expect(getProgressionService)[33m.[39mtoHaveBeenCalledWith(
+     [90m 65 |[39m       [32m'550e8400-e29b-41d4-a716-446655440001'[39m[33m,[39m[0m
+
+      at Object.<anonymous> (src/features/session-completion/__tests__/offline-sync-processors.test.ts:62:31)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+  ● session completion offline processors › STREAK_RECORD calls recordSession
+
+    TypeError: (0 , _offlineSyncProcessors.createStreakRecordProcessor) is not a function
+
+    [0m [90m 79 |[39m     })[33m;[39m
+     [90m 80 |[39m
+    [31m[1m>[22m[39m[90m 81 |[39m     [36mawait[39m createStreakRecordProcessor()(entry)[33m;[39m
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 82 |[39m
+     [90m 83 |[39m     expect(getStreakService)[33m.[39mtoHaveBeenCalledWith(
+     [90m 84 |[39m       [32m'550e8400-e29b-41d4-a716-446655440001'[39m[33m,[39m[0m
+
+      at Object.<anonymous> (src/features/session-completion/__tests__/offline-sync-processors.test.ts:81:38)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12)
+
+FAIL src/features/integration/__tests__/integration-social-feed-helpers.test.ts
+  ● integration › social-feed-helpers.ts – notification titles / bodies / generateId › getNotificationBody returns default for unknown types
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Check out the app for details!"
+    Received: "Check out the app for details"
+
+    [0m [90m 84 |[39m       expect(
+     [90m 85 |[39m         getNotificationBody({ [33m...[39mbase[33m,[39m activityType[33m:[39m [32m'SOMETHING_ELSE'[39m })[33m,[39m
+    [31m[1m>[22m[39m[90m 86 |[39m       )[33m.[39mtoBe([32m'Check out the app for details!'[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 87 |[39m     })[33m;[39m
+     [90m 88 |[39m
+     [90m 89 |[39m     it([32m'generateId returns a unique non-empty string'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.toBe (src/features/integration/__tests__/integration-social-feed-helpers.test.ts:86:9)
+
+FAIL src/shared/monetization/__tests__/revenuecat-helpers.test.ts
+  ● revenuecat-helpers › mapOfferingToDisplayInfo › maps named package slots
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "prod-annual"
+    Received: "prod-monthly"
+
+    [0m [90m 92 |[39m       [36mconst[39m result [33m=[39m mapOfferingToDisplayInfo(offering)[33m;[39m
+     [90m 93 |[39m       expect(result[33m.[39mannual)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+    [31m[1m>[22m[39m[90m 94 |[39m       expect(result[33m.[39mannual[33m![39m[33m.[39mproduct[33m.[39midentifier)[33m.[39mtoBe([32m'prod-annual'[39m)[33m;[39m
+     [90m    |[39m                                                 [31m[1m^[22m[39m
+     [90m 95 |[39m       expect(result[33m.[39mlifetime)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m 96 |[39m       expect(result[33m.[39mlifetime[33m![39m[33m.[39mproduct[33m.[39mprice)[33m.[39mtoBe([35m299.99[39m)[33m;[39m
+     [90m 97 |[39m     })[33m;[39m[0m
+
+      at Object.toBe (src/shared/monetization/__tests__/revenuecat-helpers.test.ts:94:49)
+
+
+Test Suites: 25 failed, 5 skipped, 4 passed, 29 of 34 total
+Tests:       37 failed, 36 skipped, 134 passed, 207 total
+Snapshots:   0 total
+Time:        13.681 s, estimated 51 s
+Ran all test suites related to changed files.
+Test results written to: results.json
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.

@@ -22,6 +22,7 @@ import {
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { navigateToRootScreen, navigateToSettingsStackScreen } from '../../navigation/navigation-helpers';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
@@ -62,13 +63,13 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
-    navigateToCoach: () => navigation.navigate('CoachSettings'),
-    navigateToNotifications: () => navigation.navigate('NotificationSettings'),
-    navigateToAppearance: () => navigation.navigate('AppearanceSettings'),
-    navigateToPrivacy: () => navigation.navigate('PrivacySettings'),
-    navigateToAccount: () => navigation.navigate('AccountSettings'),
-    navigateToLaneMode: () => navigation.navigate('LaneMode'),
-    navigateToDataExport: () => navigation.navigate('DataExport'),
+    navigateToCoach: () => navigateToSettingsStackScreen(navigation as any, 'CoachSettings'),
+    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as any, 'NotificationSettings'),
+    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as any, 'AppearanceSettings'),
+    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as any, 'PrivacySettings'),
+    navigateToAccount: () => navigateToSettingsStackScreen(navigation as any, 'AccountSettings'),
+    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as any, 'LaneMode'),
+    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as any, 'DataExport'),
   });
 
   const filteredGroups = settingGroups
@@ -111,7 +112,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           displayName={user?.displayName || 'User'}
           userId={user?.id || ''}
           theme={theme}
-          onPress={() => navigation.navigate('Main', { screen: 'Profile' })}
+          onPress={() => navigateToRootScreen(navigation as any, 'Main', { screen: 'Profile' })}
         />
 
         <Box px={16}>

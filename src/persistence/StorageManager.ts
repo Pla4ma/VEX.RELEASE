@@ -84,37 +84,37 @@ export class StorageManager implements StorageAdapter {
 
   async getItem(key: string): Promise<Nullable<string>> {
     this.checkInitialized();
-    return this.active!.getItem(key);
+    return this.active?.getItem(key) ?? null; // ponytail: asserted non-null by checkInitialized() above
   }
 
   async setItem(key: string, value: string): Promise<void> {
     this.checkInitialized();
-    await this.active!.setItem(key, value);
+    await this.active?.setItem(key, value); // ponytail: asserted non-null by checkInitialized() above
   }
 
   async removeItem(key: string): Promise<void> {
     this.checkInitialized();
-    await this.active!.removeItem(key);
+    await this.active?.removeItem(key); // ponytail: asserted non-null by checkInitialized() above
   }
 
   async containsKey(key: string): Promise<boolean> {
     this.checkInitialized();
-    return this.active!.containsKey(key);
+    return this.active?.containsKey(key) ?? false; // ponytail: asserted non-null by checkInitialized() above
   }
 
   async getAllKeys(): Promise<string[]> {
     this.checkInitialized();
-    return this.active!.getAllKeys();
+    return this.active?.getAllKeys() ?? []; // ponytail: asserted non-null by checkInitialized() above
   }
 
   async clear(): Promise<void> {
     this.checkInitialized();
-    await this.active!.clear();
+    await this.active?.clear(); // ponytail: asserted non-null by checkInitialized() above
   }
 
   async getSize(): Promise<number> {
     this.checkInitialized();
-    return this.active!.getSize();
+    return this.active?.getSize() ?? 0; // ponytail: asserted non-null by checkInitialized() above
   }
 
   /**

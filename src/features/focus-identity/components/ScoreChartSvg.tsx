@@ -113,21 +113,25 @@ export function ScoreChartSvg({
       })}
 
       {[0, Math.floor(history.length / 2), history.length - 1].map(
-        (i) => (
-          <SvgText
-            key={i}
-            x={scaleX(i)}
-            y={height - 8}
-            fontSize={10}
-            fill={lightColors.text.muted}
-            textAnchor="middle"
-          >
-            {new Date(history[i]!.timestamp).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-            })}
-          </SvgText>
-        ),
+        (i) => {
+          const point = history[i];
+          if (!point) return null;
+          return (
+            <SvgText
+              key={i}
+              x={scaleX(i)}
+              y={height - 8}
+              fontSize={10}
+              fill={lightColors.text.muted}
+              textAnchor="middle"
+            >
+              {new Date(point.timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+              })}
+            </SvgText>
+          );
+        },
       )}
     </Svg>
   );

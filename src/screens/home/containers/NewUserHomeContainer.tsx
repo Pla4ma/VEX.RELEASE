@@ -12,6 +12,7 @@ import type { ExtendedRootStackParams, SessionStackParams } from '../../../navig
 import {
   navigateToSessionStackScreen,
   navigateToMainTab,
+  navigateToMainStackScreen,
 } from '../../../navigation/navigation-helpers';
 import {
   getFocusedMinutesForToday,
@@ -113,7 +114,7 @@ export function useNewUserContainerModel(
   }, [navigation]);
 
   const openCoach = useCallback((): void => {
-    navigation.navigate('AICoach');
+    navigateToMainStackScreen(navigation as never, 'AICoach');
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(

@@ -8,6 +8,7 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../../navigation/types';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 
 const FocusScoreWidgetSkeleton = () => (
   <Box p="md" bg="surface" borderRadius="md">
@@ -25,7 +26,7 @@ export const FocusScoreWidget = () => {
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handlePress = () => {
-    navigation.navigate('FocusScoreDashboard');
+    navigateToRootScreen(navigation, 'FocusScoreDashboard');
   };
 
   if (status === 'pending') {

@@ -13,8 +13,8 @@ export const createMonthlyFocusReport = (
 
   if (monthHistory.length < 2) {return null;}
 
-  const startingScore = monthHistory[0]!.score;
-  const endingScore = monthHistory[monthHistory.length - 1]!.score;
+  const startingScore = monthHistory[0]?.score ?? 0; // ponytail: asserted non-null by length >= 2 guard above
+  const endingScore = monthHistory[monthHistory.length - 1]?.score ?? 0; // ponytail: asserted non-null by length >= 2 guard above
   const change = endingScore - startingScore;
   const sessionsCompleted = profile.scoreHistory.filter(
     (h) =>

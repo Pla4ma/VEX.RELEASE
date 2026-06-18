@@ -103,7 +103,7 @@ export async function restoreSessionDraft(
     const goalOverride = params?.goal ? null : parsedDraft.data.goal ?? null;
     const showAdvancedOverride = parsedDraft.data.showAdvanced ?? null;
     const showCustomizationOverride =
-      parsedDraft.data.presetId !== PRESETS[1]!.id ||
+      parsedDraft.data.presetId !== (PRESETS[1]?.id ?? '') ||
       parsedDraft.data.selectedThemeId !== 'default' ||
       parsedDraft.data.showAdvanced
         ? true

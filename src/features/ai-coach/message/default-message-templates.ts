@@ -72,7 +72,7 @@ export function getDefaultTemplate(
     return null;
   }
   Object.entries(context).forEach(([key, value]) => {
-    template = template!.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+    template = template?.replace(new RegExp(`{{${key}}}`, 'g'), String(value)) ?? template; // ponytail: template non-null after guard above
   });
-  return template!;
+  return template ?? ''; // ponytail: template non-null after guard above
 }

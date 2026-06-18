@@ -29,7 +29,7 @@ export function calculateStudyProgress(plan: StudyPlan): {
     sessionsRemaining * plan.estimatedMinutesPerSession;
   let streak = 0;
   for (let i = 0; i < plan.sessions.length; i++) {
-    if (plan.sessions[i]!.completed) {
+    if (plan.sessions[i]?.completed) {
       streak++;
     } else {
       break;

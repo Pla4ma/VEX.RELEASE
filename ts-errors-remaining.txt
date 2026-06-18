@@ -1,0 +1,325 @@
+src/features/ai-coach/session/session-context.ts(71,19): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/features/ai-coach/session/session-context.ts(74,55): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/features/ai-coach/session/session-context.ts(75,38): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/features/ai-coach/session/session-context.ts(77,44): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/features/ai-coach/session/session-context.ts(107,3): error TS2322: Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry | null' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry | null'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/features/lane-home/service.ts(29,24): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/features/lane-home/service.ts(29,40): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(callbackfn: (previousValue: SessionHistoryEntry, currentValue: SessionHistoryEntry, currentIndex: number, array: SessionHistoryEntry[]) => SessionHistoryEntry, initialValue: SessionHistoryEntry): SessionHistoryEntry', gave the following error.
+    Argument of type '(sum: number, s: SessionHistoryEntry) => any' is not assignable to parameter of type '(previousValue: SessionHistoryEntry, currentValue: SessionHistoryEntry, currentIndex: number, array: SessionHistoryEntry[]) => SessionHistoryEntry'.
+      Types of parameters 'sum' and 'previousValue' are incompatible.
+        Type 'SessionHistoryEntry' is not assignable to type 'number'.
+  Overload 2 of 3, '(callbackfn: (previousValue: number, currentValue: SessionHistoryEntry, currentIndex: number, array: SessionHistoryEntry[]) => number, initialValue: number): number', gave the following error.
+    Argument of type '(sum: number, s: SessionHistoryEntry) => any' is not assignable to parameter of type '(previousValue: number, currentValue: SessionHistoryEntry, currentIndex: number, array: SessionHistoryEntry[]) => number'.
+      Types of parameters 's' and 'currentValue' are incompatible.
+        Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/features/lane-home/service.ts(29,90): error TS2339: Property 'duration' does not exist on type 'SessionHistoryEntry'.
+src/features/session-runtime/analytics/session-analytics-listener-helpers.ts(1,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/analytics/session-analytics-listener-helpers.ts(9,56): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listener-helpers.ts(21,61): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(1,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(2,25): error TS2307: Cannot find module '../../shared/analytics/analytics-service' or its corresponding type declarations.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(3,31): error TS2307: Cannot find module '../../shared/analytics/analytics-events' or its corresponding type declarations.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(34,54): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(51,54): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(66,56): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(103,56): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(128,59): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(137,66): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(147,61): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(156,60): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(166,51): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/session-analytics-listeners.ts(177,62): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/analytics/SessionAnalytics.ts(7,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/analytics/SessionAnalytics.ts(8,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/antiCheat/AntiCheatEngine.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/components/ActiveSessionHUD.tsx(4,38): error TS2307: Cannot find module '../../utils/error-sanitizer' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview-helpers.tsx(11,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview-helpers.tsx(12,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview-helpers.tsx(13,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.styles.tsx(11,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.styles.tsx(12,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.styles.tsx(13,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.tsx(4,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.tsx(5,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.tsx(6,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/BossDamagePreview.tsx(7,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/CheckpointCelebration.tsx(12,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/CheckpointCelebration.tsx(13,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/ComboMeter.tsx(5,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/ComboMeter.tsx(6,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/ComboMeterOverlays.tsx(4,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/CompanionSessionLayer.tsx(5,33): error TS2307: Cannot find module '../../features/companion/components/LivingCompanion' or its corresponding type declarations.
+src/features/session-runtime/components/CompanionSessionLayer.tsx(6,37): error TS2307: Cannot find module '../../features/companion/types' or its corresponding type declarations.
+src/features/session-runtime/components/CompanionSessionLayer.tsx(7,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/CompanionSessionLayer.tsx(8,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/CreatePresetForm.tsx(14,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/CreativeMoodLogger.tsx(4,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/CreativeMoodLogger.tsx(5,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/CreativeMoodLogger.tsx(6,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/CreativeMoodLogger.tsx(7,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/InterruptionWarning.tsx(18,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/ModeIndicatorBadge.tsx(3,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/ModeIndicatorBadge.tsx(4,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/PresetCard.tsx(3,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/PresetCard.tsx(4,22): error TS2307: Cannot find module '../../icons/components/Icon' or its corresponding type declarations.
+src/features/session-runtime/components/PresetCard.tsx(5,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/PresetCard.tsx(6,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/PurityHUD.tsx(4,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/PurityHUD.tsx(6,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/PurityHUD.tsx(7,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator-helpers.tsx(9,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator-helpers.tsx(10,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator-helpers.tsx(11,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator.tsx(10,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator.tsx(11,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/QualityIndicator.tsx(12,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/RecoveryPrompt.tsx(4,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/session-history-helpers.ts(5,32): error TS2307: Cannot find module '../../utils/format-duration' or its corresponding type declarations.
+src/features/session-runtime/components/SessionControls.tsx(4,70): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionHistory.tsx(3,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionHistoryCard.tsx(6,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionPresets.tsx(10,31): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionSummary.helpers.ts(4,32): error TS2307: Cannot find module '../../utils/format-duration' or its corresponding type declarations.
+src/features/session-runtime/components/SessionSummary.tsx(13,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionSummaryMoodSelector.tsx(14,27): error TS2307: Cannot find module '../../utils/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/SessionTimer.tsx(9,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/SessionTimer.tsx(16,30): error TS2307: Cannot find module '../../theme/tokens/typography' or its corresponding type declarations.
+src/features/session-runtime/components/SessionTimer.tsx(17,32): error TS2307: Cannot find module '../../shared/ui/components/EnterAnimation' or its corresponding type declarations.
+src/features/session-runtime/components/SessionValidationFeedback.tsx(14,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/SessionValidationFeedback.tsx(15,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/SessionValidationFeedback.tsx(16,24): error TS2307: Cannot find module '../../components/primitives/Button' or its corresponding type declarations.
+src/features/session-runtime/components/SessionValidationFeedback.tsx(17,26): error TS2307: Cannot find module '../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/SquadMemberIndicator.tsx(13,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/SquadMemberIndicator.tsx(14,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/SquadMemberIndicator.tsx(15,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/SquadMemberIndicator.tsx(18,55): error TS2307: Cannot find module '../../utils/format-duration' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncIndicator.tsx(3,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncIndicator.tsx(4,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncIndicator.tsx(82,8): error TS7006: Parameter 'payload' implicitly has an 'any' type.
+src/features/session-runtime/components/SquadSyncIndicator.tsx(123,8): error TS7006: Parameter 'payload' implicitly has an 'any' type.
+src/features/session-runtime/components/SquadSyncStates.tsx(1,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncStates.tsx(2,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncStates.tsx(3,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncToasts.tsx(4,21): error TS2307: Cannot find module '../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncToasts.tsx(5,22): error TS2307: Cannot find module '../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/SquadSyncToasts.tsx(6,26): error TS2307: Cannot find module '../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/states/conflict-state-helpers.ts(1,50): error TS2307: Cannot find module '../../../constants/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/states/conflict-state-helpers.ts(2,26): error TS2307: Cannot find module '../../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/components/states/ConflictDeviceCard.tsx(4,22): error TS2307: Cannot find module '../../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/states/ConflictDeviceCard.tsx(5,24): error TS2307: Cannot find module '../../../components/primitives/Button' or its corresponding type declarations.
+src/features/session-runtime/components/states/ConflictDeviceCard.tsx(6,21): error TS2307: Cannot find module '../../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/states/session-backgrounded-helpers.ts(1,56): error TS2307: Cannot find module '../../../utils/format-duration' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(4,22): error TS2307: Cannot find module '../../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(5,24): error TS2307: Cannot find module '../../../components/primitives/Button' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(6,21): error TS2307: Cannot find module '../../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(8,50): error TS2307: Cannot find module '../../../constants/haptics' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(9,26): error TS2307: Cannot find module '../../../events' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(4,22): error TS2307: Cannot find module '../../../components/primitives/Text' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(5,24): error TS2307: Cannot find module '../../../components/primitives/Button' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(6,21): error TS2307: Cannot find module '../../../components/primitives/Box' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionDegradedState.tsx(4,26): error TS2307: Cannot find module '../../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionEmptyState.tsx(11,26): error TS2307: Cannot find module '../../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionErrorActions.tsx(3,26): error TS2307: Cannot find module '../../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionErrorState.tsx(8,26): error TS2307: Cannot find module '../../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionErrorState.tsx(9,38): error TS2307: Cannot find module '../../../utils/error-sanitizer' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionLoadingState.tsx(9,26): error TS2307: Cannot find module '../../../components/ui/Skeleton' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionLoadingState.tsx(11,26): error TS2307: Cannot find module '../../../theme/ThemeContext' or its corresponding type declarations.
+src/features/session-runtime/engines/completion-recovery.ts(10,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/engines/CompletionEngine.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/engines/ScoringEngine.ts(9,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/engines/timer-engine-core.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/engines/timer-tick-handler.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSession.ts(3,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSession.ts(86,43): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSession.ts(98,46): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSession.ts(105,45): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSession.ts(112,46): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSession.ts(119,48): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSession.ts(126,48): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/hooks/useSessionHistory.ts(3,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionStats.ts(3,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionStats.ts(4,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionTimer.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionTimer.ts(4,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionTimer.ts(5,50): error TS2307: Cannot find module '../../constants/haptics' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionTimerSubscriptions.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/hooks/useSessionTimerSubscriptions.ts(4,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useTimerActions.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/hooks/useTimerActions.ts(3,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/hooks/useTimerActions.ts(4,50): error TS2307: Cannot find module '../../constants/haptics' or its corresponding type declarations.
+src/features/session-runtime/integration/coach-config.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/coach-handlers.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/coach-handlers.ts(2,56): error TS2307: Cannot find module '../../features/coach-presence/coach-presence-message-resolver' or its corresponding type declarations.
+src/features/session-runtime/integration/coach-handlers.ts(3,76): error TS2307: Cannot find module '../../features/coach-presence/copy-service' or its corresponding type declarations.
+src/features/session-runtime/integration/RewardAdapter.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/RewardAdapter.ts(2,34): error TS2307: Cannot find module '../../rewards/RewardService' or its corresponding type declarations.
+src/features/session-runtime/integration/RewardAdapter.ts(4,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-calculation.ts(1,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session-runtime/integration/session-reward-helpers.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-helpers.ts(5,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session-runtime/integration/session-reward-recovery.ts(5,8): error TS2307: Cannot find module '../../features/streaks/restore-quest' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-recovery.ts(6,31): error TS2307: Cannot find module '../../features/streaks/service' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-recovery.ts(7,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-recovery.ts(8,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionBossIntegration.ts(2,36): error TS2307: Cannot find module '../../features/liveops-config/feature-access-store' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionBossIntegration.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/sessionCoachContext.ts(2,43): error TS2307: Cannot find module '../../features/coach-presence' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(2,36): error TS2307: Cannot find module '../../features/liveops-config/feature-access-store' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(50,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(55,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(59,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(63,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(73,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCoachIntegration.ts(83,10): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionCompletionOrchestrator.ts(1,57): error TS2307: Cannot find module '../../features/session-completion/completion-orchestrator' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardHandlers.ts(1,34): error TS2307: Cannot find module '../../features/streaks/service' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardHandlers.ts(2,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardHandlers.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(1,26): error TS2307: Cannot find module '../../events' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(73,50): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(91,60): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/integration/SessionRewardIntegration.ts(106,50): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/features/session-runtime/notifications/SessionNotifications.ts(1,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/orchestrator-accessors.ts(11,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCompletion.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCore.ts(2,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionCore.ts(9,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionLifecycle.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionRecovery.ts(1,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionRecovery.ts(9,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/orchestrators/SessionTimer.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-io.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager-helpers.ts(1,39): error TS2307: Cannot find module '../../persistence/MMKVStorageAdapter' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager-helpers.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager.ts(1,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/presets/preset-manager.ts(4,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/recovery/recovery-analysis.ts(7,30): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/recovery/RecoveryService.ts(7,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-history.ts(3,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-storage.ts(1,39): error TS2307: Cannot find module '../../persistence/MMKVStorageAdapter' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-summaries.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/session-repository-sync-queue.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/SessionRepository.ts(6,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/repository/SessionRepository.ts(7,38): error TS2307: Cannot find module '../../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/services/SessionTimerService.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitter.ts(11,26): error TS2307: Cannot find module '../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitter.ts(12,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitterBase.ts(1,46): error TS2307: Cannot find module '../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/SessionEventEmitterBase.ts(15,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/SessionOrchestratorBase.ts(18,30): error TS2307: Cannot find module '../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/SessionOrchestratorBase.ts(19,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(4,48): error TS2307: Cannot find module '../services/realtimeSubscriptions' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(5,32): error TS2307: Cannot find module '../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/useSessionAppState.ts(6,38): error TS2307: Cannot find module '../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/utils/idGenerator.ts(7,20): error TS2307: Cannot find module '../../utils/uuid' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence-history.ts(2,38): error TS2307: Cannot find module '../../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence-history.ts(3,42): error TS2307: Cannot find module '../../persistence/mmkv-key' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence-recovery.ts(2,38): error TS2307: Cannot find module '../../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence-recovery.ts(3,42): error TS2307: Cannot find module '../../persistence/mmkv-key' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence.ts(1,38): error TS2307: Cannot find module '../../utils/silent-failure' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence.ts(4,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence.ts(5,26): error TS2307: Cannot find module '../../events/EventBus' or its corresponding type declarations.
+src/features/session-runtime/utils/persistence.ts(18,42): error TS2307: Cannot find module '../../persistence/mmkv-key' or its corresponding type declarations.
+src/features/session-runtime/utils/RetryStrategy.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/utils/session-machine-factory.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/utils/session-machine-states.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/utils/StateMachine.ts(1,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session-runtime/utils/validation.ts(2,32): error TS2307: Cannot find module '../../utils/debug' or its corresponding type declarations.
+src/features/session/hooks/build-return-args.ts(3,42): error TS2307: Cannot find module '../../../session/types/interfaces' or its corresponding type declarations.
+src/features/session/hooks/build-return-args.ts(4,15): error TS2724: '"../../../session/SessionOrchestrator"' has no exported member named 'SessionOrchestrator'. Did you mean 'getSessionOrchestrator'?
+src/features/session/hooks/useStudySession.return.ts(3,21): error TS2307: Cannot find module '../../../session/' or its corresponding type declarations.
+src/features/session/hooks/useStudySession.ts(14,40): error TS2307: Cannot find module '../../../session/orchestrator-factory' or its corresponding type declarations.
+src/features/session/hooks/useStudySession.ts(82,55): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(85,21): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(86,18): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(87,27): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(88,30): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(99,56): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(102,21): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(103,18): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(104,27): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(105,30): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(116,54): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(121,11): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(125,23): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(126,20): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(127,32): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ status: "COMPLETED" | "PREPARING" | "STARTING" | "ACTIVE" | "PAUSED" | "BACKGROUNDED" | "INTERRUPTION_RISK" | "DEGRADED" | "COMPLETING" | "PARTIAL" | "ABANDONED" | "FAILED" | "RECOVERING" | "CONFLICT"; ... 61 more ...; lastActiveAt?: number | undefined; }'.
+src/features/session/hooks/useStudySession.ts(128,29): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(132,23): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(133,20): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(134,32): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ status: "COMPLETED" | "PREPARING" | "STARTING" | "ACTIVE" | "PAUSED" | "BACKGROUNDED" | "INTERRUPTION_RISK" | "DEGRADED" | "COMPLETING" | "PARTIAL" | "ABANDONED" | "FAILED" | "RECOVERING" | "CONFLICT"; ... 61 more ...; lastActiveAt?: number | undefined; }'.
+src/features/session/hooks/useStudySession.ts(135,29): error TS18046: 'sessionState' is of type 'unknown'.
+src/features/session/hooks/useStudySession.ts(136,32): error TS18046: 'sessionState' is of type 'unknown'.
+src/screens/home/containers/ActivatingStage.tsx(13,45): error TS2345: Argument of type 'NewUserContainerInput' is not assignable to parameter of type 'ActivatingContainerInput'.
+  The types of 'historyQuery.history' are incompatible between these types.
+    Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+      Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/EngagedStage.tsx(13,42): error TS2345: Argument of type 'NewUserContainerInput' is not assignable to parameter of type 'EngagedContainerInput'.
+  The types of 'historyQuery.history' are incompatible between these types.
+    Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+      Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/NewUserHomeContainer.tsx(82,61): error TS2345: Argument of type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' is not assignable to parameter of type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/NewUserHomeContainer.tsx(166,5): error TS2322: Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry | null' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry | null'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/NewUserHomeContainer.tsx(172,5): error TS2322: Type '{ history: SessionHistoryEntry[]; isLoading: boolean; error: Error | null; refresh: () => Promise<void>; }' is not assignable to type 'SessionHistoryResult'.
+  Types of property 'history' are incompatible.
+    Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+      Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/PowerUserStage.tsx(13,44): error TS2345: Argument of type 'NewUserContainerInput' is not assignable to parameter of type 'PowerUserContainerInput'.
+  The types of 'historyQuery.history' are incompatible between these types.
+    Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+      Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/containers/useHomeScreenInnerEffects.ts(10,50): error TS2307: Cannot find module '../../../session/analytics/SessionAnalytics' or its corresponding type declarations.
+src/screens/home/HistoryCard.tsx(12,23): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/HistoryCard.tsx(12,56): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/HistoryCard.tsx(31,20): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/HistoryCard.tsx(39,73): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/HistoryCard.tsx(39,96): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/home-controller-helpers.ts(12,11): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/home-controller-helpers.ts(12,47): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(58,11): error TS2339: Property 'mode' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(59,11): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(60,19): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(63,16): error TS2339: Property 'mode' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(63,42): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(67,16): error TS2339: Property 'mode' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeBehaviorStats.ts(67,41): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/hooks/useHomeScreenController.ts(76,53): error TS2345: Argument of type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' is not assignable to parameter of type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/home/utils.ts(44,12): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/home/utils.ts(44,48): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/profile/ProfileActivityTab.tsx(29,43): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/profile/ProfileActivityTab.tsx(47,21): error TS2339: Property 'config' does not exist on type 'SessionHistoryEntry'.
+src/screens/profile/ProfileActivityTab.tsx(72,24): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/profile/ProfileScreen.tsx(116,46): error TS2322: Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/session/ActiveSessionBottomControls.tsx(2,37): error TS2307: Cannot find module '../../session/components/InterruptionWarning' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.layers.tsx(4,39): error TS2307: Cannot find module '../../session/components/CompanionSessionLayer' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.layers.tsx(5,34): error TS2307: Cannot find module '../../session/components/DeepWorkVignette' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.tsx(3,39): error TS2307: Cannot find module '../../session/components/CompanionSessionLayer' or its corresponding type declarations.
+src/screens/session/ActiveSessionContent.tsx(4,34): error TS2307: Cannot find module '../../session/components/DeepWorkVignette' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(6,38): error TS2307: Cannot find module '../../../session/components/states/SessionDegradedState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(7,35): error TS2307: Cannot find module '../../../session/components/states/SessionEmptyState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionGuardStates.tsx(8,35): error TS2307: Cannot find module '../../../session/components/states/SessionErrorState' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionModeOverlays.tsx(11,36): error TS2307: Cannot find module '../../../session/components/ModeIndicatorBadge' or its corresponding type declarations.
+src/screens/session/components/ActiveSessionProgressRingInner.tsx(12,27): error TS2307: Cannot find module '../../../session/components/PurityHUD' or its corresponding type declarations.
+src/screens/session/hooks/useActiveSessionController.ts(79,5): error TS2322: Type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry[]' is not assignable to type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry[]'.
+  Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/session/hooks/useActiveSessionMetrics.ts(103,28): error TS2339: Property 'summary' does not exist on type 'SessionHistoryEntry'.
+src/screens/session/utils/session-complete-utils.ts(42,47): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: SessionHistoryEntry, index: number, array: SessionHistoryEntry[]) => value is SessionHistoryEntry, thisArg?: any): SessionHistoryEntry[]', gave the following error.
+    Argument of type '(entry: SessionHistoryEntry) => boolean' is not assignable to parameter of type '(value: SessionHistoryEntry, index: number, array: SessionHistoryEntry[]) => value is SessionHistoryEntry'.
+      Types of parameters 'entry' and 'value' are incompatible.
+        Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+  Overload 2 of 2, '(predicate: (value: SessionHistoryEntry, index: number, array: SessionHistoryEntry[]) => unknown, thisArg?: any): SessionHistoryEntry[]', gave the following error.
+    Argument of type '(entry: SessionHistoryEntry) => boolean' is not assignable to parameter of type '(value: SessionHistoryEntry, index: number, array: SessionHistoryEntry[]) => unknown'.
+      Types of parameters 'entry' and 'value' are incompatible.
+        Property 'progress' is missing in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/types/interfaces").SessionHistoryEntry' but required in type 'import("C:/Users/jonat/CascadeProjects/vex-app-old/src/features/session-runtime/utils/persistence-history").SessionHistoryEntry'.
+src/screens/session/utils/session-complete-utils.ts(47,71): error TS2339: Property 'createdAt' does not exist on type 'SessionHistoryEntry'.

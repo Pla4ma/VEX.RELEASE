@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getSprintChainService } from '../../../features/session/SprintChainService';
 import type { SessionStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import type { Mood } from '../../../session/components/CreativeMoodLogger';
 import type {} from '../../../session/types/schemas';
 import { SessionSummarySchema } from '../../../session/types/schemas';
@@ -92,7 +93,7 @@ export function useActiveSessionHandlers({
         message: 'Session completed',
         level: 'info',
       });
-      navigation.navigate('SessionComplete', {
+      navigateToSessionStackScreen(navigation as any, 'SessionComplete', {
         sessionId,
         summary: SessionSummarySchema.parse({
           ...result,

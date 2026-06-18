@@ -37,7 +37,7 @@ export async function withRetry<T>(
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
       const isRetryable = fullConfig.retryableErrors.some((errType) =>
-        lastError!.message.toLowerCase().includes(errType),
+        lastError?.message.toLowerCase().includes(errType) ?? false,
       );
       if (!isRetryable || attempt === fullConfig.maxAttempts) {
         break;

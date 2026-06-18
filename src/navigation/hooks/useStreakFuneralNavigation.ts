@@ -6,6 +6,7 @@ import { eventBus } from '../../events/EventBus';
 import { getStreakService } from '../../streaks/StreakService';
 
 import type { ExtendedRootStackParams } from '../types';
+import { navigateToRootScreen } from '../navigation-helpers';
 
 interface StreakFuneralData {
   previousStreak: number;
@@ -177,7 +178,7 @@ export function useStreakFuneralNavigation({
     }
 
     setLastFuneralShown();
-    navigationRef.navigate('StreakFuneral', currentData);
+    navigateToRootScreen(navigationRef as any, 'StreakFuneral', currentData);
     setShowStreakFuneral(false);
     setStreakFuneralData(null);
   }, [

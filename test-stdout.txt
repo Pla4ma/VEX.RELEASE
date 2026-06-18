@@ -1,0 +1,2 @@
+  Invalid testPattern ;|echo|EXIT:$?;|powershell supplied. Running all tests instead.
+  Invalid testPattern ;|echo|EXIT:$?;|powershell supplied. Running all tests instead.

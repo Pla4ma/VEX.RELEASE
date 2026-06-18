@@ -22,7 +22,7 @@ export function validateTick(
 ): TickValidationResult {
   const lastElapsed =
     tickHistory.length > 0
-      ? tickHistory[tickHistory.length - 1]!.elapsed
+      ? tickHistory[tickHistory.length - 1]?.elapsed ?? 0 // ponytail: asserted non-null by tickHistory.length > 0 guard
       : null;
   const elapsedDelta = lastElapsed === null ? 0 : elapsed - lastElapsed;
 
@@ -85,7 +85,7 @@ export function validateTickPatterns(
   const intervals: number[] = [];
   for (let i = 1; i < tickHistory.length; i++)
     {intervals.push(
-      tickHistory[i]!.timestamp - tickHistory[i - 1]!.timestamp,
+      (tickHistory[i]?.timestamp ?? 0) - (tickHistory[i - 1]?.timestamp ?? 0),
     );}
   const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
   const variance =

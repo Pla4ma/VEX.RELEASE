@@ -1,0 +1,66 @@
+===== BY ERROR CLASS =====
+assertion-mismatch        System.Object[]  e.g. Error: expect(received).not.toBeNull() |  | Received: null
+mock-not-called           System.Object[]  e.g. Error: expect(jest.fn()).toHaveBeenCalledWith(...expected) |  | Expected: ObjectContaining {"status"
+undefined-property        System.Object[]  e.g. TypeError: Cannot read properties of undefined (reading 'Provider') |     at Provider (C:\Users\jona
+unknown                   System.Object[]  e.g. SessionCompletionRepositoryError: Session completion repository failed during create: [object Object
+other-error               System.Object[]  e.g. Error: expect(received).rejects.toThrow() |  | Received promise resolved instead of rejected
+not-a-function            System.Object[]  e.g. TypeError: mmkvStorage.setItemSync is not a function |     at Object.setItemSync [as setItem] (C:\Us
+deep-equal-mismatch       System.Object[]  e.g. Error: expect(received).toEqual(expected) // deep equality |  | - Expected  - 1
+testid-missing            System.Object[]  e.g. Error: Unable to find an element with text: You are offline. Data may be outdated. |  | [36m<View>
+
+===== BY MODULE =====
+src\features                                       System.Object[]
+src\shared                                         System.Object[]
+src\navigation                                     System.Object[]
+src\store                                          System.Object[]
+src\screens                                        System.Object[]
+src\__tests__                                      System.Object[]
+src\performance                                    System.Object[]
+src\theme                                          System.Object[]
+src\privacy                                        System.Object[]
+
+===== PER FILE (sorted by failures) =====
+src\features\account-deletion\__tests__\account-deletion-comprehensive.test.ts                6
+src\shared\ui\components\__tests__\ScreenErrorBoundary.test.tsx                               6
+src\navigation\__tests__\deep-links-parse.test.ts                                             6
+src\features\analytics\__tests__\integration-session-sync.test.ts                             6
+src\features\content-study\__tests__\content-history.test.tsx                                 4
+src\features\session-runtime\components\__tests__\CreativeMoodLogger.test.tsx                 4
+src\features\session-completion\__tests__\repository.test.ts                                  4
+src\features\analytics\__tests__\integration-analytics.test.ts                                4
+src\features\challenges\__tests__\basic-challenges-service.test.ts                            4
+src\store\__tests__\auth-profile-storage.test.ts                                              3
+src\features\session-recommendation\__tests__\session-recommendation-analytics-performance.test.ts    2
+src\features\session-runtime\__tests__\create-start.test.ts                                   2
+src\features\ai-coach\__tests__\service\message-generator.test.ts                             2
+src\features\challenges\__tests__\reroll-eligibility.test.ts                                  2
+src\features\session-runtime\__tests__\pause-resume.test.ts                                   2
+src\features\session-completion\__tests__\offline-sync-processors.test.ts                     2
+src\features\feature-gate\__tests__\feature-gate-verification.test.ts                         1
+src\features\ai-coach\__tests__\service\coach-state-machine.test.ts                           1
+src\features\session-runtime\__tests__\complete-abandon.test.ts                               1
+src\features\session-completion\__tests__\ui-display-source-of-truth.test.ts                  1
+src\features\session-completion\__tests__\completion-subsystems-features.test.ts              1
+src\features\session-completion\__tests__\completion-subsystems\failure-degradation.test.ts    1
+src\features\challenges\__tests__\challenges-error-classes.test.ts                            1
+src\features\ai-coach\__tests__\memories-repository.test.ts                                   1
+src\__tests__\launch-schema-reconciliation.test.ts                                            1
+src\privacy\__tests__\data-deletion.test.ts                                                   1
+src\features\ai-coach\__tests__\notification-budget-quiet.test.ts                             1
+src\features\content-study\__tests__\syncQueueManager.test.ts                                 1
+src\features\session-completion\__tests__\focus-identity-updates.test.ts                      1
+src\features\session-completion\__tests__\service-story-and-summary.test.ts                   1
+src\features\session-recommendation\__tests__\session-recommendation-analytics-hooks-integration-comprehensive.test.ts    1
+src\features\account-deletion\__tests__\service.test.ts                                       1
+src\features\ai-coach\__tests__\message-quality-validation.test.ts                            1
+src\features\focus-identity\__tests__\FocusScoreDashboard.test.tsx                            1
+src\features\session-completion\__tests__\completion-orchestrator-edge.test.ts                1
+src\screens\onboarding\hooks\__tests__\useOnboardingCompletion.test.tsx                       1
+src\features\session-completion\__tests__\ledger-service-grading.test.ts                      1
+src\features\session-completion\__tests__\learning-execution-return-plan.test.ts              1
+src\performance\__tests__\performanceGateEval.test.ts                                         1
+src\features\session\__tests__\purity-viewmodel.test.ts                                       1
+src\theme\tokens\__tests__\ethereal-sky.test.ts                                               1
+src\features\session-runtime\__tests__\state-error-history.test.ts                            1
+src\shared\monetization\__tests__\revenuecat-helpers.test.ts                                  1
+src\features\integration\__tests__\integration-social-feed-helpers.test.ts                    1

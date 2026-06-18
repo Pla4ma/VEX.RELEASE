@@ -5,6 +5,7 @@ import { Box, Text, Stack, Button } from '@components/primitives';
 import { useNetInfo } from '../../network/useNetInfo';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../navigation/types';
+import { navigateToMainStackScreen } from '../../navigation/navigation-helpers';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { FocusScoreDashboardSkeleton } from './FocusScoreDashboard-skeleton';
 import { formatDelta, formatHistoryPoint } from './FocusScoreDashboard-helpers';
@@ -142,9 +143,9 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
           <Box>
             <Button
               onPress={() =>
-                navigation.navigate('Analytics', {
+                navigateToMainStackScreen(navigation as any, 'Analytics', {
                   month: new Date().toISOString().slice(0, 7),
-                })
+                } as any)
               }
               variant="secondary"
             >

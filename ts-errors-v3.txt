@@ -1,0 +1,11 @@
+src/features/session-runtime/components/SessionValidationFeedback.tsx(18,57): error TS2307: Cannot find module '../../utils/validation' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionBackgroundedState.tsx(9,26): error TS2307: Cannot find module '../../../events' or its corresponding type declarations.
+src/features/session-runtime/components/states/SessionConflictState.tsx(7,26): error TS2307: Cannot find module '../../../theme' or its corresponding type declarations.
+src/features/session-runtime/integration/session-reward-calculation.ts(1,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session-runtime/integration/session-reward-helpers.ts(5,15): error TS2305: Module '"../../session/types"' has no exported member 'SessionSummary'.
+src/features/session/hooks/build-return-args.ts(3,42): error TS2307: Cannot find module '../../../session/types/interfaces' or its corresponding type declarations.
+src/features/session/hooks/build-return-args.ts(4,15): error TS2724: '"../../../session/SessionOrchestrator"' has no exported member named 'SessionOrchestrator'. Did you mean 'getSessionOrchestrator'?
+src/features/session/hooks/useStudySession.return.ts(3,21): error TS2307: Cannot find module '../../../session/' or its corresponding type declarations.
+src/screens/home/containers/useHomeScreenInnerEffects.ts(10,10): error TS2305: Module '"../../../session/analytics/SessionAnalytics"' has no exported member 'getOrchestratorHandlesCompletion'.
+src/session/components/ModeIndicatorBadge.tsx(1,109): error TS2305: Module '"../../features/session-runtime/components/ModeIndicatorBadge"' has no exported member 'default'.

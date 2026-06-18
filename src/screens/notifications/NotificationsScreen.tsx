@@ -121,7 +121,7 @@ export const NotificationsScreen = React.memo(() => {
         keyExtractor={(item: NotificationListItem, index: number) =>
           item.type === 'header'
             ? `header-${item.title}-${index}`
-            : item.data!.id
+            : item.data?.id ?? `item-${index}`
         }
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         estimatedItemSize={80}
@@ -129,13 +129,13 @@ export const NotificationsScreen = React.memo(() => {
           if (item.type === 'header')
             {return (
               <NotificationSectionHeader
-                title={item.title!}
-                count={item.count!}
+                title={item.title ?? ''}
+                count={item.count ?? 0}
               />
             );}
           return (
             <NotificationCard
-              item={item.data!}
+              item={item.data!} // ponytail: notification type always has data
               onPress={handleNotificationPress}
               formatTime={formatTime}
               primaryColor={theme.colors.primary[500]}

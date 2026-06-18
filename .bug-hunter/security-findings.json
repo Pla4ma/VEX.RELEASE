@@ -1,0 +1,223 @@
+{
+  "hardcoded_secrets": [],
+  "supabase_security": [
+    {
+      "file": "supabase/migrations/20250101_vex_10_10_transformation.sql",
+      "line": 604,
+      "issue": "SECURITY DEFINER function get_today_dungeon() — no search_path restriction. Functions with SECURITY DEFINER that don't SET search_path can be exploited via search_path manipulation.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250101_vex_10_10_transformation.sql",
+      "line": 612,
+      "issue": "SECURITY DEFINER function get_user_active_raid() — no search_path restriction.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250101_vex_10_10_transformation.sql",
+      "line": 626,
+      "issue": "SECURITY DEFINER function get_user_active_raid() — no search_path restriction.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250420_study_from_content.sql",
+      "line": 268,
+      "issue": "SECURITY DEFINER function without SET search_path. Older migrations lack the hardening applied in later migrations.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000001_create_study_circles.sql",
+      "line": 285,
+      "issue": "SECURITY DEFINER function without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000001_create_study_circles.sql",
+      "line": 314,
+      "issue": "SECURITY DEFINER function get_circle_activity_feed without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000001_create_study_circles.sql",
+      "line": 359,
+      "issue": "SECURITY DEFINER function join_study_circle without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000001_create_study_circles.sql",
+      "line": 378,
+      "issue": "SECURITY DEFINER function leave_study_circle without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000002_create_study_buddies.sql",
+      "line": 275,
+      "issue": "SECURITY DEFINER function without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000002_create_study_buddies.sql",
+      "line": 318,
+      "issue": "SECURITY DEFINER function send_study_buddy_encouragement without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250118_seasons_battlepass.sql",
+      "line": 443,
+      "issue": "SECURITY DEFINER function without SET search_path (reroll check).",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250118_seasons_battlepass.sql",
+      "line": 459,
+      "issue": "SECURITY DEFINER function can_user_reroll without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250118_seasons_battlepass.sql",
+      "line": 493,
+      "issue": "SECURITY DEFINER function purchase_battle_pass_premium without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20260501_session_stories.sql",
+      "line": 72,
+      "issue": "SECURITY DEFINER function without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20260501_session_stories.sql",
+      "line": 111,
+      "issue": "SECURITY DEFINER function get_story_engagement_stats without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000000_create_season_journey.sql",
+      "line": 268,
+      "issue": "SECURITY DEFINER function without SET search_path.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "supabase/migrations/20250504000000_create_season_journey.sql",
+      "line": 332,
+      "issue": "SECURITY DEFINER function claim_journey_milestone without SET search_path.",
+      "severity": "MEDIUM"
+    }
+  ],
+  "edge_function_security": [
+    {
+      "file": "supabase/functions/trigger-jobs/index.ts",
+      "line": 44,
+      "issue": "NO AUTH CHECK — trigger-jobs endpoint has no JWT verification or API key validation. Any caller can invoke job triggers. Relies on Trigger.dev SDK's handleRequest for auth, but the webhook URL is publicly accessible.",
+      "severity": "HIGH"
+    },
+    {
+      "file": "supabase/functions/_shared/auth.ts",
+      "line": 33,
+      "issue": "JWT secret cached in module-level Map (CACHED_JWKS) — if Deno.env.get('SUPABASE_JWT_SECRET') is not set, all auth checks silently pass via null secret path. The remote verification fallback is the safe path but only used when JWT secret is absent.",
+      "severity": "LOW"
+    },
+    {
+      "file": "supabase/functions/season-finalize/index.ts",
+      "line": 48,
+      "issue": "console.error logs full error object which may contain sensitive Trigger.dev task data or user context in edge function logs.",
+      "severity": "LOW"
+    },
+    {
+      "file": "supabase/functions/trigger-jobs/index.ts",
+      "line": 60,
+      "issue": "console.error logs full error object which may contain sensitive data in edge function logs.",
+      "severity": "LOW"
+    }
+  ],
+  "storage_issues": [
+    {
+      "file": "src/persistence/mmkv-key.ts",
+      "line": 18,
+      "issue": "FALLBACK: Math.random() used for MMKV encryption key generation when crypto.getRandomValues is unavailable. Math.random() is NOT cryptographically secure. This weakens encryption for data at rest on platforms without Web Crypto API.",
+      "severity": "HIGH"
+    },
+    {
+      "file": "src/persistence/SecureStorage.ts",
+      "line": 1,
+      "issue": "Web platform falls back to localStorage for 'secure' storage. localStorage is NOT encrypted and persists across sessions. Sensitive data (tokens, keys) stored via SecureStorage on web is accessible to any JS running on the same origin.",
+      "severity": "MEDIUM"
+    }
+  ],
+  "env_issues": [
+    {
+      "file": ".env.server.example",
+      "line": 7,
+      "issue": "SUPABASE_SERVICE_KEY and SUPABASE_SERVICE_ROLE_KEY are separate env vars — potential confusion. SERVICE_ROLE_KEY grants full database access; ensure only the intended one is used in production.",
+      "severity": "INFO"
+    }
+  ],
+  "data_exposure": [
+    {
+      "file": "src/features/ai-coach/analytics.ts",
+      "line": 47,
+      "issue": "userId passed as context to Sentry.captureException (hashed via hashUserId, but hash function not verified). If hashUserId is weak or reversible, user identity could be recovered from Sentry breadcrumbs.",
+      "severity": "LOW"
+    },
+    {
+      "file": "src/features/analytics/integration-queries.ts",
+      "line": 50,
+      "issue": "Raw userId passed to Sentry.captureException in extra context. This exposes user PII to Sentry if Sentry is compromised or has data retention issues.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/analytics/integration-tracking.ts",
+      "line": 85,
+      "issue": "Raw userId and sessionId passed to Sentry.captureException in extra context.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/analytics/integration-tracking.ts",
+      "line": 120,
+      "issue": "Raw userId and bossId passed to Sentry.captureException in extra context.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/analytics/integration-tracking.ts",
+      "line": 155,
+      "issue": "Raw userId and itemId passed to Sentry.captureException in extra context.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/analytics/components/AnalyticsDashboard.tsx",
+      "line": 66,
+      "issue": "userId passed to Sentry.captureException in extra context.",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/analytics/components/DataExportScreen.tsx",
+      "line": 64,
+      "issue": "jobId and fileUrl passed to Sentry.captureException — fileUrl may contain signed storage tokens.",
+      "severity": "LOW"
+    },
+    {
+      "file": "src/features/ai-coach/memory/memory-analytics.ts",
+      "line": 25,
+      "issue": "userId passed to Sentry.captureException in extra context (unhashed).",
+      "severity": "MEDIUM"
+    },
+    {
+      "file": "src/features/ai-coach/hooks/useCoachRecommendation.ts",
+      "line": 62,
+      "issue": "userId passed to Sentry.captureException in extra context.",
+      "severity": "MEDIUM"
+    }
+  ],
+  "xss_risks": [],
+  "positive_findings": {
+    "auth_in_edge_functions": "All main edge functions (session-complete, ai-coach, content-study, season-finalize, ai) properly call verifyAuthorizedUser() before processing requests.",
+    "rls_policies": "Core user tables (sessions, coach_memories, personal_bests, focus_contracts, etc.) have proper owner-only RLS policies using auth.uid() = user_id.",
+    "rate_limiting": "Edge functions implement rate limiting via checkRateLimit() with appropriate per-operation configs.",
+    "sentry_user_pii": "setSentryUser() only sends userId (not email/username) to Sentry — PII minimization.",
+    "test_secrets": "Test constants use clearly fake values (test.supabase.co, test-anon-key) — no real secrets in test code.",
+    "env_var_pattern": "All Supabase keys use EXPO_PUBLIC_ prefix pattern correctly; service keys are server-only.",
+    "no_xss_vectors": "No dangerouslySetInnerHTML, eval(), or new Function() found in the codebase.",
+    "supabase_config_validation": "Supabase client creation throws if URL or anon key are missing — no silent failures.",
+    "input_validation": "Edge functions validate request bodies with Zod schemas before processing."
+  }
+}

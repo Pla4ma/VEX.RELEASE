@@ -16,6 +16,7 @@ import {
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { ExtendedRootStackParams} from '../../../navigation/types';
+import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 import { VexFocusSurface } from './VexFocusSurface';
 import {
@@ -110,7 +111,7 @@ export function HomeHeroSection({
         controller.openSetup();
         return;
       }
-      navigation.navigate('Boss');
+      navigateToMainStackScreen(navigation, 'Boss');
       return;
     }
 
@@ -134,7 +135,7 @@ export function HomeHeroSection({
           return;
         }
       }
-      navigation.navigate('Challenges');
+      navigateToMainStackScreen(navigation, 'Challenges');
       return;
     }
 

@@ -23,6 +23,7 @@ import { useProfileData } from './useProfileData';
 import { ProfileGlassTabs, type ProfileTab } from './components/ProfileGlassTabs';
 import type { ExtendedRootStackParams, MainTabParams } from '../../navigation/types';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+import { navigateToRootScreen, navigateToMainStackScreen } from '../../navigation/navigation-helpers';
 
 function ProfileBottomSheetBackdrop(
   props: BottomSheetBackdropProps,
@@ -78,8 +79,8 @@ export const ProfileScreen: React.FC = () => {
           xp={progressionQuery.data?.xp ?? 0}
           nextLevelThreshold={progressionQuery.data?.nextLevelThreshold ?? 100}
           xpPercent={xpPercent}
-          onSettingsPress={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
-          onNotificationsPress={() => navigation.navigate('Notifications')}
+          onSettingsPress={() => navigateToRootScreen(navigation, 'Settings', { screen: 'SettingsMain' })}
+          onNotificationsPress={() => navigateToMainStackScreen(navigation, 'Notifications')}
           onLogout={logout}
         />
 
@@ -100,21 +101,21 @@ export const ProfileScreen: React.FC = () => {
               ]}
               onMasteryPress={() => {
                 if (isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.achievements)))
-                  {navigation.navigate('Mastery');}
+                  {navigateToMainStackScreen(navigation, 'Mastery');}
               }}
             />
           ) : activeTab === 'mastery' ? (
             <ProfileAchievementsTab
               theme={theme} isLoading={achievementsQuery.isLoading}
               isError={!!achievementsQuery.isError} achievements={achievements}
-              onOpenAchievements={() => navigation.navigate('Achievements')}
-              onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
+              onOpenAchievements={() => navigateToMainStackScreen(navigation, 'Achievements')}
+              onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} })}
             />
           ) : (
             <ProfileActivityTab
               theme={theme} isLoading={historyQuery.isLoading}
               isError={!!historyQuery.error} history={historyQuery.history}
-              onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
+              onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} })}
             />
           )}
         </View>

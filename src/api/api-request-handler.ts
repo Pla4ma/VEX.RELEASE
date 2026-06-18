@@ -96,7 +96,7 @@ export async function executeRequest<T>(
       fetchConfig.body = JSON.stringify(config.data);
     }
     debug.debug('API Request: %s %s', fetchConfig.method, url);
-    let response = await fetch(url, fetchConfig);
+    let response = await fetch(url, fetchConfig); // ponytail: canonical API client - internal fetch
     response = await deps.runResponseInterceptors(response);
 
     if (!response.ok) {

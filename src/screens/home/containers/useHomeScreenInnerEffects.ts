@@ -10,6 +10,7 @@ import { eventBus } from '../../../events/EventBus';
 import { getOrchestratorHandlesCompletion } from '../../../session/analytics/SessionAnalytics';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
@@ -130,10 +131,7 @@ export function useHomeScreenInnerEffects(params: {
         normalized.actionLabel,
       );
       const buildParams = buildInterventionSessionParams(normalized);
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: buildParams,
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', buildParams);
     },
     [controller.userId, dismissIntervention, navigation],
   );

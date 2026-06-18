@@ -123,8 +123,8 @@ export function previewPostFailureMessage(
       templates = DAY3_MOMENTUM_TEMPLATES[style];
       break;
   }
-  return templates[0]!.replace(
+  return templates[0]?.replace(
     /\{\{streakDaysBeforeBreak\}\}/g,
     String(streakDaysBeforeBreak),
-  );
+  ) ?? '';
 }

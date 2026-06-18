@@ -15,6 +15,7 @@ import { Box, Text } from '../../components/primitives';
 import { Button, Input } from '../../components';
 import { Icon } from '../../icons';
 import type { AuthStackParams } from '../../navigation';
+import { navigateToAuthScreen } from '../../navigation/navigation-helpers';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
@@ -64,7 +65,7 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   }, []);
 
   const handleContinue = useCallback(() => {
-    navigation.navigate('Login', { email });
+    navigateToAuthScreen(navigation as any, 'Login', { email });
   }, [navigation, email]);
 
   return (

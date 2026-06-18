@@ -127,7 +127,7 @@ export function validateSessionCompletion(sessionState: {
     });
   }
   if (interruptions > 10) {
-    result.data!.recommendedAction = 'review';
+    result.data!.recommendedAction = 'review'; // ponytail: data initialized above
     result.warnings.push({
       field: 'interruptions',
       message: `High interruption count (${interruptions}) may affect session quality scoring.`,
@@ -135,7 +135,7 @@ export function validateSessionCompletion(sessionState: {
     });
   }
   if (anticheatFlags > 0) {
-    result.data!.recommendedAction = 'review';
+    result.data!.recommendedAction = 'review'; // ponytail: data initialized above
     result.warnings.push({
       field: 'anticheat',
       message: `${anticheatFlags} integrity concerns detected. Session may be flagged for review.`,
@@ -143,7 +143,7 @@ export function validateSessionCompletion(sessionState: {
     });
   }
   if (elapsedTime > duration * 2) {
-    result.data!.recommendedAction = 'review';
+    result.data!.recommendedAction = 'review'; // ponytail: data initialized above
     result.warnings.push({
       field: 'elapsedTime',
       message:

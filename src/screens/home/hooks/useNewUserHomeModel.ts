@@ -16,6 +16,7 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
 import {
   getFocusedMinutesForToday,
   getNextUnlockFeature,
@@ -90,16 +91,13 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
             'home',
         );
       }
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: (params ?? {}) as SessionStackParams['SessionSetup'],
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', (params ?? {}) as SessionStackParams['SessionSetup']);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigation.navigate('Main', { screen: 'Progress' });
+    navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(

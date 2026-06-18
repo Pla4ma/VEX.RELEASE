@@ -28,9 +28,9 @@ export function validateXPBatch(
   for (const transaction of transactions) {
     const validation = validateXPTransaction(transaction, userHistory);
     if (validation.valid && validation.riskScore < 30) {
-      result.data!.valid.push(transaction);
+      result.data?.valid.push(transaction); // ponytail: data initialized above
     } else {
-      result.data!.rejected.push(transaction);
+      result.data?.rejected.push(transaction); // ponytail: data initialized above
     }
     totalRiskScore += validation.riskScore;
   }
@@ -38,7 +38,7 @@ export function validateXPBatch(
   result.riskScore =
     transactions.length > 0 ? totalRiskScore / transactions.length : 0;
 
-  const totalXP = result.data!.valid.reduce((sum, t) => sum + t.amount, 0);
+  const totalXP = result.data?.valid.reduce((sum, t) => sum + t.amount, 0) ?? 0; // ponytail: data initialized above
   if (totalXP > MAX_XP_PER_HOUR * 2) {
     result.violations.push({
       type: 'RATE_LIMIT',

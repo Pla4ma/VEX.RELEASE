@@ -1,0 +1,2 @@
+src/features/session-runtime/components/SessionValidationFeedback.tsx(18,57): error TS2307: Cannot find module '../../../utils/validation' or its corresponding type declarations.
+src/session/types/interfaces.ts(1,301): error TS2307: Cannot find module '../features/session-runtime/types/interfaces' or its corresponding type declarations.

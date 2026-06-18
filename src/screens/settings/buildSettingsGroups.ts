@@ -1,6 +1,7 @@
 import type { ThemeMode } from '../../theme';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { SettingsStackParams } from '../../navigation';
+import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import type { SettingGroup } from './SettingsSectionGroup';
 
 type Nav = NativeStackNavigationProp<SettingsStackParams, 'SettingsMain'>;
@@ -45,7 +46,7 @@ export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[
       title: 'Profile',
       items: [
         { id: 'edit-profile', icon: 'user', title: 'Edit Profile', subtitle: 'Name, photo, bio', type: 'link',
-          onPress: () => p.navigation.navigate('Main', { screen: 'Profile' }) },
+          onPress: () => navigateToRootScreen(p.navigation as any, 'Main', { screen: 'Profile' }) },
         { id: 'focus-mode', icon: 'target', title: 'Focus Mode', subtitle: 'Study, Run, Project, or Clean', type: 'link',
           onPress: p.navigateToLaneMode },
         { id: 'account', icon: 'shield', title: 'Account', subtitle: 'Password, 2FA, email', type: 'link',

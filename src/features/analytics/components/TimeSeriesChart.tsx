@@ -58,7 +58,7 @@ export function TimeSeriesChart({ data, height = 220 }: TimeSeriesChartProps) {
         <Text style={styles.previewText}>
           {data.points.length} data points • Last updated{' '}
           {new Date(
-            data.points[data.points.length - 1]!.timestamp,
+            data.points[data.points.length - 1]?.timestamp ?? 0,
           ).toLocaleDateString()}
         </Text>
       </View>

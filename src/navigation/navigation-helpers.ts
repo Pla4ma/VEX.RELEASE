@@ -60,7 +60,7 @@ export function navigateToAuthScreen<Route extends AuthStackRoute>(
   params?: AuthStackParams[Route],
 ): void {
   debug.info('Navigating to auth screen: %s', route);
-  navigation.navigate('Auth', { screen: route, params });
+  navigateToRootScreen(navigation, 'Auth', { screen: route, params } as RootStackParams['Auth']);
 }
 
 /**
@@ -74,7 +74,7 @@ export function navigateToMainTab<Route extends MainTabRoute>(
   params?: MainTabParams[Route],
 ): void {
   debug.info('Navigating to main tab: %s', route);
-  navigation.navigate('Main', { screen: route, params });
+  navigateToRootScreen(navigation, 'Main', { screen: route, params } as RootStackParams['Main']);
 }
 
 /**
@@ -99,7 +99,7 @@ export function navigateToSessionStackScreen(
   params?: SessionStackParams[SessionStackRoute],
 ): void {
   debug.info('Navigating to session stack: %s', route);
-  navigation.navigate('SessionStack', { screen: route, params });
+  navigateToRootScreen(navigation, 'SessionStack', { screen: route, params } as RootStackParams['SessionStack']);
 }
 export function navigateToSettingsStackScreen(
   navigation: NavigationProp<RootStackParams>,
@@ -107,7 +107,7 @@ export function navigateToSettingsStackScreen(
   params?: SettingsStackParams[SettingsStackRoute],
 ): void {
   debug.info('Navigating to settings stack: %s', route);
-  navigation.navigate('Settings', { screen: route, params });
+  navigateToRootScreen(navigation, 'Settings', { screen: route, params } as RootStackParams['Settings']);
 }
 export function getRootRouteParams<Route extends RootStackRoute>(
   route: RouteProp<RootStackParams, Route>,

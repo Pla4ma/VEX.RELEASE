@@ -16,6 +16,7 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from '../../../navigation/types';
+import { navigateToMainStackScreen, navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import type { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
 
 type SessionNavigationProp = CompositeNavigationProp<
@@ -47,10 +48,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.boss_tab),
             )
           ) {
-            navigation.navigate('Boss');
+            navigateToMainStackScreen(navigation as any, 'Boss');
           }
           if (stakeId === 'streak') {
-            navigation.navigate('Main', { screen: 'Progress' });
+            navigateToRootScreen(navigation as any, 'Main', { screen: 'Progress' });
           }
           if (
             stakeId === 'challenge' &&
@@ -58,10 +59,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.challenges),
             )
           ) {
-            navigation.navigate('Challenges');
+            navigateToMainStackScreen(navigation as any, 'Challenges');
           }
           if (stakeId === 'rival') {
-            navigation.navigate('Main', { screen: 'Home' });
+            navigateToRootScreen(navigation as any, 'Main', { screen: 'Home' });
           }
         }}
       />

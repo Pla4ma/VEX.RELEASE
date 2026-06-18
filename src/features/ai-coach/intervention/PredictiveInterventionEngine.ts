@@ -135,7 +135,7 @@ export class PredictiveInterventionEngine {
     const severities: RiskPrediction['severity'][] = ['low', 'medium', 'high', 'critical'];
     const highestSeverity = active.reduce(
       (max, p) => (severities.indexOf(p.severity) > severities.indexOf(max) ? p.severity : max),
-      active[0]!.severity,
+      active[0]?.severity ?? 'low', // ponytail: asserted non-null by active.length > 0 guard above
     );
     return {
       hasActivePredictions: true, highestSeverity, activePredictions: active,

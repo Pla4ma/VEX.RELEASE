@@ -10,6 +10,7 @@ import { Text } from '../../../components/primitives/Text';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import { ref, type } from '../../reference-ui/referenceTokens';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -110,7 +111,7 @@ export function HomeDailyCards({
         accessibilityHint="Open the AI coach"
         accessibilityLabel="AI Coach card"
         accessibilityRole="button"
-        onPress={() => navigation.navigate('AICoach')}
+        onPress={() => navigateToMainStackScreen(navigation, 'AICoach')}
         style={({ pressed }) => cardPressStyle(pressed)}
       >
         <ReferenceCard accent="fire" showAsset={false}>

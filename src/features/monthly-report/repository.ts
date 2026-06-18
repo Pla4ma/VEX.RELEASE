@@ -101,8 +101,8 @@ function computePatterns(factors: FocusFactors): {
 
   entries.sort((a, b) => b.score - a.score);
   return {
-    strongestPattern: entries[0]!.name,
-    weakestPattern: entries[entries.length - 1]!.name,
+    strongestPattern: entries[0]?.name ?? 'No data', // ponytail: asserted non-null by entries.length === 0 guard above
+    weakestPattern: entries[entries.length - 1]?.name ?? 'No data', // ponytail: asserted non-null by entries.length === 0 guard above
   };
 }
 

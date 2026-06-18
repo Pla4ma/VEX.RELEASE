@@ -5,7 +5,7 @@ import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import type { SessionRecommendation, RecommendationStatus } from '../../../features/ai-coach';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
-import { navigateToMainTab } from '../../../navigation/navigation-helpers';
+import { navigateToMainTab, navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import { buildLearningSessionParams } from '../../../features/learning-execution/service';
 import type { LearningSessionTarget } from '../../../features/learning-execution';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
@@ -49,7 +49,7 @@ export function useEngagedActions(input: ActionsInput) {
   }, [canNavigateSocial, navigation]);
   const openContentStudy = useCallback(() => {
     if (!canNavigateContentStudy) { openSetup(); return; }
-    navigation.navigate('ContentStudy');
+    navigateToMainStackScreen(navigation, 'ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
     if (!learningExecutionLayer.target) { openContentStudy(); return; }

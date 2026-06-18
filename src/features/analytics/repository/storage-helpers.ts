@@ -6,6 +6,9 @@ import { AnalyticsStorageError as CircuitStorageError } from '../../../shared/ha
 
 /** Re-export singleton from canonical source to avoid stale module-level references */
 export { supabase } from '../../../config/supabase';
+// ponytail: signed URL TTL for export data — 24h is the max for user-sensitive data
+export const EXPORT_SIGNED_URL_TTL_SECONDS = 86400;
+
 
 export const storageCircuitBreaker = new CircuitBreaker({
   failureThreshold: 3,

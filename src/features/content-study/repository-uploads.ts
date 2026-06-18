@@ -41,7 +41,7 @@ export async function uploadStudyFileRecord(
     }
 
     validateFileUri(fileUri);
-    const scheme = fileUri.split(':', 1)[0]!.toLowerCase();
+    const scheme = (fileUri.split(':', 1)[0] ?? '').toLowerCase(); // ponytail: split always yields >=1 element
     if (scheme !== 'file' && scheme !== 'content') {
       throw new Error(`Unsupported file URI scheme: ${scheme}`);
     }

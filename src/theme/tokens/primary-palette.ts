@@ -82,6 +82,12 @@ export const lightColors: ColorPalette = {
     orange: '#F97316',
     pink: '#EC4899',
     teal: '#14B8A6',
+    active: '#12BFA0',
+    settled: '#687C77',
+    rescue: '#E8F7F1',
+    editorial: '#E0B870',
+    premium: '#8B5CF6',
+    reflection: '#93C5FD',
   },
   semantic: {
     background: '#F6FFFC',

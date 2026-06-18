@@ -131,7 +131,7 @@ export async function handleBreakComplete(
   orch.eventEmitter.emitPhaseChanged(prev, orch.session.phase);
   orch.timerEngine?.destroy();
   restartFocusTimer(orch);
-  orch.timerEngine!.start();
+  orch.timerEngine?.start(); // ponytail: asserted non-null by restartFocusTimer above
   if (!orch.session.config.autoStartNextInterval) {
     await pauseSession(orch, 'break_complete');
   }
@@ -146,14 +146,14 @@ export function endBreak(orch: SessionOrchestratorBase): void {
   orch.eventEmitter.emitPhaseChanged(prev, orch.session.phase);
   orch.timerEngine?.destroy();
   restartFocusTimer(orch);
-  orch.timerEngine!.start();
+  orch.timerEngine?.start(); // ponytail: asserted non-null by restartFocusTimer above
   debug.info('Break ended: %s', orch.session.id);
 }
 
 function restartFocusTimer(orch: SessionOrchestratorBase): void {
   orch.timerEngine = new TimerEngine(
-    orch.session!.id,
-    Math.floor(orch.session!.config.duration * 1000),
+    orch.session?.id ?? '',
+    Math.floor((orch.session?.config.duration ?? 0) * 1000),
     orch.config.timerConfig || {},
     {
       onTick: orch.handleTimerTick.bind(orch),

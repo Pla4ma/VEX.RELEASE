@@ -30,7 +30,7 @@ export interface ButtonProps extends Omit<
   PressableProps,
   'style' | 'disabled'
 > {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'premium';
   size?: 'sm' | 'md' | 'lg' | 'small';
   fullWidth?: boolean;
   isLoading?: boolean;

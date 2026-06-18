@@ -18,6 +18,7 @@ import { ProgressStatCards } from './components/ProgressStatCards';
 import { PlanWorkspace } from '../plan/components/PlanWorkspace';
 import { Text } from '../../components/primitives/Text';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+import { navigateToRootScreen, navigateToMainStackScreen } from '../../navigation/navigation-helpers';
 
 type ProgressMode = 'overview' | 'plan';
 
@@ -42,28 +43,28 @@ export function ProgressScreen(): React.ReactNode {
   const selectPlan = useCallback((): void => setMode('plan'), []);
 
   const openSession = (): void => {
-    navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
+    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} });
   };
 
   const openStudy = (): void => {
     if (canOpenStudy) {
-      navigation.navigate('ContentStudy');
+      navigateToMainStackScreen(navigation, 'ContentStudy');
       return;
     }
     openSession();
   };
 
   const openFocusScore = (): void => {
-    navigation.navigate('FocusScoreDashboard');
+    navigateToRootScreen(navigation, 'FocusScoreDashboard');
   };
 
   const openAchievements = (): void => {
-    navigation.navigate('Achievements');
+    navigateToMainStackScreen(navigation, 'Achievements');
   };
 
   const openMonthlyReport = (): void => {
     if (monthlyReportAction === 'paywall') {
-      navigation.navigate('Paywall', {
+      navigateToRootScreen(navigation, 'Paywall', {
         gatedFeature: 'monthly_focus_report',
         source: 'focus-monthly-report',
       });
@@ -86,7 +87,7 @@ export function ProgressScreen(): React.ReactNode {
         showsVerticalScrollIndicator={false}
       >
         <ProgressHeader
-          onOpenNotifications={() => navigation.navigate('Notifications')}
+          onOpenNotifications={() => navigateToMainStackScreen(navigation, 'Notifications')}
         />
 
         <View

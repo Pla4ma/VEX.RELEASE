@@ -133,8 +133,8 @@ export function calculateRecencyFactorForInput(
   let velocity = 0;
   if (scoreHistory.length >= 7) {
     const recent = scoreHistory.slice(-7);
-    const first = recent[0]!.score;
-    const last = recent[recent.length - 1]!.score;
+    const first = recent[0]?.score ?? 0; // ponytail: asserted non-null by scoreHistory.length >= 7 guard
+    const last = recent[recent.length - 1]?.score ?? 0; // ponytail: asserted non-null by scoreHistory.length >= 7 guard
     velocity = last - first;
     if (velocity > 10) {trend = 'UP';}
     else if (velocity < -10) {trend = 'CONCERNING';}

@@ -56,7 +56,7 @@ export class ContentStudyErrorHandler {
       if (!this.errorCallbacks.has(code)) {
         this.errorCallbacks.set(code, []);
       }
-      this.errorCallbacks.get(code)!.push(callback);
+      this.errorCallbacks.get(code)?.push(callback); // ponytail: asserted non-null by set-if-missing guard above
     });
     return () => {
       codesArray.forEach((code) => {

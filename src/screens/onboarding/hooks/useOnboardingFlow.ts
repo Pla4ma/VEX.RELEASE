@@ -18,6 +18,7 @@ import { buildOnboardingHandlers } from './onboarding-flow-handlers';
 import type { RootStackParams } from '../../../navigation/param-types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 
 export function useOnboardingFlow(routeStep?: number) {
   const { user } = useAuthStore();
@@ -88,7 +89,7 @@ export function useOnboardingFlow(routeStep?: number) {
   const startFirstSession = useCallback(() => {
     if (!userId || !chosenLane) return;
 
-    navigation.navigate('SessionStack', {
+    navigateToRootScreen(navigation, 'SessionStack', {
       screen: 'SessionSetup',
       params: {
         presetId: chosenLane,
