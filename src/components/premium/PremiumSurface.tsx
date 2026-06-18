@@ -6,8 +6,12 @@ import { LiquidButton } from '../glass/LiquidButton';
 import { Text } from '../primitives/Text';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { buttonTap } from '../../utils/haptics';
-
-type SurfaceTone = 'default' | 'celebration' | 'info' | 'warning' | 'locked';
+import {
+  InfoSurface,
+  WarningSurface,
+  type SurfaceTone,
+} from './PremiumSurface.tones';
+import { CelebrationSurface, LockedSurface } from './PremiumSurface.toneLocked';
 
 interface PremiumSurfaceProps {
   children?: React.ReactNode;
@@ -23,6 +27,13 @@ interface PremiumSurfaceProps {
   style?: ViewStyle;
 }
 
+/**
+ * PremiumSurface — tone-driven composition.
+ *
+ * Each tone renders through a dedicated variant surface so no two
+ * PremiumSurface calls look the same. The 'default' tone is the
+ * fallback stacked layout.
+ */
 export function PremiumSurface({
   children,
   title,
@@ -36,26 +47,87 @@ export function PremiumSurface({
   onSecondaryAction,
   style,
 }: PremiumSurfaceProps): React.ReactNode {
-  const cardVariant = tone === 'celebration' ? 'default' : 'subtle';
-  const isWarning = tone === 'warning';
+  if (tone === 'info') {
+    return (
+      <InfoSurface
+        actionLabel={actionLabel}
+        body={body}
+        eyebrow={eyebrow}
+        icon={icon}
+        onAction={onAction}
+        onSecondaryAction={onSecondaryAction}
+        secondaryActionLabel={secondaryActionLabel}
+        style={style}
+        title={title}
+      >
+        {children}
+      </InfoSurface>
+    );
+  }
+
+  if (tone === 'warning') {
+    return (
+      <WarningSurface
+        actionLabel={actionLabel}
+        body={body}
+        icon={icon}
+        onAction={onAction}
+        style={style}
+        title={title}
+      >
+        {children}
+      </WarningSurface>
+    );
+  }
+
+  if (tone === 'locked') {
+    return (
+      <LockedSurface
+        actionLabel={actionLabel}
+        body={body}
+        eyebrow={eyebrow}
+        icon={icon}
+        onAction={onAction}
+        style={style}
+        title={title}
+      >
+        {children}
+      </LockedSurface>
+    );
+  }
+
+  if (tone === 'celebration') {
+    return (
+      <CelebrationSurface
+        actionLabel={actionLabel}
+        body={body}
+        icon={icon}
+        onAction={onAction}
+        style={style}
+        title={title}
+      >
+        {children}
+      </CelebrationSurface>
+    );
+  }
 
   return (
-    <GlassCard variant={cardVariant} style={style}>
+    <GlassCard variant="subtle" style={style}>
       <View style={{ gap: 12 }}>
-        {eyebrow || title || body ? (
-          <View style={{ gap: 4 }}>
+        {(eyebrow || title || body) ? (
+          <View style={{ gap: 6 }}>
             {eyebrow ? (
               <Text
                 variant="label"
                 style={{
-                  color: isWarning ? vexLightGlass.semantic.danger : vexLightGlass.mint[500],
-                  fontSize: 13,
-                  fontWeight: '600',
+                  color: vexLightGlass.mint[700],
+                  fontSize: 12,
+                  fontWeight: '700',
                   letterSpacing: 0.5,
                   textTransform: 'uppercase',
                 }}
               >
-                {icon ? `${icon} ${eyebrow}` : eyebrow}
+                {eyebrow}
               </Text>
             ) : null}
             {title ? (
@@ -64,9 +136,9 @@ export function PremiumSurface({
                 style={{
                   color: vexLightGlass.text.primary,
                   fontSize: 20,
-                  fontWeight: '700',
+                  fontWeight: '800',
                   letterSpacing: -0.3,
-                  lineHeight: 28,
+                  lineHeight: 26,
                 }}
               >
                 {title}
@@ -75,13 +147,7 @@ export function PremiumSurface({
             {body ? (
               <Text
                 variant="bodySmall"
-                style={{
-                  color: vexLightGlass.text.secondary,
-                  fontSize: 14,
-                  fontWeight: '400',
-                  letterSpacing: 0,
-                  lineHeight: 20,
-                }}
+                style={{ color: vexLightGlass.text.secondary, fontSize: 14, lineHeight: 20 }}
               >
                 {body}
               </Text>
@@ -91,24 +157,20 @@ export function PremiumSurface({
 
         {children}
 
-        {actionLabel && onAction ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 12,
-              flexWrap: 'wrap',
-            }}
-          >
-            <LiquidButton
-              label={actionLabel}
-              onPress={() => {
-                buttonTap();
-                onAction();
-              }}
-              accessibilityLabel={actionLabel ?? 'Perform action'}
-              accessibilityHint="Performs the primary action for this section"
-              size="sm"
-            />
+        {(actionLabel || secondaryActionLabel) ? (
+          <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
+            {actionLabel && onAction ? (
+              <LiquidButton
+                label={actionLabel}
+                onPress={() => {
+                  buttonTap();
+                  onAction();
+                }}
+                accessibilityLabel={actionLabel ?? 'Perform action'}
+                accessibilityHint="Performs the primary action for this section"
+                size="sm"
+              />
+            ) : null}
             {secondaryActionLabel && onSecondaryAction ? (
               <LiquidButton
                 label={secondaryActionLabel}

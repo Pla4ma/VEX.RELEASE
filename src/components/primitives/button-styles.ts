@@ -126,6 +126,9 @@ export function getButtonTextColor(
   if (variant === 'primary' || variant === 'danger') {
     return vexLightGlass.text.inverse;
   }
+  if (variant === 'premium') {
+    return '#1A1300';
+  }
   if (variant === 'outline') {
     return vexLightGlass.mint[700];
   }

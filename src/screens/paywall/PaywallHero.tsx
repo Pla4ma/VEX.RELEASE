@@ -1,12 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
-import { Icon } from '../../icons/components/Icon';
-import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import type { Theme } from '../../theme';
 import {
   VALUE_PROPOSITION,
@@ -15,6 +11,13 @@ import {
 import { LANE_PREMIUM_HERO_COPY, type PremiumLane } from './lane-hero-copy';
 import { PaywallFeatureList, FreeBoundaryCard } from './PaywallFeatureList';
 import { paywallStyles as styles } from './paywall-styles';
+import {
+  CleanLaneHero,
+  DefaultHero,
+  ProjectLaneHero,
+} from './PaywallHero.defaults';
+import { FeatureHighlightHero } from './PaywallHero.featureHighlight';
+import { RunLaneHero, StudyLaneHero } from './PaywallHero.lanes';
 
 type PaywallHeroProps = {
   contextBody?: string;
@@ -50,8 +53,14 @@ export function PaywallHero({
   const premiumLane = resolveLane(lane);
   const laneCopy = premiumLane ? LANE_PREMIUM_HERO_COPY[premiumLane] : null;
 
-  const heroHeadline = contextHeadline ?? laneCopy?.headline ?? 'VEX remembers more. Adapts deeper.';
-  const heroBody = contextBody ?? laneCopy?.body ?? 'Free sessions, basic progress, and Rescue stay free forever. Premium adds memory, weekly intelligence, and mode-matched depth.';
+  const heroHeadline =
+    contextHeadline ??
+    laneCopy?.headline ??
+    'VEX remembers more. Adapts deeper.';
+  const heroBody =
+    contextBody ??
+    laneCopy?.body ??
+    'Free sessions, basic progress, and Rescue stay free forever. Premium adds memory, weekly intelligence, and mode-matched depth.';
 
   return (
     <>
@@ -64,7 +73,8 @@ export function PaywallHero({
             {isPremium ? 'Premium is active' : VALUE_PROPOSITION}
           </Text>
         </View>
-        <Button variant="ghost"
+        <Button
+          variant="ghost"
           onPress={onClose}
           accessibilityLabel="Close paywall"
           accessibilityRole="button"
@@ -75,57 +85,19 @@ export function PaywallHero({
       </View>
 
       {contextHeadline && contextBody ? (
-        <CardEnterAnimation>
-          <LinearGradient
-            colors={[theme.colors.primary[500], theme.colors.warning.DEFAULT]}
-            style={styles.heroCard}
-          >
-            <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
-              {contextHeadline}
-            </Text>
-            <Text style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
-              {contextBody}
-            </Text>
-          </LinearGradient>
-        </CardEnterAnimation>
+        <DefaultHero body={contextBody} headline={contextHeadline} theme={theme} />
       ) : featureHighlight ? (
-        <Animated.View entering={FadeInDown.duration(320)}>
-          <LinearGradient colors={[...featureHighlight.gradient]} style={styles.featureCard}>
-            <View style={[styles.featureIconBadge, { backgroundColor: theme.colors.background.primary }]}>
-              <Icon name={featureHighlight.iconName} size={20} color={theme.colors.primary[500]} />
-            </View>
-            <Text style={[styles.featureTitle, { color: theme.colors.text.inverse }]}>
-              {featureHighlight.title}
-            </Text>
-            <Text style={[styles.featureBenefit, { color: theme.colors.text.inverse }]}>
-              {featureHighlight.benefit}
-            </Text>
-          </LinearGradient>
-        </Animated.View>
+        <FeatureHighlightHero featureHighlight={featureHighlight} theme={theme} />
+      ) : premiumLane === 'study' ? (
+        <StudyLaneHero body={heroBody} headline={heroHeadline} theme={theme} />
+      ) : premiumLane === 'run' ? (
+        <RunLaneHero body={heroBody} headline={heroHeadline} theme={theme} />
+      ) : premiumLane === 'project' ? (
+        <ProjectLaneHero body={heroBody} headline={heroHeadline} theme={theme} />
+      ) : premiumLane === 'clean' ? (
+        <CleanLaneHero body={heroBody} headline={heroHeadline} theme={theme} />
       ) : (
-        <CardEnterAnimation>
-          <LinearGradient
-            colors={[theme.colors.primary[500], theme.colors.warning.DEFAULT]}
-            style={styles.heroCard}
-          >
-            <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
-              {heroHeadline}
-            </Text>
-            {laneCopy?.benefits ? (
-              <View style={{ gap: 6 }}>
-                {laneCopy.benefits.map((b, i) => (
-                  <Text key={i} style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
-                    {b}
-                  </Text>
-                ))}
-              </View>
-            ) : (
-              <Text style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
-                {heroBody}
-              </Text>
-            )}
-          </LinearGradient>
-        </CardEnterAnimation>
+        <DefaultHero body={heroBody} headline={heroHeadline} theme={theme} />
       )}
 
       {!featureHighlight ? <PaywallFeatureList theme={theme} /> : null}

@@ -34,7 +34,7 @@ export function DataList<T extends Record<string, unknown>>({
   renderSectionHeader: _renderSectionHeader,
   renderEmpty, renderFooter, keyExtractor,
   loading = false, loadingMore = false, error = null, refreshing = false,
-  emptyTitle = 'No items found',
+  emptyTitle = 'Nothing here yet',
   emptySubtitle = 'Try adjusting your filters or check back later',
   emptyIcon = undefined,
   selectionMode = 'none', selectedIds = new Set(),

@@ -1,20 +1,21 @@
 import React, { useMemo } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FocusRing } from '../../components/FocusRing';
-import { StreakBadge } from '../../components/StreakBadge';
 import { Text } from '../../components/primitives/Text';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalletBadge';
-import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
-
+import { StreakBadge } from '../../components/StreakBadge';
+import {
+  HeroFocusBlock,
+  HeroLoadingState,
+  HeroOnboardPanel,
+} from './HomeHero.helpers';
 
 const WHITE_MUTED = rgbaColors.rgb_255_255_255_0_72;
-const WHITE_SOFT = rgbaColors.rgb_255_255_255_0_18;
 
 export function getHeroGradientColors(
   streak: number,
@@ -61,13 +62,23 @@ export function HomeHero({
   const { theme } = useTheme();
   const { width } = useWindowDimensions();
   const isCompact = width < 380;
+  const isUltraNarrow = width < 340;
   const gradientColors = useMemo(
     () => getHeroGradientColors(currentStreak),
     [currentStreak],
   );
+  const focusValueStyle = useMemo(
+    () => ({
+      fontSize: isUltraNarrow ? 34 : 42,
+      fontWeight: '800' as const,
+      lineHeight: isUltraNarrow ? 40 : 48,
+    }),
+    [isUltraNarrow],
+  );
+
   return (
     <LinearGradient
-      colors={[...gradientColors]}
+      colors={gradientColors}
       style={[
         styles.hero,
         {
@@ -118,7 +129,7 @@ export function HomeHero({
             <Text variant="label" color={WHITE_MUTED}>
               Today
             </Text>
-            <Text color={theme.colors.text.inverse} style={styles.focusValue}>
+            <Text color={theme.colors.text.inverse} style={focusValueStyle}>
               {formatMinutes(todayFocusMinutes)}
             </Text>
             <StreakBadge
@@ -135,42 +146,22 @@ export function HomeHero({
           {
             alignItems: isCompact ? 'stretch' : 'center',
             gap: theme.spacing[2],
+            paddingTop: isCompact ? theme.spacing[3] : 0,
+            minWidth: isCompact ? 0 : 148,
           },
         ]}
       >
         {isLoading ? (
-          <View style={{ alignItems: 'center', gap: theme.spacing[2] }}>
-            <Skeleton width={132} height={132} variant="circular" />
-            <Skeleton width={88} height={14} />
-          </View>
+          <HeroLoadingState isUltraNarrow={isUltraNarrow} />
         ) : isFirstRun ? (
-          <View
-            style={[
-              styles.onboardPanel,
-              getPremiumCardStyle('medium'),
-              {
-                backgroundColor: WHITE_SOFT,
-                borderColor: rgbaColors.rgb_255_255_255_0_22,
-              },
-            ]}
-          >
-            <Text variant="h4" color={theme.colors.text.inverse}>
-              Welcome to VEX
-            </Text>
-            <Text variant="bodySmall" color={WHITE_MUTED}>
-              Start one clean session. VEX will use it to shape tomorrow.
-            </Text>
-          </View>
+          <HeroOnboardPanel />
         ) : (
-          <>
-            <FocusRing
-              progressPercent={progressPercent}
-              focusMinutes={todayFocusMinutes}
-            />
-            <Text variant="label" color={WHITE_MUTED}>
-              Daily Goal
-            </Text>
-          </>
+          <HeroFocusBlock
+            isCompact={isCompact}
+            isUltraNarrow={isUltraNarrow}
+            progressPercent={progressPercent}
+            todayFocusMinutes={todayFocusMinutes}
+          />
         )}
       </View>
     </LinearGradient>
@@ -179,7 +170,6 @@ export function HomeHero({
 
 const styles = createSheet({
   eyebrow: { textTransform: 'uppercase', letterSpacing: 1.2 },
-  focusValue: { fontSize: 42, fontWeight: '800', lineHeight: 48 },
   hero: {
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
@@ -187,6 +177,8 @@ const styles = createSheet({
     gap: 16,
   },
   heroColumn: { flex: 1 },
-  heroRight: { alignItems: 'center', justifyContent: 'center', minWidth: 148 },
-  onboardPanel: { borderWidth: 1, gap: 8, padding: 16 },
+  heroRight: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

@@ -19,7 +19,14 @@ interface BannerThemeColors {
   info: { DEFAULT: string };
   background: { secondary: string };
   text: { primary: string };
-  accent: { purple: string };
+  accent: {
+    active: string;
+    settled: string;
+    rescue: string;
+    editorial: string;
+    premium: string;
+    reflection: string;
+  };
 }
 
 export function getVariantStyles(
@@ -64,7 +71,7 @@ export function getVariantStyles(
       };
     case 'gradient':
       return {
-        backgroundColor: `linear-gradient(135deg, ${colors.primary[500]}, ${colors.accent.purple})`,
+        backgroundColor: `linear-gradient(135deg, ${colors.primary[500]}, ${colors.accent.premium})`,
         textColor: lightColors.text.inverse,
         iconColor: lightColors.text.inverse,
         buttonVariant: 'secondary' as const,

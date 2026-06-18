@@ -83,7 +83,9 @@ export const Card = forwardRef<View, CardProps>(
         state === 'disabled'
           ? 0.62
           : interpolate(pressed.value, [0, 1], [1, 0.94]),
-      transform: [{ scale: interpolate(pressed.value, [0, 1], [1, 0.99]) }],
+      transform: [
+        { scale: interpolate(pressed.value, [0, 1], [1, 0.985]) },
+      ],
     }));
 
     const combined = [
@@ -113,14 +115,14 @@ export const Card = forwardRef<View, CardProps>(
               pressed.value = 1;
               return;
             }
-            pressed.value = withSpring(1, springPresets.tactile);
+            pressed.value = withSpring(1, springPresets.precise);
           }}
           onPressOut={() => {
             if (reducedMotion) {
               pressed.value = 0;
               return;
             }
-            pressed.value = withSpring(0, springPresets.tactile);
+            pressed.value = withSpring(0, springPresets.settle);
           }}
           style={[combined, animatedStyle]}
           testID={testID}

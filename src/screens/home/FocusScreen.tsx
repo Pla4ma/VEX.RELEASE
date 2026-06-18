@@ -30,9 +30,11 @@ export function FocusScreen(): React.ReactNode {
   );
   const statusCopy = streakQuery.isPending
     ? 'Loading the best focus entry points for today.'
-    : streakDays > 0
-      ? `Day ${streakDays} is active. Pick the mode that matches your actual energy.`
-      : 'Start with one short mode. VEX will build the next layer from real progress.';
+    : streakQuery.isError
+      ? "Couldn't reach your streak. Pick a mode and VEX will reconcile after."
+      : streakDays > 0
+        ? `Day ${streakDays} is active. Pick the mode that matches your actual energy.`
+        : 'Start with one short mode. VEX will build the next layer from real progress.';
 
   const openMode = (card: { id: string; durationSeconds: number; mode: string }): void => {
     navigation.navigate({
@@ -71,9 +73,10 @@ export function FocusScreen(): React.ReactNode {
           <Text
             style={{
               color: vexLightGlass.text.secondary,
-              fontSize: 13,
-              fontWeight: '800',
-              letterSpacing: 0.3,
+              fontSize: 12,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
               marginBottom: 10,
             }}
           >

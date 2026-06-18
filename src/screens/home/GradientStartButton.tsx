@@ -13,6 +13,7 @@ import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
 import { useTheme } from '../../theme/ThemeContext';
+import { useReducedMotion } from '../../hooks';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
@@ -37,9 +38,13 @@ export function GradientStartButton({
   title: string;
 }): React.ReactNode {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(1);
   useEffect(() => {
-    if (pulse) {
+    // WCAG 2.3.3: indefinite animation is gated at the component, not the
+    // call site. Callers can still pass pulse=true; users with reduced
+    // motion never see the loop.
+    if (pulse && !isReducedMotion) {
       scale.value = withRepeat(
         withSequence(
           withTiming(1.02, { duration: 1500 }),
@@ -53,7 +58,7 @@ export function GradientStartButton({
       scale.value = 1;
     }
     return () => cancelAnimation(scale);
-  }, [pulse, scale]);
+  }, [pulse, isReducedMotion, scale]);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
@@ -63,7 +68,7 @@ export function GradientStartButton({
       <View>
         <LinearGradient
           colors={[
-            theme.colors.primary[500] ?? lightColors.accent.purple,
+            theme.colors.primary[500] ?? lightColors.semantic.primary,
             theme.colors.primary[600] ?? lightColors.semantic.primary,
             theme.colors.primary[700] ?? lightColors.semantic.primary,
           ]}
@@ -116,7 +121,7 @@ export function GradientStartButton({
     <Animated.View style={animatedStyle}>
       <LinearGradient
         colors={[
-          theme.colors.primary[500] ?? lightColors.accent.purple,
+          theme.colors.primary[500] ?? lightColors.semantic.primary,
           theme.colors.primary[600] ?? lightColors.semantic.primary,
           theme.colors.primary[700] ?? lightColors.semantic.primary,
         ]}
