@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import * as service from './service';
 import * as repository from './repository';
 import type { PlanItem, PlanProject, PlanStudyPlan, PlanItemStatus } from './types';
@@ -80,6 +81,9 @@ export function useAddPlanItem(userId: string | null) {
       queryClient.invalidateQueries({ queryKey: ['plan', 'today', userId] });
       queryClient.invalidateQueries({ queryKey: ['plan', 'week', userId] });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'plan', operation: 'addPlanItem' } });
+    },
   });
 }
 
@@ -91,6 +95,9 @@ export function useUpdatePlanItemStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plan'] });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'plan', operation: 'updatePlanItemStatus' } });
+    },
   });
 }
 
@@ -100,6 +107,9 @@ export function useDeletePlanItem() {
     mutationFn: (itemId: string) => repository.deletePlanItem(itemId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plan'] });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'plan', operation: 'deletePlanItem' } });
     },
   });
 }
@@ -120,6 +130,9 @@ export function useAddProject(userId: string | null) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plan', 'projects', userId] });
     },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'plan', operation: 'addProject' } });
+    },
   });
 }
 
@@ -138,6 +151,9 @@ export function useAddStudyPlan(userId: string | null) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plan', 'studyPlans', userId] });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'plan', operation: 'addStudyPlan' } });
     },
   });
 }

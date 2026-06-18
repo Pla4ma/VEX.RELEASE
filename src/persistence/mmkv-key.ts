@@ -12,12 +12,11 @@ function generateRandomHex(length: number): string {
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
   }
-  const chars = 'abcdef0123456789';
-  let result = '';
-  for (let i = 0; i < length * 2; i++) {
-    result += chars[(Date.now() * Math.random() * 100000) % chars.length | 0];
-  }
-  return result;
+  throw new Error(
+    'MMKV encryption requires globalThis.crypto.getRandomValues. ' +
+    'App cannot initialize securely on this platform. ' +
+    'Ensure a secure random source is available.',
+  );
 }
 
 export async function getMmkvEncryptionKey(): Promise<string> {

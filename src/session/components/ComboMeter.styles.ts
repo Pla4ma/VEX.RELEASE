@@ -1,12 +1,10 @@
-import { Dimensions } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-export const METER_WIDTH = SCREEN_WIDTH - 48;
+/** Reactive meter width — pass `useWindowDimensions().width` for auto-update on rotation. */
+export const getMeterWidth = (screenWidth: number): number => screenWidth - 48;
 
 export const containerStyle = {
-  width: METER_WIDTH,
+  get width() { return getMeterWidth(375); }, // fallback width; consumers should override with dynamic width
   alignSelf: 'center' as const,
   marginVertical: 12,
 };
@@ -82,7 +80,6 @@ export const progressContainerStyle = {
 
 export const progressBarStyle = { height: '100%' as const, borderRadius: 6 };
 export const nextTierTextStyle = { textAlign: 'center' as const };
-
 export const maxTierTextStyle = {
   textAlign: 'center' as const,
   fontWeight: '700' as const,

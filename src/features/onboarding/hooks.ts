@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 import { useOnboardingStore } from './store';
 import { onboardingRepository } from './repository';
 import type { OnboardingProgress } from './schemas';
@@ -31,6 +32,9 @@ export function useSyncOnboardingProgress(userId: string | null) {
       onboardingRepository.saveProgress(userId!, progress),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ONBOARDING_QUERY_KEY(userId ?? '') });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, { tags: { feature: 'onboarding', operation: 'syncOnboardingProgress' } });
     },
   });
 

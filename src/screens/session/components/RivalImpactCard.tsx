@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { CARD_WIDTH } from './session-consequence-types';
+import { getCardWidth } from './session-consequence-types';
 import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 interface RivalImpactCardProps {
@@ -20,6 +20,8 @@ export function RivalImpactCard({
   minutesGained,
 }: RivalImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = getCardWidth(screenWidth);
 
   const gainedGround = gapAfter < gapBefore;
   const nowAhead = gapAfter < 0 && gapBefore >= 0;
@@ -27,7 +29,7 @@ export function RivalImpactCard({
   return (
     <View
       style={{
-        width: CARD_WIDTH,
+        width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: gainedGround
           ? `${theme.colors.success[500]}15`

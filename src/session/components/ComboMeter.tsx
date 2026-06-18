@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useTheme } from '../../theme/ThemeContext';
@@ -29,6 +29,7 @@ import {
   progressBarStyle,
   nextTierTextStyle,
   maxTierTextStyle,
+  getMeterWidth,
 } from './ComboMeter.styles';
 import { ComboMeterOverlays } from './ComboMeterOverlays';
 
@@ -41,6 +42,8 @@ export function ComboMeter({
   onComboBroken,
 }: ComboMeterProps): React.ReactNode {
   const { theme } = useTheme();
+  const { width: windowWidth } = useWindowDimensions();
+  const meterWidth = getMeterWidth(windowWidth);
   const tier = getCurrentTier(comboMinutes);
   const tierProgress = getTierProgress(comboMinutes);
   const nextTier = COMBO_TIERS.find((t) => t.minCombo > comboMinutes);
@@ -65,7 +68,7 @@ export function ComboMeter({
   });
 
   return (
-    <Animated.View style={[containerStyle, animatedContainerStyle]}>
+    <Animated.View style={[containerStyle, { width: meterWidth }, animatedContainerStyle]}>
       <Animated.View
         style={[glowStyle, glowAnimStyle, { backgroundColor: tier.color }]}
       />

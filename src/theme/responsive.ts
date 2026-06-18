@@ -1,18 +1,21 @@
 import { Dimensions, PixelRatio, Platform } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
-const { width, height } = Dimensions.get('window');
+const getWindow = () => Dimensions.get('window');
+
+/** Reactive device properties — reads current window dimensions on each access. */
 export const Device = {
-  width,
-  height,
-  isSmall: height < 700,
-  isMedium: height >= 700 && height < 850,
-  isLarge: height >= 850,
-  isTablet: width > 768,
-  isLandscape: width > height,
+  get width() { return getWindow().width; },
+  get height() { return getWindow().height; },
+  get isSmall() { return getWindow().height < 700; },
+  get isMedium() { return getWindow().height >= 700 && getWindow().height < 850; },
+  get isLarge() { return getWindow().height >= 850; },
+  get isTablet() { return getWindow().width > 768; },
+  get isLandscape() { return getWindow().width > getWindow().height; },
   pixelRatio: PixelRatio.get(),
   fontScale: PixelRatio.getFontScale(),
 };
+
 export const breakpoints = { xs: 0, sm: 320, md: 375, lg: 414, xl: 768 };
 export function responsive<T>(values: {
   xs?: T;
@@ -87,17 +90,19 @@ export const typography = {
 };
 export const layout = {
   maxContentWidth: 480,
-  gridColumns: responsive({ xs: 1, sm: 2, md: 2, lg: 3, default: 2 }),
-  cardWidth: responsive({
-    xs: width - 24,
-    sm: (width - 40) / 2,
-    md: (width - 48) / 2,
-    default: 160,
-  }),
+  get gridColumns() { return responsive({ xs: 1, sm: 2, md: 2, lg: 3, default: 2 }); },
+  get cardWidth() {
+    return responsive({
+      xs: Device.width - 24,
+      sm: (Device.width - 40) / 2,
+      md: (Device.width - 48) / 2,
+      default: 160,
+    });
+  },
   bottomSheet: {
-    peek: responsive({ xs: 80, sm: 90, md: 100, default: 120 }),
-    half: Math.round(height * 0.5),
-    full: height - 100,
+    get peek() { return responsive({ xs: 80, sm: 90, md: 100, default: 120 }); },
+    get half() { return Math.round(Device.height * 0.5); },
+    get full() { return Device.height - 100; },
   },
 };
 export const accessibility = {

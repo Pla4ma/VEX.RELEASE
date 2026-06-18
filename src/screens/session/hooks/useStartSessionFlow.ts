@@ -1,6 +1,8 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { useCallback, useMemo, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
+import type { NavigationProp } from '@react-navigation/native';
+import type { RootStackParams } from '../../../navigation/types';
 import { getSprintChainService } from '../../../features/session/SprintChainService';
 import { startStreakRestoreQuest } from '../../../features/streaks/restore-quest';
 import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
@@ -128,7 +130,7 @@ export function useStartSessionFlow({
         }, 120);
       }
 
-      navigateToSessionStackScreen(navigation as any, 'ActiveSession', {
+      navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'ActiveSession', {
         sessionId: session.id,
         selectedThemeId: selectedThemeOwned ? selectedThemeId : 'default',
       });

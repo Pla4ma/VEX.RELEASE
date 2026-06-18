@@ -120,17 +120,19 @@ export function useActiveSessionController() {
     return () => subscription.remove();
   }, [sessionQuery]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    let cancelled = false;
+    return () => {
       if (!sessionQuery.session?.id || !sessionQuery.isActive) {return;}
       sessionQuery.backgroundSession().catch((caught) => {
+        if (cancelled) {return;}
         Sentry.captureException(caught, {
           tags: { feature: 'session-background-unmount' },
         });
       });
-    },
-    [sessionQuery],
-  );
+      cancelled = true;
+    };
+  }, [sessionQuery]);
 
   const handlers = useActiveSessionHandlers({
     sessionQuery,

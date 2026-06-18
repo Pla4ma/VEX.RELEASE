@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import * as Sentry from '@sentry/react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { NavigationProp } from '@react-navigation/native';
+import type { RootStackParams } from '../../../navigation/types';
 import { getSprintChainService } from '../../../features/session/SprintChainService';
 import type { SessionStackParams } from '../../../navigation/types';
 import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
@@ -93,7 +95,7 @@ export function useActiveSessionHandlers({
         message: 'Session completed',
         level: 'info',
       });
-      navigateToSessionStackScreen(navigation as any, 'SessionComplete', {
+      navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'SessionComplete', {
         sessionId,
         summary: SessionSummarySchema.parse({
           ...result,

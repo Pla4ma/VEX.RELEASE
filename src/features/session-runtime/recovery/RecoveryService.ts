@@ -14,22 +14,16 @@ import {
   attemptSessionRecovery,
   canAutoRecoverForInterruption,
 } from './recovery-analysis';
+import { RecoveryHistory } from './RecoveryHistory';
 
 export type { RecoveryConfig } from './recovery-analysis-types';
-export {
-  createRecoveryService,
-  getRecoveryService,
-} from './recovery-service-factory';
+export { createRecoveryService, getRecoveryService } from './recovery-service-factory';
 
 const debug = createDebugger('session:recovery');
 
-// ponytail: Cap recovery history to prevent unbounded Map growth
-const MAX_RECOVERY_SESSIONS = 200;
 export class RecoveryService {
   private config: RecoveryConfig;
-  private recoveryHistory: Map<string, RecoveryRecord[]> = new Map();
-  private pendingRecoveries: Map<string, ReturnType<typeof setTimeout>> =
-    new Map();
+  private history: RecoveryHistory;
 
   constructor(config: Partial<RecoveryConfig> = {}) {
     this.config = {
@@ -40,6 +34,7 @@ export class RecoveryService {
       maxRecoveriesPerSession: 3,
       ...config,
     };
+    this.history = new RecoveryHistory();
     debug.info('RecoveryService initialized');
   }
 
@@ -48,17 +43,16 @@ export class RecoveryService {
       return false;
     }
     if (
-      this.getRecoveryCount(session.id) >= this.config.maxRecoveriesPerSession
+      this.history.getRecoveryCount(session.id) >=
+      this.config.maxRecoveriesPerSession
     ) {
       debug.warn('Max recoveries reached for session %s', session.id);
       return false;
     }
-    this.clearPendingRecovery(session.id);
     const timeoutId = setTimeout(() => {
-      this.pendingRecoveries.delete(session.id);
       onRecover();
     }, this.config.autoRecoveryDelay);
-    this.pendingRecoveries.set(session.id, timeoutId);
+    this.history.setPendingRecovery(session.id, timeoutId);
     debug.info(
       'Auto-recovery scheduled for session %s in %dms',
       session.id,
@@ -68,18 +62,7 @@ export class RecoveryService {
   }
 
   cancelAutoRecovery(sessionId: string): boolean {
-    return this.clearPendingRecovery(sessionId);
-  }
-
-  private clearPendingRecovery(sessionId: string): boolean {
-    const timeoutId = this.pendingRecoveries.get(sessionId);
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      this.pendingRecoveries.delete(sessionId);
-      debug.debug('Pending recovery cleared for session %s', sessionId);
-      return true;
-    }
-    return false;
+    return this.history.clearPendingRecovery(sessionId);
   }
 
   attemptRecovery(
@@ -93,7 +76,7 @@ export class RecoveryService {
       this.config.partialCreditThreshold,
       recoveredTime,
     );
-    this.recordRecovery(session.id, recovery);
+    this.history.recordRecovery(session.id, recovery);
     debug.info(
       'Recovery attempted: %s (type: %s, success: %s)',
       session.id,
@@ -134,42 +117,21 @@ export class RecoveryService {
   ): ReturnType<typeof calculatePartialCredit> {
     return calculatePartialCredit(session, this.config.partialCreditThreshold);
   }
-  private recordRecovery(sessionId: string, recovery: RecoveryRecord): void {
-    const history = this.recoveryHistory.get(sessionId) || [];
-    history.push(recovery);
-    this.recoveryHistory.set(sessionId, history);
-    // Evict oldest sessions when Map exceeds cap
-    if (this.recoveryHistory.size > MAX_RECOVERY_SESSIONS) {
-      const oldestKey = this.recoveryHistory.keys().next().value;
-      if (oldestKey != null) {
-        this.recoveryHistory.delete(oldestKey);
-      }
-    }
-  }
 
   getRecoveryHistory(sessionId: string): RecoveryRecord[] {
-    return this.recoveryHistory.get(sessionId) || [];
+    return this.history.getRecoveryHistory(sessionId);
   }
 
   getRecoveryCount(sessionId: string): number {
-    return this.getRecoveryHistory(sessionId).length;
+    return this.history.getRecoveryCount(sessionId);
   }
 
   getSuccessfulRecoveries(sessionId: string): RecoveryRecord[] {
-    return this.getRecoveryHistory(sessionId).filter((r) => r.success);
+    return this.history.getSuccessfulRecoveries(sessionId);
   }
 
   clearHistory(sessionId?: string): void {
-    if (sessionId) {
-      this.recoveryHistory.delete(sessionId);
-      this.clearPendingRecovery(sessionId);
-    } else {
-      for (const timeoutId of this.pendingRecoveries.values()) {
-        clearTimeout(timeoutId);
-      }
-      this.pendingRecoveries.clear();
-      this.recoveryHistory.clear();
-    }
+    this.history.clearHistory(sessionId);
   }
 
   handleInterruption(
@@ -178,7 +140,7 @@ export class RecoveryService {
     onRecover: () => void,
   ): { autoRecoverScheduled: boolean; canAutoRecover: boolean } {
     const canAutoRecover = canAutoRecoverForInterruption(
-      this.getRecoveryCount(session.id),
+      this.history.getRecoveryCount(session.id),
       this.config.maxRecoveriesPerSession,
       interruption.severity,
     );
@@ -199,7 +161,7 @@ export class RecoveryService {
   }
 
   destroy(): void {
-    this.clearHistory();
+    this.history.destroy();
     debug.info('RecoveryService destroyed');
   }
 }

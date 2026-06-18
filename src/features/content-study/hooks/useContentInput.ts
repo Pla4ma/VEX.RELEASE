@@ -4,30 +4,22 @@
  */
 
 import { useState, useCallback } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
-import { captureException } from '../../../config/sentry';
-import {
-  submitContent,
-  extractContent,
-  uploadStudyFile,
-} from '../ContentStudyService';
-import { ContentInputState, InputTab, SubmitContentRequest } from '../types';
+import type { ContentInputState, InputTab } from '../types';
 import { VALIDATION_RULES } from '../constants';
-import { contentStudyQueryKeys } from './queryKeys';
 import {
   createInitialContentInputState,
-  getUserFacingSubmitError,
 } from './contentInputHelpers';
-import { computeValidationErrors } from './contentInputValidation';
+import { useContentInputSubmit } from './useContentInputSubmit';
 
 export function useContentInput() {
   const { user } = useAuthStore();
-  const queryClient = useQueryClient();
   const [state, setState] = useState<ContentInputState>(
     createInitialContentInputState,
   );
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  const { submit, validateInput } = useContentInputSubmit({ state, setState });
 
   const setTab = useCallback((tab: InputTab) => {
     setState((prev) => ({
@@ -71,9 +63,7 @@ export function useContentInput() {
   }, []);
 
   const setSelectedFile = useCallback(
-    (
-      file: { uri: string; name: string; size: number; type: string } | null,
-    ) => {
+    (file: { uri: string; name: string; size: number; type: string } | null) => {
       setState((prev) => ({
         ...prev,
         selectedFile: file,
@@ -87,90 +77,6 @@ export function useContentInput() {
   const clearError = useCallback(() => {
     setState((prev) => ({ ...prev, error: null }));
   }, []);
-
-  const validateInput = useCallback((): boolean => {
-    const errors = computeValidationErrors(state);
-    setState((prev) => ({
-      ...prev,
-      validationErrors: errors,
-      isValid: errors.length === 0,
-    }));
-    return errors.length === 0;
-  }, [state]);
-
-  const submitMutation = useMutation({
-    mutationFn: async () => {
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-      if (!validateInput()) {
-        throw new Error('Validation failed');
-      }
-
-      let request: SubmitContentRequest;
-
-      if (state.activeTab === 'paste') {
-        request = { type: 'PASTE', content: state.pastedText };
-      } else if (state.activeTab === 'youtube') {
-        request = { type: 'YOUTUBE', url: state.youtubeUrl.trim() };
-      } else if (state.activeTab === 'pdf' && state.selectedFile) {
-        const fileId = await uploadStudyFile(
-          state.selectedFile.uri,
-          state.selectedFile.name,
-          user.id,
-        );
-        request = { type: 'PDF', fileId };
-      } else {
-        throw new Error('Invalid input state');
-      }
-
-      const response = await submitContent(user.id, request);
-
-      if (request.type === 'PDF' || request.type === 'YOUTUBE') {
-        extractContent({ contentId: response.contentId }).catch(
-          (error: unknown) => {
-            captureException(
-              error instanceof Error
-                ? error
-                : new Error('Failed to trigger content extraction'),
-              {
-                area: 'content-study.submit.extract',
-                contentId: response.contentId,
-              },
-            );
-          },
-        );
-      }
-
-      return { contentId: response.contentId, status: response.status };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: contentStudyQueryKeys.all,
-      });
-    },
-  });
-
-  const submit = useCallback(async () => {
-    setState((prev) => ({ ...prev, isSubmitting: true, error: null }));
-
-    try {
-      const result = await submitMutation.mutateAsync();
-      return result;
-    } catch (err: unknown) {
-      const message = getUserFacingSubmitError(err);
-      captureException(
-        err instanceof Error
-          ? err
-          : new Error('Content study submission failed'),
-        { area: 'content-study.submit' },
-      );
-      setState((prev) => ({ ...prev, error: message }));
-      throw err;
-    } finally {
-      setState((prev) => ({ ...prev, isSubmitting: false }));
-    }
-  }, [submitMutation]);
 
   const reset = useCallback(() => {
     setState(createInitialContentInputState());

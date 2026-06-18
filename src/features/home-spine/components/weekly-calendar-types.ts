@@ -1,6 +1,4 @@
-import { Dimensions } from 'react-native';
-
-export const DAY_WIDTH = (Dimensions.get('window').width - 40) / 7;
+/** Reactive day cell width — pass `useWindowDimensions().width` for auto-update on rotation. */
 export const getDayWidth = (screenWidth: number): number => (screenWidth - 40) / 7;
 
 export type DayStatus = 'completed' | 'partial' | 'upcoming' | 'missed';

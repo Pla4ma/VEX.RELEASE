@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,7 +8,7 @@ import Animated, {
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { CARD_WIDTH } from './session-consequence-types';
+import { getCardWidth } from './session-consequence-types';
 import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 
 interface ChallengeImpactCardProps {
@@ -27,6 +27,8 @@ export function ChallengeImpactCard({
   wasCompleted,
 }: ChallengeImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = getCardWidth(screenWidth);
   const progressAnim = useSharedValue(progressBefore);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export function ChallengeImpactCard({
   return (
     <View
       style={{
-        width: CARD_WIDTH,
+        width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: wasCompleted
           ? `${theme.colors.success[500]}15`

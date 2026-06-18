@@ -35,6 +35,11 @@ import type { EventChannels } from './EventTypes';
 import { eventBus } from './EventBus';
 
 const processedKeys = new Map<string, Set<string>>();
+const ttlTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
+function makeTtlKey(channel: string, key: string): string {
+  return `${channel}::${key}`;
+}
 
 /**
  * Subscribe to a critical channel with idempotency protection.
@@ -54,7 +59,12 @@ export function subscribeIdempotent<T extends keyof EventChannels>(
     if (channelKeys.has(key)) {return;}
     channelKeys.add(key);
     if (options.ttlMs) {
-      setTimeout(() => channelKeys.delete(key), options.ttlMs);
+      const ttlKey = makeTtlKey(channel as string, key);
+      const timeoutId = setTimeout(() => {
+        channelKeys.delete(key);
+        ttlTimeouts.delete(ttlKey);
+      }, options.ttlMs);
+      ttlTimeouts.set(ttlKey, timeoutId);
     }
     handler(data);
   };
@@ -70,5 +80,12 @@ export function resetIdempotency(channel?: string): void {
     processedKeys.delete(channel);
   } else {
     processedKeys.clear();
+  }
+  for (const [ttlKey, timeoutId] of ttlTimeouts.entries()) {
+    const shouldClear = !channel || ttlKey.startsWith(`${channel}::`);
+    if (shouldClear) {
+      clearTimeout(timeoutId);
+      ttlTimeouts.delete(ttlKey);
+    }
   }
 }

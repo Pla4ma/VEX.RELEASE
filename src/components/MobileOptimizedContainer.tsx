@@ -10,14 +10,15 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
-import { isSmallScreen, isTablet} from './MobileOptimizedContainer.helpers';
+import { getIsSmallScreen, getIsTablet, getResponsiveFontSize } from './MobileOptimizedContainer.helpers';
 
 // Re-export for backward compatibility
-export { getResponsiveFontSize, isSmallScreen, isTablet } from './MobileOptimizedContainer.helpers';
+export { getResponsiveFontSize, getIsSmallScreen, getIsTablet } from './MobileOptimizedContainer.helpers';
 
 interface MobileOptimizedContainerProps {
   children: React.ReactNode;
@@ -41,6 +42,9 @@ export const MobileOptimizedContainer: React.FC<
   backgroundColor = lightColors.semantic.background,
 }) => {
   const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const isSmallScreen = getIsSmallScreen(height);
+  const isTablet = getIsTablet(width);
 
   // Calculate safe padding for mobile
   const topPadding = avoidHeader ? Math.max(insets.top, 16) : padding;
@@ -103,7 +107,6 @@ export const MobileOptimizedContainer: React.FC<
 const styles = createSheet({
   container: {
     flex: 1,
-    minHeight: isSmallScreen ? 'auto' : '100%',
   },
   scrollContent: {
     flexGrow: 1,
@@ -156,6 +159,8 @@ export const MobileGrid: React.FC<MobileGridProps> = ({
   columns = 2,
   gap = 12,
 }) => {
+  const { width } = useWindowDimensions();
+  const isTablet = getIsTablet(width);
   // Adjust columns based on screen width
   const actualColumns = isTablet ? Math.min(columns + 1, 4) : columns;
 

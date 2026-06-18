@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -8,7 +8,7 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { DAY_WIDTH, EVENT_ICONS, type DayData } from './weekly-calendar-types';
+import { getDayWidth, EVENT_ICONS, type DayData } from './weekly-calendar-types';
 import { buttonTap } from '../../../utils/haptics';
 
 export function DayCell({
@@ -25,6 +25,8 @@ export function DayCell({
   index: number;
 }): React.ReactNode {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const dayWidth = getDayWidth(screenWidth);
   const getStatusColor = () => {
     switch (day.status) {
       case 'completed':
@@ -69,7 +71,7 @@ export function DayCell({
   return (
     <Animated.View
       entering={FadeIn.duration(400).delay(index * 50)}
-      style={[{ width: DAY_WIDTH, paddingHorizontal: 2 }, animatedStyle]}
+      style={[{ width: dayWidth, paddingHorizontal: 2 }, animatedStyle]}
     >
       <Pressable
         onPress={() => { buttonTap(); onPress(); }}

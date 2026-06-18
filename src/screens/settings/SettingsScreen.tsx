@@ -11,6 +11,8 @@ import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
 import { useAuthStore } from '../../store';
 import type { SettingsStackParams } from '../../navigation';
+import type { NavigationProp } from '@react-navigation/native';
+import type { RootStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
 import { useSettingsStore } from '../../features/settings/store';
@@ -63,13 +65,13 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
-    navigateToCoach: () => navigateToSettingsStackScreen(navigation as any, 'CoachSettings'),
-    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as any, 'NotificationSettings'),
-    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as any, 'AppearanceSettings'),
-    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as any, 'PrivacySettings'),
-    navigateToAccount: () => navigateToSettingsStackScreen(navigation as any, 'AccountSettings'),
-    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as any, 'LaneMode'),
-    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as any, 'DataExport'),
+    navigateToCoach: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'CoachSettings'),
+    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'NotificationSettings'),
+    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'AppearanceSettings'),
+    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'PrivacySettings'),
+    navigateToAccount: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'AccountSettings'),
+    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'LaneMode'),
+    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'DataExport'),
   });
 
   const filteredGroups = settingGroups
@@ -112,7 +114,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           displayName={user?.displayName || 'User'}
           userId={user?.id || ''}
           theme={theme}
-          onPress={() => navigateToRootScreen(navigation as any, 'Main', { screen: 'Profile' })}
+          onPress={() => navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' })}
         />
 
         <Box px={16}>

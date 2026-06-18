@@ -20,6 +20,7 @@ import {
   RatingSection,
 } from './study-plan-helpers';
 import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
+import type { NavigationProp as RootNavigationProp } from '@react-navigation/native';
 
 export function StudyPlanScreen() {
   const navigation = useNavigation<NavigationProp>();
@@ -52,7 +53,7 @@ export function StudyPlanScreen() {
   const handleStartSession = useCallback(async () => {
     const sessionConfig = await startSession();
     if (sessionConfig && generation) {
-      navigateToRootScreen(navigation as any, 'SessionStack', {
+      navigateToRootScreen(navigation as unknown as RootNavigationProp<import('../../../navigation/types').RootStackParams>, 'SessionStack', {
         screen: 'SessionSetup',
         params: {
           suggestedDurationSeconds: sessionConfig.duration,
