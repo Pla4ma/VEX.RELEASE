@@ -99,6 +99,11 @@ export class SessionCompletionOfflineSyncService {
     this.syncIntervalId = null;
   }
 
+  destroy(): void {
+    this.cleanup();
+    this.isInitialized = false;
+  }
+
   private initialize(): void {
     if (this.isInitialized) {return;}
     registerSessionCompletionProcessors(this.processSessionCompletion.bind(this));

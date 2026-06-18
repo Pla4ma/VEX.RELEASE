@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
@@ -23,7 +23,7 @@ import { StreakConsequenceCard } from './StreakConsequenceCard';
 import { ChallengeImpactCard } from './ChallengeImpactCard';
 import { RivalImpactCard } from './RivalImpactCard';
 import {
-  CARD_WIDTH,
+  getCardWidth,
   type SessionConsequenceCardsProps,
 } from './session-consequence-types';
 
@@ -36,6 +36,8 @@ export function SessionConsequenceCards({
   rivalConsequence,
 }: SessionConsequenceCardsProps): JSX.Element | null {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = getCardWidth(screenWidth);
   const cards: JSX.Element[] = [];
 
   if (bossConsequence) {
@@ -80,7 +82,7 @@ export function SessionConsequenceCards({
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: theme.spacing[6] }}
           decelerationRate="fast"
-          snapToInterval={CARD_WIDTH + theme.spacing[3]}
+          snapToInterval={cardWidth + theme.spacing[3]}
         >
           {cards}
         </ScrollView>

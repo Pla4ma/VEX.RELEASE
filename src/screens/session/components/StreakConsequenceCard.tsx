@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { CARD_WIDTH } from './session-consequence-types';
+import { getCardWidth } from './session-consequence-types';
 
 interface StreakConsequenceCardProps {
   previousDays: number;
@@ -20,11 +20,13 @@ export function StreakConsequenceCard({
   streakSaved,
 }: StreakConsequenceCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = getCardWidth(screenWidth);
 
   return (
     <View
       style={{
-        width: CARD_WIDTH,
+        width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: streakSaved
           ? `${theme.colors.error[500]}15`

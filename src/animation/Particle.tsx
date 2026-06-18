@@ -95,11 +95,18 @@ export const Particle: React.FC<{
     });
     const timeout = setTimeout(() => {
       opacity.value = withSpring(0, { damping: 20 });
-      setTimeout(() => {
+      const innerTimeout = setTimeout(() => {
         runOnJS(onComplete)(config.id);
       }, 500);
+      innerTimeoutRef = innerTimeout;
     }, 3000);
-    return () => clearTimeout(timeout);
+    let innerTimeoutRef: ReturnType<typeof setTimeout> | null = null;
+    return () => {
+      clearTimeout(timeout);
+      if (innerTimeoutRef !== null) {
+        clearTimeout(innerTimeoutRef);
+      }
+    };
   }, [config.delay, config.id, config.velocityX, config.velocityY, onComplete, opacity, rotation, scale, translateX, translateY]);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [

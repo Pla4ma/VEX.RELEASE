@@ -143,6 +143,10 @@ export function useSessionTimerSubscriptions(
     );
     return () => {
       subscription.remove();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [
     duration,

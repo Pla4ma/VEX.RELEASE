@@ -1,11 +1,11 @@
 {
     "schema_version": 1,
-    "commit": "",
-    "indexed_at": "2026-05-19T23:27:52Z",
-    "project": "C-Users-jonat-CascadeProjects-vex-app-old",
-    "nodes": 32360,
-    "edges": 64859,
-    "original_size": 51052544,
-    "compressed_size": 9842564,
-    "compression_level": 9
+    "commit": "581353ac4235a776a49f025c5105f7d0f03835c0",
+    "indexed_at": "2026-06-18T14:28:26Z",
+    "project": "root-projects-VEX.RELEASE",
+    "nodes": 101197,
+    "edges": 172665,
+    "original_size": 161218560,
+    "compressed_size": 23478079,
+    "compression_level": 3
 }

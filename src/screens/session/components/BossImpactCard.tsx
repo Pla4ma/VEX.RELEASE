@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,7 +8,7 @@ import Animated, {
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { CARD_WIDTH } from './session-consequence-types';
+import { getCardWidth } from './session-consequence-types';
 
 interface BossImpactCardProps {
   bossName: string;
@@ -28,6 +28,8 @@ export function BossImpactCard({
   hadCriticalHit,
 }: BossImpactCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const { width: screenWidth } = useWindowDimensions();
+  const cardWidth = getCardWidth(screenWidth);
   const healthAnim = useSharedValue(healthBefore);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function BossImpactCard({
   return (
     <View
       style={{
-        width: CARD_WIDTH,
+        width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: wasDefeated
           ? `${theme.colors.success[500]}15`
