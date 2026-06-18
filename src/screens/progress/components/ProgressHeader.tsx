@@ -19,7 +19,7 @@ export function ProgressHeader({
 }: ProgressHeaderProps): React.ReactNode {
   const { width: SCREEN_W } = useWindowDimensions();
   return (
-    <View style={{ width: '100%', marginBottom: 10, position: 'relative' }}>
+    <View style={{ width: '100%', marginBottom: 12, position: 'relative' }}>
       {/* Liquid analytics atmosphere at top of progress screen */}
       <View
         pointerEvents="none"
@@ -108,7 +108,7 @@ export function ProgressHeader({
           />
         </Pressable>
       </View>
-      <View style={{ gap: 3, marginBottom: 6, zIndex: 2 }}>
+      <View style={{ gap: 4, marginBottom: 8, zIndex: 2 }}>
         <Text
           style={{
             color: vexLightGlass.mint[600],

@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, Text, Pressable, View } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
+import { hashUserId } from '../../../utils/sentry-privacy';
 import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { eventBus } from '../../../events/EventBus';
 import { useAnalyticsData, useInsights, useSessionHeatmapData } from '../hooks';
@@ -63,7 +64,7 @@ export function AnalyticsDashboard({
     const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
     Sentry.captureException(analyticsError, {
       tags: { component: 'AnalyticsDashboard', operation: 'fetchData' },
-      extra: { userId, timeRange, metrics: selectedMetrics },
+      extra: { userId: hashUserId(userId), timeRange, metrics: selectedMetrics },
     });
   }, [dataError, dataErrorObj, userId, timeRange, selectedMetrics]);
 

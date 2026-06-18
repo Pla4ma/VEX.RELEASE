@@ -99,7 +99,7 @@ export function SessionRecommendationCard({
           {recommendation.reason}
         </Text>
 
-        <Button variant="outline" size="sm" disabled style={{ width: '100%' }}>
+        <Button accessibilityLabel="Cannot start session" variant="outline" size="sm" disabled style={{ width: '100%' }}>
           <Text>Cannot start session</Text>
         </Button>
       </Box>
@@ -164,7 +164,7 @@ export function SessionRecommendationCard({
         </Button>
 
         {showDismiss && onDismiss && (
-          <Button variant="ghost" size="sm" onPress={onDismiss}>
+          <Button accessibilityLabel="Dismiss recommendation" variant="ghost" size="sm" onPress={onDismiss}>
             <Text>Dismiss</Text>
           </Button>
         )}

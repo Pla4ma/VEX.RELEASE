@@ -67,7 +67,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       >
         <VexAssetImage name="streakFlame" opacity={0.64} size={34} />
       </View>
-      <GlassCard padding={18} radius={28} variant="hero" glowMint>
+      <GlassCard padding={20} radius={28} variant="hero" glowMint>
         <ProfileIdentityBlock
           level={level}
           streakDays={streakDays}

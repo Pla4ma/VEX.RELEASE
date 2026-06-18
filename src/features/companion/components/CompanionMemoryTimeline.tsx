@@ -67,7 +67,6 @@ export function CompanionMemoryTimeline({
           estimatedItemSize={120}
           keyExtractor={(item: TimelineRow) => item.id}
           renderItem={renderItem}
-          scrollEnabled={false}
         />
       ) : null}
     </Box>

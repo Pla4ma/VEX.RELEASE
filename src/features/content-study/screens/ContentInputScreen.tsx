@@ -151,7 +151,7 @@ export function ContentInputScreen(): React.ReactNode {
           <Text color="text.secondary" mt="xs" variant="bodySmall">
             {error}
           </Text>
-          <Button mt="md" onPress={clearError} size="sm" variant="ghost">
+          <Button accessibilityLabel="Dismiss" mt="md" onPress={clearError} size="sm" variant="ghost">
             <Text>Dismiss</Text>
           </Button>
         </Card>

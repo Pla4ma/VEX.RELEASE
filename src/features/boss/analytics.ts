@@ -1,4 +1,6 @@
 import * as Sentry from '@sentry/react-native';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 export const BOSS_ANALYTICS_EVENTS = [
   'boss_route_opened',
@@ -27,7 +29,7 @@ export function trackBossRouteOpened(
     Sentry.addBreadcrumb({
       category: 'boss',
       message: 'boss_route_opened',
-      data: { userId, intensity, canQuery },
+      data: { userId: hashUserId(userId ?? ''), intensity, canQuery },
       level: 'info',
     });
   } catch {
@@ -44,7 +46,7 @@ export function trackBossCTAClicked(
     Sentry.addBreadcrumb({
       category: 'boss',
       message: 'boss_cta_clicked',
-      data: { userId, minutes, intensity },
+      data: { userId: hashUserId(userId ?? ''), minutes, intensity },
       level: 'info',
     });
   } catch {
@@ -63,7 +65,7 @@ export function trackCombatAbilityActivated(
     Sentry.addBreadcrumb({
       category: 'boss',
       message: 'combat_ability_activated',
-      data: { userId, encounterId, abilityId, damage, hadCombo },
+      data: { userId: hashUserId(userId ?? ''), encounterId, abilityId, damage, hadCombo },
       level: 'info',
     });
   } catch {

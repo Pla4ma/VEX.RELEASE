@@ -47,7 +47,7 @@ export function MonthlyReportErrorState({
       >
         Try Again
       </Button>
-      <Button onPress={onClose} variant="secondary">
+      <Button accessibilityLabel="Close" onPress={onClose} variant="secondary">
         <Text>Close</Text>
       </Button>
     </View>
@@ -86,7 +86,7 @@ export function MonthlyReportEmptyState({
       >
         Complete sessions this month to generate your first focus report.
       </Text>
-      <Button onPress={onClose} variant="primary">
+      <Button accessibilityLabel="Start a Session" onPress={onClose} variant="primary">
         <Text>Start a Session</Text>
       </Button>
     </View>

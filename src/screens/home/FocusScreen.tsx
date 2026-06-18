@@ -52,7 +52,7 @@ export function FocusScreen(): React.ReactNode {
 
   return (
     <GlassScreen showAura variant="focus">
-      <View style={{ flex: 1, paddingHorizontal: 12, paddingTop: 2 }}>
+      <View style={{ flex: 1, paddingHorizontal: 12, paddingTop: 4 }}>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 184 }}
           showsVerticalScrollIndicator={false}
@@ -63,7 +63,7 @@ export function FocusScreen(): React.ReactNode {
             body={statusCopy}
             onAction={() => navigation.navigate('Settings', { screen: 'SettingsMain' })}
           />
-          <View style={{ marginBottom: 18 }}>
+          <View style={{ marginBottom: 20 }}>
             <FocusScoreHomeWidget
               model={focusScoreModel}
               onPress={() => navigation.navigate('FocusScoreDashboard')}

@@ -18,35 +18,63 @@ export async function uploadStudyFile(
 }
 
 export async function deleteStudyFile(filePath: string) {
-  await deleteStudyFileRecord(filePath);
+  try {
+    await deleteStudyFileRecord(filePath);
+  } catch (error) {
+    throw new Error(`Failed to delete study file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function fetchContentHistory(userId: string, limit = 20) {
-  return fetchContentHistoryRecords(userId, limit);
+  try {
+    return await fetchContentHistoryRecords(userId, limit);
+  } catch (error) {
+    throw new Error(`Failed to fetch content history: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function fetchContentById(contentId: string) {
-  return fetchContentRecord(contentId);
+  try {
+    return await fetchContentRecord(contentId);
+  } catch (error) {
+    throw new Error(`Failed to fetch content: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function fetchGenerationById(generationId: string) {
-  return fetchGenerationRecord(generationId);
+  try {
+    return await fetchGenerationRecord(generationId);
+  } catch (error) {
+    throw new Error(`Failed to fetch generation: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function getQuizForStudyPlan(
   studyPlanId: string,
 ): Promise<QuizItem[]> {
-  const generation = await fetchGenerationRecord(studyPlanId);
-  if (!generation) {
-    return [];
+  try {
+    const generation = await fetchGenerationRecord(studyPlanId);
+    if (!generation) {
+      return [];
+    }
+    return generation.quizItems.slice(0, 3);
+  } catch (error) {
+    throw new Error(`Failed to get quiz for study plan: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
-  return generation.quizItems.slice(0, 3);
 }
 
 export async function updateContentText(contentId: string, editedText: string) {
-  await updateContentTextRecord(contentId, editedText);
+  try {
+    await updateContentTextRecord(contentId, editedText);
+  } catch (error) {
+    throw new Error(`Failed to update content text: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function deleteContent(contentId: string) {
-  await deleteContentRecord(contentId);
+  try {
+    await deleteContentRecord(contentId);
+  } catch (error) {
+    throw new Error(`Failed to delete content: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }

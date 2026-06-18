@@ -3,6 +3,8 @@ import * as Sentry from '@sentry/react-native';
 import { stateCache, DEFAULT_INTEGRATION_STATE } from './integration-types';
 import { fetchAggregatedStats, fetchDetectedPatterns, deleteOldAnalyticsData } from './repository/stats';
 import { fetchInsights } from './repository/insights';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 export async function syncAnalyticsData(
   userId: string,
@@ -47,7 +49,7 @@ export async function syncAnalyticsData(
     const message = error instanceof Error ? error.message : 'Unknown error';
     Sentry.captureException(error, {
       tags: { integration: 'analytics_sync' },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
     return {
       success: false,
@@ -115,7 +117,7 @@ export async function getRealtimeAnalytics(
   } catch (error) {
     Sentry.captureException(error, {
       tags: { integration: 'analytics_realtime' },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
     return {
       today: {
@@ -150,7 +152,7 @@ export async function cleanupAnalyticsData(
     errors.push(message);
     Sentry.captureException(error, {
       tags: { integration: 'analytics_cleanup' },
-      extra: { userId, retentionDays },
+      extra: { userId: hashUserId(userId), retentionDays },
     });
     return { deleted: 0, errors };
   }
@@ -192,7 +194,7 @@ export async function initializeAnalytics(
     const message = error instanceof Error ? error.message : 'Unknown error';
     Sentry.captureException(error, {
       tags: { integration: 'analytics_init' },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
     return { success: false, error: message };
   }

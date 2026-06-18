@@ -28,7 +28,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
       return (
         <Box p="md" gap="md" alignItems="center">
           <Text color="error">Error: {error?.message}</Text>
-          <Button onPress={() => refetch()} variant="primary">
+          <Button accessibilityLabel="Retry loading focus score" onPress={() => refetch()} variant="primary">
             <Text>Retry</Text>
           </Button>
         </Box>
@@ -144,6 +144,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
 
           <Box>
             <Button
+              accessibilityLabel="View Monthly Report"
               onPress={() =>
                 navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Analytics', {
                   month: new Date().toISOString().slice(0, 7),

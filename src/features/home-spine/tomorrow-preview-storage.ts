@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import { z } from 'zod';
 
 import { captureSilentFailure } from '../../utils/silent-failure';
+import { hashUserId } from '../../utils/sentry-privacy';
 import {
   TomorrowPreviewDataSchema,
   type TomorrowPreviewData,
@@ -44,7 +45,7 @@ export function saveTomorrowPreview(
     );
   } catch (error) {
     Sentry.captureException(error, {
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
       tags: { feature: 'tomorrow-preview', operation: 'save' },
     });
   }
@@ -67,7 +68,7 @@ export function loadTomorrowPreview(
     );
   } catch (error) {
     Sentry.captureException(error, {
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
       tags: { feature: 'tomorrow-preview', operation: 'load' },
     });
     return null;
@@ -83,7 +84,7 @@ export function clearTomorrowPreview(userId: string): void {
     storage.delete(storageKey(userId));
   } catch (error) {
     Sentry.captureException(error, {
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
       tags: { feature: 'tomorrow-preview', operation: 'clear' },
     });
   }

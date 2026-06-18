@@ -33,7 +33,7 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: 10,
+          marginBottom: 12,
         }}
       >
         <GlassPill
@@ -43,11 +43,11 @@ export function StreakCard({ currentStreak }: StreakCardProps): React.ReactNode 
         />
         <GlassPill label="2.0x" size="sm" variant="mint" />
       </View>
-      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 10 }}>
+      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 12 }}>
         {DAY_LABELS.map((day, index) => (
           <View
             key={`${day}-${index}`}
-            style={{ alignItems: 'center', flex: 1, gap: 5 }}
+            style={{ alignItems: 'center', flex: 1, gap: 4 }}
           >
             <View
               style={{

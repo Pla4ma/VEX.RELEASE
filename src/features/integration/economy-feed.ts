@@ -1,6 +1,7 @@
 import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { CurrencyTransaction, ShopOwnership } from './economy-feed-helpers';
+import { hashUserId } from '../../utils/sentry-privacy';
 import {
   recordShopOwnership,
   applyItemEffect,

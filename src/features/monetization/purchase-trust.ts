@@ -5,6 +5,7 @@ import {
   restorePurchases as restoreRevenueCatPurchases,
 } from '../../shared/monetization/revenuecat-facade';
 import { createDebugger } from '../../utils/debug';
+import { hashUserId } from '../../utils/sentry-privacy';
 import {
   PurchaseTrustError,
   TRUST_SIGNALS,
@@ -59,7 +60,7 @@ export async function restorePurchases(
     const message = result.error?.message ?? 'RevenueCat restore failed.';
     Sentry.captureException(result.error ?? new PurchaseTrustError(message), {
       tags: { component: 'purchase-trust', operation: 'restorePurchases' },
-      extra: { userId, errorCode: result.errorCode },
+      extra: { userId: hashUserId(userId), errorCode: result.errorCode  },
     });
     throw new PurchaseTrustError(message);
   }

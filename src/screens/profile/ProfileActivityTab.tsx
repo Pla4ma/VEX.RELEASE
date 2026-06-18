@@ -148,7 +148,6 @@ export const ProfileActivityTab = React.memo(({
     <Box style={{ height: Math.max(360, history.length * 86) }}>
       <FlashList
         data={history}
-        scrollEnabled={false}
         estimatedItemSize={86}
         keyExtractor={(item: SessionHistoryEntry) => item.sessionId}
         renderItem={renderSessionCard(theme)}

@@ -183,12 +183,12 @@ export function ExtractionProgress({
         ) : null}
 
         {isFailed && onRetry ? (
-          <Button onPress={onRetry} size="sm">
+          <Button accessibilityLabel="Retry extraction" onPress={onRetry} size="sm">
             <Text>Retry Extraction</Text>
           </Button>
         ) : null}
         {!isFailed && !isComplete && onCancel ? (
-          <Button onPress={onCancel} size="sm" variant="ghost">
+          <Button accessibilityLabel="Cancel extraction" onPress={onCancel} size="sm" variant="ghost">
             <Text>Cancel</Text>
           </Button>
         ) : null}

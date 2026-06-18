@@ -1,3 +1,5 @@
+import { captureSilentFailure } from '../../utils/silent-failure';
+
 import {
   CompletionPersonalizationInputSchema,
   CompletionPersonalizationSchema,
@@ -87,6 +89,7 @@ export function buildCompletionPersonalizationResult(input: {
   try {
     nextAction = buildPostSessionNextAction({ summary });
   } catch (error: unknown) {
+    captureSilentFailure(error, { feature: 'session-completion', operation: 'personalization', type: 'ui' });
     // nextAction is optional — null means degraded systems hid the next move
   }
 

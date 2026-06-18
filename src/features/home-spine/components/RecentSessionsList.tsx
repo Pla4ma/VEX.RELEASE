@@ -95,7 +95,6 @@ export function RecentSessionsList({
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             estimatedItemSize={72}
-            scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={ItemSeparator}
           />

@@ -170,7 +170,7 @@ export function ReportCards({
         >
           Share Monthly Report
         </Button>
-        <Button onPress={onClose} variant="secondary">
+        <Button accessibilityLabel="Close" onPress={onClose} variant="secondary">
           <Text>Close</Text>
         </Button>
       </Animated.View>

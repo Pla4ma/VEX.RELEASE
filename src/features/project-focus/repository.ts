@@ -1,3 +1,5 @@
+import { captureSilentFailure } from '../../utils/silent-failure';
+
 import { storage } from '../../store/mmkv-storage';
 import { ProjectThreadSchema, type ProjectThread } from './schemas';
 
@@ -28,6 +30,7 @@ export async function upsertStoredProjectThread(
     const next = [parsed, ...existing.filter((item) => item.id !== parsed.id)];
     storage.set(keyFor(parsed.userId), JSON.stringify(next));
   } catch (error: unknown) {
+    captureSilentFailure(error, { feature: 'project-focus', operation: 'save', type: 'ui' });
     // Degraded: return parsed thread even if storage fails
   }
   return parsed;

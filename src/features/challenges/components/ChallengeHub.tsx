@@ -147,7 +147,6 @@ export const ChallengeHub = React.memo(({
             renderItem={renderChallenge}
             keyExtractor={(item: UserChallengeSummary) => item.challengeId}
             estimatedItemSize={168}
-            scrollEnabled={false}
           />
         )}
       </View>

@@ -4,6 +4,8 @@ import { integrationCache } from './integration-types';
 import { bulkInsertAnalyticsEvents } from './repository/stats';
 import { generateInsights } from './service';
 import { updateIntegrationState, getTimeOfDay } from './integration-helpers';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 export async function trackSessionCompleted(
   userId: string,
@@ -82,7 +84,7 @@ export async function trackSessionCompleted(
   } catch (error) {
     Sentry.captureException(error, {
       tags: { integration: 'analytics_session' },
-      extra: { userId, sessionId: sessionData.sessionId },
+      extra: { userId: hashUserId(userId), sessionId: sessionData.sessionId  },
     });
     throw error;
   }
@@ -117,7 +119,7 @@ export async function trackBossEncounter(
   } catch (error) {
     Sentry.captureException(error, {
       tags: { integration: 'analytics_boss' },
-      extra: { userId, bossId: bossData.bossId },
+      extra: { userId: hashUserId(userId), bossId: bossData.bossId  },
     });
   }
 }
@@ -152,7 +154,7 @@ export async function trackItemCrafted(
   } catch (error) {
     Sentry.captureException(error, {
       tags: { integration: 'analytics_crafting' },
-      extra: { userId, itemId: itemData.itemId },
+      extra: { userId: hashUserId(userId), itemId: itemData.itemId  },
     });
   }
 }

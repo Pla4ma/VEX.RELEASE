@@ -33,7 +33,7 @@ function useAppRuntimeBootstrap(): boolean {
       try {
         initSentry();
       } catch (error: unknown) {
-        // Sentry unavailable in Expo Go.
+        console.warn('Sentry init failed');
       }
 
       await bootstrapApp();
@@ -41,7 +41,7 @@ function useAppRuntimeBootstrap(): boolean {
       try {
         initializeDevContrastChecker();
       } catch (error: unknown) {
-        // Accessibility checker unavailable — non-critical.
+        console.warn('Accessibility check failed');
       }
 
       setReady(true);

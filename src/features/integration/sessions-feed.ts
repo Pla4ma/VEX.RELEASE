@@ -9,6 +9,8 @@ import { addXpEnhanced } from '../progression/service-xp-core';
 import { createReward } from '../rewards/service';
 import { recordSession } from '../streaks/service';
 import * as Sentry from '@sentry/react-native';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 /**
  * Initialize sessions cross-system integration
@@ -87,7 +89,7 @@ export function initializeSessionsFeedIntegration(): () => void {
       } catch (error) {
         Sentry.captureException(error, {
           tags: { operation: 'sessions:integration', sessionId },
-          extra: { userId, duration, qualityScore },
+          extra: { userId: hashUserId(userId), duration, qualityScore },
         });
       }
     },

@@ -20,6 +20,7 @@ import {
   isInFirstWeek,
   getFirstWeekCompletion,
 } from './progression-service';
+import { hashUserId } from '../../../utils/sentry-privacy';
 
 const debug = createDebugger('progression:first-week');
 
@@ -107,7 +108,7 @@ export async function getFirstWeekProgress(
     );
     Sentry.captureException(error, {
       tags: { feature: 'first-week-pacing' },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
     return null;
   }

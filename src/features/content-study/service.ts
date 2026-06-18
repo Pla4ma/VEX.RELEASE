@@ -62,66 +62,98 @@ export async function submitContent(
 }
 
 export async function extractContent(request: ExtractContentRequest) {
-  const response = await invokeAndParse(
-    CONTENT_STUDY_API.ENDPOINTS.EXTRACT,
-    extractContentResponseSchema,
-    request,
-  );
-  if (!response.success) {
-    throw buildError(
+  try {
+    const response = await invokeAndParse(
+      CONTENT_STUDY_API.ENDPOINTS.EXTRACT,
+      extractContentResponseSchema,
+      request,
+    );
+    if (!response.success) {
+      throw buildError(
+        ContentStudyErrorCode.EXTRACTION_FAILED,
+        response.error ?? ERROR_MESSAGES.EXTRACTION_FAILED,
+        undefined,
+        true,
+      );
+    }
+    return response;
+  } catch (error) {
+    throw normalizeError(
+      error,
       ContentStudyErrorCode.EXTRACTION_FAILED,
-      response.error ?? ERROR_MESSAGES.EXTRACTION_FAILED,
-      undefined,
-      true,
+      ERROR_MESSAGES.EXTRACTION_FAILED,
     );
   }
-  return response;
 }
 
 export async function generateStudyPlan(request: GenerateStudyPlanRequest) {
-  const response = await invokeAndParse(
-    CONTENT_STUDY_API.ENDPOINTS.GENERATE,
-    generationResponseSchema,
-    request,
-  );
-  if (!response.success) {
-    const code = response.error?.toLowerCase().includes('limit')
-      ? ContentStudyErrorCode.RATE_LIMIT_EXCEEDED
-      : ContentStudyErrorCode.GENERATION_FAILED;
-    throw buildError(
-      code,
-      response.error ?? ERROR_MESSAGES.GENERATION_FAILED,
-      undefined,
-      code !== ContentStudyErrorCode.RATE_LIMIT_EXCEEDED,
+  try {
+    const response = await invokeAndParse(
+      CONTENT_STUDY_API.ENDPOINTS.GENERATE,
+      generationResponseSchema,
+      request,
+    );
+    if (!response.success) {
+      const code = response.error?.toLowerCase().includes('limit')
+        ? ContentStudyErrorCode.RATE_LIMIT_EXCEEDED
+        : ContentStudyErrorCode.GENERATION_FAILED;
+      throw buildError(
+        code,
+        response.error ?? ERROR_MESSAGES.GENERATION_FAILED,
+        undefined,
+        code !== ContentStudyErrorCode.RATE_LIMIT_EXCEEDED,
+      );
+    }
+    return response;
+  } catch (error) {
+    throw normalizeError(
+      error,
+      ContentStudyErrorCode.GENERATION_FAILED,
+      ERROR_MESSAGES.GENERATION_FAILED,
     );
   }
-  return response;
 }
 
 export async function getContentStatus(contentId: string) {
-  const response = await invokeAndParse(
-    `${CONTENT_STUDY_API.ENDPOINTS.STATUS}/${contentId}`,
-    statusResponseSchema,
-    undefined,
-    'GET',
-  );
-  if (!response.success) {
-    throw buildError(
-      ContentStudyErrorCode.CONTENT_NOT_FOUND,
-      response.error ?? 'Content not found',
+  try {
+    const response = await invokeAndParse(
+      `${CONTENT_STUDY_API.ENDPOINTS.STATUS}/${contentId}`,
+      statusResponseSchema,
       undefined,
-      false,
+      'GET',
+    );
+    if (!response.success) {
+      throw buildError(
+        ContentStudyErrorCode.CONTENT_NOT_FOUND,
+        response.error ?? 'Content not found',
+        undefined,
+        false,
+      );
+    }
+    return response;
+  } catch (error) {
+    throw normalizeError(
+      error,
+      ContentStudyErrorCode.CONTENT_NOT_FOUND,
+      'Content not found',
     );
   }
-  return response;
 }
 
 export async function submitFeedback(request: SubmitFeedbackRequest) {
-  return invokeAndParse(
-    CONTENT_STUDY_API.ENDPOINTS.FEEDBACK,
-    feedbackResponseSchema,
-    request,
-  );
+  try {
+    return await invokeAndParse(
+      CONTENT_STUDY_API.ENDPOINTS.FEEDBACK,
+      feedbackResponseSchema,
+      request,
+    );
+  } catch (error) {
+    throw normalizeError(
+      error,
+      ContentStudyErrorCode.EXTRACTION_FAILED,
+      'Failed to submit feedback',
+    );
+  }
 }
 
 export function buildContentStudyTimeoutFallback(): ContentStudyTimeoutFallback {

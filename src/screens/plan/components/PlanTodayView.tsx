@@ -67,7 +67,7 @@ export function PlanTodayView({
   }
 
   return (
-    <View style={{ padding: 20, gap: 10 }}>
+    <View style={{ padding: 20, gap: 12 }}>
       {items.map((item, index) => (
         <Animated.View
           key={item.id}

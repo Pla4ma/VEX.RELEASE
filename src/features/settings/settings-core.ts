@@ -2,6 +2,7 @@ import * as repository from './repository';
 import { withRetry, TTLCache } from '../../shared/hardening/retry';
 import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
+import { hashUserId } from '../../utils/sentry-privacy';
 import type { Setting, UserPreferences, SettingCategory, SettingValue } from './types';
 import { validateSettingValue, SettingsValidationError } from './settings-validation';
 import { syncSettings } from './settings-sync';
@@ -17,7 +18,7 @@ const SYNC_RETRY_CONFIG = {
 
 function backgroundSync(userId: string): void {
   syncSettings(userId).catch((err) => {
-    Sentry.captureException(err, { tags: { operation: 'backgroundSync' }, extra: { userId } });
+    Sentry.captureException(err, { tags: { operation: 'backgroundSync' }, extra: { userId: hashUserId(userId) } });
   });
 }
 
@@ -30,7 +31,7 @@ export async function getSetting(userId: string, key: string): Promise<Setting |
     if (setting) {settingsCache.set(cacheKey, setting);}
     return setting;
   } catch (error) {
-    Sentry.captureException(error, { tags: { operation: 'getSetting' }, extra: { userId, key } });
+    Sentry.captureException(error, { tags: { operation: 'getSetting' }, extra: { userId: hashUserId(userId), key } });
     throw error;
   }
 }
@@ -41,7 +42,7 @@ export async function getAllSettings(userId: string): Promise<Setting[]> {
     for (const s of settings) {settingsCache.set(`${userId}:${s.key}`, s);}
     return settings;
   } catch (error) {
-    Sentry.captureException(error, { tags: { operation: 'getAllSettings' }, extra: { userId } });
+    Sentry.captureException(error, { tags: { operation: 'getAllSettings' }, extra: { userId: hashUserId(userId) } });
     throw error;
   }
 }
@@ -66,12 +67,12 @@ export async function updateSetting(
     );
     settingsCache.set(`${userId}:${key}`, updated);
     eventBus.publish('settings:change', { key, value: sanitized, previousValue: oldValue });
-    Sentry.addBreadcrumb({ category: 'settings', message: `Setting updated: ${key}`, level: 'info', data: { userId, key, category } });
+    Sentry.addBreadcrumb({ category: 'settings', message: `Setting updated: ${key}`, level: 'info', data: { userId: hashUserId(userId), key, category } });
     if (!skipSync) {backgroundSync(userId);}
     return updated;
   } catch (error) {
     if (error instanceof SettingsValidationError) {throw error;}
-    Sentry.captureException(error, { tags: { operation: 'updateSetting' }, extra: { userId, key, category } });
+    Sentry.captureException(error, { tags: { operation: 'updateSetting' }, extra: { userId: hashUserId(userId), key, category } });
     throw error;
   }
 }
@@ -98,7 +99,7 @@ export async function batchUpdateSettings(
     if (!skipSync) {backgroundSync(userId);}
     return result;
   } catch (error) {
-    Sentry.captureException(error, { tags: { operation: 'batchUpdateSettings' }, extra: { userId, count: updates.length } });
+    Sentry.captureException(error, { tags: { operation: 'batchUpdateSettings' }, extra: { userId: hashUserId(userId), count: updates.length } });
     throw error;
   }
 }
@@ -113,7 +114,7 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
     preferencesCache.set(userId, prefs);
     return prefs;
   } catch (error) {
-    Sentry.captureException(error, { tags: { operation: 'getUserPreferences' }, extra: { userId } });
+    Sentry.captureException(error, { tags: { operation: 'getUserPreferences' }, extra: { userId: hashUserId(userId) } });
     throw error;
   }
 }

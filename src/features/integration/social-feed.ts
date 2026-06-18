@@ -2,6 +2,7 @@ import { eventBus } from '../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import type { SocialActivity, SquadChallenge } from './social-feed-types';
 import { CompetitiveResultSchema } from './social-feed-types';
+import { hashUserId } from '../../utils/sentry-privacy';
 import {
   createFeedEntry,
   notifyRelevantUsers,

@@ -12,6 +12,7 @@ import {
   respectQuietHours,
   type ReminderDraft,
 } from './retention-strategy-config';
+import { hashUserId } from '../../utils/sentry-privacy';
 
 async function scheduleReminder(
   userId: string,
@@ -30,7 +31,7 @@ async function scheduleReminder(
     });
     Sentry.captureException(error, {
       tags: { feature: 'retention-notifications', reminderType: draft.type },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
   }
 }

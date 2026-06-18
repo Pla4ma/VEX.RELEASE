@@ -60,12 +60,12 @@ export const typography = {
   h1: {
     fontSize: responsive({ xs: 28, sm: 30, md: 32, default: 36 }),
     lineHeight: responsive({ xs: 32, sm: 36, md: 40, default: 44 }),
-    fontWeight: '700' as const,
+    fontWeight: '800' as const,
   },
   h2: {
     fontSize: responsive({ xs: 22, sm: 24, md: 26, default: 28 }),
     lineHeight: responsive({ xs: 26, sm: 28, md: 30, default: 32 }),
-    fontWeight: '700' as const,
+    fontWeight: '800' as const,
   },
   h3: {
     fontSize: responsive({ xs: 18, sm: 20, md: 22, default: 24 }),

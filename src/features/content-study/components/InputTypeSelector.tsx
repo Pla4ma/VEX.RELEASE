@@ -43,7 +43,7 @@ export const InputTypeSelector = memo(function InputTypeSelector({
         return (
           <Pressable
             accessibilityHint={`Switches to ${tab.label} study input`}
-            accessibilityLabel={tab.label}
+            accessibilityLabel={`button: ${tab.label}`}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive, disabled }}
             disabled={disabled}

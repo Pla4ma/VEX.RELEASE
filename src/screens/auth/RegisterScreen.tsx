@@ -119,7 +119,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ flex: 1, justifyContent: 'center', gap: 18 }}>
+        <View style={{ flex: 1, justifyContent: 'center', gap: 20 }}>
           <View style={{ gap: 8, marginTop: 4 }}>
             <RegisterHero startDelayMs={120} />
           </View>
@@ -137,7 +137,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onSubmit={() => { void handleRegister(); }}
           />
 
-          <View style={{ gap: 10 }}>
+          <View style={{ gap: 12 }}>
             <View
               style={{
                 flexDirection: 'row',

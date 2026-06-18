@@ -40,10 +40,10 @@ export function FocusModeCardView({
   const orbMode = getOrbMode(card.id);
 
   return (
-    <View style={{ marginBottom: 9 }}>
+    <View style={{ marginBottom: 8 }}>
       <GlassCard
         glowMint={isPrimary}
-        padding={14}
+        padding={16}
         radius={22}
         variant={isPrimary ? 'premium' : 'default'}
       >
@@ -78,14 +78,14 @@ export function FocusModeCardView({
             mode={orbMode}
             size={isPrimary ? 66 : 58}
           />
-          <View style={{ flex: 1, gap: 3 }}>
+          <View style={{ flex: 1, gap: 4 }}>
             <Text
               style={{
                 color: vexLightGlass.text.primary,
                 fontSize: 15,
                 fontWeight: '800',
                 letterSpacing: 0,
-                lineHeight: 21,
+                lineHeight: 20,
               }}
             >
               {card.title}
@@ -94,7 +94,7 @@ export function FocusModeCardView({
               style={{
                 color: vexLightGlass.text.secondary,
                 fontSize: 12,
-                lineHeight: 17,
+                lineHeight: 16,
                 fontWeight: '400',
               }}
             >
@@ -107,7 +107,7 @@ export function FocusModeCardView({
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 10,
+            marginTop: 12,
             paddingLeft: 66,
             zIndex: 2,
           }}

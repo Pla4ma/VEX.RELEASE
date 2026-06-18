@@ -35,7 +35,7 @@ export function RegisterFormPanel({
 }: RegisterFormPanelProps): React.JSX.Element {
   return (
     <View style={{ gap: 16 }}>
-      <GlassSurface borderRadius={32} style={{ padding: 22, gap: 14, backgroundColor: 'rgba(255,255,255,0.88)' }}>
+      <GlassSurface borderRadius={32} style={{ padding: 20, gap: 16, backgroundColor: 'rgba(255,255,255,0.88)' }}>
         <FormField
           accessibilityHint="Enter the email you want to use for VEX"
           accessibilityLabel="Account email"

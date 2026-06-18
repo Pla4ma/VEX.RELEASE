@@ -113,7 +113,6 @@ export function PersonalBestsGrid({
         estimatedItemSize={ESTIMATED_ITEM_SIZE}
         keyExtractor={(item: PersonalBest) => item.id}
         renderItem={renderPersonalBest}
-        scrollEnabled={false}
       />
     </View>
   );

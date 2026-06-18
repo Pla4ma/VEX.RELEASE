@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import * as Sentry from '@sentry/react-native';
 import type { FeatureKey, UserExperienceStage } from './feature-access';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 export function useDisclosureAnalytics(): {
   trackFeatureUnlocked: (
@@ -56,7 +58,7 @@ export function useDisclosureAnalytics(): {
       trackFirstSessionStarted(userId, source) {
         Sentry.addBreadcrumb({
           category: 'home',
-          data: { source, userId },
+          data: { source, userId: hashUserId(userId ?? '') },
           level: 'info',
           message: 'First session started',
         });
@@ -80,7 +82,7 @@ export function useDisclosureAnalytics(): {
       trackSessionMilestone(userId, count) {
         Sentry.addBreadcrumb({
           category: 'home',
-          data: { count, userId },
+          data: { count, userId: hashUserId(userId) },
           level: 'info',
           message: 'Session milestone reached',
         });
@@ -104,7 +106,7 @@ export function useDisclosureAnalytics(): {
       trackOnboardingStarted(userId) {
         Sentry.addBreadcrumb({
           category: 'onboarding',
-          data: { userId },
+          data: { userId: hashUserId(userId) },
           level: 'info',
           message: 'Onboarding started',
         });
@@ -112,7 +114,7 @@ export function useDisclosureAnalytics(): {
       trackOnboardingFirstSessionCompleted(userId) {
         Sentry.addBreadcrumb({
           category: 'onboarding',
-          data: { userId },
+          data: { userId: hashUserId(userId) },
           level: 'info',
           message: 'First session completed during onboarding',
         });
@@ -120,7 +122,7 @@ export function useDisclosureAnalytics(): {
       trackOnboardingCompleted(userId) {
         Sentry.addBreadcrumb({
           category: 'onboarding',
-          data: { userId },
+          data: { userId: hashUserId(userId) },
           level: 'info',
           message: 'Onboarding completed',
         });
@@ -128,7 +130,7 @@ export function useDisclosureAnalytics(): {
       trackOnboardingGoalSet(userId, goal) {
         Sentry.addBreadcrumb({
           category: 'onboarding',
-          data: { goal, userId },
+          data: { goal, userId: hashUserId(userId) },
           level: 'info',
           message: 'Onboarding goal set',
         });

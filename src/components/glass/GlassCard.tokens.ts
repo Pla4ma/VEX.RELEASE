@@ -13,15 +13,15 @@ export type GlassCardSize = 'sm' | 'md' | 'lg' | 'xl';
 export const SIZE_PADDING: Record<GlassCardSize, number> = {
   sm: 12,
   md: 16,
-  lg: 18,
-  xl: 22,
+  lg: 20,
+  xl: 24,
 };
 
 export const SIZE_RADIUS: Record<GlassCardSize, number> = {
-  sm: 14,
-  md: 18,
-  lg: 22,
-  xl: 26,
+  sm: 12,
+  md: 16,
+  lg: 20,
+  xl: 24,
 };
 
 export interface VariantStyle {

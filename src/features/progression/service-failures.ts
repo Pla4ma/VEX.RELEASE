@@ -3,6 +3,8 @@ import { getProgressionServiceConfig } from './service-config';
 import { createProgressionError } from './service-errors';
 import type { EnhancedRepositoryError } from './repository/progression-repository';
 import type { AddXpOperationResult } from './types';
+import { hashUserId } from '../../utils/sentry-privacy';
+
 
 export function handleFetchFailure(
   error: EnhancedRepositoryError | null,
@@ -30,7 +32,7 @@ export function handleFetchFailure(
 
   Sentry.captureException(error, {
     tags: { operation: 'addXp', phase: 'fetch' },
-    extra: { userId },
+    extra: { userId: hashUserId(userId) },
   });
 
   if (

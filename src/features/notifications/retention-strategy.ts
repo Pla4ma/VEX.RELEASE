@@ -18,6 +18,7 @@ import {
   daysLaterAt,
   type ReminderDraft,
 } from './retention-strategy-config';
+import { hashUserId } from '../../utils/sentry-privacy';
 export { scheduleChallengeExpiryNotifications } from './retention-challenge-expiry';
 
 async function scheduleReminder(
@@ -37,7 +38,7 @@ async function scheduleReminder(
     });
     Sentry.captureException(error, {
       tags: { feature: 'retention-notifications', reminderType: draft.type },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
   }
 }
@@ -98,14 +99,14 @@ export async function scheduleOnboardingNotifications(
       category: 'notifications.retention',
       message: 'Onboarding notifications scheduling failed',
       level: 'error',
-      data: { userId },
+      data: { userId: hashUserId(userId) },
     });
     Sentry.captureException(error, {
       tags: {
         feature: 'retention-notifications',
         operation: 'schedule-onboarding',
       },
-      extra: { userId },
+      extra: { userId: hashUserId(userId) },
     });
   }
 }
