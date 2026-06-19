@@ -83,9 +83,9 @@ export async function getRelevantMemories(
   });
   scoredMemories.sort((a, b) => b.score - a.score);
   const selected = scoredMemories.slice(0, limit).map((s) => s.memory);
-  for (const memory of selected) {
-    await markMemoryReferencedInternal(memory.id);
-  }
+  await Promise.all(
+    selected.map((memory) => markMemoryReferencedInternal(memory.id)),
+  );
   return selected;
 }
 

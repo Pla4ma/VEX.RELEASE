@@ -21,7 +21,7 @@ export function useMotionAccessibility(): MotionPreferences & {
   ) => void;
 } {
   const [preferences, setPreferences] = React.useState<MotionPreferences>(
-    motionAccessibilityManager.getPreferences(),
+    () => motionAccessibilityManager.getPreferences(),
   );
 
   React.useEffect(() => {

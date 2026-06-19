@@ -129,13 +129,15 @@ export async function getCompletionPercentage(userId: string): Promise<number> {
 export async function initializeUserAchievements(
   userId: string,
 ): Promise<void> {
-  for (const achievement of ALL_ACHIEVEMENTS) {
-    await repository.createUserAchievement(userId, achievement.id, {
-      progress: 0,
-      maxProgress: achievement.progressMax,
-      isUnlocked: false,
-    });
-  }
+  await Promise.all(
+    ALL_ACHIEVEMENTS.map((achievement) =>
+      repository.createUserAchievement(userId, achievement.id, {
+        progress: 0,
+        maxProgress: achievement.progressMax,
+        isUnlocked: false,
+      }),
+    ),
+  );
 }
 
 export async function resetUserAchievements(userId: string): Promise<void> {
