@@ -3,7 +3,10 @@ import { View, type ViewStyle } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../primitives/Box'
 import { Text } from '../primitives/Text';
-import { Spinner, Dots, Pulse, styles } from './loading-variants';
+import { Spinner } from './loading-variants';
+import { Dots } from './Dots';
+import { Pulse } from './Pulse';
+import { styles } from './loading-variants.styles';
 
 export type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton';
 export type LoadingSize = 'sm' | 'md' | 'lg' | 'xl';

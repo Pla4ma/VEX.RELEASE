@@ -11,14 +11,6 @@ import { useTheme } from '../../theme/ThemeContext';
 import { resolveColorValue, resolveSpacingValue } from './theme-values';
 import type { BoxProps } from './BoxProps';
 
-export type { BoxProps } from './BoxProps';
-
-/**
- * Box component
- */
-export { Card as Card } from './Card';
-export { Button as Button } from './Button';
-
 export function Box({
   flex,
   flexDirection,
@@ -155,11 +147,4 @@ export function Box({
   );
 }
 
-/**
- * Create a specialized Box variant
- */
-export function createBox(defaultProps: Partial<BoxProps>) {
-  return function BoxVariant(props: BoxProps): React.ReactNode {
-    return <Box {...defaultProps} {...props} />;
-  };
-}
+

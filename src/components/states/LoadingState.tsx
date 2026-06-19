@@ -66,14 +66,3 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   );
 };
 
-// ============================================================================
-// Preset Loading States
-// ============================================================================
-
-/** Full screen loading overlay */
-export const FullScreenLoader: React.FC<{ message?: string }> = ({
-  message,
-}) => <LoadingState fullScreen message={message} />;
-
-/** Compact inline loader */
-export const InlineLoader: React.FC = () => <LoadingState size="small" />;

@@ -149,6 +149,3 @@ export const Card = forwardRef<View, CardProps>(
 );
 
 Card.displayName = 'Card';
-
-export { CardHeader, CardFooter } from './CardSubcomponents';
-export { Text } from './Text';
