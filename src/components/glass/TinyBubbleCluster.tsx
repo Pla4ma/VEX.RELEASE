@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 
 interface TinyBubbleClusterProps {
   count?: number;
@@ -11,7 +11,18 @@ interface TinyBubbleClusterProps {
   spread?: number;
 }
 
-        
+const containerBaseStyle: ViewStyle = {
+  position: 'absolute',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const bubbleBaseStyle: ViewStyle = {
+  position: 'absolute',
+  borderRadius: 0,
+  backgroundColor: '',
+};
+
 export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
   count = 4,
   top,
@@ -30,36 +41,30 @@ export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
     return { size, xOffset, yOffset, key: i };
   });
 
+  const containerStyle: ViewStyle = {
+    ...containerBaseStyle,
+    top,
+    left,
+    right,
+    bottom,
+    width: spread * 2,
+    height: spread * 1.4,
+  };
+
   return (
-    <View
-      pointerEvents="none"
-      style={{
-        position: 'absolute',
-        top,
-        left,
-        right,
-        bottom,
-        width: spread * 2,
-        height: spread * 1.4,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {bubbles.map((b) => (
-        <View
-          key={b.key}
-          style={{
-            position: 'absolute',
-            width: b.size,
-            height: b.size,
-            borderRadius: b.size / 2,
-            backgroundColor: `rgba(199, 245, 233, ${opacity * 0.72})`,
-            left: spread + b.xOffset - b.size / 2,
-            top: spread * 0.5 + b.yOffset - b.size / 2,
-            boxShadow: '0px 0px 2px rgba(136, 213, 197, 0.3)',
-          }}
-        />
-      ))}
+    <View pointerEvents="none" style={containerStyle}>
+      {bubbles.map((b) => {
+        const bubbleStyle: ViewStyle = {
+          ...bubbleBaseStyle,
+          width: b.size,
+          height: b.size,
+          borderRadius: b.size / 2,
+          backgroundColor: `rgba(199, 245, 233, ${opacity * 0.72})`,
+          left: spread + b.xOffset - b.size / 2,
+          top: spread * 0.5 + b.yOffset - b.size / 2,
+        };
+        return <View key={b.key} style={bubbleStyle} />;
+      })}
     </View>
   );
 };

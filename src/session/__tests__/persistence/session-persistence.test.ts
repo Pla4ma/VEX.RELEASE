@@ -1,4 +1,5 @@
 import { SessionPersistence, mockSession, getMockMMKVInstance } from './helpers';
+import { eventBus } from '../../../events/EventBus';
 
 describe('SessionPersistence', () => {
   let mockStorage: unknown;
@@ -17,6 +18,7 @@ describe('SessionPersistence', () => {
     mockStorage.getAllKeys.mockReturnValue([]);
     mockStorage.contains.mockReturnValue(false);
     mockStorage.getNumber.mockReturnValue(undefined);
+    eventBus.publish.mockReset();
   });
 
   describe('persist', () => {
@@ -36,7 +38,6 @@ describe('SessionPersistence', () => {
     });
 
     it('should track analytics event on persist', () => {
-      const { eventBus } = require('../../../events');
       eventBus.publish.mockClear();
       SessionPersistence.persist(mockSession);
       expect(eventBus.publish).toHaveBeenCalledWith('analytics:track', {

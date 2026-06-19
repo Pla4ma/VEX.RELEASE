@@ -15,10 +15,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
-import { getIsSmallScreen, getIsTablet, getResponsiveFontSize } from './MobileOptimizedContainer.helpers';
-
-// Re-export for backward compatibility
-export { getResponsiveFontSize, getIsSmallScreen, getIsTablet } from './MobileOptimizedContainer.helpers';
+import { getIsSmallScreen, getIsTablet } from './MobileOptimizedContainer.helpers';
 
 interface MobileOptimizedContainerProps {
   children: React.ReactNode;
@@ -115,74 +112,3 @@ const styles = createSheet({
     flex: 1,
   },
 });
-
-/**
- * Mobile Touch Target Wrapper
- * Ensures minimum 44x44 touch targets for accessibility
- */
-interface TouchTargetProps {
-  children: React.ReactNode;
-  minSize?: number;
-  onPress?: () => void;
-}
-
-export const TouchTarget: React.FC<TouchTargetProps> = ({
-  children,
-  minSize = 44,
-  onPress: _onPress,
-}) => {
-  return (
-    <View
-      style={{
-        minWidth: minSize,
-        minHeight: minSize,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      {children}
-    </View>
-  );
-};
-
-/**
- * Mobile Grid - Responsive grid for mobile layouts
- */
-interface MobileGridProps {
-  children: React.ReactNode;
-  columns?: number;
-  gap?: number;
-}
-
-export const MobileGrid: React.FC<MobileGridProps> = ({
-  children,
-  columns = 2,
-  gap = 12,
-}) => {
-  const { width } = useWindowDimensions();
-  const isTablet = getIsTablet(width);
-  // Adjust columns based on screen width
-  const actualColumns = isTablet ? Math.min(columns + 1, 4) : columns;
-
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap,
-        marginHorizontal: -gap / 2,
-      }}
-    >
-      {React.Children.map(children, (child) => (
-        <View
-          style={{
-            width: `${100 / actualColumns}%`,
-            paddingHorizontal: gap / 2,
-          }}
-        >
-          {child}
-        </View>
-      ))}
-    </View>
-  );
-};

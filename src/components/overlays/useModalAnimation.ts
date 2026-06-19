@@ -21,6 +21,20 @@ interface UseModalAnimationOptions {
   closeOnBackButton: boolean;
 }
 
+const fadeStyle: ViewStyle = {
+  opacity: 0,
+};
+
+const scaleStyle: ViewStyle = {
+  opacity: 0,
+  transform: [{ scale: 0.9 }],
+};
+
+const slideStyle: ViewStyle = {
+  opacity: 0,
+  transform: [{ translateY: 500 }],
+};
+
 export function useModalAnimation({
   visible,
   animation,

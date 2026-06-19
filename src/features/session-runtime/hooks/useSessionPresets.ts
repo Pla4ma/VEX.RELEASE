@@ -4,7 +4,7 @@ import { getSessionOrchestrator } from '../SessionOrchestrator';
 export function useSessionPresets() {
   const orchestratorRef = useRef(getSessionOrchestrator());
   const orchestrator = orchestratorRef.current;
-  const [presets, setPresets] = useState(orchestrator.getAllPresets());
+  const [presets, setPresets] = useState(() => orchestrator.getAllPresets());
 
   const refresh = useCallback(() => {
     setPresets(orchestrator.getAllPresets());

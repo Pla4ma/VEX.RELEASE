@@ -133,8 +133,9 @@ export async function consolidateBehaviorSignals(): Promise<number> {
   }
 
   let consolidated = 0;
-  for (const [key, signals] of grouped) {
-    if (signals.length < 7) continue;
+  const groupedEntries = Array.from(grouped.entries());
+  const consolidatePromises = groupedEntries.map(async ([key, signals]) => {
+    if (signals.length < 7) return 0;
 
     const avgValue = signals.reduce((sum, s) => sum + s.value, 0) / signals.length;
     const avgConfidence = signals.reduce((sum, s) => sum + s.confidence, 0) / signals.length;
@@ -145,12 +146,14 @@ export async function consolidateBehaviorSignals(): Promise<number> {
       .from('behavior_profiles')
       .upsert({
         user_id: userId,
-        signals: [{
-          signal_type: signalType,
-          value: avgValue,
-          confidence: avgConfidence,
-          timestamp: signals[0].timestamp,
-        }],
+        signals: [
+          {
+            signal_type: signalType,
+            value: avgValue,
+            confidence: avgConfidence,
+            timestamp: signals[0].timestamp,
+          },
+        ],
         last_updated: Date.now(),
       }, { onConflict: 'user_id' });
 
@@ -159,8 +162,11 @@ export async function consolidateBehaviorSignals(): Promise<number> {
       .delete()
       .in('id', signals.map(s => s.id));
 
-    consolidated += signals.length;
-  }
+    return signals.length;
+  });
+
+  const results = await Promise.all(consolidatePromises);
+  consolidated = results.reduce((sum, count) => sum + count, 0);
 
   return consolidated;
 }

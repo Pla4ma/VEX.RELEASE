@@ -65,11 +65,11 @@ export async function handleStreakUpdated(
     { id: 'streak-180', minDays: 180 },
     { id: 'streak-365', minDays: 365 },
   ];
-  for (const { id, minDays } of streakAchievements) {
-    if (streakDays >= minDays) {
-      await checkAchievement(data.userId, id);
-    }
-  }
+  await Promise.all(
+    streakAchievements
+      .filter(({ minDays }) => streakDays >= minDays)
+      .map(({ id }) => checkAchievement(data.userId, id)),
+  );
 }
 
 export async function handleStreakMilestone(
@@ -121,11 +121,11 @@ export async function handleLevelUp(
     { id: 'prog-level-20', minLevel: 20 },
     { id: 'prog-level-50', minLevel: 50 },
   ];
-  for (const { id, minLevel } of levelAchievements) {
-    if (level >= minLevel) {
-      await checkAchievement(data.userId, id);
-    }
-  }
+  await Promise.all(
+    levelAchievements
+      .filter(({ minLevel }) => level >= minLevel)
+      .map(({ id }) => checkAchievement(data.userId, id)),
+  );
 }
 
 export async function handlePrestige(

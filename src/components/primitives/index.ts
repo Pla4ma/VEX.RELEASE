@@ -4,11 +4,13 @@
  * Building blocks for all UI components.
  */
 
-export { Box, createBox } from './Box';
+export { Box } from './Box';
+export { createBox } from './Box.helpers';
 export type { BoxProps } from './Box';
 
-export { Text, createTextVariant } from './Text';
-export type { TextProps, TextVariant } from './Text';
+export { Text } from './Text';
+export { createTextVariant } from './Text.helpers';
+export type { TextProps, TextVariant } from './Text.types';
 
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
@@ -19,7 +21,10 @@ export type { CardProps, CardVariant, CardSize, CardState } from './Card';
 export { AppScreen } from './AppScreen';
 export { PremiumBackdrop } from './PremiumBackdrop';
 
-export { Stack, VStack, HStack, Center } from './Stack';
+export { Stack } from './Stack';
+export { VStack } from './VStack';
+export { HStack } from './HStack';
+export { Center } from './Center';
 export type { StackProps } from './Stack';
 
 export { FeatureScreen } from './FeatureScreen';

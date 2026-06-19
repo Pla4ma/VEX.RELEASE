@@ -85,24 +85,26 @@ export class EventEmitter {
     }
     const toCall = [...subscriptions];
     const toRemove: EventSubscription[] = [];
-    for (const subscription of toCall) {
-      try {
-        const result = subscription.handler(data);
-        if (
-          result &&
-          typeof result === 'object' &&
-          'then' in result &&
-          typeof (result as Promise<unknown>).then === 'function'
-        ) {
-          await (result as Promise<unknown>);
+    await Promise.all(
+      toCall.map(async (subscription) => {
+        try {
+          const result = subscription.handler(data);
+          if (
+            result &&
+            typeof result === 'object' &&
+            'then' in result &&
+            typeof (result as Promise<unknown>).then === 'function'
+          ) {
+            await (result as Promise<unknown>);
+          }
+          if (subscription.once) {
+            toRemove.push(subscription);
+          }
+        } catch (error) {
+          this.handleError(error, event, data);
         }
-        if (subscription.once) {
-          toRemove.push(subscription);
-        }
-      } catch (error) {
-        this.handleError(error, event, data);
-      }
-    }
+      }),
+    );
     if (toRemove.length > 0) {
       const remaining = subscriptions.filter((sub) => !toRemove.includes(sub));
       if (remaining.length > 0) {

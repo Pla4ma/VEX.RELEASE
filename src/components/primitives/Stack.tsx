@@ -158,21 +158,4 @@ export const Stack: React.FC<StackProps> = ({
   );
 };
 
-// ============================================================================
-// Preset Components
-// ============================================================================
-
-/** Vertical stack with default spacing */
-export const VStack: React.FC<Omit<StackProps, 'direction'>> = (props) => (
-  <Stack direction="column" {...props} />
-);
-
-/** Horizontal stack with default spacing */
-export const HStack: React.FC<Omit<StackProps, 'direction'>> = (props) => (
-  <Stack direction="row" {...props} />
-);
-
-/** Centered content stack */
-export const Center: React.FC<Omit<StackProps, 'align' | 'justify'>> = (
-  props,
-) => <Stack align="center" justify="center" flex={1} {...props} />;
+Stack.displayName = 'Stack';

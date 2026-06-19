@@ -21,6 +21,11 @@ function generateRandomHex(length: number): string {
 
 export async function getMmkvEncryptionKey(): Promise<string> {
   if (cached) {return cached;}
+  // In test environment, use a static key
+  if ((globalThis as Record<string, unknown>).__TEST__) {
+    cached = 'test-encryption-key-32-bytes-long!!';
+    return cached;
+  }
   let key = await SecureStore.getItemAsync(KEY_NAME);
   if (!key) {
     key = generateRandomHex(32);
@@ -32,6 +37,11 @@ export async function getMmkvEncryptionKey(): Promise<string> {
 
 export function getMmkvEncryptionKeySync(): string {
   if (!cached) {
+    // In test environment, use a static key
+    if ((globalThis as Record<string, unknown>).__TEST__) {
+      cached = 'test-encryption-key-32-bytes-long!!';
+      return cached;
+    }
     throw new Error(
       'MMKV encryption key not initialized. Ensure getMmkvEncryptionKey() is awaited at app startup.',
     );

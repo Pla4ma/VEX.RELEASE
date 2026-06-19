@@ -8,11 +8,114 @@ import { createSheet } from '@/shared/ui/create-sheet';
 import {
   type BadgeProps,
   type SizeKey,
+  type SizeConfig,
   sizeMap,
   getVariantStyles,
 } from './badge-config';
+import { getAccessibilityLabel } from './badge-helpers';
 
 export type { BadgeProps } from './badge-config';
+
+const styles = createSheet({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+  },
+  fullWidth: { alignSelf: 'stretch', justifyContent: 'center' },
+  content: { flexDirection: 'row', alignItems: 'center' },
+  leftIcon: { marginRight: 4 },
+  text: { textAlign: 'center' as const },
+  rightIcon: { marginLeft: 4 },
+  removeButton: { marginLeft: 4, padding: 2 },
+  disabled: { opacity: 0.5 },
+});
+
+interface BadgeContentProps {
+  children: React.ReactNode;
+  variantStyles: ReturnType<typeof getVariantStyles>;
+  sizeConfig: SizeConfig;
+  leftIcon?: string;
+  rightIcon?: string;
+  onRemove?: () => void;
+  removeAccessibilityLabel?: string;
+  disabled?: boolean;
+}
+
+function BadgeContent({
+  children,
+  variantStyles,
+  sizeConfig,
+  leftIcon,
+  rightIcon,
+  onRemove,
+  removeAccessibilityLabel,
+  disabled,
+}: BadgeContentProps) {
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: variantStyles.backgroundColor,
+          borderColor: variantStyles.borderColor,
+          borderWidth: variantStyles.borderWidth ?? 0,
+          paddingVertical: sizeConfig.paddingVertical,
+          paddingHorizontal: sizeConfig.paddingHorizontal,
+          borderRadius: sizeConfig.borderRadius ?? 6,
+        },
+        disabled && styles.disabled,
+      ]}
+    >
+      <View style={styles.content}>
+        {leftIcon && (
+          <Icon
+            name={leftIcon}
+            size={sizeConfig.iconSize}
+            color={variantStyles.textColor}
+            style={styles.leftIcon}
+          />
+        )}
+        <Text
+          variant="caption"
+          style={[
+            styles.text,
+            {
+              fontSize: sizeConfig.fontSize,
+              color: variantStyles.textColor,
+              fontWeight: '600',
+            },
+          ]}
+        >
+          {children}
+        </Text>
+        {rightIcon && !onRemove && (
+          <Icon
+            name={rightIcon}
+            size={sizeConfig.iconSize}
+            color={variantStyles.textColor}
+            style={styles.rightIcon}
+          />
+        )}
+      </View>
+      {onRemove && (
+        <Pressable
+          onPress={onRemove}
+          style={styles.removeButton}
+          accessibilityLabel={removeAccessibilityLabel}
+          accessibilityRole="button"
+          accessibilityHint="Double tap to remove badge"
+        >
+          <Icon
+            name="close"
+            size={sizeConfig.iconSize}
+            color={variantStyles.textColor}
+          />
+        </Pressable>
+      )}
+    </View>
+  );
+}
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
@@ -31,71 +134,20 @@ export const Badge: React.FC<BadgeProps> = ({
   const sizeConfig = sizeMap[size as SizeKey];
   const variantStyles = getVariantStyles(variant, theme);
 
-  const BadgeContent = (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: variantStyles.backgroundColor,
-          borderColor: variantStyles.borderColor,
-          borderWidth: variant === 'outline' ? 1 : 0,
-          paddingVertical: sizeConfig.paddingVertical,
-          paddingHorizontal: sizeConfig.paddingHorizontal,
-          borderRadius: size === 'sm' ? 4 : size === 'md' ? 6 : 8,
-        },
-        fullWidth && styles.fullWidth,
-        disabled && styles.disabled,
-        style,
-      ]}
-    >
-      <View style={styles.content}>
-        {leftIcon && (
-          <Icon
-            name={leftIcon}
-            size={sizeConfig.iconSize as number}
-            color={variantStyles.textColor}
-            style={styles.leftIcon}
-          />
-        )}
-        <Text
-          variant="caption"
-          style={[
-            styles.text,
-            {
-              fontSize: sizeConfig.fontSize,
-              color: variantStyles.textColor,
-              fontWeight: '600',
-            },
-            textStyle,
-          ]}
-        >
-          {children}
-        </Text>
-        {rightIcon && !onRemove && (
-          <Icon
-            name={rightIcon}
-            size={sizeConfig.iconSize as number}
-            color={variantStyles.textColor}
-            style={styles.rightIcon}
-          />
-        )}
-      </View>
-      {onRemove && (
-        <Pressable
-          onPress={onRemove}
-          style={styles.removeButton}
-          accessibilityLabel={`Remove ${typeof children === 'string' ? children : 'badge'}`}
-          accessibilityRole="button"
-          accessibilityHint="Double tap to remove badge"
-        >
-          <Icon
-            name="close"
-            size={sizeConfig.iconSize as number}
-            color={variantStyles.textColor}
-          />
-        </Pressable>
-      )}
-    </View>
+  const accessibilityLabel = getAccessibilityLabel(children, 'Badge');
+  const removeAccessibilityLabel = `Remove ${getAccessibilityLabel(children, 'badge')}`;
+
+  const content = (
+    <BadgeContent
+      children={children}
+      variantStyles={variantStyles}
+      sizeConfig={sizeConfig}
+      leftIcon={leftIcon}
+      rightIcon={rightIcon}
+      onRemove={onRemove}
+      removeAccessibilityLabel={removeAccessibilityLabel}
+      disabled={disabled}
+    />
   );
 
   if (onPress || onRemove) {
@@ -108,86 +160,33 @@ export const Badge: React.FC<BadgeProps> = ({
           {
             backgroundColor: variantStyles.backgroundColor,
             borderColor: variantStyles.borderColor,
-            borderWidth: variant === 'outline' ? 1 : 0,
+            borderWidth: variantStyles.borderWidth ?? 0,
             paddingVertical: sizeConfig.paddingVertical,
             paddingHorizontal: sizeConfig.paddingHorizontal,
-            borderRadius: size === 'sm' ? 4 : size === 'md' ? 6 : 8,
+            borderRadius: sizeConfig.borderRadius ?? 6,
           },
           fullWidth && styles.fullWidth,
           style,
           pressed && { opacity: 0.8 },
         ]}
-        accessibilityLabel={typeof children === 'string' ? children : 'Badge'}
+        accessibilityLabel={accessibilityLabel}
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
-        <View style={styles.content}>
-          {leftIcon && (
-            <Icon
-              name={leftIcon}
-              size={sizeConfig.iconSize as number}
-              color={variantStyles.textColor}
-              style={styles.leftIcon}
-            />
-          )}
-          <Text
-            variant="caption"
-            style={[
-              styles.text,
-              {
-                fontSize: sizeConfig.fontSize,
-                color: variantStyles.textColor,
-                fontWeight: '600',
-              },
-              textStyle,
-            ]}
-          >
-            {children}
-          </Text>
-          {rightIcon && !onRemove && (
-            <Icon
-              name={rightIcon}
-              size={sizeConfig.iconSize as number}
-              color={variantStyles.textColor}
-              style={styles.rightIcon}
-            />
-          )}
-        </View>
-        {onRemove && (
-          <Pressable
-            onPress={onRemove}
-            style={styles.removeButton}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            accessibilityLabel={`Remove ${typeof children === 'string' ? children : 'badge'}`}
-            accessibilityRole="button"
-            accessibilityHint="Double tap to remove badge"
-          >
-            <Icon
-              name="close"
-              size={sizeConfig.iconSize as number}
-              color={variantStyles.textColor}
-            />
-          </Pressable>
-        )}
+        <BadgeContent
+          children={children}
+          variantStyles={variantStyles}
+          sizeConfig={sizeConfig}
+          leftIcon={leftIcon}
+          rightIcon={rightIcon}
+          onRemove={onRemove}
+          removeAccessibilityLabel={removeAccessibilityLabel}
+          disabled={disabled}
+        />
       </Pressable>
     );
   }
-  return BadgeContent;
+  return content;
 };
-
-const styles = createSheet({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-  },
-  fullWidth: { alignSelf: 'stretch', justifyContent: 'center' },
-  content: { flexDirection: 'row', alignItems: 'center' },
-  leftIcon: { marginRight: 4 },
-  text: { textAlign: 'center' as const },
-  rightIcon: { marginLeft: 4 },
-  removeButton: { marginLeft: 4, padding: 2 },
-  disabled: { opacity: 0.5 },
-});
 
 export default Badge;

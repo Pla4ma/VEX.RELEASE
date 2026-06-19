@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, type ImageSourcePropType } from 'react-native';
+import { Image, View, type ImageSourcePropType, type ImageStyle, type ViewStyle } from 'react-native';
 
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
@@ -34,28 +34,44 @@ const ASSETS: Record<VexAssetName, ImageSourcePropType> = {
   orangeMastery: require('../../../assets/water/vex_orange_mastery_v1.png'),
 };
 
+const containerBaseStyle: ViewStyle = {
+  borderRadius: 0,
+  height: 0,
+  overflow: 'hidden',
+  width: 0,
+};
+
+const imageBaseStyle: ImageStyle = {
+  height: 0,
+  width: 0,
+};
+
 export function VexAssetImage({
   name,
   size,
   opacity = 1,
 }: VexAssetImageProps): React.ReactNode {
+  const containerStyle: ViewStyle = {
+    ...containerBaseStyle,
+    borderRadius: size / 2,
+    height: size,
+    opacity,
+    width: size,
+  };
+
+  const imageStyle: ImageStyle = {
+    ...imageBaseStyle,
+    height: size,
+    width: size,
+  };
+
   return (
-    <View
-      pointerEvents="none"
-      style={{
-        borderRadius: size / 2,
-        height: size,
-        opacity,
-        overflow: 'hidden',
-        boxShadow: '0px 12px 20px vexLightGlass.glass.shadowStrong / 0.18',
-        width: size,
-      }}
-    >
+    <View pointerEvents="none" style={containerStyle}>
       <Image
         accessibilityIgnoresInvertColors
         resizeMode="cover"
         source={ASSETS[name]}
-        style={{ height: size, width: size }}
+        style={imageStyle}
       />
     </View>
   );

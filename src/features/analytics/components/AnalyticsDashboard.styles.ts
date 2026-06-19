@@ -1,11 +1,10 @@
-import { Dimensions } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 
-/** Get current screen width reactively — use in render context with `useWindowDimensions().width`. */
-export const getScreenWidth = () => Dimensions.get('window').width;
+/** Default screen width fallback for static style computation. */
+const DEFAULT_SCREEN_WIDTH = 375;
 
-/** Reactive styles for analytics dashboard — `screenWidth` updates on rotation. */
+/** Reactive styles for analytics dashboard — pass `screenWidth` from `useWindowDimensions()` to component for true reactivity. */
 export const styles = createSheet({
   container: { flex: 1, backgroundColor: lightColors.surface.button },
   header: {
@@ -46,7 +45,7 @@ export const styles = createSheet({
   },
   summaryCard: {
     flex: 1,
-    get minWidth() { return (Dimensions.get('window').width - 56) / 2; },
+    minWidth: (DEFAULT_SCREEN_WIDTH - 56) / 2,
     backgroundColor: lightColors.text.inverse,
     borderRadius: 12,
     padding: 16,

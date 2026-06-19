@@ -29,6 +29,9 @@ export async function evaluateInterventions(
   const rules = await repository.fetchInterventionRulesByTrigger(
     validated.trigger,
   );
+  const todaysExecutions = await repository.fetchTodaysInterventionExecutions(
+    validated.userId,
+  );
   const executions: InterventionExecution[] = [];
 
   for (const rule of rules) {
@@ -43,9 +46,6 @@ export async function evaluateInterventions(
     if (recentlyTriggered) {
       continue;
     }
-    const todaysExecutions = await repository.fetchTodaysInterventionExecutions(
-      validated.userId,
-    );
     const ruleExecutionsToday = todaysExecutions.filter(
       (e) => e.ruleId === rule.id,
     ).length;

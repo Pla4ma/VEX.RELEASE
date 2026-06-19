@@ -44,23 +44,27 @@ export const coachReminderDeliveryJob = job({
     let delivered = 0;
     let skipped = 0;
 
-    for (const reminder of dueReminders.data) {
+    const reminderPromises = (dueReminders.data || []).map(async (reminder) => {
       try {
         const userTimezone = getUserTimezone(reminder.user_id);
         if (isQuietHours(userTimezone)) {
           await io.runTask(`skip-quiet-hours-${reminder.id}`, () => rescheduleQuietHours(reminder.id));
-          skipped++;
-          continue;
+          return { type: 'skipped' as const };
         }
 
         await io.runTask(`deliver-${reminder.id}`, () => deliverReminderNotification(reminder));
         await io.runTask(`mark-delivered-${reminder.id}`, () => markReminderDelivered(reminder.id));
 
-        delivered++;
+        return { type: 'delivered' as const };
       } catch (error) {
         await io.runTask(`mark-failed-${reminder.id}`, () => markReminderFailed(reminder.id, error));
+        return { type: 'error' as const };
       }
-    }
+    });
+
+    const results = await Promise.all(reminderPromises);
+    delivered = results.filter(r => r.type === 'delivered').length;
+    skipped = results.filter(r => r.type === 'skipped').length;
 
     return { delivered, skipped, total: dueReminders.data.length };
   },
@@ -82,9 +86,7 @@ export const coachReminderSchedulerJob = job({
       return { scheduled: 0 };
     }
 
-    let scheduled = 0;
-
-    for (const state of usersNeedingReminders.data) {
+    const schedulePromises = usersNeedingReminders.data.map(async (state) => {
       try {
         const { data: existingReminder } = await io.runTask(
           `check-existing-${state.user_id}`,
@@ -92,7 +94,7 @@ export const coachReminderSchedulerJob = job({
         );
 
         if (existingReminder?.data) {
-          continue;
+          return { scheduled: false };
         }
 
         const userTimezone = getUserTimezone(state.user_id);
@@ -100,16 +102,20 @@ export const coachReminderSchedulerJob = job({
         const nextReminderTime = optimalTimes.find(t => t > Date.now());
 
         if (!nextReminderTime) {
-          continue;
+          return { scheduled: false };
         }
 
         await io.runTask(`schedule-${state.user_id}`, () => scheduleReminder(state, nextReminderTime));
 
-        scheduled++;
+        return { scheduled: true };
       } catch (error) {
         Sentry.captureException(error, { tags: { job: 'coach-reminder-delivery', operation: 'schedule-reminder', userId: state.user_id } });
+        return { scheduled: false };
       }
-    }
+    });
+
+    const results = await Promise.all(schedulePromises);
+    const scheduled = results.filter(r => r.scheduled).length;
 
     return { scheduled };
   },
