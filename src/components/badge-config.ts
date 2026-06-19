@@ -23,10 +23,19 @@ export interface BadgeProps {
   textStyle?: StyleProp<TextStyle>;
 }
 
-export const sizeMap = {
-  sm: { paddingVertical: 2, paddingHorizontal: 6, fontSize: 10, iconSize: 10 },
-  md: { paddingVertical: 4, paddingHorizontal: 8, fontSize: 12, iconSize: 12 },
-  lg: { paddingVertical: 6, paddingHorizontal: 12, fontSize: 14, iconSize: 14 },
+export interface SizeConfig {
+  paddingVertical: number;
+  paddingHorizontal: number;
+  fontSize: number;
+  iconSize: number;
+  borderRadius?: number;
+  borderWidth?: number;
+}
+
+export const sizeMap: Record<'sm' | 'md' | 'lg', SizeConfig> = {
+  sm: { paddingVertical: 2, paddingHorizontal: 6, fontSize: 10, iconSize: 10, borderRadius: 4 },
+  md: { paddingVertical: 4, paddingHorizontal: 8, fontSize: 12, iconSize: 12, borderRadius: 6 },
+  lg: { paddingVertical: 6, paddingHorizontal: 12, fontSize: 14, iconSize: 14, borderRadius: 8 },
 };
 
 export type SizeKey = keyof typeof sizeMap;
@@ -35,6 +44,7 @@ export interface VariantStyles {
   backgroundColor: string;
   borderColor: string;
   textColor: string;
+  borderWidth?: number;
 }
 
 export function getVariantStyles(
@@ -83,6 +93,7 @@ export function getVariantStyles(
         backgroundColor: 'transparent',
         borderColor: theme.colors.border.strong,
         textColor: theme.colors.text.primary,
+        borderWidth: 1,
       };
     default:
       return {

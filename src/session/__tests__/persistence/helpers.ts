@@ -1,11 +1,3 @@
-import {
-  SessionPersistence,
-  PersistedSessionState,
-  SessionPersistenceError,
-  isSessionStale,
-  canResumeSession,
-} from '../../utils/persistence';
-
 // Use var so declaration is hoisted; name prefixed with "mock" for jest.mock() access
 var mockCapturedInstance: unknown;
 
@@ -22,7 +14,7 @@ jest.mock('react-native-mmkv', () => {
     MMKV: jest.fn().mockImplementation(() => mockCapturedInstance),
   };
 });
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('../../../utils/debug', () => ({
   createDebugger: jest.fn(() => ({
     debug: jest.fn(),
@@ -35,18 +27,29 @@ jest.mock('../../../utils/silent-failure', () => ({
   captureSilentFailure: jest.fn(),
 }));
 
+import {
+  SessionPersistence,
+  PersistedSessionState,
+  SessionPersistenceError,
+  isSessionStale,
+  canResumeSession,
+} from '../../utils/persistence';
+
 export {
   SessionPersistence,
   PersistedSessionState,
   SessionPersistenceError,
   isSessionStale,
   canResumeSession,
+  mockCapturedInstance as mockMMKVInstance,
 };
 
 /** Get the shared mock MMKV instance used by all persistence modules */
 export function getMockMMKVInstance() {
   return mockCapturedInstance;
 }
+
+export const mockEventBus = { publish: jest.fn() };
 
 export const mockSession: PersistedSessionState = {
   sessionId: '550e8400-e29b-41d4-a716-446655440000',

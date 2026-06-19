@@ -22,7 +22,7 @@ jest.mock('react-native-mmkv', () => {
     MMKV: jest.fn().mockImplementation(() => mockMMKVInstance),
   };
 });
-jest.mock('../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('../../utils/debug', () => ({
   createDebugger: jest.fn(() => ({
     debug: jest.fn(),

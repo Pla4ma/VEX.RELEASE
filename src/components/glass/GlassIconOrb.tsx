@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React, { type ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassIconOrbHighlights } from './GlassIconOrbHighlights';
@@ -83,75 +83,107 @@ export function GlassIconOrb({
   const v = resolveVariant(variant);
   const coreSize = Math.max(size - 24, 26);
 
+  const outerStyle = useMemo(
+    () => ({
+      alignItems: 'center' as const,
+      height: size,
+      justifyContent: 'center' as const,
+      width: size,
+    }),
+    [size]
+  );
+
+  const ringStyle = useMemo(
+    () => ({
+      alignItems: 'center' as const,
+      backgroundColor: v.glow,
+      borderColor: v.ring,
+      borderRadius: size / 2,
+      borderWidth: 1.6,
+      height: size,
+      justifyContent: 'center' as const,
+      overflow: 'hidden' as const,
+      width: size,
+    }),
+    [size, v.glow, v.ring]
+  );
+
+  const gradientStyle = useMemo(
+    () => ({
+      alignItems: 'center' as const,
+      borderRadius: size / 2,
+      height: size,
+      justifyContent: 'center' as const,
+      overflow: 'hidden' as const,
+      position: 'absolute' as const,
+      width: size,
+    }),
+    [size]
+  );
+
+  const overlayStyle = useMemo(
+    () => ({
+      left: 0,
+      opacity: 0.94,
+      position: 'absolute' as const,
+      top: 0,
+    }),
+    []
+  );
+
+  const shineStyle = useMemo(
+    () => ({
+      backgroundColor: 'rgba(255, 255, 255, 0.96)',
+      borderRadius: size / 10,
+      height: size * 0.12,
+      left: size * 0.26,
+      opacity: 0.78,
+      position: 'absolute' as const,
+      top: size * 0.18,
+      width: size * 0.12,
+    }),
+    [size]
+  );
+
+  const coreStyle = useMemo(
+    () => ({
+      alignItems: 'center' as const,
+      justifyContent: 'center' as const,
+      borderRadius: coreSize / 2,
+      height: coreSize,
+      width: coreSize,
+      backgroundColor: v.core,
+    }),
+    [coreSize, v.core]
+  );
+
   return (
     <View
       testID={testID}
-      style={{
-        alignItems: 'center',
-        height: size,
-        justifyContent: 'center',
-        boxShadow: '0px 8px 22px v.glow / 0.82',
-        width: size,
-      }}
+      style={outerStyle}
     >
       <View
-        style={{
-          alignItems: 'center',
-          backgroundColor: v.glow,
-          borderColor: v.ring,
-          borderRadius: size / 2,
-          borderWidth: 1.6,
-          height: size,
-          justifyContent: 'center',
-          overflow: 'hidden',
-          width: size,
-        }}
+        style={ringStyle}
       >
         <LinearGradient
           colors={[v.innerStart, v.innerEnd]}
           end={{ x: 0.5, y: 1 }}
           start={{ x: 0.5, y: 0 }}
-          style={{
-            alignItems: 'center',
-            borderRadius: size / 2,
-            height: size,
-            justifyContent: 'center',
-            overflow: 'hidden',
-            position: 'absolute',
-            width: size,
-          }}
+          style={gradientStyle}
         />
         <GlassIconOrbHighlights size={size} />
         <View
           pointerEvents="none"
-          style={{
-            left: 0,
-            opacity: 0.94,
-            position: 'absolute',
-            top: 0,
-          }}
+          style={overlayStyle}
         >
           <LiquidGlassObject size={size} variant="orb" />
         </View>
         <View
           pointerEvents="none"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.96)',
-            borderRadius: size / 10,
-            height: size * 0.12,
-            left: size * 0.26,
-            opacity: 0.78,
-            position: 'absolute',
-            top: size * 0.18,
-            width: size * 0.12,
-          }}
+          style={shineStyle}
         />
         <View
-          style={{
-            alignItems: 'center', justifyContent: 'center',
-            borderRadius: coreSize / 2, height: coreSize, width: coreSize,
-            backgroundColor: v.core,
-          }}
+          style={coreStyle}
         >
           {children}
         </View>

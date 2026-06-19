@@ -33,11 +33,12 @@ export async function scheduleChallengeExpiryNotifications(
     throw error;
   }
 
-  for (const row of (data ?? []) as ChallengeRow[]) {
+  const rows = (data ?? []) as ChallengeRow[];
+  const reminderPromises = rows.map(async (row) => {
     const title = row.challenges?.title;
     const targetValue = row.challenges?.target_value;
     if (!title || !targetValue) {
-      continue;
+      return null;
     }
 
     const expiresAt = Date.parse(row.expires_at);
@@ -67,5 +68,8 @@ export async function scheduleChallengeExpiryNotifications(
     if (reminderError) {
       throw reminderError;
     }
-  }
+    return { userId, challengeId: row.challenge_id };
+  });
+
+  await Promise.all(reminderPromises.filter((p) => p !== null));
 }

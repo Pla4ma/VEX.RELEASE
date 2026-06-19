@@ -52,9 +52,10 @@ export const challengeDailyRefresh = task({
         .lt('expires_at', now.toISOString());
       if (expireError) throw expireError;
 
-      for (const userId of users) {
+      const userPromises = users.map(async (userId) => {
         try {
-          for (const item of weightedSample(3)) {
+          const items = weightedSample(3);
+          const challengePromises = items.map(async (item) => {
             const challengeId = challengeIdFor(input.seasonId, dateKey, userId, item.id);
             const { error: challengeError } = await supabase.from('challenges').upsert(
               {
@@ -76,7 +77,6 @@ export const challengeDailyRefresh = task({
               { onConflict: 'id' }
             );
             if (challengeError) throw challengeError;
-            challengesGenerated += 1;
 
             const { error: assignmentError } = await supabase.from('user_challenges').upsert(
               {
@@ -94,12 +94,26 @@ export const challengeDailyRefresh = task({
               { onConflict: 'user_id,challenge_id' }
             );
             if (assignmentError) throw assignmentError;
-            challengesAssigned += 1;
-          }
+
+            return { challengeId, userId };
+          });
+
+          const results = await Promise.all(challengePromises);
+          return { userId, results, errors: [] as Array<{ userId: string; error: string }> };
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
-          errors.push({ userId, error: message });
-          Sentry.captureException(error, { tags: { job: JOB_IDS.CHALLENGE_DAILY_REFRESH, userId } });
+          return { userId, results: [], errors: [{ userId, error: message }] };
+        }
+      });
+
+      const userResults = await Promise.all(userPromises);
+
+      for (const { results, errors: userErrors } of userResults) {
+        challengesGenerated += results.length;
+        challengesAssigned += results.length;
+        errors.push(...userErrors);
+        for (const { userId, error } of userErrors) {
+          Sentry.captureException(new Error(error), { tags: { job: JOB_IDS.CHALLENGE_DAILY_REFRESH, userId } });
         }
       }
 
@@ -116,13 +130,21 @@ export const challengeDailyRefresh = task({
 
       await sendPushNotifications(supabase, (streakRows ?? []).map((row) => (row as { user_id: string }).user_id));
 
-      for (const userId of users) {
+      const expiryPromises = users.map(async (userId) => {
         try {
           await scheduleChallengeExpiryNotifications(supabase, userId);
+          return { userId, error: null as string | null };
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err);
-          errors.push({ userId, error: `Challenge expiry scheduling failed: ${message}` });
-          Sentry.captureException(err, { tags: { job: JOB_IDS.CHALLENGE_DAILY_REFRESH, userId } });
+          return { userId, error: `Challenge expiry scheduling failed: ${message}` };
+        }
+      });
+
+      const expiryResults = await Promise.all(expiryPromises);
+      for (const { userId, error } of expiryResults) {
+        if (error) {
+          errors.push({ userId, error });
+          Sentry.captureException(new Error(error), { tags: { job: JOB_IDS.CHALLENGE_DAILY_REFRESH, userId } });
         }
       }
 

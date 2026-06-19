@@ -96,48 +96,67 @@ export const notificationBatchSend = task({
     io.logger.info(`Sending to ${userTokens.length} devices in ${batches} batches (throttle: ${throttleDelay}ms)`);
 
     // Process in batches
-    for (let i = 0; i < batches; i++) {
+    const batchPromises = Array.from({ length: batches }, async (_, i) => {
       const batch = userTokens.slice(i * batchSize, (i + 1) * batchSize);
 
-      await io.runTask(`send-batch-${i}`, async () => {
-        for (const userToken of batch) {
-          try {
-            const success = await sendPushNotification({
-              token: userToken.token,
-              platform: userToken.platform,
-              title,
-              body,
-              data,
-            });
+      return io.runTask(`send-batch-${i}`, async () => {
+        // Process batch with controlled concurrency
+        const concurrencyLimit = 5;
+        const results = { sent: 0, failed: 0, errors: [] as Array<{ userId: string; error: string }> };
 
-            if (success) {
-              results.sent++;
-            } else {
+        for (let j = 0; j < batch.length; j += concurrencyLimit) {
+          const chunk = batch.slice(j, j + concurrencyLimit);
+          await Promise.all(chunk.map(async (userToken) => {
+            try {
+              const success = await sendPushNotification({
+                token: userToken.token,
+                platform: userToken.platform,
+                title,
+                body,
+                data,
+              });
+
+              if (success) {
+                results.sent++;
+              } else {
+                results.failed++;
+                results.errors.push({
+                  userId: userToken.user_id,
+                  error: 'Push service returned failure',
+                });
+              }
+
+              // Throttle
+              if (throttleDelay > 0) {
+                await new Promise(resolve => setTimeout(resolve, throttleDelay));
+              }
+            } catch (err) {
               results.failed++;
-              results.errors.push({
-                userId: userToken.user_id,
-                error: 'Push service returned failure',
+              const error = err instanceof Error ? err.message : String(err);
+              results.errors.push({ userId: userToken.user_id, error });
+
+              Sentry.captureException(err, {
+                tags: { job: JOB_IDS.NOTIFICATION_BATCH_SEND, userId: userToken.user_id },
               });
             }
-
-            // Throttle
-            if (throttleDelay > 0) {
-              await new Promise(resolve => setTimeout(resolve, throttleDelay));
-            }
-
-          } catch (err) {
-            results.failed++;
-            const error = err instanceof Error ? err.message : String(err);
-            results.errors.push({ userId: userToken.user_id, error });
-
-            Sentry.captureException(err, {
-              tags: { job: JOB_IDS.NOTIFICATION_BATCH_SEND, userId: userToken.user_id },
-            });
-          }
+          }));
         }
-      });
 
-      // Progress logging
+        return results;
+      });
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+
+    // Aggregate results
+    for (const batchResult of batchResults) {
+      results.sent += batchResult.sent;
+      results.failed += batchResult.failed;
+      results.errors.push(...batchResult.errors);
+    }
+
+    // Progress logging
+    for (let i = 0; i < batches; i++) {
       const progress = ((i + 1) / batches * 100).toFixed(1);
       io.logger.info(`Batch ${i + 1}/${batches} complete (${progress}%) - Sent: ${results.sent}, Failed: ${results.failed}`);
     }

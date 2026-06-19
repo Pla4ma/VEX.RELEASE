@@ -86,7 +86,11 @@ class MMKV {
 // ---------------------------------------------------------------------------
 
 function useMMKVString(key, mmkv) {
-  const storage = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  const storageRef = React.useRef(null);
+  if (!storageRef.current) {
+    storageRef.current = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  }
+  const storage = storageRef.current;
   const [value, setValue] = React.useState(() => storage.getString(key));
 
   const setter = React.useCallback(
@@ -98,15 +102,18 @@ function useMMKVString(key, mmkv) {
       }
       setValue(v);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]
+    [key, storage]
   );
 
   return [value, setter];
 }
 
 function useMMKVNumber(key, mmkv) {
-  const storage = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  const storageRef = React.useRef(null);
+  if (!storageRef.current) {
+    storageRef.current = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  }
+  const storage = storageRef.current;
   const [value, setValue] = React.useState(() => storage.getNumber(key));
 
   const setter = React.useCallback(
@@ -118,15 +125,18 @@ function useMMKVNumber(key, mmkv) {
       }
       setValue(v);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]
+    [key, storage]
   );
 
   return [value, setter];
 }
 
 function useMMKVBoolean(key, mmkv) {
-  const storage = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  const storageRef = React.useRef(null);
+  if (!storageRef.current) {
+    storageRef.current = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  }
+  const storage = storageRef.current;
   const [value, setValue] = React.useState(() => storage.getBoolean(key));
 
   const setter = React.useCallback(
@@ -138,15 +148,18 @@ function useMMKVBoolean(key, mmkv) {
       }
       setValue(v);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]
+    [key, storage]
   );
 
   return [value, setter];
 }
 
 function useMMKVObject(key, mmkv) {
-  const storage = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  const storageRef = React.useRef(null);
+  if (!storageRef.current) {
+    storageRef.current = mmkv instanceof MMKV ? mmkv : new MMKV({ id: 'default' });
+  }
+  const storage = storageRef.current;
   const [value, setValue] = React.useState(() => {
     const raw = storage.getString(key);
     try {
@@ -165,8 +178,7 @@ function useMMKVObject(key, mmkv) {
       }
       setValue(v);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]
+    [key, storage]
   );
 
   return [value, setter];
