@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 
 interface BorderProps {
   color: string;
@@ -7,23 +7,25 @@ interface BorderProps {
   width: number;
 }
 
-    
+const borderStyle: ViewStyle = {
+  borderColor: '',
+  borderRadius: 0,
+  borderWidth: 0,
+  bottom: 0,
+  left: 0,
+  position: 'absolute',
+  right: 0,
+  top: 0,
+};
+
 export function GlassBorder({ color, radius, width }: BorderProps): React.ReactNode {
-  return (
-    <View
-      pointerEvents="none"
-      style={{
-        borderColor: color,
-        borderRadius: radius,
-        borderWidth: width,
-        bottom: 0,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-      }}
-    />
-  );
+  const style: ViewStyle = {
+    ...borderStyle,
+    borderColor: color,
+    borderRadius: radius,
+    borderWidth: width,
+  };
+  return <View pointerEvents="none" style={style} />;
 }
 
 interface OuterBorderProps {
@@ -32,10 +34,5 @@ interface OuterBorderProps {
 }
 
 export function GlassOuterBorder({ color, radius }: OuterBorderProps): React.ReactNode {
-  return (
-    <View
-      pointerEvents="none"
-      style={{}}
-    />
-  );
+  return <View pointerEvents="none" style={{}} />;
 }

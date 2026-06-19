@@ -31,6 +31,20 @@ interface GlassSurfaceProps {
   testID?: string;
 }
 
+const containerStyle: ViewStyle = {
+  borderRadius: 0,
+  shadowColor: '',
+  shadowOffset: { width: 0, height: 0 },
+  shadowOpacity: 0,
+  shadowRadius: 0,
+};
+
+const innerContainerStyle: ViewStyle = {
+  backgroundColor: '',
+  borderRadius: 0,
+  overflow: 'hidden',
+};
+
 export function GlassSurface({
   children,
   variant = 'default',
@@ -42,27 +56,31 @@ export function GlassSurface({
   testID,
 }: GlassSurfaceProps): React.ReactNode {
   const v = GLASS_SURFACE_VARIANTS[variant];
+
+  const wrapperStyle: ViewStyle = {
+    ...containerStyle,
+    borderRadius: radius,
+    shadowColor: v.shadowColor,
+    shadowOffset: v.shadowOffset,
+    shadowOpacity: v.shadowOpacity,
+    shadowRadius: v.shadowRadius,
+  };
+
+  const innerStyle: ViewStyle = {
+    ...innerContainerStyle,
+    backgroundColor: v.fill,
+    borderRadius: radius,
+  };
+
   return (
-    <View
-      testID={testID}
-      style={[
-        {
-          borderRadius: radius,
-          shadowColor: v.shadowColor,
-          shadowOffset: v.shadowOffset,
-          shadowOpacity: v.shadowOpacity,
-          shadowRadius: v.shadowRadius,
-        },
-        style,
-      ]}
-    >
+    <View testID={testID} style={[wrapperStyle, style]}>
       {v.glowColor ? (
         <GlassGlow color={v.glowColor} opacity={v.glowOpacity ?? 0.3} radius={radius + 8} />
       ) : null}
 
       {bordered ? <GlassOuterBorder color={v.border} radius={radius} /> : null}
 
-      <View style={{ backgroundColor: v.fill, borderRadius: radius, overflow: 'hidden' }}>
+      <View style={innerStyle}>
         <GlassBlurLayer intensity={variant === 'hero' || variant === 'premium' ? 92 : 78} radius={radius} />
         <TopHighlight color={v.highlightTop} radius={radius} stop={v.highlightTopStop} />
         <GlassTextureOverlay intensity={variant === 'hero' || variant === 'premium' ? 'hero' : 'normal'} radius={radius} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, type ViewStyle } from 'react-native';
 import Svg, {
   Circle,
   Defs,
@@ -9,13 +9,19 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 
+const svgStyle: ViewStyle = {
+  left: 0,
+  position: 'absolute',
+  top: 0,
+};
+
 export function LiquidGlassBackdrop(): React.ReactNode {
   const { width, height } = useWindowDimensions();
   return (
     <Svg
       height={height}
       pointerEvents="none"
-      style={{ left: 0, position: 'absolute', top: 0 }}
+      style={svgStyle}
       viewBox={`0 0 ${width} ${height}`}
       width={width}
     >

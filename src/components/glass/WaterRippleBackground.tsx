@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, {
   Circle,
@@ -14,38 +14,45 @@ import Svg, {
 } from 'react-native-svg';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
+const containerStyle: ViewStyle = {
+  position: 'absolute',
+  left: 0,
+  top: 0,
+};
+
+const svgStyle: ViewStyle = {
+  opacity: 0.85,
+  position: 'absolute',
+};
+
 export function WaterRippleBackground(): React.ReactNode {
   const { width: SCREEN_W, height: SCREEN_H } = useWindowDimensions();
+
+  const outerStyle: ViewStyle = {
+    ...containerStyle,
+    height: SCREEN_H,
+    width: SCREEN_W,
+  };
+
+  const gradientStyle: ViewStyle = {
+    ...containerStyle,
+    height: SCREEN_H,
+    width: SCREEN_W,
+  };
+
   return (
-    <View
-      pointerEvents="none"
-      style={{
-        height: SCREEN_H,
-        left: 0,
-        position: 'absolute',
-        top: 0,
-        width: SCREEN_W,
-      }}
-    >
-      {/* Base atmospheric gradient */}
+    <View pointerEvents="none" style={outerStyle}>
       <LinearGradient
         colors={[vexLightGlass.background.pageTop, vexLightGlass.background.pageMid, 'rgba(132, 228, 229, 0.16)', 'rgba(95, 230, 197, 0.16)']}
         end={{ x: 0.5, y: 1 }}
         locations={[0, 0.4, 0.75, 1]}
         start={{ x: 0.5, y: 0 }}
-        style={{
-          height: SCREEN_H,
-          left: 0,
-          position: 'absolute',
-          top: 0,
-          width: SCREEN_W,
-        }}
+        style={gradientStyle}
       />
 
-      {/* Water ripple texture overlay */}
       <Svg
         height={SCREEN_H}
-        style={{ opacity: 0.85, position: 'absolute' }}
+        style={svgStyle}
         width={SCREEN_W}
       >
         <Defs>
@@ -100,28 +107,23 @@ export function WaterRippleBackground(): React.ReactNode {
         </Defs>
 
         <G>
-          {/* Ripple pattern fill */}
           <Rect fill="url(#ripplePattern)" height={SCREEN_H} width={SCREEN_W} />
 
-          {/* Light beam from top-left */}
           <Path
             d={`M 0 0 L ${SCREEN_W * 0.25} 0 L ${SCREEN_W * 0.15} ${SCREEN_H} L 0 ${SCREEN_H} Z`}
             fill="url(#lightBeam1)"
             opacity={0.65}
           />
 
-          {/* Light beam from top-right */}
           <Path
             d={`M ${SCREEN_W * 0.75} 0 L ${SCREEN_W} 0 L ${SCREEN_W} ${SCREEN_H} L ${SCREEN_W * 0.85} ${SCREEN_H} Z`}
             fill="url(#lightBeam2)"
             opacity={0.65}
           />
 
-          {/* Soft glow areas */}
           <Ellipse cx={SCREEN_W * 0.3} cy={SCREEN_H * 0.6} fill="url(#softGlow1)" rx={SCREEN_W * 0.25} ry={SCREEN_H * 0.2} />
           <Ellipse cx={SCREEN_W * 0.7} cy={SCREEN_H * 0.75} fill="url(#softGlow2)" rx={SCREEN_W * 0.2} ry={SCREEN_H * 0.15} />
 
-          {/* Floating tiny bubbles */}
           <Circle cx={SCREEN_W * 0.15} cy={SCREEN_H * 0.18} fill="rgba(255, 255, 255, 0.25)" r={3} />
           <Circle cx={SCREEN_W * 0.72} cy={SCREEN_H * 0.28} fill="rgba(132, 228, 229, 0.18)" r={2.5} />
           <Circle cx={SCREEN_W * 0.45} cy={SCREEN_H * 0.08} fill="rgba(255, 255, 255, 0.2)" r={4} />
