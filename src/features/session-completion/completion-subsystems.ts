@@ -24,8 +24,8 @@ export async function applyCompletionSubsystems(input: {
   await runSubsystem('focus-identity', degradedSystems, () =>
     updateFocusScoreFromSessionCompletion(input.ledger.userId, {
       grade: input.ledger.grade,
+      quality: input.ledger.qualityScore,
       sessionId: input.ledger.sessionId,
-      focusScoreDelta: input.ledger.focusScoreDelta,
     }),
   );
 

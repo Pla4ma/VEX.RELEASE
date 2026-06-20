@@ -1,5 +1,5 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { generateMessage } from '../../services/message-generator';
+import { generateMessage } from '../service/message-generator';
 import * as repository from '../../repository';
 import { mockUserId } from './helpers';
 

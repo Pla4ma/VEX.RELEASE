@@ -7,7 +7,11 @@ export type DeepLinkPath =
   | 'settings'
   | 'study'
   | 'coach'
-  | 'rescue';
+  | 'rescue'
+  | 'invite'
+  | 'duels'
+  | 'squad'
+  | 'shop';
 
 export interface DeepLink {
   path: DeepLinkPath;
@@ -36,6 +40,10 @@ export const VALID_DEEP_LINK_PATHS: DeepLinkPath[] = [
   'study',
   'coach',
   'rescue',
+  'invite',
+  'duels',
+  'squad',
+  'shop',
 ];
 
 export interface DeepLinkHandlers {

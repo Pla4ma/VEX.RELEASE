@@ -43,7 +43,12 @@ export function deepLinkToNavigationParams(
         },
       };
     case 'boss':
-      return { screen: 'Boss' as keyof ExtendedRootStackParams };
+    case 'duels':
+    case 'squad':
+    case 'invite':
+    case 'shop':
+    case 'coach':
+      return { screen: 'Main' as keyof ExtendedRootStackParams };
     case 'profile':
       return {
         screen: 'Main',
@@ -59,8 +64,6 @@ export function deepLinkToNavigationParams(
           params: { presetMode: 'STUDY', source: 'content-study' },
         },
       };
-    case 'coach':
-      return { screen: 'AICoach' as keyof ExtendedRootStackParams };
     case 'rescue':
       return {
         screen: 'SessionStack',

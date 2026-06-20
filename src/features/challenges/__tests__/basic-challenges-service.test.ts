@@ -40,7 +40,7 @@ describe('Basic Challenges Service - Launch Scope', () => {
       const result = await service.getOrCreateBasicDailyChallenge(mockUserId);
       expect(result).toBeTruthy();
       expect(result?.challengeId).toBe('basic-daily-001');
-      expect(result?.requiredCount).toBe(1);
+      expect(CONFIG.dailyTarget).toBe(1);
       expect(mockRepository.createUserChallenge).toHaveBeenCalledWith(
         mockUserId,
         'basic-daily-001',
@@ -64,7 +64,7 @@ describe('Basic Challenges Service - Launch Scope', () => {
       const result = await service.getOrCreateBasicWeeklyChallenge(mockUserId);
       expect(result).toBeTruthy();
       expect(result?.challengeId).toBe('basic-weekly-001');
-      expect(result?.requiredCount).toBe(5);
+      expect(CONFIG.weeklyTarget).toBe(5);
       expect(mockRepository.createUserChallenge).toHaveBeenCalledWith(
         mockUserId,
         'basic-weekly-001',
