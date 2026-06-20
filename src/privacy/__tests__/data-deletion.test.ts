@@ -17,7 +17,13 @@ jest.mock('react-native-mmkv', () => ({
     set: (key: string, value: string) => {
       mockStore.set(key, value);
     },
+    setItemSync: (key: string, value: string) => {
+      mockStore.set(key, value);
+    },
     delete: (key: string) => {
+      mockStore.delete(key);
+    },
+    removeItemSync: (key: string) => {
       mockStore.delete(key);
     },
     contains: (key: string) => mockStore.has(key),
@@ -54,10 +60,17 @@ jest.mock('../../persistence/MMKVStorageAdapter', () => {
         const val = mockStore.get(key);
         return val ?? null;
       },
+      getItemSync: (key: string) => mockStore.get(key) ?? null,
       setItem: (key: string, value: string) => {
         mockStore.set(key, value);
       },
+      setItemSync: (key: string, value: string) => {
+        mockStore.set(key, value);
+      },
       removeItem: (key: string) => {
+        mockStore.delete(key);
+      },
+      removeItemSync: (key: string) => {
         mockStore.delete(key);
       },
     })),
