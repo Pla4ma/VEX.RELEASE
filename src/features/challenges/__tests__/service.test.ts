@@ -4,9 +4,7 @@ import * as repository from '../repository';
 import * as queries from '../queries';
 import { eventBus } from '../../../events/EventBus';
 jest.mock('../repository');
-jest.mock('../queries', () => ({
-  getCompletedChallenges: jest.fn(),
-}));
+jest.mock('../queries', () => ({ getCompletedChallenges: jest.fn() }));
 jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('../../../rewards/RewardService', () => ({
   getRewardService: jest.fn(() => ({
@@ -121,7 +119,6 @@ describe('Challenges Service', () => {
       expect(result).toBeNull();
     });
   });
-
   describe('checkChallengeProgress', () => {
     it('should check progress for active challenges', async () => {
       mockedRepository.fetchUserChallenge.mockResolvedValue({
