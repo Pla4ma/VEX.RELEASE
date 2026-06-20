@@ -73,8 +73,8 @@ describe('revenuecat-helpers', () => {
     it('maps available packages', () => {
       const offering = createMockOffering({
         availablePackages: [
-          createMockPackage('MONTHLY', { productId: 'prod-monthly' }),
-          createMockPackage('ANNUAL', { productId: 'prod-annual', price: 79.99, priceString: '$79.99' }),
+          createMockPackage('MONTHLY', { identifier: 'prod-monthly' }),
+          createMockPackage('ANNUAL', { identifier: 'prod-annual', price: 79.99, priceString: '$79.99' }),
         ],
       });
       const result = mapOfferingToDisplayInfo(offering);
@@ -86,8 +86,8 @@ describe('revenuecat-helpers', () => {
 
     it('maps named package slots', () => {
       const offering = createMockOffering({
-        annual: createMockPackage('ANNUAL', { productId: 'prod-annual' }),
-        lifetime: createMockPackage('LIFETIME', { productId: 'prod-lifetime', price: 299.99 }),
+        annual: createMockPackage('ANNUAL', { identifier: 'prod-annual' }),
+        lifetime: createMockPackage('LIFETIME', { identifier: 'prod-lifetime', price: 299.99 }),
       });
       const result = mapOfferingToDisplayInfo(offering);
       expect(result.annual).not.toBeNull();
