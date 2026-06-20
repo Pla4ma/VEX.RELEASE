@@ -7,7 +7,7 @@ import {
 } from './offline-sync-service.fixtures';
 import {
   SessionCompletionRepositoryError,
-  createCompletionLedger,
+  persistCompletionLedger,
   updateCompletionSyncStatus,
 } from '../repository';
 import {
@@ -26,7 +26,7 @@ jest.mock('../repository', () => {
     jest.requireActual<typeof import('../repository')>('../repository');
   return {
     ...actual,
-    createCompletionLedger: jest.fn(),
+    persistCompletionLedger: jest.fn(),
     updateCompletionSyncStatus: jest.fn(),
   };
 });
@@ -72,7 +72,7 @@ jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   }),
 }));
 
-const createLedgerMock = jest.mocked(createCompletionLedger);
+const persistLedgerMock = jest.mocked(persistCompletionLedger);
 const updateSyncMock = jest.mocked(updateCompletionSyncStatus);
 const enqueueMock = jest.mocked(enqueue);
 const getNetInfoAdapterMock = jest.mocked(getNetInfoAdapter);
@@ -127,7 +127,7 @@ describe('SessionCompletionOfflineSyncService', () => {
   it('replays queued completions when connectivity returns', async () => {
     const payload = ledger();
     enqueueMock.mockReturnValue(queueEntry(payload));
-    createLedgerMock.mockResolvedValue(payload);
+    persistLedgerMock.mockResolvedValue(payload);
     updateSyncMock.mockResolvedValue(undefined);
     const service = new SessionCompletionOfflineSyncService();
     await service.queueSessionCompletion(payload);
@@ -139,7 +139,7 @@ describe('SessionCompletionOfflineSyncService', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(createLedgerMock).toHaveBeenCalledWith(payload);
+    expect(persistLedgerMock).toHaveBeenCalledWith(payload);
     expect(updateSyncMock).toHaveBeenCalledWith(payload.ledgerId, 'synced');
     expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(0);
     service.cleanup();
@@ -147,7 +147,7 @@ describe('SessionCompletionOfflineSyncService', () => {
 
   it('treats duplicate ledger replay as idempotent success', async () => {
     const payload = ledger();
-    createLedgerMock.mockRejectedValue(
+    persistLedgerMock.mockRejectedValue(
       new SessionCompletionRepositoryError('create', { code: '23505' }),
     );
     networkState.isConnected = true;
