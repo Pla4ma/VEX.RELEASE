@@ -21,7 +21,7 @@ export class SessionCompletionRepositoryError extends Error {
 
   constructor(operation: string, cause: unknown) {
     super(
-      `Session completion repository failed during ${operation}: ${cause instanceof Error ? cause.message : String(cause)}`,
+      `Session completion repository failed during ${operation}:${cause instanceof Error ? cause.message : String(cause)}`,
     );
     this.name = 'SessionCompletionRepositoryError';
     this.cause = cause;
@@ -87,7 +87,11 @@ export async function persistCompletionLedger(
     throw new SessionCompletionRepositoryError('create', 'invalid-response');
   }
 
-  return mapRowToCompletionLedger(data);
+  try {
+    return mapRowToCompletionLedger(data);
+  } catch (e) {
+    throw new SessionCompletionRepositoryError('create', e);
+  }
 }
 
 export async function getCompletionLedgerByIdempotencyKey(

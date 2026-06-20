@@ -31,8 +31,10 @@ export function buildCompletionPersonalization(
   const display = displayFor(input.lane, situation);
   return CompletionPersonalizationSchema.parse({
     ...display,
+    displayBody: display.body,
     lane: input.lane,
     memoryCandidates: buildMemoryCandidates(input, situation, input.deletedMemoryIds),
+    nextActionLabel: situation === 'clean' ? 'Start next session' : 'Continue building',
     reflectionQuestion: REFLECTIONS[input.lane][situation],
     unlockDecision: unlockFor(input.lane, input.hiddenFeatureKeys),
   });

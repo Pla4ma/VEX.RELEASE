@@ -157,6 +157,7 @@ export async function orchestrateSessionCompletion(
     debug.info('Session completion orchestrated for %s', parsed.sessionId);
     invalidateCompletionQueries(parsed.userId);
     markKeyProcessed(key);
+    setCompletionSyncState(finalLedger.ledgerId, subsystemResult.degradedSystems, false);
     return storyViewModel;
   } catch (error) {
     releaseKeyProcessing(key);

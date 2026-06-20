@@ -1,5 +1,5 @@
 import {
-  createCompletionLedger as persistCompletionLedger,
+  persistCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
   getCompletionLedgerBySessionId,
   hasSessionBeenCompleted,

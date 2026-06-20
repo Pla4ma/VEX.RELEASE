@@ -78,7 +78,8 @@ export function buildMemoryCandidates(
   if (deletedMemoryIds?.includes(key)) {
     return [];
   }
-  const baseText = `Lane ${input.lane} finished a ${situation} session.`;
+  const sessionIdRef = `s:${input.summary.sessionId}`;
+  const baseText = `Lane ${input.lane} finished a ${situation} session. (${sessionIdRef})`;
   const text = input.reflectionAnswer
     ? `${baseText} ${input.reflectionAnswer}`
     : baseText;

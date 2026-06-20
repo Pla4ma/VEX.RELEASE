@@ -6,6 +6,16 @@ import {
 import { CompletionLedgerSchema } from '../schemas';
 import { createSessionSummary, SESSION_ID, USER_ID } from './ledger-test-utils';
 
+const COMPLETED_AT = 1710001500000;
+const DEFAULT_TIMEZONE = 'UTC';
+
+function createValidSummary(overrides: Partial<ReturnType<typeof createSessionSummary>> = {}) {
+  return createSessionSummary({
+    finalScore: 85, // Must be <= 100 for gradeScore validation
+    ...overrides,
+  });
+}
+
 describe('buildCompletionLedger core contract', () => {
   it('ledger schema rejects missing required fields', () => {
     expect(() =>
@@ -19,8 +29,11 @@ describe('buildCompletionLedger core contract', () => {
 
   it('creates a valid ledger for a normal completed session', () => {
     const ledger = buildCompletionLedger({
+      completedAt: COMPLETED_AT,
+      offlineSyncStatus: 'synced',
       sessionId: SESSION_ID,
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
 
@@ -45,9 +58,11 @@ describe('buildCompletionLedger core contract', () => {
 
   it('creates a valid pending ledger for offline mode', () => {
     const ledger = buildCompletionLedger({
+      completedAt: COMPLETED_AT,
       offlineSyncStatus: 'pending_sync',
       sessionId: '550e8400-e29b-41d4-a716-446655440001',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
 
@@ -57,33 +72,44 @@ describe('buildCompletionLedger core contract', () => {
 
   it('uses provided idempotency key and generates session-bound keys', () => {
     const custom = buildCompletionLedger({
+      completedAt: COMPLETED_AT,
       idempotencyKey: 'custom-key-123',
+      offlineSyncStatus: 'synced',
       sessionId: '550e8400-e29b-41d4-a716-446655440002',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
     const first = buildCompletionLedger({
       completedAt: 1000000,
+      offlineSyncStatus: 'synced',
       sessionId: '550e8400-e29b-41d4-a716-446655440003',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
     const second = buildCompletionLedger({
       completedAt: 2000000,
+      offlineSyncStatus: 'synced',
       sessionId: '550e8400-e29b-41d4-a716-446655440003',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
     const different = buildCompletionLedger({
+      completedAt: COMPLETED_AT,
+      offlineSyncStatus: 'synced',
       sessionId: '550e8400-e29b-41d4-a716-446655440004',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
+      timezone: DEFAULT_TIMEZONE,
       userId: USER_ID,
     });
 
     expect(custom.idempotencyKey).toBe('custom-key-123');
     // Same sessionId produces same idempotency key regardless of completedAt
     expect(first.idempotencyKey).toBe(second.idempotencyKey);
-    expect(first.idempotencyKey).toContain(':completed');
+    expect(first.idempotencyKey).toContain(USER_ID);
+    expect(first.idempotencyKey).toContain('550e8400-e29b-41d4-a716-446655440003');
     // Different sessionId produces different key
     expect(first.idempotencyKey).not.toBe(different.idempotencyKey);
   });
@@ -96,11 +122,13 @@ describe('buildCompletionLedger core contract', () => {
     };
     const ledger = buildCompletionLedger({
       companionReactionId: 'reaction-happy-123',
+      completedAt: COMPLETED_AT,
       dailyMissionResult: missionResult,
       degradedSystems: ['rewards', 'focus-identity'],
+      offlineSyncStatus: 'synced',
       rewardIds: ['reward-1', 'reward-2'],
       sessionId: '550e8400-e29b-41d4-a716-446655440004',
-      summary: createSessionSummary(),
+      summary: createValidSummary(),
       timezone: 'America/New_York',
       userId: USER_ID,
     });
