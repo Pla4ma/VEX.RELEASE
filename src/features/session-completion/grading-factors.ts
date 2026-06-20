@@ -27,6 +27,14 @@ export function buildFactors(input: SessionGradingInput): SessionGradeFactor[] {
   const pausePenalty = input.pauseCount * 12;
   const interruptionPenalty = input.interruptionCount * 14;
   const backgroundPenalty = Math.min(30, input.backgroundTimeSeconds / 12);
+  const isRecoverySession = input.isRecoverySession;
+  const recoveryRatio =
+    input.targetDurationSeconds > 0
+      ? input.completedDurationSeconds / input.targetDurationSeconds
+      : 0;
+  const recoveryScore = isRecoverySession
+    ? Math.min(100, Math.max(0, recoveryRatio * 100 + (recoveryRatio >= 0.65 ? 15 : 0)))
+    : 88;
 
   return [
     factor(
@@ -58,7 +66,22 @@ export function buildFactors(input: SessionGradingInput): SessionGradeFactor[] {
       6,
       'Commitment pressure',
     ),
-    factor('sessionMode', 'Mode fit', 88, 4, 'Mode matched session'),
+    factor(
+      'sessionMode',
+      'Mode fit',
+      88,
+      4,
+      'Mode matched session',
+    ),
+    factor(
+      'recoverySession',
+      'Recovery',
+      recoveryScore,
+      isRecoverySession ? 8 : 0,
+      isRecoverySession
+        ? 'Recovery session judged against recovery goals.'
+        : 'Not a recovery session',
+    ),
     factor(
       'backgroundTime',
       'Background time',

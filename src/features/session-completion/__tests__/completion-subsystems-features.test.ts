@@ -107,10 +107,9 @@ describe('applyCompletionSubsystems', () => {
       'streak',
       'progression',
       'rewards',
-      'companion',
     ]);
-    expect(result.ledger.companionReactionId).toBe('companion-session-complete');
-    expect(result.ledger.dailyMissionResult.status).toBe('progressed');
-    expect(mockCompleteSession).toHaveBeenCalled();
+    expect(result.ledger.companionReactionId).toBeNull();
+    expect(result.ledger.dailyMissionResult.status).toBe('unchanged');
+    expect(mockCompleteSession).not.toHaveBeenCalled();
   });
 });

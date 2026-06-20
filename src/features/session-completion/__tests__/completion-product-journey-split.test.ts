@@ -147,6 +147,18 @@ describe('completion product journey', () => {
       const summary = createSessionSummary();
 
       const result = await applyCompletionSubsystems({ ledger, summary });
+      
+      // DEBUG
+      console.log('DEBUG degradedSystems:', result.degradedSystems);
+      console.log('DEBUG focus-identity mock calls:', require('../../focus-identity/update-focus-score.helper').updateFocusScoreFromSessionCompletion.mock.calls.length);
+      console.log('DEBUG streak mock calls:', require('../../../streaks/StreakService').getStreakService().recordSession.mock.calls.length);
+      
+      // Check what error was captured by Sentry
+      const sentry = require('@sentry/react-native');
+      console.log('DEBUG sentry captureException calls:', sentry.captureException.mock.calls.length);
+      sentry.captureException.mock.calls.forEach((call, i) => {
+        console.log(`  Call ${i}:`, call[0]?.message, call[1]?.tags);
+      });
 
       expect(result.degradedSystems).toEqual(
         expect.arrayContaining(['focus-identity', 'streak']),

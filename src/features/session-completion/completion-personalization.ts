@@ -32,7 +32,7 @@ export function buildCompletionPersonalization(
   return CompletionPersonalizationSchema.parse({
     ...display,
     lane: input.lane,
-    memoryCandidates: buildMemoryCandidates(input, situation),
+    memoryCandidates: buildMemoryCandidates(input, situation, input.deletedMemoryIds),
     reflectionQuestion: REFLECTIONS[input.lane][situation],
     unlockDecision: unlockFor(input.lane, input.hiddenFeatureKeys),
   });
