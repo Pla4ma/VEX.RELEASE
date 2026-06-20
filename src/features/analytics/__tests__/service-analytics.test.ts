@@ -1,9 +1,9 @@
 import {
   getAnalyticsData,
 } from '../service';
-import * as repository from '../repository';
+import * as timeSeriesRepository from '../repository/time-series';
 
-jest.mock('../repository');
+jest.mock('../repository/time-series');
 
 jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('@sentry/react-native', () => ({
@@ -34,7 +34,7 @@ describe('AnalyticsService', () => {
           changePercent: 0,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(
+      (timeSeriesRepository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(
         mockTimeSeriesData,
       );
       const result = await getAnalyticsData({
@@ -44,7 +44,7 @@ describe('AnalyticsService', () => {
         granularity: 'day',
       });
       expect(result).toHaveLength(2);
-      expect(repository.fetchTimeSeriesData).toHaveBeenCalledTimes(2);
+      expect(timeSeriesRepository.fetchTimeSeriesData).toHaveBeenCalledTimes(2);
     });
 
     it('should apply dimensions and filters', async () => {
@@ -61,7 +61,7 @@ describe('AnalyticsService', () => {
           changePercent: 0,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(
+      (timeSeriesRepository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(
         mockTimeSeriesData,
       );
       await getAnalyticsData({
@@ -72,7 +72,7 @@ describe('AnalyticsService', () => {
         dimensions: ['day_of_week'],
         filters: [{ dimension: 'day_of_week', operator: 'eq', value: '1' }],
       });
-      expect(repository.fetchTimeSeriesData).toHaveBeenCalledWith(
+      expect(timeSeriesRepository.fetchTimeSeriesData).toHaveBeenCalledWith(
         '550e8400-e29b-41d4-a716-446655440000',
         'sessions_completed',
         'last_7_days',
