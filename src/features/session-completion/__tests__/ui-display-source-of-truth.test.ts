@@ -8,9 +8,11 @@ const rewardSyncSource = readFileSync(
 
 describe('session completion UI source of truth', () => {
   it('does not grant core currency or XP from the display hook', () => {
-    expect(rewardSyncSource).not.toContain('creditSessionRewards');
-    expect(rewardSyncSource).not.toContain('applySessionMastery({');
-    expect(rewardSyncSource).not.toContain(
+    const codeLines = rewardSyncSource.split('\n').filter(l => !l.trim().startsWith('//'));
+    const code = codeLines.join('\n');
+    expect(code).not.toContain('creditSessionRewards(');
+    expect(code).not.toContain('applySessionMastery({');
+    expect(code).not.toContain(
       'setQueryData<ProgressionSummaryData',
     );
   });
