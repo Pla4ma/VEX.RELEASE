@@ -8,6 +8,59 @@ import {
   ThrowClientError,
 } from './ErrorBoundary.test.helpers';
 
+// Mock theme - ErrorFallback uses useTheme() which needs a ThemeProvider context
+jest.mock('../../theme', () => ({
+  useTheme: () => ({
+    theme: {
+      name: 'vex-dark',
+      mode: 'dark',
+      colors: {
+        semantic: {
+          vexCyan: '#86D6B5',
+          vexCyanSoft: 'rgba(134,214,181,0.16)',
+          vexCyanGlow: 'rgba(134,214,181,0.28)',
+          warning: '#E2A63D',
+        },
+        text: { primary: '#fff', secondary: '#aaa', tertiary: '#888' },
+      },
+    },
+    isDark: true,
+    mode: 'dark',
+    setMode: () => undefined,
+    toggleMode: () => undefined,
+    isSystem: false,
+  }),
+}));
+
+// Mock Skeleton used by ErrorFallback
+jest.mock('../../components/ui/Skeleton', () => ({
+  Skeleton: () => null,
+}));
+
+// Mock Button used by ErrorFallback
+jest.mock('../../components', () => {
+  const ReactMock = require('react');
+  const { TouchableOpacity } = require('react-native');
+  return {
+    Button: ({ children, onPress, accessibilityLabel }: any) =>
+      ReactMock.createElement(
+        TouchableOpacity,
+        { onPress, accessibilityLabel, testID: accessibilityLabel },
+        children,
+      ),
+  };
+});
+
+// Mock Icon used by ErrorFallback
+jest.mock('../../icons', () => ({
+  Icon: () => null,
+}));
+
+// Mock sentry captureException used by ErrorFallback
+jest.mock('../../config/sentry', () => ({
+  captureException: jest.fn(),
+}));
+
 describe('ErrorBoundary', () => {
   beforeEach(() => {
     jest.clearAllMocks();
