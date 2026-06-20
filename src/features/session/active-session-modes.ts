@@ -1,5 +1,6 @@
 import type { ActiveSessionConfig } from './types';
 import { SessionMode } from '../../session/modes';
+import sessionLessModes from './session-less-modes';
 export { MODE_SPECIFIC_UI, getModeSpecificUI } from './active-session-ui';
 
 export const ACTIVE_SESSION_CONFIG: Partial<
@@ -122,58 +123,7 @@ export const ACTIVE_SESSION_CONFIG: Partial<
     coachEnabled: false,
     coachCooldownSeconds: 0,
   },
-  [SessionMode.PLAN]: {
-    mode: SessionMode.PLAN,
-    allowPauses: false,
-    maxPauses: 0,
-    minFocusSecondsBeforePause: 0,
-    pauseCooldownSeconds: 0,
-    allowBackground: true,
-    maxBackgroundSeconds: 0,
-    strictMode: false,
-    companionEnabled: false,
-    coachEnabled: false,
-    coachCooldownSeconds: 0,
-  },
-  [SessionMode.REVIEW]: {
-    mode: SessionMode.REVIEW,
-    allowPauses: false,
-    maxPauses: 0,
-    minFocusSecondsBeforePause: 0,
-    pauseCooldownSeconds: 0,
-    allowBackground: true,
-    maxBackgroundSeconds: 0,
-    strictMode: false,
-    companionEnabled: false,
-    coachEnabled: false,
-    coachCooldownSeconds: 0,
-  },
-  [SessionMode.CAPTURE]: {
-    mode: SessionMode.CAPTURE,
-    allowPauses: false,
-    maxPauses: 0,
-    minFocusSecondsBeforePause: 0,
-    pauseCooldownSeconds: 0,
-    allowBackground: true,
-    maxBackgroundSeconds: 0,
-    strictMode: false,
-    companionEnabled: false,
-    coachEnabled: false,
-    coachCooldownSeconds: 0,
-  },
-  [SessionMode.HABIT]: {
-    mode: SessionMode.HABIT,
-    allowPauses: false,
-    maxPauses: 0,
-    minFocusSecondsBeforePause: 0,
-    pauseCooldownSeconds: 0,
-    allowBackground: true,
-    maxBackgroundSeconds: 0,
-    strictMode: false,
-    companionEnabled: true,
-    coachEnabled: false,
-    coachCooldownSeconds: 0,
-  },
+  ...sessionLessModes,
 };
 
 export function getActiveSessionConfig(
