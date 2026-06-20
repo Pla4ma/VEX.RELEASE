@@ -2,7 +2,7 @@ import { SyncQueueManager } from '../persistence';
 import type { SyncQueueItem } from '../types';
 import { mockStorage } from './persistence.test.helpers';
 
-jest.mock('../../../persistence', () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: () => mockStorage,
 }));
 
