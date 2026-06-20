@@ -4,7 +4,7 @@ import {
   transitionState,
   checkAutoTransitions,
   StateTransitionError,
-} from '../../services/coach-state-machine';
+} from '../../service/coach-state-machine';
 import * as repository from '../../repository';
 import {
   createMockCoachState,
@@ -56,6 +56,10 @@ describe('Coach State Machine', () => {
         confidenceLevel: 'HIGH',
         coldStart: false,
         dataPoints: 50,
+        signals: [
+          { signalType: 'STREAK_MAINTENANCE_RATE', value: 0.4, source: 'test' },
+          { signalType: 'CONSISTENCY_SCORE', value: 0.5, source: 'test' },
+        ],
       });
       const state = await determineOptimalState(mockUserId, profile);
       expect(state).toBe('STREAK_AT_RISK');
