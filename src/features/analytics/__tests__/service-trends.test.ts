@@ -2,9 +2,8 @@ import {
   calculateTrend,
   exportAnalyticsData,
 } from '../service';
-import * as repository from '../repository';
 
-jest.mock('../repository');
+jest.mock('../repository/time-series');
 jest.mock('../repository/storage', () => ({
   uploadExportData: jest
     .fn()
@@ -17,6 +16,13 @@ jest.mock('../repository/storage', () => ({
     }),
   deleteExportData: jest.fn().mockResolvedValue(undefined),
 }));
+jest.mock('../repository/export-jobs');
+const mockTimeSeries = jest.requireMock('../repository/time-series') as {
+  fetchTimeSeriesData: jest.Mock;
+};
+const mockExportJobs = jest.requireMock('../repository/export-jobs') as {
+  createExportJob: jest.Mock;
+};
 jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
@@ -49,7 +55,7 @@ describe('AnalyticsService', () => {
           changePercent: 80,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(mockData);
+      mockTimeSeries.fetchTimeSeriesData.mockResolvedValue(mockData);
       const result = await calculateTrend(
         'user-123',
         'xp_earned',
@@ -81,7 +87,7 @@ describe('AnalyticsService', () => {
           changePercent: -80,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(mockData);
+      mockTimeSeries.fetchTimeSeriesData.mockResolvedValue(mockData);
       const result = await calculateTrend(
         'user-123',
         'sessions_completed',
@@ -110,7 +116,7 @@ describe('AnalyticsService', () => {
           changePercent: 0,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(mockData);
+      mockTimeSeries.fetchTimeSeriesData.mockResolvedValue(mockData);
       const result = await calculateTrend(
         'user-123',
         'streak_days',
@@ -141,7 +147,7 @@ describe('AnalyticsService', () => {
           changePercent: 0,
         },
       };
-      (repository.fetchTimeSeriesData as jest.Mock).mockResolvedValue(mockData);
+      mockTimeSeries.fetchTimeSeriesData.mockResolvedValue(mockData);
       const result = await calculateTrend(
         'user-123',
         'xp_earned',
@@ -163,14 +169,14 @@ describe('AnalyticsService', () => {
         progress: 0,
         createdAt: Date.now(),
       };
-      (repository.createExportJob as jest.Mock).mockResolvedValue(mockJob);
+      mockExportJobs.createExportJob.mockResolvedValue(mockJob);
       const result = await exportAnalyticsData('user-123', 'json', {
         start: 1,
         end: 2,
       });
       expect(result.id).toBe('job-123');
       expect(result.status).toBe('pending');
-      expect(repository.createExportJob).toHaveBeenCalled();
+      expect(mockExportJobs.createExportJob).toHaveBeenCalled();
     });
   });
 });

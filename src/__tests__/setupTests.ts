@@ -78,16 +78,22 @@ jest.mock('@/theme', () => {
   };
   const theme = { colors, spacing, borderRadius, typography, fontWeights, motion };
   const tokensShape = { theme, colors, spacing, borderRadius, typography, fontWeights, motion };
+
+  // Minimal ThemeProvider for tests
+  const ThemeProvider = ({ children }: { children: React.ReactNode }) => children;
+
   return {
     __esModule: true,
     ...tokensShape,
+    ThemeProvider,
     useTheme: () => tokensShape,
+    useThemeObject: () => theme,
+    useIsDarkMode: () => false,
     createTheme: () => tokensShape,
     ReduceMotion: { System: 'system', Always: 'always', Never: 'never', muted: 'muted' },
     useReducedMotion: () => false,
   };
 });
-
 // ── Console suppression, lifecycle hooks, custom matchers ───────────
 
 import './setup/testLifecycle';

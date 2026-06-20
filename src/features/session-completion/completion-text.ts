@@ -92,11 +92,18 @@ export function buildMemoryCandidates(
   ];
 }
 
+const LANE_SURFACE_KEY: Record<Lane, string> = {
+  student: 'study_os',
+  game_like: 'run_board',
+  deep_creative: 'project_thread',
+  minimal_normal: 'today_strip',
+};
+
 export function unlockFor(
   lane: Lane,
   hiddenFeatureKeys: string[],
 ): CompletionUnlockDecision {
-  const key = hiddenFeatureKeys[0] ?? lane;
+  const key = hiddenFeatureKeys[0] ?? LANE_SURFACE_KEY[lane];
   const isHidden = hiddenFeatureKeys.length > 0;
   return {
     isUnlocked: !isHidden,

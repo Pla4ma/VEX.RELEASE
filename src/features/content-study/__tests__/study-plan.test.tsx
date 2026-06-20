@@ -3,6 +3,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { useContentReview, useStudyPlan } from '../hooks';
 
+jest.mock('@sentry/react-native', () => ({
+  captureException: jest.fn(),
+  addBreadcrumb: jest.fn(),
+}));
+
 jest.mock('../../../store', () => ({
   useAuthStore: () => ({
     user: { id: 'test-user-id', email: 'test@example.com' },

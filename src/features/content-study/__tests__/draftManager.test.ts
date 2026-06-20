@@ -2,7 +2,7 @@ import { DraftManager } from '../persistence';
 import type { PersistedDraft } from '../types';
 import { mockStorage } from './persistence.test.helpers';
 
-jest.mock('../../../persistence', () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: () => mockStorage,
 }));
 

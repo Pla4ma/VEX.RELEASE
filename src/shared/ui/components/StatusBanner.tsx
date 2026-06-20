@@ -5,6 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
+import { useThemeObject } from '../../../theme';
 import {
   type AsyncStatus,
   type StatusFeedbackProps,
@@ -24,7 +25,8 @@ export const StatusBanner: React.FC<StatusFeedbackProps> = ({
   onAction,
 }) => {
   const config = STATUS_CONFIG[status];
-  const color = getStatusColor(status, {} as never);
+  const theme = useThemeObject();
+  const color = getStatusColor(status, theme);
 
   useEffect(() => {
     if (status === 'success' && autoDismissSuccess) {
