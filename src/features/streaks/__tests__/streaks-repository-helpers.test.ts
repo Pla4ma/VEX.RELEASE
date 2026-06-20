@@ -17,7 +17,7 @@ describe('RepositoryError', () => {
 
   it('handles non-Error original', () => {
     const err = new RepositoryError('test', 'string error');
-    expect(err.message).toContain('Unknown error');
+    expect(err.message).toContain('string error');
   });
 });
 

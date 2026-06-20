@@ -8,10 +8,27 @@ import {
   ThrowClientError,
 } from './ErrorBoundary.test.helpers';
 
+// Mock theme, UI, and sentry — ErrorFallback uses useTheme() and Button/Icon/Skeleton
+jest.mock('../../theme', () => ({
+  useTheme: () => ({
+    theme: { name: 'vex-dark', mode: 'dark', colors: {
+      semantic: { vexCyan: '#86D6B5', vexCyanSoft: 'rgba(134,214,181,0.16)', vexCyanGlow: 'rgba(134,214,181,0.28)', warning: '#E2A63D' },
+      text: { primary: '#fff', secondary: '#aaa', tertiary: '#888' },
+    } },
+    isDark: true, mode: 'dark', setMode: () => undefined, toggleMode: () => undefined, isSystem: false,
+  }),
+}));
+jest.mock('../../components/ui/Skeleton', () => ({ Skeleton: () => null }));
+jest.mock('../../components', () => ({
+  Button: ({ children, onPress, accessibilityLabel }: any) =>
+    require('react').createElement(require('react-native').TouchableOpacity, { onPress, accessibilityLabel, testID: accessibilityLabel }, children),
+}));
+jest.mock('../../icons', () => ({ Icon: () => null }));
+jest.mock('../../config/sentry', () => ({ captureException: jest.fn() }));
+
 describe('ErrorBoundary', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useRealTimers();
+    jest.clearAllMocks(); jest.useRealTimers();
   });
 
   describe('Retry Logic', () => {
@@ -71,9 +88,7 @@ describe('ErrorBoundary', () => {
   describe('Degraded Mode', () => {
     it('should show degraded mode option', () => {
       const { getByText } = render(
-        <ErrorBoundary allowDegraded={true}>
-          <ThrowNetworkError />
-        </ErrorBoundary>,
+        <ErrorBoundary allowDegraded={true}><ThrowNetworkError /></ErrorBoundary>,
       );
       expect(getByText('Continue Anyway')).toBeTruthy();
     });
@@ -129,9 +144,7 @@ describe('ErrorBoundary', () => {
     });
     it('should not show degraded mode for non-recoverable errors', () => {
       const { queryByText } = render(
-        <ErrorBoundary allowDegraded={true}>
-          <ThrowClientError />
-        </ErrorBoundary>,
+        <ErrorBoundary allowDegraded={true}><ThrowClientError /></ErrorBoundary>,
       );
       expect(queryByText('Continue Anyway')).toBeNull();
     });

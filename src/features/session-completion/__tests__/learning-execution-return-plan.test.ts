@@ -12,6 +12,7 @@ describe('learning execution completion return plan', () => {
     const joined = [
       plan.highlightMessage,
       plan.highlightTitle,
+      plan.homeCtaLabel,
       plan.returnReasonBody,
       plan.returnReasonTitle,
     ].join(' ');

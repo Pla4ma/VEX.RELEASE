@@ -21,6 +21,7 @@ import {
   getDailyUsage,
   recordUsage,
   syncQuotaToSupabase,
+  clearUsage,
 } from './ai-quota-repository';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { useMonetizationStore } from '../monetization/store';
@@ -91,6 +92,11 @@ export async function checkQuota(
 
   const allowed = hourlyRemaining > 0 && dailyRemaining > 0;
   const window = !allowed && hourlyRemaining === 0 ? 'hourly' : 'daily';
+  const resetAt =
+    window === 'hourly'
+      ? Date.now() + HOURLY_WINDOW_MS
+      : Date.now() + DAILY_WINDOW_MS;
+  const retryAfterMs = allowed ? 0 : resetAt - Date.now();
 
   return QuotaCheckResultSchema.parse({
     allowed,
@@ -100,10 +106,8 @@ export async function checkQuota(
     used: window === 'hourly' ? hourlyUsed : dailyUsed,
     limit: window === 'hourly' ? limits.hourly : limits.daily,
     remaining: window === 'hourly' ? hourlyRemaining : dailyRemaining,
-    resetAt:
-      window === 'hourly'
-        ? Date.now() + HOURLY_WINDOW_MS
-        : Date.now() + DAILY_WINDOW_MS,
+    resetAt,
+    retryAfterMs,
   });
 }
 
@@ -132,4 +136,37 @@ export async function recordAIUsage(
       type: 'network',
     });
   }
+}
+
+export function getRemainingQuota(
+  userId: string,
+  category: AIRequestCategory,
+  tier: UserTier,
+): { hourly: number; daily: number; tokenBudget: number } {
+  const limits = DEFAULT_QUOTA_STRATEGIES[tier].limits[category];
+  if (!limits) {
+    return {
+      hourly: Number.MAX_SAFE_INTEGER,
+      daily: Number.MAX_SAFE_INTEGER,
+      tokenBudget: Number.MAX_SAFE_INTEGER,
+    };
+  }
+
+  const hourlyUsed = getHourlyUsage(userId, category).count;
+  const dailyUsed = getDailyUsage(userId, category).count;
+  const tokenUsed = getDailyUsage(userId, category).tokenCount; // token budget is daily
+
+  return {
+    hourly: Math.max(0, limits.hourly - hourlyUsed),
+    daily: Math.max(0, limits.daily - dailyUsed),
+    tokenBudget: Math.max(0, limits.tokenBudget - tokenUsed),
+  };
+}
+
+export async function consumeQuota(
+  userId: string,
+  category: AIRequestCategory,
+  tokenCount: number,
+): Promise<void> {
+  await recordAIUsage(userId, category, tokenCount);
 }

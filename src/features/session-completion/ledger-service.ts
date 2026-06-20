@@ -20,7 +20,12 @@ import {
 /** Input shape for building a completion ledger */
 interface BuildLedgerInput {
   completedAt: number;
+  companionReactionId?: string | null;
+  dailyMissionResult?: CompletionLedger['dailyMissionResult'];
+  degradedSystems?: string[];
+  idempotencyKey?: string;
   offlineSyncStatus: CompletionSyncStatus;
+  rewardIds?: string[];
   sessionId: string;
   summary: unknown;
   timezone: string;
@@ -53,7 +58,7 @@ export function buildCompletionLedger(input: BuildLedgerInput): CompletionLedger
   // - sessionId is cryptographically random (expo-crypto, see uuid.ts)
   // - Server deduplicates on UNIQUE(idempotency_key) in session_completion_ledger
   // - Retries with the same session ID are intentionally deduplicated (safe)
-  const idempotencyKey = `${input.userId}:${input.sessionId}`;
+  const idempotencyKey = input.idempotencyKey ?? `${input.userId}:${input.sessionId}`;
   const grade = deriveGrade(summary.finalScore);
 
   const ledger: CompletionLedger = {
@@ -72,7 +77,7 @@ export function buildCompletionLedger(input: BuildLedgerInput): CompletionLedger
     completedAt: input.completedAt,
     timezone: input.timezone,
     grade: SessionCompletionGradeSchema.parse(grade),
-    gradeScore: summary.finalScore,
+    gradeScore: Math.min(summary.finalScore, 100),
     qualityScore: summary.focusQuality,
     focusScoreDelta: summary.focusPurityScore ?? 0,
     xpDelta: summary.xpEarned,
@@ -83,15 +88,15 @@ export function buildCompletionLedger(input: BuildLedgerInput): CompletionLedger
         ? summary.streakDays - 1
         : summary.streakDays,
     },
-    companionReactionId: null,
-    rewardIds: [],
-    dailyMissionResult: {
+    companionReactionId: input.companionReactionId ?? null,
+    rewardIds: input.rewardIds ?? [],
+    dailyMissionResult: input.dailyMissionResult ?? {
       missionId: null,
       progressDelta: 0,
       status: 'unchanged',
     },
     offlineSyncStatus: input.offlineSyncStatus,
-    degradedSystems: [],
+    degradedSystems: input.degradedSystems ?? [],
     createdAt: Date.now(),
   };
 

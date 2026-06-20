@@ -78,7 +78,8 @@ export function buildMemoryCandidates(
   if (deletedMemoryIds?.includes(key)) {
     return [];
   }
-  const baseText = `Lane ${input.lane} finished a ${situation} session.`;
+  const sessionIdRef = `s:${input.summary.sessionId}`;
+  const baseText = `Lane ${input.lane} finished a ${situation} session. (${sessionIdRef})`;
   const text = input.reflectionAnswer
     ? `${baseText} ${input.reflectionAnswer}`
     : baseText;
@@ -92,11 +93,18 @@ export function buildMemoryCandidates(
   ];
 }
 
+const LANE_SURFACE_KEY: Record<Lane, string> = {
+  student: 'study_os',
+  game_like: 'run_board',
+  deep_creative: 'project_thread',
+  minimal_normal: 'today_strip',
+};
+
 export function unlockFor(
   lane: Lane,
   hiddenFeatureKeys: string[],
 ): CompletionUnlockDecision {
-  const key = hiddenFeatureKeys[0] ?? lane;
+  const key = hiddenFeatureKeys[0] ?? LANE_SURFACE_KEY[lane];
   const isHidden = hiddenFeatureKeys.length > 0;
   return {
     isUnlocked: !isHidden,

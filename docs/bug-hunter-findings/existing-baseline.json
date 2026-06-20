@@ -1,0 +1,245 @@
+{
+  "generated_at": "2026-06-18T00:00:00Z",
+  "source": "VEXMAX.md + repo files analysis",
+  "vexmax_findings": {
+    "total": 53,
+    "complete": 0,
+    "incomplete": 53,
+    "note": "Section 30 findings table has no completion checkboxes — all 53 findings listed as unresolved. Section 28 pre-launch checklist has 1 checkbox marked [x] (tsc passes), rest unchecked.",
+    "findings_list": [
+      {"id": 1, "finding": "Edge function JWT email verification bypass", "section": "3.1", "priority": "CRITICAL", "status": "incomplete"},
+      {"id": 2, "finding": "Economy RPCs unauditable", "section": "3.2", "priority": "CRITICAL", "status": "incomplete"},
+      {"id": 3, "finding": "Search path hardening regression", "section": "16.3", "priority": "HIGH", "status": "incomplete"},
+      {"id": 4, "finding": "12 truncated files (200 lines)", "section": "5.1", "priority": "HIGH", "status": "incomplete"},
+      {"id": 5, "finding": "npm audit: 43 advisories", "section": "3.4", "priority": "HIGH", "status": "incomplete"},
+      {"id": 6, "finding": "TLS certificate pins re-verification", "section": "3.5", "priority": "HIGH", "status": "incomplete"},
+      {"id": 7, "finding": "Onboarding profile local-only", "section": "9.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 8, "finding": "Bloat firewall audit", "section": "15.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 9, "finding": "Build verification", "section": "17.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 10, "finding": "Privacy URL verification", "section": "17.4", "priority": "HIGH", "status": "incomplete"},
+      {"id": 11, "finding": "99+ string literal navigation", "section": "7.1", "priority": "HIGH", "status": "incomplete"},
+      {"id": 12, "finding": "2 any types + 2 as any casts", "section": "2.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 13, "finding": "3 edge function monoliths", "section": "5.3", "priority": "HIGH", "status": "incomplete"},
+      {"id": 14, "finding": "Error boundary coverage audit", "section": "10.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 15, "finding": "Test suite verification", "section": "11.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 16, "finding": "Sentry replay privacy test", "section": "3.3", "priority": "HIGH", "status": "incomplete"},
+      {"id": 17, "finding": "Three parallel mode systems", "section": "4.1", "priority": "HIGH", "status": "incomplete"},
+      {"id": 18, "finding": "28+ version-suffixed files", "section": "19.2", "priority": "HIGH", "status": "incomplete"},
+      {"id": 19, "finding": "Home container query duplication", "section": "4.3", "priority": "HIGH", "status": "incomplete"},
+      {"id": 20, "finding": "Event system [key: string]: unknown", "section": "14.1", "priority": "HIGH", "status": "incomplete"},
+      {"id": 21, "finding": "[key: string]: unknown in EventChannels", "section": "14.1", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 22, "finding": "Event types for non-existent features", "section": "14.2", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 23, "finding": "Record<string, unknown> replacements", "section": "2.4", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 24, "finding": "36 feature folders missing files", "section": "4.6", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 25, "finding": "navigation-helpers.ts 303 lines", "section": "4.7", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 26, "finding": "ai-coach directory schizophrenia", "section": "4.2", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 27, "finding": "Session orchestration duplication", "section": "4.4", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 28, "finding": "SessionService thin wrapper", "section": "4.5", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 29, "finding": "364 useEffect optimization", "section": "8.3", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 30, "finding": "Dimensions.get replacement", "section": "8.2", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 31, "finding": "Liveops-config simplification", "section": "15.1", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 32, "finding": "Companion profile local-only", "section": "9.4", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 33, "finding": "Content study prompt injection", "section": "3.7", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 34, "finding": "Analytics export signed URL TTL", "section": "3.6", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 35, "finding": "Accessibility label gaps", "section": "12.2", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 36, "finding": "Touch target size audit", "section": "12.3", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 37, "finding": "Reduced motion verification", "section": "12.4", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 38, "finding": "FlashList estimatedItemSize audit", "section": "8.4", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 39, "finding": "AntiCheat engine decomposition", "section": "20.2", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 40, "finding": "Memory leak: map growth", "section": "21.3", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 41, "finding": "55 unsafe null assertions", "section": "2.3", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 42, "finding": "Supabase queries outside repository", "section": "4.8", "priority": "MEDIUM", "status": "incomplete"},
+      {"id": 43, "finding": "2,297 inline styles", "section": "8.1", "priority": "LOW", "status": "incomplete"},
+      {"id": 44, "finding": "1,184 magic numbers", "section": "20.1", "priority": "LOW", "status": "incomplete"},
+      {"id": 45, "finding": "170 barrel files audit", "section": "19.3", "priority": "LOW", "status": "incomplete"},
+      {"id": 46, "finding": "Unused export removal", "section": "19.5", "priority": "LOW", "status": "incomplete"},
+      {"id": 47, "finding": "Glass design token extraction", "section": "13.2", "priority": "LOW", "status": "incomplete"},
+      {"id": 48, "finding": "expo-image migration", "section": "8.5", "priority": "LOW", "status": "incomplete"},
+      {"id": 49, "finding": "Legacy service stub removal", "section": "9.5", "priority": "LOW", "status": "incomplete"},
+      {"id": 50, "finding": "Archive exclusion from tooling", "section": "19.4", "priority": "LOW", "status": "incomplete"},
+      {"id": 51, "finding": "Behavior signal Supabase sync", "section": "9.3", "priority": "LOW", "status": "incomplete"},
+      {"id": 52, "finding": "Zustand v5 upgrade", "section": "18.4", "priority": "LOW", "status": "incomplete"},
+      {"id": 53, "finding": "Image optimization (expo-image)", "section": "8.5", "priority": "LOW", "status": "incomplete"}
+    ]
+  },
+  "archived_features": [
+    "shop",
+    "inventory",
+    "battle pass",
+    "wagers",
+    "rivals",
+    "squads/social",
+    "leaderboards",
+    "premium currency",
+    "advanced economy",
+    "guilds",
+    "community boss",
+    "seasonal/liveops systems"
+  ],
+  "supabase_readiness": {
+    "project_id": "icnbpjkyupuqzuvwuvbk",
+    "project_name": "VEX OFFICIAL",
+    "security_advisor_status": "blocked — requires reauthentication",
+    "post_signup_failures": [
+      "notifications (auth/RLS timing)",
+      "progression (schema mismatch + empty row)",
+      "user_achievements (schema mismatch)",
+      "focus_score_current (schema mismatch on top-factor columns)",
+      "mastery_tracks (empty row/schema mismatch)",
+      "streaks (mostly empty-row handling)"
+    ],
+    "hardening_applied": true,
+    "blocked_items": [
+      "vex-admin screens update — no vex-admin project in workspace",
+      "Live Supabase security advisor — connector requires reauthentication",
+      "Database migration — SQL review requested before applying"
+    ],
+    "sql_proposal": "supabase-release-sql-proposal.sql includes RLS enablement, admin write policy, launch flag seeds, LiveOps config seeds",
+    "security_definer_plan": "Keep only privilege-escalation functions as SECURITY DEFINER; set search_path=''; revoke public execute"
+  },
+  "release_todo": {
+    "completed": [
+      "Map post-signup bootstrap Supabase queries and classify failures",
+      "Patch signup bootstrap empty-row/schema/auth handling",
+      "Harden signup submit/resend guards and rate-limit UX",
+      "Locate vex-admin code and connect to live users/user_sessions",
+      "Prepare Supabase security SQL plan",
+      "Wire feature flags to feature_flags and liveops_config",
+      "Run TypeScript/tests for touched surfaces"
+    ],
+    "blocked": [
+      "Update vex-admin screens: no vex-admin project in workspace",
+      "Fetch live Supabase security advisors: connector requires reauthentication",
+      "Apply database migration: SQL review requested before applying"
+    ],
+    "verification_notes": "tsc --noEmit passed; targeted tests passed; npm run check:line-limit still fails on pre-existing oversized files"
+  },
+  "ts_errors": {
+    "total_lines": 945,
+    "unique_files": 92,
+    "note": "ts-errors.txt contradicts VEXMAX claim of 0 TS errors. These appear to be mangled/corrupted files (likely from aggressive codemods or merge issues) — many are JSX structural errors (TS17002, TS17015) and expression expected errors (TS1109) consistent with truncated/edited files.",
+    "error_categories": {
+      "TS1109": 193,
+      "TS1005": 179,
+      "TS17002": 167,
+      "TS1128": 163,
+      "TS1003": 112,
+      "TS1382": 88,
+      "TS1136": 14,
+      "TS17015": 9,
+      "TS1381": 6,
+      "TS2657": 5,
+      "TS1434": 4,
+      "TS1472": 2,
+      "TS1160": 1,
+      "TS1359": 1,
+      "TS1137": 1
+    },
+    "most_affected_areas": [
+      "src/screens/session/components/ (13 files)",
+      "src/features/onboarding/components/ (8 files)",
+      "src/screens/onboarding/components/ (6 files)",
+      "src/features/streaks/components/ (4 files)",
+      "src/features/challenges/components/ (3 files)",
+      "src/features/content-study/ (5 files)",
+      "src/screens/paywall/ (3 files)"
+    ]
+  },
+  "failing_tests": {
+    "total_unique": 45,
+    "total_fail_lines": 90,
+    "note": "File contains duplicate listing (tests appear twice). 45 unique failing test files.",
+    "by_feature": {
+      "session-completion": 9,
+      "ai-coach": 6,
+      "src/shared": 4,
+      "session-runtime": 4,
+      "challenges": 3,
+      "analytics": 2,
+      "session-recommendation": 2,
+      "session": 2,
+      "account-deletion": 2,
+      "src/privacy": 1,
+      "src/screens": 1,
+      "content-study": 1,
+      "src/performance": 1,
+      "src/__tests__": 1,
+      "integration": 1,
+      "feature-gate": 1,
+      "src/theme": 1,
+      "streaks": 1,
+      "focus-identity": 1,
+      "src/store": 1
+    }
+  },
+  "edge_functions": [
+    {"file": "content-study/index.ts", "approx_lines": 49, "auth": "verifyAuthorizedUser + route-based dispatch"},
+    {"file": "content-study/handlers.ts", "approx_lines": 183, "auth": "delegates to index"},
+    {"file": "content-study/extractors.ts", "approx_lines": 145, "auth": "delegates to index"},
+    {"file": "content-study/handlers-extract.ts", "approx_lines": 30, "auth": "delegates to index"},
+    {"file": "content-study/schemas.ts", "approx_lines": 79, "auth": "N/A (schemas)"},
+    {"file": "ai-coach/index.ts", "approx_lines": 119, "auth": "verifyAuthorizedUser + userId check"},
+    {"file": "ai-coach/schemas.ts", "approx_lines": 22, "auth": "N/A (schemas)"},
+    {"file": "season-finalize/index.ts", "approx_lines": 59, "auth": "verifyAuthorizedUser + rate limit"},
+    {"file": "ai/index.ts", "approx_lines": 192, "auth": "verifyAuthorizedUser + route slug"},
+    {"file": "ai/gemini.ts", "approx_lines": 64, "auth": "delegates to index"},
+    {"file": "trigger-jobs/index.ts", "approx_lines": 71, "auth": "Trigger.dev SDK handleRequest (no user auth)"},
+    {"file": "session-complete/index.ts", "approx_lines": 137, "auth": "verifyAuthorizedUser + rate limit + server-side validation"},
+    {"file": "session-complete/schemas.ts", "approx_lines": 33, "auth": "N/A (schemas)"},
+    {"file": "_shared/auth.ts", "approx_lines": 196, "auth": "JWT verify (local path + remote path)"},
+    {"file": "_shared/cors.ts", "approx_lines": 83, "auth": "N/A (CORS helpers)"},
+    {"file": "_shared/rate-limit.ts", "approx_lines": 66, "auth": "N/A (rate limiting)"},
+    {"file": "_shared/rate-limit-client.ts", "approx_lines": 18, "auth": "N/A (client helper)"},
+    {"file": "_shared/openai-compatible.ts", "approx_lines": 135, "auth": "N/A (LLM client)"},
+    {"file": "_shared/vex-ai-prompt.ts", "approx_lines": 32, "auth": "N/A (prompts)"},
+    {"file": "_shared/vex-ai-output.ts", "approx_lines": 12, "auth": "N/A (output parsing)"},
+    {"file": "season-finalize/deno.json", "approx_lines": 11, "auth": "N/A (config)"},
+    {"file": "ai/deno.json", "approx_lines": 7, "auth": "N/A (config)"},
+    {"file": "trigger-jobs/deno.json", "approx_lines": 13, "auth": "N/A (config)"}
+  ],
+  "edge_function_summary": {
+    "total_functions": 7,
+    "total_ts_files": 15,
+    "auth_patterns": {
+      "verifyAuthorizedUser": 6,
+      "userId_match_check": 2,
+      "rate_limiting": 2,
+      "trigger_dev_sdk_only": 1
+    },
+    "known_vulnerability": "JWT email verification bypass in _shared/auth.ts line 94 (local path treats all valid JWTs as email-verified)"
+  },
+  "config_issues": [
+    {
+      "file": ".env.local",
+      "issue": "Contains live API keys in non-example file: Supabase anon key, Sentry DSN, PostHog key, RevenueCat iOS key. Should be .env.example with placeholder values, or .gitignore'd."
+    },
+    {
+      "file": ".env.local",
+      "issue": "RevenueCat Android key is placeholder 'your_android_key_here' — not configured for Android builds."
+    },
+    {
+      "file": "app.json",
+      "issue": "userInterfaceStyle set to 'light' only — no dark mode support (may be intentional per design system)."
+    },
+    {
+      "file": "app.json",
+      "issue": "sdkVersion 56.0.0 — verify this is current Expo SDK at release time."
+    },
+    {
+      "file": "ts-errors.txt",
+      "issue": "945 TypeScript errors across 92 files — contradicts VEXMAX claim of 0 TS errors. Files appear mangled (JSX structural errors, truncated expressions). This file may represent a snapshot from a broken state/branch."
+    },
+    {
+      "file": "failing_tests.txt",
+      "issue": "45 unique failing tests (90 lines with duplicates). Largest clusters: session-completion (9), ai-coach (6), session-runtime (4), shared (4)."
+    },
+    {
+      "file": "supabase/functions/_shared/auth.ts",
+      "issue": "CRITICAL: Line 94 local JWT path treats all non-anonymous JWTs as email-verified (emailVerified: !isAnonymous). Remote path correctly checks email_confirmed_at. Any function with SUPABASE_JWT_SECRET uses the insecure fast path."
+    },
+    {
+      "file": "supabase/functions/trigger-jobs/index.ts",
+      "issue": "No user authentication — uses Trigger.dev SDK handleRequest directly. Accepts unauthenticated webhook requests."
+    }
+  ]
+}

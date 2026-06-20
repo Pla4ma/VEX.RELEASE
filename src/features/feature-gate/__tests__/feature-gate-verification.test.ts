@@ -46,12 +46,12 @@ describe('getPhase3VerificationSummary', () => {
     expect(summary.failedFeatures).toContain('rivals');
   });
 
-  it('returns passed=false when hasNoTab fails', () => {
+  it('returns passed=false when isHidden fails', () => {
     const results = [
       {
         feature: 'rankings' as const,
-        isHidden: true,
-        hasNoTab: false,
+        isHidden: false,
+        hasNoTab: true,
         hasNoHomeCard: true,
         hasNoSettingsEntry: true,
         hasSafeFallback: true,

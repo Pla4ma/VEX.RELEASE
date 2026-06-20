@@ -16,7 +16,7 @@ describe('deriveHomeSurface — cold-start (completedSessions < 3)', () => {
   it('returns default minimal_normal surface with empty context', () => {
     const surface = deriveHomeSurface({});
     expect(surface.lane).toBe('minimal_normal');
-    expect(surface.headline).toBe('One clean action');
+    expect(surface.headline).toBe('One focus action');
     expect(surface.primaryAction).toBe('start_session');
     expect(surface.rhythmLabel).toBeNull();
   });
@@ -32,7 +32,7 @@ describe('deriveHomeSurface — cold-start (completedSessions < 3)', () => {
 
   it('game_like cold-start: does not claim best momentum', () => {
     const surface = deriveHomeSurface({ laneOverride: 'game_like' });
-    expect(surface.headline).toBe('Start a clean run');
+    expect(surface.headline).toBe('Start a quest');
     expect(surface.body).toContain('VEX will learn');
     expect(surface.body).not.toContain('best momentum');
     expect(surface.rhythmLabel).toBeNull();
@@ -41,7 +41,7 @@ describe('deriveHomeSurface — cold-start (completedSessions < 3)', () => {
   it('deep_creative cold-start: does not claim VEX remembers or project waiting', () => {
     const surface = deriveHomeSurface({ laneOverride: 'deep_creative' });
     expect(surface.primaryFeeling).toBe('I want to protect my deep work.');
-    expect(surface.headline).toBe('Start a project block');
+    expect(surface.headline).toBe('Start a create block');
     expect(surface.body).not.toContain('Your project is waiting');
     expect(surface.body).not.toContain('already saved');
     expect(surface.body).toContain('Name the project');
@@ -49,7 +49,7 @@ describe('deriveHomeSurface — cold-start (completedSessions < 3)', () => {
 
   it('minimal_normal cold-start: same as evidence (no claims to drop)', () => {
     const surface = deriveHomeSurface({ laneOverride: 'minimal_normal' });
-    expect(surface.headline).toBe('One clean action');
+    expect(surface.headline).toBe('One focus action');
     expect(surface.rhythmLabel).toBeNull();
   });
 
@@ -81,7 +81,7 @@ describe('deriveHomeSurface — cold-start (completedSessions < 3)', () => {
       cleanStartsThisWeek: 5,
       completedSessions: 0,
     });
-    expect(surface.body).toBe('Start one clean run. VEX will learn what helps you keep momentum.');
+    expect(surface.body).toBe('Start one small quest. VEX will learn what helps you keep momentum.');
   });
 });
 
@@ -135,7 +135,7 @@ describe('deriveHomeSurface — evidence-backed (completedSessions >= 3)', () =>
 
   it('minimal_normal evidence: same body structure, different provenance', () => {
     const surface = deriveHomeSurface({ laneOverride: 'minimal_normal', completedSessions: 4 });
-    expect(surface.headline).toBe('One clean action');
+    expect(surface.headline).toBe('One focus action');
     expect(surface.body).not.toContain('VEX will stay quiet');
   });
 });

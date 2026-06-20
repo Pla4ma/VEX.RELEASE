@@ -1,2 +1,0 @@
-src/features/session-runtime/orchestrators/SessionTimer.ts(155,5): error TS18047: 'orch.session' is possibly 'null'.
-src/features/session-runtime/orchestrators/SessionTimer.ts(156,16): error TS18047: 'orch.session' is possibly 'null'.

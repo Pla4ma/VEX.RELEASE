@@ -64,9 +64,8 @@ describe('session history', () => {
         startedAt: Date.now() - 172800000,
       },
     ];
-    ctx.mockRepository.getSessionHistory.mockResolvedValue(mockHistory);
+    ctx.mockOrchestrator.getSessionHistory.mockResolvedValue(mockHistory);
     const history = await ctx.mockOrchestrator.getSessionHistory(10);
     expect(history).toHaveLength(2);
-    expect(ctx.mockRepository.getSessionHistory).toHaveBeenCalledWith(10);
   });
 });

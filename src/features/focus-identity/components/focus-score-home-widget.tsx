@@ -106,6 +106,7 @@ export function FocusScoreHomeWidget({
         accessibilityLabel="Open focus score dashboard"
         accessibilityRole="button"
         accessibilityHint="Opens the full focus dashboard with trends and factor details"
+        style={{ minHeight: 44, minWidth: 44 }}
       >
         <GlassCard variant="default" padding={14} radius={22}>
           <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>

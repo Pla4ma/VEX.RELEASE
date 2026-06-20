@@ -5,7 +5,7 @@ import {
 } from '../persistence';
 import { mockStorage } from './persistence.test.helpers';
 
-jest.mock('../../../persistence', () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: () => mockStorage,
 }));
 

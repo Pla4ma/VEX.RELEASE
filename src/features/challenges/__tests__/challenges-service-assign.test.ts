@@ -47,8 +47,8 @@ jest.mock('../../../store', () => ({
 
 import * as repository from '../repository';
 import { assignChallenge } from '../service';
-
 import { ChallengeError } from '../errors';
+import { UserChallengeSchema } from '../schemas';
 
 const mockedRepo = jest.mocked(repository);
 const NOW = Date.now();

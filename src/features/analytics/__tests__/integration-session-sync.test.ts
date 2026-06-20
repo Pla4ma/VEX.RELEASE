@@ -4,14 +4,21 @@ import {
   getRealtimeAnalytics,
 } from '../integration';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
+import * as statsRepository from '../repository/stats';
 import * as Sentry from '@sentry/react-native';
 import { integrationCache, stateCache } from '../integration-types';
+
 jest.mock('../repository');
+jest.mock('../repository/stats');
+
+jest.mock('../../../events/EventBus', () => ({
+  eventBus: { publish: jest.fn() },
+}));
+const mockEventBus = jest.requireMock('../../../events/EventBus').eventBus;
+
 jest.mock('../service', () => ({
   generateInsights: jest.fn().mockResolvedValue([]),
 }));
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
@@ -20,6 +27,7 @@ jest.mock('../integration-helpers', () => ({
   updateIntegrationState: jest.fn(),
   getTimeOfDay: jest.fn().mockReturnValue('afternoon'),
 }));
+
 describe('AnalyticsIntegration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,7 +41,7 @@ describe('AnalyticsIntegration', () => {
   });
   describe('trackSessionCompleted', () => {
     it('should track session and emit events', async () => {
-      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(
+      (statsRepository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(
         undefined,
       );
       await trackSessionCompleted('user-123', {
@@ -44,7 +52,7 @@ describe('AnalyticsIntegration', () => {
         streakDay: 3,
         bossActive: false,
       });
-      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledWith(
+      expect(statsRepository.bulkInsertAnalyticsEvents).toHaveBeenCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
             user_id: 'user-123',
@@ -58,14 +66,14 @@ describe('AnalyticsIntegration', () => {
           }),
         ]),
       );
-      expect(eventBus.publish).toHaveBeenCalledWith(
+      expect(mockEventBus.publish).toHaveBeenCalledWith(
         'analytics:data_refreshed',
         expect.objectContaining({ userId: 'user-123' }),
       );
       expect(Sentry.addBreadcrumb).toHaveBeenCalled();
     });
     it('should prevent duplicate processing', async () => {
-      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(
+      (statsRepository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(
         undefined,
       );
       const sessionData = {
@@ -78,10 +86,10 @@ describe('AnalyticsIntegration', () => {
       };
       await trackSessionCompleted('user-123', sessionData);
       await trackSessionCompleted('user-123', sessionData);
-      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledTimes(1);
+      expect(statsRepository.bulkInsertAnalyticsEvents).toHaveBeenCalledTimes(1);
     });
     it('should handle errors gracefully', async () => {
-      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockRejectedValue(
+      (statsRepository.bulkInsertAnalyticsEvents as jest.Mock).mockRejectedValue(
         new Error('Database error'),
       );
       await expect(
@@ -106,10 +114,10 @@ describe('AnalyticsIntegration', () => {
       (repository.fetchDetectedPatterns as jest.Mock).mockResolvedValue([]);
       const result = await syncAnalyticsData('user-123');
       expect(result.success).toBe(true);
-      expect(result.synced).toBe(1);
+      expect(result.synced).toBe(3);
       expect(result.failed).toBe(0);
       expect(result.errors).toHaveLength(0);
-      expect(eventBus.publish).toHaveBeenCalledWith(
+      expect(mockEventBus.publish).toHaveBeenCalledWith(
         'network:sync:complete',
         expect.any(Object),
       );
@@ -124,7 +132,7 @@ describe('AnalyticsIntegration', () => {
       );
       const result = await syncAnalyticsData('user-123');
       expect(result.success).toBe(false);
-      expect(result.synced).toBe(0);
+      expect(result.synced).toBe(1);
       expect(result.failed).toBe(2);
       expect(result.errors).toHaveLength(2);
     });

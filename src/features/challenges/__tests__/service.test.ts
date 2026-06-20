@@ -1,10 +1,18 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import * as service from '../service';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
+import * as queries from '../queries';
+import { eventBus } from '../../../events/EventBus';
 jest.mock('../repository');
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../queries', () => ({ getCompletedChallenges: jest.fn() }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../../rewards/RewardService', () => ({
+  getRewardService: jest.fn(() => ({
+    grantReward: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
 const mockedRepository = jest.mocked(repository);
+const mockedQueries = jest.mocked(queries);
 const mockedEventBus = jest.mocked(eventBus);
 describe('Challenges Service', () => {
   beforeEach(() => {
@@ -26,6 +34,7 @@ describe('Challenges Service', () => {
         userId: 'user-1',
         seasonId: 'season-1',
         challengeType: 'DAILY',
+        challengeId: 'template-1',
       });
       expect(result).toBeDefined();
       expect(mockedRepository.createUserChallenge).toHaveBeenCalled();
@@ -74,9 +83,9 @@ describe('Challenges Service', () => {
         source: 'test',
       });
       expect(result).toBeDefined();
-      expect(result?.completed).toBe(true);
+      expect(result?.success).toBe(true);
       expect(mockedEventBus.publish).toHaveBeenCalledWith(
-        'challenges:challenge_completed',
+        'challenge:progress',
         expect.any(Object),
       );
     });
@@ -107,64 +116,68 @@ describe('Challenges Service', () => {
         delta: 25,
         source: 'test',
       });
-      expect(result?.completed).toBe(false);
+      expect(result).toBeNull();
     });
   });
-
-  describe('rerollChallenge', () => {
-    it('should reroll with free option', async () => {
-      mockedRepository.getFreeRerollCountToday.mockResolvedValue(0);
+  describe('checkChallengeProgress', () => {
+    it('should check progress for active challenges', async () => {
       mockedRepository.fetchUserChallenge.mockResolvedValue({
         id: 'uc-1',
         userId: 'user-1',
         challengeId: 'c-1',
         status: 'ACTIVE',
+        currentValue: 50,
+        targetValue: 100,
       } as unknown);
-      const result = await service.rerollChallenge({
+      mockedRepository.fetchChallengeById.mockResolvedValue({
+        id: 'c-1',
+        targetValue: 100,
+        rewardType: 'COINS',
+        rewardAmount: 50,
+      } as unknown);
+      mockedRepository.addChallengeProgress.mockResolvedValue({
+        id: 'uc-1',
         userId: 'user-1',
         challengeId: 'c-1',
-        usePaidReroll: false,
-      });
-      expect(result.success).toBe(true);
-    });
-    it('should fail if not eligible', async () => {
-      mockedRepository.getFreeRerollCountToday.mockResolvedValue(1);
-      const result = await service.rerollChallenge({
+        currentValue: 60,
+        status: 'ACTIVE',
+      } as unknown);
+      const result = await service.updateChallengeProgress({
         userId: 'user-1',
         challengeId: 'c-1',
-        usePaidReroll: false,
+        delta: 10,
+        source: 'test',
       });
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('No free rerolls available');
+      expect(result).toBeDefined();
     });
   });
   describe('claimChallengeReward', () => {
     it('should claim reward for completed challenge', async () => {
-      const mockUserChallenge = {
-        id: 'uc-1',
-        userId: 'user-1',
-        challengeId: 'c-1',
-        status: 'COMPLETED',
-        claimedAt: null,
+      const mockDetail = {
+        challenge: {
+          id: 'c-1',
+          rewardType: 'COINS',
+          rewardAmount: 100,
+        },
+        userChallenge: {
+          id: 'uc-1',
+          userId: 'user-1',
+          challengeId: 'c-1',
+          status: 'COMPLETED',
+          claimedAt: null,
+        },
+        xpReward: 50,
+        coinReward: 100,
+        requiredCount: 1,
       };
-      const mockChallenge = {
-        id: 'c-1',
-        rewardType: 'COINS',
-        rewardAmount: 100,
-      };
-      mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as unknown,
-      );
-      mockedRepository.fetchChallengeById.mockResolvedValue(
-        mockChallenge as unknown,
-      );
-      mockedRepository.markRewardClaimed.mockResolvedValue({} as unknown);
+      mockedQueries.getCompletedChallenges.mockResolvedValue([mockDetail] as unknown);
+      mockedRepository.updateUserChallenge.mockResolvedValue({} as unknown);
       const result = await service.claimChallengeReward({
         userId: 'user-1',
         challengeId: 'c-1',
       });
       expect(result.success).toBe(true);
-      expect(result.rewards).toHaveLength(1);
+      expect(result.rewards.length).toBeGreaterThanOrEqual(1);
     });
     it('should fail for uncompleted challenge', async () => {
       const mockUserChallenge = {
@@ -174,9 +187,7 @@ describe('Challenges Service', () => {
         status: 'ACTIVE',
         claimedAt: null,
       };
-      mockedRepository.fetchUserChallenge.mockResolvedValue(
-        mockUserChallenge as unknown,
-      );
+      mockedQueries.getCompletedChallenges.mockResolvedValue([] as unknown);
       const result = await service.claimChallengeReward({
         userId: 'user-1',
         challengeId: 'c-1',

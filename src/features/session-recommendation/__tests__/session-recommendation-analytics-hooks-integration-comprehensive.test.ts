@@ -20,7 +20,7 @@ jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
 }));
 
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { emit: jest.fn() },
 }));
 
@@ -46,7 +46,7 @@ import {
 } from '../analytics';
 import { sessionRecommendationKeys } from '../hooks';
 import Sentry from '@sentry/react-native';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

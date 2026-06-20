@@ -23,7 +23,7 @@ export async function downloadExportData(
     return await withRetry(
       async () => {
         const result = await withTimeout(
-          supabase.storage.from(bucket).download(path) as unknown as () => Promise<{ data: Blob | null; error: { message: string; name: string } | null }>,
+          () => supabase.storage.from(bucket).download(path),
           30000,
           'Storage download timeout',
         );

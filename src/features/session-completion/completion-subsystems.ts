@@ -7,6 +7,7 @@ import { getRewardService } from '../../rewards/RewardService';
 import { getStreakService } from '../../streaks/StreakService';
 import { getCompanionService } from '../../features/companion/service';
 import { trackCompletionAnalytics } from './completion-analytics';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import type { CompletionLedger } from './schemas';
 
 export type CompletionSubsystemResult = {
@@ -24,8 +25,8 @@ export async function applyCompletionSubsystems(input: {
   await runSubsystem('focus-identity', degradedSystems, () =>
     updateFocusScoreFromSessionCompletion(input.ledger.userId, {
       grade: input.ledger.grade,
+      quality: input.ledger.qualityScore,
       sessionId: input.ledger.sessionId,
-      focusScoreDelta: input.ledger.focusScoreDelta,
     }),
   );
 
@@ -80,21 +81,26 @@ export async function applyCompletionSubsystems(input: {
 
   // 5. Companion — react to session completion
   let companionReactionId = input.ledger.companionReactionId;
-  try {
-    const companionResult = getCompanionService().completeSession(
-      Math.round(input.ledger.completedDurationSeconds / 60),
-      input.ledger.qualityScore,
-      input.ledger.userId,
-      input.ledger.sessionId,
-    );
-    if (companionResult.evolved || companionResult.leveledUp) {
-      companionReactionId = 'companion-session-complete';
+  let dailyMissionStatus = input.ledger.dailyMissionResult.status;
+  const companionAvailability = getAvailabilityFor('companion_detail');
+  if (companionAvailability.canUseBackend) {
+    try {
+      const companionResult = getCompanionService().completeSession(
+        Math.round(input.ledger.completedDurationSeconds / 60),
+        input.ledger.qualityScore,
+        input.ledger.userId,
+        input.ledger.sessionId,
+      );
+      if (companionResult.evolved || companionResult.leveledUp) {
+        companionReactionId = 'companion-session-complete';
+      }
+      dailyMissionStatus = 'progressed';
+    } catch (error: unknown) {
+      degradedSystems.push('companion');
+      Sentry.captureException(error, {
+        tags: { feature: 'session-completion', subsystem: 'companion' },
+      });
     }
-  } catch (error: unknown) {
-    degradedSystems.push('companion');
-    Sentry.captureException(error, {
-      tags: { feature: 'session-completion', subsystem: 'companion' },
-    });
   }
 
   Sentry.addBreadcrumb({
@@ -116,7 +122,7 @@ export async function applyCompletionSubsystems(input: {
       companionReactionId,
       dailyMissionResult: {
         ...input.ledger.dailyMissionResult,
-        status: 'progressed',
+        status: dailyMissionStatus,
       },
       degradedSystems,
       rewardIds,

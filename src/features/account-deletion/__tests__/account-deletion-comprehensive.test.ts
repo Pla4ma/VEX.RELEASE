@@ -2,10 +2,13 @@ import { deleteAccount } from '../service';
 import { deleteCurrentUser, signOutCurrentSession } from '../repository';
 import { revenueCatService } from '../../../shared/monetization/revenuecat-service';
 import {
+  getSecureStorage,
+  SecureStorageKeys,
+} from '../../../persistence/SecureStorage';
+import {
   getDefaultStorageAdapter,
   getMMKVStorageAdapter,
-  getSecureStorage,
-} from '../../../persistence';
+} from '../../../persistence/MMKVStorageAdapter';
 import {
   captureAccountDeletionError,
   trackAccountDeletionCompleted,
@@ -25,15 +28,17 @@ jest.mock('../../../config/sentry', () => ({ clearSentryUser: jest.fn() }));
 jest.mock('../../../shared/monetization/revenuecat-service', () => ({
   revenueCatService: { clearUserId: jest.fn() },
 }));
-jest.mock('../../../persistence', () => ({
+jest.mock('../../../persistence/SecureStorage', () => ({
   SecureStorageKeys: {
     AUTH_TOKEN: 'vex_auth_token',
     REFRESH_TOKEN: 'vex_refresh_token',
     USER_CREDENTIALS: 'vex_user_credentials',
   },
+  getSecureStorage: jest.fn(),
+}));
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: jest.fn(),
   getMMKVStorageAdapter: jest.fn(),
-  getSecureStorage: jest.fn(),
 }));
 
 const deleteCurrentUserMock = jest.mocked(deleteCurrentUser);

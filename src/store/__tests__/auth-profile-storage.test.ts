@@ -1,20 +1,24 @@
 import { saveUserProfile, loadUserProfile, removeUserProfile } from '../authProfileStorage';
 import type { User } from '../types/models';
 
-jest.mock('../../../persistence/SecureStorage', () => ({
-  getSecureStorage: () => ({
+jest.mock('../../persistence/SecureStorage', () => {
+  const mockStorage = {
     getItem: jest.fn().mockResolvedValue(null),
     setItem: jest.fn().mockResolvedValue(undefined),
     removeItem: jest.fn().mockResolvedValue(undefined),
-  }),
-  SecureStorageKeys: {
-    AUTH_TOKEN: 'vex_auth_token',
-    REFRESH_TOKEN: 'vex_refresh_token',
-    USER_PROFILE: 'vex_user_profile',
-  },
-}));
+  };
+  return {
+    getSecureStorage: () => mockStorage,
+    SecureStorageKeys: {
+      AUTH_TOKEN: 'vex_auth_token',
+      REFRESH_TOKEN: 'vex_refresh_token',
+      USER_PROFILE: 'vex_user_profile',
+    },
+    __mockStorage: mockStorage,
+  };
+});
 
-jest.mock('../../../features/auth/schemas', () => ({
+jest.mock('../../features/auth/schemas', () => ({
   UserSchema: {
     safeParse: jest.fn((data: unknown) => {
       if (data && typeof data === 'object' && 'id' in data && 'email' in data) {
@@ -25,7 +29,7 @@ jest.mock('../../../features/auth/schemas', () => ({
   },
 }));
 
-jest.mock('../../../utils/debug', () => ({
+jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({
     error: jest.fn(),
     info: jest.fn(),
@@ -93,10 +97,9 @@ describe('authProfileStorage', () => {
 
   describe('saveUserProfile', () => {
     it('saves user to secure storage as JSON', async () => {
-      const { getSecureStorage } = require('../../../persistence/SecureStorage');
-      const storage = getSecureStorage();
+      const { __mockStorage } = require('../../persistence/SecureStorage');
       await saveUserProfile(validUser);
-      expect(storage.setItem).toHaveBeenCalledWith(
+      expect(__mockStorage.setItem).toHaveBeenCalledWith(
         'vex_user_profile',
         JSON.stringify(validUser),
       );
@@ -110,25 +113,22 @@ describe('authProfileStorage', () => {
     });
 
     it('returns parsed user when valid profile exists', async () => {
-      const { getSecureStorage } = require('../../../persistence/SecureStorage');
-      const storage = getSecureStorage();
-      (storage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(validUser));
+      const { __mockStorage } = require('../../persistence/SecureStorage');
+      (__mockStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(validUser));
       const result = await loadUserProfile();
       expect(result).toEqual(validUser);
     });
 
     it('returns null when stored JSON is invalid', async () => {
-      const { getSecureStorage } = require('../../../persistence/SecureStorage');
-      const storage = getSecureStorage();
-      (storage.getItem as jest.Mock).mockResolvedValueOnce('not-json');
+      const { __mockStorage } = require('../../persistence/SecureStorage');
+      (__mockStorage.getItem as jest.Mock).mockResolvedValueOnce('not-json');
       const result = await loadUserProfile();
       expect(result).toBeNull();
     });
 
     it('returns null when schema validation fails', async () => {
-      const { getSecureStorage } = require('../../../persistence/SecureStorage');
-      const storage = getSecureStorage();
-      (storage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify({ invalid: true }));
+      const { __mockStorage } = require('../../persistence/SecureStorage');
+      (__mockStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify({ invalid: true }));
       const result = await loadUserProfile();
       expect(result).toBeNull();
     });
@@ -136,10 +136,9 @@ describe('authProfileStorage', () => {
 
   describe('removeUserProfile', () => {
     it('removes profile from secure storage', async () => {
-      const { getSecureStorage } = require('../../../persistence/SecureStorage');
-      const storage = getSecureStorage();
+      const { __mockStorage } = require('../../persistence/SecureStorage');
       await removeUserProfile();
-      expect(storage.removeItem).toHaveBeenCalledWith('vex_user_profile');
+      expect(__mockStorage.removeItem).toHaveBeenCalledWith('vex_user_profile');
     });
   });
 });

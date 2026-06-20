@@ -1,7 +1,7 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 
 // ─── Event bus mock ────────────────────────────────────────────────────────
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn(() => jest.fn()) },
 }));
 

@@ -86,7 +86,7 @@ describe('Phase 6 — economy deactivation boundary', () => {
     expect(mockOrder).toContain('progression');
   });
 
-  it('5. completion subsystems execute in correct order: identity → streak → progression → rewards', async () => {
+  it('5. completion subsystems execute in correct order: identity → streak → progression → rewards → companion', async () => {
     await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
@@ -97,6 +97,7 @@ describe('Phase 6 — economy deactivation boundary', () => {
       'streak',
       'progression',
       'rewards',
+      'companion',
     ]);
   });
 });

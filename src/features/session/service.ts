@@ -160,5 +160,7 @@ export function calculateProgressPercentage(
 }
 
 export function formatDuration(seconds: number): string {
-  return formatDurationColon(seconds);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
 }

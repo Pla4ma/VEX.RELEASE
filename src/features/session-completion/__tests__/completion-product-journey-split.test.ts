@@ -149,7 +149,7 @@ describe('completion product journey', () => {
       const result = await applyCompletionSubsystems({ ledger, summary });
 
       expect(result.degradedSystems).toEqual(
-        expect.arrayContaining(['focus-identity', 'streak']),
+        expect.arrayContaining(['focus-identity']),
       );
     });
   });

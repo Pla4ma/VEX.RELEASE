@@ -40,7 +40,7 @@ export function buildSessionCompletionReturnPlan(input: {
       : 'Back home',
     nextSessionLabel: 'Bank another block',
     returnReasonBody: input.hasStudyFollowUp
-      ? 'Your next study step is ready from this progress signal.'
+      ? 'Your next plan step is ready from this progress signal.'
       : 'This progress signal helps VEX tune your next focus block.',
     returnReasonTitle: protectedStreak ? 'Tomorrow is queued' : 'Next useful action',
   });

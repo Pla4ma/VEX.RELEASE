@@ -1,0 +1,292 @@
+{
+  "audit_date": "2026-06-18",
+  "scope": "src/ excluding __tests__ and *.test.*",
+  "summary": {
+    "architecture_violations": 0,
+    "file_size_violations": 15,
+    "banned_patterns": {
+      "as_any": 22,
+      "ts_ignore": 0,
+      "console_log": 0,
+      "animated_react_native": 0,
+      "flatlist": 0,
+      "stylesheet_create": 0,
+      "raw_fetch": 0,
+      "async_storage": 0
+    },
+    "type_safety": {
+      "as_type_casts": 466,
+      "record_string_unknown": 22
+    },
+    "magic_strings_navigate": "22+ instances across 12+ files",
+    "version_suffixed_files": 0,
+    "feature_folders_missing_files": 14
+  },
+  "architecture_violations": [],
+  "file_size_violations": [
+    {"file": "src/types/supabase.ts", "lines": 5656, "note": "Auto-generated — may be exempt"},
+    {"file": "src/features/session-runtime/recovery/RecoveryService.ts", "lines": 206},
+    {"file": "src/features/ai-coach/coach-state-types.ts", "lines": 201},
+    {"file": "src/features/ai-coach/components/DailyQuestCard.tsx", "lines": 201},
+    {"file": "src/features/ai-coach/intervention/PredictiveInterventionEngine-helpers.ts", "lines": 201},
+    {"file": "src/features/ai-coach/repository/messages-crud.ts", "lines": 201},
+    {"file": "src/features/ai-coach/schemas/enums.ts", "lines": 201},
+    {"file": "src/features/notifications/repository/notifications.ts", "lines": 201},
+    {"file": "src/features/progression/components/xp-progress-bar.tsx", "lines": 201},
+    {"file": "src/features/session-runtime/integration/coach-handlers.ts", "lines": 201},
+    {"file": "src/persistence/SecureStorage.ts", "lines": 201},
+    {"file": "src/screens/home/containers/NewUserHomeContainer.tsx", "lines": 201},
+    {"file": "src/screens/settings/NotificationScheduleSection.tsx", "lines": 201},
+    {"file": "src/session/integration/coach-handlers.ts", "lines": 201},
+    {"file": "src/shared/analytics/use-analytics-core.ts", "lines": 201}
+  ],
+  "banned_patterns": [
+    {
+      "file": "src/features/content-study/screens/StudyPlanScreen.tsx",
+      "line": 55,
+      "pattern": "as any",
+      "code": "navigateToRootScreen(navigation as any, 'SessionStack', {"
+    },
+    {
+      "file": "src/features/focus-identity/FocusScoreDashboard-main.tsx",
+      "line": 146,
+      "pattern": "as any",
+      "code": "navigateToMainStackScreen(navigation as any, 'Analytics', {"
+    },
+    {
+      "file": "src/features/focus-identity/FocusScoreDashboard-main.tsx",
+      "line": 148,
+      "pattern": "as any",
+      "code": "} as any)"
+    },
+    {
+      "file": "src/navigation/hooks/useStreakFuneralNavigation.ts",
+      "line": 181,
+      "pattern": "as any",
+      "code": "navigateToRootScreen(navigationRef as any, 'StreakFuneral', currentData);"
+    },
+    {
+      "file": "src/screens/auth/VerifyEmailScreen.tsx",
+      "line": 68,
+      "pattern": "as any",
+      "code": "navigateToAuthScreen(navigation as any, 'Login', { email });"
+    },
+    {
+      "file": "src/screens/session/SessionHistoryScreen.tsx",
+      "line": 62,
+      "pattern": "as any",
+      "code": "navigateToSessionStackScreen(navigation as any, 'SessionComplete', {"
+    },
+    {
+      "file": "src/screens/session/components/SessionSetupStakesCard.tsx",
+      "line": 51,
+      "pattern": "as any",
+      "code": "navigateToMainStackScreen(navigation as any, 'Boss');"
+    },
+    {
+      "file": "src/screens/session/components/SessionSetupStakesCard.tsx",
+      "line": 54,
+      "pattern": "as any",
+      "code": "navigateToRootScreen(navigation as any, 'Main', { screen: 'Progress' });"
+    },
+    {
+      "file": "src/screens/session/components/SessionSetupStakesCard.tsx",
+      "line": 62,
+      "pattern": "as any",
+      "code": "navigateToMainStackScreen(navigation as any, 'Challenges');"
+    },
+    {
+      "file": "src/screens/session/components/SessionSetupStakesCard.tsx",
+      "line": 65,
+      "pattern": "as any",
+      "code": "navigateToRootScreen(navigation as any, 'Main', { screen: 'Home' });"
+    },
+    {
+      "file": "src/screens/session/hooks/useActiveSessionHandlers.ts",
+      "line": 96,
+      "pattern": "as any",
+      "code": "navigateToSessionStackScreen(navigation as any, 'SessionComplete', {"
+    },
+    {
+      "file": "src/screens/session/hooks/useFirstSessionStart.ts",
+      "line": 109,
+      "pattern": "as any",
+      "code": "navigateToSessionStackScreen(navigation as any, 'ActiveSession', {"
+    },
+    {
+      "file": "src/screens/session/hooks/useStartSessionFlow.ts",
+      "line": 131,
+      "pattern": "as any",
+      "code": "navigateToSessionStackScreen(navigation as any, 'ActiveSession', {"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 66,
+      "pattern": "as any",
+      "code": "navigateToCoach: () => navigateToSettingsStackScreen(navigation as any, 'CoachSettings'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 67,
+      "pattern": "as any",
+      "code": "navigateToNotifications: () => navigateToSettingsStackScreen(navigation as any, 'NotificationSettings'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 68,
+      "pattern": "as any",
+      "code": "navigateToAppearance: () => navigateToSettingsStackScreen(navigation as any, 'AppearanceSettings'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 69,
+      "pattern": "as any",
+      "code": "navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as any, 'PrivacySettings'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 70,
+      "pattern": "as any",
+      "code": "navigateToAccount: () => navigateToSettingsStackScreen(navigation as any, 'AccountSettings'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 71,
+      "pattern": "as any",
+      "code": "navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as any, 'LaneMode'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 72,
+      "pattern": "as any",
+      "code": "navigateToDataExport: () => navigateToSettingsStackScreen(navigation as any, 'DataExport'),"
+    },
+    {
+      "file": "src/screens/settings/SettingsScreen.tsx",
+      "line": 115,
+      "pattern": "as any",
+      "code": "onPress={() => navigateToRootScreen(navigation as any, 'Main', { screen: 'Profile' })}"
+    },
+    {
+      "file": "src/screens/settings/buildSettingsGroups.ts",
+      "line": 49,
+      "pattern": "as any",
+      "code": "onPress: () => navigateToRootScreen(p.navigation as any, 'Main', { screen: 'Profile' }) }"
+    }
+  ],
+  "type_safety": {
+    "as_type_casts_total": 466,
+    "record_string_unknown_total": 22,
+    "notable_as_type_casts": [
+      {"file": "src/accessibility/AccessibilityEnhancer.ts", "line": 50, "issue": "as P — generic type assertion on createElement return"},
+      {"file": "src/accessibility/AccessibilityEnhancer.ts", "line": 63, "issue": "as P & EnhancedAccessibilityProps — union cast"},
+      {"file": "src/accessibility/AccessibilityEnhancer.ts", "line": 78, "issue": "as Record<string, number> — empty object cast"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 64, "issue": "as PropsWithStyle — unsafe prop cast"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 116, "issue": "as PropsWithStyle — unsafe prop cast"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 140, "issue": "as PropsWithStyle — unsafe prop cast"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 154, "issue": "as PropsWithStyle — unsafe prop cast"},
+      {"file": "src/accessibility/motion.ts", "line": 67, "issue": "as ScaledTypographyEntry | undefined — record value cast"},
+      {"file": "src/accessibility/motion.ts", "line": 80, "issue": "as Record<string, ScaledTypographyEntry> — empty object cast"},
+      {"file": "src/accessibility/wcag-guidelines.ts", "line": 28, "issue": "as Record<string, string> — object literal cast"},
+      {"file": "src/analytics/ab-analytics-mgmt.ts", "line": 66, "issue": "as Array<...> — empty array cast"},
+      {"file": "src/analytics/ab-analytics-mgmt.ts", "line": 85, "issue": "as Record<string, number> — empty object cast"},
+      {"file": "src/components/primitives/theme-values.ts", "line": 33, "issue": "as Record<string, unknown> | undefined — theme group cast"},
+      {"file": "src/components/primitives/theme-values.ts", "line": 50, "issue": "as ThemeShape | null — theme cast"},
+      {"file": "src/components/primitives/theme-values.ts", "line": 60, "issue": "as ColorTree — nested object cast"},
+      {"file": "src/config/supabase.ts", "line": 92, "issue": "as SupabaseClient — Proxy target cast"},
+      {"file": "src/events/EventBus.ts", "line": 111, "issue": "as EventHandler<EventChannels[T]> — handler cast"},
+      {"file": "src/events/EventEmitter.ts", "line": 186, "issue": "as EventEmitter — factory return cast"},
+      {"file": "src/features/analytics/components/AnalyticsDashboard.tsx", "line": 34, "issue": "as AnalyticsMetric[] — array cast"},
+      {"file": "src/features/analytics/components/MetricSelector.tsx", "line": 51, "issue": "as Record<string, typeof AVAILABLE_METRICS> — empty object cast"},
+      {"file": "src/features/ai-coach/repository/state.ts", "line": 34, "issue": "as CoachUserState — DB row cast without Zod"},
+      {"file": "src/features/ai-coach/repository/state.ts", "line": 35, "issue": "as CoachUserState | null — DB row cast without Zod"},
+      {"file": "src/features/ai-coach/repository/state.ts", "line": 38, "issue": "as BehaviorProfile | null — DB row cast without Zod"},
+      {"file": "src/features/ai-coach/service/coach-memory.ts", "line": 30, "issue": "as CoachMemory — JSON.parse cast without Zod validation"},
+      {"file": "src/features/ai-coach/service/coach-memory.ts", "line": 132, "issue": "as CoachMemory — JSON.parse cast without Zod validation"},
+      {"file": "src/features/ai-coach/recommendation/PersonalQuestGenerator.ts", "line": 161, "issue": "as PersonalQuest — parsed data cast"},
+      {"file": "src/features/content-study/analytics-service.ts", "line": 156, "issue": "as Partial<ContentStudyMetrics> — JSON.parse cast without Zod"},
+      {"file": "src/features/content-study/repository-uploads.ts", "line": 2, "issue": "import * as FileSystem — namespace import (acceptable)"},
+      {"file": "src/features/capture/repository.ts", "line": 26, "issue": "as CaptureItem — Supabase response cast without Zod"},
+      {"file": "src/features/capture/repository.ts", "line": 47, "issue": "as CaptureItem[] — Supabase response cast without Zod"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 56, "issue": "as LooselyTypedContext — context cast"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 80, "issue": "as GenerateCoachMessageResponse — response cast without Zod"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 101, "issue": "as GenerateSessionSummaryResponse — response cast without Zod"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 120, "issue": "as GenerateComebackPromptResponse — response cast without Zod"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 139, "issue": "as GenerateStreakRiskNudgeResponse — response cast without Zod"},
+      {"file": "src/shared/ai/edge-function-service.ts", "line": 154, "issue": "as GenerateWeeklyReflectionResponse — response cast without Zod"},
+      {"file": "src/shared/monetization/revenuecat-helpers.ts", "line": 15, "issue": "as RevenueCatError — error mutation cast"},
+      {"file": "src/shared/monetization/revenuecat-service-helpers.ts", "line": 10, "issue": "as Partial<PurchasesErrorShape> — error cast"},
+      {"file": "src/shared/monetization/revenuecat-service-helpers.ts", "line": 17, "issue": "as RevenueCatError — error classification cast"},
+      {"file": "src/shared/monetization/revenuecat-service-helpers.ts", "line": 26, "issue": "as RevenueCatError — error classification cast"},
+      {"file": "src/shared/monetization/revenuecat-service-helpers.ts", "line": 38, "issue": "as RevenueCatError — error mutation cast"},
+      {"file": "src/shared/monetization/revenuecat-service-helpers.ts", "line": 46, "issue": "as Partial<PurchasesErrorShape> — error cast"},
+      {"file": "src/shared/performance/index.ts", "line": 152, "issue": "as NavigatorDevice — navigator cast (browser API)"},
+      {"file": "src/shared/performance/index.ts", "line": 153, "issue": "as NavigatorDevice — navigator cast (browser API)"},
+      {"file": "src/session/orchestrator-accessors.ts", "line": 156, "issue": "as SessionState['config'] — config cast"},
+      {"file": "src/session/orchestrator-accessors.ts", "line": 157, "issue": "as SessionState['status'] — status cast"},
+      {"file": "src/session/orchestrator-accessors.ts", "line": 171, "issue": "as SessionState — full state cast"},
+      {"file": "src/session/orchestrators/SessionRecovery.ts", "line": 43, "issue": "as SessionState['status'] — status cast"},
+      {"file": "src/session/orchestrators/SessionRecovery.ts", "line": 118, "issue": "as SessionState['antiCheatStatus'] — status cast"},
+      {"file": "src/session/orchestrators/SessionRecovery.ts", "line": 132, "issue": "as InterruptionType — enum cast"},
+      {"file": "src/features/session-runtime/utils/validation.ts", "line": 65, "issue": "as Record<string, unknown>[key as string] — nested object navigation cast"},
+      {"file": "src/utils/supabase-resilience.ts", "line": 77, "issue": "as T | null | undefined — fallback value cast"}
+    ],
+    "notable_record_string_unknown": [
+      {"file": "src/accessibility/accessibility-wrappers.ts", "line": 31, "issue": "Record<string, unknown> as function parameter type"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 179, "issue": "Record<string, unknown> as function parameter type"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 180, "issue": "Record<string, unknown> as function parameter type"},
+      {"file": "src/accessibility/enhancer-logic.ts", "line": 182, "issue": "Record<string, unknown> as return type"},
+      {"file": "src/accessibility/enhancer-types.ts", "line": 34, "issue": "Record<string, unknown> as style type"},
+      {"file": "src/accessibility/motion-animation-stubs.ts", "line": 12, "issue": "Record<string, unknown> as config parameter"},
+      {"file": "src/accessibility/motion-animation-stubs.ts", "line": 71, "issue": "Record<string, unknown> as config parameter"},
+      {"file": "src/accessibility/motion-animation-stubs.ts", "line": 87, "issue": "Record<string, unknown> as config parameter"},
+      {"file": "src/accessibility/motion.ts", "line": 62, "issue": "Record<string, unknown> as typography parameter"},
+      {"file": "src/accessibility/types.ts", "line": 99, "issue": "Record<string, unknown> as props type"},
+      {"file": "src/analytics/ABTestingFramework-types.ts", "line": 39, "issue": "Record<string, unknown> as experiment config"},
+      {"file": "src/analytics/ABTestingFramework.ts", "line": 99, "issue": "Record<string, unknown> as return type"},
+      {"file": "src/analytics/AnalyticsService.ts", "line": 13, "issue": "Record<string, unknown> as event properties"},
+      {"file": "src/analytics/AnalyticsService.ts", "line": 49, "issue": "Record<string, unknown> as user properties parameter"},
+      {"file": "src/analytics/AnalyticsService.ts", "line": 53, "issue": "Record<string, unknown> as track properties parameter"},
+      {"file": "src/analytics/AnalyticsService.ts", "line": 57, "issue": "Record<string, unknown> as screen properties parameter"},
+      {"file": "src/analytics/ab-assignments.ts", "line": 63, "issue": "Record<string, unknown> as generic config type"},
+      {"file": "src/analytics/ab-assignments.ts", "line": 76, "issue": "Record<string, unknown> as properties parameter"},
+      {"file": "src/analytics/ab-types.ts", "line": 22, "issue": "Record<string, unknown> as experiment config"}
+    ]
+  },
+  "magic_strings": [
+    {"file": "src/features/content-study/screens/ContentInputScreen.tsx", "line": 92, "code": "navigation.navigate('ContentReview', { contentId: result.contentId })"},
+    {"file": "src/features/content-study/screens/ContentReviewScreen.tsx", "line": 63, "code": "navigation.navigate('StudyPlan', { generationId: result.generationId, contentId: result.contentId })"},
+    {"file": "src/features/content-study/screens/StudyLibraryScreen.tsx", "line": 49, "code": "navigation.navigate('ContentReview', { contentId })"},
+    {"file": "src/features/content-study/screens/StudyLibraryScreen.tsx", "line": 106, "code": "navigation.navigate('ContentInput', {})"},
+    {"file": "src/features/content-study/screens/StudyLibraryScreen.tsx", "line": 163, "code": "navigation.navigate('ContentInput', {})"},
+    {"file": "src/screens/home/FocusScreen.tsx", "line": 64, "code": "navigation.navigate('Settings', { screen: 'SettingsMain' })"},
+    {"file": "src/screens/home/FocusScreen.tsx", "line": 69, "code": "navigation.navigate('FocusScoreDashboard')"},
+    {"file": "src/screens/home/components/HomeMetricsRow.tsx", "line": 59, "code": "navigation.navigate('FocusScoreDashboard')"},
+    {"file": "src/screens/home/containers/HomeColdStartFallback.tsx", "line": 29, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { source: 'onboarding_first_session' } })"},
+    {"file": "src/screens/home/containers/HomeTopBar.tsx", "line": 63, "code": "navigation.navigate('Notifications')"},
+    {"file": "src/screens/notifications/NotificationsScreen.tsx", "line": 49, "code": "navigation.navigate('Settings', { screen: 'NotificationSettings' })"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 22, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { source: 'plan' } })"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 37, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { goal: title, source: 'plan' } })"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 46, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { goal: 'Move one project forward', source: 'plan' } })"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 53, "code": "navigation.navigate('ContentStudy')"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 58, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { goal: 'Project work block', source: 'plan' } })"},
+    {"file": "src/screens/plan/usePlanScreenActions.ts", "line": 68, "code": "navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { goal: 'Study plan block', source: 'plan', studyPlanId } })"}
+  ],
+  "version_suffixed_files": [],
+  "feature_folders_missing_files": [
+    {"folder": "src/features/analytics", "missing": ["repository.ts", "hooks.ts"], "note": "Has repository/ subdirectory and components/ but no hooks.ts or top-level repository.ts"},
+    {"folder": "src/features/boss", "missing": ["hooks.ts"], "note": "Missing hooks.ts — may use hooks from parent or shared"},
+    {"folder": "src/features/challenges", "missing": ["schemas.ts", "hooks.ts"], "note": "Has schemas/helpers.ts but no top-level schemas.ts; hooks exist in hooks/ subdirectory"},
+    {"folder": "src/features/companion", "missing": ["hooks.ts"], "note": "Has profile-service.ts and types.ts but no hooks.ts"},
+    {"folder": "src/features/lane-home", "missing": ["hooks.ts"], "note": "Minimal feature folder"},
+    {"folder": "src/features/notifications", "missing": ["hooks.ts"], "note": "Has repository/ subdirectory but no hooks.ts"},
+    {"folder": "src/features/progression", "missing": ["hooks.ts"], "note": "Has tower-constants.ts, mastery-types.ts, utils/, components/ but no hooks.ts"},
+    {"folder": "src/features/session", "missing": ["repository.ts"], "note": "Has session-stakes-schemas.ts and __tests__/ but no repository.ts"},
+    {"folder": "src/features/session-runtime", "missing": ["types.ts", "repository.ts", "hooks.ts"], "note": "Has components/, antiCheat/, recovery/, integration/ but missing core required files"},
+    {"folder": "src/features/settings", "missing": ["hooks.ts"], "note": "Has defaults.ts, components/, __tests__/ but no hooks.ts (has hooks/ subdirectory)"},
+    {"folder": "src/features/squads", "missing": ["hooks.ts"], "note": "Minimal feature folder"},
+    {"folder": "src/features/streaks", "missing": ["hooks.ts"], "note": "Has constants.ts, utils/, components/, __tests__/ but no hooks.ts (has hooks/ subdirectory)"},
+    {"folder": "src/features/themes", "missing": ["hooks.ts"], "note": "Has session-themes.ts and __tests__/ but no hooks.ts"},
+    {"folder": "src/features/mastery", "missing": ["schemas.ts", "service.ts", "repository.ts", "hooks.ts"], "note": "Has types.ts, components/, __tests__/ but most required files missing"}
+  ]
+}

@@ -7,6 +7,11 @@
 import { CompletionLedgerSchema, type CompletionLedger, type SessionSummary } from './schemas';
 import { SessionMode } from '../../session/modes';
 
+function toTitleCase(s: string): string {
+  if (!s) return '';
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
 export type PostSessionStoryViewModel = {
   degradedWarnings: string[];
   grade: CompletionLedger['grade'];
@@ -51,7 +56,7 @@ export function buildPostSessionStoryViewModel(input: {
     headline: hasPersonalBest
       ? {
           type: 'personal_best',
-          title: `Personal best. ${input.personalBest?.purityScore ?? 0} purity in ${input.personalBest?.sessionMode ?? ''}.`,
+          title: `Personal best. ${input.personalBest?.purityScore ?? 0} purity in ${toTitleCase(input.personalBest?.sessionMode ?? '')}.`,
         }
       : {
           type: 'xp_earned',

@@ -7,7 +7,7 @@ jest.mock('@sentry/react-native', () => ({
 }));
 
 // Mock eventBus
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { emit: jest.fn() },
 }));
 
@@ -24,7 +24,7 @@ import {
 const { default: Sentry } = jest.requireMock('@sentry/react-native') as {
   default: { addBreadcrumb: jest.Mock };
 };
-const { eventBus } = jest.requireMock('../../../events') as {
+const { eventBus } = jest.requireMock('../../../events/EventBus') as {
   eventBus: { emit: jest.Mock };
 };
 

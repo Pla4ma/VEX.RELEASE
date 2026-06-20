@@ -29,6 +29,7 @@ export const SessionGradeFactorSchema = z
       'strictMode',
       'sessionMode',
       'backgroundTime',
+      'recoverySession',
     ]),
     label: z.string(),
     reason: z.string(),

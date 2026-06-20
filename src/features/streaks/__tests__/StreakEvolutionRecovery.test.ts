@@ -5,7 +5,7 @@ import {
   clearRecoveryPlan,
 } from '../StreakEvolutionSystem';
 
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },
 }));
 
@@ -47,7 +47,7 @@ describe('StreakEvolutionSystem', () => {
       });
 
       it('should publish event', () => {
-        const { eventBus } = require('../../../events');
+        const { eventBus } = require('../../../events/EventBus');
         createRecoveryPlan(userId, 5, 100);
         expect(eventBus.publish).toHaveBeenCalledWith(
           'streak:recovery_plan_created',

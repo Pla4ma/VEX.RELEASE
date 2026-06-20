@@ -6,7 +6,8 @@ import {
   canUseInsurance,
 } from '../StreakEvolutionSystem';
 
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
+  EventBus: jest.fn(),
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },
 }));
 

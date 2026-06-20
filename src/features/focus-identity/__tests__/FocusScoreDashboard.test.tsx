@@ -2,16 +2,19 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { FocusScoreDashboard } from '../FocusScoreDashboard';
 import * as useFocusScore from '../hooks-focus-score';
-import * as useNetInfo from '@network';
 import { useNavigation } from '@react-navigation/native';
 import { mockScore, mockHistory } from './fixtures/focus-score-data';
 
 jest.mock('../hooks-focus-score');
-jest.mock('@network', () => ({
+// Mock the exact module paths the component actually imports (not alias paths)
+jest.mock('../../../network/useNetInfo', () => ({
   useNetInfo: jest.fn(() => ({ isOffline: false })),
 }));
-jest.mock('@hooks', () => ({
+jest.mock('../../../hooks/useReducedMotion', () => ({
   useReducedMotion: jest.fn(() => ({ isReducedMotion: true })),
+}));
+jest.mock('../../../shared/ui/components/ScreenErrorBoundary', () => ({
+  withScreenErrorBoundary: (C: React.ComponentType, _name: string) => C,
 }));
 jest.mock('@components/primitives', () => {
   const React = require('react');
@@ -94,7 +97,8 @@ describe('FocusScoreDashboard', () => {
       status: 'success',
       score: null,
     });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: true });
+    const mockUseNetInfo = jest.requireMock('../../../network/useNetInfo').useNetInfo as jest.Mock;
+    mockUseNetInfo.mockReturnValue({ isOffline: true });
     const { getByText } = render(<FocusScoreDashboard />);
     expect(getByText('You are offline. Data may be outdated.')).toBeTruthy();
   });
@@ -107,7 +111,8 @@ describe('FocusScoreDashboard', () => {
       history: mockHistory,
       isRefetching: false,
     });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
+    const mockUseNetInfo = jest.requireMock('../../../network/useNetInfo').useNetInfo as jest.Mock;
+    mockUseNetInfo.mockReturnValue({ isOffline: false });
     (useNavigation as jest.Mock).mockReturnValue({ navigate: mockNavigate });
 
     const { getByText, queryByText } = render(<FocusScoreDashboard />);

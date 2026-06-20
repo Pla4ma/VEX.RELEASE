@@ -36,8 +36,8 @@ describe('ethereal-sky tokens', () => {
   });
 
   it('exposes button + medallion + orb + card colors', () => {
-    expect(etherealButton.appleFill).toMatch(/^#/);
-    expect(etherealButton.googleFill).toMatch(/^#/);
+    expect(etherealButton.appleFill).toMatch(RGBA_PATTERN);
+    expect(etherealButton.googleFill).toMatch(RGBA_PATTERN);
     expect(etherealMedallion.core).toMatch(RGBA_PATTERN);
     expect(etherealOrb.core).toMatch(/^#/);
     expect(etherealCard.border).toMatch(RGBA_PATTERN);

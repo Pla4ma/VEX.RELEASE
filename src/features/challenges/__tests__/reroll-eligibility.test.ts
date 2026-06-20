@@ -3,26 +3,59 @@ import * as service from '../service';
 import * as repository from '../repository';
 
 jest.mock('../repository');
+jest.mock('../queries', () => ({
+  getActiveChallenges: jest.fn().mockResolvedValue([]),
+}));
+jest.mock('../../../events/EventBus', () => ({
+  eventBus: { publish: jest.fn(), subscribe: jest.fn(() => jest.fn()) },
+}));
+jest.mock('../../../rewards/RewardService', () => ({
+  getRewardService: jest.fn(() => ({
+    grantReward: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
+jest.mock('@sentry/react-native', () => ({ captureException: jest.fn() }));
 
 const mockedRepository = jest.mocked(repository);
 
-describe('Challenges Service — checkRerollEligibility', () => {
+describe('Challenges Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should allow free reroll within limit', async () => {
-    mockedRepository.getFreeRerollCountToday.mockResolvedValue(0);
-    const result = await service.checkRerollEligibility('user-1', 'c-1');
-    expect(result.canReroll).toBe(true);
-    expect(result.freeRerollAvailable).toBe(true);
+  describe('assignChallenge', () => {
+    it('should assign a challenge with valid input', async () => {
+      mockedRepository.createUserChallenge.mockResolvedValue({
+        id: 'uc-1', userId: 'user-1', challengeId: 'c-1',
+        status: 'ACTIVE', currentValue: 0,
+      } as unknown);
+      const result = await service.assignChallenge({
+        userId: 'user-1', seasonId: 's-1', challengeType: 'DAILY', challengeId: 'c-1',
+      });
+      expect(result).toBeDefined();
+      expect(mockedRepository.createUserChallenge).toHaveBeenCalled();
+    });
+
+    it('should throw when challengeId is missing', async () => {
+      await expect(
+        service.assignChallenge({
+          userId: 'user-1', seasonId: 's-1', challengeType: 'DAILY',
+        }),
+      ).rejects.toThrow();
+    });
   });
 
-  it('should require paid reroll after free limit', async () => {
-    mockedRepository.getFreeRerollCountToday.mockResolvedValue(1);
-    const result = await service.checkRerollEligibility('user-1', 'c-1');
-    expect(result.canReroll).toBe(true);
-    expect(result.freeRerollAvailable).toBe(false);
-    expect(result.gemCost).toBe(10);
+  describe('checkChallengeProgress', () => {
+    it('should check progress for active challenges', async () => {
+      mockedRepository.fetchUserActiveChallenges.mockResolvedValue([]);
+      const result = await service.checkChallengeProgress(
+        'user-1',
+        'session_start' as any,
+        {} as any,
+      );
+      expect(result).toBeDefined();
+      expect(result.updated).toEqual([]);
+      expect(result.completed).toEqual([]);
+    });
   });
 });

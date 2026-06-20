@@ -33,8 +33,8 @@ jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: jest.fn(() => mockSupabaseClient),
 }));
 
-// Mock eventBus
-jest.mock('../../../events', () => ({
+// Mock eventBus — service.ts imports from EventBus directly, not the index
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { publish: jest.fn() },
 }));
 
@@ -60,6 +60,7 @@ jest.mock('../../../utils/debug', () => ({
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),
+    debug: jest.fn(),
   })),
 }));
 

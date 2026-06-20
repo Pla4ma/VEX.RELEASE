@@ -32,7 +32,7 @@ describe('RepositoryError', () => {
 
   it('handles plain string error', () => {
     const err = new RepositoryError('op', 'something failed');
-    expect(err.message).toBe('[op] Unknown error');
+    expect(err.message).toBe('[op] something failed');
   });
 
   it('handles null error', () => {

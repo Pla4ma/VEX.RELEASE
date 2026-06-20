@@ -6,7 +6,7 @@ import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 
 // ─── Mocks ─────────────────────────────────────────────────────────────────
 
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn(() => jest.fn()) },
 }));
 jest.mock('../repository');
@@ -46,7 +46,7 @@ jest.mock('../../../store', () => ({
 // ─── Imports under test ─────────────────────────────────────────────────────
 
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { updateChallengeProgress } from '../service';
 import { ChallengeSchema, UserChallengeSchema } from '../schemas';
 import { ChallengeNotFoundError, ChallengeNotActiveError } from '../errors';

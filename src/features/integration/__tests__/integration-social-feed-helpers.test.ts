@@ -83,7 +83,7 @@ describe('integration', () => {
     it('getNotificationBody returns default for unknown types', () => {
       expect(
         getNotificationBody({ ...base, activityType: 'SOMETHING_ELSE' }),
-      ).toBe('Check out the app for details!');
+      ).toBe('Check out the app for details');
     });
 
     it('generateId returns a unique non-empty string', () => {

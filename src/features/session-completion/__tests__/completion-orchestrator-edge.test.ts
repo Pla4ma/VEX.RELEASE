@@ -16,6 +16,7 @@ jest.mock('../../../events', () => ({
 }));
 jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
+    debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
     warn: jest.fn(),
@@ -59,6 +60,18 @@ jest.mock('../../companion-promise/service', () => ({
 jest.mock('../repository', () => ({
   createCompletionLedger: jest.fn(),
   getCompletionLedgerByIdempotencyKey: jest.fn().mockResolvedValue(null),
+  persistCompletionLedger: jest.fn().mockImplementation((ledger: unknown) =>
+    Promise.resolve(ledger),
+  ),
+  SessionCompletionRepositoryError: class SessionCompletionRepositoryError extends Error {
+    constructor(message: string, options?: { cause?: unknown }) {
+      super(message);
+      this.cause = options?.cause;
+    }
+  },
+}));
+jest.mock('../../session-history/repository', () => ({
+  createSessionRecord: jest.fn().mockResolvedValue(undefined),
 }));
 jest.mock('../../../api/QueryProvider', () => ({
   queryClient: { invalidateQueries: jest.fn().mockResolvedValue(undefined) },

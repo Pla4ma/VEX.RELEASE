@@ -2,15 +2,18 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { FocusScoreDashboard } from '../FocusScoreDashboard';
 import * as useFocusScore from '../hooks-focus-score';
-import * as useNetInfo from '@network';
 import { mockScore, mockHistoryThreeDays } from './fixtures/focus-score-data';
 
 jest.mock('../hooks-focus-score');
-jest.mock('@network', () => ({
+// Mock the exact module paths the component actually imports (not alias paths)
+jest.mock('../../../network/useNetInfo', () => ({
   useNetInfo: jest.fn(() => ({ isOffline: false })),
 }));
-jest.mock('@hooks', () => ({
+jest.mock('../../../hooks/useReducedMotion', () => ({
   useReducedMotion: jest.fn(() => ({ isReducedMotion: true })),
+}));
+jest.mock('../../../shared/ui/components/ScreenErrorBoundary', () => ({
+  withScreenErrorBoundary: (C: React.ComponentType, _name: string) => C,
 }));
 jest.mock('@components/primitives', () => {
   const React = require('react');
@@ -60,7 +63,6 @@ describe('FocusScoreDashboard — advanced states', () => {
       score: mockScore,
       isRefetching: true,
     });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
     const { getByText } = render(<FocusScoreDashboard />);
     expect(getByText('Updating...')).toBeTruthy();
   });
@@ -72,7 +74,6 @@ describe('FocusScoreDashboard — advanced states', () => {
       history: [],
       isRefetching: false,
     });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
     const { getByText } = render(<FocusScoreDashboard />);
     expect(getByText('No history available yet.')).toBeTruthy();
   });
@@ -84,7 +85,6 @@ describe('FocusScoreDashboard — advanced states', () => {
       history: mockHistoryThreeDays,
       isRefetching: false,
     });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
     const { getByText } = render(<FocusScoreDashboard />);
     expect(getByText('4/1/2026: 700 (+0)')).toBeTruthy();
     expect(getByText('4/2/2026: 710 (+10)')).toBeTruthy();
