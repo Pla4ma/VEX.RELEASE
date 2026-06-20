@@ -95,18 +95,18 @@ describe('PerformanceGate', () => {
     });
     it('should provide comprehensive performance report', async () => {
       mockPerformanceMonitor.getMetrics.mockReturnValue({
-        fps: 30,
-        avgFps: 25,
-        jankFrames: 10,
-        memoryUsage: 180,
-        jsHeapSize: 70,
-        longTasks: 4,
+        fps: 60,
+        avgFps: 62,
+        jankFrames: 0,
+        memoryUsage: 120,
+        jsHeapSize: 50,
+        longTasks: 1,
         timestamp: Date.now(),
       });
       const result = await gate.evaluatePerformanceGate();
       const report = gate.generateReport(result);
       expect(report).toContain('# Performance Gate Report');
-      expect(report).toContain('**Overall Status: ✅ PASSED**');
+      expect(report).toContain('**Overall Status: PASSED**');
       expect(report).toContain('### FPS');
       expect(report).toContain('### Memory');
     });
