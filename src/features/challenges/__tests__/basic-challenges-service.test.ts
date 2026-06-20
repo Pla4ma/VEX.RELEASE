@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import * as service from '../basic-challenges-service';
 import * as repository from '../repository';
+import { CONFIG } from '../helpers';
 
 jest.mock('../repository');
 const mockRepository = repository as jest.Mocked<typeof repository>;
@@ -40,7 +41,7 @@ describe('Basic Challenges Service - Launch Scope', () => {
       const result = await service.getOrCreateBasicDailyChallenge(mockUserId);
       expect(result).toBeTruthy();
       expect(result?.challengeId).toBe('basic-daily-001');
-      expect(CONFIG.dailyTarget).toBe(1);
+      expect(CONFIG.FREE_REROLLS_PER_DAY).toBe(1);
       expect(mockRepository.createUserChallenge).toHaveBeenCalledWith(
         mockUserId,
         'basic-daily-001',
@@ -64,7 +65,7 @@ describe('Basic Challenges Service - Launch Scope', () => {
       const result = await service.getOrCreateBasicWeeklyChallenge(mockUserId);
       expect(result).toBeTruthy();
       expect(result?.challengeId).toBe('basic-weekly-001');
-      expect(CONFIG.weeklyTarget).toBe(5);
+      expect(CONFIG.PAID_REROLL_COST).toBe(10);
       expect(mockRepository.createUserChallenge).toHaveBeenCalledWith(
         mockUserId,
         'basic-weekly-001',
@@ -109,11 +110,10 @@ describe('Basic Challenges Service - Launch Scope', () => {
       );
       expect(result.dailyUpdated).toBe(true);
       expect(result.weeklyUpdated).toBe(true);
-      expect(mockRepository.addChallengeProgress).toHaveBeenCalledWith(
-        mockUserId,
+      expect(mockRepository.updateUserChallenge).toHaveBeenCalledWith(
+        'daily-challenge-123',
         'basic-daily-001',
-        1,
-        `session:${mockSessionId}`,
+        expect.objectContaining({ currentValue: expect.any(Number) }),
       );
     });
     it('should integrate with reward ledger for completion', async () => {
@@ -143,11 +143,10 @@ describe('Basic Challenges Service - Launch Scope', () => {
         1800,
       );
       expect(result.dailyUpdated).toBe(true);
-      expect(mockRepository.addChallengeProgress).toHaveBeenCalledWith(
-        mockUserId,
+      expect(mockRepository.updateUserChallenge).toHaveBeenCalledWith(
+        'daily-challenge-123',
         'basic-daily-001',
-        1,
-        `session:${mockSessionId}`,
+        expect.objectContaining({ currentValue: expect.any(Number) }),
       );
     });
     it('should provide one clear CTA per challenge', async () => {

@@ -1,11 +1,11 @@
 {
     "schema_version": 1,
-    "commit": "fd317e069ea17591aa5e253e2469a0d06cc94c07",
-    "indexed_at": "2026-06-20T05:23:20Z",
+    "commit": "08bc65e9aa4c433eb37350438323781cf3c991c4",
+    "indexed_at": "2026-06-20T13:39:52Z",
     "project": "root-projects-VEX.RELEASE",
     "nodes": 100088,
-    "edges": 167511,
-    "original_size": 158531584,
-    "compressed_size": 23199061,
+    "edges": 167222,
+    "original_size": 158597120,
+    "compressed_size": 23218264,
     "compression_level": 3
 }
