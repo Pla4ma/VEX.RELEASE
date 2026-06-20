@@ -6,6 +6,7 @@ import { useTheme } from '../../../theme';
 import { MetricRow, isProgressMetric } from './MetricRow';
 import { StudyProgressPanel } from './StudyProgressPanel';
 import type { SessionProgressionCardProps } from './SessionProgressionCard.types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export type { SessionProgressionCardProps };
 
@@ -130,7 +131,7 @@ export function SessionProgressionCard({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >
-                Retry
+                <VexText>Retry</VexText>
               </Button>
             ) : null}
           </Box>

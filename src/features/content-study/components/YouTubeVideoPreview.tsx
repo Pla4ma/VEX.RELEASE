@@ -6,10 +6,11 @@ import { getOptimizedImageUrl } from '../../../shared/performance';
 
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import type { YouTubeInputProps } from '../types';
 import { styles, formatDuration } from './YouTubeInputStyles';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type VideoInfo = NonNullable<YouTubeInputProps['videoInfo']>;
 
@@ -122,7 +123,7 @@ export function YouTubeVideoPreview({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Retry
+              <VexText>Retry</VexText>
             </Button>
           )}
         </View>

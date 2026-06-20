@@ -65,11 +65,9 @@ const SHIMS = {
 };
 
 // IMPORTANT:
-// We never want to override production/native modules globally.
-// Shims are opt-in and intended only for Expo Go development runs.
-const SHIMS_ENABLED =
-  process.env.EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS === "1" &&
-  process.env.NODE_ENV !== "production";
+// Dev builds must not crash when opened in Expo Go or a remote debugger.
+// Production/native builds still resolve real native modules.
+const SHIMS_ENABLED = process.env.NODE_ENV !== "production";
 
 const originalResolveRequest = config.resolver.resolveRequest;
 

@@ -16,8 +16,9 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { NameAvatarPreview } from './NameAvatarPreview';
+import { Text as VexText } from '../../../components/primitives/Text';
 interface NameScreenProps {
   onContinue: (name: string) => void;
   onSkip: () => void;
@@ -63,7 +64,7 @@ export function NameScreen({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <Box flex={1} bg="background.primary" px="lg" py="xl">
           {}
           <Box flexDirection="row" alignItems="center" mb="md">
@@ -164,7 +165,7 @@ export function NameScreen({
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
-              Continue →
+              <VexText>Continue →</VexText>
             </Button>
           </Animated.View>
 

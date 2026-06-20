@@ -7,6 +7,7 @@ import { Skeleton, SkeletonCard } from '../../components/ui/Skeleton';
 import { StatusBanner } from '../../shared/ui/components/StatusFeedback';
 import type { Theme } from '../../theme';
 import { paywallStyles as styles } from './paywall-styles';
+import { Text as VexText } from '../../components/primitives/Text';
 
 export type PaywallStatusMessage = {
   tone: 'info' | 'warning' | 'celebration';
@@ -91,7 +92,7 @@ export function PaywallErrorState({
           accessibilityRole="button"
           accessibilityHint="Checks the app store for existing VEX Premium entitlements."
         >
-          Restore purchases
+          <VexText>Restore purchases</VexText>
         </Button>
       </View>
     </View>
@@ -122,7 +123,7 @@ export function PaywallUnavailableState({
         accessibilityRole="button"
         accessibilityHint="Checks the app store for existing VEX Premium entitlements."
       >
-        Restore purchases
+        <VexText>Restore purchases</VexText>
       </Button>
     </View>
   );

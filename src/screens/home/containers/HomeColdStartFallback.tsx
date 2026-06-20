@@ -7,6 +7,7 @@ import { markColdStart } from '../../../app/cold-start-performance';
 import { AppScreen, Button, Text } from '../../../components/primitives';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useTheme } from '../../../theme';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -91,7 +92,7 @@ export function HomeColdStartFallback({
           size="lg"
           variant="primary"
         >
-          Start first session
+          <VexText>Start first session</VexText>
         </Button>
       </View>
     </AppScreen>

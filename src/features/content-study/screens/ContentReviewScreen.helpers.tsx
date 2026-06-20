@@ -80,7 +80,7 @@ export function ContentView({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.contentContainer}>
           <View style={styles.contentHeader}>
             <Text style={styles.contentTitle}>Extracted Content</Text>

@@ -18,6 +18,7 @@ import {
 } from './PaywallHero.defaults';
 import { FeatureHighlightHero } from './PaywallHero.featureHighlight';
 import { RunLaneHero, StudyLaneHero } from './PaywallHero.lanes';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type PaywallHeroProps = {
   contextBody?: string;
@@ -80,7 +81,7 @@ export function PaywallHero({
           accessibilityRole="button"
           accessibilityHint="Returns to the previous screen."
         >
-          Close
+          <VexText>Close</VexText>
         </Button>
       </View>
 

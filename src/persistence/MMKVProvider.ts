@@ -1,20 +1,19 @@
 import * as Sentry from '@sentry/react-native';
-import type { MMKV } from 'react-native-mmkv';
 import type { StorageProvider } from './PersistenceService';
 import { getMmkvEncryptionKey } from './mmkv-key';
+import { createRuntimeMMKV, type RuntimeMMKV } from './mmkv-runtime';
 
 export class MMKVProvider implements StorageProvider {
-  private storage: MMKV | null;
+  private storage: RuntimeMMKV | null;
 
   constructor() {
     this.storage = null;
   }
 
-  private async getStorage(): Promise<MMKV> {
+  private async getStorage(): Promise<RuntimeMMKV> {
     if (!this.storage) {
-      const { MMKV } = await import('react-native-mmkv');
       const encryptionKey = await getMmkvEncryptionKey();
-      this.storage = new MMKV({
+      this.storage = createRuntimeMMKV({
         id: 'vex-persistence',
         encryptionKey,
       });

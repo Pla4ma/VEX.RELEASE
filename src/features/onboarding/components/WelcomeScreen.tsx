@@ -10,13 +10,14 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexFocusMark } from '../../../screens/auth/components/VexFocusMark';
 import { PathSelectionCard } from './PathSelectionCard';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { spacing } from '../../../theme/tokens/spacing';
 import type { OnboardingPath } from '../onboarding-paths';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface WelcomeScreenProps {
   onStart: (path: OnboardingPath) => void;
@@ -153,7 +154,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode 
             accessibilityRole="button"
             accessibilityHint="Double tap to begin your journey"
           >
-            Begin
+            <VexText>Begin</VexText>
           </Button>
         </Animated.View>
       </Box>

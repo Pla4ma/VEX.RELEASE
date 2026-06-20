@@ -2,7 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ErrorStateProps {
   message: string;
@@ -45,7 +46,7 @@ export function MonthlyReportErrorState({
         variant="primary"
         style={{ marginBottom: theme.spacing[4] }}
       >
-        Try Again
+        <VexText>Try Again</VexText>
       </Button>
       <Button accessibilityLabel="Close" onPress={onClose} variant="secondary">
         <Text>Close</Text>

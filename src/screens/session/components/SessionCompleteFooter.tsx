@@ -4,6 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box, Button } from '../../../components/primitives';
 import type { Theme } from '../../../theme/types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export function SessionCompleteFooter({
   bottomInset,
@@ -55,7 +56,7 @@ export function SessionCompleteFooter({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Share Your Session
+              <VexText>Share Your Session</VexText>
             </Button>
           </Box>
         )}

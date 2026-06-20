@@ -2,9 +2,10 @@ import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Skeleton } from './SkeletonCard';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface EmptyLibraryStateProps {
   isLoading: boolean;
@@ -64,7 +65,7 @@ export function EmptyLibraryState({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Try Again
+          <VexText>Try Again</VexText>
         </Button>
       </Box>
     );
@@ -93,7 +94,7 @@ export function EmptyLibraryState({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Add Your First Content
+            <VexText>Add Your First Content</VexText>
           </Button>
         )}
       </Box>

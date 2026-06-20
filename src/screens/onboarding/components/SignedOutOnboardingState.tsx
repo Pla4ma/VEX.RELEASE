@@ -3,7 +3,7 @@ import { Text } from '../../../components/primitives/Text';
 import { SerifTitle, EtherealSkyBackground } from '../components/ethereal';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 
-export function SignedOutOnboardingState(): JSX.Element {
+export function SignedOutOnboardingState(): React.ReactNode {
   return (
     <View style={{ flex: 1 }}>
       <EtherealSkyBackground />

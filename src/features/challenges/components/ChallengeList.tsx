@@ -12,6 +12,7 @@ import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';
 import { challengeListStyles as styles } from './challenge-list.styles';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];
@@ -88,7 +89,7 @@ export function ChallengeList({
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
-              Retry
+              <VexText>Retry</VexText>
             </Button>
           )}
         </Card>
@@ -119,7 +120,7 @@ export function ChallengeList({
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
-              Show All
+              <VexText>Show All</VexText>
             </Button>
           )}
         </Card>

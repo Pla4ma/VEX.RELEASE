@@ -6,10 +6,11 @@ import { FocusRing } from '../../../components/FocusRing';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionTheme } from '../../../features/themes/session-themes';
 import { getSessionThemeById } from '../../../features/themes/session-themes';
 import { buildPreviewGradient } from '../utils/session-setup';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionThemeSelectorProps = {
   onPressTheme: (theme: SessionTheme) => void;
@@ -70,7 +71,7 @@ export function SessionThemeSelector({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Retry
+            <VexText>Retry</VexText>
           </Button>
         </Box>
       ) : (

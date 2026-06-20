@@ -14,6 +14,7 @@ import {
   type LoadState,
   buildFallbackGrowth,
 } from './CompanionGrowthSection.helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type CompanionGrowthSectionProps = {
   sessionId: string;
@@ -99,7 +100,7 @@ export function CompanionGrowthSection({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Retry
+          <VexText>Retry</VexText>
         </Button>
       </Box>
     );

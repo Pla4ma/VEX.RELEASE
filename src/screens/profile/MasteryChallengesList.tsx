@@ -105,7 +105,7 @@ function ChallengeCard({
             accessibilityRole="button"
             accessibilityHint={`Claims ${challenge.masteryPoints} mastery points`}
           >
-            Claim +{challenge.masteryPoints} MP
+            <Text>Claim +{challenge.masteryPoints} MP</Text>
           </Button>
         )}
       </View>

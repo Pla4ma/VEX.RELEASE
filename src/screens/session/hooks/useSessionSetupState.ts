@@ -21,8 +21,8 @@ export function useSessionSetupState(
   currentStreak: number,
 ) {
   const storage = useMemo(() => getDefaultStorageAdapter(), []);
-  const sessionDraftKey = useMemo(() => `session_draft_${userId}`, [userId]);
-  const masteryStateKey = useMemo(() => `mastery_state_${userId}`, [userId]);
+  const sessionDraftKey = `session_draft_${userId}`;
+  const masteryStateKey = `mastery_state_${userId}`;
   const initialPreset = useMemo(() => {
     if (params?.presetId) {
       return (

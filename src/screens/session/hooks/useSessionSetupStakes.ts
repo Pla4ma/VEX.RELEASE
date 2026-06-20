@@ -90,9 +90,7 @@ export function useSessionSetupStakes({
     };
   }, [activeChallenges]);
 
-  const rivalStake = React.useMemo<SessionSetupStakes['rivalStake']>(() => {
-    return null;
-  }, []);
+  const rivalStake: SessionSetupStakes['rivalStake'] = null;
 
   return {
     bossStake,

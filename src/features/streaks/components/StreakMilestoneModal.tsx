@@ -6,10 +6,11 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { ConfettiBurst } from './Confetti';
 import { StreakFlame, RewardItem } from './StreakFlame';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export interface StreakMilestoneModalProps {
   visible: boolean;
@@ -159,7 +160,7 @@ export function StreakMilestoneModal({
                     accessibilityRole="button"
                     accessibilityHint="Double tap to activate"
                   >
-                    {`Share my ${milestone}-day streak`}
+                    <VexText>{`Share my ${milestone}-day streak`}</VexText>
                   </Button>
                 )}
                 <Button variant="primary"
@@ -170,7 +171,7 @@ export function StreakMilestoneModal({
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >
-                  Continue →
+                  <VexText>Continue →</VexText>
                 </Button>
               </Box>
             </Animated.View>

@@ -5,6 +5,7 @@ import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import type { StudyProgress } from './SessionProgressionCard.types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export function StudyProgressPanel({
   studyProgress,
@@ -161,7 +162,7 @@ export function StudyProgressPanel({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Mark Complete
+            <VexText>Mark Complete</VexText>
           </Button>
           <Button variant="outline"
             size="sm"
@@ -170,7 +171,7 @@ export function StudyProgressPanel({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Skip
+            <VexText>Skip</VexText>
           </Button>
         </Box>
       </Box>

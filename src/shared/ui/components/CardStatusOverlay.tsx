@@ -3,8 +3,9 @@ import { View, ActivityIndicator, StyleSheet, type ViewStyle } from 'react-nativ
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { AsyncStatus } from './StatusFeedback.types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export const CardStatusOverlay: React.FC<{
   status: AsyncStatus;
@@ -80,7 +81,7 @@ export const CardStatusOverlay: React.FC<{
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Retry
+              <VexText>Retry</VexText>
             </Button>
           )}
         </>

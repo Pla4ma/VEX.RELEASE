@@ -28,7 +28,7 @@ export const SessionSummaryMoodSelector: React.FC<
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.reflectionSection}>
           <Text style={styles.sectionTitle}>How was your session?</Text>
           <View style={styles.moodSelector}>

@@ -15,8 +15,9 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CompanionCreature } from './CompanionCreature';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface CompanionRevealScreenProps {
   userName: string;
@@ -121,7 +122,7 @@ export function CompanionRevealScreen({
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
-          Continue to session setup →
+          <VexText>Continue to session setup →</VexText>
         </Button>
       </Animated.View>
 

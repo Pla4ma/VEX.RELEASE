@@ -17,7 +17,7 @@ import { Text } from './Text';
 import { Icon } from '../../icons/components/Icon';
 import { useTheme } from '../../theme/ThemeContext';
 import { ErrorState } from '../../shared/ui/state-components/error-state';
-import { Skeleton } from '../../shared/ui/primitives';
+import { Skeleton } from '../../shared/ui/primitives/Skeleton';
 
 interface FeatureScreenProps {
   title: string;

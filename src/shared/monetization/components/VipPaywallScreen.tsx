@@ -6,15 +6,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { capture } from '../../analytics';
+import { capture } from '../../analytics/analytics-service';
 import { StatusBanner } from '../../ui/components/StatusFeedback';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
 import { usePaywall, usePremiumStatus } from '../use-revenuecat';
 import { PREMIUM_BENEFITS, type PaywallPlan } from './paywall-data';
 import { PlanCard, BenefitList } from './PaywallComponents';
 import { usePaywallActions } from './usePaywallActions';
 import { VipPaywallSkeleton } from './VipPaywallSkeleton';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;
@@ -98,7 +99,7 @@ export function VipPaywallScreen(): React.ReactNode {
             accessibilityRole="button"
             accessibilityHint="Closes this screen."
           >
-            Close
+            <VexText>Close</VexText>
           </Button>
         </View>
 
@@ -155,7 +156,7 @@ export function VipPaywallScreen(): React.ReactNode {
           accessibilityRole="button"
           accessibilityHint="Checks the app store for existing VEX Premium entitlements."
         >
-          Restore purchases
+          <VexText>Restore purchases</VexText>
         </Button>
         {!isPremium && !isLoading && !error ? (
           <Button
@@ -167,7 +168,7 @@ export function VipPaywallScreen(): React.ReactNode {
             accessibilityRole="button"
             accessibilityHint="Starts the store purchase flow for the selected plan."
           >
-            Subscribe {selectedPlan === 'annual' ? 'Annual' : 'Monthly'}
+            <VexText>Subscribe {selectedPlan === 'annual' ? 'Annual' : 'Monthly'}</VexText>
           </Button>
         ) : null}
       </ScrollView>

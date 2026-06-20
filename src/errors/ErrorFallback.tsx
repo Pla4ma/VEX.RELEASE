@@ -6,6 +6,7 @@ import { useTheme } from '../theme';
 import { Icon } from '../icons';
 import { captureException } from '../config/sentry';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
+import { Text as VexText } from '../components/primitives/Text';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
   switch (category) {
@@ -125,7 +126,7 @@ export function ErrorFallback({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Try Again
+              <VexText>Try Again</VexText>
             </Button>
           )}
           {onDegraded && isRecoverable && (
@@ -136,7 +137,7 @@ export function ErrorFallback({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Continue Anyway
+              <VexText>Continue Anyway</VexText>
             </Button>
           )}
           {category === 'client' && (
@@ -147,7 +148,7 @@ export function ErrorFallback({
               accessibilityRole="button"
               accessibilityHint="Double tap to restart the application"
             >
-              Restart App
+              <VexText>Restart App</VexText>
             </Button>
           )}
         </Box>

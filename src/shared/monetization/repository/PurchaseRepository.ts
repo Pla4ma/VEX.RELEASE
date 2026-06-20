@@ -6,12 +6,12 @@
  * @phase 6 - Deepening: Repository layer
  */
 
-import { MMKV } from 'react-native-mmkv';
+import { createRuntimeMMKV } from '../../../persistence/mmkv-runtime';
 import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('monetization:repository');
 
-const storage = new MMKV({ id: 'monetization-repo' });
+const storage = createRuntimeMMKV({ id: 'monetization-repo' });
 
 const KEYS = {
   purchases: (userId: string) => `purchases:${userId}`,

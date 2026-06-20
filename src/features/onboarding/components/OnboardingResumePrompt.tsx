@@ -4,10 +4,11 @@ import Animated, { FadeIn, FadeInUp, FadeOut } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 import { useOnboardingResumeState } from '../hooks/useOnboardingResumeState';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface OnboardingResumePromptProps {
   onResume: () => void;
@@ -107,7 +108,7 @@ export function OnboardingResumePrompt({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
               >
-                Continue Setup →
+                <VexText>Continue Setup →</VexText>
               </Button>
               <Button variant="secondary"
                 size="md"
@@ -118,7 +119,7 @@ export function OnboardingResumePrompt({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
               >
-                Start Fresh
+                <VexText>Start Fresh</VexText>
               </Button>
               <Button variant="ghost"
                 size="sm"
@@ -128,7 +129,7 @@ export function OnboardingResumePrompt({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to select"
               >
-                Skip for Now
+                <VexText>Skip for Now</VexText>
               </Button>
             </Box>
             <Text variant="caption" color="text.tertiary" textAlign="center" mt="lg">

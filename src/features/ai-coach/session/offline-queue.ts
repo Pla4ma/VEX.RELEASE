@@ -1,13 +1,16 @@
-import { MMKV } from 'react-native-mmkv';
+import {
+  createRuntimeMMKV,
+  type RuntimeMMKV,
+} from '../../../persistence/mmkv-runtime';
 import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('coach:offline');
 
-let _offlineStorage: MMKV | null = null;
-function getOfflineStorage(): MMKV {
+let _offlineStorage: RuntimeMMKV | null = null;
+function getOfflineStorage(): RuntimeMMKV {
   if (!_offlineStorage) {
-    _offlineStorage = new MMKV({ id: 'coach-offline-queue', encryptionKey: getMmkvEncryptionKeySync() });
+    _offlineStorage = createRuntimeMMKV({ id: 'coach-offline-queue', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _offlineStorage;
 }

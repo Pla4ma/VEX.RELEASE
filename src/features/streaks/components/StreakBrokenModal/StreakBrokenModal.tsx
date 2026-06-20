@@ -6,7 +6,7 @@ import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { Box } from '../../../../components/primitives/Box';
 import { Text } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
-import { useTheme } from '../../../../theme';
+import { useTheme } from '../../../../theme/ThemeContext';
 import { useState } from 'react';
 import type { StreakBrokenModalProps } from './types';
 import { calculateRestoreCost } from './helpers';
@@ -17,6 +17,7 @@ import {
   CoachMessage,
 } from './Subcomponents';
 import { RestoreStreakCard } from './RestoreStreakCard';
+import { Text as VexText } from '../../../../components/primitives/Text';
 
 export function StreakBrokenModal({
   visible,
@@ -167,7 +168,7 @@ export function StreakBrokenModal({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >
-                🔥 Start Fresh
+                <VexText>🔥 Start Fresh</VexText>
               </Button>
               <Button variant="ghost"
                 size="md"
@@ -177,7 +178,7 @@ export function StreakBrokenModal({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >
-                Not now
+                <VexText>Not now</VexText>
               </Button>
             </Box>
           </Box>

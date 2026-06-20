@@ -21,6 +21,7 @@ import type {
 import { FirstSessionView } from './components/SessionSetupFirstSessionView';
 import { ReturningUserView } from './components/SessionSetupReturningUserView';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -28,8 +29,7 @@ type SessionNavigationProp = CompositeNavigationProp<
 >;
 type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
 
-export const SessionSetupScreen = withScreenErrorBoundary(
-  function _SessionSetupScreen(): React.JSX.Element {
+function SessionSetupScreenContent(): React.JSX.Element {
     const navigation = useNavigation<SessionNavigationProp>();
     const route = useRoute<SessionSetupRouteProp>();
 
@@ -73,7 +73,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(
             accessibilityRole="button"
             accessibilityHint="Returns to the previous screen"
           >
-            Go Back
+            <VexText>Go Back</VexText>
           </Button>
         </Box>
       );
@@ -90,7 +90,10 @@ export const SessionSetupScreen = withScreenErrorBoundary(
         route={route}
       />
     );
-  },
+}
+
+export const SessionSetupScreen = withScreenErrorBoundary(
+  SessionSetupScreenContent,
   'Session Setup',
 );
 

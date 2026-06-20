@@ -11,6 +11,7 @@ import type { MasteryState } from '../types';
 import { MasteryRankBadge } from './MasteryRankBadge';
 import { TechniqueBar } from './TechniqueBar';
 import { TECHNIQUES, difficultyColors } from './mastery-card-constants';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type Props = {
   userId: string;
@@ -172,7 +173,7 @@ export function MasteryCard({
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >
-                  Claim
+                  <VexText>Claim</VexText>
                 </Button>
               ) : null}
             </View>

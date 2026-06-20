@@ -5,18 +5,18 @@
  * MMKV is a fast key-value storage library developed by Tencent.
  */
 
-import { MMKV } from 'react-native-mmkv';
 import type { Nullable } from '../types/global';
 import { safeJsonParse } from './safe-json';
 import { getMmkvEncryptionKeySync } from './mmkv-key';
-import { configureDebouncedWrites, debouncedWrite} from '../utils/debounced-write';
+import { configureDebouncedWrites } from '../utils/debounced-write';
+import { createRuntimeMMKV, type RuntimeMMKV } from './mmkv-runtime';
 
 // Singleton MMKV instance for Zustand storage
-let mmkvStorage: MMKV | null = null;
+let mmkvStorage: RuntimeMMKV | null = null;
 
-function getStorage(): MMKV {
+function getStorage(): RuntimeMMKV {
   if (!mmkvStorage) {
-    mmkvStorage = new MMKV({
+    mmkvStorage = createRuntimeMMKV({
       id: 'zustand-storage',
       encryptionKey: getMmkvEncryptionKeySync(),
     });
@@ -42,50 +42,58 @@ export const getMMKVStorageAdapter = (): MMKVStorageAdapter => {
  * Generic storage adapter interface implementation for MMKV
  */
 export class MMKVStorageAdapter {
-  private storage: MMKV;
+  private readonly id: string;
+  private storage: RuntimeMMKV | null = null;
 
   constructor(id: string = 'vex-storage') {
-    this.storage = new MMKV({ id });
+    this.id = id;
+  }
+
+  private getStorage(): RuntimeMMKV {
+    if (!this.storage) {
+      this.storage = createRuntimeMMKV({ id: this.id });
+    }
+    return this.storage;
   }
 
   async initialize(): Promise<void> {
-    // MMKV is initialized on construction, nothing to do here
+    this.getStorage();
   }
 
   async getItem(key: string): Promise<string | null> {
-    return this.storage.getString(key) ?? null;
+    return this.getStorage().getString(key) ?? null;
   }
 
   getItemSync(key: string): string | null {
-    return this.storage.getString(key) ?? null;
+    return this.getStorage().getString(key) ?? null;
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    this.storage.set(key, value);
+    this.getStorage().set(key, value);
   }
 
   setItemSync(key: string, value: string): void {
-    this.storage.set(key, value);
+    this.getStorage().set(key, value);
   }
 
   async removeItem(key: string): Promise<void> {
-    this.storage.delete(key);
+    this.getStorage().delete(key);
   }
 
   removeItemSync(key: string): void {
-    this.storage.delete(key);
+    this.getStorage().delete(key);
   }
 
   async containsKey(key: string): Promise<boolean> {
-    return this.storage.contains(key);
+    return this.getStorage().contains(key);
   }
 
   async getAllKeys(): Promise<string[]> {
-    return this.storage.getAllKeys();
+    return this.getStorage().getAllKeys();
   }
 
   async clear(): Promise<void> {
-    this.storage.clearAll();
+    this.getStorage().clearAll();
   }
 
   async getSize(): Promise<number> {

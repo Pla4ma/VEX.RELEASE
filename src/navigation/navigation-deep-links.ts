@@ -79,7 +79,7 @@ function sanitizeParams(
     }
     if (typeof value === 'object' && value !== null) {
       if (key === 'studyPlan' || key === 'sessionConfig') {
-        sanitized[key] = JSON.parse(JSON.stringify(value));
+        sanitized[key] = structuredClone(value);
       }
     }
   }

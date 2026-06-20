@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { Box, Button, Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';
 import { MOODS, type Mood } from '../utils';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionReflectionSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -110,7 +111,7 @@ export function SessionReflectionSheet({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Finish
+            <VexText>Finish</VexText>
           </Button>
           <Button variant="ghost"
             size="md"
@@ -120,7 +121,7 @@ export function SessionReflectionSheet({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Skip
+            <VexText>Skip</VexText>
           </Button>
         </Box>
       </Box>

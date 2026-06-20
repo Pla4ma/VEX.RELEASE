@@ -139,7 +139,6 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const content = (
     <BadgeContent
-      children={children}
       variantStyles={variantStyles}
       sizeConfig={sizeConfig}
       leftIcon={leftIcon}
@@ -147,7 +146,9 @@ export const Badge: React.FC<BadgeProps> = ({
       onRemove={onRemove}
       removeAccessibilityLabel={removeAccessibilityLabel}
       disabled={disabled}
-    />
+    >
+      {children}
+    </BadgeContent>
   );
 
   if (onPress || onRemove) {
@@ -174,7 +175,6 @@ export const Badge: React.FC<BadgeProps> = ({
         accessibilityHint="Double tap to activate"
       >
         <BadgeContent
-          children={children}
           variantStyles={variantStyles}
           sizeConfig={sizeConfig}
           leftIcon={leftIcon}
@@ -182,7 +182,9 @@ export const Badge: React.FC<BadgeProps> = ({
           onRemove={onRemove}
           removeAccessibilityLabel={removeAccessibilityLabel}
           disabled={disabled}
-        />
+        >
+          {children}
+        </BadgeContent>
       </Pressable>
     );
   }

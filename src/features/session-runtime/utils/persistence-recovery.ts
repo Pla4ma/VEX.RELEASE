@@ -1,11 +1,14 @@
-import { MMKV } from 'react-native-mmkv';
+import {
+  createRuntimeMMKV,
+  type RuntimeMMKV,
+} from '../../../persistence/mmkv-runtime';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 
-let _storage: MMKV | null = null;
-function getStorage(): MMKV {
+let _storage: RuntimeMMKV | null = null;
+function getStorage(): RuntimeMMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: 'session-persistence', encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = createRuntimeMMKV({ id: 'session-persistence', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }

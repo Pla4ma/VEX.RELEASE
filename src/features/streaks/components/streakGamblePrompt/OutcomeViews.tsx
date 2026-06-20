@@ -3,6 +3,7 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { Box, Text, Button } from '@/components/primitives';
 import { useTheme } from '@/theme';
 import type { GambleOutcome } from './types';
+import { Text as VexText } from '../../../../components/primitives/Text';
 
 interface GamblingViewProps {
   streakDays: number;
@@ -108,7 +109,7 @@ export const WonView: React.FC<WonViewProps> = ({ outcome, onDismiss }) => {
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Continue
+              <VexText>Continue</VexText>
             </Button>
           </Box>
         </Box>
@@ -181,7 +182,7 @@ export const LostView: React.FC<LostViewProps> = ({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Start Fresh
+              <VexText>Start Fresh</VexText>
             </Button>
           </Box>
         </Box>

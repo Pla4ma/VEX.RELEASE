@@ -2,6 +2,7 @@ import React from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Box, Text, Button } from '@/components/primitives';
 import { formatTimeUntil } from './near-miss-helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface NearMissActionsProps {
   userName?: string;
@@ -76,7 +77,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
         accessibilityRole="button"
         accessibilityHint="Double tap to select"
       >
-        I'll Get It Next Time
+        <VexText>I'll Get It Next Time</VexText>
       </Button>
       {onViewNextChallenge && (
         <Button variant="outline"
@@ -87,7 +88,7 @@ export const NearMissActions: React.FC<NearMissActionsProps> = ({
           accessibilityRole="button"
           accessibilityHint="Double tap to select"
         >
-          View Upcoming Challenges
+          <VexText>View Upcoming Challenges</VexText>
         </Button>
       )}
     </Box>

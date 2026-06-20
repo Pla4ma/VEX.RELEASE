@@ -45,7 +45,7 @@ export function useItemRenderer<T extends Record<string, unknown>>({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          <View style={[item.loading && styles.itemLoading]}>
+          <View style={item.loading && styles.itemLoading}>
             {renderItem(item.data, index, context)}
             {item.loading && (
               <View style={styles.itemLoadingOverlay}>

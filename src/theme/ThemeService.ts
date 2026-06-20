@@ -7,6 +7,7 @@
 import { captureSilentFailure } from '../utils/silent-failure';
 import type { EventEmitter } from '../events/EventEmitter';
 import { THEME_STORAGE_KEYS } from './config';
+import { createRuntimeMMKV } from '../persistence/mmkv-runtime';
 import type { ThemeMode } from './types';
 import {
   type ThemeStorage,
@@ -32,9 +33,7 @@ export class ThemeService {
     }
 
     try {
-      // Dynamic import MMKV for Expo Go compatibility
-      const { MMKV } = require('react-native-mmkv');
-      this.storage = new MMKV({
+      this.storage = createRuntimeMMKV({
         id: 'vex-theme-storage',
       });
       this.initialized = true;

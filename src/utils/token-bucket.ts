@@ -5,12 +5,15 @@
  */
 
 import { captureSilentFailure } from './silent-failure';
-import { MMKV } from 'react-native-mmkv';
+import {
+  createRuntimeMMKV,
+  type RuntimeMMKV,
+} from '../persistence/mmkv-runtime';
 
-let _storage: MMKV | null = null;
-function getStorage(): MMKV {
+let _storage: RuntimeMMKV | null = null;
+function getStorage(): RuntimeMMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: 'rate-limiter' });
+    _storage = createRuntimeMMKV({ id: 'rate-limiter' });
   }
   return _storage;
 }

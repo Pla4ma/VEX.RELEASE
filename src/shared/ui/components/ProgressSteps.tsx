@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { progressStepsStyles as styles } from './progress-steps-styles';
 import type { ProgressStepsProps, StepStatus } from './progress-steps-types';
 import { StepIndicator } from './StepIndicator';

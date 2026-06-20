@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Button } from '../../components/primitives/Button';
 import type { PaywallPlanSelection } from './paywall-copy';
 import { paywallStyles as styles } from './paywall-styles';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type PaywallFooterActionsProps = {
   hasLivePackages: boolean;
@@ -54,7 +55,7 @@ export function PaywallFooterActions({
           accessibilityRole="button"
           accessibilityHint="Confirms this account already has VEX Premium."
         >
-          Already Premium
+          <VexText>Already Premium</VexText>
         </Button>
       ) : null}
       <Button variant="ghost"
@@ -64,7 +65,7 @@ export function PaywallFooterActions({
         accessibilityRole="button"
         accessibilityHint="Checks the app store for existing VEX Premium entitlements."
       >
-        Restore Purchases
+        <VexText>Restore Purchases</VexText>
       </Button>
     </View>
   );

@@ -2,7 +2,7 @@ import { captureSilentFailure } from '../../../utils/silent-failure';
 import React, { useState, useCallback } from 'react';
 import { View, ScrollView, RefreshControl, Alert } from 'react-native';
 import { useSettingsUIState, useSyncSettings, useResetSettings, type SettingCategory } from '../hooks/useSettingsUIState';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import { SettingsSectionHeader } from './SettingsSectionHeader';
 import { SettingsCategoryTabs } from './SettingsCategoryTabs';

@@ -1,5 +1,8 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import { MMKV } from 'react-native-mmkv';
+import {
+  createRuntimeMMKV,
+  type RuntimeMMKV,
+} from '../../../persistence/mmkv-runtime';
 import type { CoachMemory, SessionFacts, StreakFacts } from './coach-memory-types';
 import {
   createEmptyMemory,
@@ -12,10 +15,10 @@ import { getMmkvEncryptionKeySync } from '../../../persistence/mmkv-key';
 export type { CoachMemory, SessionFacts, StreakFacts };
 export { generatePersonalizedMessage, getMemoryBasedSuggestions } from './coach-memory-messages';
 
-let _storage: MMKV | null = null;
-function getStorage(): MMKV {
+let _storage: RuntimeMMKV | null = null;
+function getStorage(): RuntimeMMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: 'coach-memory', encryptionKey: getMmkvEncryptionKeySync() });
+    _storage = createRuntimeMMKV({ id: 'coach-memory', encryptionKey: getMmkvEncryptionKeySync() });
   }
   return _storage;
 }

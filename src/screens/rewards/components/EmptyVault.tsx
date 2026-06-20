@@ -4,7 +4,8 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface EmptyVaultProps {
   onGetChest: () => void;
@@ -50,7 +51,7 @@ export function EmptyVault({ onGetChest }: EmptyVaultProps): React.ReactNode {
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Start a Session
+          <VexText>Start a Session</VexText>
         </Button>
       </Box>
     </Animated.View>

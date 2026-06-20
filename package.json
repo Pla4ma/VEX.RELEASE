@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "VEX is the productivity app that changes based on how you work — starting with one focused session, then unlocking Study, Run, Project, or Clean systems as it learns your rhythm.",
-  "main": "App.tsx",
+  "main": "index.js",
   "scripts": {
     "android": "expo run:android",
     "ios": "expo run:ios",

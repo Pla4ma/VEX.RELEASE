@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
-import { MMKV } from 'react-native-mmkv';
 
 import { eventBus } from '../../events/EventBus';
+import { createRuntimeMMKV } from '../../persistence/mmkv-runtime';
 import { getStreakService } from '../../streaks/StreakService';
 
 import type { ExtendedRootStackParams } from '../types';
@@ -32,7 +32,7 @@ interface UseStreakFuneralNavigationInput {
 const MIN_SESSIONS_FOR_FUNERAL = 5;
 const FUNERAL_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
 
-const funeralStorage = new MMKV({ id: 'streak-funeral' });
+const funeralStorage = createRuntimeMMKV({ id: 'streak-funeral' });
 const STREAK_FUNERAL_LAST_SHOWN_KEY = 'streak_funeral_last_shown';
 const STREAK_MINIMUM_FOR_FUNERAL = 3;
 

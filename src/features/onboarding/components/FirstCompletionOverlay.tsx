@@ -8,7 +8,8 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface FirstCompletionOverlayProps {
   xpEarned: number;
@@ -96,7 +97,7 @@ function ComebackCTA({ onPress }: { onPress: () => void }): React.ReactNode {
           accessibilityRole="button"
           accessibilityHint="Opens the VEX home screen"
         >
-          Enter VEX
+          <VexText>Enter VEX</VexText>
         </Button>
       </Box>
     </Animated.View>

@@ -6,6 +6,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import type { Theme } from '../../../theme';
 import { ScoreOverviewCard } from './ScoreOverviewCard';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ScoreDriver {
   name: string;
@@ -168,7 +169,7 @@ export function ReportCards({
           variant="primary"
           style={{ marginBottom: theme.spacing[4] }}
         >
-          Share Monthly Report
+          <VexText>Share Monthly Report</VexText>
         </Button>
         <Button accessibilityLabel="Close" onPress={onClose} variant="secondary">
           <Text>Close</Text>

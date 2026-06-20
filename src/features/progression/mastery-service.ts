@@ -75,7 +75,7 @@ export function applyMasteryXp(
   state: UnifiedMasteryState,
   xpByTrack: Record<MasteryTrack, number>,
 ): ApplyXpResult {
-  const newState: UnifiedMasteryState = JSON.parse(JSON.stringify(state));
+  const newState: UnifiedMasteryState = structuredClone(state);
   const levelUps: Array<{
     track: MasteryTrack;
     oldLevel: number;

@@ -34,7 +34,7 @@ export function useStartSessionFlow({
 }: UseStartSessionFlowParams) {
   const { createSession, startSession } = useSession(userId);
   const storage = useMemo(() => getMMKVStorageAdapter(), []);
-  const sessionDraftKey = useMemo(() => `session_draft_${userId}`, [userId]);
+  const sessionDraftKey = `session_draft_${userId}`;
   const [isStarting, setIsStarting] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
 

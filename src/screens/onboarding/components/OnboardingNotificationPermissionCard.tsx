@@ -4,7 +4,7 @@ import * as Notifications from 'expo-notifications';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { Skeleton } from '../../../components/ui/Skeleton';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { createDebugger } from '../../../utils/debug';
 import {
   hasRequestedOnboardingNotificationPrompt,
@@ -14,6 +14,7 @@ import { scheduleOnboardingNotifications } from '../../../features/notifications
 import { trackNotificationPermission } from '../../../features/notifications/analytics';
 import { registerPushToken } from '../../../features/notifications/service';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { Text as VexText } from '../../../components/primitives/Text';
 type PermissionCardState =
   | 'loading'
   | 'idle'
@@ -166,7 +167,7 @@ export function OnboardingNotificationPermissionCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Yes, remind me
+            <VexText>Yes, remind me</VexText>
           </Button>
           <Button variant="ghost"
             onPress={() => {
@@ -178,7 +179,7 @@ export function OnboardingNotificationPermissionCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Maybe later
+            <VexText>Maybe later</VexText>
           </Button>
         </View>
       )}

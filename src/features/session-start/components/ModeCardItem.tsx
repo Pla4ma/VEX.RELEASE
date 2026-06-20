@@ -3,8 +3,8 @@ import { Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+import { SessionGlyph, type SessionGlyphName } from '../../../shared/ui/liquid-glass/SessionGlyphs';
 import { isSessionLessMode } from '../../../session/modes';
 import type { ModeCard } from './ModeSelector.data';
 
@@ -22,7 +22,7 @@ export function ModeCardItem({
   isDisabled,
   disabledReason,
   onPress,
-}: ModeCardItemProps): JSX.Element {
+}: ModeCardItemProps): React.ReactNode {
   const { theme } = useTheme();
 
   return (

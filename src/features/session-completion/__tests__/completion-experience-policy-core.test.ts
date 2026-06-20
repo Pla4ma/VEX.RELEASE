@@ -5,9 +5,10 @@ import { baseInput, baseSummary } from './completion-experience-policy.helpers';
 describe('CompletionExperiencePolicy', () => {
   it('rejects stale final-release runtime language', () => {
     const legacyPremiumState = ['public', 'v1'].join('_');
-    const legacyInput = JSON.parse(
-      JSON.stringify({ ...baseInput, premiumState: legacyPremiumState }),
-    );
+    const legacyInput = structuredClone({
+      ...baseInput,
+      premiumState: legacyPremiumState,
+    });
 
     expect(() => resolveCompletionExperiencePolicy(legacyInput)).toThrow();
   });

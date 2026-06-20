@@ -1,4 +1,5 @@
 import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { createRuntimeMMKV } from '../../persistence/mmkv-runtime';
 
 export interface MMKVInstance {
   getString(key: string): string | undefined;
@@ -23,8 +24,7 @@ export class SessionStorageHelper {
 
   private initStorage(): void {
     try {
-      const { MMKV } = require('react-native-mmkv');
-      this.mmkv = new MMKV({ id: 'session-storage' });
+      this.mmkv = createRuntimeMMKV({ id: 'session-storage' });
       this.useMMKV = true;
     } catch (error: unknown) {
       this.useMMKV = false;

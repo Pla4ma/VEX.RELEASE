@@ -6,6 +6,7 @@ import { loadCompanionState } from '../../features/companion/session-storage';
 import type { CompanionState } from '../../features/companion/types';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type LoadState =
   | { status: 'loading' }
@@ -83,7 +84,7 @@ export function CompanionDetailScreen(): React.ReactNode {
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Retry
+          <VexText>Retry</VexText>
         </Button>
       </Box>
     );

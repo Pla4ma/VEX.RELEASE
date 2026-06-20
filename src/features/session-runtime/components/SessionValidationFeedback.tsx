@@ -17,6 +17,7 @@ import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 import type { ValidationError, ValidationWarning } from '../utils/validation-types';
 import { formatFieldName, styles } from './session-validation-feedback-helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface SessionValidationFeedbackProps {
   errors: ValidationError[];
@@ -121,7 +122,7 @@ export function SessionValidationFeedback({
                   accessibilityRole="button"
                   accessibilityHint="Double tap to activate"
                 >
-                  Fix this →
+                  <VexText>Fix this ?</VexText>
                 </Button>
               )}
             </View>
@@ -160,9 +161,9 @@ export function SessionValidationFeedback({
                     accessibilityRole="button"
                     accessibilityHint="Double tap to activate"
                   >
-                    Dismiss
+                    <VexText>Dismiss</VexText>
                   </Button>
-                )}
+              )}
               </Box>
             </Box>
           ))}

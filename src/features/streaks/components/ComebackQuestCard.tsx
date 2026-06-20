@@ -15,6 +15,7 @@ import {
   PhoenixBadgePreview,
   QuestProgressBar,
 } from './ComebackQuestSubcomponents';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export interface ComebackQuestCardProps {
   quest: ComebackQuest;
@@ -112,8 +113,6 @@ export function ComebackQuestCard({
             </Text>
           </Box>
         )}
-
-        {}
         {!isComplete && (
           <Button
             variant="primary"
@@ -124,11 +123,13 @@ export function ComebackQuestCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            {currentQuestNum === 1
+            <VexText>
+              {currentQuestNum === 1
               ? '🚀 Start First Comeback Session'
               : currentQuestNum === 2
                 ? '⚡ Continue Your Comeback'
                 : '🎯 Final Quest — You Got This!'}
+            </VexText>
           </Button>
         )}
 
@@ -141,11 +142,10 @@ export function ComebackQuestCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            ✅ Start Your Next Session
+            <VexText>? Start Your Next Session</VexText>
           </Button>
         )}
 
-        {}
         {onViewDetails && (
           <Pressable
             onPress={onViewDetails}

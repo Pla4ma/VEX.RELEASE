@@ -4,7 +4,8 @@ import { Box } from '../components/primitives/Box';
 import { Button } from '../components/primitives/Button';
 import { Text } from '../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../navigation/types';
-import { useTheme } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
+import { Text as VexText } from '../components/primitives/Text';
 
 type ComebackState = ExtendedRootStackParams['Comeback']['comebackState'];
 
@@ -104,7 +105,7 @@ export function ComebackCard({
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
-        Start My Comeback Session
+        <VexText>Start My Comeback Session</VexText>
       </Button>
       <Button variant="ghost"
         size="lg"
@@ -113,7 +114,7 @@ export function ComebackCard({
         accessibilityRole="button"
         accessibilityHint="Double tap to activate"
       >
-        Remind Me Later
+        <VexText>Remind Me Later</VexText>
       </Button>
     </Box>
   );

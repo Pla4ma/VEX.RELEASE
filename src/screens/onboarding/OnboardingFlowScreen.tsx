@@ -24,12 +24,24 @@ import {
   type StepRenderersConfig,
 } from './components/OnboardingStepRenderers';
 
-export function OnboardingFlowScreen(): JSX.Element {
+export function OnboardingFlowScreen(): React.ReactNode {
   const route = useRoute<OnboardingRouteProp>();
   const isFocused = useIsFocused();
   const flow = useOnboardingFlow(route.params?.step);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [hasSeenCinematicIntro, setHasSeenCinematicIntro] = useState(false);
+
+  const handleAccept = useCallback((lane: Lane) => {
+    setIsCelebrating(true);
+    (window).__ONBOARDING_LANE_CHOSEN__ = true;
+    setTimeout(() => {
+      flow.handleAcceptLaneAndAdvance(lane);
+    }, 900);
+  }, [flow]);
+
+  const handleStartFirstSession = useCallback(() => {
+    flow.startFirstSession();
+  }, [flow]);
 
   useEffect(() => {
     if (!isFocused) return;
@@ -52,18 +64,6 @@ export function OnboardingFlowScreen(): JSX.Element {
   const stepCopy = STEP_TITLES[flow.step] ?? { title: '', subtitle: '' };
   const eyebrow = STEP_EYEBROW[flow.step];
   const mascotCopy = MASCOT_COPY[flow.step];
-
-  const handleAccept = useCallback((lane: Lane) => {
-    setIsCelebrating(true);
-    (window).__ONBOARDING_LANE_CHOSEN__ = true;
-    setTimeout(() => {
-      flow.handleAcceptLaneAndAdvance(lane);
-    }, 900);
-  }, [flow]);
-
-  const handleStartFirstSession = useCallback(() => {
-    flow.startFirstSession();
-  }, [flow]);
 
   if (!hasSeenCinematicIntro) {
     return (

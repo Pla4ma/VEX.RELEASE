@@ -7,8 +7,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { quizPanelStyles } from './QuizPanelStyles';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ShortAnswerInputProps {
   value: string;
@@ -28,7 +29,7 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={quizPanelStyles.shortAnswerContainer}>
           <TextInput
             style={[
@@ -54,7 +55,7 @@ export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Submit
+            <VexText>Submit</VexText>
           </Button>
         </View>
       </ScrollView>

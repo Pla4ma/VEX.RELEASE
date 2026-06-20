@@ -18,6 +18,7 @@ import {
   getFilteredChallenges,
   getChallengeStats,
 } from './challenge-hub-helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeHubProps {
   userId: string;
@@ -115,7 +116,7 @@ export const ChallengeHub = React.memo(({
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>Daily Streak</Text>
-            <Badge variant="warning">{'3 Days'}</Badge>
+            <Badge variant="warning"><VexText>{'3 Days'}</VexText></Badge>
           </View>
           <Text style={styles.streakDescription}>
             Complete daily challenges to maintain your streak and earn bonus rewards!

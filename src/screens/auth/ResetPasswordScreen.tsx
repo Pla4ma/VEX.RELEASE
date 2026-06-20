@@ -10,12 +10,13 @@ import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Box, Text } from '../../components/primitives';
 import { Button, Input } from '../../components';
 import { Icon } from '../../icons';
 import { resetPasswordSchema } from './schemas';
 import type { AuthStackParams } from '../../navigation';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ResetPassword'>;
 
@@ -121,7 +122,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Continue to Login
+              <VexText>Continue to Login</VexText>
             </Button>
           </Box>
         ) : (
@@ -159,7 +160,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
                 accessibilityRole="button"
                 accessibilityHint="Double tap to activate"
               >
-                Reset Password
+                <VexText>Reset Password</VexText>
               </Button>
             </Box>
           </>

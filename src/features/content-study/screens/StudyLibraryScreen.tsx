@@ -10,7 +10,7 @@ import { Button } from '../../../components/primitives/Button';
 import type { ContentStudyStackParamList } from '../types';
 import type { StudyContent, ContentStatus, ContentSourceType } from '../types';
 import { useContentHistory } from '../hooks';
-import { useNetInfo } from '../../../network';
+import { useNetInfo } from '../../../network/useNetInfo';
 import { ContentItemCard } from '../components/ContentItemCard';
 import { FilterChip } from '../components/FilterChip';
 import { EmptyLibraryState } from '../components/EmptyLibraryState';
@@ -18,6 +18,7 @@ import {
   STATUS_FILTERS,
   TYPE_FILTERS,
 } from './StudyLibraryScreen.constants';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type ContentStudyNavigationProp =
   NativeStackNavigationProp<ContentStudyStackParamList>;
@@ -108,7 +109,7 @@ export function StudyLibraryScreen(): React.ReactNode {
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            + Add New
+            <VexText>+ Add New</VexText>
           </Button>
         </Box>
       </Box>

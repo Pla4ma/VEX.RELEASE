@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/react-native';
 import { hashUserId } from '../../../utils/sentry-privacy';
 import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { eventBus } from '../../../events/EventBus';
-import { useAnalyticsData, useInsights, useSessionHeatmapData } from '../hooks';
+import { useAnalyticsData, useInsights, useSessionHeatmapData } from '../hooks/useAnalyticsQueries';
 import { analyticsKeys } from '../hooks/analyticsKeys';
 import type { AnalyticsMetric } from '../schemas';
 import { MetricSelector } from './MetricSelector';

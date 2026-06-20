@@ -9,6 +9,7 @@ import {
   formatDuration,
   challengeCardStyles as styles,
 } from './challengeCardHelpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeCardProps {
   challenge: UserChallengeSummary;
@@ -128,7 +129,7 @@ export function ChallengeCard({
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
-              Claim Reward
+              <VexText>Claim Reward</VexText>
             </Button>
           )}
 

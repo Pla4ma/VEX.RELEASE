@@ -8,6 +8,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
 import type { StorageAdapter, StorageOptions } from './StorageAdapter';
 import type { Nullable } from '../types/global';
 import { createDebugger } from '../utils/debug';
+import { createRuntimeMMKV, type RuntimeMMKV } from './mmkv-runtime';
 
 const debug = createDebugger('storage:mmkv');
 
@@ -15,7 +16,7 @@ const debug = createDebugger('storage:mmkv');
  * MMKV storage adapter
  */
 export class MMKVStorage implements StorageAdapter {
-  private mmkv: unknown | null = null;
+  private mmkv: RuntimeMMKV | null = null;
   private options: StorageOptions;
   private initialized = false;
 
@@ -32,10 +33,7 @@ export class MMKVStorage implements StorageAdapter {
     }
 
     try {
-      // Dynamic import to avoid errors when module not installed
-      const MMKV = require('react-native-mmkv').MMKV;
-
-      this.mmkv = new MMKV({
+      this.mmkv = createRuntimeMMKV({
         id: 'vex-storage',
         encryptionKey: this.options.encryptionKey,
       });
@@ -56,45 +54,41 @@ export class MMKVStorage implements StorageAdapter {
     }
   }
 
-  async getItem(key: string): Promise<Nullable<string>> {
+  private getInitializedStorage(): RuntimeMMKV {
     this.checkInitialized();
-    const value = (
-      this.mmkv as { getString: (key: string) => string | undefined }
-    ).getString(key);
+    if (!this.mmkv) {
+      throw new Error('MMKV not initialized. Call initialize() first.');
+    }
+    return this.mmkv;
+  }
+
+  async getItem(key: string): Promise<Nullable<string>> {
+    const value = this.getInitializedStorage().getString(key);
     return value ?? null;
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    this.checkInitialized();
-    (this.mmkv as { set: (key: string, value: string) => void }).set(
-      key,
-      value,
-    );
+    this.getInitializedStorage().set(key, value);
   }
 
   async removeItem(key: string): Promise<void> {
-    this.checkInitialized();
-    (this.mmkv as { delete: (key: string) => void }).delete(key);
+    this.getInitializedStorage().delete(key);
   }
 
   async containsKey(key: string): Promise<boolean> {
-    this.checkInitialized();
-    return (this.mmkv as { contains: (key: string) => boolean }).contains(key);
+    return this.getInitializedStorage().contains(key);
   }
 
   async getAllKeys(): Promise<string[]> {
-    this.checkInitialized();
-    return (this.mmkv as { getAllKeys: () => string[] }).getAllKeys();
+    return this.getInitializedStorage().getAllKeys();
   }
 
   async clear(): Promise<void> {
-    this.checkInitialized();
-    (this.mmkv as { clearAll: () => void }).clearAll();
+    this.getInitializedStorage().clearAll();
   }
 
   async getSize(): Promise<number> {
-    this.checkInitialized();
-    return (this.mmkv as { size: number }).size;
+    return this.getInitializedStorage().size ?? 0;
   }
 
   /**

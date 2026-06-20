@@ -36,7 +36,7 @@ describe('NavigationGuard', () => {
 
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <div testID="protected-content">Protected Content</div>
+        <div data-testid="protected-content">Protected Content</div>
       </NavigationGuard>,
     );
 
@@ -55,7 +55,7 @@ describe('NavigationGuard', () => {
 
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <div testID="protected-content">Protected Content</div>
+        <div data-testid="protected-content">Protected Content</div>
       </NavigationGuard>,
     );
 
@@ -75,9 +75,9 @@ describe('NavigationGuard', () => {
     render(
       <NavigationGuard
         featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}
-        fallback={<div testID="custom-fallback">Custom Fallback</div>}
+        fallback={<div data-testid="custom-fallback">Custom Fallback</div>}
       >
-        <div testID="protected-content">Protected Content</div>
+        <div data-testid="protected-content">Protected Content</div>
       </NavigationGuard>,
     );
 

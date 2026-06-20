@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text, Button } from '@components/primitives';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ReportEmptyStateProps {
   isOffline: boolean;
@@ -37,7 +38,7 @@ export function ReportEmptyState({
           accessibilityRole="button"
           accessibilityHint="Navigates to session setup"
         >
-          Start a session
+          <VexText>Start a session</VexText>
         </Button>
       </Box>
     </Box>

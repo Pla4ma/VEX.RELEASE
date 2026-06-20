@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { useReducedMotion } from '@/hooks';
 import { useTheme } from '@/theme';
@@ -32,7 +32,10 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({
   colors = DEFAULT_COLORS,
 }) => {
   const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = useWindowDimensions();
-  const origin = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 3 };
+  const origin = useMemo(
+    () => ({ x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 3 }),
+    [SCREEN_HEIGHT, SCREEN_WIDTH],
+  );
   const [particles, setParticles] = React.useState<ParticleConfig[]>([]);
   const { isReducedMotion } = useReducedMotion();
   useTheme();

@@ -10,6 +10,7 @@ import {
   type CompanionMemoryGroup,
 } from './companion-memory-groups';
 import { CompanionMemoryItem } from './CompanionMemoryItem';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type CompanionMemoryTimelineProps = {
   isError: boolean;
@@ -141,7 +142,7 @@ function EmptyTimeline({
           onPress={onStartFocus}
           variant="primary"
         >
-          Start focus
+          <VexText>Start focus</VexText>
         </Button>
       </Box>
     </Card>

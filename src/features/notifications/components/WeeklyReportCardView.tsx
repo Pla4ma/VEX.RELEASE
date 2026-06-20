@@ -3,10 +3,11 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { WeeklyReportStatsGrid } from './WeeklyReportStatsGrid';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export interface WeeklyReportCardProps {
   totalMinutes: number;
@@ -147,7 +148,7 @@ export function WeeklyReportCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to select"
           >
-            View Full Analytics
+            <VexText>View Full Analytics</VexText>
           </Button>
 
           {onShare && (
@@ -159,7 +160,7 @@ export function WeeklyReportCard({
               accessibilityRole="button"
               accessibilityHint="Double tap to select"
             >
-              Share My Week
+              <VexText>Share My Week</VexText>
             </Button>
           )}
         </Box>

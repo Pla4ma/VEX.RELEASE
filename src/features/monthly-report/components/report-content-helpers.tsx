@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Text, Button } from '@components/primitives';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export function formatTime(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
@@ -93,7 +94,7 @@ export function PremiumLock({ onOpenPaywall }: { onOpenPaywall: () => void }) {
         accessibilityRole="button"
         accessibilityHint="Opens the premium subscription page"
       >
-        Unlock with Premium
+        <VexText>Unlock with Premium</VexText>
       </Button>
     </Box>
   );

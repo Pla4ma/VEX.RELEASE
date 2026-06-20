@@ -7,9 +7,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Icon } from '../../../icons/components/Icon';
 import { styles } from './PdfUploader.styles';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface FileCardProps {
   fileName: string;
@@ -167,7 +168,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Remove
+          <VexText>Remove</VexText>
         </Button>
       </View>
     </View>

@@ -170,7 +170,7 @@ export async function atomicAddXpRpc(params: {
     p_session_id: params.sessionId ?? null,
     p_idempotency_key: params.idempotencyKey ?? null,
     p_metadata: params.metadata
-      ? JSON.parse(JSON.stringify(params.metadata))
+      ? structuredClone(params.metadata)
       : null,
   });
   if (error) {

@@ -9,6 +9,7 @@ import { createDebugger } from '@/utils/debug';
 import { AchievementDetailIcon } from './AchievementDetailIcon';
 import { AchievementUnlockStatus } from './AchievementUnlockStatus';
 import { AchievementRewards } from './AchievementRewards';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 const debug = createDebugger('achievements:detail-sheet');
 
@@ -115,7 +116,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          📤 Share Achievement
+          <VexText>📤 Share Achievement</VexText>
         </Button>
 
         <Button variant="ghost"
@@ -126,7 +127,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Close
+          <VexText>Close</VexText>
         </Button>
       </Box>
     </Box>

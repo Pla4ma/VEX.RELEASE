@@ -6,7 +6,7 @@
  * @phase 2 - Deepening: Repository layer
  */
 
-import { MMKV } from 'react-native-mmkv';
+import { createRuntimeMMKV } from '../../../persistence/mmkv-runtime';
 import {
   parseJsonWithSchema,
   stringifyJsonSafe,
@@ -21,7 +21,7 @@ import {
 
 const debug = createDebugger('onboarding:repository');
 
-const storage = new MMKV({ id: 'onboarding-repo' });
+const storage = createRuntimeMMKV({ id: 'onboarding-repo' });
 
 const KEYS = {
   onboardingState: (userId: string) => `onboarding:state:${userId}`,

@@ -49,7 +49,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           {}
           <View style={styles.statsHeader}>

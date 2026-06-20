@@ -4,14 +4,15 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import { styles } from './SessionBackgroundedState.styles';
 import {
   formatDuration,
   calculateProgressLoss,
 } from './session-backgrounded-helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface SessionBackgroundedStateProps {
   backgroundDuration: number;
@@ -131,7 +132,7 @@ export function SessionBackgroundedState({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Resume Session
+            <VexText>Resume Session</VexText>
           </Button>
           <Button variant="secondary"
             size="md"
@@ -141,7 +142,7 @@ export function SessionBackgroundedState({
             accessibilityRole="button"
             accessibilityHint="Double tap to activate"
           >
-            Pause & Review
+            <VexText>Pause & Review</VexText>
           </Button>
           <Box flexDirection="row" gap="sm">
             <Button variant="ghost"
@@ -153,7 +154,7 @@ export function SessionBackgroundedState({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              End Session
+              <VexText>End Session</VexText>
             </Button>
             <Button variant="ghost"
               size="sm"
@@ -164,7 +165,7 @@ export function SessionBackgroundedState({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Abandon
+              <VexText>Abandon</VexText>
             </Button>
           </Box>
         </Box>

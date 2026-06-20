@@ -12,6 +12,7 @@ import {
   isFeatureUnlocked,
   type UnlockableFeature,
 } from './mastery-unlock-gate-data';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface MasteryUnlockGateProps {
   userRank: MasteryRank;
@@ -116,7 +117,7 @@ export function MasteryUnlockGate({
             accessibilityRole="button"
             accessibilityHint="Opens the mastery screen to track your progress"
           >
-            View Mastery Progress
+            <VexText>View Mastery Progress</VexText>
           </Button>
         )}
 

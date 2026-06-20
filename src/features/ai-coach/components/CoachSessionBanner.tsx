@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Text } from '../../../components';
+import { Text } from '../../../components/primitives/Text';
 
 export type CoachPersonaStyle = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';
 

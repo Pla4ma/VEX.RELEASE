@@ -4,6 +4,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { sizing } from '../../../theme/tokens/sizing';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export function HistorySkeleton(): React.ReactNode {
   return (
@@ -41,7 +42,7 @@ export function HistoryEmptyState({
         onPress={onStart}
         variant="primary"
       >
-        Start Focus
+        <VexText>Start Focus</VexText>
       </Button>
     </Box>
   );

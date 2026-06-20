@@ -150,4 +150,4 @@ export function VexLaunchButton({
   );
 }
 
-void MINT_PRESS;
+void MINT_PRESS;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
@@ -60,7 +60,7 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): React.ReactNode 
                 color: active
                   ? vexLightGlass.mint[700]
                   : vexLightGlass.text.tertiary,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: '700',
               }}
             >

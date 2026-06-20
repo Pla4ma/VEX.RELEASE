@@ -9,7 +9,7 @@ import {
 } from '../../features/focus-memory/service';
 import type { FocusMemory } from '../../features/focus-memory/service';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Box, Card, Text } from '../../components/primitives';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { EmptyState } from '../../components/EmptyState';

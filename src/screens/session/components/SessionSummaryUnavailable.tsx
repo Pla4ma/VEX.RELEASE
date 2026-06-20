@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, Button, Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionSummaryUnavailableProps = {
   message?: string;
@@ -45,7 +46,7 @@ export function SessionSummaryUnavailable({
             accessibilityRole="button"
             accessibilityHint="Attempts to rebuild this completion summary from the saved session record"
           >
-            Retry recovery
+            <VexText>Retry recovery</VexText>
           </Button>
         ) : null}
       </Box>
@@ -58,7 +59,7 @@ export function SessionSummaryUnavailable({
           accessibilityRole="button"
           accessibilityHint="Leaves this unavailable completion summary and opens the home screen"
         >
-          Done
+          <VexText>Done</VexText>
         </Button>
       </Box>
     </Box>

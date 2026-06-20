@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { useMMKVNumber } from 'react-native-mmkv';
+import { useRuntimeMMKVNumber } from '../../../persistence/useRuntimeMMKVNumber';
 import { createDebugger } from '../../../utils/debug';
 import { eventBus } from '../../../events/EventBus';
 import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
@@ -28,10 +28,10 @@ export function useSessionTimer(
     autoStart = false,
   } = options;
 
-  const [elapsedTimeStored, setElapsedTime] = useMMKVNumber(
+  const [elapsedTimeStored, setElapsedTime] = useRuntimeMMKVNumber(
     'session:timer:elapsed',
   );
-  const [remainingTimeStored, setRemainingTime] = useMMKVNumber(
+  const [remainingTimeStored, setRemainingTime] = useRuntimeMMKVNumber(
     'session:timer:remaining',
   );
 

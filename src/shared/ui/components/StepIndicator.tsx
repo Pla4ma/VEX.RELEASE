@@ -13,6 +13,7 @@ import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { progressStepsStyles as styles } from './progress-steps-styles';
 import type { StepIndicatorProps } from './progress-steps-types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   status,
@@ -156,11 +157,9 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
       accessibilityRole="button"
       accessibilityHint="Double tap to activate"
     >
-      {' '}
-      {indicatorContent}
+      <VexText>{indicatorContent}</VexText>
       {(title || (description && showDescription)) && (
         <View style={styles.stepTextContainer}>
-          {' '}
           {title && (
             <Text
               variant="body"
@@ -176,22 +175,20 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 },
               ]}
             >
-              {' '}
-              {title}{' '}
+              {title}
             </Text>
-          )}{' '}
+          )}
           {description && showDescription && (
             <Text
               variant="caption"
               color={status === 'error' ? 'error.DEFAULT' : 'text.tertiary'}
               style={styles.stepDescription}
             >
-              {' '}
-              {description}{' '}
+              {description}
             </Text>
-          )}{' '}
+          )}
         </View>
-      )}{' '}
+      )}
     </Pressable>
   );
 };

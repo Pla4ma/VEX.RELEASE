@@ -7,6 +7,7 @@ import { SessionDegradedState } from '../../../session/components/states/Session
 import { SessionEmptyState } from '../../../session/components/states/SessionEmptyState';
 import { SessionErrorState } from '../../../session/components/states/SessionErrorState';
 import { SessionLoadingState } from '../../../session/components/states/SessionLoadingState';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type GuardSession = {
   canRecover?: boolean;
@@ -59,7 +60,7 @@ export function ActiveSessionGuardStates({
           onPress={onGoBack}
           accessibilityLabel="Go back to the previous screen"
         >
-          Go Back
+          <VexText>Go Back</VexText>
         </Button>
       </Box>
     );

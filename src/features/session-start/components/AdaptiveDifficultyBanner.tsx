@@ -12,7 +12,7 @@ import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 import { DifficultySuggestion } from '../service/adaptiveDifficulty';
 import { ConfidenceIndicator } from './ConfidenceIndicator';
@@ -136,7 +136,7 @@ export function AdaptiveDifficultyBanner({
             variant="primary"
             style={{ flex: 1 }}
           >
-            Switch to {suggestedDifficulty}
+            <Text>Switch to {suggestedDifficulty}</Text>
           </Button>
           <Button onPress={onDismiss} variant="secondary">
             <Text>Keep Current</Text>

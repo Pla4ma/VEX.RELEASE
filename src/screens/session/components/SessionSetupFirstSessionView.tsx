@@ -16,9 +16,10 @@ import { ModeQuickContract } from '../../../features/mode-native/components/Mode
 import { useFirstSessionPersonalization } from '../hooks/useFirstSessionPersonalization';
 import { useFirstSessionStart } from '../hooks/useFirstSessionStart';
 import { useAuthStore } from '../../../store';
-import { useOnboardingStore } from '../../../features/onboarding';
+import { useOnboardingStore } from '../../../features/onboarding/store';
 import type { Lane } from '../../../features/lane-engine/types';
-import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass';
+import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -106,7 +107,7 @@ export function FirstSessionView({
           accessibilityRole="button"
           accessibilityHint="Returns to the previous screen"
         >
-          Go Back
+          <VexText>Go Back</VexText>
         </Button>
       </Box>
     );

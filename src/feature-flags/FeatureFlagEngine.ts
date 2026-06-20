@@ -1,5 +1,5 @@
 import { createDebugger } from '@/utils/debug';
-import { MMKV } from 'react-native-mmkv';
+import { createRuntimeMMKV } from '../persistence/mmkv-runtime';
 import { DEFAULT_FLAGS } from './defaults';
 import { evaluateFlag } from './helpers';
 import type {
@@ -20,7 +20,7 @@ class FeatureFlagEngine {
   private evaluations: Map<string, FlagEvaluation> = new Map();
   private userContext: UserContext | null = null;
   private lastSync: number = 0;
-  private storage = new MMKV({ id: 'feature-flags' });
+  private storage = createRuntimeMMKV({ id: 'feature-flags' });
 
   constructor() {
     this.loadDefaults();

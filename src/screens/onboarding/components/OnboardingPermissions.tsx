@@ -7,13 +7,14 @@ import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import {
   BENEFITS,
   BenefitCard,
   SuccessAnimation,
   type PermissionBenefit,
 } from './OnboardingPermissions.helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export type { PermissionBenefit };
 
@@ -98,7 +99,7 @@ export function OnboardingPermissions({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Enable Notifications
+              <VexText>Enable Notifications</VexText>
             </Button>
           )}
 
@@ -112,7 +113,7 @@ export function OnboardingPermissions({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Continue
+              <VexText>Continue</VexText>
             </Button>
           )}
 

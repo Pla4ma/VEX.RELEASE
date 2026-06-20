@@ -9,9 +9,10 @@ import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionRecommendation } from '../types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export interface SessionRecommendationCardProps {
   recommendation: SessionRecommendation;
@@ -160,7 +161,7 @@ export function SessionRecommendationCard({
           onPress={onAccept}
           style={{ flex: 1, marginRight: showDismiss ? theme.spacing[2] : 0 }}
         >
-          Start Session
+          <VexText>Start Session</VexText>
         </Button>
 
         {showDismiss && onDismiss && (

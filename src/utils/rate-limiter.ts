@@ -1,5 +1,8 @@
 import { captureSilentFailure } from './silent-failure';
-import { MMKV } from 'react-native-mmkv';
+import {
+  createRuntimeMMKV,
+  type RuntimeMMKV,
+} from '../persistence/mmkv-runtime';
 import { createDebugger } from './debug';
 import { eventBus } from '../events/EventBus';
 import { TokenBucketLimiter } from './token-bucket';
@@ -9,10 +12,10 @@ export { TokenBucketLimiter } from './token-bucket';
 export type { RateLimitResult, TokenBucketConfig } from './token-bucket';
 
 const debug = createDebugger('rate-limiter');
-let _storage: MMKV | null = null;
-function getStorage(): MMKV {
+let _storage: RuntimeMMKV | null = null;
+function getStorage(): RuntimeMMKV {
   if (!_storage) {
-    _storage = new MMKV({ id: 'rate-limiter' });
+    _storage = createRuntimeMMKV({ id: 'rate-limiter' });
   }
   return _storage;
 }

@@ -79,7 +79,7 @@ function StepBlock({ step, index, isReducedMotion }: {
     <Animated.View style={[{ flex: 1, gap: 6, alignItems: 'flex-start' }, style]}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <StepDot active={index === 0} isReducedMotion={isReducedMotion} />
-        <Text color="rgba(224,184,112,0.85)" style={{ fontSize: 10, fontWeight: '700', letterSpacing: 2.5 }}>
+        <Text color="rgba(224,184,112,0.85)" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 2.5 }}>
           {step.label}
         </Text>
       </View>
@@ -116,12 +116,12 @@ export function VexDataLoop(): React.ReactNode {
     <HoloCard accent="gold" borderRadius={22} innerPadding={22} delay={400}>
       <View accessibilityLabel="VEX focus loop" accessibilityRole="text" style={{ gap: 16 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text color="rgba(224,184,112,0.85)" style={{ fontSize: 10, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' }}>
+          <Text color="rgba(224,184,112,0.85)" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' }}>
             The Loop
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: 'rgba(94,234,212,0.6)' }} />
-            <Text color="text.muted" style={{ fontSize: 10, fontWeight: '500', letterSpacing: 1.5, opacity: 0.7 }}>
+            <Text color="text.muted" style={{ fontSize: 12, fontWeight: '500', letterSpacing: 1.5, opacity: 0.7 }}>
               ACTIVE
             </Text>
           </View>

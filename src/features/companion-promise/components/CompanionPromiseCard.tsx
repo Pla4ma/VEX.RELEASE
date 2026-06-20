@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { CompanionPromiseHomeState } from '../types';
 import {
@@ -12,6 +12,7 @@ import {
   getBodyCopy,
   getCtaLabel,
 } from './CompanionPromiseCard.helpers';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface CompanionPromiseCardProps {
   onDismissRecovery: () => void;
@@ -109,7 +110,7 @@ export function CompanionPromiseCard({
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[3] }]}
           variant="outline"
         >
-          Retry
+          <VexText>Retry</VexText>
         </Button>
       </View>
     );
@@ -184,7 +185,7 @@ export function CompanionPromiseCard({
           style={[getMinTouchTargetStyle(), { marginTop: theme.spacing[2] }]}
           variant="ghost"
         >
-          Dismiss for now
+          <VexText>Dismiss for now</VexText>
         </Button>
       ) : null}
     </Animated.View>

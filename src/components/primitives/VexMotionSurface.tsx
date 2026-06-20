@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { rgbaColors } from '../../theme/tokens/rgba-colors';
 import { lightColors } from '@/theme/tokens/colors';

@@ -14,7 +14,7 @@ import {
 } from '../../../features/learning-execution/service';
 import { useComebackState } from '../../../features/streaks/streakQueries';
 import { useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
-import { getNextBestAction } from '../../../features/progression';
+import { getNextBestAction } from '../../../features/progression/next-best-action';
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,

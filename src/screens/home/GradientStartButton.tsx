@@ -13,7 +13,7 @@ import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { ShimmerSweep } from '../../components/primitives/ShimmerSweep';
 import { useTheme } from '../../theme/ThemeContext';
-import { useReducedMotion } from '../../hooks';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { glow } from '../../theme/tokens/elevation';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';

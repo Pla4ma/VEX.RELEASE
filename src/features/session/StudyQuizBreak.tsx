@@ -6,6 +6,7 @@ import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { getQuizForStudyPlan } from '../content-study/service';
 import type { QuizItem } from '../content-study/types';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type StudyQuizBreakProps = {
   isVisible: boolean;
@@ -136,7 +137,7 @@ export function StudyQuizBreak({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          Skip
+          <VexText>Skip</VexText>
         </Button>
         <Button variant="primary"
           onPress={() => onClose(correctAnswers)}
@@ -144,7 +145,7 @@ export function StudyQuizBreak({
           accessibilityRole="button"
           accessibilityHint="Double tap to activate"
         >
-          {`Continue +${correctAnswers * 5}`}
+          <VexText>{`Continue +${correctAnswers * 5}`}</VexText>
         </Button>
       </Box>
     </Box>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { FloatingChoiceCard } from './ethereal';
-import { ONBOARDING_GOALS } from '../../../features/onboarding';
+import { FloatingChoiceCard } from './ethereal/FloatingChoiceCard';
+import { ONBOARDING_GOALS } from '../../../features/onboarding/constants';
 import { MOTIVATION_STYLE_OPTIONS } from './onboarding-flow-data';
 import type { MotivationProfileType } from '../../../features/onboarding';
 import { LaneChoiceStep } from './LaneChoiceStep';

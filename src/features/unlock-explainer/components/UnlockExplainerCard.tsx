@@ -3,8 +3,9 @@ import { Pressable, View } from 'react-native';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { UnlockDecision } from '../types';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface UnlockExplainerCardProps {
   decision: UnlockDecision;
@@ -106,7 +107,7 @@ export function UnlockExplainerCard({
           onPress={onHide}
           accessibilityLabel="Got it"
         >
-          Got it
+          <VexText>Got it</VexText>
         </Button>
 
         {decision.canHide && (
@@ -115,7 +116,7 @@ export function UnlockExplainerCard({
             onPress={onHide}
             accessibilityLabel="Hide this feature"
           >
-            Hide this
+            <VexText>Hide this</VexText>
           </Button>
         )}
 
@@ -125,7 +126,7 @@ export function UnlockExplainerCard({
             onPress={onReconsider}
             accessibilityLabel="Reconsider later"
           >
-            Reconsider later
+            <VexText>Reconsider later</VexText>
           </Button>
         )}
       </View>

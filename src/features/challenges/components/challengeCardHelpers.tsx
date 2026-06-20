@@ -1,19 +1,20 @@
 import { Badge } from '../../../components/Badge';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 export function getStatusBadge(
   status: UserChallengeSummary['status'],
 ): React.ReactNode {
   switch (status) {
     case 'COMPLETED':
-      return <Badge variant="success">Ready to Claim</Badge>;
+      return <Badge variant="success"><VexText>Ready to Claim</VexText></Badge>;
     case 'CLAIMED':
-      return <Badge variant="secondary">Claimed</Badge>;
+      return <Badge variant="secondary"><VexText>Claimed</VexText></Badge>;
     case 'EXPIRED':
-      return <Badge variant="error">Expired</Badge>;
+      return <Badge variant="error"><VexText>Expired</VexText></Badge>;
     case 'REROLLED':
-      return <Badge variant="secondary">Rerolled</Badge>;
+      return <Badge variant="secondary"><VexText>Rerolled</VexText></Badge>;
     default:
       return null;
   }

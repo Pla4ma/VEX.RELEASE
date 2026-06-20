@@ -8,7 +8,7 @@ import type { OnboardingProgress } from './schemas';
 const ONBOARDING_QUERY_KEY = (userId: string) => ['onboarding', 'progress', userId] as const;
 
 export function useOnboardingProgress(userId: string | null) {
-  const query = useQuery({
+  const { data, error, isPending, refetch } = useQuery({
     queryKey: ONBOARDING_QUERY_KEY(userId ?? ''),
     queryFn: () => onboardingRepository.getProgress(userId!),
     enabled: !!userId,
@@ -16,10 +16,10 @@ export function useOnboardingProgress(userId: string | null) {
   });
 
   return {
-    progress: query.data ?? null,
-    isLoading: query.isPending,
-    error: query.error,
-    refetch: query.refetch,
+    progress: data ?? null,
+    isLoading: isPending,
+    error,
+    refetch,
   };
 }
 

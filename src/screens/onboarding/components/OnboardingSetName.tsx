@@ -25,8 +25,9 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { CharacterCounter } from './CharacterCounter';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface OnboardingSetNameProps {
   initialName?: string;
@@ -167,7 +168,7 @@ export function OnboardingSetName({
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              Continue
+              <VexText>Continue</VexText>
             </Button>
 
             <Pressable

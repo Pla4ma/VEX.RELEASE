@@ -5,10 +5,10 @@
  * Tracks and calculates user retention metrics.
  */
 
-import { MMKV } from 'react-native-mmkv';
+import { createRuntimeMMKV } from '../persistence/mmkv-runtime';
 import type { RetentionCohort } from './types';
 
-const retentionStorage = new MMKV({ id: 'retention' });
+const retentionStorage = createRuntimeMMKV({ id: 'retention' });
 const retentionCohorts = new Map<string, RetentionCohort>();
 
 function loadCohortsFromStorage(): void {

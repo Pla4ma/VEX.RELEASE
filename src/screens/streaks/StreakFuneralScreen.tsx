@@ -17,6 +17,7 @@ import { useTheme } from '../../theme';
 import { useToast } from '../../shared/ui/components/Toast';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { StreakFuneralFlame } from './StreakFuneralFlame';
+import { Text as VexText } from '../../components/primitives/Text';
 
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, 'StreakFuneral'>;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -142,7 +143,7 @@ export const StreakFuneralScreen: React.FC = () => {
               accessibilityRole="button"
               accessibilityHint="Begins a new rhythm with your next session"
             >
-              Start fresh — new rhythm
+              <VexText>Start fresh — new rhythm</VexText>
             </Button>
             <Button variant="ghost"
               size="sm"
@@ -152,7 +153,7 @@ export const StreakFuneralScreen: React.FC = () => {
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              View Focus History
+              <VexText>View Focus History</VexText>
             </Button>
           </Box>
         </Animated.View>

@@ -3,9 +3,11 @@ import { MMKVStorageAdapter } from '../MMKVStorageAdapter';
 
 const mockStores = new Map<string, Map<string, string>>();
 const mockMmkvControls = {
+  throwOnNextConstructor: false,
   throwOnNextSet: false,
   reset: (): void => {
     mockStores.clear();
+    mockMmkvControls.throwOnNextConstructor = false;
     mockMmkvControls.throwOnNextSet = false;
   },
 };
@@ -19,6 +21,10 @@ jest.mock('react-native-mmkv', () => ({
     private readonly store: Map<string, string>;
 
     constructor(options?: { id?: string }) {
+      if (mockMmkvControls.throwOnNextConstructor) {
+        mockMmkvControls.throwOnNextConstructor = false;
+        throw new Error('React Native is not running on-device');
+      }
       const id = options?.id ?? 'default';
       const existing = mockStores.get(id);
       this.store = existing ?? new Map<string, string>();
@@ -57,8 +63,14 @@ jest.mock('react-native-mmkv', () => ({
 
 describe('MMKVStorageAdapter error paths', () => {
   beforeEach(() => {
+    (globalThis as { nativeCallSyncHook?: unknown }).nativeCallSyncHook =
+      jest.fn();
     mockMmkvControls.reset();
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    delete (globalThis as { nativeCallSyncHook?: unknown }).nativeCallSyncHook;
   });
 
   it('returns null when JSON is corrupted and does not throw', async () => {
@@ -109,5 +121,17 @@ describe('MMKVStorageAdapter error paths', () => {
     expect(adapter.getJSONSync<{ value: number }>('payload')).toEqual({
       value: 2,
     });
+  });
+
+  it('falls back when MMKV cannot run without on-device JSI', async () => {
+    delete (globalThis as { nativeCallSyncHook?: unknown }).nativeCallSyncHook;
+    mockMmkvControls.throwOnNextConstructor = true;
+    const adapter = new MMKVStorageAdapter('remote-debugger');
+
+    await adapter.setItem('payload', JSON.stringify({ value: 1 }));
+
+    await expect(
+      adapter.getJSON<{ value: number }>('payload'),
+    ).resolves.toEqual({ value: 1 });
   });
 });

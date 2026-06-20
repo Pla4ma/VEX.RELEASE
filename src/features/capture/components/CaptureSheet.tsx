@@ -4,7 +4,7 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from 'react-native-reanimated';
-import { Icon } from '../../../icons';
+import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -12,6 +12,7 @@ import { spacing } from '../../../theme/tokens/spacing';
 
 import { useCaptureForm, useCaptureMutation } from '../hooks';
 import { CaptureTypeSelector } from './CaptureTypeSelector';
+import { Text as VexText } from '../../../components/primitives/Text';
 
 interface CaptureSheetProps {
   userId: string;
@@ -170,7 +171,7 @@ export function CaptureSheet({
             accessibilityLabel="Save capture"
             accessibilityRole="button"
           >
-            Save Capture
+            <VexText>Save Capture</VexText>
           </Button>
         </>
       )}
