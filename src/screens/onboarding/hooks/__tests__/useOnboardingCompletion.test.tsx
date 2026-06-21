@@ -18,7 +18,7 @@ jest.mock('../../../../features/liveops-config', () => ({
   }),
 }));
 
-jest.mock('../../../../features/onboarding', () => ({
+jest.mock('../../../../features/onboarding/store', () => ({
   useOnboardingStore: (
     selector: (state: { completeOnboarding: typeof mockCompleteOnboarding }) => unknown,
   ) => selector({ completeOnboarding: mockCompleteOnboarding }),

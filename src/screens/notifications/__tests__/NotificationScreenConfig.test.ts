@@ -82,11 +82,18 @@ describe('NotificationScreenConfig', () => {
       jest.useRealTimers();
     });
 
-    const now = new Date(2026, 5, 22, 12, 0, 0);
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
-    const yesterday = today - 86400000;
-    const twoDaysAgo = today - 2 * 86400000;
-    const lastWeek = today - 7 * 86400000;
+    let today: number;
+    let yesterday: number;
+    let twoDaysAgo: number;
+    let lastWeek: number;
+
+    beforeEach(() => {
+      const now = new Date(2026, 5, 22, 12, 0, 0);
+      today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
+      yesterday = today - 86400000;
+      twoDaysAgo = today - 2 * 86400000;
+      lastWeek = today - 7 * 86400000;
+    });
 
     const makeNotification = (timestamp: number): Notification => ({
       id: `n-${timestamp}`,

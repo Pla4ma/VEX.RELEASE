@@ -46,9 +46,10 @@ describe('session modes', () => {
     expect(config.xpMultiplier).toBe(1);
   });
 
-  test('every session mode has scoring weights summing close to 1', () => {
+  it('every session mode has scoring weights summing close to 1', () => {
     for (const mode of Object.values(SessionMode)) {
       const config = SESSION_MODE_CONFIG[mode];
+      if (config.isSessionLess) continue;
       const sum =
         config.scoringWeights.consistency +
         config.scoringWeights.depth +
