@@ -1,12 +1,12 @@
-import { eventBus } from '../../events';
+import { eventBus } from '../../events/EventBus';
 import { initializeAchievementTracking } from '../service';
 
-jest.mock('../../events', () => ({ eventBus: { subscribe: jest.fn(), publish: jest.fn() } }));
+jest.mock('../../events/EventBus', () => ({ eventBus: { subscribe: jest.fn(), publish: jest.fn() } }));
 jest.mock('../repository', () => ({
   getUserAchievement: jest.fn().mockResolvedValue(null),
   updateAchievementProgress: jest.fn().mockResolvedValue({ id: 'ua-1', isUnlocked: false }),
 }));
-jest.mock('../../shared/analytics/analytics-service', () => ({ capture: jest.fn() }));
+jest.mock('../../../shared/analytics/analytics-service', () => ({ capture: jest.fn() }));
 jest.mock('../definitions', () => ({
   ALL_ACHIEVEMENTS: [
     { id: 's1', unlockCondition: { type: 'SESSION_COMPLETE', target: 1, comparator: 'CUMULATIVE' }, progressMax: 1, reward: {} },

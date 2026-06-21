@@ -1,5 +1,5 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { generateMessage } from '../service/message-generator';
+import { generateMessage } from '../../service/message-generator';
 import * as repository from '../../repository';
 import { mockUserId } from './helpers';
 
@@ -8,6 +8,10 @@ jest.mock('../../repository');
 describe('Message Generator', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (repository.fetchCoachHistory as jest.Mock).mockResolvedValue({
+      messages: [],
+      mutedCategories: [],
+    });
   });
 
   it('generates message from template', async () => {

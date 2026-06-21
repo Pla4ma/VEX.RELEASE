@@ -45,27 +45,32 @@ function checkSessionCompleteEconomyChain(check, fail) {
 function checkOnboardingSessionHandoff(check, fail) {
   let pass = true;
   const screen = readFile(path.join(__dirname, '../src/screens/onboarding/OnboardingFlowScreen.tsx'));
-  if (screen) {
-    const hasStack = screen.includes("'SessionStack'");
-    const hasSetup = screen.includes("screen: 'SessionSetup'");
-    const hasPreset = screen.includes('presetId:');
-    const hasSource = screen.includes("'onboarding_first_session'");
+  const hook = readFile(path.join(__dirname, '../src/screens/onboarding/hooks/useOnboardingFlow.ts'));
+  // Navigation strings live in the hook (correct architecture: screen → hook → nav)
+  const navSource = hook || screen;
+  if (screen && hook) {
+    const hasStack = navSource.includes("'SessionStack'");
+    const hasSetup = navSource.includes("screen: 'SessionSetup'");
+    const hasPreset = navSource.includes('presetId:');
+    const hasSource = navSource.includes("'onboarding_first_session'");
     console.log(`   ${hasStack ? check : fail} Navigates to 'SessionStack'`);
     console.log(`   ${hasSetup ? check : fail} screen: 'SessionSetup'`);
     console.log(`   ${hasPreset ? check : fail} params.presetId passed`);
     console.log(`   ${hasSource ? check : fail} source: 'onboarding_first_session'`);
     const hasFocused = screen.includes('useIsFocused()');
     const hasGuard = screen.includes('!isFocused');
-    const hasStep5 = screen.includes('step !== LAST_STEP_INDEX') || screen.includes('step !== 4');
-    const hasHistory = screen.includes('historyQuery.history.length');
-    const hasFinish = screen.includes('finishOnboarding');
+    // Step guard: screen uses LAST_STEP_INDEX or flow.step === 3
+    const hasStep5 = screen.includes('LAST_STEP_INDEX') || screen.includes('step === 3') || screen.includes('step !== 4');
+    // Completion: screen checks hasCompletedFirstSession and calls handleFinish
+    const hasHistory = screen.includes('hasCompletedFirstSession');
+    const hasFinish = screen.includes('handleFinish');
     console.log(`   ${hasFocused ? check : fail} useIsFocused() hook used`);
     console.log(`   ${hasGuard ? check : fail} Focus guard checked before return detection`);
     console.log(`   ${hasStep5 ? check : fail} Step 5 launch step check present`);
     console.log(`   ${hasHistory && hasFinish ? check : fail} Completes onboarding on return from session`);
     if (!(hasStack && hasSetup && hasPreset && hasSource && hasFocused && hasGuard && hasStep5 && hasHistory && hasFinish)) pass = false;
   } else {
-    console.log(`   ${fail} OnboardingFlowScreen.tsx not found`);
+    console.log(`   ${fail} Onboarding screen/hook files not found`);
     pass = false;
   }
   return pass;

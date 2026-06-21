@@ -1,7 +1,7 @@
 import {
   verifyReceiptSignature,
   parseReceipt,
-} from '../utils/receipt-utils';
+} from '../receipt-utils';
 
 jest.mock('../../../utils/silent-failure', () => ({
   captureSilentFailure: jest.fn(),

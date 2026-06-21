@@ -26,12 +26,12 @@ jest.mock('react-native-mmkv', () => ({
     }
     getAllKeys(): string[] {
       return Array.from(mockStore.keys());
-    },
+    }
   },
 }));
 
 // Mock mmkv-runtime to use a shared in-memory store
-jest.mock('../../persistence/mmkv-runtime', () => {
+jest.mock('../../../persistence/mmkv-runtime', () => {
   const stores = new Map<string, Map<string, string | boolean | number | Uint8Array>>();
   return {
     createRuntimeMMKV: (configuration: { id: string }) => {
@@ -54,7 +54,7 @@ jest.mock('../../persistence/mmkv-runtime', () => {
 describe('project-focus service — thread lifecycle', () => {
   beforeEach(() => {
     mockStore.clear();
-    const { createRuntimeMMKV } = require('../../persistence/mmkv-runtime');
+    const { createRuntimeMMKV } = require('../../../persistence/mmkv-runtime');
     const store = createRuntimeMMKV({ id: 'vex-runtime-storage' });
     store.clearAll();
   });
