@@ -29,29 +29,26 @@ describe('trackBossRouteOpened', () => {
     jest.clearAllMocks();
   });
 
-  it('does not crash with null userId (boss analytics stubbed in final release)', () => {
+  it('does not crash with null userId (boss analytics active)', () => {
     trackBossRouteOpened(null, 'subtle', false);
-    // Stub function — tracks nothing because boss is deactivated
-    expect(mockAddBreadcrumb).not.toHaveBeenCalled();
+    expect(mockAddBreadcrumb).toHaveBeenCalled();
   });
 
-  it('does not track anything with valid inputs (boss deactivated)', () => {
+  it('tracks with valid inputs via Sentry breadcrumb', () => {
     trackBossRouteOpened('user-1', 'game-like', true);
-    expect(mockAddBreadcrumb).not.toHaveBeenCalled();
-    expect(mockPublish).not.toHaveBeenCalled();
+    expect(mockAddBreadcrumb).toHaveBeenCalled();
   });
 
-  it('does not publish analytics events (boss deactivated)', () => {
+  it('publishes no eventBus events (uses Sentry only)', () => {
     trackBossRouteOpened('user-2', 'intense', true);
     expect(mockPublish).not.toHaveBeenCalled();
   });
 
-  it('remains a no-op across all intensity levels', () => {
+  it('tracks across all intensity levels', () => {
     for (const intensity of ['subtle', 'game-like', 'intense']) {
       jest.clearAllMocks();
       trackBossRouteOpened('user-1', intensity, true);
-      expect(mockAddBreadcrumb).not.toHaveBeenCalled();
-      expect(mockPublish).not.toHaveBeenCalled();
+      expect(mockAddBreadcrumb).toHaveBeenCalled();
     }
   });
 });

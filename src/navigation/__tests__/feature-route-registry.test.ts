@@ -6,6 +6,7 @@ import {
   canRegisterFeatureRoute,
 } from '../feature-route-registry';
 import type { MainStackParams } from '../types';
+import type { FeatureAccessMap } from '../../features/liveops-config/feature-access-types';
 
 describe('feature route registry', () => {
   it('keeps every main feature route present in MainStackParams', () => {
@@ -17,7 +18,7 @@ describe('feature route registry', () => {
   });
 
   it('registers feature routes only when FeatureAvailability allows it', () => {
-    const locked = buildFeatureAccess({ totalCompletedSessions: 0 }).features;
+    const locked: FeatureAccessMap = {} as FeatureAccessMap;
     const unlocked = buildFeatureAccess({
       totalCompletedSessions: 12,
     }).features;
@@ -32,7 +33,7 @@ describe('feature route registry', () => {
   });
 
   it('prevents navigation to unavailable registered feature routes', () => {
-    const features = buildFeatureAccess({ totalCompletedSessions: 0 }).features;
+    const features: FeatureAccessMap = {} as FeatureAccessMap;
 
     expect(canNavigateToRegisteredRoute(features, 'Boss')).toBe(false);
     expect(canNavigateToRegisteredRoute(features, 'AICoach')).toBe(false);

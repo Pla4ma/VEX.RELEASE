@@ -75,7 +75,14 @@ describe('NotificationScreenConfig', () => {
   });
 
   describe('groupNotificationsByTime', () => {
-    const now = new Date();
+    beforeAll(() => {
+      jest.setSystemTime(new Date(2026, 5, 22, 12, 0, 0)); // Monday
+    });
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    const now = new Date(2026, 5, 22, 12, 0, 0);
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
     const yesterday = today - 86400000;
     const twoDaysAgo = today - 2 * 86400000;

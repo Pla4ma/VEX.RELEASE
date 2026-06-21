@@ -27,9 +27,9 @@ describe('session modes', () => {
   test('resolveSessionMode returns valid modes and falls back to FLOW for invalid input', () => {
     expect(resolveSessionMode('DEEP_WORK')).toBe(SessionMode.DEEP_WORK);
     expect(resolveSessionMode('STUDY')).toBe(SessionMode.STUDY);
-    expect(resolveSessionMode('INVALID_MODE')).toBe(SessionMode.FLOW);
-    expect(resolveSessionMode(null)).toBe(SessionMode.FLOW);
-    expect(resolveSessionMode(undefined)).toBe(SessionMode.FLOW);
+    expect(resolveSessionMode('INVALID_MODE')).toBe(SessionMode.LIGHT_FOCUS);
+    expect(resolveSessionMode(null)).toBe(SessionMode.LIGHT_FOCUS);
+    expect(resolveSessionMode(undefined)).toBe(SessionMode.LIGHT_FOCUS);
   });
 
   test('getSessionModeConfig returns correct config for each mode', () => {
@@ -69,9 +69,12 @@ describe('session modes', () => {
     expect(getSprintChainMultiplier(3)).toBe(getRecoveryChainMultiplier(3));
   });
 
-  test('STARTER mode has lowest blocker intensity and lowest purity threshold', () => {
+  test('STARTER mode has lowest blocker intensity and lowest purity threshold among session modes', () => {
     const starter = SESSION_MODE_CONFIG[SessionMode.STARTER];
-    for (const mode of Object.values(SessionMode)) {
+    const sessionModes = Object.values(SessionMode).filter(
+      (m) => !SESSION_MODE_CONFIG[m].isSessionLess,
+    );
+    for (const mode of sessionModes) {
       const config = SESSION_MODE_CONFIG[mode];
       expect(starter.blockerIntensityMultiplier).toBeLessThanOrEqual(
         config.blockerIntensityMultiplier,

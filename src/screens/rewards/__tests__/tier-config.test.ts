@@ -27,10 +27,10 @@ describe('tier-config', () => {
     });
 
     it('has correct emojis', () => {
-      expect(TIER_CONFIG.WOOD.emoji).toBe('\uD83D\uDC66');
-      expect(TIER_CONFIG.SILVER.emoji).toBe('\uD83E\uDD48');
-      expect(TIER_CONFIG.GOLD.emoji).toBe('\uD83C\uDFC6');
-      expect(TIER_CONFIG.LEGENDARY.emoji).toBe('\uD83D\uDC51');
+      expect(TIER_CONFIG.WOOD.emoji).toBe('📦');
+      expect(TIER_CONFIG.SILVER.emoji).toBe('🥈');
+      expect(TIER_CONFIG.GOLD.emoji).toBe('🏆');
+      expect(TIER_CONFIG.LEGENDARY.emoji).toBe('👑');
     });
 
     it('LEGENDARY has 3 colors, others have fewer', () => {

@@ -24,6 +24,13 @@ jest.mock('../../../../features/onboarding', () => ({
   ) => selector({ completeOnboarding: mockCompleteOnboarding }),
 }));
 
+jest.mock('../../../../features/onboarding/hooks', () => ({
+  useSyncOnboardingProgress: () => ({
+    syncFromStore: jest.fn().mockResolvedValue(undefined),
+    isSyncing: false,
+  }),
+}));
+
 jest.mock('../../../../store/session-state', () => ({
   useSessionUIStore: (
     selector: (state: { showHomeHighlight: typeof mockShowHomeHighlight }) => unknown,

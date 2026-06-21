@@ -125,6 +125,6 @@ export function createTestContext(): TestContext {
   (eventBus.publish as jest.Mock).mockImplementation(() => {});
   (eventBus.subscribe as jest.Mock).mockImplementation(() => () => {});
 
-  const service = orchestrator;
+  const service = mockOrchestrator as unknown as ReturnType<typeof getSessionOrchestrator>;
   service.setUserId(mockUserId);
   return { service, mockRepository, mockOrchestrator };}

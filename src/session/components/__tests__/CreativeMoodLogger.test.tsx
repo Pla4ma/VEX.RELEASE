@@ -36,7 +36,12 @@ jest.mock('../../../theme/ThemeContext', () => {
           accent: { purple: '#A855F7', blue: '#3B82F6', green: '#10B981', orange: '#F97316', pink: '#EC4899', teal: '#14B8A6' },
           semantic: {},
         },
-        typography: {},
+        typography: {
+          display: { large: { fontSize: 48, lineHeight: 56 }, medium: { fontSize: 36, lineHeight: 44 }, small: { fontSize: 28, lineHeight: 36 } },
+          heading: { h1: { fontSize: 32, lineHeight: 40 }, h2: { fontSize: 28, lineHeight: 36 }, h3: { fontSize: 24, lineHeight: 30 }, h4: { fontSize: 20, lineHeight: 28 }, h5: { fontSize: 18, lineHeight: 26 }, h6: { fontSize: 16, lineHeight: 24 } },
+          body: { large: { fontSize: 18, lineHeight: 27 }, medium: { fontSize: 16, lineHeight: 24 }, small: { fontSize: 14, lineHeight: 21 } },
+          ui: { button: { fontSize: 16, lineHeight: 24 }, label: { fontSize: 12, lineHeight: 16 }, caption: { fontSize: 12, lineHeight: 18 }, overline: { fontSize: 11, lineHeight: 16 } },
+        },
         fonts: {},
         fontWeights: {},
         spacing: {
