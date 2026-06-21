@@ -4,14 +4,14 @@
  * Extracted from lane-test-helpers.ts to stay under the 200-line limit.
  */
 
-import { getLaneMechanicPolicy } from '../lane-engine';
-import type { Lane, LaneProfile } from '../lane-engine/types';
-import { buildLaneSessionBrief } from '../session-start/service';
-import { decideNudge } from '../notification-policy/service';
-import { resolveCompletionExperiencePolicy } from '../session-completion/completion-experience-policy';
-import type { CompletionExperiencePolicyInput } from '../session-completion/completion-experience-policy-schemas';
-import { resolveLaneCopy } from '../personalization/first-week-lane-copy';
-import { LANE_USER_FACING_NAMES } from '../lane-engine/schemas';
+import { getLaneMechanicPolicy } from '../../features/lane-engine';
+import type { Lane, LaneProfile } from '../../features/lane-engine/types';
+import { buildLaneSessionBrief } from '../../features/session-start/service';
+import { decideNudge } from '../../features/notification-policy/service';
+import { resolveCompletionExperiencePolicy } from '../../features/session-completion/completion-experience-policy';
+import type { CompletionExperiencePolicyInput } from '../../features/session-completion/completion-experience-policy-schemas';
+import { resolveLaneCopy } from '../../features/personalization/first-week-lane-copy';
+import { LANE_USER_FACING_NAMES } from '../../features/lane-engine/schemas';
 import { SessionMode } from '../../session/modes';
 
 export type SessionModeString = (typeof SessionMode)[keyof typeof SessionMode];
