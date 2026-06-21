@@ -2,7 +2,7 @@ import * as repository from '../repository';
 import { getUnreadNotificationsCount } from '../service';
 
 jest.mock('../repository');
-jest.mock('../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 
 describe('getUnreadNotificationsCount', () => {
   beforeEach(() => jest.clearAllMocks());
