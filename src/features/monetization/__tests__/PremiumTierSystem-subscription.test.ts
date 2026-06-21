@@ -8,11 +8,12 @@ import {
   type SubscriptionTier,
 } from '../PremiumTierSystem';
 
-const mockEventBus = { publish: jest.fn(), subscribe: jest.fn() };
-
 jest.mock('../../../events/EventBus', () => ({
-  eventBus: mockEventBus,
-}), { virtual: true });
+  eventBus: {
+    publish: jest.fn(),
+    subscribe: jest.fn(),
+  },
+}));
 
 // Mock mmkv-storage used by subscription-store
 const mockSubscriptionStore = new Map<string, string>();
@@ -67,7 +68,7 @@ describe('PremiumTierSystem — User Subscription Management', () => {
     });
 
     it('publishes event on new subscription', () => {
-      const { eventBus } = require('../../../events/EventBus');
+      const eventBus = require('../../../events/EventBus').eventBus;
       setUserSubscription({
         userId,
         tier: 'premium',
@@ -78,7 +79,7 @@ describe('PremiumTierSystem — User Subscription Management', () => {
         autoRenew: true,
         platform: 'ios',
       });
-      expect(mockEventBus.publish).toHaveBeenCalledWith(
+      expect(eventBus.publish).toHaveBeenCalledWith(
         'subscription:changed',
         expect.any(Object),
       );

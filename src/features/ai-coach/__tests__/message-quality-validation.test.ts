@@ -63,10 +63,10 @@ describe('Message quality validation', () => {
   it('detects banned generic patterns', () => {
     const messages: Array<[string, string, boolean]> = [
       // [content, expectedReasonSubstring, expectIsGeneric]
-      ['Keep going with your focus!', 'keep going', false],
-      ['You are doing great!', 'you are doing great', false],
-      ['Try focusing more today.', 'try focusing more', false],
-      ['Come back today!', 'come back today', false],
+      ['Keep going with your focus!', 'keep going', true],
+      ['You are doing great!', 'you are doing great', true],
+      ['Try focusing more today.', 'try focusing more', true],
+      ['Come back today!', 'come back today', true],
       ['Good job!', 'Message too short', true],
       [
         'Your progress is wonderful! Keep believing in yourself!',

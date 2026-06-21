@@ -71,7 +71,7 @@ describe('Themes Service', () => {
     });
 
     it('returns error for non-free themes', async () => {
-      const result = await purchaseTheme(TEST_USER_ID, 'premium_ocean', null);
+      const result = await purchaseTheme(TEST_USER_ID, 'deep-ocean', null);
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBeTruthy();
     });

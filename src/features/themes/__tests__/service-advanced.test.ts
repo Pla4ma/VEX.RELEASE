@@ -19,7 +19,7 @@ describe('Themes Service — Purchases & Unlocks', () => {
     });
 
     it('returns error for non-free themes (purchases disabled)', async () => {
-      const result = await purchaseTheme(TEST_USER_ID, 'premium_ocean', null);
+      const result = await purchaseTheme(TEST_USER_ID, 'deep-ocean', null);
       expect(result.success).toBe(false);
       expect(result.errorMessage).toBeTruthy();
     });
@@ -29,9 +29,10 @@ describe('Themes Service — Purchases & Unlocks', () => {
       expect(result.success).toBe(false);
     });
 
-    it('succeeds for legendary with sufficient streak', async () => {
+    it('rejects legendary when purchases disabled', async () => {
       const result = await purchaseTheme(TEST_USER_ID, 'legendary', { longestDays: 30 });
-      expect(result.success).toBe(true);
+      expect(result.success).toBe(false);
+      expect(result.errorMessage).toContain('not available');
     });
   });
 
