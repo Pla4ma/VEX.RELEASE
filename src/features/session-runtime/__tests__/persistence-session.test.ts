@@ -1,7 +1,7 @@
 import { SessionPersistence, mockSession, mockMMKVInstance } from './persistence.helpers';
 
 describe('SessionPersistence', () => {
-  let mockStorage: unknown;
+  let mockStorage: Record<string, jest.Mock>;
 
   beforeEach(() => {
     mockStorage = mockMMKVInstance;

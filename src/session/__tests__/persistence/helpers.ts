@@ -1,17 +1,21 @@
-// Use var so declaration is hoisted; name prefixed with "mock" for jest.mock() access
-var mockCapturedInstance: unknown;
+// Shared mock instance — defined outside factory so exports resolve correctly
+const mockCapturedInstance: Record<string, jest.Mock> = {
+  set: jest.fn(),
+  getString: jest.fn(),
+  getNumber: jest.fn(),
+  delete: jest.fn(),
+  contains: jest.fn(),
+  getAllKeys: jest.fn(),
+};
 
-jest.mock('react-native-mmkv', () => {
-  mockCapturedInstance = {
-    set: jest.fn(),
-    getString: jest.fn(),
-    getNumber: jest.fn(),
-    delete: jest.fn(),
-    contains: jest.fn(),
-    getAllKeys: jest.fn(),
-  };
+// Mock mmkv-runtime so createRuntimeMMKV returns our mock instance.
+// In Jest env, the real module uses MemoryMMKV (bypassing react-native-mmkv),
+// so we must mock at this level to control storage behavior in tests.
+jest.mock('../../../persistence/mmkv-runtime', () => {
+  const actual = jest.requireActual('../../../persistence/mmkv-runtime');
   return {
-    MMKV: jest.fn().mockImplementation(() => mockCapturedInstance),
+    ...actual,
+    createRuntimeMMKV: jest.fn(() => mockCapturedInstance),
   };
 });
 jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));

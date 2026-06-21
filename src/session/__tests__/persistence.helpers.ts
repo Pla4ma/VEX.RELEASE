@@ -6,20 +6,24 @@ import {
   canResumeSession,
 } from '../utils/persistence';
 
-// Use var so declaration is hoisted; assignment happens inside factory
-var mockMMKVInstance: unknown;
+// Shared mock instance — defined outside factory so exports resolve correctly
+const mockMMKVInstance: Record<string, jest.Mock> = {
+  set: jest.fn(),
+  getString: jest.fn(),
+  getNumber: jest.fn(),
+  delete: jest.fn(),
+  contains: jest.fn(),
+  getAllKeys: jest.fn(),
+};
 
-jest.mock('react-native-mmkv', () => {
-  mockMMKVInstance = {
-    set: jest.fn(),
-    getString: jest.fn(),
-    getNumber: jest.fn(),
-    delete: jest.fn(),
-    contains: jest.fn(),
-    getAllKeys: jest.fn(),
-  };
+// Mock mmkv-runtime so createRuntimeMMKV returns our mock instance.
+// In Jest env, the real module uses MemoryMMKV (bypassing react-native-mmkv),
+// so we must mock at this level to control storage behavior in tests.
+jest.mock('../../persistence/mmkv-runtime', () => {
+  const actual = jest.requireActual('../../persistence/mmkv-runtime');
   return {
-    MMKV: jest.fn().mockImplementation(() => mockMMKVInstance),
+    ...actual,
+    createRuntimeMMKV: jest.fn(() => mockMMKVInstance),
   };
 });
 jest.mock('../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
