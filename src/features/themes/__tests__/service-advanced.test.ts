@@ -3,10 +3,10 @@ import {
   unlockTheme,
   equipTheme,
 } from '../service';
-import { getEconomyService } from '../../../economy/EconomyService';
+import { spendCurrency } from '../../../features/economy/wallet-service';
 import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
-jest.mock('../../../economy/EconomyService');
+jest.mock('../../../features/economy/wallet-service');
 jest.mock('../../../persistence/MMKVStorageAdapter');
 
 const mockStorage = { getItem: jest.fn(), setItem: jest.fn() };
@@ -21,14 +21,11 @@ describe('Themes Service — Purchases & Unlocks', () => {
 
   describe('purchaseTheme', () => {
     it('should purchase theme and deduct coins', async () => {
-      const mockSpendCurrency = jest.fn().mockResolvedValue(true);
-      (getEconomyService as jest.Mock).mockReturnValue({
-        spendCurrency: mockSpendCurrency,
-      });
+      (spendCurrency as jest.Mock).mockResolvedValue(true);
       const result = await purchaseTheme(TEST_USER_ID, 'premium_ocean');
       expect(result.success).toBe(true);
       expect(result.themeId).toBe('premium_ocean');
-      expect(mockSpendCurrency).toHaveBeenCalledWith(
+      expect(spendCurrency).toHaveBeenCalledWith(
         TEST_USER_ID,
         'COINS',
         expect.any(Number),
@@ -55,12 +52,7 @@ describe('Themes Service — Purchases & Unlocks', () => {
     });
 
     it('should throw error on insufficient funds', async () => {
-      const mockSpendCurrency = jest
-        .fn()
-        .mockRejectedValue(new Error('Insufficient funds'));
-      (getEconomyService as jest.Mock).mockReturnValue({
-        spendCurrency: mockSpendCurrency,
-      });
+      (spendCurrency as jest.Mock).mockRejectedValue(new Error('Insufficient funds'));
       await expect(
         purchaseTheme(TEST_USER_ID, 'premium_ocean'),
       ).rejects.toThrow('Insufficient funds');

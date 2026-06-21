@@ -8,7 +8,7 @@ import {
   type Notification,
 } from '../NotificationScreenConfig';
 
-jest.mock('../../features/liveops-config/FeatureFlagService', () => ({
+jest.mock('../../../features/liveops-config/FeatureFlagService', () => ({
   isFeatureHidden: jest.fn().mockReturnValue(false),
   getFeatureAvailabilityFor: jest.fn().mockReturnValue({ canShowNotification: true }),
   isFeatureAvailableForNavigation: jest.fn().mockReturnValue(true),

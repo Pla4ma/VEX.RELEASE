@@ -6,7 +6,7 @@ import {
 } from '../service';
 import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
-jest.mock('../../../economy/EconomyService');
+jest.mock('../../../features/economy/service');
 jest.mock('../../../persistence/MMKVStorageAdapter');
 
 const mockStorage = { getItem: jest.fn(), setItem: jest.fn() };

@@ -1,7 +1,8 @@
 import React from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Box, Card } from '../../../components/primitives/Box'
+import { Box } from '../../../components/primitives/Box'
+import { Card } from '../../../components/primitives'
 import { Text } from '../../../components/primitives/Text';
 import { Badge } from '../../../components/Badge';
 import { Icon } from '../../../icons/components/Icon';

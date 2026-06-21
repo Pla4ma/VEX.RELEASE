@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Text } from '../../components/primitives/Card';
+import { Card } from '../../components/primitives/Card';
+import { Text } from '../../components/primitives/Text';
 import { TechniqueBar } from '../../features/mastery/components/TechniqueBar';
 import type { MasteryState } from '../../features/mastery/types';
 import { useTheme } from '../../theme/ThemeContext';

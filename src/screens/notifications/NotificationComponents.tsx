@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable } from 'react-native';
-import { Box, Button, Card } from '../../components/primitives/Box'
+import { Box } from '../../components/primitives/Box'
+import { Button, Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Avatar } from '../../components/Avatar';
 import { lightColors } from '@/theme/tokens/colors';

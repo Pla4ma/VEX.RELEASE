@@ -2,7 +2,7 @@
  * Phase 3A — Lane Pipeline Audit
  */
 
-import type { Lane, LaneMechanicPolicy } from '../../lane-engine/types';
+import type { Lane, LaneMechanicPolicy } from '../../../features/lane-engine/types';
 import {
   getLaneMechanicPolicy,
   getLanePresentationPolicy,

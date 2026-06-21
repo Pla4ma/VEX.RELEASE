@@ -1,4 +1,4 @@
-import { decideHomeSurfaces } from '../home-experience/home-surface-decision';
+import { decideHomeSurfaces } from '../features/home-experience/home-surface-decision';
 import {
   resolveLaneCopy,
   resolveFirstWeekExperiment,

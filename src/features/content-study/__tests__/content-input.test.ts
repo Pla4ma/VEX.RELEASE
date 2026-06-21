@@ -7,7 +7,7 @@ import {
   contentStudyQueryKeys,
 } from '../hooks';
 
-jest.mock('../store', () => ({
+jest.mock('../../../store', () => ({
   useAuthStore: () => ({
     user: { id: 'test-user-id', email: 'test@example.com' },
   }),

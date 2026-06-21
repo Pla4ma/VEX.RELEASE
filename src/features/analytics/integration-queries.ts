@@ -35,7 +35,7 @@ export async function syncAnalyticsData(userId: string): Promise<SyncResult> {
   let failed = 0;
 
   try {
-    await repository.fetchAggregatedStats(userId, 'day');
+    await repository.fetchAggregatedStats(userId, 'today');
     synced++;
   } catch (error) {
     failed++;
@@ -62,8 +62,8 @@ export async function syncAnalyticsData(userId: string): Promise<SyncResult> {
 
   if (success) {
     eventBus.publish('network:sync:complete', {
-      userId,
-      syncedAt: Date.now(),
+      synced,
+      failed,
     });
   }
 
@@ -81,7 +81,7 @@ export async function getRealtimeAnalytics(
 
   try {
     const [stats, insights] = await Promise.all([
-      repository.fetchAggregatedStats(userId, 'day').catch(() => null),
+      repository.fetchAggregatedStats(userId, 'today').catch(() => null),
       repository.fetchInsights(userId).catch(() => []),
     ]);
 
@@ -122,7 +122,7 @@ export async function initializeAnalytics(
 ): Promise<InitializeResult> {
   try {
     const [stats, insights, patterns] = await Promise.all([
-      repository.fetchAggregatedStats(userId, 'day'),
+      repository.fetchAggregatedStats(userId, 'today'),
       repository.fetchInsights(userId),
       repository.fetchDetectedPatterns(userId),
     ]);

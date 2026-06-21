@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Box, Button } from '../../../components/primitives/Box'
+import { Box } from '../../../components/primitives/Box'
+import { Button } from '../../../components/primitives'
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 
