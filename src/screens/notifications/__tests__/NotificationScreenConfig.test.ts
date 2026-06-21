@@ -76,6 +76,7 @@ describe('NotificationScreenConfig', () => {
 
   describe('groupNotificationsByTime', () => {
     beforeAll(() => {
+      jest.useFakeTimers();
       jest.setSystemTime(new Date(2026, 5, 22, 12, 0, 0)); // Monday
     });
     afterAll(() => {
