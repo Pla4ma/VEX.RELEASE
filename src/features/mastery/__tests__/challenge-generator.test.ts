@@ -23,39 +23,39 @@ describe('generateMasteryChallenges (real implementation)', () => {
     expect(challenges.length).toBeLessThanOrEqual(2);
   });
 
-  it('focuses on the lowest technique', () => {
+  it('focuses on the highest technique', () => {
     const techniques = {
       durationMastery: 0,
-      purityMastery: 10,
+      purityMastery: 5,
       consistencyMastery: 10,
-      comebackMastery: 10,
+      comebackMastery: 15,
       bossMastery: 10,
     };
     const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
-    expect(challenges[0]?.technique).toBe('durationMastery');
+    expect(challenges[0]?.technique).toBe('comebackMastery');
   });
 
-  it('uses EASY difficulty for lowest technique level < 5 when EASY template exists', () => {
-    // consistencyMastery has an EASY template
+  it('uses EASY difficulty for highest technique level < 5 when EASY template exists', () => {
+    // consistencyMastery has an EASY template; make it the highest at level 2
     const techniques = {
-      durationMastery: 10,
-      purityMastery: 10,
+      durationMastery: 0,
+      purityMastery: 0,
       consistencyMastery: 2,
-      comebackMastery: 10,
-      bossMastery: 10,
+      comebackMastery: 1,
+      bossMastery: 1,
     };
     const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
     expect(challenges[0]?.difficulty).toBe('EASY');
   });
 
   it('falls back to first template when no matching difficulty exists', () => {
-    // durationMastery has no EASY template — falls back to first (MEDIUM)
+    // durationMastery has no EASY template — make it the highest at level 2
     const techniques = {
       durationMastery: 2,
-      purityMastery: 10,
-      consistencyMastery: 10,
-      comebackMastery: 10,
-      bossMastery: 10,
+      purityMastery: 0,
+      consistencyMastery: 0,
+      comebackMastery: 0,
+      bossMastery: 0,
     };
     const challenges = actual.generateMasteryChallenges(techniques, 'APPRENTICE');
     expect(challenges[0]?.difficulty).toBe('MEDIUM');

@@ -1,137 +1,80 @@
 import {
   purchaseTheme,
-  unlockTheme,
-  equipTheme,
+  canPurchaseTheme,
+  getSelectableThemes,
+  getOwnedSessionThemeIds,
 } from '../service';
-import { spendCurrency } from '../../../features/economy/wallet-service';
-import { getDefaultStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
+jest.mock('../../../features/economy/service');
 jest.mock('../../../features/economy/wallet-service');
-jest.mock('../../../persistence/MMKVStorageAdapter');
 
-const mockStorage = { getItem: jest.fn(), setItem: jest.fn() };
-(getDefaultStorageAdapter as jest.Mock).mockReturnValue(mockStorage);
 const TEST_USER_ID = 'test-user-123';
 
 describe('Themes Service — Purchases & Unlocks', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockStorage.getItem.mockResolvedValue(null);
-  });
-
   describe('purchaseTheme', () => {
-    it('should purchase theme and deduct coins', async () => {
-      (spendCurrency as jest.Mock).mockResolvedValue(true);
-      const result = await purchaseTheme(TEST_USER_ID, 'premium_ocean');
+    it('succeeds for free themes', async () => {
+      const result = await purchaseTheme(TEST_USER_ID, 'default', null);
       expect(result.success).toBe(true);
-      expect(result.themeId).toBe('premium_ocean');
-      expect(spendCurrency).toHaveBeenCalledWith(
-        TEST_USER_ID,
-        'COINS',
-        expect.any(Number),
-        'theme_purchase',
-      );
-      expect(mockStorage.setItem).toHaveBeenCalled();
+      expect(result.errorMessage).toBeNull();
     });
 
-    it('should throw error for already unlocked theme', async () => {
-      const storedThemes = {
-        unlocked: ['default_light', 'premium_ocean'],
-        equipped: 'default_light',
-      };
-      mockStorage.getItem.mockResolvedValue(JSON.stringify(storedThemes));
-      await expect(
-        purchaseTheme(TEST_USER_ID, 'premium_ocean'),
-      ).rejects.toThrow('Theme already unlocked');
+    it('returns error for non-free themes (purchases disabled)', async () => {
+      const result = await purchaseTheme(TEST_USER_ID, 'premium_ocean', null);
+      expect(result.success).toBe(false);
+      expect(result.errorMessage).toBeTruthy();
     });
 
-    it('should throw error for non-existent theme', async () => {
-      await expect(purchaseTheme(TEST_USER_ID, 'non_existent')).rejects.toThrow(
-        'Theme not found',
-      );
+    it('returns error for legendary without streak', async () => {
+      const result = await purchaseTheme(TEST_USER_ID, 'legendary', { longestDays: 5 });
+      expect(result.success).toBe(false);
     });
 
-    it('should throw error on insufficient funds', async () => {
-      (spendCurrency as jest.Mock).mockRejectedValue(new Error('Insufficient funds'));
-      await expect(
-        purchaseTheme(TEST_USER_ID, 'premium_ocean'),
-      ).rejects.toThrow('Insufficient funds');
+    it('succeeds for legendary with sufficient streak', async () => {
+      const result = await purchaseTheme(TEST_USER_ID, 'legendary', { longestDays: 30 });
+      expect(result.success).toBe(true);
     });
   });
 
-  describe('unlockTheme', () => {
-    it('should unlock theme via achievement', async () => {
-      const result = await unlockTheme(TEST_USER_ID, 'achievement_theme', {
-        type: 'achievement',
-        achievementId: 'seven_day_streak',
-      });
-      expect(result.success).toBe(true);
-      expect(result.unlockedVia).toBe('achievement');
-      expect(mockStorage.setItem).toHaveBeenCalled();
+  describe('canPurchaseTheme', () => {
+    it('allows free themes', () => {
+      const result = canPurchaseTheme('default', null);
+      expect(result.allowed).toBe(true);
+      expect(result.message).toBeNull();
     });
 
-    it('should unlock theme via mastery rank', async () => {
-      const result = await unlockTheme(TEST_USER_ID, 'master_theme', {
-        type: 'mastery',
-        rank: 'MASTER',
-      });
-      expect(result.success).toBe(true);
-      expect(result.unlockedVia).toBe('mastery');
+    it('blocks legendary without 30-day streak', () => {
+      const result = canPurchaseTheme('legendary', { longestDays: 5 });
+      expect(result.allowed).toBe(false);
+      expect(result.message).toContain('30');
     });
 
-    it('should unlock theme via season pass', async () => {
-      const result = await unlockTheme(TEST_USER_ID, 'season_exclusive', {
-        type: 'season',
-        seasonId: 'season_1',
-        tier: 20,
-      });
-      expect(result.success).toBe(true);
-      expect(result.unlockedVia).toBe('season');
-    });
-
-    it('should throw error for already unlocked theme', async () => {
-      const storedThemes = {
-        unlocked: ['default_light', 'achievement_theme'],
-        equipped: 'default_light',
-      };
-      mockStorage.getItem.mockResolvedValue(JSON.stringify(storedThemes));
-      await expect(
-        unlockTheme(TEST_USER_ID, 'achievement_theme', {
-          type: 'achievement',
-          achievementId: 'test',
-        }),
-      ).rejects.toThrow('Theme already unlocked');
+    it('allows legendary with 30-day streak', () => {
+      const result = canPurchaseTheme('legendary', { longestDays: 30 });
+      expect(result.allowed).toBe(true);
     });
   });
 
-  describe('equipTheme', () => {
-    it('should equip unlocked theme', async () => {
-      const storedThemes = {
-        unlocked: ['default_light', 'ocean_blue'],
-        equipped: 'default_light',
-      };
-      mockStorage.getItem.mockResolvedValue(JSON.stringify(storedThemes));
-      const result = await equipTheme(TEST_USER_ID, 'ocean_blue');
-      expect(result.success).toBe(true);
-      expect(result.equippedTheme).toBe('ocean_blue');
-      expect(mockStorage.setItem).toHaveBeenCalled();
+  describe('getSelectableThemes', () => {
+    it('returns all themes with ownership status', async () => {
+      const themes = await getSelectableThemes(TEST_USER_ID, null);
+      expect(themes.length).toBeGreaterThan(0);
+      const freeThemes = themes.filter((t) => t.isOwned);
+      expect(freeThemes.length).toBeGreaterThan(0);
     });
 
-    it('should throw error for locked theme', async () => {
-      const storedThemes = {
-        unlocked: ['default_light'],
-        equipped: 'default_light',
-      };
-      mockStorage.getItem.mockResolvedValue(JSON.stringify(storedThemes));
-      await expect(equipTheme(TEST_USER_ID, 'locked_theme')).rejects.toThrow(
-        'Theme not unlocked',
-      );
+    it('marks legendary description based on streak', async () => {
+      const themes = await getSelectableThemes(TEST_USER_ID, { longestDays: 5 });
+      const legendary = themes.find((t) => t.id === 'legendary');
+      if (legendary) {
+        expect(legendary.description).toContain('30');
+      }
     });
+  });
 
-    it('should throw error for non-existent theme', async () => {
-      await expect(equipTheme(TEST_USER_ID, 'non_existent')).rejects.toThrow(
-        'Theme not found',
-      );
+  describe('getOwnedSessionThemeIds', () => {
+    it('returns free theme ids for any user', async () => {
+      const ids = await getOwnedSessionThemeIds(TEST_USER_ID);
+      expect(ids.length).toBeGreaterThan(0);
     });
   });
 });

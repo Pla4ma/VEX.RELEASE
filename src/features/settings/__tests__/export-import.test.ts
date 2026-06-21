@@ -6,10 +6,10 @@ import {
   SettingsValidationError,
 } from '../service';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 
 jest.mock('../repository');
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),

@@ -5,6 +5,23 @@ jest.mock('react-native-purchases', () => ({
     restorePurchases: jest.fn(),
     syncPurchases: jest.fn(),
   },
+  PURCHASES_ERROR_CODE: {
+    PURCHASE_CANCELLED_ERROR: 'PURCHASE_CANCELLED_ERROR',
+    STORE_PROBLEM_ERROR: 'STORE_PROBLEM_ERROR',
+    PURCHASE_NOT_ALLOWED_ERROR: 'PURCHASE_NOT_ALLOWED_ERROR',
+    PURCHASE_INVALID_ERROR: 'PURCHASE_INVALID_ERROR',
+    PRODUCT_NOT_AVAILABLE_FOR_PURCHASE_ERROR: 'PRODUCT_NOT_AVAILABLE_FOR_PURCHASE_ERROR',
+    PRODUCT_ALREADY_PURCHASED_ERROR: 'PRODUCT_ALREADY_PURCHASED_ERROR',
+    RECEIPT_ALREADY_IN_USE_ERROR: 'RECEIPT_ALREADY_IN_USE_ERROR',
+    INVALID_RECEIPT_ERROR: 'INVALID_RECEIPT_ERROR',
+    MISSING_RECEIPT_FILE_ERROR: 'MISSING_RECEIPT_FILE_ERROR',
+    NETWORK_ERROR: 'NETWORK_ERROR',
+    INVALID_CREDENTIALS_ERROR: 'INVALID_CREDENTIALS_ERROR',
+    UNEXPECTED_BACKEND_RESPONSE_ERROR: 'UNEXPECTED_BACKEND_RESPONSE_ERROR',
+    INVALID_APP_USER_ID_ERROR: 'INVALID_APP_USER_ID_ERROR',
+    OPERATION_ALREADY_IN_PROGRESS_ERROR: 'OPERATION_ALREADY_IN_PROGRESS_ERROR',
+    INVALID_SUBSCRIBER_ATTRIBUTES_ERROR: 'INVALID_SUBSCRIBER_ATTRIBUTES_ERROR',
+  },
 }));
 
 jest.mock('@sentry/react-native', () => ({
@@ -44,7 +61,8 @@ describe('revenuecat-service-purchases', () => {
       const deps = createDeps({ isReady: () => false });
       const result = await purchasePackage(deps, mockPackage);
       expect(result.success).toBe(false);
-      expect(result.errorCode).toBe('CONFIGURATION_ERROR');
+      expect(result.error).toBeDefined();
+      expect(result.error?.code).toBe('CONFIGURATION_ERROR');
     });
 
     it('returns success on successful purchase', async () => {
@@ -61,7 +79,8 @@ describe('revenuecat-service-purchases', () => {
       const deps = createDeps();
       const result = await purchasePackage(deps, mockPackage);
       expect(result.success).toBe(false);
-      expect(result.errorCode).toBe('PURCHASE_CANCELLED');
+      expect(result.error).toBeDefined();
+      expect(result.error?.code).toBe('PURCHASE_CANCELLED');
     });
 
     it('returns error on purchase failure', async () => {
@@ -78,7 +97,8 @@ describe('revenuecat-service-purchases', () => {
       const deps = createDeps({ isReady: () => false });
       const result = await restorePurchases(deps);
       expect(result.success).toBe(false);
-      expect(result.errorCode).toBe('CONFIGURATION_ERROR');
+      expect(result.error).toBeDefined();
+      expect(result.error?.code).toBe('CONFIGURATION_ERROR');
     });
 
     it('returns success on successful restore', async () => {

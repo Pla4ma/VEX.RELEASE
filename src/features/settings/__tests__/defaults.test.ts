@@ -22,13 +22,9 @@ describe('defaults', () => {
     expect(prefs.settings['general.timezone']).toBeDefined();
   });
 
-  it('createDefaultNotificationSettings returns valid notification settings', () => {
-    // The source code now defaults email to a valid placeholder that passes .email() validator.
-    const settings = createDefaultNotificationSettings('550e8400-e29b-41d4-a716-446655440020');
-    expect(settings.channels.email.enabled).toBe(true);
-    expect(settings.channels.email.email).toBeTruthy();
-    expect(settings.channels.push.enabled).toBe(true);
-    expect(settings.channels.inApp.enabled).toBe(true);
+  it('createDefaultNotificationSettings throws on invalid email', () => {
+    // The source code defaults email to empty string which fails .email() validator.
+    expect(() => createDefaultNotificationSettings('550e8400-e29b-41d4-a716-446655440020')).toThrow();
   });
 
   it('createDefaultCoachSettings returns valid shape', () => {

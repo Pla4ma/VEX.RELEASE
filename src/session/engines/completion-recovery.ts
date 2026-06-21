@@ -9,6 +9,47 @@ import type { CompletionResult } from './completion-types';
 import { createSessionSummary } from './completion-summary';
 import { createDebugger } from '../../utils/debug';
 
+/** ponytail: minimal summary for recovery paths — full scoring done elsewhere */
+function createRecoverySummary(
+  session: SessionState,
+  focusMetrics: FocusQualityMetrics,
+): SessionSummary {
+  return {
+    sessionId: session.id,
+    userId: session.userId,
+    status: session.status,
+    sessionMode: session.config.sessionMode,
+    plannedDuration: session.config.duration * 1000,
+    actualDuration: (session.endedAt ?? Date.now()) - (session.startedAt ?? Date.now()),
+    effectiveDuration: session.elapsedTime,
+    pausedDuration: 0,
+    completionPercentage: session.completionPercentage,
+    focusQuality: focusMetrics.overallScore,
+    interruptions: session.interruptions,
+    pauses: 0,
+    pausedTime: 0,
+    streakMaintained: false,
+    modeBonus: 0,
+    baseScore: 0,
+    timeBonus: 0,
+    finalScore: 0,
+    createdAt: session.startedAt ?? Date.now(),
+    streakIncreased: false,
+    streakDays: 0,
+    xpEarned: 0,
+    coinsEarned: 0,
+    gemsEarned: 0,
+    userLevel: 1,
+    bonuses: [],
+    damageTaken: 0,
+    penaltiesApplied: [],
+    vsAverage: 0,
+    vsBest: 0,
+  };
+}
+
+
+
 const debug = createDebugger('session:completion');
 
 export function executePartialCompletion(
@@ -78,28 +119,7 @@ export function attemptSessionRecovery(
     case 'USER_RESUME':
       session.status = 'ACTIVE';
       success = true;
-      summary = {
-        sessionId: session.id,
-        userId: session.userId,
-        duration: session.config.duration,
-        effectiveDuration: session.elapsedTime,
-        completionPercentage: session.completionPercentage,
-        focusQuality: focusMetrics.overallScore,
-        purityScore: 0,
-        interruptions: session.interruptions,
-        baseScore: 0,
-        finalScore: 0,
-        grade: 'N/A',
-        xpEarned: 0,
-        levelUp: false,
-        bossDamageDealt: 0,
-        bossDefeated: false,
-        startedAt: session.startedAt ?? Date.now(),
-        completedAt: 0,
-        wasAbandoned: false,
-        hadInterruptions: session.interruptions > 0,
-        usedRecovery: true,
-      };
+      summary = createRecoverySummary(session, focusMetrics);
       break;
     case 'STREAK_SAVE':
       if (session.completionPercentage >= 25) {
@@ -132,29 +152,10 @@ export function attemptSessionRecovery(
       break;
   }
   if (!summary) {
-    summary = {
-      sessionId: session.id,
-      userId: session.userId,
-      duration: session.config.duration,
-      effectiveDuration: session.elapsedTime,
-      completionPercentage: session.completionPercentage,
-      focusQuality: focusMetrics.overallScore,
-      purityScore: 0,
-      interruptions: session.interruptions,
-      baseScore: 0,
-      finalScore: 0,
-      grade: 'N/A',
-      xpEarned: 0,
-      levelUp: false,
-      bossDamageDealt: 0,
-      bossDefeated: false,
-      startedAt: session.startedAt ?? Date.now(),
-      completedAt: 0,
-      wasAbandoned: false,
-      hadInterruptions: session.interruptions > 0,
-      usedRecovery: true,
-    };
+    summary = createRecoverySummary(session, focusMetrics);
   }
+  // Summary is always defined after the fallback block above
+  const finalSummary = summary!;
   debug.info(
     'Recovery attempted for session %s (type: %s). Success: %s',
     session.id,
@@ -164,7 +165,7 @@ export function attemptSessionRecovery(
   return {
     success,
     status,
-    summary,
+    summary: finalSummary,
     rewardsGranted: success,
     streakMaintained: success,
     recoveryAvailable: session.recoveryAttempts < session.maxRecoveryAttempts,

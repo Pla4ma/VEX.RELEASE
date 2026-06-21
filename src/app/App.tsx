@@ -32,16 +32,16 @@ function useAppRuntimeBootstrap(): boolean {
 
       try {
         initSentry();
-      } catch (error: unknown) {
-        console.warn('Sentry init failed');
+      } catch {
+        // Sentry init failure is non-fatal; already captured by ErrorBoundary
       }
 
       await bootstrapApp();
 
       try {
         initializeDevContrastChecker();
-      } catch (error: unknown) {
-        console.warn('Accessibility check failed');
+      } catch {
+        // Accessibility check failure is non-fatal
       }
 
       setReady(true);

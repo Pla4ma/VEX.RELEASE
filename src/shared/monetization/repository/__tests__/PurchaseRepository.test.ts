@@ -12,6 +12,26 @@ jest.mock('react-native-mmkv', () => ({
   })),
 }));
 
+jest.mock('../../../persistence/mmkv-runtime', () => {
+  const stores = new Map<string, Map<string, string | boolean | number | Uint8Array>>();
+  return {
+    createRuntimeMMKV: (configuration: { id: string }) => {
+      const store = stores.get(configuration.id) ?? new Map<string, string | boolean | number | Uint8Array>();
+      stores.set(configuration.id, store);
+      return {
+        set: (key: string, value: string | boolean | number | Uint8Array) => { store.set(key, value); },
+        getString: (key: string) => typeof store.get(key) === 'string' ? store.get(key) as string : undefined,
+        getBoolean: (key: string) => typeof store.get(key) === 'boolean' ? store.get(key) as boolean : undefined,
+        getNumber: (key: string) => typeof store.get(key) === 'number' ? store.get(key) as number : undefined,
+        contains: (key: string) => store.has(key),
+        delete: (key: string) => { store.delete(key); },
+        getAllKeys: () => Array.from(store.keys()),
+        clearAll: () => { store.clear(); },
+      };
+    },
+  };
+});
+
 jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
     error: jest.fn(),
@@ -25,6 +45,10 @@ describe('PurchaseRepository', () => {
 
   beforeEach(() => {
     mockStorage.clear();
+    // Clear the MMKV storage used by PurchaseRepository
+    const { createRuntimeMMKV } = require('../../../persistence/mmkv-runtime');
+    const store = createRuntimeMMKV({ id: 'monetization-repo' });
+    store.clearAll();
     repo = new PurchaseRepository();
   });
 

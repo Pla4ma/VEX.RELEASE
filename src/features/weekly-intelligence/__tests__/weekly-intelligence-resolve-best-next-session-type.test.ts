@@ -3,8 +3,7 @@ import {
   type WeeklyInsightInput,
 } from '../schemas';
 
-import {
-} from '../insight-builders/insight-builders';
+import { resolveBestNextSessionType } from '../insight-builders/insight-builders';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -23,42 +22,42 @@ function baseInput(overrides: Partial<WeeklyInsightInput> = {}): WeeklyInsightIn
   });
 }
 
-// ───────────────────────────────────────────────
+// ────────────────────────────────────────────────
 
 describe('', () => {
   it('returns STUDY for student lane with avg >= 20', () => {
-    expect((baseInput({ lane: 'student', avgDurationMinutes: 25 }))).toBe('STUDY');
+    expect(resolveBestNextSessionType(baseInput({ lane: 'student', avgDurationMinutes: 25 }))).toBe('STUDY');
   });
 
   it('returns REVIEW for student lane with avg < 20', () => {
-    expect((baseInput({ lane: 'student', avgDurationMinutes: 15 }))).toBe('REVIEW');
+    expect(resolveBestNextSessionType(baseInput({ lane: 'student', avgDurationMinutes: 15 }))).toBe('REVIEW');
   });
 
   it('returns SPRINT for game_like lane with cleanStarts >= 3', () => {
     expect(
-(baseInput({ lane: 'game_like', cleanStarts: 3 })),
+      resolveBestNextSessionType(baseInput({ lane: 'game_like', cleanStarts: 3 })),
     ).toBe('SPRINT');
   });
 
   it('returns RECOVERY for game_like lane with cleanStarts < 3', () => {
     expect(
-(baseInput({ lane: 'game_like', cleanStarts: 1 })),
+      resolveBestNextSessionType(baseInput({ lane: 'game_like', cleanStarts: 1 })),
     ).toBe('RECOVERY');
   });
 
   it('returns DEEP_WORK for deep_creative lane with avg >= 25', () => {
     expect(
-(baseInput({ lane: 'deep_creative', avgDurationMinutes: 30 })),
+      resolveBestNextSessionType(baseInput({ lane: 'deep_creative', avgDurationMinutes: 30 })),
     ).toBe('DEEP_WORK');
   });
 
   it('returns LIGHT_FOCUS for deep_creative lane with avg < 25', () => {
     expect(
-(baseInput({ lane: 'deep_creative', avgDurationMinutes: 20 })),
+      resolveBestNextSessionType(baseInput({ lane: 'deep_creative', avgDurationMinutes: 20 })),
     ).toBe('LIGHT_FOCUS');
   });
 
   it('returns LIGHT_FOCUS for minimal_normal lane', () => {
-    expect((baseInput({ lane: 'minimal_normal' }))).toBe('LIGHT_FOCUS');
+    expect(resolveBestNextSessionType(baseInput({ lane: 'minimal_normal' }))).toBe('LIGHT_FOCUS');
   });
 });

@@ -3,8 +3,7 @@ import {
   type WeeklyInsightInput,
 } from '../schemas';
 
-import {
-} from '../insight-builders/insight-builders';
+import { buildPremiumDeeperInsight } from '../insight-builders/insight-builders';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -29,7 +28,7 @@ describe('', () => {
   it.each(['student', 'game_like', 'deep_creative', 'minimal_normal'] as const)(
     'returns a premium insight string for %s lane',
     (lane) => {
-      const insight = (baseInput({ lane }));
+      const insight = buildPremiumDeeperInsight(baseInput({ lane }));
       expect(typeof insight).toBe('string');
       expect(insight!.length).toBeGreaterThan(0);
     },

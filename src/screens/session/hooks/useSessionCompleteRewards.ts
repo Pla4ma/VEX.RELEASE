@@ -9,16 +9,12 @@ type ProgressionSummaryData = NonNullable<
 >;
 
 // Mock functions for applyChestRewards and creditSessionRewards
-const applyChestRewards = async (input: { sessionId: string; rewards: HeadlineReward[] }) => {
+const applyChestRewards = async (_input: { sessionId: string; rewards: HeadlineReward[] }) => {
   // In archived economy system, this would call the progression service
-  // For now, just log
-  console.debug('[SessionCompleteRewards] applyChestRewards called', input);
 };
 
-const creditSessionRewards = async (userId: string, rewards: HeadlineReward[]) => {
+const creditSessionRewards = async (_userId: string, rewards: HeadlineReward[]) => {
   // In archived economy system, this would call the progression service
-  // For now, just return the rewards
-  console.debug('[SessionCompleteRewards] creditSessionRewards called', { userId, rewards });
   return rewards;
 };
 

@@ -11,8 +11,12 @@ import {
 } from '../analytics';
 
 describe('boss analytics', () => {
-  it('BOSS_ANALYTICS_EVENTS is an empty array', () => {
-    expect(BOSS_ANALYTICS_EVENTS).toEqual([]);
+  it('BOSS_ANALYTICS_EVENTS contains expected event names', () => {
+    expect(BOSS_ANALYTICS_EVENTS).toEqual([
+      'boss_route_opened',
+      'boss_cta_clicked',
+      'combat_ability_activated',
+    ]);
   });
 
   it('trackBossEvent is a no-op function', () => {

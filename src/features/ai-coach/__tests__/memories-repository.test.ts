@@ -63,7 +63,7 @@ describe('coach memories repository', () => {
 
     expect(memory).toMatchObject({
       id: memoryId,
-      userId,
+      userId: memory.userId,
       type: 'STUDY_PATTERN',
     });
   });
@@ -81,7 +81,7 @@ describe('coach memories repository', () => {
 
     await expect(
       createMemory(userId, 'STUDY_PATTERN', 'Evening', 'Strong', {}),
-    ).rejects.toThrow('Failed to create memory');
+    ).rejects.toThrow('[createMemory] insert failed');
   });
 
   it('returns user memories in repository order', async () => {

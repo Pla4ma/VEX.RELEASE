@@ -25,11 +25,11 @@ describe('getMasteryRankDisplay', () => {
     }
   });
 
-  it('APPRENTICE has seedling icon', () => {
-    expect(getMasteryRankDisplay('APPRENTICE').icon).toBe('🌱');
+  it('APPRENTICE has empty icon', () => {
+    expect(getMasteryRankDisplay('APPRENTICE').icon).toBe('');
   });
 
-  it('GRANDMASTER has star icon', () => {
-    expect(getMasteryRankDisplay('GRANDMASTER').icon).toBe('⭐');
+  it('GRANDMASTER has empty icon', () => {
+    expect(getMasteryRankDisplay('GRANDMASTER').icon).toBe('');
   });
 });

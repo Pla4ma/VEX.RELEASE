@@ -1,6 +1,7 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import * as service from '../service';
 import * as repository from '../repository';
+import type { DailyChallengeContext, DailyChallengeTriggerType } from '../service';
 
 jest.mock('../repository');
 jest.mock('../queries', () => ({
@@ -50,8 +51,8 @@ describe('Challenges Service', () => {
       mockedRepository.fetchUserActiveChallenges.mockResolvedValue([]);
       const result = await service.checkChallengeProgress(
         'user-1',
-        'session_start' as any,
-        {} as any,
+        'SESSION_COMPLETED' as DailyChallengeTriggerType,
+        {} as DailyChallengeContext,
       );
       expect(result).toBeDefined();
       expect(result.updated).toEqual([]);

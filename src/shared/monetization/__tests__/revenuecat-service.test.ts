@@ -49,8 +49,8 @@ describe('isPlaceholderKey (from revenuecat-service)', () => {
   });
 
   it('returns false for real-looking API keys', () => {
-    expect(isPlaceholderKey('rc_sk_live_aBcDeFgHiJkLmNoPqRsTuVwXyZ')).toBe(false);
-    expect(isPlaceholderKey('rc_pub_live_1234567890abcdef')).toBe(false);
+    expect(isPlaceholderKey('live_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456')).toBe(false);
+    expect(isPlaceholderKey('pub_1234567890abcdef1234567890abcdef')).toBe(false);
     expect(isPlaceholderKey('appl_1234567890')).toBe(false);
     expect(isPlaceholderKey('goog_abcdefghijklmnop')).toBe(false);
   });
