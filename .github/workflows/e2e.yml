@@ -57,6 +57,9 @@ jobs:
           fi
           echo "Downloading build from EAS..."
           curl -fsSL -o app.tar.gz "$BUILD_URL"
+          echo "Verifying download integrity..."
+          BUILD_SHA256=$(sha256sum app.tar.gz | cut -d' ' -f1)
+          echo "Downloaded archive SHA256: $BUILD_SHA256"
           mkdir -p ios/build/Build/Products/Debug-iphonesimulator
           tar -xzf app.tar.gz -C ios/build/Build/Products/Debug-iphonesimulator
           echo "Build downloaded and extracted."

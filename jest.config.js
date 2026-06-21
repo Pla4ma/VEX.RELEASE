@@ -20,11 +20,9 @@ module.exports = {
     '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@constants/(.*)$': '<rootDir>/src/constants/$1',
     '^@overlays/(.*)$': '<rootDir>/src/overlays/$1',
-    '^@animation/(.*)$': '<rootDir>/src/animation/$1',
     '^@icons/(.*)$': '<rootDir>/src/icons/$1',
-    '^@a11y/(.*)$': '<rootDir>/src/a11y/$1',
     '^@events/(.*)$': '<rootDir>/src/events/$1',
-    '^@analytics/(.*)$': '<rootDir>/src/analytics/$1',
+
     '^react-native-gesture-handler$': '<rootDir>/__mocks__/react-native-gesture-handler.js',
     '^@featureFlags/(.*)$': '<rootDir>/src/featureFlags/$1',
     '^@settings/(.*)$': '<rootDir>/src/settings/$1',
@@ -60,8 +58,6 @@ module.exports = {
   ],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
-    '<rootDir>/archive/',
-    '<rootDir>/jobs/',
     '<rootDir>/e2e/',
     '<rootDir>/tmp/',
     '<rootDir>/coverage/',
