@@ -16,9 +16,9 @@ const mockCapturedInstance: Record<string, jest.Mock> = {
   getAllKeys: jest.fn(),
 };
 
-// Mock mmkv-runtime so createRuntimeMMKV returns our mock instance.
-// In Jest env, the real module uses MemoryMMKV (bypassing react-native-mmkv),
-// so we must mock at this level to control storage behavior in tests.
+// Shared mock instance — for tests that need to control storage behavior.
+// Note: In Jest env, createRuntimeMMKV returns MemoryMMKV (not native MMKV),
+// so we mock at mmkv-runtime level to provide a controllable mock.
 jest.mock('../../../../persistence/mmkv-runtime', () => {
   const actual = jest.requireActual('../../../../persistence/mmkv-runtime');
   return {
