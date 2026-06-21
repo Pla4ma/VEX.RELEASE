@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Text } from '../../../components/primitives';
+import { Card } from '../../../components/primitives/Card';
+import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';

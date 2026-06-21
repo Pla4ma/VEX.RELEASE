@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Pressable, type ViewStyle } from 'react-native';
-import { Badge, Button, Card, Text } from '../../../components';
+import { Badge } from '../../../components/Badge';
+import { Button } from '../../../components/primitives/Button';
+import { Card } from '../../../components/primitives/Card';
+import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { UserChallengeSummary } from '../schemas';
 import {

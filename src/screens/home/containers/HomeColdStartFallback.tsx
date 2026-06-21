@@ -4,7 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { markColdStart } from '../../../app/cold-start-performance';
-import { AppScreen, Button, Text } from '../../../components/primitives';
+import { AppScreen } from '../../../components/primitives/AppScreen';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useTheme } from '../../../theme';
 import { Text as VexText } from '../../../components/primitives/Text';

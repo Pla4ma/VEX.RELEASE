@@ -55,9 +55,12 @@ if (pkg) {
       '@neondatabase/serverless': 'Neon', '@upstash/redis': 'Upstash Redis',
       '@clerk/nextjs': 'Clerk', stripe: 'Stripe', tailwindcss: 'Tailwind CSS',
     };
+    const depsSet = new Set(deps);
+    const stackSet = new Set(output.stack);
     for (const [dep, label] of Object.entries(stackMap)) {
-      if (deps.includes(dep) && !output.stack.includes(label)) {
+      if (depsSet.has(dep) && !stackSet.has(label)) {
         output.stack.push(label);
+        stackSet.add(label);
       }
     }
     if (deps.includes('typescript') || existsSync(resolve(cwd, 'tsconfig.json'))) {
@@ -113,7 +116,7 @@ if (claudeMd) {
 
   const stack = extractSection(claudeMd, 'Tech Stack');
   if (stack && output.stack.length === 0) {
-    output.stack = stack.split(/[,\n]/).map(s => s.replace(/^[-*]\s+/, '').trim()).filter(Boolean);
+    output.stack = stack.split(/[,\n]/).flatMap(s => { const v = s.replace(/^[-*]\s+/, '').trim(); return v ? [v] : []; });
   }
 
   // Description from first section or "What This Is"

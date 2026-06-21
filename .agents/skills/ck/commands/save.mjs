@@ -56,9 +56,10 @@ if (isInit) {
   // Derive contextDir (lowercase, spaces→dashes, deduplicate)
   let contextDir = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   let suffix = 2;
-  const existingDirs = Object.values(projects).map(p => p.contextDir);
-  while (existingDirs.includes(contextDir) && projects[projectPath]?.contextDir !== contextDir) {
+  const existingDirsSet = new Set(Object.values(projects).map(p => p.contextDir));
+  while (existingDirsSet.has(contextDir) && projects[projectPath]?.contextDir !== contextDir) {
     contextDir = `${contextDir.replace(/-\d+$/, '')}-${suffix++}`;
+    existingDirsSet.add(contextDir);
   }
 
   const context = {

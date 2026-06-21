@@ -1,0 +1,58 @@
+[
+  {
+    "filePath": "src/features/achievements/hooks.ts",
+    "plugin": "react-doctor",
+    "rule": "js-flatmap-filter",
+    "severity": "warning",
+    "title": ".map().filter(Boolean) loops twice",
+    "message": "This loops over your list twice because .map().filter(Boolean) makes two passes, so use .flatMap() to change & drop items in one pass",
+    "help": "Use `.flatMap(item => condition ? [value] : [])` to change and drop items in one pass, instead of building a throwaway array in between",
+    "line": 156,
+    "column": 31,
+    "offset": 5209,
+    "length": 288,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/features/focus-run/display.ts",
+    "plugin": "react-doctor",
+    "rule": "js-flatmap-filter",
+    "severity": "warning",
+    "title": ".map().filter(Boolean) loops twice",
+    "message": "This loops over your list twice because .map().filter(Boolean) makes two passes, so use .flatMap() to change & drop items in one pass",
+    "help": "Use `.flatMap(item => condition ? [value] : [])` to change and drop items in one pass, instead of building a throwaway array in between",
+    "line": 62,
+    "column": 22,
+    "offset": 1842,
+    "length": 57,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/features/session-runtime/presets/preset-manager.ts",
+    "plugin": "react-doctor",
+    "rule": "js-flatmap-filter",
+    "severity": "warning",
+    "title": ".map().filter(Boolean) loops twice",
+    "message": "This loops over your list twice because .map().filter(Boolean) makes two passes, so use .flatMap() to change & drop items in one pass",
+    "help": "Use `.flatMap(item => condition ? [value] : [])` to change and drop items in one pass, instead of building a throwaway array in between",
+    "line": 146,
+    "column": 7,
+    "offset": 4436,
+    "length": 49,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/session/presets/preset-manager.ts",
+    "plugin": "react-doctor",
+    "rule": "js-flatmap-filter",
+    "severity": "warning",
+    "title": ".map().filter(Boolean) loops twice",
+    "message": "This loops over your list twice because .map().filter(Boolean) makes two passes, so use .flatMap() to change & drop items in one pass",
+    "help": "Use `.flatMap(item => condition ? [value] : [])` to change and drop items in one pass, instead of building a throwaway array in between",
+    "line": 146,
+    "column": 7,
+    "offset": 4430,
+    "length": 49,
+    "category": "Performance"
+  }
+]

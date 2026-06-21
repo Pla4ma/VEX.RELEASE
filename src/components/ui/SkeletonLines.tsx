@@ -27,7 +27,7 @@ export const SkeletonLines: React.FC<SkeletonLinesProps> = ({
     <>
       {lineArray.map((_, index) => (
         <LineWrapper
-          key={`skeleton-line-wrapper-${index}-${lineArray.length}`}
+          key={`skl-${width}-${height}-${borderRadius}-${spacing}-${backgroundColor}-${index}`}
           style={[
             {
               width,

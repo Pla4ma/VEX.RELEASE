@@ -1,7 +1,9 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Button, Text } from '../../components/primitives';
+import { Box } from '../../components/primitives/Box';
+import { Button } from '../../components/primitives/Button';
+import { Text } from '../../components/primitives/Text';
 import { loadCompanionState } from '../../features/companion/session-storage';
 import type { CompanionState } from '../../features/companion/types';
 import { useAuthStore } from '../../store';

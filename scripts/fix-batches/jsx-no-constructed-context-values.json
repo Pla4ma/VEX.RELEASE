@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/shared/ui/components/ToastProvider.tsx",
+    "plugin": "react-doctor",
+    "rule": "jsx-no-constructed-context-values",
+    "severity": "warning",
+    "title": "Unstable context provider value",
+    "message": "Every reader of this context redraws on each render because you build its `value` inline.",
+    "help": "Wrap the context value in `useMemo` or move it outside the component so consumers do not redraw every render.",
+    "line": 72,
+    "column": 7,
+    "offset": 1948,
+    "length": 53,
+    "category": "Performance"
+  }
+]

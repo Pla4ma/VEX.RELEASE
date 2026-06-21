@@ -1,0 +1,44 @@
+[
+  {
+    "filePath": "src/screens/auth/ResetPasswordScreen.tsx",
+    "plugin": "react-doctor",
+    "rule": "prefer-useReducer",
+    "severity": "warning",
+    "title": "Many related useState calls",
+    "message": "5 useState calls in \"ResetPasswordScreen\" can each trigger a separate render.",
+    "help": "Group related state in `useReducer` so one logical update does not fan out into separate renders.",
+    "line": 23,
+    "column": 80,
+    "offset": 1010,
+    "length": 4772,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/auth/VerifyEmailScreen.tsx",
+    "plugin": "react-doctor",
+    "rule": "prefer-useReducer",
+    "severity": "warning",
+    "title": "Many related useState calls",
+    "message": "6 useState calls in \"VerifyEmailScreen\" can each trigger a separate render.",
+    "help": "Group related state in `useReducer` so one logical update does not fan out into separate renders.",
+    "line": 24,
+    "column": 78,
+    "offset": 1106,
+    "length": 5553,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/search/SearchScreen.tsx",
+    "plugin": "react-doctor",
+    "rule": "prefer-useReducer",
+    "severity": "warning",
+    "title": "Many related useState calls",
+    "message": "6 useState calls in \"SearchScreen\" can each trigger a separate render.",
+    "help": "Group related state in `useReducer` so one logical update does not fan out into separate renders.",
+    "line": 17,
+    "column": 45,
+    "offset": 966,
+    "length": 3706,
+    "category": "Bugs"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/features/challenges/hooks/challengeMutations.ts",
+    "plugin": "react-doctor",
+    "rule": "advanced-event-handler-refs",
+    "severity": "warning",
+    "title": "Listener re-subscribes on every handler change",
+    "message": "useEffect re-adds the \"handleChallengeCompleted\" listener every time the handler changes.",
+    "help": "Store the handler in a ref and have the listener read `handlerRef.current()`. The subscription stays put while the latest handler still runs.",
+    "line": 108,
+    "column": 3,
+    "offset": 4968,
+    "length": 218,
+    "category": "Performance"
+  }
+]

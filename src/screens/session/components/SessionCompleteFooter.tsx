@@ -2,7 +2,8 @@ import React from 'react';
 
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box, Button } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
 import type { Theme } from '../../../theme/types';
 import { Text as VexText } from '../../../components/primitives/Text';
 

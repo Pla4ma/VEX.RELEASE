@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Button, Text } from '../../../components/primitives';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
 import {
   getPremiumCardStyle,
   withAlpha,

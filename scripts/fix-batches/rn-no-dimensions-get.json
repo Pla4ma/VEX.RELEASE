@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/theme/responsive.ts",
+    "plugin": "react-doctor",
+    "rule": "rn-no-dimensions-get",
+    "severity": "warning",
+    "title": "Dimensions.get over useWindowDimensions",
+    "message": "Your users see a stale layout on rotation or resize because Dimensions.get() does not update.",
+    "help": "Use `const { width, height } = useWindowDimensions()` so the size updates automatically on rotation and resize.",
+    "line": 4,
+    "column": 25,
+    "offset": 146,
+    "length": 24,
+    "category": "Bugs"
+  }
+]

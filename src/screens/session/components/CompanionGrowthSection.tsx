@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
-import { Box, Button, Text } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import type { SessionSummary } from '../../../session/types';
 import type { Theme } from '../../../theme/types';

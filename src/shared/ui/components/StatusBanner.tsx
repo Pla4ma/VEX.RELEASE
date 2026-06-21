@@ -5,7 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
-import { useThemeObject } from '../../../theme';
+import { useThemeObject } from '../../../theme/ThemeContext';
 import {
   type AsyncStatus,
   type StatusFeedbackProps,

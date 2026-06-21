@@ -7,7 +7,9 @@
 import React from 'react';
 import { View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Text, Card, Button } from '../../../components';
+import { Text } from '../../../components/primitives/Text';
+import { Card } from '../../../components/primitives/Card';
+import { Button } from '../../../components/primitives/Button';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';

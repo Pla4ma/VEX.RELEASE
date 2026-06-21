@@ -10,7 +10,7 @@ import { ScrollView, View } from 'react-native';
 
 import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components';
+import { Button } from '../../../components/primitives/Button';
 import { useNetInfo } from '../../../network';
 import { Text as VexText } from '../../../components/primitives/Text';
 

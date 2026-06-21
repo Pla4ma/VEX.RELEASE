@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/shared/performance/index.ts",
+    "plugin": "react-doctor",
+    "rule": "js-length-check-first",
+    "severity": "warning",
+    "title": "Array compare without length check",
+    "message": "This is slow because .every() compares two arrays item by item, so check `a.length === b.length` first to bail out immediately when sizes differ",
+    "help": "Check `a.length === b.length && a.every((x, i) => x === b[i])` so arrays of different sizes stop right away",
+    "line": 45,
+    "column": 19,
+    "offset": 1369,
+    "length": 223,
+    "category": "Performance"
+  }
+]

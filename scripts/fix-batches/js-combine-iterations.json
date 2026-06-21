@@ -1,0 +1,58 @@
+[
+  {
+    "filePath": "src/features/achievements/event-handlers.ts",
+    "plugin": "react-doctor",
+    "rule": "js-combine-iterations",
+    "severity": "warning",
+    "title": "Chained array iterations",
+    "message": "This loops over your list twice because .filter().map() makes two passes, so do it in one pass with .reduce() or a for...of loop",
+    "help": "Combine `.map().filter()` style chains into one pass with `.reduce()` or a `for...of` loop, so you only loop over the list once",
+    "line": 69,
+    "column": 5,
+    "offset": 2219,
+    "length": 132,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/features/achievements/event-handlers.ts",
+    "plugin": "react-doctor",
+    "rule": "js-combine-iterations",
+    "severity": "warning",
+    "title": "Chained array iterations",
+    "message": "This loops over your list twice because .filter().map() makes two passes, so do it in one pass with .reduce() or a for...of loop",
+    "help": "Combine `.map().filter()` style chains into one pass with `.reduce()` or a `for...of` loop, so you only loop over the list once",
+    "line": 125,
+    "column": 5,
+    "offset": 3904,
+    "length": 128,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/features/session-completion/completion-personalization-step.ts",
+    "plugin": "react-doctor",
+    "rule": "js-combine-iterations",
+    "severity": "warning",
+    "title": "Chained array iterations",
+    "message": "This loops over your list twice because .filter().map() makes two passes, so do it in one pass with .reduce() or a for...of loop",
+    "help": "Combine `.map().filter()` style chains into one pass with `.reduce()` or a `for...of` loop, so you only loop over the list once",
+    "line": 49,
+    "column": 29,
+    "offset": 1704,
+    "length": 100,
+    "category": "Performance"
+  },
+  {
+    "filePath": "src/screens/settings/SettingsScreen.tsx",
+    "plugin": "react-doctor",
+    "rule": "js-combine-iterations",
+    "severity": "warning",
+    "title": "Chained array iterations",
+    "message": "This loops over your list twice because .filter().map() makes two passes, so do it in one pass with .reduce() or a for...of loop",
+    "help": "Combine `.map().filter()` style chains into one pass with `.reduce()` or a `for...of` loop, so you only loop over the list once",
+    "line": 77,
+    "column": 26,
+    "offset": 4355,
+    "length": 517,
+    "category": "Performance"
+  }
+]

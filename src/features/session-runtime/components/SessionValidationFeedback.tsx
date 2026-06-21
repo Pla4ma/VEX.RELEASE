@@ -14,7 +14,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ValidationError, ValidationWarning } from '../utils/validation-types';
 import { formatFieldName, styles } from './session-validation-feedback-helpers';
 import { Text as VexText } from '../../../components/primitives/Text';

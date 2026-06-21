@@ -3,6 +3,8 @@ import {AbsoluteFill, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const {fontFamily} = loadFont();
 
+const yAxisSteps = [2000, 2400, 2800];
+
 const COLOR_BAR = '#D4AF37';
 const COLOR_TEXT = '#ffffff';
 const COLOR_MUTED = '#888888';
@@ -135,7 +137,6 @@ export const MyAnimation = () => {
 	const maxPrice = 2800;
 	const priceRange = maxPrice - minPrice;
 	const chartHeight = height - 280;
-	const yAxisSteps = [2000, 2400, 2800];
 
 	return (
 		<AbsoluteFill

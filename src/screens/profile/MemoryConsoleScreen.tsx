@@ -10,7 +10,9 @@ import {
 import type { FocusMemory } from '../../features/focus-memory/service';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Card, Text } from '../../components/primitives';
+import { Box } from '../../components/primitives/Box';
+import { Card } from '../../components/primitives/Card';
+import { Text } from '../../components/primitives/Text';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { EmptyState } from '../../components/EmptyState';
 import type { ExtendedRootStackParams } from '../../navigation/types';

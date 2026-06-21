@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "shared/jobs/trigger-config.ts",
+    "plugin": "react-doctor",
+    "rule": "expo-no-non-inlined-env",
+    "severity": "warning",
+    "title": "Non-inlinable process.env access (Expo)",
+    "message": "Computed `process.env[...]` access isn't inlined by babel-preset-expo and is `undefined` at runtime. Use static `process.env.EXPO_PUBLIC_NAME`.",
+    "help": "Read env vars with static dotted access (`process.env.EXPO_PUBLIC_NAME`). Computed access and destructuring aren't inlined by babel-preset-expo and resolve to `undefined` at runtime.",
+    "line": 21,
+    "column": 17,
+    "offset": 791,
+    "length": 17,
+    "category": "Bugs"
+  }
+]

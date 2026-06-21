@@ -33,8 +33,7 @@ function parseBullets(text) {
   if (!text) return [];
   return text.split('\n')
     .filter(l => /^[-*\d]\s/.test(l.trim()))
-    .map(l => l.replace(/^[-*\d]+\.?\s+/, '').trim())
-    .filter(Boolean);
+    .flatMap(l => { const v = l.replace(/^[-*\d]+\.?\s+/, '').trim(); return v ? [v] : []; });
 }
 
 function parseDecisionsTable(text) {
@@ -63,14 +62,14 @@ function parseLeftOff(text) {
   const sessionBlocks = text.split(/(?=Session \d+)/);
   if (sessionBlocks.length > 1) {
     return sessionBlocks
-      .filter(b => b.trim())
-      .map(block => {
+      .flatMap(block => {
+        if (!block.trim()) return [];
         const dateMatch = block.match(/\((\d{4}-\d{2}-\d{2})\)/);
         const bullets = parseBullets(block);
-        return {
+        return [{
           date: dateMatch?.[1] || null,
           leftOff: bullets.length ? bullets.join('\n') : block.replace(/^Session \d+.*\n/, '').trim(),
-        };
+        }];
       });
   }
 
@@ -122,7 +121,7 @@ for (const [projectPath, info] of Object.entries(projects)) {
     // Extract fields from CONTEXT.md
     const description   = extractSection(contextMd, 'What This Is') || extractSection(contextMd, 'About') || null;
     const stackRaw      = extractSection(contextMd, 'Tech Stack') || '';
-    const stack         = stackRaw.split(/[,\n]/).map(s => s.replace(/^[-*]\s+/, '').trim()).filter(Boolean);
+    const stack         = stackRaw.split(/[,\n]/).flatMap(s => { const v = s.replace(/^[-*]\s+/, '').trim(); return v ? [v] : []; });
     const goal          = (extractSection(contextMd, 'Current Goal') || '').split('\n')[0].trim() || null;
     const constraintRaw = extractSection(contextMd, 'Do Not Do') || '';
     const constraints   = parseBullets(constraintRaw);

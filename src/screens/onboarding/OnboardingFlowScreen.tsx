@@ -7,12 +7,10 @@ import { useIsFocused } from '@react-navigation/native';
 import { useOnboardingFlow } from './hooks/useOnboardingFlow';
 import type { OnboardingRouteProp } from './hooks/useOnboardingFlow';
 import { LAST_STEP_INDEX, getStepValidation } from './onboarding-flow-steps';
-import {
-  EtherealOnboardingShell,
-  EtherealSkyBackground,
-  BackgroundScrim,
-  OnboardingCinematicIntro,
-} from './components/ethereal';
+import { EtherealOnboardingShell } from './components/ethereal/EtherealOnboardingShell';
+import { EtherealSkyBackground } from '../auth/components/ethereal/EtherealSkyBackground';
+import { BackgroundScrim } from './components/ethereal/BackgroundScrim';
+import { OnboardingCinematicIntro } from './components/ethereal/OnboardingCinematicIntro';
 import { SignedOutOnboardingState } from './components/SignedOutOnboardingState';
 import { STEP_TITLES, STEP_EYEBROW, MASCOT_COPY } from './onboarding-flow-copy';
 import type { Lane } from '../../features/lane-engine';

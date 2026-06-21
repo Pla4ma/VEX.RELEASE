@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/shared/ui/PremiumPullToRefresh-main.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-no-panresponder",
+    "severity": "warning",
+    "title": "PanResponder over react-native-gesture-handler",
+    "message": "PanResponder runs gesture handling on the JS thread, which stutters under load. Use react-native-gesture-handler (`Gesture.Pan()`) so gestures run on the native UI thread.",
+    "help": "Use `react-native-gesture-handler` (`Gesture.Pan()`) instead of `PanResponder`. It runs gestures on the native UI thread, so they stay smooth even when the JS thread is busy.",
+    "line": 2,
+    "column": 16,
+    "offset": 78,
+    "length": 12,
+    "category": "Bugs"
+  }
+]

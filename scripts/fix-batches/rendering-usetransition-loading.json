@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/features/session/StudyQuizBreak.tsx",
+    "plugin": "react-doctor",
+    "rule": "rendering-usetransition-loading",
+    "severity": "warning",
+    "title": "Loading useState forces extra render",
+    "message": "This adds an extra render because useState for \"isLoading\" re-renders just for the loading flag, so if it's a state change & not a data fetch, use useTransition instead",
+    "help": "Replace with `const [isPending, startTransition] = useTransition()`, which skips the extra render for the loading flag",
+    "line": 26,
+    "column": 37,
+    "offset": 947,
+    "length": 15,
+    "category": "Performance"
+  }
+]

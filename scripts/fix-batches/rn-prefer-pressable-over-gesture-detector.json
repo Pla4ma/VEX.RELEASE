@@ -1,0 +1,16 @@
+[
+  {
+    "filePath": "src/screens/auth/components/ethereal/AuthPillButton.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-prefer-pressable-over-gesture-detector",
+    "severity": "warning",
+    "title": "GestureDetector for a plain tap",
+    "message": "Your users wait longer for the screen when <GestureDetector> handles a simple tap.",
+    "help": "Every GestureDetector sets up a native handler when it appears, which slows the screen. For a plain tap, use `<Pressable>` (or `createCSSAnimatedComponent(Pressable)` from react-native-reanimated/css for animated press feedback).",
+    "line": 102,
+    "column": 7,
+    "offset": 2721,
+    "length": 38,
+    "category": "Bugs"
+  }
+]

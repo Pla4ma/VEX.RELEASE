@@ -1,0 +1,4 @@
+// .agents/skills/ – ECC framework skill training templates, NOT VEX app code
+// archive/ – ARCHIVED_OR_DEACTIVATED per docs/VEX_PRODUCT_CONSTITUTION.md, inert at runtime
+// .github/ – GitHub Actions CI YAML, not app source
+// release/ – release notes, not source code

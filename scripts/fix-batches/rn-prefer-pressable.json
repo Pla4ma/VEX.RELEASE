@@ -1,0 +1,58 @@
+[
+  {
+    "filePath": "src/components/overlays/Modal.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-prefer-pressable",
+    "severity": "warning",
+    "title": "Touchable components instead of Pressable",
+    "message": "Your users miss <Pressable>'s flexible press feedback when you use TouchableWithoutFeedback, which is old & frozen.",
+    "help": "Use `<Pressable>` because Touchable* components are frozen and lack Pressable's state-based feedback and accessibility behavior.",
+    "line": 4,
+    "column": 3,
+    "offset": 82,
+    "length": 24,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/features/focus-identity/components/FocusScoreWidget.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-prefer-pressable",
+    "severity": "warning",
+    "title": "Touchable components instead of Pressable",
+    "message": "Your users miss <Pressable>'s flexible press feedback when you use TouchableOpacity, which is old & frozen.",
+    "help": "Use `<Pressable>` because Touchable* components are frozen and lack Pressable's state-based feedback and accessibility behavior.",
+    "line": 7,
+    "column": 10,
+    "offset": 336,
+    "length": 16,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/home/components/HomeCompanionWidget.cards.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-prefer-pressable",
+    "severity": "warning",
+    "title": "Touchable components instead of Pressable",
+    "message": "Your users miss <Pressable>'s flexible press feedback when you use TouchableOpacity, which is old & frozen.",
+    "help": "Use `<Pressable>` because Touchable* components are frozen and lack Pressable's state-based feedback and accessibility behavior.",
+    "line": 2,
+    "column": 16,
+    "offset": 43,
+    "length": 16,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/home/components/HomeCompanionWidget.tsx",
+    "plugin": "react-doctor",
+    "rule": "rn-prefer-pressable",
+    "severity": "warning",
+    "title": "Touchable components instead of Pressable",
+    "message": "Your users miss <Pressable>'s flexible press feedback when you use TouchableOpacity, which is old & frozen.",
+    "help": "Use `<Pressable>` because Touchable* components are frozen and lack Pressable's state-based feedback and accessibility behavior.",
+    "line": 2,
+    "column": 16,
+    "offset": 43,
+    "length": 16,
+    "category": "Bugs"
+  }
+]

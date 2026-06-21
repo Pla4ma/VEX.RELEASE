@@ -1,0 +1,72 @@
+[
+  {
+    "filePath": "src/features/content-study/components/YouTubeInput.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-pass-data-to-parent",
+    "severity": "warning",
+    "title": "Data passed to parent via effect",
+    "message": "Handing data back to a parent from a useEffect costs your users an extra render.",
+    "help": "Fetch the data in the parent and pass it down as a prop (or return it from the hook), instead of handing it back up through a prop callback in a useEffect. See https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent",
+    "line": 43,
+    "column": 5,
+    "offset": 1385,
+    "length": 72,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/features/content-study/components/useTextPasteInput.ts",
+    "plugin": "react-doctor",
+    "rule": "no-pass-data-to-parent",
+    "severity": "warning",
+    "title": "Data passed to parent via effect",
+    "message": "Handing data back to a parent from a useEffect costs your users an extra render.",
+    "help": "Fetch the data in the parent and pass it down as a prop (or return it from the hook), instead of handing it back up through a prop callback in a useEffect. See https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent",
+    "line": 53,
+    "column": 5,
+    "offset": 1755,
+    "length": 110,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/hooks/usePaginatedApi.ts",
+    "plugin": "react-doctor",
+    "rule": "no-pass-data-to-parent",
+    "severity": "warning",
+    "title": "Data passed to parent via effect",
+    "message": "Handing data back to a parent from a useEffect costs your users an extra render.",
+    "help": "Fetch the data in the parent and pass it down as a prop (or return it from the hook), instead of handing it back up through a prop callback in a useEffect. See https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent",
+    "line": 56,
+    "column": 7,
+    "offset": 1665,
+    "length": 11,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/home/hooks/useHomeReturnReason.ts",
+    "plugin": "react-doctor",
+    "rule": "no-pass-data-to-parent",
+    "severity": "warning",
+    "title": "Data passed to parent via effect",
+    "message": "Handing data back to a parent from a useEffect costs your users an extra render.",
+    "help": "Fetch the data in the parent and pass it down as a prop (or return it from the hook), instead of handing it back up through a prop callback in a useEffect. See https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent",
+    "line": 78,
+    "column": 5,
+    "offset": 2320,
+    "length": 410,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/shared/ui/PremiumErrorRecovery.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-pass-data-to-parent",
+    "severity": "warning",
+    "title": "Data passed to parent via effect",
+    "message": "Handing data back to a parent from a useEffect costs your users an extra render.",
+    "help": "Fetch the data in the parent and pass it down as a prop (or return it from the hook), instead of handing it back up through a prop callback in a useEffect. See https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent",
+    "line": 118,
+    "column": 7,
+    "offset": 3811,
+    "length": 13,
+    "category": "Bugs"
+  }
+]

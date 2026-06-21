@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { SerifTitle, EtherealSkyBackground } from '../components/ethereal';
+import { SerifTitle } from '../../auth/components/ethereal/SerifTitle';
+import { EtherealSkyBackground } from '../../auth/components/ethereal/EtherealSkyBackground';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 export function SignedOutOnboardingState(): React.ReactNode {

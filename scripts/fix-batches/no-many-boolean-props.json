@@ -1,0 +1,72 @@
+[
+  {
+    "filePath": "src/features/content-study/components/TaskCard.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-many-boolean-props",
+    "severity": "warning",
+    "title": "Boolean prop combinations are hard to test",
+    "message": "Component \"TaskCard\" takes 4 on/off props (isCompleted, isActive, isLocked…), which is hard to combine & test. Split it into smaller components or named variants.",
+    "help": "Split boolean-heavy APIs into smaller components or named variants so combinations stay testable.",
+    "line": 23,
+    "column": 14,
+    "offset": 777,
+    "length": 33,
+    "category": "Maintainability"
+  },
+  {
+    "filePath": "src/features/session-runtime/components/ComboMeterOverlays.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-many-boolean-props",
+    "severity": "warning",
+    "title": "Boolean prop combinations are hard to test",
+    "message": "Component \"ComboMeterOverlays\" takes 4 on/off props (showMilestone, showComboBroken, isPaused…), which is hard to combine & test. Split it into smaller components or named variants.",
+    "help": "Split boolean-heavy APIs into smaller components or named variants so combinations stay testable.",
+    "line": 34,
+    "column": 17,
+    "offset": 820,
+    "length": 18,
+    "category": "Maintainability"
+  },
+  {
+    "filePath": "src/screens/home/components/HomeSecondaryRail.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-many-boolean-props",
+    "severity": "warning",
+    "title": "Boolean prop combinations are hard to test",
+    "message": "Component \"HomeSecondaryRail\" takes 5 on/off props (canShowSecondarySystems, hasActiveRecommendation, isFirstRun…), which is hard to combine & test. Split it into smaller components or named variants.",
+    "help": "Split boolean-heavy APIs into smaller components or named variants so combinations stay testable.",
+    "line": 44,
+    "column": 17,
+    "offset": 1326,
+    "length": 17,
+    "category": "Maintainability"
+  },
+  {
+    "filePath": "src/session/components/ComboMeterOverlays.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-many-boolean-props",
+    "severity": "warning",
+    "title": "Boolean prop combinations are hard to test",
+    "message": "Component \"ComboMeterOverlays\" takes 4 on/off props (showMilestone, showComboBroken, isPaused…), which is hard to combine & test. Split it into smaller components or named variants.",
+    "help": "Split boolean-heavy APIs into smaller components or named variants so combinations stay testable.",
+    "line": 34,
+    "column": 17,
+    "offset": 850,
+    "length": 18,
+    "category": "Maintainability"
+  },
+  {
+    "filePath": "src/shared/ui/state-components/state-wrapper.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-many-boolean-props",
+    "severity": "warning",
+    "title": "Boolean prop combinations are hard to test",
+    "message": "Component \"StateWrapper\" takes 4 on/off props (isLoading, isError, isEmpty…), which is hard to combine & test. Split it into smaller components or named variants.",
+    "help": "Split boolean-heavy APIs into smaller components or named variants so combinations stay testable.",
+    "line": 8,
+    "column": 17,
+    "offset": 285,
+    "length": 12,
+    "category": "Maintainability"
+  }
+]

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable, TextInput } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { Box, Button, Text } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { MOODS, type Mood } from '../utils';
 import { Text as VexText } from '../../../components/primitives/Text';

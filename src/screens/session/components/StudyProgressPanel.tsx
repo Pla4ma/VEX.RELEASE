@@ -1,6 +1,8 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Button, Text } from '../../../components/primitives';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';

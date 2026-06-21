@@ -1,0 +1,30 @@
+[
+  {
+    "filePath": "src/features/content-study/components/YouTubeInput.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-prop-callback-in-effect",
+    "severity": "warning",
+    "title": "Parent kept in sync with a callback effect",
+    "message": "Your parent re-renders on every local state change because this useEffect calls the prop \"onValidationChange\" just to stay in sync.",
+    "help": "Move the shared state into a Provider so both sides read the same value. Then you don't need a useEffect to keep them in sync.",
+    "line": 40,
+    "column": 7,
+    "offset": 1329,
+    "length": 27,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/features/content-study/components/YouTubeInput.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-prop-callback-in-effect",
+    "severity": "warning",
+    "title": "Parent kept in sync with a callback effect",
+    "message": "Your parent re-renders on every local state change because this useEffect calls the prop \"onValidationChange\" just to stay in sync.",
+    "help": "Move the shared state into a Provider so both sides read the same value. Then you don't need a useEffect to keep them in sync.",
+    "line": 43,
+    "column": 5,
+    "offset": 1385,
+    "length": 72,
+    "category": "Bugs"
+  }
+]

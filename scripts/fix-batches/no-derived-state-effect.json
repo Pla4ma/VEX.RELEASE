@@ -1,0 +1,30 @@
+[
+  {
+    "filePath": "src/features/mastery/components/MasteryCard.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-derived-state-effect",
+    "severity": "warning",
+    "title": "Derived state stored in an effect",
+    "message": "You pay an extra render for state you can derive from other values.",
+    "help": "Work out derived values while rendering: `const x = fn(dep)`. To reset a component's state when a prop changes, give it a key prop: `<Component key={prop} />`. See https://react.dev/learn/you-might-not-need-an-effect",
+    "line": 30,
+    "column": 3,
+    "offset": 943,
+    "length": 58,
+    "category": "Bugs"
+  },
+  {
+    "filePath": "src/screens/onboarding/components/ethereal/VexMascotGuide.tsx",
+    "plugin": "react-doctor",
+    "rule": "no-derived-state-effect",
+    "severity": "warning",
+    "title": "Derived state stored in an effect",
+    "message": "Your users briefly see stale state on every prop change.",
+    "help": "Work out derived values while rendering: `const x = fn(dep)`. To reset a component's state when a prop changes, give it a key prop: `<Component key={prop} />`. See https://react.dev/learn/you-might-not-need-an-effect",
+    "line": 68,
+    "column": 3,
+    "offset": 1991,
+    "length": 58,
+    "category": "Bugs"
+  }
+]

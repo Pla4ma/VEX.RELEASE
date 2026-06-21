@@ -1,11 +1,9 @@
 import React from 'react';
 
-import {
-  ExtractionProgress,
-  PdfUploader,
-  TextPasteInput,
-  YouTubeInput,
-} from './index';
+import { ExtractionProgress } from './ExtractionProgress';
+import { PdfUploader } from './PdfUploader';
+import { TextPasteInput } from './TextPasteInput';
+import { YouTubeInput } from './YouTubeInput';
 import type { ContentSourceType, InputTab } from '../types/enums';
 
 const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {

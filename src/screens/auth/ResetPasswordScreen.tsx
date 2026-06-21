@@ -11,7 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Text } from '../../components/primitives';
+import { Box } from '../../components/primitives/Box';
+import { Text } from '../../components/primitives/Text';
 import { Button, Input } from '../../components';
 import { Icon } from '../../icons';
 import { resetPasswordSchema } from './schemas';
