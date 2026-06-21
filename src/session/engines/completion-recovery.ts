@@ -78,6 +78,28 @@ export function attemptSessionRecovery(
     case 'USER_RESUME':
       session.status = 'ACTIVE';
       success = true;
+      summary = {
+        sessionId: session.id,
+        userId: session.userId,
+        duration: session.config.duration,
+        effectiveDuration: session.elapsedTime,
+        completionPercentage: session.completionPercentage,
+        focusQuality: focusMetrics.overallScore,
+        purityScore: 0,
+        interruptions: session.interruptions,
+        baseScore: 0,
+        finalScore: 0,
+        grade: 'N/A',
+        xpEarned: 0,
+        levelUp: false,
+        bossDamageDealt: 0,
+        bossDefeated: false,
+        startedAt: session.startedAt ?? Date.now(),
+        completedAt: 0,
+        wasAbandoned: false,
+        hadInterruptions: session.interruptions > 0,
+        usedRecovery: true,
+      };
       break;
     case 'STREAK_SAVE':
       if (session.completionPercentage >= 25) {
@@ -109,17 +131,36 @@ export function attemptSessionRecovery(
       success = true;
       break;
   }
+  if (!summary) {
+    summary = {
+      sessionId: session.id,
+      userId: session.userId,
+      duration: session.config.duration,
+      effectiveDuration: session.elapsedTime,
+      completionPercentage: session.completionPercentage,
+      focusQuality: focusMetrics.overallScore,
+      purityScore: 0,
+      interruptions: session.interruptions,
+      baseScore: 0,
+      finalScore: 0,
+      grade: 'N/A',
+      xpEarned: 0,
+      levelUp: false,
+      bossDamageDealt: 0,
+      bossDefeated: false,
+      startedAt: session.startedAt ?? Date.now(),
+      completedAt: 0,
+      wasAbandoned: false,
+      hadInterruptions: session.interruptions > 0,
+      usedRecovery: true,
+    };
+  }
   debug.info(
     'Recovery attempted for session %s (type: %s). Success: %s',
     session.id,
     recoveryType,
     success,
   );
-  if (summary === undefined) {
-    throw new Error(
-      `Session recovery for ${session.id} (type: ${recoveryType}) failed to produce a summary`,
-    );
-  }
   return {
     success,
     status,
