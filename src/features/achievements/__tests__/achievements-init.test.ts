@@ -1,7 +1,7 @@
-import { eventBus } from '../../events/EventBus';
+import { eventBus } from '../../../events/EventBus';
 import { initializeAchievementTracking } from '../service';
 
-jest.mock('../../events/EventBus', () => ({ eventBus: { subscribe: jest.fn(), publish: jest.fn() } }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { subscribe: jest.fn(), publish: jest.fn() } }));
 jest.mock('../repository', () => ({
   getUserAchievement: jest.fn().mockResolvedValue(null),
   updateAchievementProgress: jest.fn().mockResolvedValue({ id: 'ua-1', isUnlocked: false }),

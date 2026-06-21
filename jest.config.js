@@ -50,7 +50,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
   transform: { '^.+\\.(mjs|js|jsx|ts|tsx)$': 'babel-jest' },
   transformIgnorePatterns: [
-    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|expo-crypto|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat)/))',
+    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|expo-file-system|expo-crypto|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat)/))',
   ],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.test.ts',
