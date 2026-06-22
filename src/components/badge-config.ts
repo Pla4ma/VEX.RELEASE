@@ -2,7 +2,9 @@ import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { Theme } from '../theme';
 
 export interface BadgeProps {
-  children: string;
+  children?: React.ReactNode;
+  /** Preferred over children — renders text inside Text component */
+  label?: string;
   variant?:
     | 'default'
     | 'primary'

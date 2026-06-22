@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
+import { View } from 'react-native';
 import { NavigationGuard } from '../NavigationGuard';
 import { FEATURE_FLAGS } from '../../../constants/features';
 import { useFeatureFlags } from '../../../hooks/useFeatureFlags';
@@ -36,7 +37,7 @@ describe('NavigationGuard', () => {
 
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <div data-testid="protected-content">Protected Content</div>
+        <View testID="protected-content">Protected Content</View>
       </NavigationGuard>,
     );
 
@@ -55,7 +56,7 @@ describe('NavigationGuard', () => {
 
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <div data-testid="protected-content">Protected Content</div>
+        <View testID="protected-content">Protected Content</View>
       </NavigationGuard>,
     );
 
@@ -75,9 +76,9 @@ describe('NavigationGuard', () => {
     render(
       <NavigationGuard
         featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}
-        fallback={<div data-testid="custom-fallback">Custom Fallback</div>}
+        fallback={<View testID="custom-fallback">Custom Fallback</View>}
       >
-        <div data-testid="protected-content">Protected Content</div>
+        <View testID="protected-content">Protected Content</View>
       </NavigationGuard>,
     );
 

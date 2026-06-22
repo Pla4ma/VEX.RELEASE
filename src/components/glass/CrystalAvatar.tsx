@@ -117,5 +117,3 @@ export const CrystalAvatar: React.FC<CrystalAvatarProps> = ({
     </Svg>
   );
 };
-
-export default CrystalAvatar;

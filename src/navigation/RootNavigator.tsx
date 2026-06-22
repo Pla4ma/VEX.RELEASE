@@ -189,5 +189,3 @@ export const RootNavigator: React.FC = () => {
     </NavigationContainer>
   );
 };
-
-export default RootNavigator;

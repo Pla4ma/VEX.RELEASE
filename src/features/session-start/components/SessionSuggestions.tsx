@@ -101,5 +101,3 @@ export function SessionSuggestions({
     </Box>
   );
 }
-
-export default SessionSuggestions;

@@ -1,5 +1,5 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import { evaluateInterventions } from '../../services/intervention-engine';
+import { evaluateInterventions } from '../../service/intervention-engine';
 import * as repository from '../../repository';
 import {
   createMockCoachState,

@@ -186,5 +186,3 @@ const styles = createSheet({
     paddingVertical: 6,
   },
 });
-
-export default PurityHUD;

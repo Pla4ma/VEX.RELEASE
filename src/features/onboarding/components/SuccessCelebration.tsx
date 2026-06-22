@@ -89,5 +89,3 @@ export function SuccessCelebration(): React.ReactNode {
     </Box>
   );
 }
-
-export default SuccessCelebration;

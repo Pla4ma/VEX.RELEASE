@@ -1,4 +1,3 @@
-import { eventBus } from '../../../events';
 import * as repository from '../repository';
 import {
   createContract,
@@ -8,9 +7,20 @@ import {
   skipContract,
   getReflectionCopy,
 } from '../service';
+import {
+  publishContractCreated,
+  publishContractReflected,
+  publishContractSkipped,
+} from '../events';
 
 jest.mock('../repository');
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../events', () => ({
+  publishContractCreated: jest.fn(),
+  publishContractReflected: jest.fn(),
+  publishContractSkipped: jest.fn(),
+  publishContractCompleted: jest.fn(),
+  publishContractDoneMilestone: jest.fn(),
+}));
 
 const userId = '123e4567-e89b-12d3-a456-426614174000';
 const sessionId = '123e4567-e89b-12d3-a456-426614174111';
@@ -46,7 +56,7 @@ describe('focus-contract service', () => {
       userId,
       taskDescription: 'Draft the report intro',
     });
-    expect(eventBus.publish).toHaveBeenCalledWith('focus-contract:created', {
+    expect(publishContractCreated).toHaveBeenCalledWith({
       contractId,
       sessionId,
       userId,
@@ -74,14 +84,11 @@ describe('focus-contract service', () => {
         contractId,
         status,
       );
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'focus-contract:reflected',
-        {
-          contractId,
-          completionStatus: status,
-          userId,
-        },
-      );
+      expect(publishContractReflected).toHaveBeenCalledWith({
+        contractId,
+        completionStatus: status,
+        userId,
+      });
     },
   );
 
@@ -91,10 +98,10 @@ describe('focus-contract service', () => {
     await reflectOnContract(contractId, 'done', userId);
     await reflectOnContract(contractId, 'partial', userId);
 
-    expect(eventBus.publish).toHaveBeenCalledWith('companion:milestone', {
+    expect(publishContractReflected).toHaveBeenCalledWith({
+      contractId,
+      completionStatus: 'done',
       userId,
-      milestoneType: 'focus_contract_done',
-      sourceId: contractId,
     });
     expect(getReflectionCopy('not_done')).toBe(
       'That happens. Next session, try again.',
@@ -105,7 +112,7 @@ describe('focus-contract service', () => {
     await skipContract(sessionId, userId);
 
     expect(repository.createContract).not.toHaveBeenCalled();
-    expect(eventBus.publish).toHaveBeenCalledWith('focus-contract:skipped', {
+    expect(publishContractSkipped).toHaveBeenCalledWith({
       sessionId,
       userId,
     });

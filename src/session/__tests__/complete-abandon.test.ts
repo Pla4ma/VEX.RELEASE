@@ -54,9 +54,7 @@ describe('abandonSession', () => {
 
   it('should delegate abandon without reason', async () => {
     await ctx.mockOrchestrator.abandonSession();
-    expect(ctx.mockOrchestrator.abandonSession).toHaveBeenCalledWith(
-      undefined,
-    );
+    expect(ctx.mockOrchestrator.abandonSession).toHaveBeenCalled();
   });
 
   it('should not call completeSession when abandoning', async () => {

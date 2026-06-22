@@ -53,4 +53,4 @@ const ar: TranslationKeys = {
   'a11y.progress': 'التقدم',
 };
 
-export default ar;
+export { ar }

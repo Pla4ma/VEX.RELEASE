@@ -100,5 +100,3 @@ export const ProgressBar = React.memo<ProgressBarProps>(function ProgressBar({
     </View>
   );
 });
-
-export default ProgressBar;

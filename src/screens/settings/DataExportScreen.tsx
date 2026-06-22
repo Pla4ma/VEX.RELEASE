@@ -21,5 +21,3 @@ export const DataExportScreen = withScreenErrorBoundary(
   },
   'DataExport',
 );
-
-export default DataExportScreen;

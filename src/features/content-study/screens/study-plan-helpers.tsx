@@ -91,7 +91,7 @@ export function QuizSection({ quizItems, revealedAnswers, toggleAnswer }: {
             {item.options && item.options.length > 0 && (
               <View style={styles.optionsList}>
                 {item.options.map((option, optIndex) => (
-                  <View key={optIndex} style={styles.optionItem}>
+                  <View key={`option-${option}`} style={styles.optionItem}>
                     <Text style={styles.optionLabel}>{String.fromCharCode(65 + optIndex)}.</Text>
                     <Text style={styles.optionText}>{option}</Text>
                   </View>
@@ -153,7 +153,7 @@ export function SessionPlanSection({ sessionPlan }: { sessionPlan: SessionPlan }
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
             <View style={styles.focusAreas}>
               {sessionPlan.focusAreas.map((area, index) => (
-                <View key={`area-${index}`} style={styles.focusAreaTag}>
+                <View key={`area-${area}`} style={styles.focusAreaTag}>
                   <Text style={styles.focusAreaText}>{area}</Text>
                 </View>
               ))}

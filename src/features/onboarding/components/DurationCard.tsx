@@ -115,5 +115,3 @@ export function DurationCard({
     </Animated.View>
   );
 }
-
-export default DurationCard;

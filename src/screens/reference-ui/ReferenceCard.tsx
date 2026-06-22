@@ -53,5 +53,3 @@ export function ReferenceCard({
     </GlassCard>
   );
 }
-
-export default ReferenceCard;

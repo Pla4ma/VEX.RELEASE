@@ -18,7 +18,7 @@ import { createSheet } from '@/shared/ui/create-sheet';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export function AnalyticsScreen(): React.ReactNode {
+function AnalyticsScreen(): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
   const { theme } = useTheme();
   const { user } = useAuthStore();
@@ -99,4 +99,7 @@ const styles = createSheet({
   },
 });
 
-export default withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+const AnalyticsScreenWithBoundary = withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+export { AnalyticsScreenWithBoundary as AnalyticsScreen };
+
+export { AnalyticsScreen as default };

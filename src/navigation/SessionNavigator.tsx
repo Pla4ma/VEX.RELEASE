@@ -61,4 +61,4 @@ export const SessionNavigator: React.FC = () => {
   );
 };
 
-export default SessionNavigator;
+export { SessionNavigator as default };

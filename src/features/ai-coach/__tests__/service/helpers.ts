@@ -1,6 +1,6 @@
 import type { BehaviorProfile, CoachState, InterventionRule } from '../../schemas';
 
-export const mockUserId = 'user-123';
+export const mockUserId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
 
 export function createMockCoachState(
   overrides: Partial<CoachState> = {},

@@ -188,5 +188,3 @@ export const AICoachValidation = {
   shouldSendCheckIn,
   CoachMessageSchema,
 };
-
-export default AICoachValidation;

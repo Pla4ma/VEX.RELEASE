@@ -36,7 +36,7 @@ export const RecentSearches: React.FC<RecentSearchesProps> = ({ onSelect }) => {
       </Box>
       {RECENT_SEARCHES.map((search, index) => (
         <Pressable
-          key={`search-${index}`}
+          key={`search-${search}`}
           style={{
             flexDirection: 'row',
             alignItems: 'center',

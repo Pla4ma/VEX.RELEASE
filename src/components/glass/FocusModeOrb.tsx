@@ -146,5 +146,3 @@ export function FocusModeOrbRaw({
 
 export const FocusModeOrb = React.memo(FocusModeOrbRaw);
 FocusModeOrb.displayName = 'FocusModeOrb';
-
-export default FocusModeOrb;

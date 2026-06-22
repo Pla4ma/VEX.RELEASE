@@ -23,7 +23,7 @@ import { Text as VexText } from '../../../components/primitives/Text';
 type ContentStudyNavigationProp =
   NativeStackNavigationProp<ContentStudyStackParamList>;
 
-export function StudyLibraryScreen(): React.ReactNode {
+function StudyLibraryScreen(): React.ReactNode {
   const navigation = useNavigation<ContentStudyNavigationProp>();
   const { content, isLoading, error, refetch, deleteContent } =
     useContentHistory();
@@ -169,4 +169,5 @@ export function StudyLibraryScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(StudyLibraryScreen, 'StudyLibrary');
+const StudyLibraryScreenWithBoundary = withScreenErrorBoundary(StudyLibraryScreen, 'StudyLibrary');
+export { StudyLibraryScreenWithBoundary as StudyLibraryScreen };

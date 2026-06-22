@@ -162,5 +162,3 @@ export const Banner = React.memo(({
 });
 
 Banner.displayName = 'Banner';
-
-export default Banner;

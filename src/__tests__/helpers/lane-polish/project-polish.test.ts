@@ -2,7 +2,7 @@
  * Phase 3E — Project Mode Polish
  */
 
-import { isRescueEligible, createRescuePlan } from '../../rescue-mode/service';
+import { isRescueEligible, createRescuePlan } from '../../../features/rescue-mode/service';
 import {
   getLaneMechanicPolicy,
   decideHomeSurfaces,

@@ -74,8 +74,8 @@ export const Starfield = memo(function Starfield(): React.ReactNode {
       }}
       pointerEvents="none"
     >
-      {PARTICLES.map((p, i) => (
-        <Star key={`star-${i}`} spec={p} />
+      {PARTICLES.map((p) => (
+        <Star key={`star-${p.x.toFixed(4)}-${p.y.toFixed(4)}`} spec={p} />
       ))}
     </View>
   );

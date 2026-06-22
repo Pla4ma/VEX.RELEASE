@@ -53,4 +53,4 @@ const ja: TranslationKeys = {
   'a11y.progress': '進捗',
 };
 
-export default ja;
+export { ja }

@@ -177,4 +177,3 @@ const styles = createSheet({
   },
   dismissText: { fontSize: 14, fontWeight: '700' },
 });
-export default OfflineBanner;

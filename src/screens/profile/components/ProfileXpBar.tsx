@@ -50,5 +50,3 @@ export function ProfileXpBar({
     </View>
   );
 }
-
-export default ProfileXpBar;

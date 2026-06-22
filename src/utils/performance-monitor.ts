@@ -183,4 +183,3 @@ export const Performance = {
   measureAsyncExecutionTime,
   DEFAULT_THRESHOLDS,
 };
-export default Performance;

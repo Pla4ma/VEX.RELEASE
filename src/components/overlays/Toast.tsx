@@ -171,4 +171,3 @@ const styles = createSheet({
     zIndex: 2000,
   },
 });
-export default Toast;

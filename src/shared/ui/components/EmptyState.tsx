@@ -186,4 +186,3 @@ const styles = createSheet({
     borderRadius: 16,
   },
 });
-export default EmptyState;

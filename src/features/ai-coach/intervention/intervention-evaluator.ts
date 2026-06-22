@@ -26,12 +26,10 @@ export async function evaluateInterventions(
     return [];
   }
 
-  const rules = await repository.fetchInterventionRulesByTrigger(
-    validated.trigger,
-  );
-  const todaysExecutions = await repository.fetchTodaysInterventionExecutions(
-    validated.userId,
-  );
+  const [rules, todaysExecutions] = await Promise.all([
+    repository.fetchInterventionRulesByTrigger(validated.trigger),
+    repository.fetchTodaysInterventionExecutions(validated.userId),
+  ]);
   const executions: InterventionExecution[] = [];
 
   for (const rule of rules) {

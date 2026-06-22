@@ -7,8 +7,8 @@
  */
 
 // Core utilities
-export { default as SessionPersistence } from './persistence';
 export {
+  SessionPersistence,
   persistSessionState,
   loadPersistedSession,
   clearPersistedSession,
@@ -20,8 +20,8 @@ export {
 } from './persistence';
 
 // Validation utilities
-export { default as SessionValidation } from './validation';
 export {
+  SessionValidation,
   validateSessionConfig,
   validateSessionStart,
   validateSessionPause,
@@ -38,4 +38,4 @@ export {
 } from './validation';
 
 // Timer hook (exported from hooks directory)
-export { default as useSessionTimer } from '../hooks/useSessionTimer';
+export { useSessionTimer } from '../hooks/useSessionTimer';

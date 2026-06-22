@@ -123,5 +123,3 @@ export function ProfileLoadingState(): React.ReactNode {
 export function AnalyticsLoadingState(): React.ReactNode {
   return <WittyLoadingState context="analytics" />;
 }
-
-export default WittyLoadingState;

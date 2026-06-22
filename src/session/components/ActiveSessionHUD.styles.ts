@@ -101,4 +101,4 @@ const styles = createSheet({
   },
 });
 
-export default styles;
+export { styles }

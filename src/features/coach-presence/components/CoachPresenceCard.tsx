@@ -121,5 +121,3 @@ function getReactionColor(
       return vexLightGlass.text.disabled;
   }
 }
-
-export default CoachPresenceCard;

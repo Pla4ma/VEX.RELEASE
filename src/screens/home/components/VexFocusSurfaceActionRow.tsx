@@ -98,5 +98,3 @@ export function VexFocusSurfaceActionRow({
     </>
   );
 }
-
-export default VexFocusSurfaceActionRow;

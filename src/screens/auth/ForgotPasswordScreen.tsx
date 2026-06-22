@@ -22,7 +22,7 @@ import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
 
-export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
+const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const { email, setEmail, error, setError, isLoading, isSuccess, handleSubmit, handleBack } =
     useForgotPasswordForm(navigation);
@@ -134,4 +134,5 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+const ForgotPasswordScreenWithBoundary = withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+export { ForgotPasswordScreenWithBoundary as ForgotPasswordScreen };

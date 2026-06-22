@@ -27,8 +27,9 @@ export function SettingsDataControlSection({
           pressed && { opacity: 0.8 },
         ]}
         onPress={() => {
+          const jobId = `export_${Date.now()}`;
           eventBus.publish('analytics:export_requested', {
-            jobId: `export_${Date.now()}`,
+            jobId,
             userId,
             format: 'json',
           });

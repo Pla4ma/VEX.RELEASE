@@ -22,7 +22,7 @@ import {
 import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import type { NavigationProp as RootNavigationProp } from '@react-navigation/native';
 
-export function StudyPlanScreen() {
+function StudyPlanScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProps>();
   const { generationId, contentId } = route.params;
@@ -196,4 +196,5 @@ export function StudyPlanScreen() {
   );
 }
 
-export default withScreenErrorBoundary(StudyPlanScreen, 'StudyPlan');
+const StudyPlanScreenWithBoundary = withScreenErrorBoundary(StudyPlanScreen, 'StudyPlan');
+export { StudyPlanScreenWithBoundary as StudyPlanScreen };

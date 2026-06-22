@@ -142,4 +142,5 @@ function SessionHistoryScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(SessionHistoryScreen, 'SessionHistory');
+const SessionHistoryScreenWithBoundary = withScreenErrorBoundary(SessionHistoryScreen, 'SessionHistory');
+export { SessionHistoryScreenWithBoundary as SessionHistoryScreen };

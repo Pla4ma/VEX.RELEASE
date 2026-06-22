@@ -76,5 +76,3 @@ export function GraceUsesIndicator({
     </Animated.View>
   );
 }
-
-export default GraceUsesIndicator;

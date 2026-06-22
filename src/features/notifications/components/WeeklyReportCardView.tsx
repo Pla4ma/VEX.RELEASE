@@ -46,6 +46,11 @@ export function WeeklyReportCard({
   const { theme } = useTheme();
   const isImprovement = comparison.changePercent >= 0;
   const trendEmoji = isImprovement ? '📈' : '📉';
+  // Compute date once to avoid hydration mismatch
+  const weekLabel = new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+  });
   return (
     <Animated.View entering={FadeInUp.duration(400)}>
       <Box
@@ -68,10 +73,7 @@ export function WeeklyReportCard({
             Your Week in Focus
           </Text>
           <Text variant="caption" color="text.secondary">
-            {new Date().toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-            })}{' '}
+            {weekLabel}{' '}
             - Weekly Report
           </Text>
         </Box>

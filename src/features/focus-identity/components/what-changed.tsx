@@ -108,5 +108,3 @@ export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
     </GlassCard>
   );
 };
-
-export default WhatChanged;

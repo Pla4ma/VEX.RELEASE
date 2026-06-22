@@ -20,4 +20,4 @@ export function ContentStudyNavigator(): React.ReactNode {
   );
 }
 
-export default ContentStudyNavigator;
+export { ContentStudyNavigator as default };

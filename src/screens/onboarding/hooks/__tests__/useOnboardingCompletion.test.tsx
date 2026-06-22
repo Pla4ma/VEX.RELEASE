@@ -18,10 +18,17 @@ jest.mock('../../../../features/liveops-config', () => ({
   }),
 }));
 
-jest.mock('../../../../features/onboarding', () => ({
+jest.mock('../../../../features/onboarding/store', () => ({
   useOnboardingStore: (
     selector: (state: { completeOnboarding: typeof mockCompleteOnboarding }) => unknown,
   ) => selector({ completeOnboarding: mockCompleteOnboarding }),
+}));
+
+jest.mock('../../../../features/onboarding/hooks', () => ({
+  useSyncOnboardingProgress: () => ({
+    syncFromStore: jest.fn().mockResolvedValue(undefined),
+    isSyncing: false,
+  }),
 }));
 
 jest.mock('../../../../store/session-state', () => ({

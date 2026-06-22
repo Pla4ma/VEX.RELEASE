@@ -25,8 +25,8 @@ export function HomeMemoryInsight({
 
   return (
     <View style={{ padding: 16 }}>
-      {data.items.map((item: unknown, i: number) => (
-        <View key={i} style={{ padding: 8, borderBottomWidth: 1, borderColor: '#eee' }}>
+      {data.items.map((item: { id: string }, i: number) => (
+        <View key={item.id} style={{ padding: 8, borderBottomWidth: 1, borderColor: '#eee' }}>
           {String(item)}
         </View>
       ))}

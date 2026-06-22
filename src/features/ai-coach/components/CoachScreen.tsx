@@ -25,7 +25,7 @@ import { CoachRecommendationCard } from './CoachRecommendationCard';
 import { useCoachChat } from './useCoachChat';
 
 
-export function CoachScreen(): React.ReactNode {
+function CoachScreen(): React.ReactNode {
   const {
     flashListRef,
     inputText,
@@ -152,4 +152,7 @@ export function CoachScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(CoachScreen, 'Coach');
+const CoachScreenWithBoundary = withScreenErrorBoundary(CoachScreen, 'Coach');
+export { CoachScreenWithBoundary as CoachScreen };
+
+export { CoachScreen as default };

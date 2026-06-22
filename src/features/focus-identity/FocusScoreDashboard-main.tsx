@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React, { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusScore } from './hooks-focus-score';
 import { Box, Text, Stack, Button } from '@components/primitives';
@@ -19,6 +19,9 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
     const { score, history, status, error, refetch, isRefetching } =
       useFocusScore();
     const { isOffline } = useNetInfo();
+
+    // Compute static month value at render time to avoid hydration mismatch
+    const currentMonth = new Date().toISOString().slice(0, 7);
 
     if (status === 'pending') {
       return <FocusScoreDashboardSkeleton />;
@@ -93,7 +96,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
               {history && history.length > 0 ? (
                 history.slice(-5).map((point, index) => (
                   <Box
-                    key={`point-${index}`}
+                    key={`point-${point.timestamp}`}
                     flexDirection="row"
                     justifyContent="space-between"
                   >
@@ -147,7 +150,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
               accessibilityLabel="View Monthly Report"
               onPress={() =>
                 navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Analytics', {
-                  month: new Date().toISOString().slice(0, 7),
+                  month: currentMonth,
                 } as unknown as MainStackParams['Analytics'])
               }
               variant="secondary"

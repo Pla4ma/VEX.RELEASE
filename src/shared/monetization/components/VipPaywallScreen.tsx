@@ -176,4 +176,4 @@ export function VipPaywallScreen(): React.ReactNode {
   );
 }
 
-export default VipPaywallScreen;
+export { VipPaywallScreen as default };

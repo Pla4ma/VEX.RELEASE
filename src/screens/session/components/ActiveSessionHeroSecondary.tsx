@@ -26,7 +26,7 @@ export function MomentumDots({
       {scores.length > 0 ? (
         scores.map((score, index) => (
           <Box
-            key={`momentum-score-${index}`}
+            key={`momentum-${index}-${score}`}
             width={8}
             height={8}
             borderRadius="full"

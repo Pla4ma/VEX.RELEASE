@@ -80,4 +80,4 @@ const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
   return null;
 };
 
-export default StreakGamblePrompt;
+export { StreakGamblePrompt }

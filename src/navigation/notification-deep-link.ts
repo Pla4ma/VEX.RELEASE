@@ -21,6 +21,14 @@ export function deepLinkToNotificationAction(
       return { type: 'view_progress' };
     case 'coach':
       return { type: 'open_coach' };
+    case 'duels':
+      return { type: 'join_duel', payload: { duelId: params.duelId } };
+    case 'squad':
+      return { type: 'view_squad', payload: { squadId: params.squadId } };
+    case 'invite':
+      return { type: 'accept_invite', payload: { inviteCode: params.inviteCode || params.code, squadId: params.squadId } };
+    case 'shop':
+      return { type: 'open_shop' };
     default:
       return { type: 'custom', payload: { screen: path, params } };
   }

@@ -88,5 +88,3 @@ export function ActiveSessionBackground({
     </Animated.View>
   );
 }
-
-export default ActiveSessionBackground;

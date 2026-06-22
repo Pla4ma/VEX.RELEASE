@@ -94,5 +94,3 @@ export function SessionContractInput({
     </Box>
   );
 }
-
-export default SessionContractInput;

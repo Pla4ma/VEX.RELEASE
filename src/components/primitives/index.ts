@@ -6,7 +6,7 @@
 
 export { Box } from './Box';
 export { createBox } from './Box.helpers';
-export type { BoxProps } from './Box';
+export type { BoxProps } from './BoxProps';
 
 export { Text } from './Text';
 export { createTextVariant } from './Text.helpers';
@@ -15,7 +15,8 @@ export type { TextProps, TextVariant } from './Text.types';
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
-export { Card, CardFooter, CardHeader } from './Card';
+export { Card } from './Card';
+export { CardFooter, CardHeader } from './CardSubcomponents';
 export type { CardProps, CardVariant, CardSize, CardState } from './Card';
 
 export { AppScreen } from './AppScreen';

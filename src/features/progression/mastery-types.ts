@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { lightColors } from '@/theme/tokens/colors';
+import { lightColors } from '@/theme/tokens/primary-palette';
 
 
 export const MasteryTrackSchema = z.enum([

@@ -97,5 +97,3 @@ export function FeatureUnlockCelebration({
     </Animated.View>
   );
 }
-
-export default FeatureUnlockCelebration;

@@ -68,5 +68,3 @@ export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
     </View>
   );
 };
-
-export default ProfileGlassTabs;

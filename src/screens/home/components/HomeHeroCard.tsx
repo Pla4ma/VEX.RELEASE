@@ -143,5 +143,3 @@ export function HomeHeroCard({
     </View>
   );
 }
-
-export default HomeHeroCard;

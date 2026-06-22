@@ -184,5 +184,3 @@ export function StreakCalendarAnimated({
     </View>
   );
 }
-
-export default StreakCalendarAnimated;

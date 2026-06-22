@@ -29,7 +29,7 @@ type ContentInputNavigationProp = NativeStackNavigationProp<
   'ContentInput'
 >;
 
-export function ContentInputScreen(): React.ReactNode {
+function ContentInputScreen(): React.ReactNode {
   const navigation = useNavigation<ContentInputNavigationProp>();
   const route = useRoute<ContentInputRouteProp>();
   const { theme } = useTheme();
@@ -172,4 +172,5 @@ export function ContentInputScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ContentInputScreen, 'ContentInput');
+const ContentInputScreenWithBoundary = withScreenErrorBoundary(ContentInputScreen, 'ContentInput');
+export { ContentInputScreenWithBoundary as ContentInputScreen };

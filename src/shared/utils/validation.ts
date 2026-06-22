@@ -85,13 +85,3 @@ export function validateSchema<T>(
 export function createValidator<T>(schema: z.ZodSchema<T>) {
   return (data: unknown): ValidationResult<T> => validateSchema(schema, data);
 }
-
-export default {
-  isNonEmptyString, isPositiveInteger, isNonNegativeNumber,
-  isValidEmail, isValidUUID, isPlainObject,
-  validateRange, clamp, clamp01,
-  validateSchema, createValidator,
-  sanitizeString, truncateString, formatNumber, parseNumber,
-  validateArray, isValidDate, validateDateRange,
-  isValidURL, isValidImageURL, validatePassword,
-};

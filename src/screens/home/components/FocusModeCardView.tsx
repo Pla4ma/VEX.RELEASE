@@ -146,5 +146,3 @@ export function FocusModeCardView({
     </View>
   );
 }
-
-export default FocusModeCardView;

@@ -5,7 +5,7 @@ import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
 
 function EmptyDay({ index }: { index: number }) {
-  return <View key={`empty-${index}`} style={styles.day} />;
+  return <View key={`empty-${String(index)}`} style={styles.day} />;
 }
 
 interface StreakCalendarProps {

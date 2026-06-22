@@ -37,5 +37,3 @@ export const GlassScreen: React.FC<GlassScreenProps> = React.memo(function Glass
     </View>
   );
 });
-
-export default GlassScreen;

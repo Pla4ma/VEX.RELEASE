@@ -24,7 +24,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AppearanceSettings'>;
 
-export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
+const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const [selectedTheme, setSelectedTheme] = useState<ThemeMode>(mode);
@@ -156,7 +156,5 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(
-  AppearanceSettingsScreen,
-  'AppearanceSettings',
-);
+const AppearanceSettingsScreenWithBoundary = withScreenErrorBoundary(AppearanceSettingsScreen, "AppearanceSettings");
+export { AppearanceSettingsScreenWithBoundary as AppearanceSettingsScreen };

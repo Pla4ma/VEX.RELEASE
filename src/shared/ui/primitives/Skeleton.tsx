@@ -9,7 +9,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { skeletonStyles } from './Skeleton.styles';
 interface SkeletonProps {
   width?: number | string;
   height?: number;
@@ -47,7 +47,9 @@ export function Skeleton({
         false,
       );
     }
-  }, [animated, shimmerValue, reducedMotion]);
+    // shimmerValue is a stable useSharedValue ref
+    // eslint-disable-next-line react-doctor/exhaustive-deps
+  }, [animated, reducedMotion]);
   const shimmerStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: interpolate(shimmerValue.value, [0, 1], [-200, 200]) },
@@ -73,17 +75,18 @@ export function Skeleton({
           ? width * 0.6
           : '60%'
         : width;
+    const lineKey = `skeleton-line-${lines}-${index}`;
     return (
       <View
-        key={`skeleton-line-${index}`}
+        key={lineKey}
         style={[
-          styles.skeleton,
+          skeletonStyles.skeleton,
           {
             width: lineWidth as DimensionValue,
             height,
             borderRadius: borderRadius ?? getBorderRadius(),
             marginTop: mt,
-            marginBottom: index < lines - 1 ? spacing : 0,
+            marginBottom: Number(lineKey.split('-')[2]) < lines - 1 ? spacing : 0,
             backgroundColor: theme.colors.background.tertiary,
           },
           style,
@@ -92,7 +95,7 @@ export function Skeleton({
         {animated && (
           <Animated.View
             style={[
-              styles.shimmer,
+              skeletonStyles.shimmer,
               { backgroundColor: theme.colors.background.elevated },
               shimmerStyle,
             ]}
@@ -102,7 +105,7 @@ export function Skeleton({
     );
   };
   return (
-    <View style={styles.container}>
+    <View style={skeletonStyles.container}>
       {Array.from({ length: lines }).map((_, index) => renderLine(index))}
     </View>
   );
@@ -118,14 +121,14 @@ export function SkeletonCard({
   return (
     <View
       style={[
-        styles.card,
+        skeletonStyles.card,
         { height, backgroundColor: theme.colors.background.secondary },
         style,
       ]}
     >
       <Skeleton width={60} height={60} variant="circular" />
-      <View style={styles.cardContent}>
-        <Skeleton width="70%" height={20} style={styles.cardTitle} />
+      <View style={skeletonStyles.cardContent}>
+        <Skeleton width="70%" height={20} style={skeletonStyles.cardTitle} />
         <Skeleton width="40%" height={16} />
       </View>
     </View>
@@ -133,28 +136,32 @@ export function SkeletonCard({
 }
 export function SkeletonList({ count = 3 }: { count?: number }) {
   return (
-    <View style={styles.list}>
+    <View style={skeletonStyles.list}>
       {Array.from({ length: count }).map((_, index) => (
-        <SkeletonCard key={index} style={styles.listItem} />
+        <SkeletonCard key={index} style={skeletonStyles.listItem} />
       ))}
     </View>
   );
 }
 export function SkeletonChart({ height = 200 }: { height?: number }) {
   const { theme } = useTheme();
+  // Precompute random heights to avoid hydration mismatch
+  const barHeights = Array.from({ length: 7 }, () =>
+    Math.random() * height * 0.6 + height * 0.2,
+  );
   return (
     <View
       style={[
-        styles.chart,
+        skeletonStyles.chart,
         { height, backgroundColor: theme.colors.background.secondary },
       ]}
     >
-      <View style={styles.chartBars}>
-        {Array.from({ length: 7 }).map((_, index) => (
+      <View style={skeletonStyles.chartBars}>
+        {barHeights.map((h, index) => (
           <Skeleton
-            key={index}
+            key={`bar-${index}`}
             width={30}
-            height={Math.random() * height * 0.6 + height * 0.2}
+            height={h}
             variant="rounded"
           />
         ))}
@@ -162,33 +169,4 @@ export function SkeletonChart({ height = 200 }: { height?: number }) {
     </View>
   );
 }
-const styles = createSheet({
-  container: { overflow: 'hidden' },
-  skeleton: { overflow: 'hidden', position: 'relative' },
-  shimmer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    opacity: 0.5,
-    width: 100,
-  },
-  card: {
-    flexDirection: 'row',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  cardContent: { flex: 1, marginLeft: 16, gap: 8 },
-  cardTitle: { marginBottom: 8 },
-  list: { gap: 12 },
-  listItem: { marginBottom: 8 },
-  chart: { borderRadius: 12, padding: 16 },
-  chartBars: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: '100%',
-  },
-});
+

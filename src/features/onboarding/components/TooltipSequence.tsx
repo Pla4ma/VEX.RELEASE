@@ -73,5 +73,3 @@ export function TooltipSequence({
     </>
   );
 }
-
-export default TooltipSequence;

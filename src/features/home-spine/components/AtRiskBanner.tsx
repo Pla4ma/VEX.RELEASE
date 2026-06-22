@@ -154,5 +154,3 @@ export function AtRiskBanner({
     </Animated.View>
   );
 }
-
-export default AtRiskBanner;

@@ -13,7 +13,7 @@ import { captureException } from '../../../config/sentry';
 import { ErrorFallback } from './ErrorFallback';
 import type {} from './ErrorFallback';
 
-export { ErrorFallback } from './ErrorFallback';
+export { ErrorFallback }
 export type { ErrorFallbackProps } from './ErrorFallback';
 
 export interface ScreenErrorBoundaryProps {
@@ -126,5 +126,3 @@ export function useScreenError(): (error: Error) => void {
     }
   };
 }
-
-export default ScreenErrorBoundary;

@@ -4,12 +4,10 @@ import { StatusBanner } from './StatusBanner';
 import { CardStatusOverlay } from './CardStatusOverlay';
 import type { StatusFeedbackProps } from './StatusFeedback.types';
 
-export { InlineStatus } from './InlineStatus';
-export { StatusChip } from './StatusChip';
-export { StatusBanner } from './StatusBanner';
-export { CardStatusOverlay } from './CardStatusOverlay';
+export { InlineStatus }
+export { StatusBanner }
+export { CardStatusOverlay }
 export type { AsyncStatus, StatusFeedbackProps } from './StatusFeedback.types';
-export { STATUS_CONFIG, getStatusColor } from './StatusFeedback.types';
 
 export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
   switch (props.variant) {
@@ -36,5 +34,3 @@ export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
       return <StatusBanner {...props} />;
   }
 };
-
-export default StatusFeedback;

@@ -5,13 +5,13 @@
 import {
   getLaneMechanicPolicy,
   type Lane,
-} from '../../lane-engine';
-import { buildLaneSessionBrief } from '../../session-start/service';
-import { decideNudge } from '../../notification-policy/service';
-import { resolveCompletionExperiencePolicy } from '../../session-completion/completion-experience-policy';
-import { resolveLaneCopy } from '../../personalization/first-week-lane-copy';
-import { LANE_USER_FACING_NAMES } from '../../lane-engine/schemas';
-import type {} from '../../session-completion/completion-experience-policy-schemas';
+} from '../../../features/lane-engine';
+import { buildLaneSessionBrief } from '../../../features/session-start/service';
+import { decideNudge } from '../../../features/notification-policy/service';
+import { resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
+import { resolveLaneCopy } from '../../../features/personalization/first-week-lane-copy';
+import { LANE_USER_FACING_NAMES } from '../../../features/lane-engine/schemas';
+import type {} from '../../../features/session-completion/completion-experience-policy-schemas';
 import { baseLaneProfile, completionInput } from './helpers';
 
 export function auditLane(lane: Lane): string {

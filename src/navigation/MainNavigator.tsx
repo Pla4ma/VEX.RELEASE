@@ -14,7 +14,7 @@ import { HomeScreen } from '../screens/home/HomeScreen';
 import { FocusScreen } from '../screens/home/FocusScreen';
 import { ProgressScreen } from '../screens/progress/ProgressScreen';
 import { VexTabBar } from './components/VexTabBar';
-import ProfileTabRoute from './ProfileTabRoute';
+import { ProfileTabRoute } from './ProfileTabRoute';
 import type { MainTabParams } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParams>();
@@ -51,5 +51,3 @@ export const MainNavigator: React.FC = () => {
     </Tab.Navigator>
   );
 };
-
-export default MainNavigator;

@@ -8,7 +8,7 @@ import { eventBus } from '../events/EventBus';
 import { TokenBucketLimiter } from './token-bucket';
 import type { RateLimitResult } from './token-bucket';
 
-export { TokenBucketLimiter } from './token-bucket';
+export { TokenBucketLimiter }
 export type { RateLimitResult, TokenBucketConfig } from './token-bucket';
 
 const debug = createDebugger('rate-limiter');
@@ -160,4 +160,3 @@ export const RateLimiter = {
   RateLimits,
   RateLimitError,
 };
-export default RateLimiter;

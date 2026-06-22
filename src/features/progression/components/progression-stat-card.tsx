@@ -88,5 +88,3 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
     </GlassCard>
   );
 };
-
-export default ProgressionStatCard;

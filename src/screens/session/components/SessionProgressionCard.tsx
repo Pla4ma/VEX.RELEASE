@@ -142,5 +142,3 @@ export function SessionProgressionCard({
     </Box>
   );
 }
-
-export default SessionProgressionCard;

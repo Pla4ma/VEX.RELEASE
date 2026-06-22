@@ -97,5 +97,3 @@ export function GlassTextureOverlay({
     </View>
   );
 }
-
-export default GlassTextureOverlay;

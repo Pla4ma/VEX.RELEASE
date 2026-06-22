@@ -162,4 +162,3 @@ export class OnboardingRepositoryError extends Error {
 }
 
 export const onboardingRepository = new OnboardingRepository();
-export default onboardingRepository;

@@ -83,5 +83,3 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     </View>
   );
 };
-
-export default ProfileHeader;

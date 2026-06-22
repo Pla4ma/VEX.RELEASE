@@ -21,7 +21,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ResetPassword'>;
 
-export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
+const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { token: _token } = route.params;
@@ -171,4 +171,5 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(ResetPasswordScreen, 'ResetPassword');
+const ResetPasswordScreenWithBoundary = withScreenErrorBoundary(ResetPasswordScreen, 'ResetPassword');
+export { ResetPasswordScreenWithBoundary as ResetPasswordScreen };

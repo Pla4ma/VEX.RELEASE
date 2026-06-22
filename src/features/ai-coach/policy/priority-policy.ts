@@ -25,8 +25,10 @@ export function shouldCoachShowSuggestion(
 export async function getPriorityEngineState(
   userId: string,
 ): Promise<PriorityEngine> {
-  const coachState = await repository.fetchCoachState(userId);
-  const recentMessages = await repository.fetchRecentMessages(userId, 5);
+  const [coachState, recentMessages] = await Promise.all([
+    repository.fetchCoachState(userId),
+    repository.fetchRecentMessages(userId, 5),
+  ]);
 
   return PriorityEngineSchema.parse({
     streakCritical: coachState?.currentState === 'STREAK_AT_RISK',

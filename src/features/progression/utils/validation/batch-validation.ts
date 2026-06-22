@@ -59,8 +59,8 @@ export function validateXPBatch(
 
 // ── Barrel Export ────────────────────────────────────────────────────────────
 
-export { validateXPTransaction } from './xp-validation';
-export { validateLevelUp, validatePrestige } from './level-validation';
+export { validateXPTransaction }
+export { validateLevelUp, validatePrestige }
 
 export const ProgressionValidation = {
   validateXPTransaction,
@@ -68,5 +68,3 @@ export const ProgressionValidation = {
   validatePrestige,
   validateXPBatch,
 };
-
-export default ProgressionValidation;

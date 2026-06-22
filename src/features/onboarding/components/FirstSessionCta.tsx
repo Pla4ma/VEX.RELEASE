@@ -61,5 +61,3 @@ export function FirstSessionCta({
     </Animated.View>
   );
 }
-
-export default FirstSessionCta;

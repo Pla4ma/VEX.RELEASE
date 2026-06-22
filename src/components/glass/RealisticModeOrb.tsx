@@ -84,5 +84,3 @@ export function RealisticModeOrb({
     </View>
   );
 }
-
-export default RealisticModeOrb;

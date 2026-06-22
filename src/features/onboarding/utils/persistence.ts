@@ -194,5 +194,3 @@ export const OnboardingPersistence = {
   getCompletionAttempts: getCompletionAttemptsFn,
   getPartialData: getPartialDataFn,
 };
-
-export default OnboardingPersistence;

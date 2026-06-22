@@ -23,7 +23,8 @@ import {
   getMoodScale,
 } from './coach-avatar-types';
 
-export { type CoachMood, type AnimatedCoachAvatarProps } from './coach-avatar-types';
+export type { CoachMood } from './coach-avatar-types';
+export type { AnimatedCoachAvatarProps } from './coach-avatar-types';
 
 export function AnimatedCoachAvatar({
   size = 112,
@@ -185,5 +186,3 @@ export function AnimatedCoachAvatar({
     </View>
   );
 }
-
-export default AnimatedCoachAvatar;

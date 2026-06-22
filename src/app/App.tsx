@@ -9,7 +9,7 @@ import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { QueryProvider } from '../api/QueryProvider';
-import { initSentry } from '../config/sentry';
+import { initSentry, wireSentryToDebug } from '../config/sentry';
 import { ErrorBoundary } from '../errors/ErrorBoundary';
 import { PrivacyBlurOverlay } from '../components/primitives/PrivacyBlurOverlay';
 
@@ -32,16 +32,17 @@ function useAppRuntimeBootstrap(): boolean {
 
       try {
         initSentry();
-      } catch (error: unknown) {
-        console.warn('Sentry init failed');
+        wireSentryToDebug();
+      } catch {
+        // Sentry init failure is non-fatal; already captured by ErrorBoundary
       }
 
       await bootstrapApp();
 
       try {
         initializeDevContrastChecker();
-      } catch (error: unknown) {
-        console.warn('Accessibility check failed');
+      } catch {
+        // Accessibility check failure is non-fatal
       }
 
       setReady(true);
@@ -98,5 +99,3 @@ export const App: React.FC = () => {
       </GestureHandlerRootView>
   );
 };
-
-export default App;

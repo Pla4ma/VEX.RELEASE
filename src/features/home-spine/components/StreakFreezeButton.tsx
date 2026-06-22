@@ -184,5 +184,3 @@ export function StreakFreezeButton({
     </Animated.View>
   );
 }
-
-export default StreakFreezeButton;

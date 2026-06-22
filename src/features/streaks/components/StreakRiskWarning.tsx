@@ -138,5 +138,3 @@ const styles = createSheet({
     fontSize: 13,
   },
 });
-
-export default StreakRiskWarning;

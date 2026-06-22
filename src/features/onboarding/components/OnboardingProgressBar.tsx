@@ -110,5 +110,3 @@ export function OnboardingDots({
     </Box>
   );
 }
-
-export default OnboardingProgressBar;

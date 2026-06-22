@@ -61,25 +61,27 @@ describe('Message quality validation', () => {
   });
 
   it('detects banned generic patterns', () => {
-    const messages = [
-      ['Keep going with your focus!', 'keep going'],
-      ['You are doing great!', 'you are doing great'],
-      ['Try focusing more today.', 'try focusing more'],
-      ['Come back today!', 'come back today'],
-      ['Good job!', 'Message too short'],
+    const messages: Array<[string, string, boolean]> = [
+      // [content, expectedReasonSubstring, expectIsGeneric]
+      ['Keep going with your focus!', 'keep going', true],
+      ['You are doing great!', 'you are doing great', true],
+      ['Try focusing more today.', 'try focusing more', true],
+      ['Come back today!', 'come back today', true],
+      ['Good job!', 'Message too short', true],
       [
         'Your progress is wonderful! Keep believing in yourself!',
         'No specific user data',
+        true,
       ],
     ];
 
-    messages.forEach(([content, reason], index) => {
+    messages.forEach(([content, reason, expectIsGeneric], index) => {
       const result = validateMessageQuality(
         `generic-${index}`,
         content,
         'MOTIVATION_BOOST',
       );
-      expect(result.isGeneric).toBe(true);
+      expect(result.isGeneric).toBe(expectIsGeneric);
       expect(result.genericReasons.some((item) => item.includes(reason))).toBe(
         true,
       );

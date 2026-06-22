@@ -25,7 +25,7 @@ type ComebackRoute = RouteProp<ExtendedRootStackParams, 'Comeback'>;
 
 const PARTICLE_COUNT = 20;
 
-export function ComebackScreen(): React.ReactNode {
+function ComebackScreen(): React.ReactNode {
   const navigation = useNavigation<ComebackNavigationProp>();
   const route = useRoute<ComebackRoute>();
   const { theme } = useTheme();
@@ -115,4 +115,7 @@ export function ComebackScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ComebackScreen, 'Comeback');
+const ComebackScreenWithBoundary = withScreenErrorBoundary(ComebackScreen, 'Comeback');
+export { ComebackScreenWithBoundary as ComebackScreen };
+
+export { ComebackScreen as default };

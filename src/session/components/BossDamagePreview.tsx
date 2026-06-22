@@ -96,5 +96,3 @@ export function BossDamagePreview({
     </Pressable>
   );
 }
-
-export default BossDamagePreview;

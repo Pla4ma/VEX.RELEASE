@@ -76,6 +76,8 @@ export function useApi<T = unknown>(
         abortControllerRef.current.abort();
       }
     };
+    // refs are stable objects, no need for dep array
+    // eslint-disable-next-line react-doctor/exhaustive-deps
   }, []);
 
   const execute = useCallback(

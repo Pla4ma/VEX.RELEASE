@@ -21,7 +21,6 @@ export function useEventBus() {
 export function useEventSubscription<T extends keyof EventChannels>(
   channel: T,
   handler: (data: EventChannels[T]) => void,
-  deps: React.DependencyList = [],
 ) {
   const handlerRef = useRef(handler);
 
@@ -36,8 +35,7 @@ export function useEventSubscription<T extends keyof EventChannels>(
     );
 
     return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channel, ...deps]);
+  }, [channel]);
 }
 
 /**

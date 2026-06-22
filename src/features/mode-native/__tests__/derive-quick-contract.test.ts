@@ -28,21 +28,21 @@ describe('deriveQuickContract', () => {
   it('returns game_like contract', () => {
     const contract = deriveQuickContract('game_like');
     expect(contract.lane).toBe('game_like');
-    expect(contract.title).toBe('Quick contract: Run');
-    expect(contract.startLabel).toBe('Start run');
+    expect(contract.title).toBe('Quick contract: Quest');
+    expect(contract.startLabel).toBe('Start quest');
   });
 
   it('returns deep_creative contract', () => {
     const contract = deriveQuickContract('deep_creative');
     expect(contract.lane).toBe('deep_creative');
-    expect(contract.title).toBe('Quick contract: Project');
-    expect(contract.startLabel).toBe('Start project block');
+    expect(contract.title).toBe('Quick contract: Create');
+    expect(contract.startLabel).toBe('Start create block');
   });
 
   it('returns minimal_normal contract with 1 question', () => {
     const contract = deriveQuickContract('minimal_normal');
     expect(contract.lane).toBe('minimal_normal');
-    expect(contract.title).toBe('Quick contract: Clean');
+    expect(contract.title).toBe('Quick contract: Focus');
     expect(contract.questions).toHaveLength(1);
     expect(contract.questions[0].key).toBe('action');
     expect(contract.suggestedDurationMinutes).toBe(15);

@@ -154,5 +154,3 @@ export function NameAndGoalScreen({
     </KeyboardAvoidingView>
   );
 }
-
-export default NameAndGoalScreen;

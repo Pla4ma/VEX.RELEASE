@@ -69,5 +69,3 @@ export function buildRootExposureFlags({
     vault: false,
   };
 }
-
-export default canExposeFeature;

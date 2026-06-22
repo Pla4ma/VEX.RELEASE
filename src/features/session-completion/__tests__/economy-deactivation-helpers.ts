@@ -42,7 +42,7 @@ jest.mock('../../../rewards/RewardService', () => ({
   })),
 }));
 
-jest.mock('../../../features/companion/service', () => ({
+jest.mock('../../companion/service', () => ({
   getCompanionService: jest.fn(() => ({
     completeSession: jest.fn((): { evolved: boolean; leveledUp: boolean } => {
       mockOrder.push('companion');
@@ -51,6 +51,9 @@ jest.mock('../../../features/companion/service', () => ({
   })),
 }));
 
+jest.mock('../../liveops-config/feature-access-store', () => ({
+  getAvailabilityFor: jest.fn(() => ({ canUseBackend: true, canNavigate: true, canQuery: true })),
+}));
 jest.mock('../analytics', () => ({
   trackSessionCompleted: jest.fn(),
 }));

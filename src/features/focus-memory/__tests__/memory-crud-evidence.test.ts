@@ -1,5 +1,4 @@
 import {
-  mockStore,
   currentTime,
   createMemoryCandidate,
   listActiveMemories,
@@ -10,10 +9,18 @@ import {
   generateRecommendationEvidence,
   buildColdStartEvidence,
 } from './helpers';
+import { storage } from '../../../store/mmkv-storage';
+
+function clearAllStorage(): void {
+  const keys = storage.getAllKeys();
+  for (const key of keys) {
+    storage.delete(key);
+  }
+}
 
 describe('FocusMemory — CRUD & evidence', () => {
   beforeEach(() => {
-    mockStore.clear();
+    clearAllStorage();
     jest.spyOn(Date, 'now').mockReturnValue(currentTime);
   });
 

@@ -48,5 +48,3 @@ const styles = createSheet({
     alignSelf: 'stretch',
   },
 });
-
-export default Divider;

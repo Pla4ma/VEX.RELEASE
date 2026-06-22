@@ -1,2 +1,2 @@
-export { StreakBrokenModal, default } from './StreakBrokenModal';
+export { StreakBrokenModal } from './StreakBrokenModal';
 export type { StreakBrokenModalProps } from './types';

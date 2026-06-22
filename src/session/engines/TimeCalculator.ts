@@ -11,7 +11,7 @@ import {
   calculateCurrentInterval,
 } from './time-calculations';
 
-export { TIME_CONSTANTS } from './time-calculations';
+export { TIME_CONSTANTS }
 export {
   calculateElapsedTime,
   calculateRemainingTime,
@@ -123,4 +123,3 @@ export const TimeCalculator = {
   calculateCurrentInterval,
   constants: TIME_CONSTANTS,
 };
-export default TimeCalculator;

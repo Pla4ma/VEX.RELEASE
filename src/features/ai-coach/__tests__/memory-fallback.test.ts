@@ -41,11 +41,11 @@ jest.mock('../../../events', () => ({
   eventBus: { publish: jest.fn(), clearHistory: jest.fn() },
 }));
 
-jest.mock('../memory-events', () => ({
+jest.mock('../memory/memory-events', () => ({
   createCoachMemoryCreatedEvent: jest.fn(() => ({})),
 }));
 
-jest.mock('../memory-analytics', () => ({
+jest.mock('../memory/memory-analytics', () => ({
   trackMemoryCreated: jest.fn(),
   trackMemoryError: jest.fn(),
 }));

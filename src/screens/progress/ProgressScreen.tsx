@@ -22,7 +22,7 @@ import { navigateToRootScreen, navigateToMainStackScreen } from '../../navigatio
 
 type ProgressMode = 'overview' | 'plan';
 
-export function ProgressScreen(): React.ReactNode {
+function ProgressScreen(): React.ReactNode {
   const insets = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
@@ -178,4 +178,5 @@ export function ProgressScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ProgressScreen, 'Progress');
+const ProgressScreenWithBoundary = withScreenErrorBoundary(ProgressScreen, 'Progress');
+export { ProgressScreenWithBoundary as ProgressScreen };

@@ -14,6 +14,3 @@ export {
   ScreenLoadingState,
 } from './skeletonLayouts';
 export type { SkeletonLayoutProps } from './skeletonLayouts';
-
-import { EnhancedSkeleton } from './skeletonLayouts';
-export default EnhancedSkeleton;

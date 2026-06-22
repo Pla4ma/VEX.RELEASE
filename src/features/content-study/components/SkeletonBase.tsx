@@ -61,4 +61,3 @@ const Skeleton: React.FC<SkeletonProps> = ({
 
 export { Skeleton };
 export type { SkeletonProps };
-export default Skeleton;

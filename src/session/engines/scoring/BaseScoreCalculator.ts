@@ -141,5 +141,3 @@ export const BaseScoreCalculator = {
   validateScoringInput,
   constants: SCORING_CONSTANTS,
 };
-
-export default BaseScoreCalculator;

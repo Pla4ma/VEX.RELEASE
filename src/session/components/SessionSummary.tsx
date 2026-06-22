@@ -9,7 +9,7 @@ import type { SessionSummary as SessionSummaryType } from '../types';
 import { getGrade, type MoodType } from './SessionSummary.helpers';
 import { SessionSummaryMoodSelector } from './SessionSummaryMoodSelector';
 import { SessionSummaryStats } from './SessionSummaryStats';
-import styles from './SessionSummary.styles';
+import { styles } from './SessionSummary.styles';
 import { buttonTap } from '../../utils/haptics';
 
 interface SessionSummaryProps {
@@ -104,7 +104,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           <View style={styles.bonusesSection}>
             <Text style={styles.sectionTitle}>Bonus Awards</Text>
             {summary.bonuses.map((bonus, index) => (
-              <View key={`bonus-${index}`} style={styles.bonusItem}>
+              <View key={`bonus-${bonus.type}-${bonus.amount}`} style={styles.bonusItem}>
                 <Text style={styles.bonusIcon}>🏆</Text>
                 <View style={styles.bonusInfo}>
                   <Text style={styles.bonusType}>{bonus.type}</Text>
@@ -167,5 +167,3 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
     </ScrollView>
   );
 };
-
-export default SessionSummary;

@@ -103,6 +103,13 @@ describe('launch schema reconciliation migration', () => {
       'transactions',
       'users',
       'wallets',
+      'captures',
+      'content_items',
+      'notification_rate_limits',
+      'plan_items',
+      'plan_projects',
+      'plan_study_plans',
+      'session_presets',
     ]);
 
     expect(

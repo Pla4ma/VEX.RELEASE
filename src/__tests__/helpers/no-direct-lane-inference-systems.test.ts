@@ -1,7 +1,7 @@
-import { decideHomeSurfaces } from '../home-experience/home-surface-decision';
-import { resolveLaneCopy } from '../personalization/first-week-lane-copy';
-import { buildLaneSessionBrief } from '../session-start/service';
-import { decideNudge } from '../notification-policy/service';
+import { decideHomeSurfaces } from '../../features/home-experience/home-surface-decision';
+import { resolveLaneCopy } from '../../features/personalization/first-week-lane-copy';
+import { buildLaneSessionBrief } from '../../features/session-start/service';
+import { decideNudge } from '../../features/notification-policy/service';
 import type { LaneProfile, Lane } from './no-direct-lane-inference.helpers';
 
 describe('No direct lane inference', () => {

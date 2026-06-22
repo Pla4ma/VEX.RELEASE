@@ -64,17 +64,3 @@ import {
   generateBossStrategyMessage,
 } from './intervention-messages';
 
-export default {
-  detectBurnout,
-  detectPlateau,
-  detectStreakRescueNeeded,
-  detectBossStrategyOpportunity,
-  detectStudyStuck,
-  detectDistraction,
-  detectOptimalBreak,
-  evaluateInterventions,
-  generateBurnoutMessage,
-  generatePlateauMessage,
-  generateStreakRescueMessage,
-  generateBossStrategyMessage,
-};

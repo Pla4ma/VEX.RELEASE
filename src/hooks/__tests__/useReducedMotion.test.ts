@@ -1,5 +1,19 @@
 import { renderHook } from '@testing-library/react-native';
 import { useReducedMotion, useShouldAnimate } from '../useReducedMotion';
+import { AccessibilityInfo } from 'react-native';
+import {
+  useReducedMotion as useReanimatedReducedMotion,
+} from 'react-native-reanimated';
+
+// Override mock return values to simulate reduced motion enabled
+beforeEach(() => {
+  (
+    useReanimatedReducedMotion as jest.Mock
+  ).mockReturnValue(true);
+  (
+    AccessibilityInfo.isReduceMotionEnabled as jest.Mock
+  ).mockResolvedValue(true);
+});
 
 describe('useReducedMotion', () => {
   it('returns reduced motion configuration', () => {

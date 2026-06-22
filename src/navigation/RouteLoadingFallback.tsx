@@ -66,5 +66,3 @@ export function RouteLoadingFallback({
     </View>
   );
 }
-
-export default RouteLoadingFallback;

@@ -98,5 +98,3 @@ export function MotivationScreen({
     </Box>
   );
 }
-
-export default MotivationScreen;

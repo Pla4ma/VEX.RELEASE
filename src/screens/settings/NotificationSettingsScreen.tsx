@@ -4,7 +4,8 @@ import { ScrollView, Pressable, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Card } from '../../components/primitives/Box'
+import { Box } from '../../components/primitives/Box'
+import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
@@ -25,7 +26,7 @@ type Props = NativeStackScreenProps<
   'NotificationSettings'
 >;
 
-export const NotificationSettingsScreen: React.FC<Props> = ({
+const NotificationSettingsScreen: React.FC<Props> = ({
   navigation,
 }) => {
   const { theme } = useTheme();
@@ -157,7 +158,5 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
   );
 };
 
-export default withScreenErrorBoundary(
-  NotificationSettingsScreen,
-  'NotificationSettings',
-);
+const NotificationSettingsScreenWithBoundary = withScreenErrorBoundary(NotificationSettingsScreen, "NotificationSettings");
+export { NotificationSettingsScreenWithBoundary as NotificationSettingsScreen };

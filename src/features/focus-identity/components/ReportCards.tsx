@@ -74,7 +74,7 @@ export function ReportCards({
             <View style={{ gap: theme.spacing[3] }}>
               {scoreDrivers.map((driver, index) => (
                 <View
-                  key={index}
+                  key={driver.name}
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',

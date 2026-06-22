@@ -102,10 +102,12 @@ export async function trackComebackSession(
   if (sessionCompleted) {
     const newCount = plan.sessionsCompleted + 1;
     if (newCount >= plan.targetSessions) {
-      await repository.updateComebackPlanStatus(plan.id, 'COMPLETED', newCount);
-      await updateCoachState(userId, 'HIGH_CONFIDENCE', {
-        comebackCompleted: true,
-      });
+      await Promise.all([
+        repository.updateComebackPlanStatus(plan.id, 'COMPLETED', newCount),
+        updateCoachState(userId, 'HIGH_CONFIDENCE', {
+          comebackCompleted: true,
+        }),
+      ]);
       const completionMessage = await generateMessage({
         userId,
         category: 'MILESTONE_HYPE',

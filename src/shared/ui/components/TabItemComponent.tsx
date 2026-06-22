@@ -143,4 +143,4 @@ const TabItemComponent: React.FC<TabItemProps> = ({
   );
 };
 
-export default TabItemComponent;
+export { TabItemComponent }

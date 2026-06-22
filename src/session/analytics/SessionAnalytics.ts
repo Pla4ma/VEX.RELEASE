@@ -187,5 +187,3 @@ export function getSessionAnalytics(): SessionAnalytics {
   }
   return sessionAnalytics;
 }
-
-export default SessionAnalytics;

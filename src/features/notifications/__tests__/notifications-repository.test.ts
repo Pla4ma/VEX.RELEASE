@@ -19,7 +19,7 @@ describe('Repository', () => {
 
     it('handles non-Error original error', () => {
       const err = new RepositoryError('fetchData', 'string error');
-      expect(err.message).toContain('Unknown error');
+      expect(err.message).toContain('string error');
     });
   });
 

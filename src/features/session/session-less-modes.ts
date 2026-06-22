@@ -56,4 +56,4 @@ const sessionLessModes: Record<string, ActiveSessionConfig> = {
   },
 };
 
-export default sessionLessModes;
+export { sessionLessModes }

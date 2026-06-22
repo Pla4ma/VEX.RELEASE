@@ -141,7 +141,7 @@ export function PremiumBadge({
   );
 }
 
-export { SupporterBadge };
+export { SupporterBadge }
 
 const styles = createSheet({
   container: {
@@ -162,5 +162,3 @@ const styles = createSheet({
   },
   text: { fontWeight: '800' as const, letterSpacing: -0.5 },
 });
-
-export default PremiumBadge;

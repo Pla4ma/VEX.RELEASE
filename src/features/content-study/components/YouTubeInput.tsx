@@ -99,7 +99,8 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
       </View>
       {validationState.errors.length > 0 && (
         <View style={styles.messageContainer}>
-          {validationState.errors.map((error, index) => (              <View key={error} style={styles.messageRow}>
+          {validationState.errors.map((error, index) => (
+            <View key={`error-${error}`} style={styles.messageRow}>
               <Icon
                 name="alert-circle"
                 size="sm"
@@ -118,7 +119,7 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
         validationState.warnings.length > 0 && (
           <View style={styles.messageContainer}>
             {validationState.warnings.map((warning, index) => (
-              <View key={warning} style={styles.messageRow}>
+              <View key={`warning-${warning}`} style={styles.messageRow}>
                 <Icon
                   name="alert-triangle"
                   size="sm"

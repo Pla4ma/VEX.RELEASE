@@ -150,5 +150,3 @@ export function StudyPlanSuggestionCard({
     </Animated.View>
   );
 }
-
-export default StudyPlanSuggestionCard;

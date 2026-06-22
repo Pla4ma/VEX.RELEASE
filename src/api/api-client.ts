@@ -191,7 +191,5 @@ export function resetApiClient(): void {
   apiClientInstance = null;
 }
 
-export default ApiClient;
-
 // Re-export standalone request handler functions for direct usage
-export { executeWithRetry, executeWithDeduplication } from './api-request-handler';
+export { executeWithRetry, executeWithDeduplication }

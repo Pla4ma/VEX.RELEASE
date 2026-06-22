@@ -9,7 +9,7 @@ import { useClaimChallengeReward } from '../../features/challenges/hooks/challen
 import { useAuthStore } from '../../store';
 import { useToast } from '../../shared/ui/components/Toast';
 
-export function ChallengesScreen(): React.ReactNode {
+function ChallengesScreen(): React.ReactNode {
   const userId = useAuthStore((state) => state.user?.id);
   const claimReward = useClaimChallengeReward();
   const { show: showToast } = useToast();
@@ -74,4 +74,7 @@ export function ChallengesScreen(): React.ReactNode {
   return <ChallengeHub userId={userId} onClaimReward={handleClaimReward} />;
 }
 
-export default withScreenErrorBoundary(ChallengesScreen, 'Challenges');
+const ChallengesScreenWithBoundary = withScreenErrorBoundary(ChallengesScreen, 'Challenges');
+export { ChallengesScreenWithBoundary as ChallengesScreen };
+
+export { ChallengesScreen as default };

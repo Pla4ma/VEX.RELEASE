@@ -110,5 +110,3 @@ export function HoloCard({
     </Animated.View>
   );
 }
-
-export default HoloCard;

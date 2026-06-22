@@ -67,6 +67,17 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
     });
   }, [exportJobs]);
 
+  const handleRetryExport = useCallback(() => {
+    exportMutation.mutateAsync({
+      format: selectedFormat,
+      dataTypes: ['analytics'],
+      dateRange: {
+        start: Date.now() - 30 * 24 * 60 * 60 * 1000,
+        end: Date.now(),
+      },
+    });
+  }, [exportMutation, selectedFormat]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -153,13 +164,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
                   key={job.id}
                   job={job}
                   onDownload={() => handleDownload(job.id)}
-                  onRetry={() =>
-                    exportMutation.mutateAsync({
-                      format: selectedFormat,
-                      dataTypes: ['analytics'],
-                      dateRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
-                    })
-                  }
+                  onRetry={handleRetryExport}
                 />
               ))
             ) : (

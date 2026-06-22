@@ -138,5 +138,3 @@ export function SessionQuickStartCard({
     </Box>
   );
 }
-
-export default SessionQuickStartCard;

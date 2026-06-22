@@ -152,7 +152,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               />
             ) : (
               <LockedSlot
-                key={`locked-slot-${index}`}
+                key={`locked-slot-${String(index)}`}
                 slotIndex={index}
                 onPress={() => handleSlotPress(index)}
                 isEditable={isEditable || isEditMode}
@@ -191,4 +191,3 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
     </Box>
   );
 };
-export default AchievementShowcase;

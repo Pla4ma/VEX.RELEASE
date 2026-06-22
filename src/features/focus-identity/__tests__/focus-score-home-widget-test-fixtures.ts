@@ -24,7 +24,7 @@ export const sampleFocusHistory = [
 export function model(overrides: Partial<FocusScoreDashboardModel> = {}): FocusScoreDashboardModel {
   return {
     current: null,
-    history: [] as unknown as FocusScoreDashboardModel['history'],
+    history: [] satisfies FocusScoreDashboardModel['history'],
     monthlyInput: null,
     isOffline: false,
     isPending: false,

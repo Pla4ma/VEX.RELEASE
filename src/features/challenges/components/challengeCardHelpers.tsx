@@ -8,13 +8,13 @@ export function getStatusBadge(
 ): React.ReactNode {
   switch (status) {
     case 'COMPLETED':
-      return <Badge variant="success"><VexText>Ready to Claim</VexText></Badge>;
+      return <Badge variant="success" label="Ready to Claim" />;
     case 'CLAIMED':
-      return <Badge variant="secondary"><VexText>Claimed</VexText></Badge>;
+      return <Badge variant="secondary" label="Claimed" />;
     case 'EXPIRED':
-      return <Badge variant="error"><VexText>Expired</VexText></Badge>;
+      return <Badge variant="error" label="Expired" />;
     case 'REROLLED':
-      return <Badge variant="secondary"><VexText>Rerolled</VexText></Badge>;
+      return <Badge variant="secondary" label="Rerolled" />;
     default:
       return null;
   }

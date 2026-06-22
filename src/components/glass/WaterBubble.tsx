@@ -109,5 +109,3 @@ export const WaterBubble: React.FC<WaterBubbleProps> = ({
     </Svg>
   );
 };
-
-export default WaterBubble;

@@ -108,5 +108,3 @@ export function VexFocusSurface({
     </Animated.View>
   );
 }
-
-export default VexFocusSurface;

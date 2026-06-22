@@ -71,5 +71,3 @@ function SessionCompleteResolved({
     />
   );
 }
-
-export default SessionCompleteScreen;

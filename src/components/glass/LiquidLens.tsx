@@ -105,5 +105,3 @@ export const LiquidLens: React.FC<LiquidLensProps> = ({
     </Svg>
   );
 };
-
-export default LiquidLens;

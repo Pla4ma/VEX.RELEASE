@@ -87,5 +87,3 @@ export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard
     </View>
   );
 });
-
-export default GlassCard;

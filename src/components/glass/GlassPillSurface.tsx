@@ -172,5 +172,3 @@ export function GlassPillSurface({
     </View>
   );
 }
-
-export default GlassPillSurface;

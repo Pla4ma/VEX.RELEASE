@@ -22,7 +22,7 @@ import {
   type StepRenderersConfig,
 } from './components/OnboardingStepRenderers';
 
-export function OnboardingFlowScreen(): React.ReactNode {
+function OnboardingFlowScreen(): React.ReactNode {
   const route = useRoute<OnboardingRouteProp>();
   const isFocused = useIsFocused();
   const flow = useOnboardingFlow(route.params?.step);
@@ -127,4 +127,5 @@ export function OnboardingFlowScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');
+const OnboardingFlowScreenWithBoundary = withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');
+export { OnboardingFlowScreenWithBoundary as OnboardingFlowScreen };

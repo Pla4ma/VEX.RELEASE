@@ -8,7 +8,7 @@ import {
   type Notification,
 } from '../NotificationScreenConfig';
 
-jest.mock('../../features/liveops-config/FeatureFlagService', () => ({
+jest.mock('../../../features/liveops-config/FeatureFlagService', () => ({
   isFeatureHidden: jest.fn().mockReturnValue(false),
   getFeatureAvailabilityFor: jest.fn().mockReturnValue({ canShowNotification: true }),
   isFeatureAvailableForNavigation: jest.fn().mockReturnValue(true),
@@ -75,11 +75,25 @@ describe('NotificationScreenConfig', () => {
   });
 
   describe('groupNotificationsByTime', () => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
-    const yesterday = today - 86400000;
-    const twoDaysAgo = today - 2 * 86400000;
-    const lastWeek = today - 7 * 86400000;
+    let today: number;
+    let yesterday: number;
+    let twoDaysAgo: number;
+    let lastWeek: number;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      // Use a Wednesday to avoid week boundary issues
+      jest.setSystemTime(new Date(2026, 5, 24, 12, 0, 0));
+      const now = new Date();
+      today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      yesterday = today - 86400000;
+      twoDaysAgo = today - 2 * 86400000;
+      lastWeek = today - 7 * 86400000;
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
 
     const makeNotification = (timestamp: number): Notification => ({
       id: `n-${timestamp}`,
@@ -114,7 +128,7 @@ describe('NotificationScreenConfig', () => {
     });
 
     it('puts multiple today notifications in today group', () => {
-      const notifications = [makeNotification(today), makeNotification(today - 1000)];
+      const notifications = [makeNotification(today), makeNotification(today + 1000)];
       const result = groupNotificationsByTime(notifications);
       expect(result.today).toHaveLength(2);
     });

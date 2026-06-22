@@ -37,7 +37,7 @@ function ProfileBottomSheetBackdrop(
   );
 }
 
-export const ProfileScreen: React.FC = () => {
+const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const route = useRoute<RouteProp<MainTabParams, 'Profile'>>();
   const { user, logout } = useAuthStore();
@@ -144,5 +144,6 @@ export const ProfileScreen: React.FC = () => {
   );
 };
 
-export default withScreenErrorBoundary(ProfileScreen, 'Profile');
+const ProfileScreenWithBoundary = withScreenErrorBoundary(ProfileScreen, 'Profile');
+export { ProfileScreenWithBoundary as ProfileScreen };
 

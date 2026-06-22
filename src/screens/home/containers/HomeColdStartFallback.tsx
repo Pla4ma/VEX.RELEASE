@@ -100,5 +100,3 @@ export function HomeColdStartFallback({
     </AppScreen>
   );
 }
-
-export default HomeColdStartFallback;

@@ -32,6 +32,7 @@ export function detectGenericPatterns(content: string): {
       candidate.source.includes(phrase.replace(/\s+/g, '\\s+')),
     );
     if (lowerContent.includes(phrase) || pattern?.test(content)) {
+      isGeneric = true;
       reasons.push(`Generic pattern detected: ${phrase}`);
       if (reasons.length >= 3) {
         break;

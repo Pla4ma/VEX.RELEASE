@@ -92,5 +92,3 @@ export const Loading: React.FC<LoadingProps> = ({
   }
   return content;
 };
-
-export default Loading;

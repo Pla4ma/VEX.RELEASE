@@ -162,5 +162,3 @@ const styles = createSheet({
     lineHeight: 20,
   },
 });
-
-export default SessionEmptyState;

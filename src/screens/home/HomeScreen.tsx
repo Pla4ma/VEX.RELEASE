@@ -11,5 +11,3 @@ export const HomeScreen = withScreenErrorBoundary(
   },
   'Home',
 );
-
-export default HomeScreen;

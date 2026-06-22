@@ -156,5 +156,3 @@ export function FirstResultScreen({
     </Box>
   );
 }
-
-export default FirstResultScreen;

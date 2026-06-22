@@ -57,5 +57,3 @@ export function ComebackQuestCompact({
     </Pressable>
   );
 }
-
-export default ComebackQuestCompact;

@@ -175,5 +175,3 @@ export function GreetingHeader({
     </Animated.View>
   );
 }
-
-export default GreetingHeader;

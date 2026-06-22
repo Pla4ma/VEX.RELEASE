@@ -95,5 +95,3 @@ const styles = createSheet({
     color: lightColors.text.muted,
   },
 });
-
-export default ProgressionLoadingState;

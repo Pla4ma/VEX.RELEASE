@@ -180,5 +180,3 @@ export function XPEarnAnimation({
     </Animated.View>
   );
 }
-
-export default XPEarnAnimation;

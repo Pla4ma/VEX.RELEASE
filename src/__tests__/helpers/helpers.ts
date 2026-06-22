@@ -1,13 +1,13 @@
-import { decideHomeSurfaces } from '../home-experience/home-surface-decision';
+import { decideHomeSurfaces } from '../../features/home-experience/home-surface-decision';
 import {
   resolveLaneCopy,
   resolveFirstWeekExperiment,
-} from '../personalization/first-week-lane-copy';
-import { buildLaneSessionBrief } from '../session-start/service';
-import { decideNudge } from '../notification-policy/service';
-import { getCoachPresenceMessage } from '../coach-presence/copy-service';
-import { getLaneMechanicPolicy } from '../lane-engine/service';
-import type { LaneProfile } from '../lane-engine/types';
+} from '../../features/personalization/first-week-lane-copy';
+import { buildLaneSessionBrief } from '../../features/session-start/service';
+import { decideNudge } from '../../features/notification-policy/service';
+import { getCoachPresenceMessage } from '../../features/coach-presence/copy-service';
+import { getLaneMechanicPolicy } from '../../features/lane-engine/service';
+import type { LaneProfile } from '../../features/lane-engine/types';
 
 export const baseLaneProfile = (
   overrides: Partial<LaneProfile>,

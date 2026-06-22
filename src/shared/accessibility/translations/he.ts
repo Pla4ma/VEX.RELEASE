@@ -53,4 +53,4 @@ const he: TranslationKeys = {
   'a11y.progress': 'התקדמות',
 };
 
-export default he;
+export { he }

@@ -2,7 +2,7 @@ import { StudySessionManager } from '../persistence';
 import type { PersistedStudySession } from '../types';
 import { mockStorage } from './persistence.test.helpers';
 
-jest.mock('../../../persistence', () => ({
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   getDefaultStorageAdapter: () => mockStorage,
 }));
 

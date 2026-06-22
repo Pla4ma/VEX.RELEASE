@@ -86,5 +86,3 @@ export function ProfileActionsRow({
     </View>
   );
 }
-
-export default ProfileActionsRow;

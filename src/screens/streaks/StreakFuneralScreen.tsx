@@ -22,7 +22,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, 'StreakFuneral'>;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export const StreakFuneralScreen: React.FC = () => {
+const StreakFuneralScreen: React.FC = () => {
   const { theme } = useTheme();
   const { show: showToast } = useToast();
   const { user } = useAuthStore();
@@ -163,4 +163,7 @@ export const StreakFuneralScreen: React.FC = () => {
     </Box>
   );
 };
-export default withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');
+const StreakFuneralScreenWithBoundary = withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');
+export { StreakFuneralScreenWithBoundary as StreakFuneralScreen };
+
+export { StreakFuneralScreen as default };

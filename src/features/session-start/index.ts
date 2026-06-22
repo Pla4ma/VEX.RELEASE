@@ -28,7 +28,6 @@ export { useSessionStartController } from './hooks';
 // Phase 10.6 - Live Focusing Widget
 export {
   LiveFocusingWidget,
-  LiveFocusingSkeleton,
   type LiveFocusingData,
 } from './components/LiveFocusingWidget';
 

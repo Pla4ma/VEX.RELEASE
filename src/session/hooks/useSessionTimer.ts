@@ -188,5 +188,3 @@ export function useSessionTimer(
     },
   };
 }
-
-export default useSessionTimer;

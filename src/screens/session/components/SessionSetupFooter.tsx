@@ -73,5 +73,3 @@ export function SessionSetupFooter({
     </Box>
   );
 }
-
-export default SessionSetupFooter;

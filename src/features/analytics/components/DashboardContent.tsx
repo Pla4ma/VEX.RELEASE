@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { eventBus } from '../../../events/EventBus';
 import { EmptyAnalytics, NetworkError } from '../../../shared/ui/primitives/EmptyState';
@@ -63,6 +63,15 @@ export function DashboardContent({
   state, analyticsData, heatmapData, heatmapLoading, heatmapError,
   error, insights, userId, onInsightPress,
 }: DashboardContentProps): React.JSX.Element | null {
+  const handleStartSession = useCallback(() => {
+    eventBus.publish('session:created', {
+      sessionId: `session_${Date.now()}`,
+      userId,
+      config: {},
+      timestamp: Date.now(),
+    });
+  }, [userId]);
+
   switch (state) {
     case 'loading':
       return (
@@ -81,11 +90,7 @@ export function DashboardContent({
     case 'empty':
       return (
         <EmptyAnalytics
-          onStartSession={() => {
-            eventBus.publish('session:created', {
-              sessionId: `session_${Date.now()}`, userId, config: {}, timestamp: Date.now(),
-            });
-          }}
+          onStartSession={handleStartSession}
         />
       );
     case 'partial':

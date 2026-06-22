@@ -27,5 +27,3 @@ export function VexBrandPill(): React.ReactNode {
     </View>
   );
 }
-
-export default VexBrandPill;

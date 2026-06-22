@@ -156,4 +156,3 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
     </View>
   );
 };
-export default SessionDegradedState;

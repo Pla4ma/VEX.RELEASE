@@ -1,6 +1,6 @@
 import type { ActiveSessionConfig } from './types';
 import { SessionMode } from '../../session/modes';
-import sessionLessModes from './session-less-modes';
+import { sessionLessModes } from './session-less-modes';
 export { MODE_SPECIFIC_UI, getModeSpecificUI } from './active-session-ui';
 
 export const ACTIVE_SESSION_CONFIG: Partial<

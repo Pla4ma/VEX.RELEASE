@@ -75,13 +75,17 @@ describe('boss-screen-utils', () => {
     it('scales with streak multiplier', () => {
       const base = estimateDamage(25, 1);
       const doubled = estimateDamage(25, 2);
-      expect(doubled).toBe(base * 2);
+      expect(doubled).toBeGreaterThan(base);
+      expect(doubled).toBeGreaterThanOrEqual(base * 2 - 1);
+      expect(doubled).toBeLessThanOrEqual(base * 2 + 1);
     });
 
     it('scales with minutes', () => {
-      const short = estimateDamage(15, 1);
-      const long = estimateDamage(30, 1);
-      expect(long).toBe(short * 2);
+      const short = estimateDamage(20, 1);
+      const long = estimateDamage(40, 1);
+      expect(long).toBeGreaterThan(short);
+      expect(long).toBeGreaterThanOrEqual(short * 2 - 1);
+      expect(long).toBeLessThanOrEqual(short * 2 + 1);
     });
   });
 

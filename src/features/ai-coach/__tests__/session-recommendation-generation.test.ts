@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { createMockCoachInput } from './input-contract-test-utils';
 import { generateSessionRecommendation } from '../integration';
 
-jest.mock('../message-quality-gate', () => ({
+jest.mock('../message/message-quality-gate', () => ({
   validateMessageQuality: jest.fn(() => ({
     messageId: 'test',
     content: 'Your strongest sessions use this pattern. Try it today.',

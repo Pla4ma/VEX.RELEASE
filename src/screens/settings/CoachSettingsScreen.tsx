@@ -29,7 +29,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
           
-export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
+const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
 
   
@@ -187,4 +187,5 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(CoachSettingsScreen, 'CoachSettings');
+const CoachSettingsScreenWithBoundary = withScreenErrorBoundary(CoachSettingsScreen, 'CoachSettings');
+export { CoachSettingsScreenWithBoundary as CoachSettingsScreen };

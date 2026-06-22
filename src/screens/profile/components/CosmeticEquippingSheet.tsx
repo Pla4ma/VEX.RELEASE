@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -6,7 +6,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Box, Card } from '../../../components/primitives/Box';
+import { Box } from '../../../components/primitives/Box'
+import { Card } from '../../../components/primitives';
 import { useUIStore } from '../../../store/index';
 
 import {
@@ -20,6 +21,7 @@ import {
   CosmeticCategoryHeader,
   CosmeticEquipBar,
 } from './CosmeticCategorySelector';
+import { cosmeticEquipSheetStyles } from './cosmetic-equip-sheet-styles';
 
 export type { CosmeticType, CosmeticItem } from './CosmeticPreviewCard';
 
@@ -48,9 +50,17 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
   const { showToast } = useUIStore();
   const [selectedId, setSelectedId] = useState<string | null>(currentEquippedId ?? null);
   const [isEquipping, setIsEquipping] = useState(false);
+  const mountedRef = useRef(true);
   const slideUp = useSharedValue(0);
   const prevVisibleRef = useRef(visible);
   const prevEquippedIdRef = useRef(currentEquippedId);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   if (visible !== prevVisibleRef.current) {
     prevVisibleRef.current = visible;
@@ -81,6 +91,9 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
     }
     setIsEquipping(true);
     await new Promise((resolve) => setTimeout(resolve, 300));
+    if (!mountedRef.current) {
+      return;
+    }
     onEquip(selectedId);
     setIsEquipping(false);
     const item = items.find((i) => i.id === selectedId);
@@ -117,13 +130,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
       animationType="none"
       onRequestClose={onClose}
     >
-      <Box
-        flex={1}
-        style={{
-          backgroundColor: 'rgba(10, 31, 26, 0.12)',
-          justifyContent: 'flex-end',
-        }}
-      >
+      <Box flex={1} style={cosmeticEquipSheetStyles.overlay}>
         <Pressable
           style={{ flex: 1 }}
           onPress={onClose}
@@ -133,14 +140,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
         />
 
         <Animated.View style={[modalStyle, style]}>
-          <Card
-            size="lg"
-            style={{
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              maxHeight: '85%',
-            }}
-          >
+          <Card size="lg" style={cosmeticEquipSheetStyles.card}>
             {}
             <Box alignItems="center" mb={16}>
               <Box
@@ -189,4 +189,3 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
     </Modal>
   );
 };
-export default CosmeticEquippingSheet;

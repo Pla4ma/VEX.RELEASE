@@ -2,7 +2,7 @@
  * Phase 3D — Run Mode Polish
  */
 
-import type { Lane } from '../../lane-engine/types';
+import type { Lane } from '../../../features/lane-engine/types';
 import {
   getLaneMechanicPolicy,
   decideHomeSurfaces,

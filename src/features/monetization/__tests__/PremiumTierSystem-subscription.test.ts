@@ -8,8 +8,28 @@ import {
   type SubscriptionTier,
 } from '../PremiumTierSystem';
 
-jest.mock('../../../events', () => ({
-  eventBus: { publish: jest.fn(), subscribe: jest.fn() },
+jest.mock('../../../events/EventBus', () => ({
+  eventBus: {
+    publish: jest.fn(),
+    subscribe: jest.fn(),
+  },
+}));
+
+// Mock mmkv-storage used by subscription-store
+const mockSubscriptionStore = new Map<string, string>();
+jest.mock('../../../store/mmkv-storage', () => ({
+  mmkvStorage: {
+    getItem: (key: string) => mockSubscriptionStore.get(key) ?? null,
+    setItem: (key: string, value: string) => { mockSubscriptionStore.set(key, value); },
+    removeItem: (key: string) => { mockSubscriptionStore.delete(key); },
+  },
+  storage: {
+    getString: (key: string) => mockSubscriptionStore.get(key),
+    set: (key: string, value: string) => { mockSubscriptionStore.set(key, value); },
+    delete: (key: string) => { mockSubscriptionStore.delete(key); },
+    contains: (key: string) => mockSubscriptionStore.has(key),
+    getAllKeys: () => Array.from(mockSubscriptionStore.keys()),
+  },
 }));
 
 describe('PremiumTierSystem — User Subscription Management', () => {
@@ -17,6 +37,7 @@ describe('PremiumTierSystem — User Subscription Management', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSubscriptionStore.clear();
     setUserSubscription({
       userId,
       tier: 'free',
@@ -47,7 +68,7 @@ describe('PremiumTierSystem — User Subscription Management', () => {
     });
 
     it('publishes event on new subscription', () => {
-      const { eventBus } = require('../../../events');
+      const eventBus = require('../../../events/EventBus').eventBus;
       setUserSubscription({
         userId,
         tier: 'premium',

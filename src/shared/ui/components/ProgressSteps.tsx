@@ -78,4 +78,3 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
 };
 
 export type { Step, StepStatus, ProgressStepsProps } from './progress-steps-types';
-export default ProgressSteps;

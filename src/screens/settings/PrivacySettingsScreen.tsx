@@ -4,7 +4,8 @@ import { Alert, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Box, Card } from '../../components/primitives/Box'
+import { Box } from '../../components/primitives/Box'
+import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import type { SettingsStackParams } from '../../navigation';
 import { useDeleteAccount } from '../../features/account-deletion/hooks';
@@ -21,7 +22,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 
-export const PrivacySettingsScreen: React.FC<Props> = () => {
+const PrivacySettingsScreen: React.FC<Props> = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
@@ -191,7 +192,5 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   );
 };
 
-export default withScreenErrorBoundary(
-  PrivacySettingsScreen,
-  'PrivacySettings',
-);
+const PrivacySettingsScreenWithBoundary = withScreenErrorBoundary(PrivacySettingsScreen, "PrivacySettings");
+export { PrivacySettingsScreenWithBoundary as PrivacySettingsScreen };

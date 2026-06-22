@@ -1,15 +1,8 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-/**
- * Verify Email Screen
- *
- * Email verification screen with OTP input.
- */
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
@@ -22,7 +15,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
-export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
+const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { email } = route.params;
@@ -198,4 +191,5 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(VerifyEmailScreen, 'VerifyEmail');
+const VerifyEmailScreenWithBoundary = withScreenErrorBoundary(VerifyEmailScreen, 'VerifyEmail');
+export { VerifyEmailScreenWithBoundary as VerifyEmailScreen };

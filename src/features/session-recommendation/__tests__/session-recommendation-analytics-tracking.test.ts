@@ -8,7 +8,7 @@ jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
 }));
 
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { emit: jest.fn() },
 }));
 

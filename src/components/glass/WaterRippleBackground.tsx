@@ -137,6 +137,3 @@ export function WaterRippleBackground(): React.ReactNode {
     </View>
   );
 }
-
-export default WaterRippleBackground;
-

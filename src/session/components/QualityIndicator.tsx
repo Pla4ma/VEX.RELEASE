@@ -157,5 +157,3 @@ export function QualityIndicator({
     </Animated.View>
   );
 }
-
-export default QualityIndicator;

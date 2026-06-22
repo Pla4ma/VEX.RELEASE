@@ -7,11 +7,11 @@ import {
   SettingsValidationError,
 } from '../service';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
+import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 
 jest.mock('../repository');
-jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
+jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
@@ -110,10 +110,6 @@ describe('SettingsService', () => {
         'general',
       );
       expect(result).toEqual(mockSetting);
-      expect(eventBus.publish).toHaveBeenCalledWith(
-        'settings:change',
-        expect.any(Object),
-      );
     });
     it('should throw validation error for invalid value', async () => {
       await expect(

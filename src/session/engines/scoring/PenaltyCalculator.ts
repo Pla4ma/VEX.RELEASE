@@ -11,7 +11,7 @@ import {
   calculateTotalPenalty,
 } from './penalty-advanced';
 
-export { PENALTY_CONSTANTS, severityRankings };
+export { PENALTY_CONSTANTS, severityRankings }
 export {
   calculatePausePenalty,
   calculateInterruptionPenalty,
@@ -48,4 +48,3 @@ export const PenaltyCalculator = {
   calculateTotalPenalty,
   constants: PENALTY_CONSTANTS,
 };
-export default PenaltyCalculator;

@@ -189,5 +189,3 @@ export function OnboardingSetName({
     </KeyboardAvoidingView>
   );
 }
-
-export default OnboardingSetName;

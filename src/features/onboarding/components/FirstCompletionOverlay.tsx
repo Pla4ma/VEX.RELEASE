@@ -165,5 +165,3 @@ export function FirstCompletionOverlay({
     </Animated.View>
   );
 }
-
-export default FirstCompletionOverlay;

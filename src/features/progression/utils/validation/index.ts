@@ -18,5 +18,4 @@ export { validateLevelUp, validatePrestige } from './level-validation';
 export {
   validateXPBatch,
   ProgressionValidation,
-  default,
 } from './batch-validation';

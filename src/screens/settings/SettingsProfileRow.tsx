@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Theme } from '../../theme';
-import { Box, Card } from '../../components/primitives/Box'
+import { Box } from '../../components/primitives/Box'
+import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
@@ -37,9 +38,7 @@ export function SettingsProfileRow({
             {userId}
           </Text>
           <Box flexDirection="row" mt={8}>
-            <Badge variant="primary" size="sm" leftIcon="star">
-              <VexText>Pro</VexText>
-            </Badge>
+            <Badge variant="primary" size="sm" leftIcon="star" label="Pro" />
           </Box>
         </Box>
       </Box>

@@ -25,5 +25,3 @@ export function DeepWorkVignette(): React.ReactNode {
     </View>
   );
 }
-
-export default DeepWorkVignette;

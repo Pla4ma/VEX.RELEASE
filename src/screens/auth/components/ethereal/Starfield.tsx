@@ -51,7 +51,7 @@ export function Starfield(): React.JSX.Element {
 
         return (
           <View
-            key={`star-${i}`}
+            key={`star-${s.x}-${s.y}`}
             pointerEvents="none"
             style={{}}
           />

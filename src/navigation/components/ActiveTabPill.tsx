@@ -64,5 +64,3 @@ export function ActiveTabPill({
     </Animated.View>
   );
 }
-
-export default ActiveTabPill;

@@ -98,9 +98,7 @@ export function useFirstSessionStart({
         });
 
         const session = await createSession(sessionConfig);
-        await startSession(0);
-
-        await sessionStart();
+        await Promise.all([startSession(0), sessionStart()]);
 
         if (config.mode === SessionMode.DEEP_WORK) {
           setTimeout(() => {

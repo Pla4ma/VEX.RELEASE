@@ -157,5 +157,3 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
     </View>
   );
 };
-
-export default PremiumPullToRefresh;

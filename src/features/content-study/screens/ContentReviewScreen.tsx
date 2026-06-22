@@ -33,7 +33,7 @@ type NavigationProp = {
   goBack: () => void;
 };
 
-export function ContentReviewScreen() {
+function ContentReviewScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProps>();
   const { contentId } = route.params;
@@ -191,4 +191,5 @@ export function ContentReviewScreen() {
   );
 }
 
-export default withScreenErrorBoundary(ContentReviewScreen, 'ContentReview');
+const ContentReviewScreenWithBoundary = withScreenErrorBoundary(ContentReviewScreen, 'ContentReview');
+export { ContentReviewScreenWithBoundary as ContentReviewScreen };
