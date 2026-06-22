@@ -1,5 +1,4 @@
 import { IS_DEVELOPMENT } from '../constants/app';
-import { captureException, captureMessage } from '../config/sentry';
 
 // Log levels
 export enum LogLevel {
@@ -57,13 +56,15 @@ function reportToErrorTracking(
   level: LogLevel,
   message: string,
   error?: Error,
+  captureExceptionFn?: (error: Error) => void,
+  captureMessageFn?: (message: string) => void,
 ): void {
   if (!IS_DEVELOPMENT && level >= LogLevel.ERROR) {
     try {
-      if (error) {
-        captureException(error);
-      } else {
-        captureMessage(message, 'error');
+      if (error && captureExceptionFn) {
+        captureExceptionFn(error);
+      } else if (captureMessageFn) {
+        captureMessageFn(message);
       }
     } catch {
       // Sentry not available — fail silently
@@ -81,54 +82,62 @@ export interface Debugger {
   error: (message: string, error?: Error | unknown, ...args: unknown[]) => void;
   time: (label: string) => void;
   timeEnd: (label: string) => void;
+  setErrorCapture: (captureExceptionFn: (error: Error) => void, captureMessageFn: (message: string) => void) => void;
 }
 
 /**
  * Create a namespaced debugger
  */
 export function createDebugger(namespace: string): Debugger {
-  return {
-    debug: (message: string, ...args: unknown[]) => {
-      if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.debug(formatMessage(namespace, message), ...args);
-      }
-    },
+  let _captureException: ((error: Error) => void) | undefined;
+  let _captureMessage: ((message: string) => void) | undefined;
 
-    info: (message: string, ...args: unknown[]) => {
-      if (currentLogLevel <= LogLevel.INFO) {
+    return {
+      debug: (message: string, ...args: unknown[]) => {
+        if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
+          console.debug(formatMessage(namespace, message), ...args);
+        }
+      },
 
-        console.info(formatMessage(namespace, message), ...args);
-      }
-    },
+      info: (message: string, ...args: unknown[]) => {
+        if (currentLogLevel <= LogLevel.INFO) {
+          console.info(formatMessage(namespace, message), ...args);
+        }
+      },
 
-    warn: (message: string, ...args: unknown[]) => {
-      if (currentLogLevel <= LogLevel.WARN) {
-        console.warn(formatMessage(namespace, message), ...args);
-      }
-    },
+      warn: (message: string, ...args: unknown[]) => {
+        if (currentLogLevel <= LogLevel.WARN) {
+          console.warn(formatMessage(namespace, message), ...args);
+        }
+      },
 
-    error: (message: string, error?: Error | unknown, ...args: unknown[]) => {
-      if (currentLogLevel <= LogLevel.ERROR) {
-        const errorInstance =
-          error instanceof Error ? error : new Error(String(error));
-        console.error(formatMessage(namespace, message), errorInstance, ...args);
-        reportToErrorTracking(LogLevel.ERROR, message, errorInstance);
-      }
-    },
+      error: (message: string, error?: Error | unknown, ...args: unknown[]) => {
+        if (currentLogLevel <= LogLevel.ERROR) {
+          const errorInstance =
+            error instanceof Error ? error : new Error(String(error));
+          console.error(formatMessage(namespace, message), errorInstance, ...args);
+          reportToErrorTracking(LogLevel.ERROR, message, errorInstance, _captureException, _captureMessage);
+        }
+      },
 
-    time: (label: string) => {
-      if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.time(label);
-      }
-    },
+      time: (label: string) => {
+        if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
+          console.time(label);
+        }
+      },
 
-    timeEnd: (label: string) => {
-      if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.timeEnd(label);
-      }
-    },
-  };
-}
+      timeEnd: (label: string) => {
+        if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
+          console.timeEnd(label);
+        }
+      },
+
+      setErrorCapture: (captureExceptionFn: (error: Error) => void, captureMessageFn: (message: string) => void) => {
+        _captureException = captureExceptionFn;
+        _captureMessage = captureMessageFn;
+      },
+    };
+  }
 
 /**
  * Global debug instance

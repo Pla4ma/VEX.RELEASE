@@ -4,6 +4,7 @@
 
 export {
   initSentry,
+  wireSentryToDebug,
   setSentryUser,
   clearSentryUser,
   captureException,

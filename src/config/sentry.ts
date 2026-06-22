@@ -100,8 +100,15 @@ export function initSentry(): void {
 }
 
 /**
- * Set user context for Sentry
+ * Wire Sentry capture functions to the debug system.
+ * Call this after initSentry() to enable debug.error() → Sentry reporting.
  */
+export function wireSentryToDebug(): void {
+  debug.setErrorCapture(
+    (error: Error) => { Sentry.captureException(error); },
+    (message: string) => { Sentry.captureMessage(message, 'error'); },
+  );
+}
 export function setSentryUser(
   userId: string,
   _email?: string,
