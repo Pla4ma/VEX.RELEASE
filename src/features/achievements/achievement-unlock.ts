@@ -45,17 +45,15 @@ export async function checkCumulativeAchievements(
   counterType;
   const achievements =
     await achievementRepository.getAllUserAchievements(userId);
-  for (const id of achievementIds) {
-    const achievement = getAchievementById(id);
-    if (!achievement) {
-      continue;
-    }
-    const progress =
-      achievements.find((item) => item.achievementId === id)?.progress ?? 0;
-    if (progress >= achievement.progressMax) {
-      await checkAchievement(userId, id);
-    }
-  }
+  const toCheck = achievementIds
+    .map((id) => getAchievementById(id))
+    .filter((a): a is Achievement => a !== undefined)
+    .filter((a) => {
+      const progress =
+        achievements.find((item) => item.achievementId === a.id)?.progress ?? 0;
+      return progress >= a.progressMax;
+    });
+  await Promise.all(toCheck.map((a) => checkAchievement(userId, a.id)));
 }
 
 async function unlockAchievement(

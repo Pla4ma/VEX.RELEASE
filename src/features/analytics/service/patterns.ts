@@ -95,8 +95,6 @@ export async function detectPatterns(
       );
     }
   }
-  for (const pattern of patterns) {
-    await storeDetectedPattern(pattern);
-  }
+  await Promise.all(patterns.map((p) => storeDetectedPattern(p)));
   return patterns;
 }

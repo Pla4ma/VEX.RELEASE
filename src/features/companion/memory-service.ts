@@ -47,14 +47,10 @@ export async function checkAndRecordSessionMemories(
   const parsed = CheckSessionMemoriesInputSchema.parse(input);
   const context = buildMemoryContext(parsed);
   const memoryTypes = getEligibleMemoryTypes(parsed);
-  const created: CompanionMemory[] = [];
-  for (const type of memoryTypes) {
-    const memory = await maybeCreateMemory(parsed.userId, type, context);
-    if (memory) {
-      created.push(memory);
-    }
-  }
-  return created;
+  const results = await Promise.all(
+    memoryTypes.map((type) => maybeCreateMemory(parsed.userId, type, context)),
+  );
+  return results.filter((m): m is CompanionMemory => m !== null);
 }
 
 export async function getCompanionMemories(

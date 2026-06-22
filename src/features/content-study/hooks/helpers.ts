@@ -41,12 +41,22 @@ export async function resolveActiveStudyPlan(): Promise<ActiveStudyPlan | null> 
     (a, b) => b.startTime - a.startTime,
   );
 
-  for (const persistedSession of sortedSessions) {
-    const generation = await fetchGenerationById(persistedSession.generationId);
+  // Fetch all generations and contents in parallel to avoid sequential awaits
+  const [generations, contents] = await Promise.all([
+    Promise.all(sortedSessions.map((s) => fetchGenerationById(s.generationId))),
+    Promise.all(sortedSessions.map((s) => fetchContentById(s.contentId))),
+  ]);
+
+  for (let i = 0; i < sortedSessions.length; i++) {
+    const persistedSession = sortedSessions[i];
+    if (!persistedSession) {
+      continue;
+    }
+    const generation = generations[i];
     if (!generation) {
       continue;
     }
-    const content = await fetchContentById(persistedSession.contentId);
+    const content = contents[i] ?? null;
     const completedTaskIds = new Set(persistedSession.completedTasks);
     const nextTask =
       generation.tasks.find((task) => !completedTaskIds.has(task.id)) ?? null;
