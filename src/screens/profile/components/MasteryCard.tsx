@@ -189,5 +189,3 @@ export const MasteryCard: React.FC<MasteryCardProps> = ({
     </Pressable>
   );
 };
-
-export { MasteryCard }

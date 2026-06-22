@@ -9,7 +9,7 @@ import type {
   TotalBonusInput,
 } from './bonus-types';
 
-export { BONUS_CONSTANTS, STREAK_MULTIPLIERS } from './bonus-constants';
+export { BONUS_CONSTANTS, STREAK_MULTIPLIERS }
 export type {
   TimeBonusInput,
   StreakBonusInput,
@@ -148,5 +148,3 @@ export const BonusCalculator = {
   calculateTotalBonus,
   constants: BONUS_CONSTANTS,
 };
-
-export { BonusCalculator }

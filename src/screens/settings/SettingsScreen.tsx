@@ -159,5 +159,3 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     </LiquidGlassScreen>
   );
 }, 'Settings');
-
-export { SettingsScreen }

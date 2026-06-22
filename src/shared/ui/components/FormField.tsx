@@ -186,6 +186,5 @@ export const FormField: React.FC<FormFieldProps> = ({
   );
 };
 
-export { FormSection, InputGroup };
+export { FormSection, InputGroup }
 export type { FormSectionProps, FormFieldProps };
-export { FormField }

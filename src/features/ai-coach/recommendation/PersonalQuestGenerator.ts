@@ -162,12 +162,3 @@ export async function getActiveQuest(
 }
 
 export type { PersonalQuest, UserPatterns, QuestType } from './quest-types';
-
-export {
-  generateDailyQuest,
-  getActiveQuest,
-  updateQuestProgress,
-  isQuestCompleted,
-  formatQuestProgress,
-  questToCoachMessage,
-};

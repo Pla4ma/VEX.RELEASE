@@ -29,7 +29,7 @@ type ContentInputNavigationProp = NativeStackNavigationProp<
   'ContentInput'
 >;
 
-export function ContentInputScreen(): React.ReactNode {
+function ContentInputScreen(): React.ReactNode {
   const navigation = useNavigation<ContentInputNavigationProp>();
   const route = useRoute<ContentInputRouteProp>();
   const { theme } = useTheme();

@@ -18,7 +18,7 @@ import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export function FocusScreen(): React.ReactNode {
+function FocusScreen(): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
   const userId = useAuthStore((state) => state.user?.id ?? '');
   const streakQuery = useStreakSummary(userId || null);

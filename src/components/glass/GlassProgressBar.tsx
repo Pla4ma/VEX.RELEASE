@@ -112,5 +112,3 @@ export function GlassProgressBar({
     </View>
   );
 }
-
-export { GlassProgressBar }

@@ -147,5 +147,3 @@ export function FocusLoopPreview(): React.ReactNode {
     </AnimatedGradientBorder>
   );
 }
-
-export { FocusLoopPreview }

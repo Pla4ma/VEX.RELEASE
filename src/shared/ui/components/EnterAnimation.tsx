@@ -159,5 +159,3 @@ const styles = createSheet({
   staggerItem: {},
   screenContainer: { flex: 1 },
 });
-
-export { EnterAnimation }

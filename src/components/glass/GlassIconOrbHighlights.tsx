@@ -82,5 +82,3 @@ export function GlassIconOrbHighlights({
     </>
   );
 }
-
-export { GlassIconOrbHighlights }

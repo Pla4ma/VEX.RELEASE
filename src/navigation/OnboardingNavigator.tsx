@@ -34,5 +34,3 @@ export const OnboardingNavigator: React.FC = () => {
     </Stack.Navigator>
   );
 };
-
-export { OnboardingNavigator }

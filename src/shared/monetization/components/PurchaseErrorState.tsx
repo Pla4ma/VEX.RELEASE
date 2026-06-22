@@ -180,5 +180,3 @@ const styles = createSheet({
     lineHeight: 18,
   },
 });
-
-export { PurchaseErrorState }

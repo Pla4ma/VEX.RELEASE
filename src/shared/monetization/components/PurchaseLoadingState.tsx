@@ -98,5 +98,3 @@ const styles = createSheet({
     color: lightColors.text.muted,
   },
 });
-
-export { PurchaseLoadingState }

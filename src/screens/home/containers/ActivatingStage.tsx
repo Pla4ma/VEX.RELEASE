@@ -14,5 +14,3 @@ export function ActivatingStage({ sharedInput }: StageProps): React.ReactNode {
   const data = useActivatingHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;
 }
-
-export { ActivatingStage }

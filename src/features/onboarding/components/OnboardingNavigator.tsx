@@ -80,5 +80,3 @@ export function OnboardingNavigator({
     </View>
   );
 }
-
-export { OnboardingNavigator }

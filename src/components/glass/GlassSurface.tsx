@@ -97,5 +97,3 @@ export function GlassSurface({
     </View>
   );
 }
-
-export { GlassSurface }

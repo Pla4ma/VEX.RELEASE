@@ -94,5 +94,3 @@ export function StakesCard({ stakes }: StakesCardProps): React.ReactNode {
     </GlassCard>
   );
 }
-
-export { StakesCard }

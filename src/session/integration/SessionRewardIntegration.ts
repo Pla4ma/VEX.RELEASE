@@ -176,5 +176,3 @@ export function getSessionRewardIntegration(
   }
   return rewardIntegration;
 }
-
-export { SessionRewardIntegration }

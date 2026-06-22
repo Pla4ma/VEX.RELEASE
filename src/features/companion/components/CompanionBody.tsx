@@ -165,5 +165,3 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
       );
   }
 };
-
-export { CompanionBody }

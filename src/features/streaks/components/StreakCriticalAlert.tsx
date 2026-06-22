@@ -109,5 +109,3 @@ export function StreakCriticalAlert({
     </Pressable>
   );
 }
-
-export { StreakCriticalAlert }

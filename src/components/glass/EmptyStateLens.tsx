@@ -98,5 +98,3 @@ export const EmptyStateLens: React.FC<EmptyStateLensProps> = ({
     </Svg>
   );
 };
-
-export { EmptyStateLens }

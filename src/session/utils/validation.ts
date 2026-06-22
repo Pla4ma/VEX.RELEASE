@@ -17,7 +17,7 @@ export type {
   ValidationWarning,
   ValidationResult,
 } from './validation-types';
-export { FieldValidators } from './field-validators';
+export { FieldValidators }
 export {
   validateSessionStart,
   validateSessionPause,
@@ -172,5 +172,3 @@ export const SessionValidation = {
   hasWarnings,
   getFirstError,
 };
-
-export { SessionValidation }

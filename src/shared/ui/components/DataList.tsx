@@ -22,7 +22,6 @@ import type {
   DataListItem,
 } from './DataList.types';
 
-export { SelectionToolbar } from './DataList.SelectionToolbar';
 export type {
   DataListProps,
   DataListItem,
@@ -154,5 +153,3 @@ export function DataList<T extends Record<string, unknown>>({
     </View>
   );
 }
-
-export { DataList }

@@ -26,7 +26,7 @@ type Props = NativeStackScreenProps<
   'NotificationSettings'
 >;
 
-export const NotificationSettingsScreen: React.FC<Props> = ({
+const NotificationSettingsScreen: React.FC<Props> = ({
   navigation,
 }) => {
   const { theme } = useTheme();

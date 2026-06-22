@@ -144,5 +144,3 @@ export function GlassBlurLayer({
     </View>
   );
 }
-
-export { GlassBlurLayer }

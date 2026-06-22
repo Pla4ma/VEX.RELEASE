@@ -171,4 +171,3 @@ export const OnboardingFlow = withScreenErrorBoundary(function OnboardingFlowInn
     />
   );
 }, 'Onboarding');
-export { OnboardingFlow }

@@ -36,7 +36,7 @@ const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null
   email: null,
 };
 
-export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
+const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [showEmailForm, setShowEmailForm] = useState(false);

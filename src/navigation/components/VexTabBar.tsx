@@ -187,5 +187,3 @@ export function VexTabBar({
     </View>
   );
 }
-
-export { VexTabBar }

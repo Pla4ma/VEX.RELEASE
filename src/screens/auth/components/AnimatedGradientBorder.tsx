@@ -78,5 +78,3 @@ export function AnimatedGradientBorder({
     </View>
   );
 }
-
-export { AnimatedGradientBorder }

@@ -161,4 +161,3 @@ const styles = createSheet({
   },
   progressFill: { height: '100%', borderRadius: 3 },
 });
-export { OnboardingResumePrompt }

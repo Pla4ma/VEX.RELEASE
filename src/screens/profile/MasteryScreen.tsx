@@ -23,7 +23,7 @@ import { MasteryTechniqueGrid } from './MasteryTechniqueGrid';
 import { MasteryChallengesList } from './MasteryChallengesList';
 import { useMasteryState } from './useMasteryState';
 
-export function MasteryScreen(): React.ReactNode {
+function MasteryScreen(): React.ReactNode {
   const navigation =
     useNavigation<NativeStackNavigationProp<MainStackParams>>();
   const { theme } = useTheme();
@@ -160,3 +160,5 @@ export function MasteryScreen(): React.ReactNode {
 
 const MasteryScreenWithBoundary = withScreenErrorBoundary(MasteryScreen, 'Mastery');
 export { MasteryScreenWithBoundary as MasteryScreen };
+
+export { MasteryScreen as default };

@@ -116,5 +116,3 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
     </GlassCard>
   );
 };
-
-export { FactorMap }

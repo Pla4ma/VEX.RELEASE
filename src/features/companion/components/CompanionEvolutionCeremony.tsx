@@ -118,5 +118,3 @@ export const CompanionEvolutionCeremony: React.FC<
     </Pressable>
   );
 };
-
-export { CompanionEvolutionCeremony }

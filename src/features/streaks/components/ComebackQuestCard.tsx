@@ -165,5 +165,3 @@ export function ComebackQuestCard({
   );
 }
 
-export { ComebackQuestCompact } from './ComebackQuestCompact';
-export { ComebackQuestCard }

@@ -195,5 +195,3 @@ export function GoalScreen({
     </Box>
   );
 }
-
-export { GoalScreen }

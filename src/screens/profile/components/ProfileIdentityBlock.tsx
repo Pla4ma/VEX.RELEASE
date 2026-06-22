@@ -83,5 +83,3 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
     </View>
   );
 };
-
-export { ProfileIdentityBlock }

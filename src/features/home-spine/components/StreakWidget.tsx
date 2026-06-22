@@ -145,5 +145,3 @@ export function StreakWidget({
     </Pressable>
   );
 }
-
-export { StreakWidget }

@@ -112,4 +112,3 @@ export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
   return <Animated.View style={style}>{children}</Animated.View>;
 };
 const styles = createSheet({ placeholder: { opacity: 0 } });
-export { TransitionWrapper }

@@ -97,5 +97,3 @@ export function LockedFeatureScreen(
     </SafeAreaView>
   );
 }
-
-export { LockedFeatureScreen }

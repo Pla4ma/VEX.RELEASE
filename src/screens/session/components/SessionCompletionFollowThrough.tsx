@@ -175,5 +175,3 @@ export function SessionCompletionFollowThrough({
     </Box>
   );
 }
-
-export { SessionCompletionFollowThrough }

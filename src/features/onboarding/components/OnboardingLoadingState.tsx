@@ -92,5 +92,3 @@ const styles = createSheet({
     alignItems: 'center',
   },
 });
-
-export { OnboardingLoadingState }

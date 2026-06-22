@@ -76,5 +76,3 @@ export function VexAssetImage({
     </View>
   );
 }
-
-export { VexAssetImage }

@@ -19,4 +19,4 @@ export { validateXPTransaction } from './validation/xp-validation';
 export { validateSourceSpecific } from './validation/source-validators';
 export { validateLevelUp, validatePrestige } from './validation/level-validation';
 export { validateXPBatch } from './validation/batch-validation';
-export { ProgressionValidation, default } from './validation/batch-validation';
+export { ProgressionValidation } from './validation/batch-validation';

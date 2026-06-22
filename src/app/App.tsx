@@ -99,5 +99,3 @@ export const App: React.FC = () => {
       </GestureHandlerRootView>
   );
 };
-
-export { App }

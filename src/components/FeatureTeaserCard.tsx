@@ -108,5 +108,3 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): React.ReactNod
     </Pressable>
   );
 }
-
-export { FeatureTeaserCard }

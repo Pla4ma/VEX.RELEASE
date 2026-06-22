@@ -20,7 +20,6 @@ export type {
   SessionListItem,
   RecentSessionsListProps,
 } from './session-list-utils';
-export { formatDuration, formatTimeAgo, getGradeColor } from './session-list-utils';
 
 const ItemSeparator = React.memo(() => {
   const { theme } = useTheme();
@@ -103,5 +102,3 @@ export function RecentSessionsList({
     </Animated.View>
   );
 }
-
-export { RecentSessionsList }

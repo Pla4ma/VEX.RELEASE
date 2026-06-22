@@ -37,7 +37,7 @@ import {
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export const BossScreen = (): React.ReactNode => {
+const BossScreen = (): React.ReactNode => {
   const { theme } = useTheme();
   const navigation = useNavigation<Nav>();
   const disclosure = useFeatureAccess();
@@ -142,3 +142,5 @@ export const BossScreen = (): React.ReactNode => {
 
 const BossScreenWithBoundary = withScreenErrorBoundary(BossScreen, 'Boss');
 export { BossScreenWithBoundary as BossScreen };
+
+export { BossScreen as default };

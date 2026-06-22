@@ -13,7 +13,7 @@ export type {
   SessionUIState,
   SessionNotificationType,
   SessionSyncMeta,
-} from '../features/session-runtime/types/schemas';
+} from './types/schemas';
 export {
   SessionSummarySchema,
   SessionStateSchema,
@@ -29,7 +29,7 @@ export {
   SessionUIStateSchema,
   SessionNotificationTypeSchema,
   SessionSyncMetaSchema,
-} from '../features/session-runtime/types/schemas';
+} from './types/schemas';
 export type {
   SessionStatus,
   SessionPhase,
@@ -37,7 +37,7 @@ export type {
   StorageStatus,
   SyncStatus,
   AntiCheatStatus,
-} from '../features/session-runtime/types/enums';
+} from './types/enums';
 export {
   SessionStatusSchema,
   SessionPhaseSchema,
@@ -45,8 +45,8 @@ export {
   StorageStatusSchema,
   SyncStatusSchema,
   AntiCheatStatusSchema,
-} from '../features/session-runtime/types/enums';
-export type { SessionHistoryEntry } from '../features/session-runtime/types/interfaces';
+} from './types/enums';
+export type { SessionHistoryEntry } from './types/interfaces';
 export type {
   TimerConfig,
   InterruptionRecord,
@@ -58,4 +58,4 @@ export type {
   FocusQualityMetrics,
   TimeBreakdown,
   TimeProgressMetrics,
-} from '../features/session-runtime/types/interfaces';
+} from './types/interfaces';

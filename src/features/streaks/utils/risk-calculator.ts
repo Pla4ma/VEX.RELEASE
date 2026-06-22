@@ -110,7 +110,7 @@ export function calculateStreakRisk(
   return assessment;
 }
 
-export { getRiskLevel, analyzePattern };
+export { getRiskLevel, analyzePattern }
 export type { RiskLevel, RiskFactors, RiskAssessment };
 
 export const StreakRiskCalculator = {
@@ -118,5 +118,3 @@ export const StreakRiskCalculator = {
   getRiskLevel,
   analyzePattern,
 };
-
-export { StreakRiskCalculator }

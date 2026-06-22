@@ -48,5 +48,3 @@ export function UnlockRequirementRow({
     </View>
   );
 }
-
-export { UnlockRequirementRow }

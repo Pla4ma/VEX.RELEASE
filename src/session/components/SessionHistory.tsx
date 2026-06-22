@@ -168,5 +168,3 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
     </KeyboardAvoidingView>
   );
 };
-
-export { SessionHistory }

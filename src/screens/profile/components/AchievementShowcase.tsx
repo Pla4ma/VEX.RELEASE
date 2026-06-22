@@ -191,4 +191,3 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
     </Box>
   );
 };
-export { AchievementShowcase }

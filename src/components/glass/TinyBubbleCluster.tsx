@@ -68,5 +68,3 @@ export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
     </View>
   );
 };
-
-export { TinyBubbleCluster }

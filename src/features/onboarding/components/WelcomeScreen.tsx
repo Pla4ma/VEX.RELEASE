@@ -161,5 +161,3 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode 
     </Box>
   );
 }
-
-export { WelcomeScreen }

@@ -116,5 +116,3 @@ export function CompanionCreature(): React.ReactNode {
     </Box>
   );
 }
-
-export { CompanionCreature }

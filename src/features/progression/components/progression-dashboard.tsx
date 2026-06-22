@@ -126,5 +126,3 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
     </GlassCard>
   );
 };
-
-export { ProgressionDashboard }

@@ -95,5 +95,3 @@ export function DeeperModePrompt({
     </Box>
   );
 }
-
-export { DeeperModePrompt }

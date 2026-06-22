@@ -8,7 +8,7 @@ import Animated, {
 import { useTheme } from '../../../theme/ThemeContext';
 import type { TabBarProps } from './TabBar.types';
 import { styles } from './TabBar.styles';
-import TabItemComponent from './TabItemComponent';
+import { TabItemComponent } from './TabItemComponent';
 import { Breadcrumb } from './Breadcrumb';
 
 export const TabBar: React.FC<TabBarProps> = ({
@@ -120,6 +120,5 @@ export const TabBar: React.FC<TabBarProps> = ({
   );
 };
 
-export { Breadcrumb };
+export { Breadcrumb }
 export type { TabBarProps, TabItem, BreadcrumbProps } from './TabBar.types';
-export { TabBar }

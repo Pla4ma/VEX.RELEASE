@@ -42,5 +42,3 @@ export const IdGenerator = {
   generateShortId,
   generateUUID,
 };
-
-export { IdGenerator }

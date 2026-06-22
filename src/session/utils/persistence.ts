@@ -56,8 +56,8 @@ const PersistedSessionStateSchema = z.object({
 });
 export type PersistedSessionState = z.infer<typeof PersistedSessionStateSchema>;
 export type { SessionHistoryEntry, RecoveryAttempt };
-export { isSessionStale, canResumeSession };
-export { addToSessionHistory, getSessionHistory } from './persistence-history';
+export { isSessionStale, canResumeSession }
+export { addToSessionHistory, getSessionHistory }
 export {
   recordRecoveryAttempt,
   getRecoveryAttempts,
@@ -194,4 +194,3 @@ export const SessionPersistence = {
   isSessionStale,
   canResumeSession,
 };
-export { SessionPersistence }

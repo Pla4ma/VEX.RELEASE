@@ -84,5 +84,3 @@ export function PerfectSessionBanner({
     </Animated.View>
   );
 }
-
-export { PerfectSessionBanner }

@@ -113,5 +113,3 @@ export function renderRootStackFeatureRoutes({
     </>
   );
 }
-
-export { renderRootStackFeatureRoutes }

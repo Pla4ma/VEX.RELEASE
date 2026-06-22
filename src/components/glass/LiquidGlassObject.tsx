@@ -49,5 +49,3 @@ export function LiquidGlassObjectRaw({
 
 export const LiquidGlassObject = React.memo(LiquidGlassObjectRaw);
 LiquidGlassObject.displayName = 'LiquidGlassObject';
-
-export { LiquidGlassObject }

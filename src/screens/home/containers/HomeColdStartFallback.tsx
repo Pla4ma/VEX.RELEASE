@@ -98,5 +98,3 @@ export function HomeColdStartFallback({
     </AppScreen>
   );
 }
-
-export { HomeColdStartFallback }

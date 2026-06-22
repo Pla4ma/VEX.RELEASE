@@ -14,7 +14,7 @@ type LoadState =
   | { status: 'error'; error: Error }
   | { status: 'success'; companion: CompanionState };
 
-export function CompanionDetailScreen(): React.ReactNode {
+function CompanionDetailScreen(): React.ReactNode {
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
@@ -122,3 +122,5 @@ export function CompanionDetailScreen(): React.ReactNode {
 
 const CompanionDetailScreenWithBoundary = withScreenErrorBoundary(CompanionDetailScreen, "CompanionDetail");
 export { CompanionDetailScreenWithBoundary as CompanionDetailScreen };
+
+export { CompanionDetailScreen as default };

@@ -87,5 +87,3 @@ export const GlassRibbon: React.FC<GlassRibbonProps> = ({
     </Svg>
   );
 };
-
-export { GlassRibbon }

@@ -165,5 +165,4 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   );
 };
 
-export { type InterruptionWarningProps } from './InterruptionWarning.helpers';
-export { InterruptionWarning }
+export { type InterruptionWarningProps }

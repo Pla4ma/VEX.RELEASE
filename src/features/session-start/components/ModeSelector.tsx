@@ -82,5 +82,3 @@ export function ModeSelector({
     </Box>
   );
 }
-
-export { ModeSelector }

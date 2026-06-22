@@ -161,5 +161,3 @@ export function useNotificationBadge(userId: string | undefined): {
 } {
   return useBadgeCount(userId);
 }
-
-export { NotificationBadge }

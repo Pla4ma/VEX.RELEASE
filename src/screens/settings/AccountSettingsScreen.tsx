@@ -20,7 +20,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 
-export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
+const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuthStore();

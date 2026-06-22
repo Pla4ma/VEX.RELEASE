@@ -194,5 +194,3 @@ export const Badge: React.FC<BadgeProps> = ({
   }
   return content;
 };
-
-export { Badge }

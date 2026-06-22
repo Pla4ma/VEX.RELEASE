@@ -130,5 +130,3 @@ export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
     </GlassCard>
   );
 };
-
-export { ProfileStatTile }

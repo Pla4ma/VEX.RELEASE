@@ -127,5 +127,3 @@ export function CompanionWaiting({
     </Box>
   );
 }
-
-export { CompanionWaiting }

@@ -86,5 +86,3 @@ const styles = createSheet({
     fontWeight: '600',
   },
 });
-
-export { ProgressionErrorState }

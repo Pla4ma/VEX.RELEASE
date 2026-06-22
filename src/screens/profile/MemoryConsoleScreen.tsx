@@ -25,7 +25,7 @@ function formatDate(ts: number): string {
   });
 }
 
-export const MemoryConsoleScreen: React.FC<Props> = () => {
+const MemoryConsoleScreen: React.FC<Props> = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuthStore();
@@ -193,3 +193,5 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
 
 const MemoryConsoleScreenWithBoundary = withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
 export { MemoryConsoleScreenWithBoundary as MemoryConsoleScreen };
+
+export { MemoryConsoleScreen as default };

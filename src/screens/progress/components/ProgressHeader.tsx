@@ -146,5 +146,3 @@ export function ProgressHeader({
     </View>
   );
 }
-
-export { ProgressHeader }

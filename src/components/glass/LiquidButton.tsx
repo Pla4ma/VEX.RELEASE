@@ -162,5 +162,3 @@ export function LiquidButton({
     </Animated.View>
   );
 }
-
-export { LiquidButton }

@@ -56,5 +56,3 @@ export function FocusScoreChange({
     </Box>
   );
 }
-
-export { FocusScoreChange }

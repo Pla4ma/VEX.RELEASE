@@ -29,7 +29,6 @@ export * from './service';
 // Phase 11.4 - Comeback Quest System
 export {
   ComebackQuestCard,
-  ComebackQuestCompact,
 } from './components/ComebackQuestCard';
 export {
   checkComebackEligibility,

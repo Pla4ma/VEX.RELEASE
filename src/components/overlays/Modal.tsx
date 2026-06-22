@@ -168,5 +168,3 @@ const styles = createSheet({
     borderTopColor: rgbaColors.rgb_0_0_0_0_1,
   },
 });
-
-export { Modal }

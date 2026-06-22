@@ -27,12 +27,11 @@ export type {
 // Interactive Components
 export {
   InteractiveCard,
-  CardSkeleton as InteractiveCardSkeleton,
 } from './InteractiveCard';
 export type { InteractiveCardProps } from './InteractiveCard';
 
 // Data Display (FlashList-backed)
-export { DataList, SelectionToolbar } from './DataList';
+export { DataList } from './DataList';
 export type { DataListProps, DataListItem, DataListSection } from './DataList';
 
 // Progress & Feedback
@@ -40,8 +39,6 @@ export { ProgressSteps } from './ProgressSteps';
 export type { Step, StepStatus, ProgressStepsProps } from './ProgressSteps';
 export {
   AnimatedCounter,
-  useCountUp,
-  useCounterAnimation,
 } from './AnimatedCounter';
 export type {
   AnimatedCounterProps,
@@ -75,10 +72,9 @@ export { TabBar, Breadcrumb } from './TabBar';
 export type { TabBarProps, TabItem, BreadcrumbProps } from './TabBar';
 
 // Polish Components - Design Cohesion
-export { MicroRewardBanner, CompactRewardBadge } from './MicroRewardBanner';
+export { MicroRewardBanner } from './MicroRewardBanner';
 export type {
   MicroRewardBannerProps,
-  CompactRewardBadgeProps,
 } from './MicroRewardBanner';
 export type { RewardType } from './micro-reward-helpers';
 
@@ -96,7 +92,6 @@ export {
 export {
   StatusFeedback,
   InlineStatus,
-  StatusChip,
   StatusBanner,
   CardStatusOverlay,
 } from './StatusFeedback';

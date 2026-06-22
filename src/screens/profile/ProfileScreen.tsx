@@ -37,7 +37,7 @@ function ProfileBottomSheetBackdrop(
   );
 }
 
-export const ProfileScreen: React.FC = () => {
+const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const route = useRoute<RouteProp<MainTabParams, 'Profile'>>();
   const { user, logout } = useAuthStore();

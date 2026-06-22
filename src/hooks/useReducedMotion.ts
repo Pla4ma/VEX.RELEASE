@@ -147,5 +147,3 @@ export function useShouldAnimate(): boolean {
   const { isReducedMotion } = useReducedMotion();
   return !isReducedMotion;
 }
-
-export { useReducedMotion }

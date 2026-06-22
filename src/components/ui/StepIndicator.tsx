@@ -106,5 +106,3 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
     </View>
   );
 };
-
-export { StepIndicator }

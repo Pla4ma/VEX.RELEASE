@@ -85,5 +85,3 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ score }) => {
     </GlassCard>
   );
 };
-
-export { ScoreCard }

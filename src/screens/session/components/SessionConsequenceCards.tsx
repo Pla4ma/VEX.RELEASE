@@ -27,7 +27,7 @@ import {
   type SessionConsequenceCardsProps,
 } from './session-consequence-types';
 
-export { type SessionConsequenceCardsProps } from './session-consequence-types';
+export { type SessionConsequenceCardsProps }
 
 export function SessionConsequenceCards({
   bossConsequence,
@@ -90,5 +90,3 @@ export function SessionConsequenceCards({
     </Animated.View>
   );
 }
-
-export { SessionConsequenceCards }

@@ -193,5 +193,3 @@ export function SquadSyncIndicator({
     </Box>
   );
 }
-
-export { SquadSyncIndicator }

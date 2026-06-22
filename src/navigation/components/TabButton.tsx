@@ -169,5 +169,3 @@ export function TabButton({
     </Pressable>
   );
 }
-
-export { TabButton }

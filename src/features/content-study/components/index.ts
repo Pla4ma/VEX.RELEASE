@@ -24,7 +24,7 @@ export {
 
 // Skeleton Loaders
 export {
-  default as Skeleton,
+  Skeleton,
   StudyPlanSkeleton,
   ContentHistorySkeleton,
   ExtractionSkeleton,

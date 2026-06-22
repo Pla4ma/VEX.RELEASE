@@ -12,7 +12,7 @@ export { Input } from './Input';
 export type { InputProps } from './Input';
 
 export { Avatar } from './Avatar';
-export type { default as AvatarProps } from './Avatar';
+export type { AvatarProps } from './Avatar.types';
 
 export { Badge } from './Badge';
 export type { BadgeProps } from './Badge';

@@ -64,5 +64,3 @@ export function GlassSectionHeader({
     </View>
   );
 }
-
-export { GlassSectionHeader }

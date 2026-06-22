@@ -149,4 +149,3 @@ export function OnboardingPermissions({
     </Box>
   );
 }
-export { OnboardingPermissions }

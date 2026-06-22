@@ -79,5 +79,3 @@ export function OnboardingChooseElement({
     </View>
   );
 }
-
-export { OnboardingChooseElement }

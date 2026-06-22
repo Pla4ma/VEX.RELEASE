@@ -28,7 +28,6 @@ import {
 } from './InteractiveCardOverlays';
 
 export type { InteractiveCardProps } from './InteractiveCardTypes';
-export { CardSkeleton } from './CardSkeleton';
 
 const variantStyleMap: Record<CardVariant, { backgroundColor: string; borderWidth: number; borderColor?: string }> = {
   default: { backgroundColor: 'transparent', borderWidth: 0 },
@@ -172,5 +171,3 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
     </Animated.View>
   );
 };
-
-export { InteractiveCard }

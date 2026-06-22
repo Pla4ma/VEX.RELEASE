@@ -148,5 +148,3 @@ export function SessionConflictState({
     </Box>
   );
 }
-
-export { SessionConflictState }

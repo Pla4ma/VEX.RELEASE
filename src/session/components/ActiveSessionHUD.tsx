@@ -8,7 +8,7 @@ import {
   getPhaseLabel,
   getStatusColor,
 } from './ActiveSessionHUD.helpers';
-import styles from './ActiveSessionHUD.styles';
+import { styles } from './ActiveSessionHUD.styles';
 
 interface ActiveSessionHUDProps {
   userId: string;
@@ -188,5 +188,3 @@ const SessionHUDEmptyState: React.FC = () => (
     <Text style={styles.emptySubtext}>Create a session to get started</Text>
   </View>
 );
-
-export { ActiveSessionHUD }

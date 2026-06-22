@@ -187,5 +187,3 @@ export function StreakBrokenModal({
     </Modal>
   );
 }
-
-export { StreakBrokenModal }

@@ -21,7 +21,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
-export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
+const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { email } = route.params;

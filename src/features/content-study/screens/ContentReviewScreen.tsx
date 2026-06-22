@@ -33,7 +33,7 @@ type NavigationProp = {
   goBack: () => void;
 };
 
-export function ContentReviewScreen() {
+function ContentReviewScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProps>();
   const { contentId } = route.params;

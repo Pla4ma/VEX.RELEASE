@@ -96,5 +96,3 @@ export function getSessionCoachIntegration(
   }
   return coachIntegration;
 }
-
-export { SessionCoachIntegration }

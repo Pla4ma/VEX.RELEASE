@@ -92,5 +92,3 @@ export function EmptyState({
     </View>
   );
 }
-
-export { EmptyState }

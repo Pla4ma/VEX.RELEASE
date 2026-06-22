@@ -188,5 +188,3 @@ export function useSessionTimer(
     },
   };
 }
-
-export { useSessionTimer }

@@ -188,4 +188,3 @@ export function TodaysChallengesWidget({
     </Animated.View>
   );
 }
-export { TodaysChallengesWidget }

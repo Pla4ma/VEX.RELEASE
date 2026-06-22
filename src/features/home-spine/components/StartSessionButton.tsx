@@ -179,5 +179,4 @@ export function StartSessionButton({
     </Animated.View>
   );
 }
-export { StartSessionButtonCompact };
-export { StartSessionButton }
+export { StartSessionButtonCompact }

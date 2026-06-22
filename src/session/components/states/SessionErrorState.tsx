@@ -84,5 +84,3 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
     </View>
   );
 };
-
-export { SessionErrorState }

@@ -151,4 +151,3 @@ export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
     </Modal>
   );
 };
-export { RecoveryPrompt }

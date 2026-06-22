@@ -173,4 +173,3 @@ export function SessionBackgroundedState({
     </Box>
   );
 }
-export { SessionBackgroundedState }

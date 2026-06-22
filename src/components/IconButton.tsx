@@ -84,5 +84,3 @@ const styles = createSheet({
     textAlign: 'center',
   },
 });
-
-export { IconButton }

@@ -177,5 +177,3 @@ const styles = createSheet({
     paddingRight: 12,
   },
 });
-
-export { Input }

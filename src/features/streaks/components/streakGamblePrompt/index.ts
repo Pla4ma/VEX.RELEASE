@@ -1,4 +1,4 @@
-export { default as StreakGamblePrompt } from './StreakGamblePrompt';
+export { StreakGamblePrompt } from './StreakGamblePrompt';
 export {
   trackStreakGambleDecision,
   useShouldShowGamblePrompt,

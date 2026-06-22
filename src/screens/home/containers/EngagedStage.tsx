@@ -14,5 +14,3 @@ export function EngagedStage({ sharedInput }: StageProps): React.ReactNode {
   const data = useEngagedHomeData(model.controller);
   return <HomeScreenInner model={model} data={data} />;
 }
-
-export { EngagedStage }

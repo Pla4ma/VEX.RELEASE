@@ -64,5 +64,3 @@ export function SessionStakesBriefing({
     </Animated.View>
   );
 }
-
-export { SessionStakesBriefing }

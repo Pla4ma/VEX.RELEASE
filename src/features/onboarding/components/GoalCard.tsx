@@ -92,5 +92,3 @@ export function GoalCard({
     </Animated.View>
   );
 }
-
-export { GoalCard }

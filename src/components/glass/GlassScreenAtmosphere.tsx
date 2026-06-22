@@ -64,5 +64,3 @@ export function GlassScreenAtmosphere({
     </View>
   );
 }
-
-export { GlassScreenAtmosphere }

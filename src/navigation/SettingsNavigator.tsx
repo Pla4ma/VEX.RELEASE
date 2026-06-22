@@ -49,5 +49,3 @@ export const SettingsNavigator: React.FC = () => {
     </Stack.Navigator>
   );
 };
-
-export { SettingsNavigator }

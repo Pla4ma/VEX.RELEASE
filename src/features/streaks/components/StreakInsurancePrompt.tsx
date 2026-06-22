@@ -183,5 +183,3 @@ const styles = createSheet({
     textAlign: 'center',
   },
 });
-
-export { StreakInsurancePrompt }

@@ -18,7 +18,6 @@ import { AvatarStack } from './live-focusing/AvatarStack';
 import { TrendIndicator } from './live-focusing/TrendIndicator';
 import { buttonTap } from '../../../utils/haptics';
 
-export { LiveFocusingSkeleton } from './live-focusing/LiveFocusingSkeleton';
 export type { LiveFocusingData } from './live-focusing/types';
 
 export function LiveFocusingWidget({
@@ -175,5 +174,3 @@ export function LiveFocusingWidget({
     </Animated.View>
   );
 }
-
-export { LiveFocusingWidget }

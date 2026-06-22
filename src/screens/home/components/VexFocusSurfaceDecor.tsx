@@ -73,5 +73,3 @@ export function VexFocusSurfaceDecor(): React.ReactNode {
     </>
   );
 }
-
-export { VexFocusSurfaceDecor }

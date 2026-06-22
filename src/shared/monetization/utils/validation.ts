@@ -10,7 +10,7 @@ export {
   type Subscription,
   validateSubscription,
 } from './subscription-validation';
-export { verifyReceiptSignature, parseReceipt } from './receipt-utils';
+export { verifyReceiptSignature, parseReceipt }
 
 import { validatePurchase } from './purchase-validation';
 import { validateSubscription } from './subscription-validation';
@@ -25,5 +25,3 @@ export const MonetizationValidation = {
   VALIDATION_RULES,
   PurchaseSchema,
 };
-
-export { MonetizationValidation }

@@ -118,5 +118,3 @@ export function GradeRevealAnimation({
     </Animated.View>
   );
 }
-
-export { GradeRevealAnimation }

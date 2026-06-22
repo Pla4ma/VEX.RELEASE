@@ -96,5 +96,3 @@ export const SessionSetupScreen = withScreenErrorBoundary(
   SessionSetupScreenContent,
   'Session Setup',
 );
-
-export { SessionSetupScreen }

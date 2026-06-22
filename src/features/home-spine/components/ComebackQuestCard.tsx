@@ -175,5 +175,3 @@ export function ComebackQuestCard({
     </Animated.View>
   );
 }
-
-export { ComebackQuestCard }

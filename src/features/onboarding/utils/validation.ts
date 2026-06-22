@@ -9,10 +9,10 @@ import { getNextRecommendedStep, canSkipStep } from './step-navigation';
 const debug = createDebugger('onboarding:validation');
 
 export type { ValidationResult, ValidationError, ValidationWarning } from './goal-validators';
-export { GoalValidators } from './goal-validators';
-export { DurationValidators } from './duration-validators';
-export { NameValidators } from './name-validators';
-export { getNextRecommendedStep, canSkipStep } from './step-navigation';
+export { GoalValidators }
+export { DurationValidators }
+export { NameValidators }
+export { getNextRecommendedStep, canSkipStep }
 export {
   OnboardingGoalSchema,
   OnboardingDurationSchema,
@@ -166,5 +166,3 @@ export const OnboardingValidation = {
   getNextRecommendedStep,
   canSkipStep,
 };
-
-export { OnboardingValidation }
