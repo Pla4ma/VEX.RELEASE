@@ -2,7 +2,7 @@ import { useCallback, type ReactNode } from 'react';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Box } from '../components/primitives/Box';
 import { Text } from '../components/primitives/Text';
-import { Button } from '../components';
+import { Button } from '../components/primitives/Button';
 import { useTheme } from '../theme';
 import { Icon } from '../icons';
 import { captureException } from '../config/sentry';

@@ -31,17 +31,23 @@ export async function evaluateInterventions(
     repository.fetchTodaysInterventionExecutions(validated.userId),
   ]);
   const executions: InterventionExecution[] = [];
+  // Pre-fetch cooldown checks in parallel
+  const cooldownResults = await Promise.all(
+    rules.map((rule) =>
+      repository.wasRuleTriggeredRecently(
+        validated.userId,
+        rule.id,
+        rule.cooldownHours,
+      ),
+    ),
+  );
+  const cooldownMap = new Map(rules.map((rule, i) => [rule.id, cooldownResults[i]]));
 
   for (const rule of rules) {
     if (!checkConditions(rule.conditions, validated.context)) {
       continue;
     }
-    const recentlyTriggered = await repository.wasRuleTriggeredRecently(
-      validated.userId,
-      rule.id,
-      rule.cooldownHours,
-    );
-    if (recentlyTriggered) {
+    if (cooldownMap.get(rule.id)) {
       continue;
     }
     const ruleExecutionsToday = todaysExecutions.filter(

@@ -47,8 +47,14 @@ export async function evaluateInterventions(
       }
       const rules = await fetchRulesWithCache(trigger);
       const sortedRules = [...rules].sort((a, b) => b.priority - a.priority);
+      // Pre-fetch cooldown checks in parallel
+      const cooldownResults = await Promise.all(
+        sortedRules.map((rule) => isInCooldown(userId, rule)),
+      );
+      const cooldownMap = new Map(sortedRules.map((rule, i) => [rule.id, cooldownResults[i]]));
+
       for (const rule of sortedRules) {
-        if (await isInCooldown(userId, rule)) {
+        if (cooldownMap.get(rule.id)) {
           continue;
         }
         const ruleExecutionsToday = todaysExecutions.filter(
