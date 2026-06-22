@@ -21,6 +21,7 @@ import {
   CosmeticCategoryHeader,
   CosmeticEquipBar,
 } from './CosmeticCategorySelector';
+import { cosmeticEquipSheetStyles } from './cosmetic-equip-sheet-styles';
 
 export type { CosmeticType, CosmeticItem } from './CosmeticPreviewCard';
 
@@ -129,13 +130,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
       animationType="none"
       onRequestClose={onClose}
     >
-      <Box
-        flex={1}
-        style={{
-          backgroundColor: 'rgba(10, 31, 26, 0.12)',
-          justifyContent: 'flex-end',
-        }}
-      >
+      <Box flex={1} style={cosmeticEquipSheetStyles.overlay}>
         <Pressable
           style={{ flex: 1 }}
           onPress={onClose}
@@ -145,14 +140,7 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
         />
 
         <Animated.View style={[modalStyle, style]}>
-          <Card
-            size="lg"
-            style={{
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              maxHeight: '85%',
-            }}
-          >
+          <Card size="lg" style={cosmeticEquipSheetStyles.card}>
             {}
             <Box alignItems="center" mb={16}>
               <Box
