@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { Card } from '../../../components/primitives/Card';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import { getMasteryRankDisplay, type MasteryRank } from '../types';
 import {
   FEATURE_INFO,

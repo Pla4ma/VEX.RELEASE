@@ -10,7 +10,7 @@ import Animated, {
 import { Icon } from '../../../icons/components/Icon';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { borderRadius } from '../../../theme/tokens';
+import { borderRadius } from '../../../theme/tokens/radius';
 
 export type MilestoneState = 'unlocked' | 'current' | 'locked';
 

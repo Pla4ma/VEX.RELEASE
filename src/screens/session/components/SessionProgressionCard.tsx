@@ -4,7 +4,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { MetricRow, isProgressMetric } from './MetricRow';
 import { StudyProgressPanel } from './StudyProgressPanel';
 import type { SessionProgressionCardProps } from './SessionProgressionCard.types';

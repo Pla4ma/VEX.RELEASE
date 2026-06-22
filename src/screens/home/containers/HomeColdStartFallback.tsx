@@ -8,7 +8,7 @@ import { AppScreen } from '../../../components/primitives/AppScreen';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { Text as VexText } from '../../../components/primitives/Text';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;

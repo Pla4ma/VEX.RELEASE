@@ -4,8 +4,8 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons/components/Icon';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { StudyProgress } from './SessionProgressionCard.types';
 import { Text as VexText } from '../../../components/primitives/Text';
 

@@ -6,8 +6,8 @@ import { Text } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
 import { EmptyState } from '../../components/EmptyState';
 import type { MasteryChallenge } from '../../features/mastery/types';
-import { Icon } from '../../icons';
-import { useTheme } from '../../theme';
+import { Icon } from '../../icons/components/Icon';
+import { useTheme } from '../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 

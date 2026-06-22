@@ -13,7 +13,7 @@ import { Box, Text } from '../../components/primitives';
 import { Button } from '../../components/primitives/Button';
 import { useAuthStore } from '../../store';
 import { getStreakService } from '../../streaks/StreakService';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { useToast } from '../../shared/ui/components/Toast';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { StreakFuneralFlame } from './StreakFuneralFlame';

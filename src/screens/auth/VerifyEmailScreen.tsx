@@ -8,7 +8,7 @@ import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
 import { Input } from '../../components/Input';
-import { Icon } from '../../icons';
+import { Icon } from '../../icons/components/Icon';
 import type { AuthStackParams, RootStackParams } from '../../navigation';
 import type { NavigationProp } from '@react-navigation/native';
 import { navigateToAuthScreen } from '../../navigation/navigation-helpers';

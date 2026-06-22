@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
 import { Box, Text, Card } from '@/components/primitives';
-import { Icon } from '@/icons';
+import { Icon } from '@/icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
 export type CoachLanguage = 'en';

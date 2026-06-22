@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Text } from '@/components/primitives';
-import { Icon } from '@/icons';
+import { Icon } from '@/icons/components/Icon';
 import { useTheme } from '@/theme';
 import type { Achievement } from '../types';
 import { getRarityColor } from '../definitions';

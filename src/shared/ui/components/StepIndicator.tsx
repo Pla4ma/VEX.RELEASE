@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { progressStepsStyles as styles } from './progress-steps-styles';
 import type { StepIndicatorProps } from './progress-steps-types';
 import { Text as VexText } from '../../../components/primitives/Text';

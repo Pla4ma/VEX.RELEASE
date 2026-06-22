@@ -6,7 +6,7 @@ import {
   getPremiumCardStyle,
   withAlpha,
 } from '../../../components/premiumStyles';
-import { useTheme } from '../../../theme';
+import { useTheme } from '../../../theme/ThemeContext';
 import { MasteryService } from '../service';
 import type { MasteryState } from '../types';
 import { MasteryRankBadge } from './MasteryRankBadge';

@@ -7,7 +7,7 @@ import { Text } from '../../components/primitives/Text';
 import { loadCompanionState } from '../../features/companion/session-storage';
 import type { CompanionState } from '../../features/companion/types';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
+import { useTheme } from '../../theme/ThemeContext';
 import { Text as VexText } from '../../components/primitives/Text';
 
 type LoadState =
