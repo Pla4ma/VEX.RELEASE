@@ -5,11 +5,9 @@
  */
 
 export { Box } from './Box';
-export { createBox } from './Box.helpers';
 export type { BoxProps } from './BoxProps';
 
 export { Text } from './Text';
-export { createTextVariant } from './Text.helpers';
 export type { TextProps, TextVariant } from './Text.types';
 
 export { Button } from './Button';
