@@ -21,20 +21,22 @@ export const SkeletonLines: React.FC<SkeletonLinesProps> = ({
   lineStyle,
   backgroundColor,
 }) => {
-  const lineArray = Array.from({ length: lines }, (_, i) => i);
+  const lineArray = Array.from({ length: lines }, (_, i) => ({
+    key: `line-${lines}-${i}`,
+  }));
   const LineWrapper = Platform.OS === 'web' ? View : Animated.View;
   return (
     <>
-      {lineArray.map((_, index) => (
+      {lineArray.map(({ key }) => (
         <LineWrapper
-          key={`skeleton-line-wrapper-${index}-${lineArray.length}`}
+          key={key}
           style={[
             {
               width,
               height,
               borderRadius,
               backgroundColor,
-              marginBottom: index < lines - 1 ? spacing : 0,
+              marginBottom: Number(key.split('-')[2]) < lines - 1 ? spacing : 0,
             },
             lineStyle,
           ]}

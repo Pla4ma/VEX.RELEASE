@@ -39,7 +39,9 @@ export async function recordRescueCompletion(
     input.actualDurationSeconds,
   );
   const memory = buildRescueCompletionMemory(plan, outcome);
-  await saveRescueCompletion(record);
-  await saveRescueMemory(memory);
-  await clearActiveRescuePlan(input.userId);
+  await Promise.all([
+    saveRescueCompletion(record),
+    saveRescueMemory(memory),
+    clearActiveRescuePlan(input.userId),
+  ]);
 }

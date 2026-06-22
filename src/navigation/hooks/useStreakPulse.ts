@@ -9,10 +9,12 @@ export function useStreakPulse(
 ) {
   const [pulseStart, setPulseStart] = useState<number | null>(null);
   const pulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pulseStartedRef = useRef(false);
 
   useEffect(() => {
     if (!streakSummary || isLoading) {
       setPulseStart(null);
+      pulseStartedRef.current = false;
       return;
     }
 
@@ -21,11 +23,13 @@ export function useStreakPulse(
     const shouldPulse = isAtRisk && currentDays > 0 && hour >= PULSE_START_HOUR;
 
     if (shouldPulse) {
-      if (pulseStart === null) {
+      if (!pulseStartedRef.current) {
         setPulseStart(Date.now());
+        pulseStartedRef.current = true;
       }
     } else {
       setPulseStart(null);
+      pulseStartedRef.current = false;
     }
 
     return () => {
@@ -33,7 +37,7 @@ export function useStreakPulse(
         clearTimeout(pulseTimeoutRef.current);
       }
     };
-  }, [streakSummary, isLoading, pulseStart]);
+  }, [streakSummary, isLoading, pulseTimeoutRef, pulseStartedRef]);
 
   return pulseStart;
 }

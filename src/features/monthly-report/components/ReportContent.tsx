@@ -36,11 +36,10 @@ export function ReportContent({
       <Box bg="surface.card" borderRadius="xl" p="lg">
         <Text variant="h4" color="textSecondary">
           {new Date(
-            report.monthStartScore > 0 ? Date.now() : Date.now(),
+            report.monthStartScore > 0 ? report.monthStartScore : report.monthEndScore,
           ).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
         </Text>
         <Text
-          variant="display"
           color="text"
           style={{ fontWeight: '700', marginTop: theme.spacing[1] }}
         >

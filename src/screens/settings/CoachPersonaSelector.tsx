@@ -75,7 +75,7 @@ export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
             <Box width="100%">
               {selectedData?.exampleMessages.map((message, index) => (
                 <Box
-                  key={`message-${index}`}
+                  key={`message-${message}`}
                   p={12}
                   borderRadius={12}
                   mb={8}

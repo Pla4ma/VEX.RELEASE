@@ -101,7 +101,7 @@ export function ScoreChartSvg({
         const isLatest = i === history.length - 1;
         return (
           <Circle
-            key={`point-${i}`}
+            key={`point-${point.timestamp}`}
             cx={x}
             cy={y}
             r={isLatest ? 6 : 4}
@@ -118,7 +118,7 @@ export function ScoreChartSvg({
           if (!point) return null;
           return (
             <SvgText
-              key={i}
+              key={`label-${point.timestamp}`}
               x={scaleX(i)}
               y={height - 8}
               fontSize={10}

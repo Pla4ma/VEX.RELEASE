@@ -74,13 +74,15 @@ export function useCompanionPromise(): {
     if (!userId) {
       return;
     }
-    await queryClient.invalidateQueries({
-      queryKey: companionPromiseKeys.home(userId),
-    });
-    await queryClient.invalidateQueries({
-      queryKey: ['companion-memories', userId],
-    });
-    await queryClient.invalidateQueries({ queryKey: QueryKeys.session });
+    await Promise.all([
+      queryClient.invalidateQueries({
+        queryKey: companionPromiseKeys.home(userId),
+      }),
+      queryClient.invalidateQueries({
+        queryKey: ['companion-memories', userId],
+      }),
+      queryClient.invalidateQueries({ queryKey: QueryKeys.session }),
+    ]);
   };
 
   const keepPromiseMutation = useMutation({

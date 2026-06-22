@@ -184,8 +184,10 @@ export class SessionRepository {
   }
 
   async getSessionStats(): Promise<SessionStatsResult> {
-    const history = await this.getSessionHistory(1000);
-    const summaries = await this.getAllSummaries();
+    const [history, summaries] = await Promise.all([
+      this.getSessionHistory(1000),
+      this.getAllSummaries(),
+    ]);
     return calculateSessionStats(history, summaries);
   }
 }

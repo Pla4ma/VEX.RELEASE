@@ -10,14 +10,16 @@ export function useEventBus<T extends keyof EventChannels>(
 ): void {
   const handlerRef = useRef(handler);
   handlerRef.current = handler;
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   useEffect(() => {
     const unsubscribe = eventBus.subscribe(channel, ((data: EventChannels[T]) => {
       handlerRef.current(data);
-    }) as EventHandler<EventChannels[T]>, options);
+    }) as EventHandler<EventChannels[T]>, optionsRef.current);
 
     return () => {
       unsubscribe();
     };
-  }, [channel]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [channel]);
 }

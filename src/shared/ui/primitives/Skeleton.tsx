@@ -73,9 +73,10 @@ export function Skeleton({
           ? width * 0.6
           : '60%'
         : width;
+    const lineKey = `skeleton-line-${lines}-${index}`;
     return (
       <View
-        key={`skeleton-line-${index}`}
+        key={lineKey}
         style={[
           styles.skeleton,
           {
@@ -83,7 +84,7 @@ export function Skeleton({
             height,
             borderRadius: borderRadius ?? getBorderRadius(),
             marginTop: mt,
-            marginBottom: index < lines - 1 ? spacing : 0,
+            marginBottom: Number(lineKey.split('-')[2]) < lines - 1 ? spacing : 0,
             backgroundColor: theme.colors.background.tertiary,
           },
           style,
@@ -142,6 +143,10 @@ export function SkeletonList({ count = 3 }: { count?: number }) {
 }
 export function SkeletonChart({ height = 200 }: { height?: number }) {
   const { theme } = useTheme();
+  // Precompute random heights to avoid hydration mismatch
+  const barHeights = Array.from({ length: 7 }, () =>
+    Math.random() * height * 0.6 + height * 0.2,
+  );
   return (
     <View
       style={[
@@ -150,11 +155,11 @@ export function SkeletonChart({ height = 200 }: { height?: number }) {
       ]}
     >
       <View style={styles.chartBars}>
-        {Array.from({ length: 7 }).map((_, index) => (
+        {barHeights.map((h, index) => (
           <Skeleton
-            key={index}
+            key={`bar-${index}`}
             width={30}
-            height={Math.random() * height * 0.6 + height * 0.2}
+            height={h}
             variant="rounded"
           />
         ))}

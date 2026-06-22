@@ -116,7 +116,7 @@ export const ChallengeHub = React.memo(({
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>Daily Streak</Text>
-            <Badge variant="warning">3 Days</Badge>
+            <Badge variant="warning" label="3 Days" />
           </View>
           <Text style={styles.streakDescription}>
             Complete daily challenges to maintain your streak and earn bonus rewards!

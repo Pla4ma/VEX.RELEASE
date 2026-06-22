@@ -80,9 +80,9 @@ export function FocusLoopPreview(): React.ReactNode {
         <View style={{ flexDirection: 'row', gap: theme.spacing[4] }}>
           {/* Node column */}
           <View style={{ alignItems: 'center', width: 20 }}>
-            {previewSteps.map((_, i) => (
+            {previewSteps.map((step, i) => (
               <View
-                key={`focus-loop-preview-node-${i}`}
+                key={step.label}
                 style={{ marginVertical: theme.spacing[1] }}
               >
                 <VexSignalNode active index={i} />

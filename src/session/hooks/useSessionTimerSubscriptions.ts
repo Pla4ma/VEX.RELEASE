@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { createDebugger } from '../../utils/debug';
 import { eventBus } from '../../events/EventBus';
@@ -87,6 +87,22 @@ export function useSessionTimerSubscriptions(
     start,
   } = options;
 
+  // Stabilize function callbacks with refs to prevent unnecessary effect re-runs
+  const tickRef = useRef(tick);
+  tickRef.current = tick;
+  const handleCompleteRef = useRef(handleComplete);
+  handleCompleteRef.current = handleComplete;
+  const onBackgroundRef = useRef(onBackground);
+  onBackgroundRef.current = onBackground;
+  const onForegroundRef = useRef(onForeground);
+  onForegroundRef.current = onForeground;
+  const setElapsedTimeRef = useRef(setElapsedTime);
+  setElapsedTimeRef.current = setElapsedTime;
+  const setRemainingTimeRef = useRef(setRemainingTime);
+  setRemainingTimeRef.current = setRemainingTime;
+  const startRef = useRef(start);
+  startRef.current = start;
+
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
       if (nextAppState === 'background' && isRunning && !isPaused) {
@@ -100,8 +116,8 @@ export function useSessionTimerSubscriptions(
           event: 'session_timer_backgrounded',
           properties: { elapsed: elapsedTime },
         });
-        if (onBackground) {
-          onBackground(0);
+        if (onBackgroundRef.current) {
+          onBackgroundRef.current(0);
         }
       }
       if (nextAppState === 'active' && isRunning && backgroundedAtRef.current) {
@@ -114,15 +130,15 @@ export function useSessionTimerSubscriptions(
           });
           const adjustedElapsed = elapsedTime + backgroundDuration;
           const adjustedRemaining = Math.max(duration - adjustedElapsed, 0);
-          setElapsedTime(() => adjustedElapsed);
-          setRemainingTime(() => adjustedRemaining);
+          setElapsedTimeRef.current(() => adjustedElapsed);
+          setRemainingTimeRef.current(() => adjustedRemaining);
           if (adjustedRemaining <= 0) {
-            handleComplete();
+            handleCompleteRef.current();
             return;
           }
         }
         lastTickRef.current = Date.now();
-        intervalRef.current = setInterval(tick, tickInterval);
+        intervalRef.current = setInterval(tickRef.current, tickInterval);
         debug.info('Timer resumed after foreground', { backgroundDuration });
         eventBus.publish('analytics:track', {
           event: 'session_timer_foregrounded',
@@ -132,8 +148,8 @@ export function useSessionTimerSubscriptions(
             backgroundTotal: backgroundTimeRef.current,
           },
         });
-        if (onForeground) {
-          onForeground(backgroundDuration);
+        if (onForegroundRef.current) {
+          onForegroundRef.current(backgroundDuration);
         }
       }
     };
@@ -143,23 +159,17 @@ export function useSessionTimerSubscriptions(
     );
     return () => {
       subscription.remove();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [
     duration,
     elapsedTime,
-    handleComplete,
     isPaused,
     isRunning,
-    onBackground,
-    onForeground,
-    setElapsedTime,
-    setRemainingTime,
-    tick,
     tickInterval,
-    backgroundTimeRef,
-    backgroundedAtRef,
-    intervalRef,
-    lastTickRef,
   ]);
 
   useEffect(() => {
@@ -168,11 +178,13 @@ export function useSessionTimerSubscriptions(
         clearInterval(intervalRef.current);
       }
     };
-  }, [intervalRef]);
+    // intervalRef is a ref — stable across renders, no need for dep
+    // eslint-disable-next-line react-doctor/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (autoStart && !isRunning) {
-      start();
+      startRef.current();
     }
-  }, [autoStart, isRunning, start]);
+  }, [autoStart, isRunning]);
 }

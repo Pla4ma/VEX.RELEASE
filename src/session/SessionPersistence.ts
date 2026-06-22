@@ -57,23 +57,25 @@ export async function finalizeSession(
   summary: SessionSummary,
   repository: SessionRepository,
 ): Promise<void> {
-  await repository.saveSessionSummary(summary);
-  await repository.addToHistory({
-    sessionId: session.id,
-    userId: session.userId,
-    status: session.status,
-    config: session.config,
-    summary,
-    startedAt: session.startedAt || session.createdAt,
-    endedAt: Date.now(),
-    createdAt: session.createdAt,
-    duration: session.actualDuration || 0,
-    mode: session.config.sessionMode,
-    completionPercentage: session.completionPercentage || 0,
-    focusQuality: session.focusQuality || 0,
-  });
-  await repository.clearActiveSession();
-  await repository.removeFromSyncQueue(session.id);
+  await Promise.all([
+    repository.saveSessionSummary(summary),
+    repository.addToHistory({
+      sessionId: session.id,
+      userId: session.userId,
+      status: session.status,
+      config: session.config,
+      summary,
+      startedAt: session.startedAt || session.createdAt,
+      endedAt: Date.now(),
+      createdAt: session.createdAt,
+      duration: session.actualDuration || 0,
+      mode: session.config.sessionMode,
+      completionPercentage: session.completionPercentage || 0,
+      focusQuality: session.focusQuality || 0,
+    }),
+    repository.clearActiveSession(),
+    repository.removeFromSyncQueue(session.id),
+  ]);
 }
 
 export async function finalizeAbandonedSession(

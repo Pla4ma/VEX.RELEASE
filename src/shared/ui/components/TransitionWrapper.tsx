@@ -29,7 +29,7 @@ function StaggerContainer({
     <>
       {childrenArray.map((child, index) => (
         <Animated.View
-          key={`child-${index}`}
+          key={`child-${React.isValidElement(child) ? child.key ?? index : index}`}
           entering={FadeIn.delay(initialDelay + index * staggerDelay)}
           exiting={FadeOut}
         >

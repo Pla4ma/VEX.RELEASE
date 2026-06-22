@@ -72,38 +72,40 @@ async function processExportJob(
           }
         },
       );
-      await updateExportJobProgress(jobId, 10);
-      const fetchResults = await withRetry(
-        async () => {
-          return await Promise.all(
-            metricsToFetch.map((metric) =>
-              fetchTimeSeriesData(
-                userId,
-                metric,
-                'custom' as TimeRange,
-                'day',
+      const [, fetchResults] = await Promise.all([
+        updateExportJobProgress(jobId, 10),
+        withRetry(
+          async () => {
+            return await Promise.all(
+              metricsToFetch.map((metric) =>
+                fetchTimeSeriesData(
+                  userId,
+                  metric,
+                  'custom' as TimeRange,
+                  'day',
+                ),
               ),
-            ),
-          );
-        },
-        {
-          maxAttempts: 3,
-          baseDelayMs: 1000,
-          retryableErrors: [
-            'network_error',
-            'timeout',
-            'temporarily_unavailable',
-          ],
-          onRetry: (attempt, error) => {
-            Sentry.addBreadcrumb({
-              category: 'analytics_export',
-              message: `Retrying data fetch attempt ${attempt}`,
-              level: 'warning',
-              data: { jobId, error: error.message },
-            });
+            );
           },
-        },
-      );
+          {
+            maxAttempts: 3,
+            baseDelayMs: 1000,
+            retryableErrors: [
+              'network_error',
+              'timeout',
+              'temporarily_unavailable',
+            ],
+            onRetry: (attempt, error) => {
+              Sentry.addBreadcrumb({
+                category: 'analytics_export',
+                message: `Retrying data fetch attempt ${attempt}`,
+                level: 'warning',
+                data: { jobId, error: error.message },
+              });
+            },
+          },
+        ),
+      ]);
       await updateExportJobProgress(jobId, 40);
       const exportData: Record<string, unknown> = {
         metadata: {
@@ -124,25 +126,27 @@ async function processExportJob(
           };
         }
       });
-      await updateExportJobProgress(jobId, 60);
-      const uploadResult = await withRetry(
-        async () => {
-          return await uploadExportData(jobId, exportData, format, userId);
-        },
-        {
-          maxAttempts: 3,
-          baseDelayMs: 2000,
-          retryableErrors: ['network_error', 'timeout', 'rate_limited'],
-          onRetry: (attempt, error) => {
-            Sentry.addBreadcrumb({
-              category: 'analytics_export',
-              message: `Retrying storage upload attempt ${attempt}`,
-              level: 'warning',
-              data: { jobId, error: error.message },
-            });
+      const [, uploadResult] = await Promise.all([
+        updateExportJobProgress(jobId, 60),
+        withRetry(
+          async () => {
+            return await uploadExportData(jobId, exportData, format, userId);
           },
-        },
-      );
+          {
+            maxAttempts: 3,
+            baseDelayMs: 2000,
+            retryableErrors: ['network_error', 'timeout', 'rate_limited'],
+            onRetry: (attempt, error) => {
+              Sentry.addBreadcrumb({
+                category: 'analytics_export',
+                message: `Retrying storage upload attempt ${attempt}`,
+                level: 'warning',
+                data: { jobId, error: error.message },
+              });
+            },
+          },
+        ),
+      ]);
       await updateExportJobProgress(jobId, 90);
       await updateExportJobProgress(
         jobId,

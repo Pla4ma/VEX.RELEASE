@@ -85,7 +85,7 @@ export function SkiaParticles(): React.JSX.Element {
       <Group>
         {particles.map((p, i) => (
           <ParticleNode
-            key={`particle-${i}`}
+            key={`particle-${p.baseX}-${p.baseY}`}
             baseX={p.baseX}
             baseY={p.baseY}
             baseRadius={p.radius}

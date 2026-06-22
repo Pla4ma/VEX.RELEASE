@@ -33,6 +33,7 @@ const styles = createSheet({
 
 interface BadgeContentProps {
   children: React.ReactNode;
+  label?: string;
   variantStyles: ReturnType<typeof getVariantStyles>;
   sizeConfig: SizeConfig;
   leftIcon?: string;
@@ -44,6 +45,7 @@ interface BadgeContentProps {
 
 function BadgeContent({
   children,
+  label,
   variantStyles,
   sizeConfig,
   leftIcon,
@@ -87,7 +89,7 @@ function BadgeContent({
             },
           ]}
         >
-          {children}
+          {label ?? children}
         </Text>
         {rightIcon && !onRemove && (
           <Icon
@@ -119,6 +121,7 @@ function BadgeContent({
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
+  label,
   variant = 'default',
   size = 'md',
   leftIcon,
@@ -133,12 +136,13 @@ export const Badge: React.FC<BadgeProps> = ({
   const { theme } = useTheme();
   const sizeConfig = sizeMap[size as SizeKey];
   const variantStyles = getVariantStyles(variant, theme);
-
-  const accessibilityLabel = getAccessibilityLabel(children, 'Badge');
-  const removeAccessibilityLabel = `Remove ${getAccessibilityLabel(children, 'badge')}`;
+  const textContent = label ?? children;
+  const accessibilityLabel = getAccessibilityLabel(textContent, 'Badge');
+  const removeAccessibilityLabel = `Remove ${getAccessibilityLabel(textContent, 'badge')}`;
 
   const content = (
     <BadgeContent
+      label={label}
       variantStyles={variantStyles}
       sizeConfig={sizeConfig}
       leftIcon={leftIcon}

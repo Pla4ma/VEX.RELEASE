@@ -137,7 +137,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
         <View style={styles.errorContainer}>
           {validation.errors.map((error, index) => (
             <Text
-              key={index}
+              key={`error-${error.message}-${index}`}
               style={[styles.errorText, { color: theme.colors.error[500] }]}
             >
               {error.message}
@@ -149,7 +149,7 @@ export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
         <View style={styles.warningContainer}>
           {validation.warnings.slice(0, 1).map((warning, index) => (
             <Text
-              key={index}
+              key={`warning-${warning.message}-${index}`}
               style={[
                 styles.warningText,
                 { color: theme.colors.warning[500] },

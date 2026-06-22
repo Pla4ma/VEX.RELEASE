@@ -47,11 +47,11 @@ export async function downloadExportData(
             false,
           );
         }
-        const content = await data.text();
+        const [content, { data: metadata }] = await Promise.all([
+          data.text(),
+          supabase.storage.from(bucket).getPublicUrl(path),
+        ]);
         const checksum = await calculateChecksum(content);
-        const { data: metadata } = await supabase.storage
-          .from(bucket)
-          .getPublicUrl(path);
         return {
           data,
           url: metadata?.publicUrl || '',

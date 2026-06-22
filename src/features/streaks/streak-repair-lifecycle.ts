@@ -50,8 +50,10 @@ export async function expireRepairQuest(
 export async function getRepairQuestStatus(
   userId: string,
 ): Promise<RepairQuestStatus> {
-  const streak = await repository.fetchStreak(userId);
-  const quest = await repository.fetchActiveRepairQuest(userId);
+  const [streak, quest] = await Promise.all([
+    repository.fetchStreak(userId),
+    repository.fetchActiveRepairQuest(userId),
+  ]);
   if (!quest) {
     const canStart =
       streak !== null &&

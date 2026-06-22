@@ -40,7 +40,7 @@ export function AvatarStack({
       {displayAvatars.map((avatar, index) => {
         return (
           <Box
-            key={`avatar-${index}`}
+            key={`avatar-${avatar.initials}`}
             style={{
               marginLeft: index === 0 ? 0 : -8,
               zIndex: displayAvatars.length - index,

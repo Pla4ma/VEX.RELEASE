@@ -26,9 +26,11 @@ export async function logoutUser(set: AuthStateSetter): Promise<void> {
     return;
   }
   const secureStorage = getSecureStorage();
-  await secureStorage.removeItem(SecureStorageKeys.AUTH_TOKEN);
-  await secureStorage.removeItem(SecureStorageKeys.REFRESH_TOKEN);
-  await removeUserProfile();
+  await Promise.all([
+    secureStorage.removeItem(SecureStorageKeys.AUTH_TOKEN),
+    secureStorage.removeItem(SecureStorageKeys.REFRESH_TOKEN),
+    removeUserProfile(),
+  ]);
   setSignedOut(set);
   resetServiceSingletonsForLogout();
   clearSentryUser();

@@ -160,8 +160,10 @@ export class StorageManager implements StorageAdapter {
     keys: number;
     size: number;
   }> {
-    const keys = await this.getAllKeys();
-    const size = await this.getSize();
+    const [keys, size] = await Promise.all([
+      this.getAllKeys(),
+      this.getSize(),
+    ]);
     return {
       adapter: this.useFallback ? 'MMKVStorageAdapter' : 'MMKV',
       keys: keys.length,

@@ -43,7 +43,7 @@ function Flourish({ isReducedMotion }: { isReducedMotion: boolean }) {
         <Defs>
           <SvgLinearGradient id="flourishGrad" x1="0" y1="0" x2="1" y2="0">
             {FLOURISH_GRADIENT_STOPS.map((s, i) => (
-              <Stop key={`stop-${i}`} offset={s.offset} stopColor={s.stopColor} />
+              <Stop key={`stop-${s.offset}`} offset={s.offset} stopColor={s.stopColor} />
             ))}
           </SvgLinearGradient>
         </Defs>
@@ -167,7 +167,7 @@ export function VexHeroSignature({
       <Flourish isReducedMotion={isReducedMotion} />
       <Animated.View style={[{ flexDirection: 'row', marginTop: 4, height: 100 }, wordBreath]}>
         {title.split('').map((c, i) => (
-          <VexLetter key={`title-${i}`} char={c} index={i} isReducedMotion={isReducedMotion} />
+          <VexLetter key={`letter-${c}-${i}`} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
       <Underline isReducedMotion={isReducedMotion} />

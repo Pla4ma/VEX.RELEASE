@@ -26,8 +26,10 @@ export async function generatePerformanceSummary(
 }> {
   const state = await getOrCreateCoachState(userId);
   const sessionRepository = getSessionRepository(userId);
-  const stats = await sessionRepository.getSessionStats();
-  const summaries = await sessionRepository.getAllSummaries();
+  const [stats, summaries] = await Promise.all([
+    sessionRepository.getSessionStats(),
+    sessionRepository.getAllSummaries(),
+  ]);
   const averageSessionQuality =
     summaries.length > 0
       ? summaries.reduce((sum, summary) => sum + summary.focusQuality, 0) /

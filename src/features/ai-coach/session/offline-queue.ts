@@ -53,8 +53,10 @@ export async function processMutation(
   mutation: QueuedMutation,
   userId: string,
 ): Promise<void> {
-  const service = await import('../service/service');
-  const repository = await import('../repository');
+  const [service, repository] = await Promise.all([
+    import('../service/service'),
+    import('../repository'),
+  ]);
 
   switch (mutation.type) {
     case 'MARK_READ':

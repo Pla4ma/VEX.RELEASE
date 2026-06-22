@@ -106,7 +106,7 @@ export function SessionValidationFeedback({
                 {formatFieldName(field)}
               </Text>
               {fieldErrors.map((error, index) => (
-                <Box key={index} flexDirection="row" mt="xs">
+                <Box key={`${field}-${error.message}-${index}`} flexDirection="row" mt="xs">
                   <Text style={styles.bullet}>•</Text>
                   <Text variant="bodySmall" color="error.DEFAULT" flex={1}>
                     {error.message}
@@ -142,7 +142,7 @@ export function SessionValidationFeedback({
 
           {warnings.map((warning, index) => (
             <Box
-              key={index}
+              key={warning.field}
               flexDirection="row"
               alignItems="flex-start"
               mt="xs"

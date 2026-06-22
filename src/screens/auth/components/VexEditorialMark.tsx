@@ -91,7 +91,7 @@ export function VexEditorialMark({
 
       <Animated.View style={[{ flexDirection: 'row', marginTop: 2, height: 140 }, wordBreath]}>
         {letters.map((c, i) => (
-          <VexLetter key={`letter-${i}`} char={c} index={i} isReducedMotion={isReducedMotion} />
+          <VexLetter key={`letter-${c}-${i}`} char={c} index={i} isReducedMotion={isReducedMotion} />
         ))}
       </Animated.View>
 

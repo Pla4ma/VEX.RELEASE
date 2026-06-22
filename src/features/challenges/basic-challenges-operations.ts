@@ -68,8 +68,10 @@ async function createBasicChallenge(
 export async function getBasicChallengesStatus(
   userId: string,
 ): Promise<BasicChallengesStatus> {
-  const daily = await getOrCreateBasicDailyChallenge(userId);
-  const weekly = await getOrCreateBasicWeeklyChallenge(userId);
+  const [daily, weekly] = await Promise.all([
+    getOrCreateBasicDailyChallenge(userId),
+    getOrCreateBasicWeeklyChallenge(userId),
+  ]);
 
   const dailyProgress = daily?.currentValue ?? 0;
   const weeklyProgress = weekly?.currentValue ?? 0;
@@ -104,8 +106,10 @@ export async function updateBasicChallengeProgressFromSession(
   _sessionId;
   _sessionDuration;
 
-  const daily = await getOrCreateBasicDailyChallenge(userId);
-  const weekly = await getOrCreateBasicWeeklyChallenge(userId);
+  const [daily, weekly] = await Promise.all([
+    getOrCreateBasicDailyChallenge(userId),
+    getOrCreateBasicWeeklyChallenge(userId),
+  ]);
 
   let dailyUpdated = false;
   let dailyCompleted = false;
