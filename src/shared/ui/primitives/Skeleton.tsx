@@ -9,7 +9,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { skeletonStyles } from './Skeleton.styles';
 interface SkeletonProps {
   width?: number | string;
   height?: number;
@@ -80,7 +80,7 @@ export function Skeleton({
       <View
         key={lineKey}
         style={[
-          styles.skeleton,
+          skeletonStyles.skeleton,
           {
             width: lineWidth as DimensionValue,
             height,
@@ -95,7 +95,7 @@ export function Skeleton({
         {animated && (
           <Animated.View
             style={[
-              styles.shimmer,
+              skeletonStyles.shimmer,
               { backgroundColor: theme.colors.background.elevated },
               shimmerStyle,
             ]}
@@ -105,7 +105,7 @@ export function Skeleton({
     );
   };
   return (
-    <View style={styles.container}>
+    <View style={skeletonStyles.container}>
       {Array.from({ length: lines }).map((_, index) => renderLine(index))}
     </View>
   );
@@ -121,14 +121,14 @@ export function SkeletonCard({
   return (
     <View
       style={[
-        styles.card,
+        skeletonStyles.card,
         { height, backgroundColor: theme.colors.background.secondary },
         style,
       ]}
     >
       <Skeleton width={60} height={60} variant="circular" />
-      <View style={styles.cardContent}>
-        <Skeleton width="70%" height={20} style={styles.cardTitle} />
+      <View style={skeletonStyles.cardContent}>
+        <Skeleton width="70%" height={20} style={skeletonStyles.cardTitle} />
         <Skeleton width="40%" height={16} />
       </View>
     </View>
@@ -136,9 +136,9 @@ export function SkeletonCard({
 }
 export function SkeletonList({ count = 3 }: { count?: number }) {
   return (
-    <View style={styles.list}>
+    <View style={skeletonStyles.list}>
       {Array.from({ length: count }).map((_, index) => (
-        <SkeletonCard key={index} style={styles.listItem} />
+        <SkeletonCard key={index} style={skeletonStyles.listItem} />
       ))}
     </View>
   );
@@ -152,11 +152,11 @@ export function SkeletonChart({ height = 200 }: { height?: number }) {
   return (
     <View
       style={[
-        styles.chart,
+        skeletonStyles.chart,
         { height, backgroundColor: theme.colors.background.secondary },
       ]}
     >
-      <View style={styles.chartBars}>
+      <View style={skeletonStyles.chartBars}>
         {barHeights.map((h, index) => (
           <Skeleton
             key={`bar-${index}`}
@@ -169,33 +169,4 @@ export function SkeletonChart({ height = 200 }: { height?: number }) {
     </View>
   );
 }
-const styles = createSheet({
-  container: { overflow: 'hidden' },
-  skeleton: { overflow: 'hidden', position: 'relative' },
-  shimmer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    opacity: 0.5,
-    width: 100,
-  },
-  card: {
-    flexDirection: 'row',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  cardContent: { flex: 1, marginLeft: 16, gap: 8 },
-  cardTitle: { marginBottom: 8 },
-  list: { gap: 12 },
-  listItem: { marginBottom: 8 },
-  chart: { borderRadius: 12, padding: 16 },
-  chartBars: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: '100%',
-  },
-});
+

@@ -1,15 +1,8 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-/**
- * Verify Email Screen
- *
- * Email verification screen with OTP input.
- */
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 import { useTheme } from '../../theme/ThemeContext';
 import { Box, Text } from '../../components/primitives';
 import { Button, Input } from '../../components';
