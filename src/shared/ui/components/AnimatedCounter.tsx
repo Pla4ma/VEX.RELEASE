@@ -185,6 +185,5 @@ const styles = createSheet({
   trendArrow: { lineHeight: undefined },
 });
 
-export default AnimatedCounter;
-
+export { AnimatedCounter }
 export { useCountUp, useCounterAnimation } from './AnimatedCounter.hooks';

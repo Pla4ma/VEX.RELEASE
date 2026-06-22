@@ -129,4 +129,5 @@ export function OnboardingFlowScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');
+const OnboardingFlowScreenWithBoundary = withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');
+export { OnboardingFlowScreenWithBoundary as OnboardingFlowScreen };

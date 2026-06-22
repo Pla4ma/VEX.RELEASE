@@ -144,5 +144,6 @@ export const ProfileScreen: React.FC = () => {
   );
 };
 
-export default withScreenErrorBoundary(ProfileScreen, 'Profile');
+const ProfileScreenWithBoundary = withScreenErrorBoundary(ProfileScreen, 'Profile');
+export { ProfileScreenWithBoundary as ProfileScreen };
 

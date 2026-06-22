@@ -22,4 +22,4 @@ export const DataExportScreen = withScreenErrorBoundary(
   'DataExport',
 );
 
-export default DataExportScreen;
+export { DataExportScreen }

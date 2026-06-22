@@ -187,4 +187,4 @@ const styles = createSheet({
   },
 });
 
-export default PurityHUD;
+export { PurityHUD }

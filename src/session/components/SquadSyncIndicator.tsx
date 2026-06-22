@@ -194,4 +194,4 @@ export function SquadSyncIndicator({
   );
 }
 
-export default SquadSyncIndicator;
+export { SquadSyncIndicator }

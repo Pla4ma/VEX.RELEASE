@@ -160,4 +160,4 @@ export const RateLimiter = {
   RateLimits,
   RateLimitError,
 };
-export default RateLimiter;
+export { RateLimiter }

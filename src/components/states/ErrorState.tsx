@@ -181,4 +181,4 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   );
 };
 
-export default ErrorState;
+export { ErrorState }

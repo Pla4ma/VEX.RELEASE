@@ -127,4 +127,4 @@ export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
   );
 };
 
-export default ProgressionDashboard;
+export { ProgressionDashboard }

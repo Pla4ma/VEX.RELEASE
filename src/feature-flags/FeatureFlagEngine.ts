@@ -170,4 +170,4 @@ export const featureFlags = {
   getAll: () => getFeatureFlagEngine().getAllFlags(),
 };
 
-export default FeatureFlagEngine;
+export { FeatureFlagEngine }

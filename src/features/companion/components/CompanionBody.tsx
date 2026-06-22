@@ -166,4 +166,4 @@ export const CompanionBody: React.FC<CompanionBodyProps> = ({
   }
 };
 
-export default CompanionBody;
+export { CompanionBody }

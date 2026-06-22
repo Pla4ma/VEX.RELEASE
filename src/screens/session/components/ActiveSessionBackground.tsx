@@ -89,4 +89,4 @@ export function ActiveSessionBackground({
   );
 }
 
-export default ActiveSessionBackground;
+export { ActiveSessionBackground }

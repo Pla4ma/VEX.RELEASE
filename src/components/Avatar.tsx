@@ -71,4 +71,4 @@ export const Avatar = React.memo(({
 
 Avatar.displayName = 'Avatar';
 
-export default Avatar;
+export { Avatar }

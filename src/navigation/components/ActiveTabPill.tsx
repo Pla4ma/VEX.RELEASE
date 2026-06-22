@@ -65,4 +65,4 @@ export function ActiveTabPill({
   );
 }
 
-export default ActiveTabPill;
+export { ActiveTabPill }

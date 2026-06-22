@@ -181,4 +181,4 @@ const styles = createSheet({
   },
 });
 
-export default PurchaseErrorState;
+export { PurchaseErrorState }

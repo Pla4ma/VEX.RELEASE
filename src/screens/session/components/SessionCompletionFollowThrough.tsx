@@ -176,4 +176,4 @@ export function SessionCompletionFollowThrough({
   );
 }
 
-export default SessionCompletionFollowThrough;
+export { SessionCompletionFollowThrough }

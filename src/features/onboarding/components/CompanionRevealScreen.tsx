@@ -148,4 +148,4 @@ export function CompanionRevealScreen({
   );
 }
 
-export default CompanionRevealScreen;
+export { CompanionRevealScreen }

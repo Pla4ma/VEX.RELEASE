@@ -114,4 +114,4 @@ export function OnboardingWelcome({
   );
 }
 
-export default OnboardingWelcome;
+export { OnboardingWelcome }

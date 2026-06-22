@@ -172,4 +172,5 @@ export function ContentInputScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ContentInputScreen, 'ContentInput');
+const ContentInputScreenWithBoundary = withScreenErrorBoundary(ContentInputScreen, 'ContentInput');
+export { ContentInputScreenWithBoundary as ContentInputScreen };

@@ -130,4 +130,4 @@ const styles = {
   closeButtonText: { color: lightColors.text.muted, fontSize: 16 },
 };
 
-export default styles;
+export { styles }

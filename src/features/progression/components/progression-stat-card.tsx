@@ -89,4 +89,4 @@ export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
   );
 };
 
-export default ProgressionStatCard;
+export { ProgressionStatCard }

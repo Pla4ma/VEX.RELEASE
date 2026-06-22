@@ -176,4 +176,4 @@ export function GreetingHeader({
   );
 }
 
-export default GreetingHeader;
+export { GreetingHeader }

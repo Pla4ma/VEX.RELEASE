@@ -63,4 +63,4 @@ export const FloatingDroplets: React.FC<FloatingDropletsProps> = ({
   );
 };
 
-export default FloatingDroplets;
+export { FloatingDroplets }

@@ -140,4 +140,5 @@ export const BossScreen = (): React.ReactNode => {
   );
 };
 
-export default withScreenErrorBoundary(BossScreen, 'Boss');
+const BossScreenWithBoundary = withScreenErrorBoundary(BossScreen, 'Boss');
+export { BossScreenWithBoundary as BossScreen };

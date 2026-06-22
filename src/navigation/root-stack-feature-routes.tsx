@@ -114,4 +114,4 @@ export function renderRootStackFeatureRoutes({
   );
 }
 
-export default renderRootStackFeatureRoutes;
+export { renderRootStackFeatureRoutes }

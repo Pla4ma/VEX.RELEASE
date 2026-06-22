@@ -26,4 +26,4 @@ export const MonetizationValidation = {
   PurchaseSchema,
 };
 
-export default MonetizationValidation;
+export { MonetizationValidation }

@@ -119,4 +119,4 @@ export const StreakRiskCalculator = {
   analyzePattern,
 };
 
-export default StreakRiskCalculator;
+export { StreakRiskCalculator }

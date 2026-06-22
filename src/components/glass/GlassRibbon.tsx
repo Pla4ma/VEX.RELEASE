@@ -88,4 +88,4 @@ export const GlassRibbon: React.FC<GlassRibbonProps> = ({
   );
 };
 
-export default GlassRibbon;
+export { GlassRibbon }

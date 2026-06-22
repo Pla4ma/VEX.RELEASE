@@ -97,4 +97,4 @@ export const SessionSetupScreen = withScreenErrorBoundary(
   'Session Setup',
 );
 
-export default SessionSetupScreen;
+export { SessionSetupScreen }

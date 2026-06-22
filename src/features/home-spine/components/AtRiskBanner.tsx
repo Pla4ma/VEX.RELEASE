@@ -155,4 +155,4 @@ export function AtRiskBanner({
   );
 }
 
-export default AtRiskBanner;
+export { AtRiskBanner }

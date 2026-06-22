@@ -91,4 +91,4 @@ export function SessionConsequenceCards({
   );
 }
 
-export default SessionConsequenceCards;
+export { SessionConsequenceCards }

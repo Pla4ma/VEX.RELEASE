@@ -156,7 +156,5 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(
-  AppearanceSettingsScreen,
-  'AppearanceSettings',
-);
+const AppearanceSettingsScreenWithBoundary = withScreenErrorBoundary(AppearanceSettingsScreen, "AppearanceSettings");
+export { AppearanceSettingsScreenWithBoundary as AppearanceSettingsScreen };

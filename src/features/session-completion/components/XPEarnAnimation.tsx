@@ -181,4 +181,4 @@ export function XPEarnAnimation({
   );
 }
 
-export default XPEarnAnimation;
+export { XPEarnAnimation }

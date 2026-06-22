@@ -51,4 +51,4 @@ export function SessionStartStatusCard({
   );
 }
 
-export default SessionStartStatusCard;
+export { SessionStartStatusCard }

@@ -139,4 +139,4 @@ const styles = createSheet({
   },
 });
 
-export default StreakRiskWarning;
+export { StreakRiskWarning }

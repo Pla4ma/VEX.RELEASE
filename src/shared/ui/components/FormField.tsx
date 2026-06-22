@@ -188,4 +188,4 @@ export const FormField: React.FC<FormFieldProps> = ({
 
 export { FormSection, InputGroup };
 export type { FormSectionProps, FormFieldProps };
-export default FormField;
+export { FormField }

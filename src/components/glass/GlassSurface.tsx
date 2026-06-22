@@ -98,4 +98,4 @@ export function GlassSurface({
   );
 }
 
-export default GlassSurface;
+export { GlassSurface }

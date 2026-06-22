@@ -85,4 +85,4 @@ export function PerfectSessionBanner({
   );
 }
 
-export default PerfectSessionBanner;
+export { PerfectSessionBanner }

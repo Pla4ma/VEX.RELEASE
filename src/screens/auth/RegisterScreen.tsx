@@ -182,4 +182,5 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(RegisterScreen, 'Register');
+const RegisterScreenWithBoundary = withScreenErrorBoundary(RegisterScreen, 'Register');
+export { RegisterScreenWithBoundary as RegisterScreen };

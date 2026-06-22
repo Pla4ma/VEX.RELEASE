@@ -128,4 +128,4 @@ export function CompanionWaiting({
   );
 }
 
-export default CompanionWaiting;
+export { CompanionWaiting }

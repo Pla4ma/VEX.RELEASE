@@ -130,4 +130,4 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
 };
 
 export { CompactRewardBadge, type CompactRewardBadgeProps } from './CompactRewardBadge';
-export default MicroRewardBanner;
+export { MicroRewardBanner }

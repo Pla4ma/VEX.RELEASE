@@ -148,4 +148,4 @@ export function LiquidGlassSphereRaw({
 export const LiquidGlassSphere = React.memo(LiquidGlassSphereRaw);
 LiquidGlassSphere.displayName = 'LiquidGlassSphere';
 
-export default LiquidGlassSphere;
+export { LiquidGlassSphere }

@@ -195,4 +195,4 @@ export const Badge: React.FC<BadgeProps> = ({
   return content;
 };
 
-export default Badge;
+export { Badge }

@@ -117,4 +117,4 @@ export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
   );
 };
 
-export default FactorMap;
+export { FactorMap }

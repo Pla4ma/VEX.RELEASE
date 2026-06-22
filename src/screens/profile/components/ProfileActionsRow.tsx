@@ -87,4 +87,4 @@ export function ProfileActionsRow({
   );
 }
 
-export default ProfileActionsRow;
+export { ProfileActionsRow }

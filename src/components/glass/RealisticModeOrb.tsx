@@ -85,4 +85,4 @@ export function RealisticModeOrb({
   );
 }
 
-export default RealisticModeOrb;
+export { RealisticModeOrb }

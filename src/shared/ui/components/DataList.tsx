@@ -155,4 +155,4 @@ export function DataList<T extends Record<string, unknown>>({
   );
 }
 
-export default DataList;
+export { DataList }

@@ -188,4 +188,4 @@ export function StreakBrokenModal({
   );
 }
 
-export default StreakBrokenModal;
+export { StreakBrokenModal }

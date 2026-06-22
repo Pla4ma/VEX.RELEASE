@@ -185,4 +185,4 @@ export function StreakFreezeButton({
   );
 }
 
-export default StreakFreezeButton;
+export { StreakFreezeButton }

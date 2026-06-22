@@ -147,4 +147,4 @@ export function FocusModeCardView({
   );
 }
 
-export default FocusModeCardView;
+export { FocusModeCardView }

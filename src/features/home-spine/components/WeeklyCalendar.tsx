@@ -80,4 +80,4 @@ export function WeeklyCalendar({
     </Box>
   );
 }
-export default WeeklyCalendar;
+export { WeeklyCalendar }

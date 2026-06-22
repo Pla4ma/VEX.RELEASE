@@ -99,4 +99,4 @@ export function MotivationScreen({
   );
 }
 
-export default MotivationScreen;
+export { MotivationScreen }

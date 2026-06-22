@@ -169,4 +169,4 @@ const styles = createSheet({
   },
 });
 
-export default Modal;
+export { Modal }

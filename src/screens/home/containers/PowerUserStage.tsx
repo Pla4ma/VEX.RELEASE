@@ -15,4 +15,4 @@ export function PowerUserStage({ sharedInput }: StageProps): React.ReactNode {
   return <HomeScreenInner model={model} data={data} />;
 }
 
-export default PowerUserStage;
+export { PowerUserStage }

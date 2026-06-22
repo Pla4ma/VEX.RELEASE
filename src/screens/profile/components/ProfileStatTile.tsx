@@ -131,4 +131,4 @@ export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
   );
 };
 
-export default ProfileStatTile;
+export { ProfileStatTile }

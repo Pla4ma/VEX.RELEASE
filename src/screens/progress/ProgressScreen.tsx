@@ -178,4 +178,5 @@ export function ProgressScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ProgressScreen, 'Progress');
+const ProgressScreenWithBoundary = withScreenErrorBoundary(ProgressScreen, 'Progress');
+export { ProgressScreenWithBoundary as ProgressScreen };

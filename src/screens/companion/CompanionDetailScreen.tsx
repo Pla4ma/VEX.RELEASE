@@ -120,7 +120,5 @@ export function CompanionDetailScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(
-  CompanionDetailScreen,
-  'CompanionDetail',
-);
+const CompanionDetailScreenWithBoundary = withScreenErrorBoundary(CompanionDetailScreen, "CompanionDetail");
+export { CompanionDetailScreenWithBoundary as CompanionDetailScreen };

@@ -157,4 +157,4 @@ export function FirstResultScreen({
   );
 }
 
-export default FirstResultScreen;
+export { FirstResultScreen }

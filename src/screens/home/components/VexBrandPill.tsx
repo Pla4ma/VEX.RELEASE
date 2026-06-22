@@ -28,4 +28,4 @@ export function VexBrandPill(): React.ReactNode {
   );
 }
 
-export default VexBrandPill;
+export { VexBrandPill }

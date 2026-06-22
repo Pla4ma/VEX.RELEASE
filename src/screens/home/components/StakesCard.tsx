@@ -95,4 +95,4 @@ export function StakesCard({ stakes }: StakesCardProps): React.ReactNode {
   );
 }
 
-export default StakesCard;
+export { StakesCard }

@@ -186,4 +186,4 @@ export function AnimatedCoachAvatar({
   );
 }
 
-export default AnimatedCoachAvatar;
+export { AnimatedCoachAvatar }

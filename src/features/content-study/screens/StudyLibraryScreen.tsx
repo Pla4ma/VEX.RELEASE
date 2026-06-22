@@ -169,4 +169,5 @@ export function StudyLibraryScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(StudyLibraryScreen, 'StudyLibrary');
+const StudyLibraryScreenWithBoundary = withScreenErrorBoundary(StudyLibraryScreen, 'StudyLibrary');
+export { StudyLibraryScreenWithBoundary as StudyLibraryScreen };

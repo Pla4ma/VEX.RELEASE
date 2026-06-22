@@ -8,7 +8,7 @@ import React from 'react';
 import { useRoute, type RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import OnboardingFlowScreen from '../screens/onboarding/OnboardingFlowScreen';
+import { OnboardingFlowScreen } from '../screens/onboarding/OnboardingFlowScreen';
 
 import type { RootStackParams } from './types';
 
@@ -35,4 +35,4 @@ export const OnboardingNavigator: React.FC = () => {
   );
 };
 
-export default OnboardingNavigator;
+export { OnboardingNavigator }

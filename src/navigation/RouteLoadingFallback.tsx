@@ -67,4 +67,4 @@ export function RouteLoadingFallback({
   );
 }
 
-export default RouteLoadingFallback;
+export { RouteLoadingFallback }

@@ -85,4 +85,4 @@ const styles = createSheet({
   },
 });
 
-export default IconButton;
+export { IconButton }

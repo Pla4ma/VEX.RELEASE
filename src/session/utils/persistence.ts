@@ -194,4 +194,4 @@ export const SessionPersistence = {
   isSessionStale,
   canResumeSession,
 };
-export default SessionPersistence;
+export { SessionPersistence }

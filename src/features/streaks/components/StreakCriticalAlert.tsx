@@ -110,4 +110,4 @@ export function StreakCriticalAlert({
   );
 }
 
-export default StreakCriticalAlert;
+export { StreakCriticalAlert }

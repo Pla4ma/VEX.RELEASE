@@ -149,4 +149,4 @@ export const BonusCalculator = {
   constants: BONUS_CONSTANTS,
 };
 
-export default BonusCalculator;
+export { BonusCalculator }

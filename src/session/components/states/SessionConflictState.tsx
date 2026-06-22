@@ -149,4 +149,4 @@ export function SessionConflictState({
   );
 }
 
-export default SessionConflictState;
+export { SessionConflictState }

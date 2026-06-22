@@ -129,4 +129,4 @@ export function FirstSessionSetup({
   );
 }
 
-export default FirstSessionSetup;
+export { FirstSessionSetup }

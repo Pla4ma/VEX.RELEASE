@@ -83,4 +83,4 @@ export function GlassIconOrbHighlights({
   );
 }
 
-export default GlassIconOrbHighlights;
+export { GlassIconOrbHighlights }

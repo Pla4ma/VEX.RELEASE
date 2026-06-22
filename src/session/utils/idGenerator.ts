@@ -43,4 +43,4 @@ export const IdGenerator = {
   generateUUID,
 };
 
-export default IdGenerator;
+export { IdGenerator }

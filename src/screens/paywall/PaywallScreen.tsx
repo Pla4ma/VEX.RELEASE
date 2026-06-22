@@ -109,4 +109,4 @@ export const PaywallScreen = withScreenErrorBoundary(
   'Paywall',
 );
 
-export default PaywallScreen;
+export { PaywallScreen }

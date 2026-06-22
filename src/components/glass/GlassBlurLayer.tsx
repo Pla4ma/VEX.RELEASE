@@ -145,4 +145,4 @@ export function GlassBlurLayer({
   );
 }
 
-export default GlassBlurLayer;
+export { GlassBlurLayer }

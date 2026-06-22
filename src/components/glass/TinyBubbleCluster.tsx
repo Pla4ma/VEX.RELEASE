@@ -69,4 +69,4 @@ export const TinyBubbleCluster: React.FC<TinyBubbleClusterProps> = ({
   );
 };
 
-export default TinyBubbleCluster;
+export { TinyBubbleCluster }

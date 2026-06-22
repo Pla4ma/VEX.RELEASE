@@ -49,4 +49,4 @@ const styles = createSheet({
   },
 });
 
-export default Divider;
+export { Divider }

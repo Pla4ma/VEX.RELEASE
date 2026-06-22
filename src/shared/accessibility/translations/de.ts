@@ -53,4 +53,4 @@ const de: TranslationKeys = {
   'a11y.progress': 'Fortschritt',
 };
 
-export default de;
+export { de }

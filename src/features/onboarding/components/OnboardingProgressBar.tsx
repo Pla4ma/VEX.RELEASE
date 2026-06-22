@@ -111,4 +111,4 @@ export function OnboardingDots({
   );
 }
 
-export default OnboardingProgressBar;
+export { OnboardingProgressBar }

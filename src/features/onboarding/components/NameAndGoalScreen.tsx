@@ -155,4 +155,4 @@ export function NameAndGoalScreen({
   );
 }
 
-export default NameAndGoalScreen;
+export { NameAndGoalScreen }

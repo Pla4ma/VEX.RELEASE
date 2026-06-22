@@ -163,4 +163,4 @@ const styles = createSheet({
   },
 });
 
-export default SessionEmptyState;
+export { SessionEmptyState }

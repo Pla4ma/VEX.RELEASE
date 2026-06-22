@@ -122,4 +122,4 @@ function getReactionColor(
   }
 }
 
-export default CoachPresenceCard;
+export { CoachPresenceCard }

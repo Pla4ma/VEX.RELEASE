@@ -15,4 +15,4 @@ export function ActivatingStage({ sharedInput }: StageProps): React.ReactNode {
   return <HomeScreenInner model={model} data={data} />;
 }
 
-export default ActivatingStage;
+export { ActivatingStage }

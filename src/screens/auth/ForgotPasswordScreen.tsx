@@ -134,4 +134,5 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+const ForgotPasswordScreenWithBoundary = withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+export { ForgotPasswordScreenWithBoundary as ForgotPasswordScreen };

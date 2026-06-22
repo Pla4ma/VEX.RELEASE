@@ -168,4 +168,4 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   );
 };
 
-export default SessionSummary;
+export { SessionSummary }

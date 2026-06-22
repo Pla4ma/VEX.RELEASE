@@ -96,4 +96,4 @@ export function DeeperModePrompt({
   );
 }
 
-export default DeeperModePrompt;
+export { DeeperModePrompt }

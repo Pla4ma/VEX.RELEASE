@@ -163,4 +163,5 @@ export const StreakFuneralScreen: React.FC = () => {
     </Box>
   );
 };
-export default withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');
+const StreakFuneralScreenWithBoundary = withScreenErrorBoundary(StreakFuneralScreen, 'StreakFuneral');
+export { StreakFuneralScreenWithBoundary as StreakFuneralScreen };

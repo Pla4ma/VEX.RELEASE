@@ -152,4 +152,5 @@ export function CoachScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(CoachScreen, 'Coach');
+const CoachScreenWithBoundary = withScreenErrorBoundary(CoachScreen, 'Coach');
+export { CoachScreenWithBoundary as CoachScreen };

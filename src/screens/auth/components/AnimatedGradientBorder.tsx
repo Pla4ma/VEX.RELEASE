@@ -79,4 +79,4 @@ export function AnimatedGradientBorder({
   );
 }
 
-export default AnimatedGradientBorder;
+export { AnimatedGradientBorder }

@@ -146,4 +146,4 @@ export function StreakWidget({
   );
 }
 
-export default StreakWidget;
+export { StreakWidget }

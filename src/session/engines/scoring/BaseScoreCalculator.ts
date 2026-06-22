@@ -142,4 +142,4 @@ export const BaseScoreCalculator = {
   constants: SCORING_CONSTANTS,
 };
 
-export default BaseScoreCalculator;
+export { BaseScoreCalculator }

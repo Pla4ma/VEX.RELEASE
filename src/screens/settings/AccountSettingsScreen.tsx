@@ -74,7 +74,5 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(
-  AccountSettingsScreen,
-  'AccountSettings',
-);
+const AccountSettingsScreenWithBoundary = withScreenErrorBoundary(AccountSettingsScreen, "AccountSettings");
+export { AccountSettingsScreenWithBoundary as AccountSettingsScreen };

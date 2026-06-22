@@ -49,4 +49,4 @@ export function UnlockRequirementRow({
   );
 }
 
-export default UnlockRequirementRow;
+export { UnlockRequirementRow }

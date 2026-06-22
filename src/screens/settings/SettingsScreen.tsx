@@ -160,4 +160,4 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
   );
 }, 'Settings');
 
-export default SettingsScreen;
+export { SettingsScreen }

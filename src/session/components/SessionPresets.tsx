@@ -149,4 +149,4 @@ const styles = createSheet({
   },
 });
 
-export default SessionPresets;
+export { SessionPresets }

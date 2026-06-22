@@ -85,4 +85,4 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
   );
 };
 
-export default SessionErrorState;
+export { SessionErrorState }

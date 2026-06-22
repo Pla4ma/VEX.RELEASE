@@ -173,4 +173,4 @@ export function SessionBackgroundedState({
     </Box>
   );
 }
-export default SessionBackgroundedState;
+export { SessionBackgroundedState }

@@ -139,4 +139,4 @@ export function SessionQuickStartCard({
   );
 }
 
-export default SessionQuickStartCard;
+export { SessionQuickStartCard }

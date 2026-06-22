@@ -163,4 +163,4 @@ export function LiquidButton({
   );
 }
 
-export default LiquidButton;
+export { LiquidButton }

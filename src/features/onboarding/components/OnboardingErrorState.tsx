@@ -153,4 +153,4 @@ const styles = createSheet({
   },
 });
 
-export default OnboardingErrorState;
+export { OnboardingErrorState }

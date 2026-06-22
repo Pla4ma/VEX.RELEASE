@@ -196,4 +196,5 @@ export function StudyPlanScreen() {
   );
 }
 
-export default withScreenErrorBoundary(StudyPlanScreen, 'StudyPlan');
+const StudyPlanScreenWithBoundary = withScreenErrorBoundary(StudyPlanScreen, 'StudyPlan');
+export { StudyPlanScreenWithBoundary as StudyPlanScreen };

@@ -117,4 +117,4 @@ export function CompanionCreature(): React.ReactNode {
   );
 }
 
-export default CompanionCreature;
+export { CompanionCreature }

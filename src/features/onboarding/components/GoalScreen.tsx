@@ -196,4 +196,4 @@ export function GoalScreen({
   );
 }
 
-export default GoalScreen;
+export { GoalScreen }

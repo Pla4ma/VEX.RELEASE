@@ -96,4 +96,4 @@ const styles = createSheet({
   },
 });
 
-export default ProgressionLoadingState;
+export { ProgressionLoadingState }

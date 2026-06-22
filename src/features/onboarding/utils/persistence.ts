@@ -195,4 +195,4 @@ export const OnboardingPersistence = {
   getPartialData: getPartialDataFn,
 };
 
-export default OnboardingPersistence;
+export { OnboardingPersistence }

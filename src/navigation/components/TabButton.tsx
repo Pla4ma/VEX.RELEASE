@@ -170,4 +170,4 @@ export function TabButton({
   );
 }
 
-export default TabButton;
+export { TabButton }

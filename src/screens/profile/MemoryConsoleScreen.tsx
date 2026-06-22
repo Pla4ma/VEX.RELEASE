@@ -191,4 +191,5 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
   );
 };
 
-export default withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
+const MemoryConsoleScreenWithBoundary = withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
+export { MemoryConsoleScreenWithBoundary as MemoryConsoleScreen };

@@ -104,4 +104,4 @@ export function RecentSessionsList({
   );
 }
 
-export default RecentSessionsList;
+export { RecentSessionsList }

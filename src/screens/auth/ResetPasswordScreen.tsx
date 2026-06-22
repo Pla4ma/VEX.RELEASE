@@ -170,4 +170,5 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(ResetPasswordScreen, 'ResetPassword');
+const ResetPasswordScreenWithBoundary = withScreenErrorBoundary(ResetPasswordScreen, 'ResetPassword');
+export { ResetPasswordScreenWithBoundary as ResetPasswordScreen };

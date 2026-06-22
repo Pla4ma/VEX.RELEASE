@@ -74,4 +74,5 @@ export function ChallengesScreen(): React.ReactNode {
   return <ChallengeHub userId={userId} onClaimReward={handleClaimReward} />;
 }
 
-export default withScreenErrorBoundary(ChallengesScreen, 'Challenges');
+const ChallengesScreenWithBoundary = withScreenErrorBoundary(ChallengesScreen, 'Challenges');
+export { ChallengesScreenWithBoundary as ChallengesScreen };

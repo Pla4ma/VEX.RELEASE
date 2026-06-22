@@ -65,4 +65,4 @@ export function GlassScreenAtmosphere({
   );
 }
 
-export default GlassScreenAtmosphere;
+export { GlassScreenAtmosphere }

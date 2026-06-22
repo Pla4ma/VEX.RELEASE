@@ -109,4 +109,4 @@ export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
   );
 };
 
-export default WhatChanged;
+export { WhatChanged }

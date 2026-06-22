@@ -151,4 +151,4 @@ export function StudyPlanSuggestionCard({
   );
 }
 
-export default StudyPlanSuggestionCard;
+export { StudyPlanSuggestionCard }

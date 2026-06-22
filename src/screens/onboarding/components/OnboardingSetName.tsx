@@ -190,4 +190,4 @@ export function OnboardingSetName({
   );
 }
 
-export default OnboardingSetName;
+export { OnboardingSetName }

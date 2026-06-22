@@ -57,4 +57,4 @@ export function FocusScoreChange({
   );
 }
 
-export default FocusScoreChange;
+export { FocusScoreChange }

@@ -187,4 +187,5 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(CoachSettingsScreen, 'CoachSettings');
+const CoachSettingsScreenWithBoundary = withScreenErrorBoundary(CoachSettingsScreen, 'CoachSettings');
+export { CoachSettingsScreenWithBoundary as CoachSettingsScreen };

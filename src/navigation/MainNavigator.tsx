@@ -52,4 +52,4 @@ export const MainNavigator: React.FC = () => {
   );
 };
 
-export default MainNavigator;
+export { MainNavigator }

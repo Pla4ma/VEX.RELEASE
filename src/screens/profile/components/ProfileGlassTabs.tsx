@@ -69,4 +69,4 @@ export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
   );
 };
 
-export default ProfileGlassTabs;
+export { ProfileGlassTabs }

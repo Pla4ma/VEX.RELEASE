@@ -173,4 +173,4 @@ export function GlassPillSurface({
   );
 }
 
-export default GlassPillSurface;
+export { GlassPillSurface }

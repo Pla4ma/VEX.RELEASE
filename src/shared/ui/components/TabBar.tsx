@@ -122,4 +122,4 @@ export const TabBar: React.FC<TabBarProps> = ({
 
 export { Breadcrumb };
 export type { TabBarProps, TabItem, BreadcrumbProps } from './TabBar.types';
-export default TabBar;
+export { TabBar }

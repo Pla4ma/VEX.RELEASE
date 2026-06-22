@@ -95,4 +95,4 @@ export function SessionContractInput({
   );
 }
 
-export default SessionContractInput;
+export { SessionContractInput }

@@ -77,4 +77,4 @@ export function VexAssetImage({
   );
 }
 
-export default VexAssetImage;
+export { VexAssetImage }

@@ -16,4 +16,4 @@ export {
 export type { SkeletonLayoutProps } from './skeletonLayouts';
 
 import { EnhancedSkeleton } from './skeletonLayouts';
-export default EnhancedSkeleton;
+export { EnhancedSkeleton }

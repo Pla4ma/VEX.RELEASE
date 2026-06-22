@@ -158,7 +158,5 @@ export const NotificationSettingsScreen: React.FC<Props> = ({
   );
 };
 
-export default withScreenErrorBoundary(
-  NotificationSettingsScreen,
-  'NotificationSettings',
-);
+const NotificationSettingsScreenWithBoundary = withScreenErrorBoundary(NotificationSettingsScreen, "NotificationSettings");
+export { NotificationSettingsScreenWithBoundary as NotificationSettingsScreen };

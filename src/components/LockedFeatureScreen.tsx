@@ -98,4 +98,4 @@ export function LockedFeatureScreen(
   );
 }
 
-export default LockedFeatureScreen;
+export { LockedFeatureScreen }

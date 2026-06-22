@@ -77,4 +77,4 @@ export function GraceUsesIndicator({
   );
 }
 
-export default GraceUsesIndicator;
+export { GraceUsesIndicator }

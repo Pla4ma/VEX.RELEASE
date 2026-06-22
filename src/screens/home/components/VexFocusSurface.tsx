@@ -109,4 +109,4 @@ export function VexFocusSurface({
   );
 }
 
-export default VexFocusSurface;
+export { VexFocusSurface }

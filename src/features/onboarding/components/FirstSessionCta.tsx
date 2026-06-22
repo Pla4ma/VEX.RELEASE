@@ -62,4 +62,4 @@ export function FirstSessionCta({
   );
 }
 
-export default FirstSessionCta;
+export { FirstSessionCta }

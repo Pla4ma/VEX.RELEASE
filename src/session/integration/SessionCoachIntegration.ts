@@ -97,4 +97,4 @@ export function getSessionCoachIntegration(
   return coachIntegration;
 }
 
-export default SessionCoachIntegration;
+export { SessionCoachIntegration }

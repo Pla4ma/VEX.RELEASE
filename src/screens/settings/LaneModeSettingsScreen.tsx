@@ -135,4 +135,4 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
   'LaneMode',
 );
 
-export default LaneModeSettingsScreen;
+export { LaneModeSettingsScreen }

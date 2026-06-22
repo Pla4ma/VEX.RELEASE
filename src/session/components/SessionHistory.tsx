@@ -169,4 +169,4 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
   );
 };
 
-export default SessionHistory;
+export { SessionHistory }

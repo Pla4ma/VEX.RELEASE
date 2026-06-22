@@ -113,4 +113,4 @@ export function GlassProgressBar({
   );
 }
 
-export default GlassProgressBar;
+export { GlassProgressBar }

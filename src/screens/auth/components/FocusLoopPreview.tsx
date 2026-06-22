@@ -148,4 +148,4 @@ export function FocusLoopPreview(): React.ReactNode {
   );
 }
 
-export default FocusLoopPreview;
+export { FocusLoopPreview }

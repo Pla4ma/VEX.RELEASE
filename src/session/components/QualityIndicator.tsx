@@ -158,4 +158,4 @@ export function QualityIndicator({
   );
 }
 
-export default QualityIndicator;
+export { QualityIndicator }

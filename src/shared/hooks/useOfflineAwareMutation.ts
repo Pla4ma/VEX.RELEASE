@@ -15,4 +15,4 @@ export function useOfflineAwareMutation<TData, TError, TVariables>(
   });
 }
 
-export default useOfflineAwareMutation;
+export { useOfflineAwareMutation }

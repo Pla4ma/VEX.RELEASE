@@ -160,4 +160,4 @@ export const haptics = {
   setBatteryLevel: (level: number) => getHapticEngine().setBatteryLevel(level),
 };
 
-export default HapticEngine;
+export { HapticEngine }

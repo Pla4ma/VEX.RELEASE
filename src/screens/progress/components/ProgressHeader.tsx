@@ -147,4 +147,4 @@ export function ProgressHeader({
   );
 }
 
-export default ProgressHeader;
+export { ProgressHeader }

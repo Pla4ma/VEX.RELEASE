@@ -69,4 +69,4 @@ export const ProgressionValidation = {
   validateXPBatch,
 };
 
-export default ProgressionValidation;
+export { ProgressionValidation }

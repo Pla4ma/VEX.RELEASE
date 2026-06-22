@@ -148,4 +148,4 @@ export function useShouldAnimate(): boolean {
   return !isReducedMotion;
 }
 
-export default useReducedMotion;
+export { useReducedMotion }

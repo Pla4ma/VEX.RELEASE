@@ -154,4 +154,4 @@ export const ChallengeValidation = {
   ChallengeDifficultySchema,
   ChallengeCompletionSchema,
 };
-export default ChallengeValidation;
+export { ChallengeValidation }

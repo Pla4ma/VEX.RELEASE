@@ -181,4 +181,4 @@ export function useCoachHomeRecommendation() {
     getPersonaName,
   };
 }
-export default useCoachRecommendation;
+export { useCoachRecommendation }

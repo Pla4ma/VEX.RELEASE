@@ -72,4 +72,4 @@ export function SessionPreview({
   );
 }
 
-export default SessionPreview;
+export { SessionPreview }

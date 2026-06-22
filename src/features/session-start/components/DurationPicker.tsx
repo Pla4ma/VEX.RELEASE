@@ -93,4 +93,4 @@ export function DurationPicker({
     </Box>
   );
 }
-export default DurationPicker;
+export { DurationPicker }

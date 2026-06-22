@@ -73,4 +73,4 @@ export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
   </View>
 );
 
-export default LiquidProgressBar;
+export { LiquidProgressBar }

@@ -99,4 +99,4 @@ export const EmptyStateLens: React.FC<EmptyStateLensProps> = ({
   );
 };
 
-export default EmptyStateLens;
+export { EmptyStateLens }

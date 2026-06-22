@@ -99,4 +99,4 @@ const styles = createSheet({
   },
 });
 
-export default PurchaseLoadingState;
+export { PurchaseLoadingState }

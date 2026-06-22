@@ -127,4 +127,4 @@ export function useScreenError(): (error: Error) => void {
   };
 }
 
-export default ScreenErrorBoundary;
+export { ScreenErrorBoundary }

@@ -189,4 +189,4 @@ export function useSessionTimer(
   };
 }
 
-export default useSessionTimer;
+export { useSessionTimer }

@@ -115,4 +115,5 @@ export function ComebackScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(ComebackScreen, 'Comeback');
+const ComebackScreenWithBoundary = withScreenErrorBoundary(ComebackScreen, 'Comeback');
+export { ComebackScreenWithBoundary as ComebackScreen };

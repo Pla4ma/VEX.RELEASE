@@ -74,4 +74,4 @@ export function SessionSetupFooter({
   );
 }
 
-export default SessionSetupFooter;
+export { SessionSetupFooter }

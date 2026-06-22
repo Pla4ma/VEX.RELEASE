@@ -136,4 +136,4 @@ export class PurchaseRepositoryError extends Error {
 }
 
 export const purchaseRepository = new PurchaseRepository();
-export default purchaseRepository;
+export { purchaseRepository }

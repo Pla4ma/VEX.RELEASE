@@ -103,4 +103,4 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): React.ReactNode
   );
 }
 
-export default VexFocusMark;
+export { VexFocusMark }

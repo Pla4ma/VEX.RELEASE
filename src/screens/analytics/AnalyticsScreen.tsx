@@ -99,4 +99,5 @@ const styles = createSheet({
   },
 });
 
-export default withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+const AnalyticsScreenWithBoundary = withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+export { AnalyticsScreenWithBoundary as AnalyticsScreen };

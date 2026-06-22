@@ -86,4 +86,4 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ score }) => {
   );
 };
 
-export default ScoreCard;
+export { ScoreCard }

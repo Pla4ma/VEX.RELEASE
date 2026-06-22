@@ -58,4 +58,4 @@ export function ComebackQuestCompact({
   );
 }
 
-export default ComebackQuestCompact;
+export { ComebackQuestCompact }

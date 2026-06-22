@@ -149,4 +149,4 @@ export function OnboardingPermissions({
     </Box>
   );
 }
-export default OnboardingPermissions;
+export { OnboardingPermissions }

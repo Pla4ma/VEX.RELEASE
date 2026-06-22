@@ -163,4 +163,5 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default withScreenErrorBoundary(LoginScreen, 'Login');
+const LoginScreenWithBoundary = withScreenErrorBoundary(LoginScreen, 'Login');
+export { LoginScreenWithBoundary as LoginScreen };

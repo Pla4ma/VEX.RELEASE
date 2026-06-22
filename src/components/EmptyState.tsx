@@ -93,4 +93,4 @@ export function EmptyState({
   );
 }
 
-export default EmptyState;
+export { EmptyState }

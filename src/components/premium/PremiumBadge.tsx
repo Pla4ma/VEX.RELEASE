@@ -163,4 +163,4 @@ const styles = createSheet({
   text: { fontWeight: '800' as const, letterSpacing: -0.5 },
 });
 
-export default PremiumBadge;
+export { PremiumBadge }

@@ -159,4 +159,4 @@ export function NameInputSection({
   );
 }
 
-export default NameInputSection;
+export { NameInputSection }

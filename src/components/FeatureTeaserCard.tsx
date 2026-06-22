@@ -109,4 +109,4 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): React.ReactNod
   );
 }
 
-export default FeatureTeaserCard;
+export { FeatureTeaserCard }

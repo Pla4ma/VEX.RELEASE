@@ -146,4 +146,5 @@ export const AchievementsScreen = React.memo(() => {
 
 AchievementsScreen.displayName = 'AchievementsScreen';
 
-export default withScreenErrorBoundary(AchievementsScreen, 'Achievements');
+const AchievementsScreenWithBoundary = withScreenErrorBoundary(AchievementsScreen, 'Achievements');
+export { AchievementsScreenWithBoundary as AchievementsScreen };

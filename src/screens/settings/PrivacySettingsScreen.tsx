@@ -192,7 +192,5 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   );
 };
 
-export default withScreenErrorBoundary(
-  PrivacySettingsScreen,
-  'PrivacySettings',
-);
+const PrivacySettingsScreenWithBoundary = withScreenErrorBoundary(PrivacySettingsScreen, "PrivacySettings");
+export { PrivacySettingsScreenWithBoundary as PrivacySettingsScreen };

@@ -106,4 +106,4 @@ export const LiquidLens: React.FC<LiquidLensProps> = ({
   );
 };
 
-export default LiquidLens;
+export { LiquidLens }

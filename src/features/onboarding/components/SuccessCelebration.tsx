@@ -90,4 +90,4 @@ export function SuccessCelebration(): React.ReactNode {
   );
 }
 
-export default SuccessCelebration;
+export { SuccessCelebration }

@@ -190,4 +190,4 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
     </Modal>
   );
 };
-export default CosmeticEquippingSheet;
+export { CosmeticEquippingSheet }

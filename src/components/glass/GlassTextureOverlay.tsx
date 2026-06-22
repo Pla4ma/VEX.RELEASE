@@ -98,4 +98,4 @@ export function GlassTextureOverlay({
   );
 }
 
-export default GlassTextureOverlay;
+export { GlassTextureOverlay }

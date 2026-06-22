@@ -81,4 +81,4 @@ export function OnboardingNavigator({
   );
 }
 
-export default OnboardingNavigator;
+export { OnboardingNavigator }

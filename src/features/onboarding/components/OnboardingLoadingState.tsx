@@ -93,4 +93,4 @@ const styles = createSheet({
   },
 });
 
-export default OnboardingLoadingState;
+export { OnboardingLoadingState }

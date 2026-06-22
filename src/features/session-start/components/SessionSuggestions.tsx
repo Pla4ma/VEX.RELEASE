@@ -102,4 +102,4 @@ export function SessionSuggestions({
   );
 }
 
-export default SessionSuggestions;
+export { SessionSuggestions }

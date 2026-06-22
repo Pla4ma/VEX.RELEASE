@@ -54,4 +54,4 @@ export function ReferenceCard({
   );
 }
 
-export default ReferenceCard;
+export { ReferenceCard }

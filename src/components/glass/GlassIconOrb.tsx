@@ -192,4 +192,4 @@ export function GlassIconOrb({
   );
 }
 
-export default GlassIconOrb;
+export { GlassIconOrb }

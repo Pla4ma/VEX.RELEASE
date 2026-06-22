@@ -95,4 +95,5 @@ export function FocusScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(FocusScreen, 'Focus');
+const FocusScreenWithBoundary = withScreenErrorBoundary(FocusScreen, 'Focus');
+export { FocusScreenWithBoundary as FocusScreen };

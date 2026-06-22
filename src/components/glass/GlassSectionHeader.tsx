@@ -65,4 +65,4 @@ export function GlassSectionHeader({
   );
 }
 
-export default GlassSectionHeader;
+export { GlassSectionHeader }

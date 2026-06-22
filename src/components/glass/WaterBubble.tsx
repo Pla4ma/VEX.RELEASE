@@ -110,4 +110,4 @@ export const WaterBubble: React.FC<WaterBubbleProps> = ({
   );
 };
 
-export default WaterBubble;
+export { WaterBubble }

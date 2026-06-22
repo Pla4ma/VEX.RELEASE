@@ -102,4 +102,4 @@ export const GlassPill: React.FC<GlassPillProps> = React.memo(function GlassPill
   );
 });
 
-export default GlassPill;
+export { GlassPill }

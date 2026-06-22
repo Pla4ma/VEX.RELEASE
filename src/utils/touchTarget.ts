@@ -105,7 +105,7 @@ export const StandardHitSlops = {
   TEXT_BUTTON: { top: 8, bottom: 8, left: 12, right: 12 } as Insets,
   LINK: { top: 12, bottom: 12, left: 8, right: 8 } as Insets,
 } as const;
-export default {
+export {
   MIN_TOUCH_TARGET,
   calculateHitSlop,
   getSquareHitSlop,

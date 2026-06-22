@@ -48,4 +48,4 @@ export const PenaltyCalculator = {
   calculateTotalPenalty,
   constants: PENALTY_CONSTANTS,
 };
-export default PenaltyCalculator;
+export { PenaltyCalculator }

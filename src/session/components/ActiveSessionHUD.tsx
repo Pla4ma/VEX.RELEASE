@@ -189,4 +189,4 @@ const SessionHUDEmptyState: React.FC = () => (
   </View>
 );
 
-export default ActiveSessionHUD;
+export { ActiveSessionHUD }

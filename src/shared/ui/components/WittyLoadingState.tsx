@@ -124,4 +124,4 @@ export function AnalyticsLoadingState(): React.ReactNode {
   return <WittyLoadingState context="analytics" />;
 }
 
-export default WittyLoadingState;
+export { WittyLoadingState }

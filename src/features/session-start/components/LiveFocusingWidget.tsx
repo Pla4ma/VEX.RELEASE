@@ -176,4 +176,4 @@ export function LiveFocusingWidget({
   );
 }
 
-export default LiveFocusingWidget;
+export { LiveFocusingWidget }

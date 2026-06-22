@@ -84,4 +84,4 @@ export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
   );
 };
 
-export default ProfileIdentityBlock;
+export { ProfileIdentityBlock }

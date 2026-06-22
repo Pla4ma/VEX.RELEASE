@@ -99,4 +99,4 @@ export function HomeColdStartFallback({
   );
 }
 
-export default HomeColdStartFallback;
+export { HomeColdStartFallback }

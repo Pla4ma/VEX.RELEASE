@@ -111,4 +111,4 @@ export function HoloCard({
   );
 }
 
-export default HoloCard;
+export { HoloCard }

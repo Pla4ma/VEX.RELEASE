@@ -80,4 +80,4 @@ export function OnboardingChooseElement({
   );
 }
 
-export default OnboardingChooseElement;
+export { OnboardingChooseElement }

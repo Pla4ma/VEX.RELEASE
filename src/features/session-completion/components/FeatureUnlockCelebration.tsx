@@ -98,4 +98,4 @@ export function FeatureUnlockCelebration({
   );
 }
 
-export default FeatureUnlockCelebration;
+export { FeatureUnlockCelebration }

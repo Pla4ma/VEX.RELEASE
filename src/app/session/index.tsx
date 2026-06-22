@@ -19,7 +19,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import type { Theme } from '../../theme/themeCoreTypes';
 import { useAuthStore } from '../../store/authStore';
 
-export default function SessionHomeScreen() {
+export function SessionHomeScreen() {
   const [, setActiveView] = useState<'home' | 'custom'>('home');
   const authUserId = useAuthStore((state) => state.user?.id);
   const { theme } = useTheme();

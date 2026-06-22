@@ -173,4 +173,4 @@ export const SessionValidation = {
   getFirstError,
 };
 
-export default SessionValidation;
+export { SessionValidation }

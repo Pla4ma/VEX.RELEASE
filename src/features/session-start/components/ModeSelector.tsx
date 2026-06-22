@@ -83,4 +83,4 @@ export function ModeSelector({
   );
 }
 
-export default ModeSelector;
+export { ModeSelector }

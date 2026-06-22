@@ -87,4 +87,4 @@ const styles = createSheet({
   },
 });
 
-export default ProgressionErrorState;
+export { ProgressionErrorState }

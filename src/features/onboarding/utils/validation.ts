@@ -167,4 +167,4 @@ export const OnboardingValidation = {
   canSkipStep,
 };
 
-export default OnboardingValidation;
+export { OnboardingValidation }

@@ -189,4 +189,4 @@ export const AICoachValidation = {
   CoachMessageSchema,
 };
 
-export default AICoachValidation;
+export { AICoachValidation }

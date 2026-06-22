@@ -121,4 +121,4 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
   'Active Session',
 );
 
-export default ActiveSessionScreen;
+export { ActiveSessionScreen }

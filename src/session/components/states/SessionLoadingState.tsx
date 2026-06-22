@@ -80,4 +80,4 @@ const styles = createSheet({
   },
 });
 
-export default SessionLoadingState;
+export { SessionLoadingState }

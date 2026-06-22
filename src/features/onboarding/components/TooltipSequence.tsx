@@ -74,4 +74,4 @@ export function TooltipSequence({
   );
 }
 
-export default TooltipSequence;
+export { TooltipSequence }

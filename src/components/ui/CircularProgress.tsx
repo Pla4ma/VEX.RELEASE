@@ -112,4 +112,4 @@ export const CircularProgress = React.memo<CircularProgressProps>(function Circu
     </View>
   );
 });
-export default CircularProgress;
+export { CircularProgress }

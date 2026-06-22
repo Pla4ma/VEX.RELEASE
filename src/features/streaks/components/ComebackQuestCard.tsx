@@ -166,4 +166,4 @@ export function ComebackQuestCard({
 }
 
 export { ComebackQuestCompact } from './ComebackQuestCompact';
-export default ComebackQuestCard;
+export { ComebackQuestCard }

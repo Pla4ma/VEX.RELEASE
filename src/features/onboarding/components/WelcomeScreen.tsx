@@ -162,4 +162,4 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode 
   );
 }
 
-export default WelcomeScreen;
+export { WelcomeScreen }

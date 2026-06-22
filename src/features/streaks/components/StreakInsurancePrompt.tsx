@@ -184,4 +184,4 @@ const styles = createSheet({
   },
 });
 
-export default StreakInsurancePrompt;
+export { StreakInsurancePrompt }

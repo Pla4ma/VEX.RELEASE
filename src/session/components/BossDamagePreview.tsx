@@ -97,4 +97,4 @@ export function BossDamagePreview({
   );
 }
 
-export default BossDamagePreview;
+export { BossDamagePreview }

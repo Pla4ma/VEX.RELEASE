@@ -166,4 +166,4 @@ export function FirstCompletionOverlay({
   );
 }
 
-export default FirstCompletionOverlay;
+export { FirstCompletionOverlay }

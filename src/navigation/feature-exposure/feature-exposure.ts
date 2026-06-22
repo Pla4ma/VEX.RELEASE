@@ -70,4 +70,4 @@ export function buildRootExposureFlags({
   };
 }
 
-export default canExposeFeature;
+export { canExposeFeature }

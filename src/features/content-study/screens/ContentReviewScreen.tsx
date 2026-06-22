@@ -191,4 +191,5 @@ export function ContentReviewScreen() {
   );
 }
 
-export default withScreenErrorBoundary(ContentReviewScreen, 'ContentReview');
+const ContentReviewScreenWithBoundary = withScreenErrorBoundary(ContentReviewScreen, 'ContentReview');
+export { ContentReviewScreenWithBoundary as ContentReviewScreen };

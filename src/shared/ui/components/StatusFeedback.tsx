@@ -37,4 +37,4 @@ export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
   }
 };
 
-export default StatusFeedback;
+export { StatusFeedback }

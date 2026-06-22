@@ -156,4 +156,5 @@ export const NotificationsScreen = React.memo(() => {
 
 NotificationsScreen.displayName = 'NotificationsScreen';
 
-export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');
+const NotificationsScreenWithBoundary = withScreenErrorBoundary(NotificationsScreen, 'Notifications');
+export { NotificationsScreenWithBoundary as NotificationsScreen };

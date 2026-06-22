@@ -188,4 +188,4 @@ export function VexTabBar({
   );
 }
 
-export default VexTabBar;
+export { VexTabBar }

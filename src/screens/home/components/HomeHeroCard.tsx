@@ -144,4 +144,4 @@ export function HomeHeroCard({
   );
 }
 
-export default HomeHeroCard;
+export { HomeHeroCard }

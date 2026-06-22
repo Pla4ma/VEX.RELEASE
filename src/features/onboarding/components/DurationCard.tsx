@@ -116,4 +116,4 @@ export function DurationCard({
   );
 }
 
-export default DurationCard;
+export { DurationCard }

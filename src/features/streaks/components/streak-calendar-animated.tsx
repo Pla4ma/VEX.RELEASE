@@ -185,4 +185,4 @@ export function StreakCalendarAnimated({
   );
 }
 
-export default StreakCalendarAnimated;
+export { StreakCalendarAnimated }

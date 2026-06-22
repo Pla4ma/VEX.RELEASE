@@ -119,4 +119,4 @@ export const CompanionEvolutionCeremony: React.FC<
   );
 };
 
-export default CompanionEvolutionCeremony;
+export { CompanionEvolutionCeremony }

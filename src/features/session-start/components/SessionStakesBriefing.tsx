@@ -65,4 +65,4 @@ export function SessionStakesBriefing({
   );
 }
 
-export default SessionStakesBriefing;
+export { SessionStakesBriefing }

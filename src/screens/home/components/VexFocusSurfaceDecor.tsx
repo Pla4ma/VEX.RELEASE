@@ -74,4 +74,4 @@ export function VexFocusSurfaceDecor(): React.ReactNode {
   );
 }
 
-export default VexFocusSurfaceDecor;
+export { VexFocusSurfaceDecor }

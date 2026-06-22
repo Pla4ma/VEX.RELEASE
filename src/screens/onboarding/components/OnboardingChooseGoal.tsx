@@ -133,4 +133,4 @@ export function OnboardingChooseGoal({
 
 import { View } from 'react-native';
 
-export default OnboardingChooseGoal;
+export { OnboardingChooseGoal }

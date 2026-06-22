@@ -177,4 +177,4 @@ export function getSessionRewardIntegration(
   return rewardIntegration;
 }
 
-export default SessionRewardIntegration;
+export { SessionRewardIntegration }

@@ -158,4 +158,5 @@ export function MasteryScreen(): React.ReactNode {
   );
 }
 
-export default withScreenErrorBoundary(MasteryScreen, 'Mastery');
+const MasteryScreenWithBoundary = withScreenErrorBoundary(MasteryScreen, 'Mastery');
+export { MasteryScreenWithBoundary as MasteryScreen };

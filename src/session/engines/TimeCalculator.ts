@@ -123,4 +123,4 @@ export const TimeCalculator = {
   calculateCurrentInterval,
   constants: TIME_CONSTANTS,
 };
-export default TimeCalculator;
+export { TimeCalculator }

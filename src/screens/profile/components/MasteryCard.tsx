@@ -190,4 +190,4 @@ export const MasteryCard: React.FC<MasteryCardProps> = ({
   );
 };
 
-export default MasteryCard;
+export { MasteryCard }

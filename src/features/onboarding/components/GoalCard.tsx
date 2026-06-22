@@ -93,4 +93,4 @@ export function GoalCard({
   );
 }
 
-export default GoalCard;
+export { GoalCard }

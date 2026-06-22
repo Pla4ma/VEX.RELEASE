@@ -51,4 +51,4 @@ export function ProfileXpBar({
   );
 }
 
-export default ProfileXpBar;
+export { ProfileXpBar }

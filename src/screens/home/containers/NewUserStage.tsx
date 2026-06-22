@@ -17,4 +17,4 @@ export function NewUserStage({ sharedInput }: StageProps): React.ReactNode {
   return <HomeScreenInner model={model} data={data} />;
 }
 
-export default NewUserStage;
+export { NewUserStage }

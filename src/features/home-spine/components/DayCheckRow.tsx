@@ -73,4 +73,4 @@ export function DayCheckRow({ currentDays }: DayCheckRowProps): React.ReactNode 
   );
 }
 
-export default DayCheckRow;
+export { DayCheckRow }

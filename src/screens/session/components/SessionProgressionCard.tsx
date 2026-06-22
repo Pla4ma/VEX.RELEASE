@@ -141,4 +141,4 @@ export function SessionProgressionCard({
   );
 }
 
-export default SessionProgressionCard;
+export { SessionProgressionCard }

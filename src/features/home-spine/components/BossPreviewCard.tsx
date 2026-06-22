@@ -194,4 +194,4 @@ export function BossPreviewCard({
     </Pressable>
   );
 }
-export default BossPreviewCard;
+export { BossPreviewCard }

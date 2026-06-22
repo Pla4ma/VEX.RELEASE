@@ -178,4 +178,4 @@ const styles = createSheet({
   },
 });
 
-export default Input;
+export { Input }

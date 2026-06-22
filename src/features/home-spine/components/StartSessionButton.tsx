@@ -180,4 +180,4 @@ export function StartSessionButton({
   );
 }
 export { StartSessionButtonCompact };
-export default StartSessionButton;
+export { StartSessionButton }

@@ -160,4 +160,4 @@ const styles = createSheet({
   screenContainer: { flex: 1 },
 });
 
-export default EnterAnimation;
+export { EnterAnimation }

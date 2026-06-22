@@ -93,4 +93,4 @@ export function VexSignalNode({ active = false, index }: VexSignalNodeProps): Re
   );
 }
 
-export default VexSignalNode;
+export { VexSignalNode }

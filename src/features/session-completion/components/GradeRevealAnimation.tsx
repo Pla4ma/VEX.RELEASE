@@ -119,4 +119,4 @@ export function GradeRevealAnimation({
   );
 }
 
-export default GradeRevealAnimation;
+export { GradeRevealAnimation }

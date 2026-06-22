@@ -26,4 +26,4 @@ function PlanScreenContent(): React.ReactNode {
 }
 
 export const PlanScreen = withScreenErrorBoundary(PlanScreenContent, 'Plan');
-export default PlanScreen;
+export { PlanScreen }

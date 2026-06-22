@@ -156,4 +156,4 @@ export const SessionControls: React.FC<SessionControlsProps> = ({
     </View>
   );
 };
-export default SessionControls;
+export { SessionControls }
