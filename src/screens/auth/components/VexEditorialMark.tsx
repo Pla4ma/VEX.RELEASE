@@ -39,6 +39,8 @@ export function VexEditorialMark({
   tagline?: string;
 }): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
+  // Compute year once to avoid hydration mismatch
+  const currentYear = new Date().getFullYear();
   const tagOp = useSharedValue(isReducedMotion ? 1 : 0);
   const tagTy = useSharedValue(isReducedMotion ? 0 : 14);
   const edOp = useSharedValue(isReducedMotion ? 1 : 0);
@@ -118,7 +120,7 @@ export function VexEditorialMark({
             marginTop: 4,
           }}
         >
-          {`An editorial practice · ${new Date().getFullYear()}`}
+          {`An editorial practice · ${currentYear}`}
         </Text>
       </Animated.View>
     </View>
