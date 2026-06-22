@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -49,9 +49,17 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
   const { showToast } = useUIStore();
   const [selectedId, setSelectedId] = useState<string | null>(currentEquippedId ?? null);
   const [isEquipping, setIsEquipping] = useState(false);
+  const mountedRef = useRef(true);
   const slideUp = useSharedValue(0);
   const prevVisibleRef = useRef(visible);
   const prevEquippedIdRef = useRef(currentEquippedId);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   if (visible !== prevVisibleRef.current) {
     prevVisibleRef.current = visible;
@@ -82,6 +90,9 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
     }
     setIsEquipping(true);
     await new Promise((resolve) => setTimeout(resolve, 300));
+    if (!mountedRef.current) {
+      return;
+    }
     onEquip(selectedId);
     setIsEquipping(false);
     const item = items.find((i) => i.id === selectedId);

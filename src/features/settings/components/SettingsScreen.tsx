@@ -1,5 +1,5 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, ScrollView, RefreshControl, Alert } from 'react-native';
 import { useSettingsUIState, useSyncSettings, useResetSettings, type SettingCategory } from '../hooks/useSettingsUIState';
 import { eventBus } from '../../../events/EventBus';
@@ -44,6 +44,14 @@ export function SettingsScreen({
   const [activeCategory, setActiveCategory] =
     useState<SettingCategory>(initialCategory);
   const [settingsState, setSettingsState] = useState<SettingsState>('idle');
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
   const {
     isLoading,
     isError,
@@ -62,14 +70,18 @@ export function SettingsScreen({
     setSettingsState('loading');
     try {
       await refetch();
-      setSettingsState('idle');
+      if (mountedRef.current) {
+        setSettingsState('idle');
+      }
     } catch (err) {
       captureSilentFailure(err, {
         feature: 'settings',
         operation: 'ui-fallback',
         type: 'ui',
       });
-      setSettingsState('error');
+      if (mountedRef.current) {
+        setSettingsState('error');
+      }
     }
   }, [refetch]);
 
@@ -77,14 +89,18 @@ export function SettingsScreen({
     setSettingsState('syncing');
     try {
       await syncMutation.mutateAsync({});
-      setSettingsState('idle');
+      if (mountedRef.current) {
+        setSettingsState('idle');
+      }
       Sentry.addBreadcrumb({
         category: 'settings',
         message: 'Settings synced successfully',
         level: 'info',
       });
     } catch (err) {
-      setSettingsState('error');
+      if (mountedRef.current) {
+        setSettingsState('error');
+      }
       Sentry.captureException(err, { tags: { operation: 'settingsSync' } });
     }
   }, [syncMutation]);
@@ -102,10 +118,15 @@ export function SettingsScreen({
             setSettingsState('saving');
             try {
               await resetMutation.mutateAsync({ category: activeCategory });
+              if (!mountedRef.current) {
+                return;
+              }
               setSettingsState('idle');
               eventBus.publish('settings:reset', { category: activeCategory });
             } catch (err) {
-              setSettingsState('error');
+              if (mountedRef.current) {
+                setSettingsState('error');
+              }
             }
           },
         },

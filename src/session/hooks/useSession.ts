@@ -142,6 +142,7 @@ export function useSession(userId: string): UseSessionReturn {
         setState((prev) => ({ ...prev, isLoading: true }));
         try {
           const result = await action(...args);
+          setState((prev) => ({ ...prev, isLoading: false }));
           refresh();
           return result;
         } catch (err) {
@@ -162,6 +163,7 @@ export function useSession(userId: string): UseSessionReturn {
       setState((prev) => ({ ...prev, isLoading: true }));
       try {
         const session = await actions.createSession(config);
+        setState((prev) => ({ ...prev, isLoading: false }));
         refresh();
         return session;
       } catch (err) {
