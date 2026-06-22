@@ -144,9 +144,7 @@ export async function createRecommendation(
   const sameType = existing.filter(
     (r) => r.recommendationType === validated.type,
   );
-  for (const old of sameType) {
-    await repository.updateRecommendationStatus(old.id, 'EXPIRED');
-  }
+  await Promise.all(sameType.map((old) => repository.updateRecommendationStatus(old.id, 'EXPIRED')));
   return repository.createRecommendation(recommendation);
 }
 

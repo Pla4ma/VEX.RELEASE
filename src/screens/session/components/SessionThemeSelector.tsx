@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
@@ -34,6 +34,49 @@ export function SessionThemeSelector({
   themes,
 }: SessionThemeSelectorProps) {
   const { theme } = useTheme();
+  const renderThemeItem = useCallback(
+    ({ item }: { item: SessionTheme }) => {
+      const isSelected = item.id === selectedThemeId;
+      const isOwned = item.isOwned || item.isFree;
+
+      return (
+        <Pressable
+          onPress={() => onPressTheme(item)}
+          accessibilityLabel="Theme option"
+          accessibilityRole="button"
+          accessibilityHint="Double tap to activate"
+        >
+          <Box
+            width={132}
+            mr="md"
+            p="md"
+            borderRadius={20}
+            style={{
+              backgroundColor: theme.colors.background.secondary,
+              borderWidth: 1,
+              borderColor: isSelected
+                ? item.previewColor
+                : theme.colors.border.light,
+            }}
+          >
+            <Box alignItems="center" mb="sm">
+              <Box
+                width={56}
+                height={56}
+                borderRadius={999}
+                style={{ backgroundColor: item.previewColor }}
+              />
+            </Box>
+            <Text variant="label">{item.name}</Text>
+            <Text variant="caption" color="text.secondary" mt="xs">
+              {isOwned ? 'Owned' : `${item.coinCost} coins`}
+            </Text>
+          </Box>
+        </Pressable>
+      );
+    },
+    [selectedThemeId, onPressTheme, theme],
+  );
 
   return (
     <Box px="lg" mt="lg">
@@ -83,46 +126,7 @@ export function SessionThemeSelector({
             keyExtractor={(item: SessionTheme) => item.id}
             contentContainerStyle={{ paddingRight: theme.spacing[5] }}
             estimatedItemSize={132}
-            renderItem={({ item }: { item: SessionTheme }) => {
-              const isSelected = item.id === selectedThemeId;
-              const isOwned = item.isOwned || item.isFree;
-
-              return (
-                <Pressable
-                  onPress={() => onPressTheme(item)}
-                  accessibilityLabel="Theme option"
-                  accessibilityRole="button"
-                  accessibilityHint="Double tap to activate"
-                >
-                  <Box
-                    width={132}
-                    mr="md"
-                    p="md"
-                    borderRadius={20}
-                    style={{
-                      backgroundColor: theme.colors.background.secondary,
-                      borderWidth: 1,
-                      borderColor: isSelected
-                        ? item.previewColor
-                        : theme.colors.border.light,
-                    }}
-                  >
-                    <Box alignItems="center" mb="sm">
-                      <Box
-                        width={56}
-                        height={56}
-                        borderRadius={999}
-                        style={{ backgroundColor: item.previewColor }}
-                      />
-                    </Box>
-                    <Text variant="label">{item.name}</Text>
-                    <Text variant="caption" color="text.secondary" mt="xs">
-                      {isOwned ? 'Owned' : `${item.coinCost} coins`}
-                    </Text>
-                  </Box>
-                </Pressable>
-              );
-            }}
+            renderItem={renderThemeItem}
           />
         </Box>
       )}

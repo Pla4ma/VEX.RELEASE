@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { submitCapture, loadCaptures } from './service';
 import type { CaptureType, CaptureFormState } from './types';
@@ -28,6 +28,7 @@ export function useCaptureForm() {
 }
 
 export function useCaptureMutation(userId: string) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
       type,
@@ -41,6 +42,9 @@ export function useCaptureMutation(userId: string) {
       const result = await submitCapture(userId, type, content, metadata);
       if (result.error) throw result.error;
       return result.item;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['captures', userId] });
     },
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'capture', operation: 'submitCapture' } });

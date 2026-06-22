@@ -3,7 +3,7 @@ import { Image, View } from 'react-native';
 
 import { glassMaterials, glassRadius } from '../../../theme/tokens/vex-light-glass';
 
-const MASCOT = require('../../../../MASCOT ASSETS/MASCOT_POINTING.png');
+const MASCOT = require('../../../../assets/MASCOT_POINTING.png');
 
 interface Day0MascotProps {
   size: number;

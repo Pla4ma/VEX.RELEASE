@@ -11,11 +11,11 @@ const CoachContextSchema = z.object({ category: z.enum(['STREAK_RISK', 'SESSION_
 const SummaryContextSchema = z.object({ sessionCount: z.number(), totalFocusMinutes: z.number(), averageSessionQuality: z.number(), streakDays: z.number(), xpEarned: z.number(), challengesCompleted: z.number() }).passthrough();
 
 export const AIRequestSchema = z.discriminatedUnion('requestType', [
-  z.object({ requestType: z.literal('GENERATE_COACH_MESSAGE'), userId: z.string().uuid(), context: CoachContextSchema, personaId: z.string().uuid().optional() }),
-  z.object({ requestType: z.literal('GENERATE_SESSION_SUMMARY'), userId: z.string().uuid(), context: SummaryContextSchema }),
-  z.object({ requestType: z.literal('GENERATE_COMEBACK_PROMPT'), userId: z.string().uuid(), context: z.record(z.unknown()) }),
-  z.object({ requestType: z.literal('GENERATE_STREAK_RISK_NUDGE'), userId: z.string().uuid(), context: z.record(z.unknown()) }),
-  z.object({ requestType: z.literal('GENERATE_WEEKLY_REFLECTION'), userId: z.string().uuid(), context: z.record(z.unknown()) }),
+  z.object({ requestType: z.literal('GENERATE_COACH_MESSAGE'), userId: z.string().min(1), context: CoachContextSchema, personaId: z.string().uuid().optional() }),
+  z.object({ requestType: z.literal('GENERATE_SESSION_SUMMARY'), userId: z.string().min(1), context: SummaryContextSchema }),
+  z.object({ requestType: z.literal('GENERATE_COMEBACK_PROMPT'), userId: z.string().min(1), context: z.record(z.unknown()) }),
+  z.object({ requestType: z.literal('GENERATE_STREAK_RISK_NUDGE'), userId: z.string().min(1), context: z.record(z.unknown()) }),
+  z.object({ requestType: z.literal('GENERATE_WEEKLY_REFLECTION'), userId: z.string().min(1), context: z.record(z.unknown()) }),
 ]);
 
 export type AIRequest = z.infer<typeof AIRequestSchema>;

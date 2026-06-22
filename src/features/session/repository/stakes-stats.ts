@@ -93,20 +93,17 @@ export async function batchSaveStakesSessions(
   successful: StakesSessionRecord[];
   failed: Array<{ record: StakesSessionRecord; error: RepositoryError }>;
 }> {
-  const results = {
-    successful: [] as StakesSessionRecord[],
-    failed: [] as Array<{
-      record: StakesSessionRecord;
-      error: RepositoryError;
-    }>,
-  };
-  for (const record of records) {
-    const result = await saveStakesSession(record);
-    if (result.error) {
-      results.failed.push({ record, error: result.error });
-    } else if (result.data) {
-      results.successful.push(result.data);
+  const settled = await Promise.allSettled(
+    records.map((record) => saveStakesSession(record).then((result) => ({ record, result }))),
+  );
+  const successful: StakesSessionRecord[] = [];
+  const failed: Array<{ record: StakesSessionRecord; error: RepositoryError }> = [];
+  for (const item of settled) {
+    if (item.status === 'fulfilled' && item.value.result.data) {
+      successful.push(item.value.result.data);
+    } else if (item.status === 'fulfilled' && item.value.result.error) {
+      failed.push({ record: item.value.record, error: item.value.result.error });
     }
   }
-  return results;
+  return { successful, failed };
 }

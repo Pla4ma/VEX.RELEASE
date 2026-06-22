@@ -23,7 +23,8 @@ export async function fetchStreakSummary(
   return executeWithFallback('fetchStreakSummary', async () => {
     const { data: streakData, error: streakError } = await supabase
       .from('streaks')
-      .select(tableColumns('streaks'))      .single();
+      .select(tableColumns('streaks'))
+      .single();
 
     if (streakError) {
       if (streakError.code === 'PGRST116') {
@@ -61,7 +62,8 @@ export async function fetchStreakEnhanced(
   return executeWithFallback('fetchStreak', async () => {
     const { data, error } = await supabase
       .from('streaks')
-      .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')      .single();
+      .select('id,user_id,current_days,longest_days,last_qualifying_session_at,current_day_completed_at,frozen_until,shields_available,grace_period_used,timezone,created_at,updated_at')
+      .single();
     if (error) {
       throw error;
     }
@@ -116,7 +118,8 @@ export async function updateStreakEnhanced(
   return executeWithFallback('updateStreak', async () => {
     const { data, error } = await supabase
       .from('streaks')
-      .update({ ...updates, updated_at: Date.now() })      .select(tableColumns('streaks'))
+      .update({ ...updates, updated_at: Date.now() })
+      .select(tableColumns('streaks'))
       .single();
     if (error) {
       throw error;
@@ -160,23 +163,23 @@ export async function recordShieldUsageEnhanced(
 export async function batchUpdateStreaks(
   updates: Array<{ userId: string; streak: Partial<Streak> }>,
 ): Promise<{
-  successful: Streak[];
-  failed: Array<{ userId: string; error: StreaksRepositoryError }>;
-}> {
-  const results = {
-    successful: [] as Streak[],
-    failed: [] as Array<{ userId: string; error: StreaksRepositoryError }>,
-  };
-  for (const update of updates) {
-    const result = await updateStreakEnhanced(update.userId, update.streak);
-    if (result.error) {
-      results.failed.push({ userId: update.userId, error: result.error });
-    } else if (result.data) {
-      results.successful.push(result.data);
+    successful: Streak[];
+    failed: Array<{ userId: string; error: StreaksRepositoryError }>;
+  }> {
+    const settled = await Promise.allSettled(
+      updates.map((u) => updateStreakEnhanced(u.userId, u.streak).then((result) => ({ userId: u.userId, result }))),
+    );
+    const successful: Streak[] = [];
+    const failed: Array<{ userId: string; error: StreaksRepositoryError }> = [];
+    for (const item of settled) {
+      if (item.status === 'fulfilled' && item.value.result.data) {
+        successful.push(item.value.result.data);
+      } else if (item.status === 'fulfilled' && item.value.result.error) {
+        failed.push({ userId: item.value.userId, error: item.value.result.error });
+      }
     }
+    return { successful, failed };
   }
-  return results;
-}
 
 export {
   executeWithFallback,

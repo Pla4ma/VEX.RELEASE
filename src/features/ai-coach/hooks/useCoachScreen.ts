@@ -52,9 +52,10 @@ export function useAskCoachQuestionMutation(callbacks: {
   onError: (message: string) => void;
 }) {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
 
   return useMutation({
-    mutationFn: askCoachQuestion,
+    mutationFn: (question: string) => askCoachQuestion(question, user?.id),
     onMutate: callbacks.onMutate,
     onSuccess: (response) => {
       callbacks.onSuccess(response);

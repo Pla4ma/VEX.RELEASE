@@ -1,3 +1,5 @@
+import { getRateLimitClient } from './rate-limit-client.ts';
+
 export { getRateLimitClient, resetRateLimitClient } from './rate-limit-client.ts';
 
 export interface RateLimitConfig {

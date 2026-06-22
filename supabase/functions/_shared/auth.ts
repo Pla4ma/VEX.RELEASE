@@ -74,10 +74,10 @@ export async function verifyAuthorizedUser(
       });
       payload = verified;
     } catch {
-      return verifyAuthorizedUserRemote(request, jsonResponse);
+      return verifyAuthorizedUserRemote(request, jsonResponse, options);
     }
   } else {
-    return verifyAuthorizedUserRemote(request, jsonResponse);
+    return verifyAuthorizedUserRemote(request, jsonResponse, options);
   }
 
   if (!payload.sub) {
@@ -141,6 +141,7 @@ export async function verifyAuthorizedUser(
 async function verifyAuthorizedUserRemote(
   request: Request,
   jsonResponse: (payload: unknown, status: number, request: Request) => Response,
+  options: VerifyAuthOptions = {},
 ): Promise<AuthResult> {
   const authorization = request.headers.get('authorization');
   const token = authorization?.replace('Bearer ', '').trim() ?? '';
@@ -168,7 +169,7 @@ async function verifyAuthorizedUserRemote(
     return { ok: false, response: jsonResponse({ error: 'Unauthorized' }, 401, request) };
   }
 
-  if (!rawUser.email_confirmed_at) {
+  if (options.requireEmailVerified && !rawUser.email_confirmed_at) {
     return {
       ok: false,
       response: jsonResponse({ error: 'Email not verified' }, 403, request),

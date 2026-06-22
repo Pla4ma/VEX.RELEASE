@@ -78,9 +78,7 @@ export class CacheManager {
     const allKeys = (await storage.getAllKeys?.()) || [];
     const cacheKeys = allKeys.filter((k) => k.startsWith(STORAGE_KEYS.CACHE));
 
-    for (const key of cacheKeys) {
-      await storage.removeItem(key);
-    }
+    await Promise.all(cacheKeys.map((key) => storage.removeItem(key)));
 
     this.memoryCache.clear();
   }

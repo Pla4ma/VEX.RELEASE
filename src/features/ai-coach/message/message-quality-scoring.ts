@@ -27,10 +27,15 @@ export function detectGenericPatterns(content: string): {
     'keep it up',
   ];
 
+  const phrasePatternMap = new Map<string, RegExp | undefined>();
   for (const phrase of genericPhrases) {
     const pattern = GENERIC_PATTERNS.find((candidate) =>
       candidate.source.includes(phrase.replace(/\s+/g, '\\s+')),
     );
+    phrasePatternMap.set(phrase, pattern);
+  }
+  for (const phrase of genericPhrases) {
+    const pattern = phrasePatternMap.get(phrase);
     if (lowerContent.includes(phrase) || pattern?.test(content)) {
       isGeneric = true;
       reasons.push(`Generic pattern detected: ${phrase}`);

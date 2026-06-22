@@ -46,17 +46,15 @@ function CoachScreen(): React.ReactNode {
     ({ item }) => (
       <ChatMessageItem
         message={item}
-        personaId={coachState?.personaId}
         onActionPress={handleActionPress}
       />
     ),
-    [coachState?.personaId, handleActionPress],
+    [handleActionPress],
   );
 
   if (stateLoading || historyLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{ height: 44 }} />
         <View style={styles.loadingContainer}>
           <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading your coach...</Text>
@@ -67,7 +65,6 @@ function CoachScreen(): React.ReactNode {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 44 }} />
       <View style={styles.header}>
         <View style={styles.coachInfo}>
           <Text style={styles.coachName}>

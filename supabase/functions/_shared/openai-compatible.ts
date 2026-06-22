@@ -35,11 +35,20 @@ export type OpenAICompatibleResult = {
 };
 
 const httpRequest = globalThis.fetch.bind(globalThis);
+const FREELLMAPI_DEFAULT_BASE_URL = 'https://api.freellmapi.com/v1';
 
 export function getOpenAICompatibleConfig(): OpenAICompatibleConfig | null {
-  const apiKey = Deno.env.get('LLM_API_KEY') ?? Deno.env.get('FREE_LLM_API_KEY');
-  const baseUrl = Deno.env.get('LLM_BASE_URL') ?? Deno.env.get('FREE_LLM_BASE_URL');
-  if (!apiKey || !baseUrl) return null;
+  const apiKey =
+    Deno.env.get('FREELLMAPI_KEY') ??
+    Deno.env.get('LLM_API_KEY') ??
+    Deno.env.get('FREE_LLM_API_KEY');
+  const baseUrl =
+    Deno.env.get('FREELLMAPI_BASE_URL') ??
+    (Deno.env.get('FREELLMAPI_KEY') ? FREELLMAPI_DEFAULT_BASE_URL : undefined) ??
+    Deno.env.get('LLM_BASE_URL') ??
+    Deno.env.get('FREE_LLM_BASE_URL') ??
+    (apiKey ? FREELLMAPI_DEFAULT_BASE_URL : undefined);
+  if (!apiKey || !baseUrl) {return null;}
   return { apiKey, baseUrl };
 }
 
@@ -76,10 +85,10 @@ export async function callOpenAICompatible(params: {
       }),
       signal: controller.signal,
     });
-    if (!response.ok) throw new Error(`LLM API error: ${response.status}`);
+    if (!response.ok) {throw new Error(`LLM API error: ${response.status}`);}
     const payload = parseOpenAIResponse(await response.json());
     const content = payload.choices?.[0]?.message?.content ?? payload.choices?.[0]?.text ?? payload.output_text ?? '';
-    if (!content) throw new Error('LLM returned no content');
+    if (!content) {throw new Error('LLM returned no content');}
     return {
       content: content.replace(/\s+/g, ' ').trim(),
       model: payload.model ?? params.model,
@@ -101,7 +110,7 @@ function buildMessages(systemPrompt: string, userPrompt: string): ChatMessage[] 
 }
 
 function parseOpenAIResponse(value: unknown): OpenAIResponse {
-  if (!isRecord(value)) return {};
+  if (!isRecord(value)) {return {};}
   const choices = Array.isArray(value.choices) ? value.choices.map(parseChoice) : undefined;
   const usage = isRecord(value.usage) ? {
     prompt_tokens: readNumber(value.usage.prompt_tokens),
@@ -116,7 +125,7 @@ function parseOpenAIResponse(value: unknown): OpenAIResponse {
 }
 
 function parseChoice(value: unknown): OpenAIChoice {
-  if (!isRecord(value)) return {};
+  if (!isRecord(value)) {return {};}
   return {
     message: isRecord(value.message) && typeof value.message.content === 'string'
       ? { content: value.message.content }

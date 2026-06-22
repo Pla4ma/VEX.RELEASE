@@ -2252,6 +2252,60 @@ export type Database = {
         }
         Relationships: []
       }
+      onboarding_profiles: {
+        Row: {
+          chosen_lane: string | null
+          created_at: string
+          display_name: string | null
+          element: string | null
+          first_session: Json
+          focus_duration: number | null
+          goal: string | null
+          id: string
+          motivation_profile: Json | null
+          permissions: Json
+          persona: string | null
+          status: string
+          steps: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chosen_lane?: string | null
+          created_at?: string
+          display_name?: string | null
+          element?: string | null
+          first_session?: Json
+          focus_duration?: number | null
+          goal?: string | null
+          id?: string
+          motivation_profile?: Json | null
+          permissions?: Json
+          persona?: string | null
+          status?: string
+          steps?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chosen_lane?: string | null
+          created_at?: string
+          display_name?: string | null
+          element?: string | null
+          first_session?: Json
+          focus_duration?: number | null
+          goal?: string | null
+          id?: string
+          motivation_profile?: Json | null
+          permissions?: Json
+          persona?: string | null
+          status?: string
+          steps?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       personal_bests: {
         Row: {
           achieved_at: string
@@ -4176,6 +4230,7 @@ export type Database = {
           deleted_at: string | null
           generation_version: string
           id: string
+          is_llm_generated: boolean
           key_concepts: string[] | null
           last_used_at: string | null
           model: string
@@ -4196,6 +4251,7 @@ export type Database = {
           deleted_at?: string | null
           generation_version?: string
           id?: string
+          is_llm_generated?: boolean
           key_concepts?: string[] | null
           last_used_at?: string | null
           model?: string
@@ -4216,6 +4272,7 @@ export type Database = {
           deleted_at?: string | null
           generation_version?: string
           id?: string
+          is_llm_generated?: boolean
           key_concepts?: string[] | null
           last_used_at?: string | null
           model?: string
@@ -5213,15 +5270,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "wallets_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       weekly_leaderboard: {
         Row: {
@@ -5276,6 +5325,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      atomic_add_currency: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_source: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      atomic_spend_currency: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_sink: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       can_user_reroll: {
         Args: { p_date?: string; p_user_id: string }
         Returns: boolean
@@ -5438,10 +5505,22 @@ export type Database = {
           weekly_goal_minutes: number
         }[]
       }
+      grant_currency: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_description?: string
+          p_source: string
+          p_source_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       increment_coins: {
         Args: { p_amount: number; p_user_id: string }
         Returns: number
       }
+      is_admin_user: { Args: never; Returns: boolean }
       join_study_circle: {
         Args: { p_circle_id: string; p_role?: string; p_user_id: string }
         Returns: boolean

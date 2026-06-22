@@ -9,7 +9,9 @@ const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 const CONTENT_STUDY_FUNCTION =
   process.env.EXPO_PUBLIC_CONTENT_STUDY_FUNCTION ?? 'generate-study-plan';
 const AI_COACH_FUNCTION =
-  process.env.EXPO_PUBLIC_AI_COACH_FUNCTION ?? 'ai-router';
+  process.env.EXPO_PUBLIC_AI_COACH_FUNCTION === 'ai-router'
+    ? 'ai-coach'
+    : process.env.EXPO_PUBLIC_AI_COACH_FUNCTION ?? 'ai-coach';
 
 function hasSupabaseConfig(): boolean {
   return Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);

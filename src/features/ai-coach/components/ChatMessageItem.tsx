@@ -2,18 +2,16 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import type { ChatMessage } from './coach-chat-types';
 import { buttonTap } from '../../../utils/haptics';
-import { getPersonalityEmoji } from './coach-helpers';
 import { styles } from './CoachScreen.styles';
+import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 
 interface ChatMessageItemProps {
   message: ChatMessage;
-  personaId?: string | null;
   onActionPress: (message: ChatMessage) => void;
 }
 
 export function ChatMessageItem({
   message,
-  personaId,
   onActionPress,
 }: ChatMessageItemProps): React.ReactNode {
   const isCoach = message.type === 'coach';
@@ -32,9 +30,7 @@ export function ChatMessageItem({
     >
       {isCoach && (
         <View style={styles.coachAvatar}>
-          <Text style={styles.coachAvatarText}>
-            {getPersonalityEmoji(personaId)}
-          </Text>
+          <VexAssetImage name="orangeCoach" size={40} />
         </View>
       )}
 

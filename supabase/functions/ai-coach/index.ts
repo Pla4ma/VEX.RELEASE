@@ -1,8 +1,7 @@
 import { buildCorsHeaders } from '../_shared/cors.ts';
-import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
-import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
+import { callOpenAICompatible, getOpenAICompatibleConfig } from '../_shared/openai-compatible.ts';
 import { buildCoachSystemPrompt } from '../_shared/vex-ai-prompt.ts';
 import { extractJsonObject, stripAiMarkdown } from '../_shared/vex-ai-output.ts';
 
@@ -11,11 +10,27 @@ const httpRequest = globalThis.fetch.bind(globalThis);
 const MAX_BODY_LENGTH = 10000;
 
 Deno.serve(async (request) => {
+  try {
+    return await handleRequest(request);
+  } catch (error) {
+    return respond(
+      buildError(
+        'GENERATE_COACH_MESSAGE',
+        Date.now(),
+        'EDGE_UNCAUGHT',
+        error instanceof Error ? error.message : 'Unhandled edge crash',
+        true,
+      ),
+      500,
+      request,
+    );
+  }
+});
+
+async function handleRequest(request: Request): Promise<Response> {
   const corsHeaders = buildCorsHeaders(request);
-  if (request.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
-  const auth = await verifyAuthorizedUser(request, respond);
-  if (!auth.ok) return auth.response;
-  if (request.method !== 'POST') return respond(buildError('GENERATE_COACH_MESSAGE', Date.now(), 'INVALID_REQUEST', 'Method not allowed', false), 405, request);
+  if (request.method === 'OPTIONS') {return new Response('ok', { headers: corsHeaders });}
+  if (request.method !== 'POST') {return respond(buildError('GENERATE_COACH_MESSAGE', Date.now(), 'INVALID_REQUEST', 'Method not allowed', false), 405, request);}
   const startedAt = Date.now();
   const bodyText = await request.text();
   if (bodyText.length > MAX_BODY_LENGTH) {
@@ -23,45 +38,55 @@ Deno.serve(async (request) => {
   }
   let body: unknown;
   try { body = JSON.parse(bodyText); } catch { body = null; }
+  if (!hasAppUserId(body)) {
+    return respond(buildError(readRequestType(body), startedAt, 'INVALID_REQUEST', 'Missing app user id', false), 400, request);
+  }
   const parsed = AIRequestSchema.safeParse(body);
-  if (!parsed.success) return respond(buildError(readRequestType(body), startedAt, 'INVALID_REQUEST', 'Invalid AI request payload', false), 400, request);
-  if (parsed.data.userId !== auth.user.id) return respond(buildError(parsed.data.requestType, startedAt, 'FORBIDDEN', 'Request user does not match auth token', false), 403, request);
+  if (!parsed.success) {return respond(buildError(readRequestType(body), startedAt, 'INVALID_REQUEST', 'Invalid AI request payload', false), 400, request);}
   const llmConfig = getOpenAICompatibleConfig();
   const apiKey = Deno.env.get('GEMINI_API_KEY');
-  if (!llmConfig && !apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
+  if (!llmConfig && !apiKey) {return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);}
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (parsed.data.requestType === 'GENERATE_COACH_MESSAGE' && supabaseUrl && serviceRoleKey) {
+  if (
+    parsed.data.requestType === 'GENERATE_COACH_MESSAGE' &&
+    isUuid(parsed.data.userId) &&
+    supabaseUrl &&
+    serviceRoleKey
+  ) {
     const rateLimit = await checkRateLimit(parsed.data.userId, 'ai:coach', supabaseUrl, serviceRoleKey);
-    if (!rateLimit.allowed) return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);
+    if (!rateLimit.allowed) {return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);}
   }
   try {
     const prompt = buildPrompt(parsed.data);
     if (llmConfig) {
-      const model = getOpenAICompatibleModel('fast', 'auto');
+      const model = 'auto';
       const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: parsed.data.requestType === 'GENERATE_COACH_MESSAGE' });
       try {
         return respond(buildTextSuccess(parsed.data, llm.content, llm.model, startedAt, false, llm.promptTokens, llm.responseTokens), 200, request);
       } catch (error) {
-        if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') throw error;
-        const fallbackModel = Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'groq/compound-mini';
+        if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') {throw error;}
+        const fallbackModel = Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'auto';
         const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: true });
         return respond(buildTextSuccess(parsed.data, fallback.content, fallback.model, startedAt, true, fallback.promptTokens, fallback.responseTokens), 200, request);
       }
     }
-    if (!apiKey) return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);
+    if (!apiKey) {return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);}
     const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);
     return respond(buildSuccess(parsed.data, gemini, startedAt), 200, request);
   } catch (error) {
     return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', error instanceof Error ? error.message : 'LLM request failed', true), 200, request);
   }
-});
+}
 
 function buildPrompt(request: AIRequest): { system: string; user: string; maxOutputTokens: number } {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const persona = request.context.personaStyle ?? 'MENTOR';
     const recent = (request.context.recentSessionOutcomes ?? []).map((e, i) => `#${i + 1}: score=${e.score}, quality=${e.focusQuality ?? e.score}, duration=${e.durationMinutes ?? 0}m`).join('; ') || 'none';
-    return { system: buildCoachSystemPrompt(persona), user: `Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. Hours=${request.context.hoursSinceLastSession ?? 0}. Inactive=${request.context.daysInactive ?? 0}. Recent3=${recent}.`, maxOutputTokens: 150 };
+    const userMessage = typeof request.context.userMessage === 'string'
+      ? request.context.userMessage.slice(0, 500)
+      : '';
+    return { system: buildCoachSystemPrompt(persona), user: `UserMessage=${userMessage}. Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. Hours=${request.context.hoursSinceLastSession ?? 0}. Inactive=${request.context.daysInactive ?? 0}. Recent3=${recent}.`, maxOutputTokens: 180 };
   }
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
 }
@@ -70,8 +95,8 @@ async function callGemini(apiKey: string, systemPrompt: string, userPrompt: stri
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 9000);
   try {
-    const response = await httpRequest(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { role: 'user', parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
-    if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
+    const response = await httpRequest('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { role: 'user', parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
+    if (!response.ok) {throw new Error(`Gemini API error: ${response.status}`);}
     return (await response.json()) as GeminiResponse;
   } finally { clearTimeout(timeoutId); }
 }
@@ -101,16 +126,28 @@ function buildError(requestType: AIRequest['requestType'], startedAt: number, co
 
 function parseJsonBlock(text: string): unknown {
   const matched = extractJsonObject(text);
-  if (!matched) throw new Error('LLM returned non-JSON content');
+  if (!matched) {throw new Error('LLM returned non-JSON content');}
   return JSON.parse(matched) as unknown;
 }
 
 function stripMarkdown(text: string): string { return stripAiMarkdown(text); }
 
 function readRequestType(rawBody: unknown): AIRequest['requestType'] {
-  if (typeof rawBody !== 'object' || rawBody === null || !('requestType' in rawBody)) return 'GENERATE_COACH_MESSAGE';
+  if (typeof rawBody !== 'object' || rawBody === null || !('requestType' in rawBody)) {return 'GENERATE_COACH_MESSAGE';}
   const parsed = AIRequestTypeSchema.safeParse(rawBody.requestType);
   return parsed.success ? parsed.data : 'GENERATE_COACH_MESSAGE';
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+function hasAppUserId(body: unknown): boolean {
+  return isRecord(body) && typeof body.userId === 'string' && body.userId.trim().length > 0;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }
 
 function respond(payload: unknown, status: number, request: Request): Response {

@@ -52,7 +52,5 @@ export async function clearAllContentStudyData(): Promise<void> {
     k.startsWith(CONTENT_STUDY_CONSTANTS.LOCAL_STORAGE_KEY),
   );
 
-  for (const key of contentStudyKeys) {
-    await storage.removeItem(key);
-  }
+  await Promise.all(contentStudyKeys.map((key) => storage.removeItem(key)));
 }

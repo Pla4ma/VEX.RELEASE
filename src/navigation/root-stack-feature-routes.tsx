@@ -6,6 +6,7 @@ import { canRegisterFeatureRoute } from './feature-route-registry';
 import type { ExtendedRootStackParams } from './types';
 import { RouteLoadingFallback } from './RouteLoadingFallback';
 import type { FeatureAccessMap } from '../features/liveops-config';
+import CoachScreen from '../features/ai-coach/components/CoachScreen';
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
@@ -26,9 +27,6 @@ const MasteryScreen = React.lazy(
 );
 const ContentStudyNavigator = React.lazy(
   () => import('./ContentStudyNavigator'),
-);
-const CoachScreen = React.lazy(
-  () => import('../features/ai-coach/components/CoachScreen'),
 );
 const MemoryConsoleScreen = React.lazy(
   () => import('../screens/profile/MemoryConsoleScreen'),
