@@ -4,9 +4,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   deleteMemory,
-  useActiveFocusMemories,
-  useMemoryConsoleVisibility,
 } from '../../features/focus-memory/service';
+import { useActiveFocusMemories } from '../../features/focus-memory/hooks';
+import { useMemoryConsoleVisibility } from '../../features/focus-memory/useMemoryConsoleVisibility';
 import type { FocusMemory } from '../../features/focus-memory/service';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
