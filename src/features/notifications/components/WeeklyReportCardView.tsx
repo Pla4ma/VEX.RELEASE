@@ -8,6 +8,7 @@ import { lightColors } from '@/theme/tokens/colors';
 
 import { WeeklyReportStatsGrid } from './WeeklyReportStatsGrid';
 import { Text as VexText } from '../../../components/primitives/Text';
+import { formatCompactNumber } from '../formatters';
 
 export interface WeeklyReportCardProps {
   totalMinutes: number;
@@ -23,13 +24,6 @@ export interface WeeklyReportCardProps {
   };
   onViewAnalytics: () => void;
   onShare?: () => void;
-}
-
-function formatNumber(num: number): string {
-  if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}K`;
-  }
-  return num.toString();
 }
 
 export function WeeklyReportCard({
@@ -86,7 +80,7 @@ export function WeeklyReportCard({
           bg="background.tertiary"
         >
           <Text fontSize={48} fontWeight="900" color="primary.500">
-            {formatNumber(totalMinutes)}
+            {formatCompactNumber(totalMinutes)}
           </Text>
           <Text variant="body" color="text.secondary">
             minutes focused this week
