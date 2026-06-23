@@ -7,7 +7,6 @@ export { GlassIconOrb } from './GlassIconOrb';
 export { GlassProgressBar } from './GlassProgressBar';
 export { LiquidGlassSphere } from './LiquidGlassSphere';
 export { WaterBubble } from './WaterBubble';
-export { FocusModeOrb } from './FocusModeOrb';
 export { LiquidLens } from './LiquidLens';
 export { GlassRibbon } from './GlassRibbon';
 export { CrystalAvatar } from './CrystalAvatar';
