@@ -73,9 +73,11 @@ export function isInPeakWindow(peakHour: number, windowSize = 2): boolean {
 export async function processSmartNotifications(): Promise<void> {
   try {
     const users = await fetchNotificationEnabledUsers();
-    for (const user of users) {
-      await processUserSmartNotification(user.id, user.timezone || 'UTC');
-    }
+    await Promise.allSettled(
+      users.map((user) =>
+        processUserSmartNotification(user.id, user.timezone || 'UTC'),
+      ),
+    );
   } catch (error) {
     debug.error('Error processing smart notifications', error instanceof Error ? error : undefined);
   }

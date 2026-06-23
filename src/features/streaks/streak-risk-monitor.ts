@@ -130,18 +130,16 @@ export async function checkAndSendRiskNotifications(
 export async function checkAllStreaksAtRisk(): Promise<StreakRiskStatus[]> {
   const atRiskUsers = await repository.fetchUsersWithActiveStreaks();
   const riskStatuses: StreakRiskStatus[] = [];
-  for (const userId of atRiskUsers) {
-    try {
+  const results = await Promise.allSettled(
+    atRiskUsers.map(async (userId) => {
       await checkAndSendRiskNotifications(userId);
       const streak = await repository.fetchStreak(userId);
-      if (streak) {
-        riskStatuses.push(calculateStreakRisk(streak));
-      }
-    } catch (error) {
-      debug.error(
-        `Failed to check streak risk for user ${userId}`,
-        error instanceof Error ? error : new Error(String(error)),
-      );
+      return streak ? calculateStreakRisk(streak) : null;
+    }),
+  );
+  for (const r of results) {
+    if (r.status === 'fulfilled' && r.value) {
+      riskStatuses.push(r.value);
     }
   }
   return riskStatuses;

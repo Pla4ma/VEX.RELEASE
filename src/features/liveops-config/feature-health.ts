@@ -96,14 +96,17 @@ class FeatureHealthRegistry {
    * Returns all features that are currently unhealthy.
    */
   async getUnhealthyFeatures(): Promise<FeatureKey[]> {
-    const results = new Set<FeatureKey>();
-    for (const check of this.checks.values()) {
-      const status = await this.getCachedOrCheck(check);
-      if (status !== 'healthy') {
-        results.add(check.feature);
+    const entries = Array.from(this.checks.values());
+    const results = await Promise.allSettled(
+      entries.map((check) => this.getCachedOrCheck(check)),
+    );
+    const unhealthy = new Set<FeatureKey>();
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled' && r.value !== 'healthy') {
+        unhealthy.add(entries[i]!.feature);
       }
-    }
-    return Array.from(results);
+    });
+    return Array.from(unhealthy);
   }
 
   /**

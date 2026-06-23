@@ -103,18 +103,19 @@ export async function dispatchSocialNotification(
       debug.info('No push tokens found for user', { recipientUserId });
       return { success: true, sentCount: 0 };
     }
-    let sentCount = 0;
-    for (const token of pushTokens) {
-      const sent = await sendExpoPushNotification(token, title, body, {
-        type,
-        ...data,
-        actorUserId: notification.actorUserId,
-        actorName,
-      });
-      if (sent) {
-        sentCount++;
-      }
-    }
+    const results = await Promise.allSettled(
+      pushTokens.map((token) =>
+        sendExpoPushNotification(token, title, body, {
+          type,
+          ...data,
+          actorUserId: notification.actorUserId,
+          actorName,
+        }),
+      ),
+    );
+    const sentCount = results.filter(
+      (r) => r.status === 'fulfilled' && r.value,
+    ).length;
     debug.info('Social notification dispatched', {
       type,
       recipientUserId,
@@ -130,11 +131,13 @@ export async function dispatchSocialNotification(
 export async function batchDispatchSocialNotifications(
   notifications: SocialNotification[],
 ): Promise<{ success: boolean; totalSent: number }> {
-  let totalSent = 0;
-  for (const notification of notifications) {
-    const result = await dispatchSocialNotification(notification);
-    totalSent += result.sentCount;
-  }
+  const results = await Promise.allSettled(
+    notifications.map((n) => dispatchSocialNotification(n)),
+  );
+  const totalSent = results.reduce(
+    (sum, r) => sum + (r.status === 'fulfilled' ? r.value.sentCount : 0),
+    0,
+  );
   return { success: totalSent > 0, totalSent };
 }
 export async function isNotificationEnabled(
