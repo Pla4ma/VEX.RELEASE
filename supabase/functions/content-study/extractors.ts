@@ -8,12 +8,12 @@ const GEMINI_TIMEOUT_MS = 60000;
 
 export function resolveStudyPlanModel(): string {
   return getOpenAICompatibleConfig()
-    ? getOpenAICompatibleModel('pro', 'auto')
+    ? getOpenAICompatibleModel('pro', 'mistral-small-latest')
     : GEMINI_MODEL;
 }
 
 export function resolveStudyPlanFallbackModel(): string {
-  return Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'groq/compound-mini';
+  return Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'llama-3.3-70b-versatile';
 }
 
 async function callGemini(prompt: string): Promise<string> {

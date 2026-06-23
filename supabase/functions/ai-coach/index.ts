@@ -1,12 +1,16 @@
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
-import { callOpenAICompatible, getOpenAICompatibleConfig } from '../_shared/openai-compatible.ts';
-import { extractJsonObject, stripAiMarkdown } from '../_shared/vex-ai-output.ts';
+import { callOpenAICompatible, getOpenAICompatibleConfig, type OpenAICompatibleConfig, type OpenAICompatibleResult } from '../_shared/openai-compatible.ts';
+import { readCoachPayload } from './coach-output.ts';
+import { COACH_MODEL_LADDER } from './coach-models.ts';
+import { buildGuardrailReply } from './coach-guardrails.ts';
 
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
 const httpRequest = globalThis.fetch.bind(globalThis);
 const MAX_BODY_LENGTH = 10000;
+const COACH_MODEL_TIMEOUT_MS = 4500;
+const COACH_TOTAL_TIMEOUT_MS = 12000;
 
 Deno.serve(async (request) => {
   try {
@@ -59,16 +63,12 @@ async function handleRequest(request: Request): Promise<Response> {
   try {
     const prompt = buildPrompt(parsed.data);
     if (llmConfig) {
-      const model = 'auto';
-      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: false });
-      try {
-        return respond(buildTextSuccess(parsed.data, llm.content, llm.model, startedAt, false, llm.promptTokens, llm.responseTokens), 200, request);
-      } catch (error) {
-        if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') {throw error;}
-        const fallbackModel = 'auto';
-        const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: false });
-        return respond(buildTextSuccess(parsed.data, fallback.content, fallback.model, startedAt, true, fallback.promptTokens, fallback.responseTokens), 200, request);
+      const guardrail = readGuardrailReply(parsed.data);
+      if (guardrail) {
+        return respond(buildTextSuccess(parsed.data, guardrail, 'vex-guardrail', startedAt, false), 200, request);
       }
+      const llm = await callCoachModelLadder(llmConfig, prompt, parsed.data.requestType === 'GENERATE_COACH_MESSAGE');
+      return respond(buildTextSuccess(parsed.data, llm.content, llm.model, startedAt, llm.fallbackUsed, llm.promptTokens, llm.responseTokens), 200, request);
     }
     if (!apiKey) {return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);}
     const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);
@@ -78,6 +78,34 @@ async function handleRequest(request: Request): Promise<Response> {
   }
 }
 
+function readGuardrailReply(request: AIRequest): string | null {
+  if (request.requestType !== 'GENERATE_COACH_MESSAGE') {return null;}
+  const userMessage = typeof request.context.userMessage === 'string' ? request.context.userMessage : '';
+  return buildGuardrailReply(userMessage);
+}
+
+async function callCoachModelLadder(
+  config: OpenAICompatibleConfig,
+  prompt: { system: string; user: string; maxOutputTokens: number },
+  useFallbacks: boolean,
+): Promise<OpenAICompatibleResult> {
+  const models = useFallbacks ? COACH_MODEL_LADDER : ['auto'];
+  const startedAt = Date.now();
+  let lastError: Error | null = null;
+  for (const model of models) {
+    const remainingMs = COACH_TOTAL_TIMEOUT_MS - (Date.now() - startedAt);
+    if (remainingMs <= 0) {break;}
+    try {
+      const llm = await callOpenAICompatible({ config, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: Math.min(COACH_MODEL_TIMEOUT_MS, remainingMs), temperature: 0.45, maxTokens: prompt.maxOutputTokens, jsonMode: false });
+      if (useFallbacks) {readCoachPayload(llm.content);}
+      return { ...llm, fallbackUsed: model !== 'auto' };
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('LLM request failed');
+    }
+  }
+  throw lastError ?? new Error('LLM request failed');
+}
+
 function buildPrompt(request: AIRequest): { system: string; user: string; maxOutputTokens: number } {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const recent = (request.context.recentSessionOutcomes ?? []).map((e, i) => `#${i + 1}: score=${e.score}, quality=${e.focusQuality ?? e.score}, duration=${e.durationMinutes ?? 0}m`).join('; ') || 'none';
@@ -85,9 +113,9 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
       ? request.context.userMessage.slice(0, 500)
       : '';
     return {
-      system: 'You are VEX, a direct focus coach inside a mobile app. Reply to the user, not the prompt. No markdown. No lists. No analysis. One or two short sentences.',
-      user: 'User said: "' + userMessage + '". Context: category ' + request.context.category + ', level ' + (request.context.currentLevel ?? 1) + ', streak ' + (request.context.currentStreak ?? 0) + ', hours since session ' + (request.context.hoursSinceLastSession ?? 0) + ', recent ' + recent + '. Give one useful next step.',
-      maxOutputTokens: 90,
+      system: '',
+      user: 'You are the VEX app coach for focus, self-control, and execution. VEX is not VEX Robotics. Never mention sensors, motors, robots, competitions, providers, or model names unless the user explicitly asks about those external topics. If asked what model you are, say you are VEX inside the app. User: "' + userMessage + '". Context: level ' + (request.context.currentLevel ?? 1) + ', streak ' + (request.context.currentStreak ?? 0) + ', recent ' + recent + '. Output style: premium, current, calm, human. No quotes. No team/game/match/gameplan language. No generic assistant phrases. Answer the actual message first. If useful, add one grounded next move. Maximum two short sentences.',
+      maxOutputTokens: 140,
     };
   }
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
@@ -119,30 +147,11 @@ function buildTextPayload(request: AIRequest, rawText: string, metadata: { model
     const structuredData = CoachPayloadSchema.parse(readCoachPayload(rawText));
     return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };
   }
-  return { success: true, requestType: request.requestType, content: stripMarkdown(rawText).slice(0, 1000), structuredData: {}, metadata };
+  return { success: true, requestType: request.requestType, content: rawText.replace(/\s+/g, ' ').trim().slice(0, 1000), structuredData: {}, metadata };
 }
 
 function buildError(requestType: AIRequest['requestType'], startedAt: number, code: string, message: string, retryable: boolean) {
   return { success: false, requestType, content: '', structuredData: requestType === 'GENERATE_COACH_MESSAGE' ? { message: '', tone: 'calm', urgency: 'low' } : {}, metadata: { model: 'gemini-1.5-flash', processingTimeMs: Date.now() - startedAt, cached: false }, error: { code, message, retryable } };
-}
-
-function readCoachPayload(text: string): unknown {
-  const matched = extractJsonObject(text);
-  if (matched) {return JSON.parse(matched) as unknown;}
-  const message = stripMarkdown(text).slice(0, 1000);
-  if (isPromptEcho(message)) {throw new Error('LLM echoed prompt instead of answering');}
-  return { message, tone: 'calm', urgency: 'low' };
-}
-
-function stripMarkdown(text: string): string { return stripAiMarkdown(text); }
-
-function isPromptEcho(message: string): boolean {
-  const lower = message.toLowerCase();
-  return lower.includes('analyze the request') ||
-    lower.includes('user context:') ||
-    lower.includes('allowed actions') ||
-    lower.includes('valid json only') ||
-    lower.includes('user said:');
 }
 
 function readRequestType(rawBody: unknown): AIRequest['requestType'] {

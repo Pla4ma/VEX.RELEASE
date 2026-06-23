@@ -22,6 +22,7 @@ import type { FeatureAccessMap } from '../../../features/liveops-config/feature-
 import type { HomeScreenInnerProps } from './HomeScreenInnerTypes';
 import { useHomeScreenInnerEffects } from './useHomeScreenInnerEffects';
 import { HomeTopBar } from './HomeTopBar';
+import { spacing } from '../../../theme/tokens/spacing';
 
 export type { HomeDataProps, HomeScreenInnerProps } from './HomeScreenInnerTypes';
 
@@ -100,7 +101,13 @@ function HomeScreenInnerRaw({
 
   return (
       <GlassScreen showAura variant="home">
-        <View style={{ flex: 1, paddingHorizontal: 12, paddingTop: 6 }}>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: spacing[4],
+            paddingTop: spacing[2],
+          }}
+        >
           <HomeTopBar />
           <ScrollView
             contentContainerStyle={{ paddingBottom: 200 }}

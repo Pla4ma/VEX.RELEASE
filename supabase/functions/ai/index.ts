@@ -1,6 +1,6 @@
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import { AIRequestSchema, type AIRequest, type AIResponse } from '../../../src/shared/ai/ai-types.ts';
-import { AI_TIMEOUTS, FALLBACK_CONTENT, GENERATION_CONFIG, MODEL_BY_USE_CASE, SYSTEM_PROMPTS, USER_PROMPT_TEMPLATES } from '../../../src/shared/ai/ai-constants.ts';
+import { AI_TIMEOUTS, GENERATION_CONFIG, MODEL_BY_USE_CASE, SYSTEM_PROMPTS, USER_PROMPT_TEMPLATES } from '../../../src/shared/ai/ai-constants.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { callGemini } from './gemini.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
@@ -98,7 +98,10 @@ async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
 
 function resolveModel(requestType: AIRequest['requestType']): string {
   const llmConfig = getOpenAICompatibleConfig();
-  if (llmConfig) return getOpenAICompatibleModel(requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION' ? 'pro' : 'fast', 'auto');
+  if (llmConfig) {
+    const kind = requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION' ? 'pro' : 'fast';
+    return getOpenAICompatibleModel(kind, kind === 'pro' ? 'mistral-small-latest' : 'llama-3.1-8b-instant');
+  }
   return Deno.env.get(requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION' ? 'GEMINI_MODEL_PRO' : 'GEMINI_MODEL_FLASH') || MODEL_BY_USE_CASE[requestType] || 'gemini-2.5-flash';
 }
 

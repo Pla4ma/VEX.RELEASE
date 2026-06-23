@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
-import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { borderRadius } from '../../../theme/tokens/radius';
@@ -12,56 +11,42 @@ import { type } from '../../reference-ui/referenceTokens';
 import type { HomeUnlockPathItem } from '../services/home-unlock-path-schemas';
 
 interface ActiveUnlockCardProps {
-  item: HomeUnlockPathItem;
   progress: number;
   progressLabel: string;
-  actionCopy: string;
 }
 
         
 export function ActiveUnlockCard({
-  item,
   progress,
   progressLabel,
-  actionCopy,
 }: ActiveUnlockCardProps): React.ReactNode {
   return (
-    <GlassCard padding={16} radius={borderRadius['2xl']} variant="warning">
+    <View
+      style={{
+        backgroundColor: vexLightGlass.glass.fill,
+        borderColor: vexLightGlass.glass.border,
+        borderRadius: borderRadius.xl,
+        borderWidth: 1,
+        marginTop: spacing[4],
+        padding: spacing[4],
+      }}
+    >
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
-        <View
-          style={{}}
-        >
-          <Icon color={vexLightGlass.semantic.fireDeep} name="lock" size="sm" />
-        </View>
         <View style={{ flex: 1 }}>
-          <Text style={[type.kicker, { color: vexLightGlass.semantic.fireDeep }]}>
-            {item.eyebrow}
+          <Text style={[type.kicker, { color: vexLightGlass.text.tertiary }]}>
+            SIGNAL PROGRESS
           </Text>
-          <Text style={[type.title, { marginTop: spacing[1] }]}>{item.title}</Text>
-        </View>
-        <View
-          style={{
-            backgroundColor: vexLightGlass.glass.fillStrong,
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: borderRadius.full,
-            borderWidth: 1,
-            paddingHorizontal: spacing[2],
-            paddingVertical: spacing[1],
-          }}
-        >
-          <Text style={[type.kicker, { color: vexLightGlass.semantic.fireDeep }]}>
-            NEXT
+          <Text style={[type.body, { marginTop: spacing[1] }]}>
+            Complete one clean session to reveal the baseline layer.
           </Text>
         </View>
+        <Icon color={vexLightGlass.semantic.fireDeep} name="arrowRight" size="sm" />
       </View>
-      <Text style={[type.body, { marginTop: spacing[3] }]}>
-        {item.body} {actionCopy}
-      </Text>
       <View
         style={{
           backgroundColor: vexLightGlass.glass.borderSubtle,
           borderRadius: borderRadius.full,
-          height: 7,
+          height: 6,
           marginTop: spacing[3],
           overflow: 'hidden',
         }}
@@ -87,7 +72,7 @@ export function ActiveUnlockCard({
       >
         {progressLabel}
       </Text>
-    </GlassCard>
+    </View>
   );
 }
 
@@ -115,7 +100,15 @@ export function LockedTeaserCard({
         transform: [{ scale: pressed ? 0.985 : 1 }],
       })}
     >
-      <GlassCard padding={14} radius={borderRadius.xl} variant="subtle">
+      <View
+        style={{
+          backgroundColor: vexLightGlass.glass.fillSubtle,
+          borderColor: vexLightGlass.glass.borderSubtle,
+          borderRadius: borderRadius.xl,
+          borderWidth: 1,
+          padding: spacing[4],
+        }}
+      >
         <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
           <Icon color={vexLightGlass.text.disabled} name="lock" size="sm" />
           <View style={{ flex: 1 }}>
@@ -126,7 +119,7 @@ export function LockedTeaserCard({
             <Text style={[type.body, { marginTop: spacing[1] }]}>{item.body}</Text>
           </View>
         </View>
-      </GlassCard>
+      </View>
     </Pressable>
   );
 }

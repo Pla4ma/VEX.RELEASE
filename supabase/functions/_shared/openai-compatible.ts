@@ -58,7 +58,8 @@ function readConfigPair(keyName: string, baseUrlName: string): OpenAICompatibleC
 
 export function getOpenAICompatibleModel(kind: 'fast' | 'pro', fallback: string): string {
   const specific = kind === 'pro' ? Deno.env.get('LLM_MODEL_PRO') : Deno.env.get('LLM_MODEL_FAST');
-  return specific ?? Deno.env.get('LLM_MODEL') ?? Deno.env.get('FREE_LLM_MODEL') ?? fallback;
+  const configured = specific ?? Deno.env.get('LLM_MODEL') ?? Deno.env.get('FREE_LLM_MODEL');
+  return configured && configured !== 'auto' ? configured : fallback;
 }
 
 export async function callOpenAICompatible(params: {
@@ -124,10 +125,10 @@ function redactBaseUrl(baseUrl: string): string {
 }
 
 function buildMessages(systemPrompt: string, userPrompt: string): ChatMessage[] {
-  return [
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: userPrompt },
-  ];
+  const messages: ChatMessage[] = [];
+  if (systemPrompt.trim()) {messages.push({ role: 'system', content: systemPrompt });}
+  messages.push({ role: 'user', content: userPrompt });
+  return messages;
 }
 
 function parseOpenAIResponse(value: unknown): OpenAIResponse {

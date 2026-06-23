@@ -7,7 +7,10 @@ import { Icon } from '../../../icons/components/Icon';
 import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { GlassPill } from '../../../components/glass/GlassPill';
 import { VexBrandPill } from '../components/VexBrandPill';
+import { borderRadius } from '../../../theme/tokens/radius';
+import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -22,7 +25,7 @@ export function HomeTopBar(): React.ReactNode {
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 14,
+        marginBottom: spacing[5],
         zIndex: 2,
       }}
     >
@@ -65,14 +68,18 @@ export function HomeTopBar(): React.ReactNode {
           alignItems: 'center',
           backgroundColor: vexLightGlass.glass.fill,
           borderColor: vexLightGlass.glass.border,
-          borderRadius: 19,
+          borderRadius: borderRadius.full,
           borderWidth: 1.5,
-          height: 40,
+          height: 44,
           justifyContent: 'center',
           overflow: 'hidden',
-          boxShadow: '0px 7px 12px vexLightGlass.glass.shadow / 0.16',
-          width: 40,
+          shadowColor: vexLightGlass.glass.shadow,
+          shadowOffset: { height: 7, width: 0 },
+          shadowOpacity: 0.16,
+          shadowRadius: 12,
+          width: 44,
           zIndex: 3,
+          ...getMinTouchTargetStyle(),
         }}
       >
         <LinearGradient
@@ -84,8 +91,8 @@ export function HomeTopBar(): React.ReactNode {
           locations={[0, 0.55]}
           start={{ x: 0, y: 0 }}
           style={{
-            borderTopLeftRadius: 19,
-            borderTopRightRadius: 19,
+            borderTopLeftRadius: 22,
+            borderTopRightRadius: 22,
             height: '60%',
             left: 0,
             position: 'absolute',

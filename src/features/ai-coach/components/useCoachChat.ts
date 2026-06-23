@@ -8,9 +8,12 @@ import type { ChatMessage } from './coach-chat-types';
 import { CoachMessageInputSchema } from './coach-chat-types';
 import { getWelcomeMessage } from './coach-helpers';
 
+const MIN_COACH_RESPONSE_MS = 3000;
+
 export function useCoachChat() {
   const { track } = useAnalytics();
   const flashListRef = useRef<FlashListRef<ChatMessage> | null>(null);
+  const requestStartedAtRef = useRef(0);
   const [inputText, setInputText] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -20,15 +23,15 @@ export function useCoachChat() {
 
   const askMutation = useAskCoachQuestionMutation({
     onMutate: () => {
+      requestStartedAtRef.current = Date.now();
       setIsTyping(true);
       setError(null);
     },
     onSuccess: (response) => {
-      setIsTyping(false);
       const coachMsg: ChatMessage = {
         id: `coach-${Date.now()}`,
         type: 'coach',
-        content: response.message,
+        content: cleanCoachContent('coach', response.message),
         timestamp: Date.now(),
         metadata: {
           hasAction: response.hasAction,
@@ -36,10 +39,15 @@ export function useCoachChat() {
           actionData: response.actionData,
         },
       };
-      setChatMessages((prev) => [...prev, coachMsg]);
-      track(CoachEvents.COACH_QUESTION_ANSWERED, {
-        has_action: response.hasAction,
-      });
+      const elapsedMs = Date.now() - requestStartedAtRef.current;
+      const delayMs = Math.max(MIN_COACH_RESPONSE_MS - elapsedMs, 0);
+      setTimeout(() => {
+        setIsTyping(false);
+        setChatMessages((prev) => [...prev, coachMsg]);
+        track(CoachEvents.COACH_QUESTION_ANSWERED, {
+          has_action: response.hasAction,
+        });
+      }, delayMs);
     },
     onError: (message) => {
       setIsTyping(false);
@@ -51,17 +59,19 @@ export function useCoachChat() {
     if (coachHistory?.messages && chatMessages.length === 0) {
       const initialMessages: ChatMessage[] = coachHistory.messages
         .slice(-20)
-        .map((msg) => {
+        .map((msg): ChatMessage => {
           const parsed = CoachMessageInputSchema.parse(msg);
+          const sender = parsed.sender === 'user' ? 'user' : 'coach';
           return {
             id: parsed.id,
-            type: parsed.sender === 'user' ? 'user' : 'coach',
-            content: parsed.content,
+            type: sender,
+            content: cleanCoachContent(sender, parsed.content),
             timestamp: parsed.createdAt,
             // Validated Zod parse boundary — metadata shape matches ChatMessage
             metadata: parsed.metadata as ChatMessage['metadata'],
           };
-        });
+        })
+        .filter((message) => !isCoachPromptEcho(message));
       if (initialMessages.length === 0) {
         initialMessages.push({
           id: 'welcome',
@@ -146,4 +156,38 @@ export function useCoachChat() {
     historyLoading,
     recommendation,
   };
+}
+
+function isCoachPromptEcho(message: ChatMessage): boolean {
+  if (message.type !== 'coach') {return false;}
+  const lower = message.content.toLowerCase();
+  return lower.includes('analyze the request') ||
+    lower.includes('analyze the user') ||
+    lower.includes('user context:') ||
+    lower.includes('allowed actions') ||
+    lower.includes('constraints:') ||
+    lower.includes('persona:') ||
+    lower.includes('valid json only') ||
+    lower.includes('user said:');
+}
+
+function cleanCoachContent(sender: string, content: string): string {
+  if (sender === 'user') {return content;}
+  return stripWrappingQuotes(content)
+    .replace(/let'?s get back to the game ?plan[.!]?/gi, 'Pick one small next move.')
+    .replace(/let'?s get started on our first match[.!]?/gi, 'Start with one clear target.')
+    .replace(/welcome to the team,?\s*/gi, '')
+    .replace(/\b(sensors?|motors?|robots?|robotics|competition|tournament)\b/gi, 'focus')
+    .trim();
+}
+
+function stripWrappingQuotes(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed.length < 2) {return trimmed;}
+  const first = trimmed[0];
+  const last = trimmed[trimmed.length - 1];
+  if ((first === '"' && last === '"') || (first === '“' && last === '”')) {
+    return trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
 }

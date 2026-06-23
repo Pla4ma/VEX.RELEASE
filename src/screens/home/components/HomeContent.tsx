@@ -87,19 +87,19 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         onRetry={controller.retryAll}
       />
 
-      {showUnlockPath ? (
-        <HomeUnlockPath
-          model={unlockPathModel}
-          onStartSession={() => controller.openSetup()}
-          onPeekLocked={handlePeekLocked}
-        />
-      ) : null}
-
       {isDayZero ? (
         <HomeDayZeroLaunchpad
           onStartSession={() => controller.openSetup()}
           onOpenCoach={controller.openCoach}
           userId={controller.userId}
+        />
+      ) : null}
+
+      {showUnlockPath ? (
+        <HomeUnlockPath
+          model={unlockPathModel}
+          onStartSession={() => controller.openSetup()}
+          onPeekLocked={handlePeekLocked}
         />
       ) : null}
 

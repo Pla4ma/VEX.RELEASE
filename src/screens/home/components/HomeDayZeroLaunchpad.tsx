@@ -4,6 +4,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { useToast } from '../../../shared/ui/components/ToastProvider';
+import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
@@ -48,8 +49,13 @@ export function HomeDayZeroLaunchpad({
 
   return (
     <>
-      <Day0VexOsCard completedActions={completedActions} />
-      <Day0ActionGrid onSelect={handleSelect} />
+      <Day0VexOsCard
+        completedActions={completedActions}
+        onStartSession={onStartSession}
+      />
+      <View style={{ marginBottom: spacing[4] }}>
+        <Day0ActionGrid onSelect={handleSelect} />
+      </View>
 
       <Pressable
         accessibilityHint="Opens the VEX coach to calibrate your first day"
@@ -61,16 +67,29 @@ export function HomeDayZeroLaunchpad({
           transform: [{ scale: pressed ? 0.985 : 1 }],
         })}
       >
-        <ReferenceCard showAsset={false}>
+        <ReferenceCard showAsset={false} style={{ marginBottom: spacing[8] }}>
           <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
-            <Day0Mascot size={72} />
+            <View
+              style={{
+                alignItems: 'center',
+                backgroundColor: vexLightGlass.mint[100],
+                borderColor: vexLightGlass.glass.border,
+                borderRadius: borderRadius['2xl'],
+                borderWidth: 1,
+                height: 76,
+                justifyContent: 'center',
+                width: 76,
+              }}
+            >
+              <Day0Mascot size={58} />
+            </View>
             <View style={{ flex: 1 }}>
               <Text style={type.kicker}>VEX ANCHOR</Text>
               <Text style={[type.title, { marginTop: spacing[1] }]}>
-                Meet the agent before you focus.
+                Check in before you start.
               </Text>
               <Text style={[type.body, { marginTop: spacing[1] }]}>
-                Tell VEX how today feels. It can coach, plan, or just hold the thread.
+                Tell VEX what today feels like. It will shape the next move.
               </Text>
             </View>
             <Icon
