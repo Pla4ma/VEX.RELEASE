@@ -38,42 +38,33 @@ function computeBestFocusWindow(sessions: SessionRow[]): string {
   }
 
   const hourBuckets = new Map<number, { count: number; gradeSum: number }>();
-  const gradeValues: Record<string, number> = {
-    S: 6,
-    A: 5,
-    B: 4,
-    C: 3,
-    D: 2,
-    F: 1,
-  };
+  const gradeValues: Record<string, number> = { S: 6, A: 5, B: 4, C: 3, D: 2, F: 1 };
 
   for (const session of sessions) {
     const hour = new Date(session.started_at).getHours();
     const gradeVal = gradeValues[session.grade] ?? 3;
     const existing = hourBuckets.get(hour) ?? { count: 0, gradeSum: 0 };
-    hourBuckets.set(hour, {
-      count: existing.count + 1,
-      gradeSum: existing.gradeSum + gradeVal,
-    });
+    hourBuckets.set(hour, { count: existing.count + 1, gradeSum: existing.gradeSum + gradeVal });
   }
 
   let bestHour = 0;
   let bestScore = -1;
-
   for (const [hour, data] of hourBuckets.entries()) {
     const avgGrade = data.gradeSum / data.count;
     const weightedScore = avgGrade * Math.log2(data.count + 1);
-    if (weightedScore > bestScore) {
-      bestScore = weightedScore;
-      bestHour = hour;
-    }
+    if (weightedScore > bestScore) { bestScore = weightedScore; bestHour = hour; }
   }
 
-  const period =
-    bestHour < 12 ? 'Morning' : bestHour < 17 ? 'Afternoon' : 'Evening';
+  const period = getDayPeriod(bestHour);
   const startHour = bestHour % 12 === 0 ? 12 : bestHour % 12;
   const amPm = bestHour < 12 ? 'AM' : 'PM';
   return `${period} (${startHour}:00 ${amPm})`;
+}
+
+function getDayPeriod(hour: number): string {
+  if (hour < 12) { return 'Morning'; }
+  if (hour < 17) { return 'Afternoon'; }
+  return 'Evening';
 }
 
 function computePatterns(factors: FocusFactors): {
