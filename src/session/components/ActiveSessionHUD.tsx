@@ -7,6 +7,7 @@ import {
   formatTime,
   getPhaseLabel,
   getStatusColor,
+  getSessionStatusLabel,
 } from './ActiveSessionHUD.helpers';
 import { styles } from './ActiveSessionHUD.styles';
 
