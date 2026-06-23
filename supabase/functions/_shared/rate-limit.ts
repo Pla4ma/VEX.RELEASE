@@ -9,7 +9,7 @@ export interface RateLimitConfig {
 
 const DEFAULT_CONFIGS: Record<string, RateLimitConfig> = {
   'session:complete': { maxRequests: 10, windowSeconds: 60 },
-  'ai:coach': { maxRequests: 5, windowSeconds: 3600 },
+  'ai:coach': { maxRequests: 120, windowSeconds: 3600 },
   'ai:generate': { maxRequests: 20, windowSeconds: 3600 },
   'auth:login': { maxRequests: 10, windowSeconds: 300 },
   'auth:signup': { maxRequests: 5, windowSeconds: 300 },

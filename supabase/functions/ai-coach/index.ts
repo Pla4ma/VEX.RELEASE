@@ -2,7 +2,6 @@ import { buildCorsHeaders } from '../_shared/cors.ts';
 import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
 import { callOpenAICompatible, getOpenAICompatibleConfig } from '../_shared/openai-compatible.ts';
-import { buildCoachSystemPrompt } from '../_shared/vex-ai-prompt.ts';
 import { extractJsonObject, stripAiMarkdown } from '../_shared/vex-ai-output.ts';
 
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
@@ -55,19 +54,19 @@ async function handleRequest(request: Request): Promise<Response> {
     serviceRoleKey
   ) {
     const rateLimit = await checkRateLimit(parsed.data.userId, 'ai:coach', supabaseUrl, serviceRoleKey);
-    if (!rateLimit.allowed) {return respond(buildError(parsed.data.requestType, startedAt, 'GEMINI_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);}
+    if (!rateLimit.allowed) {return respond(buildError(parsed.data.requestType, startedAt, 'AI_COACH_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);}
   }
   try {
     const prompt = buildPrompt(parsed.data);
     if (llmConfig) {
       const model = 'auto';
-      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: parsed.data.requestType === 'GENERATE_COACH_MESSAGE' });
+      const llm = await callOpenAICompatible({ config: llmConfig, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.4, maxTokens: prompt.maxOutputTokens, jsonMode: false });
       try {
         return respond(buildTextSuccess(parsed.data, llm.content, llm.model, startedAt, false, llm.promptTokens, llm.responseTokens), 200, request);
       } catch (error) {
         if (parsed.data.requestType !== 'GENERATE_COACH_MESSAGE') {throw error;}
-        const fallbackModel = Deno.env.get('LLM_MODEL_JSON_FALLBACK') ?? 'auto';
-        const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: true });
+        const fallbackModel = 'auto';
+        const fallback = await callOpenAICompatible({ config: llmConfig, model: fallbackModel, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: 9000, temperature: 0.2, maxTokens: prompt.maxOutputTokens, jsonMode: false });
         return respond(buildTextSuccess(parsed.data, fallback.content, fallback.model, startedAt, true, fallback.promptTokens, fallback.responseTokens), 200, request);
       }
     }
@@ -81,12 +80,15 @@ async function handleRequest(request: Request): Promise<Response> {
 
 function buildPrompt(request: AIRequest): { system: string; user: string; maxOutputTokens: number } {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
-    const persona = request.context.personaStyle ?? 'MENTOR';
     const recent = (request.context.recentSessionOutcomes ?? []).map((e, i) => `#${i + 1}: score=${e.score}, quality=${e.focusQuality ?? e.score}, duration=${e.durationMinutes ?? 0}m`).join('; ') || 'none';
     const userMessage = typeof request.context.userMessage === 'string'
       ? request.context.userMessage.slice(0, 500)
       : '';
-    return { system: buildCoachSystemPrompt(persona), user: `UserMessage=${userMessage}. Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. Hours=${request.context.hoursSinceLastSession ?? 0}. Inactive=${request.context.daysInactive ?? 0}. Recent3=${recent}.`, maxOutputTokens: 180 };
+    return {
+      system: 'You are VEX, a direct focus coach inside a mobile app. Reply to the user, not the prompt. No markdown. No lists. No analysis. One or two short sentences.',
+      user: 'User said: "' + userMessage + '". Context: category ' + request.context.category + ', level ' + (request.context.currentLevel ?? 1) + ', streak ' + (request.context.currentStreak ?? 0) + ', hours since session ' + (request.context.hoursSinceLastSession ?? 0) + ', recent ' + recent + '. Give one useful next step.',
+      maxOutputTokens: 90,
+    };
   }
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
 }
@@ -114,7 +116,7 @@ function buildTextSuccess(request: AIRequest, rawText: string, model: string, st
 
 function buildTextPayload(request: AIRequest, rawText: string, metadata: { model: string; provider?: string; fallbackUsed?: boolean; processingTimeMs: number; promptTokens?: number; responseTokens?: number; cached: boolean }) {
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
-    const structuredData = CoachPayloadSchema.parse(parseJsonBlock(rawText));
+    const structuredData = CoachPayloadSchema.parse(readCoachPayload(rawText));
     return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };
   }
   return { success: true, requestType: request.requestType, content: stripMarkdown(rawText).slice(0, 1000), structuredData: {}, metadata };
@@ -124,13 +126,24 @@ function buildError(requestType: AIRequest['requestType'], startedAt: number, co
   return { success: false, requestType, content: '', structuredData: requestType === 'GENERATE_COACH_MESSAGE' ? { message: '', tone: 'calm', urgency: 'low' } : {}, metadata: { model: 'gemini-1.5-flash', processingTimeMs: Date.now() - startedAt, cached: false }, error: { code, message, retryable } };
 }
 
-function parseJsonBlock(text: string): unknown {
+function readCoachPayload(text: string): unknown {
   const matched = extractJsonObject(text);
-  if (!matched) {throw new Error('LLM returned non-JSON content');}
-  return JSON.parse(matched) as unknown;
+  if (matched) {return JSON.parse(matched) as unknown;}
+  const message = stripMarkdown(text).slice(0, 1000);
+  if (isPromptEcho(message)) {throw new Error('LLM echoed prompt instead of answering');}
+  return { message, tone: 'calm', urgency: 'low' };
 }
 
 function stripMarkdown(text: string): string { return stripAiMarkdown(text); }
+
+function isPromptEcho(message: string): boolean {
+  const lower = message.toLowerCase();
+  return lower.includes('analyze the request') ||
+    lower.includes('user context:') ||
+    lower.includes('allowed actions') ||
+    lower.includes('valid json only') ||
+    lower.includes('user said:');
+}
 
 function readRequestType(rawBody: unknown): AIRequest['requestType'] {
   if (typeof rawBody !== 'object' || rawBody === null || !('requestType' in rawBody)) {return 'GENERATE_COACH_MESSAGE';}

@@ -23,6 +23,7 @@ type OpenAIResponse = {
 export type OpenAICompatibleConfig = {
   apiKey: string;
   baseUrl: string;
+  source: string;
 };
 
 export type OpenAICompatibleResult = {
@@ -35,21 +36,24 @@ export type OpenAICompatibleResult = {
 };
 
 const httpRequest = globalThis.fetch.bind(globalThis);
-const FREELLMAPI_DEFAULT_BASE_URL = 'https://api.freellmapi.com/v1';
+const FREELLMAPI_DEFAULT_BASE_URL = 'http://167.71.255.199:3001/v1';
 
 export function getOpenAICompatibleConfig(): OpenAICompatibleConfig | null {
-  const apiKey =
-    Deno.env.get('FREELLMAPI_KEY') ??
-    Deno.env.get('LLM_API_KEY') ??
-    Deno.env.get('FREE_LLM_API_KEY');
-  const baseUrl =
-    Deno.env.get('FREELLMAPI_BASE_URL') ??
-    (Deno.env.get('FREELLMAPI_KEY') ? FREELLMAPI_DEFAULT_BASE_URL : undefined) ??
-    Deno.env.get('LLM_BASE_URL') ??
-    Deno.env.get('FREE_LLM_BASE_URL') ??
-    (apiKey ? FREELLMAPI_DEFAULT_BASE_URL : undefined);
-  if (!apiKey || !baseUrl) {return null;}
-  return { apiKey, baseUrl };
+  const explicitConfig =
+    readConfigPair('LLM_API_KEY', 'LLM_BASE_URL') ??
+    readConfigPair('FREELLMAPI_KEY', 'FREELLMAPI_BASE_URL') ??
+    readConfigPair('FREE_LLM_API_KEY', 'FREE_LLM_BASE_URL');
+  if (explicitConfig) {return explicitConfig;}
+  const apiKey = Deno.env.get('LLM_API_KEY') ?? Deno.env.get('FREELLMAPI_KEY') ?? Deno.env.get('FREE_LLM_API_KEY');
+  const baseUrl = Deno.env.get('LLM_BASE_URL') ?? Deno.env.get('FREELLMAPI_BASE_URL') ?? Deno.env.get('FREE_LLM_BASE_URL') ?? FREELLMAPI_DEFAULT_BASE_URL;
+  if (!apiKey) {return null;}
+  return { apiKey, baseUrl, source: 'fallback' };
+}
+
+function readConfigPair(keyName: string, baseUrlName: string): OpenAICompatibleConfig | null {
+  const apiKey = Deno.env.get(keyName);
+  const baseUrl = Deno.env.get(baseUrlName);
+  return apiKey && baseUrl ? { apiKey, baseUrl, source: keyName + '+' + baseUrlName } : null;
 }
 
 export function getOpenAICompatibleModel(kind: 'fast' | 'pro', fallback: string): string {
@@ -75,6 +79,7 @@ export async function callOpenAICompatible(params: {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${params.config.apiKey}`,
+        'x-api-key': params.config.apiKey,
       },
       body: JSON.stringify({
         model: params.model,
@@ -85,7 +90,9 @@ export async function callOpenAICompatible(params: {
       }),
       signal: controller.signal,
     });
-    if (!response.ok) {throw new Error(`LLM API error: ${response.status}`);}
+    if (!response.ok) {
+      throw new Error(await buildApiError(response, params.config));
+    }
     const payload = parseOpenAIResponse(await response.json());
     const content = payload.choices?.[0]?.message?.content ?? payload.choices?.[0]?.text ?? payload.output_text ?? '';
     if (!content) {throw new Error('LLM returned no content');}
@@ -99,6 +106,20 @@ export async function callOpenAICompatible(params: {
     };
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+async function buildApiError(response: Response, config: OpenAICompatibleConfig): Promise<string> {
+  const body = (await response.text()).replace(/\s+/g, ' ').slice(0, 500);
+  return `LLM API error: ${response.status} source=${config.source} baseUrl=${redactBaseUrl(config.baseUrl)} body=${body}`;
+}
+
+function redactBaseUrl(baseUrl: string): string {
+  try {
+    const url = new URL(baseUrl);
+    return url.protocol + '//' + url.host + url.pathname;
+  } catch {
+    return 'invalid-url';
   }
 }
 

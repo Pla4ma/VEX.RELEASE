@@ -30,7 +30,7 @@ export function ChatMessageItem({
     >
       {isCoach && (
         <View style={styles.coachAvatar}>
-          <VexAssetImage name="orangeCoach" size={40} />
+          <VexAssetImage name="orangeCoach" size={30} />
         </View>
       )}
 
