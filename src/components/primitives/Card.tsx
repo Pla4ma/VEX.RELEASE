@@ -91,7 +91,7 @@ export const Card = forwardRef<View, CardProps>(
     const combined = [
       { overflow: 'hidden' as const },
       variantStyles[variant],
-      { ...sizeStyles[size], padding: theme.spacing[size === 'sm' ? 3 : size === 'md' ? 4 : 5] },
+      sizeStyles[size],
       stateStyles[state],
       style,
     ];
