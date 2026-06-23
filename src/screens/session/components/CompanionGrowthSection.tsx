@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
@@ -33,6 +33,11 @@ export function CompanionGrowthSection({
 }: CompanionGrowthSectionProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
+
   const load = useCallback(() => {
     if (!userId) {
       setLoadState({ status: 'empty' });
@@ -43,8 +48,12 @@ export function CompanionGrowthSection({
       .then(
         (growth) => growth ?? buildFallbackGrowth(sessionId, summary, userId),
       )
-      .then((growth) => setLoadState({ status: 'success', growth }))
+      .then((growth) => {
+        if (!mountedRef.current) { return; }
+        setLoadState({ status: 'success', growth });
+      })
       .catch((caught: unknown) => {
+        if (!mountedRef.current) { return; }
         setLoadState({
           status: 'error',
           error: caught instanceof Error ? caught : new Error(String(caught)),
