@@ -54,7 +54,7 @@ const initializeServices = async (): Promise<() => void> => {
  4. ThemeProvider - styling
  5. ErrorBoundary - error handling
  */
-export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
+export function AppProviders({ children }: AppProvidersProps) {
   useEffect(() => {
     let cleanup: (() => void) | null = null;
     let disposed = false;
@@ -88,4 +88,4 @@ export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
       </SafeAreaProvider>
     </Container>
   );
-};
+}

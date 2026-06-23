@@ -53,7 +53,7 @@ function useAppRuntimeBootstrap(): boolean {
   return ready;
 }
 
-let GestureHandlerRootView: React.FC<{
+let GestureHandlerRootView: React.ComponentType<{
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }> = ({ children }) => <>{children}</>;
@@ -71,7 +71,7 @@ if (Platform.OS !== 'web') {
   }
 }
 
-export const App: React.FC = () => {
+export function App() {
   const isReady = useAppRuntimeBootstrap();
 
   if (!isReady) {
@@ -98,4 +98,4 @@ export const App: React.FC = () => {
         <PrivacyBlurOverlay />
       </GestureHandlerRootView>
   );
-};
+}

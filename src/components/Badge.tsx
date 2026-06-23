@@ -119,7 +119,7 @@ function BadgeContent({
   );
 }
 
-export const Badge: React.FC<BadgeProps> = ({
+export function Badge({
   children,
   label,
   variant = 'default',
@@ -132,7 +132,7 @@ export const Badge: React.FC<BadgeProps> = ({
   fullWidth = false,
   style,
   textStyle,
-}) => {
+}: BadgeProps) {
   const { theme } = useTheme();
   const sizeConfig = sizeMap[size as SizeKey];
   const variantStyles = getVariantStyles(variant, theme);

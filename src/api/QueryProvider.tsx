@@ -54,7 +54,7 @@ interface QueryProviderProps {
  * - Network awareness (pause when offline)
  * - Focus management
  */
-export const QueryProvider: React.FC<QueryProviderProps> = ({ children }) => {
+export function QueryProvider({ children }: QueryProviderProps) {
   useEffect(() => {
     // Initialize network monitoring
     const netInfo = getNetInfoAdapter();
@@ -91,7 +91,7 @@ export const QueryProvider: React.FC<QueryProviderProps> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
-};
+}
 
 /**
  * Export query client for direct access
