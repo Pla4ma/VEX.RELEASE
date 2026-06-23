@@ -5,7 +5,7 @@ import { eventBus } from '../../../events';
 import type { UserAchievement } from '../types';
 
 jest.mock('../repository');
-jest.mock('../../../events', () => ({
+jest.mock('../../../events/EventBus', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },
 }));
 jest.mock('../../../shared/analytics/analytics-service', () => ({

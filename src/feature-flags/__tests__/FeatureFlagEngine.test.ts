@@ -1,4 +1,4 @@
-import FeatureFlagEngine from '../FeatureFlagEngine';
+import { FeatureFlagEngine } from '../FeatureFlagEngine';
 
 jest.mock('react-native-mmkv', () => ({
   MMKV: jest.fn().mockImplementation(() => ({

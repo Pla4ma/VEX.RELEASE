@@ -1,4 +1,4 @@
-import HapticEngine from '../HapticEngine';
+import { HapticEngine } from '../HapticEngine';
 
 describe('HapticEngine', () => {
   let engine: HapticEngine;

@@ -147,9 +147,7 @@ export function setupMocks(): void {
     })),
   }));
 
-  jest.mock('../analytics', () => ({
-    trackSessionCompleted: jest.fn(),
-  }));
+
 }
 
 setupMocks();

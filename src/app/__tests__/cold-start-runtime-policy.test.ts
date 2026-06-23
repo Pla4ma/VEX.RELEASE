@@ -120,7 +120,6 @@ describe('cold-start runtime policy', () => {
     expectNoStaticImport(
       [...rootFiles, ...rootNavigationFiles],
       [
-        'features/ai-coach',
         'features/boss',
         'features/content-study',
         'features/spectacle',

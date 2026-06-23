@@ -62,9 +62,6 @@ jest.mock('../../../../features/companion/service', () => ({
   })),
 }));
 
-jest.mock('../../analytics', () => ({
-  trackSessionCompleted: jest.fn(),
-}));
 
 export const baseLedger: CompletionLedger = {
   companionReactionId: null,

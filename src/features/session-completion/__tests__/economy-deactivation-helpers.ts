@@ -54,9 +54,7 @@ jest.mock('../../companion/service', () => ({
 jest.mock('../../liveops-config/feature-access-store', () => ({
   getAvailabilityFor: jest.fn(() => ({ canUseBackend: true, canNavigate: true, canQuery: true })),
 }));
-jest.mock('../analytics', () => ({
-  trackSessionCompleted: jest.fn(),
-}));
+
 
 export const baseLedger: CompletionLedger = {
   companionReactionId: null,

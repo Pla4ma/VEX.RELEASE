@@ -10,7 +10,7 @@ export {
   type Subscription,
   validateSubscription,
 } from './subscription-validation';
-export { verifyReceiptSignature, parseReceipt }
+export { verifyReceiptSignature, parseReceipt } from './receipt-utils';
 
 import { validatePurchase } from './purchase-validation';
 import { validateSubscription } from './subscription-validation';

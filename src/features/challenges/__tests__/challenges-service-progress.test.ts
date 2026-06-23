@@ -31,9 +31,6 @@ jest.mock('../../../config/supabase', () => ({
     })),
   })),
 }));
-jest.mock('../../../analytics', () => ({
-  getAnalyticsService: jest.fn(() => ({ track: jest.fn() })),
-}));
 jest.mock('../../../utils/debug', () => ({
   createDebugger: jest.fn(() => ({
     debug: jest.fn(), error: jest.fn(), log: jest.fn(), warn: jest.fn(),
