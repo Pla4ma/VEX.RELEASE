@@ -13,6 +13,7 @@ import {
   type CompletionSyncStatus,
 } from './schemas';
 import { mapRowToCompletionLedger, mapRowToCompletionLedgerNullable } from './mappers';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 const debug = createDebugger('session-completion:repository');
 
@@ -37,34 +38,16 @@ export async function persistCompletionLedger(
     idempotency_key: ledger.idempotencyKey,
     session_id: ledger.sessionId,
     user_id: ledger.userId,
-    mode: ledger.mode,
-    target_duration_seconds: ledger.targetDurationSeconds,
-    completed_duration_seconds: ledger.completedDurationSeconds,
-    effective_focused_seconds: ledger.effectiveFocusedSeconds,
-    pause_count: ledger.pauseCount,
-    interruption_count: ledger.interruptionCount,
-    strict_mode: ledger.strictMode,
-    started_at: ledger.startedAt,
     completed_at: ledger.completedAt,
-    timezone: ledger.timezone,
-    grade: ledger.grade,
-    grade_score: ledger.gradeScore,
-    quality_score: ledger.qualityScore,
-    focus_score_delta: ledger.focusScoreDelta,
-    xp_delta: ledger.xpDelta,
-    streak_result: ledger.streakResult,
-    companion_reaction_id: ledger.companionReactionId,
-    reward_ids: ledger.rewardIds,
-    daily_mission_result: ledger.dailyMissionResult,
+    ledger_payload: CompletionLedgerSchema.parse(ledger),
     offline_sync_status: 'synced' as const,
-    degraded_systems: ledger.degradedSystems,
     created_at: ledger.createdAt,
   };
 
   const { data, error } = await supabase
     .from('session_completion_ledgers')
     .insert(row)
-    .select('*')
+    .select(tableColumns('session_completion_ledgers'))
     .single();
 
   if (error) {
@@ -88,7 +71,9 @@ export async function persistCompletionLedger(
   }
 
   try {
-    return mapRowToCompletionLedger(data);
+    const persisted = mapRowToCompletionLedger(data);
+    await recordCompletionSessionEvent(persisted);
+    return persisted;
   } catch (e) {
     throw new SessionCompletionRepositoryError('create', e);
   }
@@ -100,7 +85,7 @@ export async function getCompletionLedgerByIdempotencyKey(
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from('session_completion_ledgers')
-    .select('*')
+    .select(tableColumns('session_completion_ledgers'))
     .eq('idempotency_key', idempotencyKey)
     .single();
 
@@ -125,7 +110,7 @@ export async function getCompletionLedgerBySessionId(
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from('session_completion_ledgers')
-    .select('*')
+    .select(tableColumns('session_completion_ledgers'))
     .eq('session_id', sessionId)
     .single();
 
@@ -173,5 +158,22 @@ export async function updateCompletionSyncStatus(
 
   if (error) {
     throw new SessionCompletionRepositoryError('update-sync-status', error);
+  }
+}
+
+async function recordCompletionSessionEvent(ledger: CompletionLedger): Promise<void> {
+  const supabase = getSupabaseClient();
+  const { error } = await supabase.rpc('record_session_event', {
+    p_user_id: ledger.userId,
+    p_session_id: ledger.sessionId,
+    p_event_type: 'session.completed',
+    p_event_payload: CompletionLedgerSchema.parse(ledger),
+    p_idempotency_key: ledger.idempotencyKey + ':event',
+    p_occurred_at: new Date(ledger.completedAt).toISOString(),
+  });
+
+  if (error) {
+    Sentry.captureException(error);
+    debug.warn('Failed to record session completion event:', error);
   }
 }

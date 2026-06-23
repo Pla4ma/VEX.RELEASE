@@ -2,62 +2,24 @@ import { ACTION_LABELS } from '../../coach-presence/copy';
 import { CoachActionIntentSchema } from '../../coach-presence/schemas';
 import { resolveCoachActionIntent } from '../../coach-presence/service';
 import { getAvailabilityFor } from '../../liveops-config';
-import { isSupabaseConfigured, supabase } from '../../../config/supabase';
-import { readFunctionErrorMessage } from './coach-screen-ai-errors';
+import {
+  invokeAiCoachFunction,
+  type AiCoachFunctionResponse,
+} from '../repository/coach-ai-function-repository';
 import type { CoachQuestionResponse } from './coach-screen-service';
-
-const AI_COACH_FUNCTION = resolveCoachFunctionName(
-  process.env.EXPO_PUBLIC_AI_COACH_FUNCTION,
-);
-
-interface AiCoachFunctionResponse {
-  success?: unknown;
-  error?: {
-    code?: unknown;
-    message?: unknown;
-  };
-  content?: unknown;
-  structuredData?: {
-    message?: unknown;
-    action?: unknown;
-    actionLabel?: unknown;
-  };
-  message?: unknown;
-  action?: { type?: unknown; duration?: unknown; difficulty?: unknown };
-}
 
 export async function askAiCoachFunction(
   question: string,
   userId?: string,
 ): Promise<CoachQuestionResponse | null> {
-  if (!isSupabaseConfigured() || !AI_COACH_FUNCTION.trim()) {
-    return null;
-  }
   if (!userId) {
     throw new Error('Coach AI needs a signed-in user before it can respond.');
   }
-  const session = await supabase.auth.getSession();
-
-  const { data, error } = await supabase.functions.invoke<AiCoachFunctionResponse>(
-    AI_COACH_FUNCTION,
-    {
-      body: {
-        context: buildCoachContext(question),
-        requestType: 'GENERATE_COACH_MESSAGE',
-        userId,
-      },
-    },
-  );
-  const message = readAiMessage(data);
-  if (error) {
-    throw new Error(
-      await readFunctionErrorMessage(error, {
-        functionName: AI_COACH_FUNCTION,
-        hasSession: Boolean(session.data.session),
-        userId,
-      }),
-    );
+  const data = await invokeAiCoachFunction(question, userId);
+  if (!data) {
+    return null;
   }
+  const message = readAiMessage(data);
   if (data?.success === false) {
     throw new Error(readAiPayloadError(data));
   }
@@ -95,30 +57,6 @@ function readAiPayloadError(data: AiCoachFunctionResponse): string {
       ? data.error.message
       : 'Coach AI returned an error payload.';
   return code + ': ' + message;
-}
-
-function buildCoachContext(question: string): Record<string, unknown> {
-  return {
-    category: chooseCoachCategory(question),
-    currentLevel: 1,
-    currentStreak: 0,
-    hoursSinceLastSession: 0,
-    userMessage: question,
-  };
-}
-
-function chooseCoachCategory(question: string): string {
-  const lowerQuestion = question.toLowerCase();
-  if (lowerQuestion.includes('break')) {
-    return 'BREAK_SUGGESTION';
-  }
-  if (lowerQuestion.includes('streak')) {
-    return 'STREAK_RISK';
-  }
-  if (lowerQuestion.includes('progress') || lowerQuestion.includes('level')) {
-    return 'PROGRESS_REMINDER';
-  }
-  return 'MOTIVATION_BOOST';
 }
 
 function normalizeCoachAction(
@@ -187,11 +125,4 @@ function mapAiActionIntent(intent: string): string {
     default:
       return intent;
   }
-}
-
-function resolveCoachFunctionName(value: string | undefined): string {
-  if (!value || value.trim().length === 0 || value === 'ai-router') {
-    return 'ai-coach';
-  }
-  return value;
 }

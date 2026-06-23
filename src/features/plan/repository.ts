@@ -3,11 +3,12 @@ import { RepositoryError } from '../../lib/repository/error-handling';
 import type { PlanItemStatus } from './schemas';
 import { mapPlanItem, mapPlanProject, mapPlanStudyPlan } from './repository-mappers';
 import type { PlanItem, PlanProject, PlanStudyPlan } from './types';
+import { tableColumns } from '../../lib/repository/tableColumns';
 
 export async function fetchPlanItems(userId: string): Promise<PlanItem[]> {
   const { data, error } = await getSupabaseClient()
     .from('plan_items')
-    .select('*')
+    .select(tableColumns('plan_items'))
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -21,7 +22,7 @@ export async function fetchPlanItemsByProject(
 ): Promise<PlanItem[]> {
   const { data, error } = await getSupabaseClient()
     .from('plan_items')
-    .select('*')
+    .select(tableColumns('plan_items'))
     .eq('user_id', userId)
     .eq('project_id', projectId)
     .order('created_at', { ascending: false });
@@ -36,7 +37,7 @@ export async function fetchPlanItemsByStudyPlan(
 ): Promise<PlanItem[]> {
   const { data, error } = await getSupabaseClient()
     .from('plan_items')
-    .select('*')
+    .select(tableColumns('plan_items'))
     .eq('user_id', userId)
     .eq('study_plan_id', studyPlanId)
     .order('created_at', { ascending: false });
@@ -63,7 +64,7 @@ export async function createPlanItem(
       tags: input.tags,
       lane: input.lane,
     })
-    .select()
+    .select(tableColumns('plan_items'))
     .single();
 
   if (error) throw new RepositoryError('createPlanItem', error);
@@ -79,7 +80,7 @@ export async function updatePlanItemStatus(
     .from('plan_items')
     .update({ status, completed_at: completedAt })
     .eq('id', itemId)
-    .select()
+    .select(tableColumns('plan_items'))
     .single();
 
   if (error) throw new RepositoryError('updatePlanItemStatus', error);
@@ -98,7 +99,7 @@ export async function deletePlanItem(itemId: string): Promise<void> {
 export async function fetchProjects(userId: string): Promise<PlanProject[]> {
   const { data, error } = await getSupabaseClient()
     .from('plan_projects')
-    .select('*')
+    .select(tableColumns('plan_projects'))
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -120,7 +121,7 @@ export async function createProject(
       status: input.status,
       lane: input.lane,
     })
-    .select()
+    .select(tableColumns('plan_projects'))
     .single();
 
   if (error) throw new RepositoryError('createProject', error);
@@ -130,7 +131,7 @@ export async function createProject(
 export async function fetchStudyPlans(userId: string): Promise<PlanStudyPlan[]> {
   const { data, error } = await getSupabaseClient()
     .from('plan_study_plans')
-    .select('*')
+    .select(tableColumns('plan_study_plans'))
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -152,7 +153,7 @@ export async function createStudyPlan(
       target_date: input.targetDate,
       lane: input.lane,
     })
-    .select()
+    .select(tableColumns('plan_study_plans'))
     .single();
 
   if (error) throw new RepositoryError('createStudyPlan', error);

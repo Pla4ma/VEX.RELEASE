@@ -1,0 +1,15 @@
+.agents/
+.codebase-memory/
+.opencode/
+.omx/
+.od-skills/
+.serena/
+.hermes/
+.kiro/
+.vscode/
+.zed/
+audit-*.ps1
+doctor-*.txt
+.vexpath-smoke.png
+docs/superpowers/
+archive/

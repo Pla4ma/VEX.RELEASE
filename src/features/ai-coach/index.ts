@@ -8,7 +8,9 @@
 export * from './schemas';
 export * from './events';
 export * from './memory/memory-schemas';
+export * from './memory/vector-memory-schemas';
 export * from './memory/memory-events';
+export * from './action';
 
 // Service layer
 export * as coachService from './service/service';

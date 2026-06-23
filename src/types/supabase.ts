@@ -379,6 +379,33 @@ export type Database = {
         }
         Relationships: []
       }
+      captures: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          metadata: Json
+          type: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          type: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       challenge_rerolls: {
         Row: {
           gems_spent: number | null
@@ -2337,6 +2364,171 @@ export type Database = {
           id?: string
           session_mode?: string
           total_sessions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plan_items: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          estimated_minutes: number | null
+          id: string
+          lane: string | null
+          priority: string
+          project_id: string | null
+          status: string
+          study_plan_id: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          lane?: string | null
+          priority?: string
+          project_id?: string | null
+          status?: string
+          study_plan_id?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          lane?: string | null
+          priority?: string
+          project_id?: string | null
+          status?: string
+          study_plan_id?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "plan_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plan_items_study_plan_id_fkey"
+            columns: ["study_plan_id"]
+            isOneToOne: false
+            referencedRelation: "plan_study_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plan_projects: {
+        Row: {
+          color: string | null
+          completed_item_count: number
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          item_count: number
+          lane: string | null
+          name: string
+          progress: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          completed_item_count?: number
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          item_count?: number
+          lane?: string | null
+          name: string
+          progress?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          completed_item_count?: number
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          item_count?: number
+          lane?: string | null
+          name?: string
+          progress?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plan_study_plans: {
+        Row: {
+          completed_item_count: number
+          created_at: string
+          description: string | null
+          id: string
+          item_count: number
+          lane: string | null
+          name: string
+          progress: number
+          status: string
+          subject: string
+          target_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_item_count?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          item_count?: number
+          lane?: string | null
+          name: string
+          progress?: number
+          status?: string
+          subject: string
+          target_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_item_count?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          item_count?: number
+          lane?: string | null
+          name?: string
+          progress?: number
+          status?: string
+          subject?: string
+          target_date?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -5363,6 +5555,13 @@ export type Database = {
         }
         Returns: Json
       }
+      check_rls_status: {
+        Args: never
+        Returns: {
+          rls_status: string
+          tablename: string
+        }[]
+      }
       claim_journey_milestone: {
         Args: {
           p_milestone_number: number
@@ -5515,6 +5714,82 @@ export type Database = {
           p_user_id: string
         }
         Returns: Json
+      }
+      grant_currency_idempotent: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_description?: string
+          p_idempotency_key: string
+          p_source: string
+          p_source_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      spend_currency_idempotent: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_description?: string
+          p_idempotency_key: string
+          p_sink: string
+          p_source_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      match_ai_memories: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          memory_type_filter?: string
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          id: string
+          memory_type: string
+          metadata: Json
+          similarity: number
+          source_id: string
+          source_table: string
+        }[]
+      }
+      record_session_event: {
+        Args: {
+          p_event_payload: Json
+          p_event_type: string
+          p_idempotency_key: string
+          p_occurred_at?: string
+          p_session_id: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      get_my_progress_stats: {
+        Args: never
+        Returns: {
+          average_quality_score: number
+          completed_sessions: number
+          last_completed_at: string
+          refreshed_at: string
+          total_effective_seconds: number
+          user_id: string
+        }[]
+      }
+      get_my_economy_stats: {
+        Args: never
+        Returns: {
+          coins: number
+          refreshed_at: string
+          tokens: number
+          total_earned_coins: number
+          total_earned_tokens: number
+          total_spent_coins: number
+          total_spent_tokens: number
+          user_id: string
+        }[]
       }
       increment_coins: {
         Args: { p_amount: number; p_user_id: string }

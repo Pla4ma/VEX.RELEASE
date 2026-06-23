@@ -8,7 +8,6 @@ import { HomeStatusBanners } from './HomeStatusBanners';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
-import type { useHomeData } from '../hooks/useHomeData';
 import { staggeredEnterStyle } from './homeContentHelpers';
 import { buildHomeUnlockPathModel } from '../services/home-unlock-path-service';
 import { HomeDayZeroLaunchpad } from './HomeDayZeroLaunchpad';
@@ -16,8 +15,14 @@ import { HomeUnlockPath } from './HomeUnlockPath';
 import { HomeDailyCards } from './HomeDailyCards';
 import { HomeMetricsRow } from './HomeMetricsRow';
 import { HomeContinueCard } from './HomeContinueCard';
+import { InvisibleAgentCard } from '../../../features/invisible-agent/components/InvisibleAgentCard';
+import type { CoachAgentDecision } from '../../../features/invisible-agent';
+import type { useHomeData } from '../hooks/useHomeData';
+import type { UseQueryResult } from '@tanstack/react-query';
 
-type HomeData = ReturnType<typeof useHomeData>;
+type HomeData = ReturnType<typeof useHomeData> & {
+  invisibleAgentQuery?: UseQueryResult<CoachAgentDecision>;
+};
 
 interface HomeContentProps {
   controller: HomeController;
@@ -71,6 +76,17 @@ export const HomeContent: React.FC<HomeContentProps> = ({
           : `Finish ${remaining} more sessions to unlock ${item.reward}.`,
     });
   };
+  const handleAgentConfirm = (decision: CoachAgentDecision): void => {
+    if (decision.type === 'CONTINUE_STUDY_PLAN') {
+      controller.continueStudyPlan();
+      return;
+    }
+    if (decision.type === 'REVIEW_PROGRESS' || decision.type === 'NO_ACTION') {
+      controller.openProgress();
+      return;
+    }
+    controller.openSetup(decision.actionPayload);
+  };
 
   return (
     <StaggeredEnter
@@ -86,6 +102,16 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         loadError={controller.loadError}
         onRetry={controller.retryAll}
       />
+
+      {data.invisibleAgentQuery ? (
+        <InvisibleAgentCard
+          decision={data.invisibleAgentQuery.data ?? null}
+          isPending={data.invisibleAgentQuery.isPending}
+          isError={data.invisibleAgentQuery.isError}
+          onConfirm={handleAgentConfirm}
+          onRetry={() => { void data.invisibleAgentQuery?.refetch(); }}
+        />
+      ) : null}
 
       {isDayZero ? (
         <HomeDayZeroLaunchpad

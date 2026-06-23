@@ -34,3 +34,8 @@ export * from './ai-intent-routing';
 
 // Client implementation
 export * from './edge-client';
+
+// AI Core kernel primitives
+export * from './core-schemas';
+export * from './core-policy';
+export * from './core-trace';

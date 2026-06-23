@@ -8,6 +8,7 @@ import {
   getQualityGrade,
   getHomeCompanionMood,
 } from '../../../screens/home/utils';
+import { useInvisibleAgentDecision } from '../../../features/invisible-agent';
 
 export function useBaseHomeData(controller: HomeController) {
   const streakData = controller.streakQuery.data as
@@ -96,6 +97,25 @@ export function useBaseHomeData(controller: HomeController) {
       controller.historyQuery.history as Array<{ status: string }>
     ).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
+  const completedSessions = controller.disclosure.inputs.totalCompletedSessions;
+  const activeStudyPlan = controller.activeStudyPlanQuery.data as
+    | { id?: string; studyPackId?: string }
+    | null
+    | undefined;
+  const invisibleAgentQuery = useInvisibleAgentDecision(
+    {
+      userId: controller.userId,
+      isOnline: controller.isOnline,
+      completedToday: controller.todayFocusMinutes > 0,
+      currentStreak: controller.currentStreak,
+      hoursUntilStreakDeadline: streakHoursRemaining,
+      recentSessionIds: recentSessions.map((session) => session.id),
+      activeStudyPackId: activeStudyPlan?.studyPackId ?? activeStudyPlan?.id ?? null,
+      lowEnergyPattern: completedSessions > 0 && controller.todayFocusMinutes < 10,
+      trustLevel: completedSessions < 2 ? 'low' : 'normal',
+    },
+    Boolean(controller.userId),
+  );
 
   return {
     streakHoursRemaining,
@@ -104,5 +124,6 @@ export function useBaseHomeData(controller: HomeController) {
     recentSessions,
     companionMood,
     comebackSessionsCompleted,
+    invisibleAgentQuery,
   };
 }

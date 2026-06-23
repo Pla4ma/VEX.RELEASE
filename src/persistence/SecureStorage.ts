@@ -3,7 +3,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Secure Storage Adapter
  *
  * Encrypted storage using expo-secure-store for native platforms.
-  * Falls back to localStorage for web platform (persists across tab closes).
+ * Falls back to sessionStorage for web platform.
  * Used for tokens, credentials, and private keys.
  */
 
@@ -58,9 +58,7 @@ export class SecureStorage implements StorageAdapter {
   async setItem(key: string, value: string): Promise<void> {
     try {
       if (this.isWeb) {
-        // Web platform limitation: sessionStorage is the most secure option available.
-        // Data is session-scoped (clears on tab close) and prefixed to avoid collisions.
-        // On native, expo-secure-store uses the OS keychain.
+        // Web data is session-scoped and prefixed to avoid collisions.
         // nosec: B310 - sessionStorage is the securest web storage option
         sessionStorage.setItem(WEB_STORAGE_PREFIX + key, value);
         return;

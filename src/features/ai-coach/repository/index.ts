@@ -76,3 +76,5 @@ export {
   getMostRecentMemoryByType,
   hasMemoryOfType,
 } from './memories';
+
+export { storeMemoryEmbedding, matchCoachMemories } from './memory-vectors';

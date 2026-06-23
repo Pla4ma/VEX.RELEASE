@@ -1,8 +1,6 @@
 import React from 'react';
 import { Image, View, type ImageSourcePropType, type ImageStyle, type ViewStyle } from 'react-native';
 
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
-
 type VexAssetName =
   | 'sculpture'
   | 'coachStar'

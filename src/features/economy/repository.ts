@@ -49,14 +49,21 @@ export async function spendCurrencyRpc(params: {
   currency: string;
   amount: number;
   sink: string;
+  idempotencyKey?: string;
 }): Promise<CurrencyRpcResult> {
   const parsed = SpendCurrencyRpcInputSchema.parse(params);
   const supabase = getSupabaseClient();
-  const { data, error } = await supabase.rpc('atomic_spend_currency', {
+  const { data, error } = await supabase.rpc('spend_currency_idempotent', {
     p_user_id: parsed.userId,
     p_currency: parsed.currency,
     p_amount: parsed.amount,
     p_sink: parsed.sink,
+    p_idempotency_key: parsed.idempotencyKey ?? buildCurrencyIdempotencyKey({
+      userId: parsed.userId,
+      currency: parsed.currency,
+      amount: parsed.amount,
+      operation: parsed.sink,
+    }),
   });
   if (error) {throw new RepositoryError('spendCurrencyRpc', error);}
   return CurrencyRpcResultSchema.parse(data);
@@ -69,14 +76,22 @@ export async function grantCurrencyRpc(params: {
   source: string;
   sourceId?: string | null;
   description?: string | null;
+  idempotencyKey?: string;
 }): Promise<CurrencyRpcResult> {
   const parsed = GrantCurrencyRpcInputSchema.parse(params);
   const supabase = getSupabaseClient();
-  const { data, error } = await supabase.rpc('grant_currency', {
+  const { data, error } = await supabase.rpc('grant_currency_idempotent', {
     p_user_id: parsed.userId,
     p_currency: parsed.currency,
     p_amount: parsed.amount,
     p_source: parsed.source,
+    p_idempotency_key: parsed.idempotencyKey ?? buildCurrencyIdempotencyKey({
+      userId: parsed.userId,
+      currency: parsed.currency,
+      amount: parsed.amount,
+      operation: parsed.source,
+      sourceId: parsed.sourceId ?? null,
+    }),
     p_source_id: parsed.sourceId ?? null,
     p_description: parsed.description ?? null,
   });
@@ -89,14 +104,38 @@ export async function addCurrencyRpc(params: {
   currency: string;
   amount: number;
   source: string;
+  idempotencyKey?: string;
 }): Promise<void> {
   const parsed = AddCurrencyRpcParamsSchema.parse(params);
   const supabase = getSupabaseClient();
-  const { error } = await supabase.rpc('atomic_add_currency', {
+  const { error } = await supabase.rpc('grant_currency_idempotent', {
     p_user_id: parsed.userId,
     p_currency: parsed.currency,
     p_amount: parsed.amount,
     p_source: parsed.source,
+    p_idempotency_key: parsed.idempotencyKey ?? buildCurrencyIdempotencyKey({
+      userId: parsed.userId,
+      currency: parsed.currency,
+      amount: parsed.amount,
+      operation: parsed.source,
+    }),
   });
   if (error) {throw new RepositoryError('addCurrencyRpc', error);}
+}
+
+function buildCurrencyIdempotencyKey(input: {
+  userId: string;
+  currency: string;
+  amount: number;
+  operation: string;
+  sourceId?: string | null;
+}): string {
+  return [
+    'economy',
+    input.operation,
+    input.userId,
+    input.currency,
+    input.amount.toString(),
+    input.sourceId ?? 'none',
+  ].join(':');
 }

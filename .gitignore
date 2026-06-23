@@ -40,6 +40,21 @@ data/jest-results.json
 # AI/config noise
 .trae/
 .replit
+.agents/
+.codebase-memory/
+.opencode/
+.omx/
+.od-skills/
+.serena/
+.hermes/
+.kiro/
+.vscode/
+.zed/
+docs/superpowers/
+archive/
+audit-*.ps1
+doctor-*.txt
+.vexpath-smoke.png
 
 .omo/
 

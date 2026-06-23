@@ -5,82 +5,51 @@
  * to keep repository.ts under 200 lines.
  */
 
-import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
+import { z } from 'zod';
+import {
+  CompletionLedgerSchema,
+  CompletionSyncStatusSchema,
+  type CompletionLedger,
+} from './schemas';
 
-const mapRowToCompletionLedger = (data: Record<string, unknown>): CompletionLedger => {
-  const parsed = CompletionLedgerSchema.safeParse({
-    ledgerId: data.ledger_id,
-    idempotencyKey: data.idempotency_key,
-    sessionId: data.session_id,
-    userId: data.user_id,
-    mode: data.mode,
-    targetDurationSeconds: data.target_duration_seconds,
-    completedDurationSeconds: data.completed_duration_seconds,
-    effectiveFocusedSeconds: data.effective_focused_seconds,
-    pauseCount: data.pause_count,
-    interruptionCount: data.interruption_count,
-    strictMode: data.strict_mode,
-    startedAt: data.started_at,
-    completedAt: data.completed_at,
-    timezone: data.timezone,
-    grade: data.grade,
-    gradeScore: data.grade_score,
-    qualityScore: data.quality_score,
-    focusScoreDelta: data.focus_score_delta,
-    xpDelta: data.xp_delta,
-    streakResult: data.streak_result,
-    companionReactionId: data.companion_reaction_id,
-    rewardIds: data.reward_ids,
-    dailyMissionResult: data.daily_mission_result,
-    offlineSyncStatus: data.offline_sync_status,
-    degradedSystems: data.degraded_systems,
-    createdAt: data.created_at,
-  });
+const LedgerRowSchema = z.object({
+  ledger_id: z.string().uuid(),
+  idempotency_key: z.string().min(1),
+  session_id: z.string().uuid(),
+  user_id: z.string().min(1),
+  completed_at: z.number().int().nonnegative(),
+  offline_sync_status: CompletionSyncStatusSchema,
+  created_at: z.number().int().nonnegative(),
+  ledger_payload: CompletionLedgerSchema,
+});
+
+const mapRowToCompletionLedger = (data: unknown): CompletionLedger => {
+  const parsed = LedgerRowSchema.safeParse(data);
 
   if (!parsed.success) {
     throw new Error('invalid-response');
   }
 
-  return { ...parsed.data, offlineSyncStatus: 'synced' as const };
+  const row = parsed.data;
+  return {
+    ...row.ledger_payload,
+    ledgerId: row.ledger_id,
+    idempotencyKey: row.idempotency_key,
+    sessionId: row.session_id,
+    userId: row.user_id,
+    completedAt: row.completed_at,
+    offlineSyncStatus: row.offline_sync_status,
+    createdAt: row.created_at,
+  };
 };
 
-const mapRowToCompletionLedgerNullable = (data: Record<string, unknown> | null): CompletionLedger | null => {
+const mapRowToCompletionLedgerNullable = (data: unknown): CompletionLedger | null => {
   if (!data) return null;
-
-  const parsed = CompletionLedgerSchema.safeParse({
-    ledgerId: data.ledger_id,
-    idempotencyKey: data.idempotency_key,
-    sessionId: data.session_id,
-    userId: data.user_id,
-    mode: data.mode,
-    targetDurationSeconds: data.target_duration_seconds,
-    completedDurationSeconds: data.completed_duration_seconds,
-    effectiveFocusedSeconds: data.effective_focused_seconds,
-    pauseCount: data.pause_count,
-    interruptionCount: data.interruption_count,
-    strictMode: data.strict_mode,
-    startedAt: data.started_at,
-    completedAt: data.completed_at,
-    timezone: data.timezone,
-    grade: data.grade,
-    gradeScore: data.grade_score,
-    qualityScore: data.quality_score,
-    focusScoreDelta: data.focus_score_delta,
-    xpDelta: data.xp_delta,
-    streakResult: data.streak_result,
-    companionReactionId: data.companion_reaction_id,
-    rewardIds: data.reward_ids,
-    dailyMissionResult: data.daily_mission_result,
-    offlineSyncStatus: data.offline_sync_status,
-    degradedSystems: data.degraded_systems,
-    createdAt: data.created_at,
-  });
-
-  if (!parsed.success) {
+  try {
+    return mapRowToCompletionLedger(data);
+  } catch {
     return null;
   }
-
-  return parsed.data;
 };
 
 export { mapRowToCompletionLedger, mapRowToCompletionLedgerNullable };

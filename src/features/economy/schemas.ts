@@ -49,6 +49,7 @@ export const SpendCurrencyRpcInputSchema = z.object({
   currency: CurrencyTypeSchema,
   amount: z.number().int().positive().max(1_000_000),
   sink: z.string().min(1),
+  idempotencyKey: z.string().min(1).optional(),
 });
 export type SpendCurrencyRpcInput = z.infer<typeof SpendCurrencyRpcInputSchema>;
 
@@ -59,6 +60,7 @@ export const GrantCurrencyRpcInputSchema = z.object({
   source: z.string().min(1),
   sourceId: z.string().nullable().optional(),
   description: z.string().nullable().optional(),
+  idempotencyKey: z.string().min(1).optional(),
 });
 export type GrantCurrencyRpcInput = z.infer<typeof GrantCurrencyRpcInputSchema>;
 
@@ -67,5 +69,6 @@ export const AddCurrencyRpcParamsSchema = z.object({
   currency: CurrencyTypeSchema,
   amount: z.number().int().positive().max(1_000_000),
   source: z.string().min(1),
+  idempotencyKey: z.string().min(1).optional(),
 });
 export type AddCurrencyRpcParams = z.infer<typeof AddCurrencyRpcParamsSchema>;

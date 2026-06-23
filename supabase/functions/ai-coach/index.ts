@@ -1,5 +1,5 @@
 import { buildCorsHeaders } from '../_shared/cors.ts';
-import { AIRequestSchema, AIRequestTypeSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
+import { AIRequestSchema, AIRequestTypeSchema, CoachAgentDecisionSchema, CoachPayloadSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
 import { callOpenAICompatible, getOpenAICompatibleConfig, type OpenAICompatibleConfig, type OpenAICompatibleResult } from '../_shared/openai-compatible.ts';
 import { readCoachPayload } from './coach-output.ts';
@@ -118,6 +118,13 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
       maxOutputTokens: 140,
     };
   }
+  if (request.requestType === 'GENERATE_AGENT_DECISION') {
+    return {
+      system: 'You are VEX Invisible Agent. Return only strict JSON. Pick one safe next-best action. Never auto-execute. Never guilt user. If completedToday true, choose NO_ACTION.',
+      user: JSON.stringify({ context: request.context, requiredPolicy: { requiresUserConfirmation: true, canAutoExecute: false } }),
+      maxOutputTokens: 260,
+    };
+  }
   return { system: 'Return a short plain-text coaching response.', user: JSON.stringify(request.context), maxOutputTokens: 150 };
 }
 
@@ -143,11 +150,26 @@ function buildTextSuccess(request: AIRequest, rawText: string, model: string, st
 }
 
 function buildTextPayload(request: AIRequest, rawText: string, metadata: { model: string; provider?: string; fallbackUsed?: boolean; processingTimeMs: number; promptTokens?: number; responseTokens?: number; cached: boolean }) {
+  if (request.requestType === 'GENERATE_AGENT_DECISION') {
+    const structuredData = readAgentDecision(rawText, request);
+    return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };
+  }
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const structuredData = CoachPayloadSchema.parse(readCoachPayload(rawText));
     return { success: true, requestType: request.requestType, content: structuredData.message, structuredData, metadata };
   }
   return { success: true, requestType: request.requestType, content: rawText.replace(/\s+/g, ' ').trim().slice(0, 1000), structuredData: {}, metadata };
+}
+
+function readAgentDecision(rawText: string, request: AIRequest) {
+  const match = rawText.replace(/\`\`\`json|\`\`\`/g, '').match(/\{[\s\S]*\}/);
+  const parsed = match ? JSON.parse(match[0]) as unknown : null;
+  return CoachAgentDecisionSchema.parse(parsed ?? localAgentDecision(request));
+}
+
+function localAgentDecision(request: AIRequest) {
+  const ctx = request.context as Record<string, unknown>;
+  return { decisionId: crypto.randomUUID(), userId: request.userId, type: ctx.completedToday ? 'NO_ACTION' : 'START_SESSION', message: ctx.completedToday ? 'You already did enough today. Review progress only if useful.' : 'Start one focused session and keep VEX learning.', reasonCode: ctx.completedToday ? 'ENOUGH_DONE_TODAY' : 'RECENT_MISSED_SESSION', confidence: 0.7, evidence: { sessionIds: Array.isArray(ctx.recentSessionIds) ? ctx.recentSessionIds : [] }, expiresAt: new Date(Date.now() + 1800000).toISOString(), policy: { requiresUserConfirmation: true, canAutoExecute: false } };
 }
 
 function buildError(requestType: AIRequest['requestType'], startedAt: number, code: string, message: string, retryable: boolean) {

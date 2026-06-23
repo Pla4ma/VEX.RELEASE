@@ -80,7 +80,6 @@ export function RealisticModeOrb({
         style={imageStyle}
       />
       <View style={overlayStyle} />
-      <View style={{}} />
     </View>
   );
 }

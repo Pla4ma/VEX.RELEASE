@@ -9,6 +9,8 @@ import type {
   SessionListItem,
 } from '../../../features/home-spine/components';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { CoachAgentDecision } from '../../../features/invisible-agent';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -46,6 +48,7 @@ export interface HomeDataProps {
     isPending: boolean;
   };
   displayedInterventionIdRef: React.MutableRefObject<string | null>;
+  invisibleAgentQuery?: UseQueryResult<CoachAgentDecision>;
 }
 
 export interface HomeScreenInnerProps {
