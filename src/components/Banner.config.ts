@@ -92,18 +92,21 @@ export const sizeStyles = {
     iconSize: 20,
     titleSize: 'h4' as const,
     descSize: 'caption' as const,
+    borderRadius: 8,
   },
   md: {
     padding: 16,
     iconSize: 24,
     titleSize: 'h3' as const,
     descSize: 'body' as const,
+    borderRadius: 12,
   },
   lg: {
     padding: 20,
     iconSize: 32,
     titleSize: 'h2' as const,
     descSize: 'body' as const,
+    borderRadius: 16,
   },
 };
 

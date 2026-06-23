@@ -37,7 +37,7 @@ function isNamespaceEnabled(namespace: string): boolean {
     return true;
   }
   return enabledNamespaces.some((ns) =>
-    namespace.startsWith(ns.replace('*', '')),
+    namespace.startsWith(ns.replaceAll('*', '')),
   );
 }
 

@@ -63,6 +63,7 @@ function useSystemReducedMotion(): ReducedMotionResult {
   );
 
   useEffect(() => {
+    let cancelled = false;
     // Update from Reanimated's value
     if (reanimatedReducedMotion !== null) {
       setIsReducedMotion(reanimatedReducedMotion);
@@ -78,10 +79,13 @@ function useSystemReducedMotion(): ReducedMotionResult {
 
     // Initial check
     AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
-      setIsReducedMotion(enabled);
+      if (!cancelled) {
+        setIsReducedMotion(enabled);
+      }
     });
 
     return () => {
+      cancelled = true;
       subscription.remove();
     };
   }, [reanimatedReducedMotion]);

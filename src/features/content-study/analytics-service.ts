@@ -134,7 +134,9 @@ export class ContentStudyAnalyticsService {
   }
 
   private generateSessionId(): string {
-    return `cs-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const randomPart = crypto.randomUUID?.()?.replace(/-/g, '').slice(0, 9)
+      ?? Math.random().toString(36).substring(2, 11);
+    return `cs-${Date.now()}-${randomPart}`;
   }
 
   private metrics: Partial<ContentStudyMetrics> = {};

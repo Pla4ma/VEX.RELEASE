@@ -1,5 +1,5 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
@@ -21,6 +21,9 @@ function CompanionDetailScreen(): React.ReactNode {
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' });
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
+
   const load = useCallback(() => {
     if (!userId) {
       setLoadState({ status: 'empty' });
@@ -28,8 +31,12 @@ function CompanionDetailScreen(): React.ReactNode {
     }
     setLoadState({ status: 'loading' });
     loadCompanionState(userId)
-      .then((companion) => setLoadState({ status: 'success', companion }))
+      .then((companion) => {
+        if (!mountedRef.current) { return; }
+        setLoadState({ status: 'success', companion });
+      })
       .catch((caught: unknown) => {
+        if (!mountedRef.current) { return; }
         setLoadState({
           status: 'error',
           error: caught instanceof Error ? caught : new Error(String(caught)),

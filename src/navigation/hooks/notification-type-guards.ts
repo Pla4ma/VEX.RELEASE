@@ -53,7 +53,7 @@ export function isNotificationTypeHiddenByV1FeatureMap(
 ): boolean {
   const key = HIDDEN_V1_FEATURE_KEYS.find((fk) => {
     return (
-      notificationType.startsWith(fk.replace(/_/g, '_')) ||
+      notificationType.startsWith(fk) ||
       notificationType.includes(fk)
     );
   });

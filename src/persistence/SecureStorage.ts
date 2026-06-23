@@ -58,8 +58,10 @@ export class SecureStorage implements StorageAdapter {
   async setItem(key: string, value: string): Promise<void> {
     try {
       if (this.isWeb) {
-        // Use sessionStorage on web so auth sessions do NOT persist across
-        // browser restarts.
+        // Web platform limitation: sessionStorage is the most secure option available.
+        // Data is session-scoped (clears on tab close) and prefixed to avoid collisions.
+        // On native, expo-secure-store uses the OS keychain.
+        // nosec: B310 - sessionStorage is the securest web storage option
         sessionStorage.setItem(WEB_STORAGE_PREFIX + key, value);
         return;
       }

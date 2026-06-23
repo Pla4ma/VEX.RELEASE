@@ -26,9 +26,15 @@ function NotificationPermissionScreen({
   const [NotificationCard, setNotificationCard] = React.useState<React.FC<{
     userId: string;
   }> | null>(null);
+  const mountedRef = React.useRef(true);
+  React.useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
+
   React.useEffect(() => {
     import('../../../screens/onboarding/components/OnboardingNotificationPermissionCard')
       .then((mod) => {
+        if (!mountedRef.current) { return; }
         setNotificationCard(() => mod.OnboardingNotificationPermissionCard);
       })
       .catch((error: unknown) => {
@@ -87,9 +93,15 @@ function FirstResultScreenInner({
     focusScoreBefore: number;
     onComplete: () => void;
   }> | null>(null);
+  const mountedRef = React.useRef(true);
+  React.useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
+
   React.useEffect(() => {
     import('./FirstResultScreen')
       .then((mod) => {
+        if (!mountedRef.current) { return; }
         setFirstResult(
           () =>
             mod.FirstResultScreen as React.FC<{

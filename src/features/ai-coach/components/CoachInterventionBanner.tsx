@@ -32,10 +32,12 @@ export function CoachInterventionBanner({
   }
   const storage = storageRef.current;
 
-  if (intervention?.id !== prevInterventionIdRef.current) {
-    prevInterventionIdRef.current = intervention?.id;
-    setIsDismissed(false);
-  }
+  useEffect(() => {
+    if (intervention?.id !== prevInterventionIdRef.current) {
+      prevInterventionIdRef.current = intervention?.id;
+      setIsDismissed(false);
+    }
+  }, [intervention?.id]);
 
   useEffect(() => {
     if (!intervention) {

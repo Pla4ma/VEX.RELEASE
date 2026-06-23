@@ -36,6 +36,13 @@ const typeIconMap: Record<ToastType, IconName> = {
   warning: 'warning',
   error: 'alert',
 };
+
+const getToastTranslateY = (position: ToastPosition, visible: boolean): number => {
+  if (position === 'top') { return visible ? 60 : -100; }
+  if (position === 'bottom') { return visible ? -60 : 100; }
+  return 0;
+};
+
 const getTypeColors = (theme: ReturnType<typeof useTheme>['theme']) => ({
   info: {
     bg: theme.colors.primary[50],
@@ -85,19 +92,19 @@ export const Toast: React.FC<ToastProps> = ({
     if (reducedMotion) {
       opacity.value = 1;
       scale.value = 1;
-      translateY.value = position === 'top' ? 60 : position === 'center' ? 0 : -60;
+      translateY.value = getToastTranslateY(position, true);
       return;
     }
     opacity.value = withTiming(1, { duration: 200 });
     scale.value = withSpring(1, { damping: 20, stiffness: 300 });
-    const targetY = position === 'top' ? 60 : position === 'center' ? 0 : -60;
+    const targetY = getToastTranslateY(position, true);
     translateY.value = withSpring(targetY, { damping: 20, stiffness: 300 });
   }, [opacity, scale, translateY, position, reducedMotion]);
   const hide = useCallback(() => {
     if (reducedMotion) {
       opacity.value = 0;
       scale.value = 0.8;
-      translateY.value = position === 'top' ? -100 : position === 'bottom' ? 100 : 0;
+      translateY.value = getToastTranslateY(position, false);
       if (onHide) {
         runOnJS(onHide)();
       }
@@ -105,7 +112,7 @@ export const Toast: React.FC<ToastProps> = ({
     }
     opacity.value = withTiming(0, { duration: 150 });
     scale.value = withTiming(0.8, { duration: 150 });
-    const targetY = position === 'top' ? -100 : position === 'bottom' ? 100 : 0;
+    const targetY = getToastTranslateY(position, false);
     translateY.value = withTiming(targetY, { duration: 200 }, () => {
       if (onHide) {
         runOnJS(onHide)();

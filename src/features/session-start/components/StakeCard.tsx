@@ -60,7 +60,12 @@ export function StakeCard({
   const styles = getUrgencyStyles();
   const CardWrapper = onPress ? Pressable : View;
   return (
-    <CardWrapper onPress={onPress} accessibilityLabel={title}>
+    <CardWrapper
+      onPress={onPress}
+      accessibilityLabel={title}
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityHint={onPress ? `View details for ${title}` : undefined}
+    >
       <View
         style={{
   flexDirection: 'row',

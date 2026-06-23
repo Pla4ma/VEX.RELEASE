@@ -24,9 +24,9 @@ import {
 } from '../focus-run/service';
 import { createManualStudyPlan } from '../study-os/service';
 import { completeProjectSession } from '../project-focus/service';
-import { findMemoriesForRecommendation } from '../focus-memory/service';
-import type { FocusRunDisplay } from '../focus-run/schemas';
+import { findMemoriesForRecommendation } from '../focus-memory/memory-operations';
 import type { FocusMemory } from '../focus-memory/schemas';
+import type { FocusRunDisplay } from '../focus-run/schemas';
 
 export async function vexScheduleFocusWindow(
   rawInput: ScheduleFocusWindowInput,

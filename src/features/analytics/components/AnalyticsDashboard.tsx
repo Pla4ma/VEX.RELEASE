@@ -45,19 +45,21 @@ export function AnalyticsDashboard({
   const prevDataErrorRef = React.useRef(dataError);
   const prevDataErrorObjRef = React.useRef(dataErrorObj);
 
-  if (dataError !== prevDataErrorRef.current || dataErrorObj !== prevDataErrorObjRef.current) {
-    prevDataErrorRef.current = dataError;
-    prevDataErrorObjRef.current = dataErrorObj;
-    if (dataError && dataErrorObj) {
-      const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
-      setError({
-        title: 'Failed to load analytics',
-        message: analyticsError.message,
-        recoverable: true,
-        action: () => { refetchData(); },
-      });
+  React.useEffect(() => {
+    if (dataError !== prevDataErrorRef.current || dataErrorObj !== prevDataErrorObjRef.current) {
+      prevDataErrorRef.current = dataError;
+      prevDataErrorObjRef.current = dataErrorObj;
+      if (dataError && dataErrorObj) {
+        const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
+        setError({
+          title: 'Failed to load analytics',
+          message: analyticsError.message,
+          recoverable: true,
+          action: () => { refetchData(); },
+        });
+      }
     }
-  }
+  }, [dataError, dataErrorObj, refetchData]);
 
   React.useEffect(() => {
     if (!dataError || !dataErrorObj) {return;}

@@ -1,4 +1,5 @@
 import { useTheme } from '../../../theme/ThemeContext';
+import { formatDuration } from '../../../utils/format-duration';
 
 export interface SessionListItem {
   id: string;
@@ -16,15 +17,7 @@ export interface RecentSessionsListProps {
   isLoading?: boolean;
 }
 
-export function formatDuration(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) {
-    return `${minutes} min`;
-  }
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
-}
+export { formatDuration } from '../../../utils/format-duration';
 
 export function formatTimeAgo(isoDate: string): string {
   const date = new Date(isoDate);

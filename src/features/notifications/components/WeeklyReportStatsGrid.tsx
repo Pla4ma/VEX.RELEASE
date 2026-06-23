@@ -1,13 +1,7 @@
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-
-function formatNumber(num: number): string {
-  if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}K`;
-  }
-  return num.toString();
-}
+import { formatCompactNumber } from '../formatters';
 
 export interface WeeklyReportStatsGridProps {
   sessionsCompleted: number;
@@ -46,7 +40,7 @@ export function WeeklyReportStatsGrid({
 
         <Box flex={1} minWidth={80} alignItems="center">
           <Text fontSize={24} fontWeight="800" color="success.DEFAULT">
-            +{formatNumber(xpEarned)}
+            +{formatCompactNumber(xpEarned)}
           </Text>
           <Text variant="caption" color="text.tertiary">
             XP Earned

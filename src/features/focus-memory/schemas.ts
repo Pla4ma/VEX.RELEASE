@@ -18,6 +18,7 @@ export const FocusMemorySchema = z
     id: z.string().min(1),
     userId: z.string().min(1),
     type: FocusMemoryTypeSchema,
+    content: z.string().default(''),
     summary: z.string().min(1),
     source: z.enum([
       'session_completion',

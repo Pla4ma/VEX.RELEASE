@@ -33,3 +33,12 @@ export const getStatusColor = (
   if (isActive) {return lightColors.semantic.success;}
   return lightColors.text.muted;
 };
+
+export const getSessionStatusLabel = (
+  isPaused: boolean,
+  isActive: boolean,
+): string => {
+  if (isPaused) {return 'PAUSED';}
+  if (isActive) {return 'ACTIVE';}
+  return 'INACTIVE';
+};

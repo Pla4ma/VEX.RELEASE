@@ -7,7 +7,7 @@ import {
   withAlpha,
 } from '../../../components/premiumStyles';
 import { useTheme } from '../../../theme/ThemeContext';
-import { MasteryService } from '../service';
+import { useMasteryActions } from '../hooks';
 import type { MasteryState } from '../types';
 import { MasteryRankBadge } from './MasteryRankBadge';
 import { TechniqueBar } from './TechniqueBar';
@@ -26,6 +26,7 @@ export function MasteryCard({
   onStateChange,
 }: Props): React.ReactNode {
   const { theme } = useTheme();
+  const { claimChallenge, getMasteryState } = useMasteryActions();
   const [cardState, setCardState] = useState(state);
 
   useEffect(() => {
@@ -33,10 +34,8 @@ export function MasteryCard({
   }, [state]);
 
   const handleClaim = (challengeId: string) => {
-    if (!userId || !MasteryService.claimChallenge(userId, challengeId)) {
-      return;
-    }
-    const updatedState = MasteryService.getOrCreateMasteryState(userId);
+    const updatedState = claimChallenge(userId, challengeId);
+    if (!updatedState) { return; }
     setCardState(updatedState);
     onStateChange?.(updatedState);
   };

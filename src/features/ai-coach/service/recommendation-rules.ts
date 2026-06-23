@@ -78,6 +78,7 @@ const RULES_HIGH_PRIORITY: RecommendationRule[] = [
     },
     generate: (ctx, persona) => {
       const messages = generateMessage('study_behind', ctx, persona);
+      // plan is non-null: condition() checked ctx.activeStudyPlan before calling generate()
       const plan = ctx.activeStudyPlan!;
       return {
         id: `study-behind-${Date.now()}`,

@@ -17,6 +17,7 @@ function marshallForUpsert(
     id: m.id,
     user_id: userId,
     type: m.type,
+    content: m.content ?? '',
     summary: m.summary,
     source: m.source,
     confidence: m.confidence,
@@ -67,7 +68,7 @@ export async function fetchMemoriesFromSupabase(
   try {
     const { data, error } = await supabase
       .from('focus_memories')
-      .select('id,user_id,type,summary,source,confidence,accepted,deleted_at,expires_at,evidence_hash,created_at,updated_at')
+      .select('id,user_id,type,content,summary,source,confidence,accepted,deleted_at,expires_at,evidence_hash,created_at,updated_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (error) {
@@ -78,6 +79,7 @@ export async function fetchMemoriesFromSupabase(
       id: z.string(),
       user_id: z.string(),
       type: z.string(),
+      content: z.string().default(''),
       summary: z.string(),
       source: z.string(),
       confidence: z.number(),
@@ -95,6 +97,7 @@ export async function fetchMemoriesFromSupabase(
         id: row.id,
         userId: row.user_id,
         type: row.type as FocusMemory['type'],
+        content: row.content ?? '',
         summary: row.summary,
         source: row.source as FocusMemory['source'],
         confidence: row.confidence,

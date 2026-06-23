@@ -7,6 +7,7 @@ import {
   formatTime,
   getPhaseLabel,
   getStatusColor,
+  getSessionStatusLabel,
 } from './ActiveSessionHUD.helpers';
 import { styles } from './ActiveSessionHUD.styles';
 
@@ -58,7 +59,7 @@ export const ActiveSessionHUD: React.FC<ActiveSessionHUDProps> = ({
           ]}
         >
           <Text style={styles.statusText}>
-            {isPaused ? 'PAUSED' : isActive ? 'ACTIVE' : 'INACTIVE'}
+            {getSessionStatusLabel(isPaused, isActive)}
           </Text>
         </View>
       </View>

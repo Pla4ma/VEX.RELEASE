@@ -61,7 +61,7 @@ export const Banner = React.memo(({
         {
           backgroundColor: variantStyles.backgroundColor,
           padding: currentSize.padding,
-          borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16,
+          borderRadius: currentSize.borderRadius,
         },
         fullWidth && styles.fullWidth,
         style,
@@ -73,7 +73,7 @@ export const Banner = React.memo(({
           resizeMode="cover"
           style={[
             styles.backgroundImage,
-            { borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16 },
+            { borderRadius: currentSize.borderRadius },
           ]}
         />
       )}

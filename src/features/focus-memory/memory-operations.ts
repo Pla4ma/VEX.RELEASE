@@ -52,6 +52,7 @@ export async function createMemoryCandidate(
     id: v4(),
     userId: input.userId,
     type: input.type,
+    content: '',
     summary: input.summary,
     source: input.source,
     confidence: input.confidence,

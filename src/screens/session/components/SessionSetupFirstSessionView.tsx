@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import type { CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -54,6 +54,11 @@ export function FirstSessionView({
   );
   const [offlineMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const { handleFirstSessionStart, isStarting } = useFirstSessionStart({
     navigation,
@@ -74,6 +79,7 @@ export function FirstSessionView({
         durationMinutes: personalization.suggestedDurationMinutes,
         goal,
       }).catch((err: unknown) => {
+        if (!mountedRef.current) { return; }
         const message =
           err instanceof Error
             ? err.message

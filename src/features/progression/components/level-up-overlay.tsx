@@ -35,7 +35,8 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
   const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
   const { width, height } = useWindowDimensions();
 
-  if (isVisible !== prevIsVisible) {
+  useEffect(() => {
+    if (isVisible === prevIsVisible) { return; }
     setPrevIsVisible(isVisible);
     if (isVisible) {
       levelUp();
@@ -64,7 +65,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
       rotateAnim.value = 0;
       setShowConfetti(false);
     }
-  }
+  }, [isVisible, prevIsVisible, width, height, scaleAnim, opacityAnim, rotateAnim]);
 
   useEffect(() => {
     if (!isVisible) {return;}

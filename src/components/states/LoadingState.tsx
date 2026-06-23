@@ -35,6 +35,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   fullScreen = false,
 }) => {
   const { theme } = useTheme();
+  const skeletonSize = size === 'large' ? 40 : 20;
 
   return (
     <View
@@ -48,7 +49,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           : undefined,
       }}
     >
-      <Skeleton width={size === 'large' ? 40 : 20} height={size === 'large' ? 40 : 20} variant="circular" />
+      <Skeleton width={skeletonSize} height={skeletonSize} variant="circular" />
 
       {message && (
         <Text
