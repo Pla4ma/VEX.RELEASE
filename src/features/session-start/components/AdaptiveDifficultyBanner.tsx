@@ -135,10 +135,19 @@ export function AdaptiveDifficultyBanner({
             onPress={() => onAccept(suggestedDifficulty)}
             variant="primary"
             style={{ flex: 1 }}
+            accessibilityLabel={`Switch to ${suggestedDifficulty} difficulty`}
+            accessibilityRole="button"
+            accessibilityHint="Accepts the suggested difficulty change"
           >
             <Text>Switch to {suggestedDifficulty}</Text>
           </Button>
-          <Button onPress={onDismiss} variant="secondary">
+          <Button
+            onPress={onDismiss}
+            variant="secondary"
+            accessibilityLabel="Keep current difficulty"
+            accessibilityRole="button"
+            accessibilityHint="Declines the suggested difficulty change"
+          >
             <Text>Keep Current</Text>
           </Button>
         </View>
