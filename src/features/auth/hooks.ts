@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
+import { useToast } from '../../shared/ui/components/Toast';
 import * as service from './service';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserProfile } from '../../store/authProfileStorage';
@@ -33,6 +34,7 @@ function setupUserServices(user: User): void {
 export function useSignUp() {
   const queryClient = useQueryClient();
   const { login } = useAuthStore();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: ({
@@ -52,6 +54,11 @@ export function useSignUp() {
     },
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'auth-signup' } });
+      show({
+        title: 'Sign Up Failed',
+        message: error?.message ?? 'Unable to sign up.',
+        type: 'error',
+      });
     },
   });
 }
@@ -59,6 +66,7 @@ export function useSignUp() {
 export function useSignIn() {
   const queryClient = useQueryClient();
   const { login } = useAuthStore();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: (credentials: AuthCredentials) => service.signIn(credentials),
@@ -72,6 +80,11 @@ export function useSignIn() {
     },
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'auth-signin' } });
+      show({
+        title: 'Sign In Failed',
+        message: error?.message ?? 'Unable to sign in.',
+        type: 'error',
+      });
     },
   });
 }
@@ -79,6 +92,7 @@ export function useSignIn() {
 export function useSignOut() {
   const queryClient = useQueryClient();
   const { logout } = useAuthStore();
+  const { show } = useToast();
 
   return useMutation({
     mutationFn: () => service.signOut(),
@@ -88,6 +102,11 @@ export function useSignOut() {
     },
     onError: (error) => {
       Sentry.captureException(error, { tags: { feature: 'auth-logout' } });
+      show({
+        title: 'Sign Out Failed',
+        message: error?.message ?? 'Unable to sign out.',
+        type: 'error',
+      });
     },
   });
 }
