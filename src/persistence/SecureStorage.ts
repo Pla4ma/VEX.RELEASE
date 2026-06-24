@@ -1,5 +1,4 @@
 import { captureSilentFailure } from '../utils/silent-failure';
-import { createSecureStorageCredentials } from './SecureStorageCredentials';
 /**
  * Secure Storage Adapter
  *
@@ -25,11 +24,9 @@ const WEB_STORAGE_PREFIX = 'vex_secure_';
  */
 export class SecureStorage implements StorageAdapter {
   private isWeb: boolean;
-  private credentials: ReturnType<typeof createSecureStorageCredentials<SecureStorage>>;
 
   constructor() {
     this.isWeb = Platform.OS === 'web';
-    this.credentials = createSecureStorageCredentials(this);
   }
 
   /**
@@ -139,30 +136,6 @@ export class SecureStorage implements StorageAdapter {
    */
   async getSize(): Promise<number> {
     return 0;
-  }
-
-  /**
-   * Store credentials securely
-   */
-  async setCredentials(
-    key: string,
-    value: string,
-  ): Promise<StorageResult<void>> {
-    return this.credentials.setCredentials(key, value);
-  }
-
-  /**
-   * Get credentials securely
-   */
-  async getCredentials(key: string): Promise<StorageResult<string>> {
-    return this.credentials.getCredentials(key);
-  }
-
-  /**
-   * Clear credentials
-   */
-  async clearCredentials(key: string): Promise<StorageResult<void>> {
-    return this.credentials.clearCredentials(key);
   }
 }
 
