@@ -1,31 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events/EventBus';
-import type { SessionConfig, SessionState } from '../types';
-import type { SessionActions } from './useSessionActions';
 import { createSessionActions } from './useSessionActions';
-import { createDebugger } from '../../utils/debug';
-
-const debug = createDebugger('hooks:useSession');
+import { UseSessionState, UseSessionReturn, debug } from './useSessionHelpers';
 
 export { useSessionHistory } from './useSessionHistory';
 export { useSessionPresets } from './useSessionPresets';
 export { useSessionStats } from './useSessionStats';
-
-interface UseSessionState {
-  session: SessionState | null;
-  isActive: boolean;
-  isPaused: boolean;
-  remainingSeconds: number;
-  elapsedSeconds: number;
-  completionPercentage: number;
-  isLoading: boolean;
-  error: Error | null;
-}
-
-export interface UseSessionReturn extends UseSessionState, SessionActions {
-  refresh: () => void;
-}
 
 export function useSession(userId: string): UseSessionReturn {
   const orchestratorRef = useRef(getSessionOrchestrator());

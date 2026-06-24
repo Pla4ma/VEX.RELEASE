@@ -83,60 +83,6 @@ const SCREEN_CONFIG = {
   Analytics: 'analytics',
   Mastery: 'mastery',
   Notifications: 'notifications',
-};
-  Auth: {
-    screens: {
-      Login: 'login',
-      Register: 'register',
-      ForgotPassword: 'forgot-password',
-      ResetPassword: 'reset-password/:token',
-      VerifyEmail: 'verify-email',
-    },
-  },
-  Main: {
-    screens: {
-      Home: 'home',
-      Focus: 'focus',
-      Progress: 'progress',
-      Profile: 'profile',
-    },
-  },
-  Onboarding: 'onboarding',
-  Paywall: 'paywall',
-  Settings: {
-    path: 'settings',
-    screens: {
-      SettingsMain: '',
-      AccountSettings: 'account',
-      NotificationSettings: 'notifications',
-      PrivacySettings: 'privacy',
-      AppearanceSettings: 'appearance',
-      CoachSettings: 'coach',
-      LaneMode: 'lane-mode',
-    },
-  },
-  SessionStack: {
-    path: 'session',
-    screens: {
-      SessionSetup: 'setup',
-      ActiveSession: 'active/:sessionId',
-      SessionComplete: 'complete/:sessionId',
-      SessionHistory: 'history',
-    },
-  },
-  Boss: 'boss',
-  AICoach: 'coach',
-  ContentStudy: 'study',
-  Challenges: 'challenges',
-  FocusScoreDashboard: 'focus-score',
-  Comeback: 'comeback',
-  StreakFuneral: 'streak-funeral',
-  MemoryConsole: 'memory-console',
-  CompanionDetail: 'companion-detail',
-  Achievements: 'achievements',
-  Analytics: 'analytics',
-  Mastery: 'mastery',
-  Notifications: 'notifications',
 } as PathConfigMap<ExtendedRootStackParams>;
 
 export function createLinkingConfig(): LinkingOptions<ExtendedRootStackParams> {

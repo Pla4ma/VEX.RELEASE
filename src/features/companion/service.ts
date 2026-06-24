@@ -43,35 +43,43 @@ export class CompanionService {
     purityScore: number,
     isPaused: boolean,
   ): void {
-    if (!this.state) {return;}
-    const progress = (elapsedSeconds / totalDurationSeconds) * 100;
-    this.state.sessionProgress = progress;
-    this.state.purityScore = purityScore;
-    if (!isPaused) {
-      const delta = purityScore > 80 ? 0.2 : purityScore > 50 ? 0.1 : -0.3;
-      this.state.energyLevel = Math.max(0, Math.min(100, this.state.energyLevel + delta));
-      this.currentStreakSeconds = purityScore > 80 ? this.currentStreakSeconds + 1 : 0;
-    }
-    const nextMood = calculateMood(progress, this.state.energyLevel, purityScore);
-    if (nextMood !== this.state.currentMood) {
-      this.state.currentMood = nextMood;
-      this.emitEvent({
-        type: 'MOOD_SHIFT',
-        timestamp: Date.now(),
-        data: { mood: nextMood, message: getMoodMessage(nextMood) },
-      });
-    }
-    const milestone = Math.floor(progress / 10) * 10;
-    if (milestone > this.lastMilestone && milestone > 0) {
-      this.lastMilestone = milestone;
-      this.emitEvent({
-        type: 'MILESTONE',
-        timestamp: Date.now(),
-        data: {
-          progressDelta: milestone,
-          message: `${milestone}% - Your companion grows stronger!`,
-        },
-      });
+    try {
+      if (!this.state) {return;}
+      const progress = (elapsedSeconds / totalDurationSeconds) * 100;
+      this.state.sessionProgress = progress;
+      this.state.purityScore = purityScore;
+      if (!isPaused) {
+        const delta = purityScore > 80 ? 0.2 : purityScore > 50 ? 0.1 : -0.3;
+        this.state.energyLevel = Math.max(0, Math.min(100, this.state.energyLevel + delta));
+        this.currentStreakSeconds = purityScore > 80 ? this.currentStreakSeconds + 1 : 0;
+      }
+      const nextMood = calculateMood(progress, this.state.energyLevel, purityScore);
+      if (nextMood !== this.state.currentMood) {
+        this.state.currentMood = nextMood;
+        this.emitEvent({
+          type: 'MOOD_SHIFT',
+          timestamp: Date.now(),
+          data: { mood: nextMood, message: getMoodMessage(nextMood) },
+        });
+      }
+      const milestone = Math.floor(progress / 10) * 10;
+      if (milestone > this.lastMilestone && milestone > 0) {
+        this.lastMilestone = milestone;
+        this.emitEvent({
+          type: 'MILESTONE',
+          timestamp: Date.now(),
+          data: {
+            progressDelta: milestone,
+            message: `${milestone}% - Your companion grows stronger!`,
+          },
+        });
+      }
+    } catch (error) {
+      // Capture unexpected errors
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/react-native');
+      Sentry.captureException(error);
+      throw error;
     }
   }
   completeSession(
@@ -80,12 +88,20 @@ export class CompanionService {
     userId?: string,
     sessionId?: string,
   ): { leveledUp: boolean; evolved: boolean; newPhase?: CompanionPhase } {
-    if (!this.state) {return { leveledUp: false, evolved: false };}
-    this.growthService.updateState(this.state);
-    const result = this.growthService.processSessionCompletion(sessionMinutes, finalPurity, userId, sessionId);
-    const updatedState = this.growthService.getState();
-    if (updatedState) {this.state = updatedState;}
-    return result;
+    try {
+      if (!this.state) {return { leveledUp: false, evolved: false };}
+      this.growthService.updateState(this.state);
+      const result = this.growthService.processSessionCompletion(sessionMinutes, finalPurity, userId, sessionId);
+      const updatedState = this.growthService.getState();
+      if (updatedState) {this.state = updatedState;}
+      return result;
+    } catch (error) {
+      // Capture unexpected errors
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/react-native');
+      Sentry.captureException(error);
+      throw error;
+    }
   }
   getState(): CompanionState | null {
     return this.state ? { ...this.state } : null;
@@ -98,12 +114,20 @@ export class CompanionService {
   }
 
   private syncGrowth(action: () => void, createEvent: () => CompanionSessionEvent): void {
-    if (!this.state) {return;}
-    this.growthService.updateState(this.state);
-    action();
-    const updatedState = this.growthService.getState();
-    if (updatedState) {this.state = updatedState;}
-    this.emitEvent(createEvent());
+    try {
+      if (!this.state) {return;}
+      this.growthService.updateState(this.state);
+      action();
+      const updatedState = this.growthService.getState();
+      if (updatedState) {this.state = updatedState;}
+      this.emitEvent(createEvent());
+    } catch (error) {
+      // Capture unexpected errors
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/react-native');
+      Sentry.captureException(error);
+      throw error;
+    }
   }
 
   reactToStreakMaintained(userId: string): void {
