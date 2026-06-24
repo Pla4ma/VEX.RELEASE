@@ -10,6 +10,9 @@ import {
   type UserChallenge,
 } from './schemas';
 import { getCompletedChallenges } from './queries';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('challenges');
 
 export async function claimChallengeReward(input: {
   userId: string;
@@ -57,7 +60,7 @@ export async function claimChallengeReward(input: {
           source: 'CHALLENGE_COMPLETE',
           sourceId: validated.challengeId,
         });
-      } catch {
+      } catch (error) { debug.error('Error claiming challenge reward', error);
         // ARCH-04: Economy disabled — coin reward silently skipped
       }
       rewards.push({
