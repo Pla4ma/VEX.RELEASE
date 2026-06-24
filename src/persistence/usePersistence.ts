@@ -1,5 +1,8 @@
 import React from 'react';
 import { persistence, type PersistenceConfig } from './PersistenceService';
+import { createDebugger } from '../utils/debug';
+
+const debug = createDebugger('persistence:usePersistence');
 
 export function usePersistence<T>(config: PersistenceConfig<T>): {
   data: T | null;
@@ -20,6 +23,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>): {
         setData(result);
         setError(null);
       } catch (err) {
+        debug.error('usePersistence load error:', err as Error);
         setError(err instanceof Error ? err : new Error('Unknown error'));
       } finally {
         setLoading(false);

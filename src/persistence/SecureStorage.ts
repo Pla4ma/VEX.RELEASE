@@ -149,6 +149,7 @@ export class SecureStorage implements StorageAdapter {
       await this.setItem(key, value);
       return { success: true };
     } catch (error) {
+      debug.error('[SecureStorage] setCredentials error:', error as Error);
       return { success: false, error: error as Error };
     }
   }
@@ -164,6 +165,7 @@ export class SecureStorage implements StorageAdapter {
       }
       return { success: false, error: new Error('No credentials found') };
     } catch (error) {
+      debug.error('[SecureStorage] getCredentials error:', error as Error);
       return { success: false, error: error as Error };
     }
   }
@@ -176,6 +178,7 @@ export class SecureStorage implements StorageAdapter {
       await this.removeItem(key);
       return { success: true };
     } catch (error) {
+      debug.error('[SecureStorage] clearCredentials error:', error as Error);
       return { success: false, error: error as Error };
     }
   }
