@@ -1,8 +1,8 @@
 [
+  "src/components/glass/native/nativeModuleLoaders.ts",
   "src/config/supabase-mock.ts",
   "src/features/ai-coach/__tests__/memories-repository.test.ts",
   "src/features/analytics/repository/dashboard.ts",
-  "src/features/analytics/repository/storage.ts",
   "src/features/content-study/screens/StudyPlanScreen.tsx",
   "src/features/focus-identity/FocusScoreDashboard-main.tsx",
   "src/features/mode-native/__tests__/derive-home-surface.test.ts",
