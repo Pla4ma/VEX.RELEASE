@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { FocusRing } from '../../components/FocusRing';
 import { Text } from '../../components/primitives/Text';
 import { Skeleton } from '../../components/ui/Skeleton';
-import { getPremiumCardStyle } from '../../components/premiumStyles';
+import { NativeGlassSurface } from '../../components/glass';
 import { useTheme } from '../../theme/ThemeContext';
 import { rgbaColors } from '@/theme/tokens/rgba-colors';
 
@@ -62,17 +62,12 @@ export function HeroLoadingState({
 export function HeroOnboardPanel(): React.ReactNode {
   const { theme } = useTheme();
   return (
-    <View
-      style={[
-        {
-          backgroundColor: WHITE_SOFT,
-          borderColor: rgbaColors.rgb_255_255_255_0_22,
-          borderWidth: 1,
-          padding: 16,
-          gap: 8,
-        },
-        getPremiumCardStyle('medium'),
-      ]}
+    <NativeGlassSurface
+      variant="hero"
+      style={{
+        padding: 16,
+        gap: 8,
+      }}
     >
       <Text variant="h4" color={theme.colors.text.inverse}>
         Welcome to VEX
@@ -80,7 +75,7 @@ export function HeroOnboardPanel(): React.ReactNode {
       <Text variant="bodySmall" color={rgbaColors.rgb_255_255_255_0_72}>
         Start one clean session. VEX will use it to shape tomorrow.
       </Text>
-    </View>
+    </NativeGlassSurface>
   );
 }
 

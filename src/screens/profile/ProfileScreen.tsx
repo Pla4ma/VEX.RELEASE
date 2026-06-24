@@ -8,6 +8,7 @@ import { useNavigation, useRoute, type RouteProp } from '@react-navigation/nativ
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { GlassScreen } from '../../components/glass/GlassScreen';
+import { GlassSheetBackground } from '@components/glass/native/GlassSheetBackground';
 import { useAchievements } from '../../features/achievements/hooks';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/FeatureFlagService';
 import { useFeatureAccess } from '../../features/liveops-config';
@@ -127,10 +128,11 @@ const ProfileScreen: React.FC = () => {
         snapPoints={['60%', '90%']}
         enablePanDownToClose
         backdropComponent={ProfileBottomSheetBackdrop}
+        backgroundComponent={GlassSheetBackground}
         backgroundStyle={{
-          backgroundColor: vexLightGlass.glass.fillStrong,
-          borderWidth: 1,
-          borderColor: vexLightGlass.glass.innerHighlight,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          overflow: 'hidden',
         }}
         handleIndicatorStyle={{ backgroundColor: vexLightGlass.text.disabled }}
       >

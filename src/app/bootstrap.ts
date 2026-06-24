@@ -16,18 +16,27 @@ let sessionRuntimeInitialized = false;
 const debug = createDebugger('app:bootstrap');
 
 function deferBootCall(call: () => void): void {
-  setTimeout(call, 0);
+  setTimeout(() => {
+    try {
+      call();
+    } catch (error) {
+      debug.error('Deferred bootstrap call failed', error);
+    }
+  }, 0);
 }
 
 function initializeCoreSystems(): void {
   setupGlobalErrorHandler();
   setupRejectionHandler();
   initializeAnalyticsEventBridge();
-  analyticsService.initialize().then((enabled) => {
-    if (enabled) {
-      capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
-    }
-  });
+  analyticsService
+    .initialize()
+    .then((enabled) => {
+      if (enabled) {
+        capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
+      }
+    })
+    .catch((error) => debug.error('Analytics initialization failed', error));
 }
 
 export const initializeSessionRuntime = (): void => {
@@ -48,9 +57,21 @@ export const bootstrapApp = async (): Promise<void> => {
   }
 
   bootstrapped = true;
-  await getMmkvEncryptionKey();
-  initializeCoreSystems();
-  initializeSessionCompletionOrchestrator();
+  try {
+    await getMmkvEncryptionKey();
+  } catch (error) {
+    debug.error('MMKV encryption key initialization failed', error);
+  }
+  try {
+    initializeCoreSystems();
+  } catch (error) {
+    debug.error('Core system initialization failed', error);
+  }
+  try {
+    initializeSessionCompletionOrchestrator();
+  } catch (error) {
+    debug.error('Session completion orchestrator initialization failed', error);
+  }
   deferBootCall(initializeSessionRuntime);
 };
 

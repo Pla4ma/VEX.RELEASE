@@ -1,12 +1,9 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { CURRENT_CONFIG } from '../constants/app';
 import type { Database } from '../types/supabase';
-import { createDebugger } from '../utils/debug';
 import { getSecureStorage } from '../persistence/SecureStorage';
 import { createMockSupabaseClient } from './supabase-mock';
 import { TEST_CONSTANTS } from '../constants/test';
-
-const debug = createDebugger('config:supabase');
 
 const IS_JEST = Boolean(process.env.JEST_WORKER_ID);
 const TEST_SUPABASE_URL = IS_JEST ? TEST_CONSTANTS.SUPABASE_URL : '';
@@ -33,7 +30,7 @@ const secureStorageAdapter = {
 
 function createSupabaseClient(): SupabaseClient {
   if (IS_JEST) {
-    debug.warn('[Supabase] Jest environment detected — using mock client');
+    console.warn('[Supabase] Jest environment detected — using mock client');
     return createMockSupabaseClient();
   }
 
@@ -41,20 +38,31 @@ function createSupabaseClient(): SupabaseClient {
     throw createMissingSupabaseConfigError();
   }
 
-  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-      storage: secureStorageAdapter,
-      autoRefreshToken: !IS_JEST,
-      persistSession: !IS_JEST,
-      detectSessionInUrl: false,
-    },
-    global: {
-      headers: {
-        'X-Client-Info': `vex-app/${CURRENT_CONFIG.version}`,
-        'X-Platform': 'react-native',
+  try {
+    return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storage: secureStorageAdapter,
+        autoRefreshToken: !IS_JEST,
+        persistSession: !IS_JEST,
+        detectSessionInUrl: false,
       },
-    },
-  });
+      global: {
+        headers: {
+          'X-Client-Info': `vex-app/${CURRENT_CONFIG.version}`,
+          'X-Platform': 'react-native',
+        },
+      },
+    });
+  } catch (error: unknown) {
+    // createClient failed — Metro ESM/CJS interop may still be broken.
+    // Fall back to mock to prevent a hard crash.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(
+      '[supabase] createClient failed. Falling back to mock client. Error:',
+      message,
+    );
+    return createMockSupabaseClient();
+  }
 }
 
 let supabaseClient: SupabaseClient | null = null;

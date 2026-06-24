@@ -23,7 +23,6 @@ import type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig } from './feature
 import { evaluateFlag, getFlagValue } from './featureFlagEvaluator';
 
 export type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig };
-export { getFeatureFlagService } from './featureFlagInstance';
 const debug = createDebugger('features');
 
 export class FeatureFlagService {
@@ -134,4 +133,15 @@ export class FeatureFlagService {
     this.flags.clear();
     this.overrides.clear();
   }
+}
+
+let featureFlagServiceInstance: FeatureFlagService | null = null;
+
+export function getFeatureFlagService(
+  config?: FeatureFlagConfig,
+): FeatureFlagService {
+  if (!featureFlagServiceInstance) {
+    featureFlagServiceInstance = new FeatureFlagService(config);
+  }
+  return featureFlagServiceInstance;
 }

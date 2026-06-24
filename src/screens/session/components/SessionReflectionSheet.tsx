@@ -1,12 +1,12 @@
 import React from 'react';
 import { Pressable, TextInput } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { GlassSheetBackground } from '@components/glass/native/GlassSheetBackground';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text, Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { MOODS, type Mood } from '../utils';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionReflectionSheetProps = {
   bottomSheetRef: React.RefObject<BottomSheet | null>;
@@ -41,10 +41,11 @@ export function SessionReflectionSheet({
           disappearsOnIndex={-1}
         />
       )}
+      backgroundComponent={GlassSheetBackground}
       backgroundStyle={{
-        backgroundColor: theme.colors.background.secondary,
-        borderWidth: 1,
-        borderColor: theme.colors.border.light,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: 'hidden',
       }}
       handleIndicatorStyle={{ backgroundColor: theme.colors.text.tertiary }}
     >

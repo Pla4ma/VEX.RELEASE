@@ -5,12 +5,13 @@ import { lightColors } from '@/theme/tokens/colors';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
+import { NativeGlassSurface } from '../../../components/glass';
+import { glassHaptics } from '../../../shared/feedback/GlassHaptics';
 import type {
   HomePrimaryPriority,
   HomeStakes,
 } from '../../../features/home-spine/priority-schemas';
 import { useTheme } from '../../../theme/ThemeContext';
-import { glow } from '../../../theme/tokens/elevation';
 import { getHeroTitle, getHeroEyebrow } from './HomeHeroCard.helpers';
 
 interface HomeHeroCardProps {
@@ -53,11 +54,10 @@ export function HomeHeroCard({
   }
 
   return (
-    <View
-      style={{
-        borderRadius: theme.borderRadius['2xl'],
-        ...glow(theme.colors.semantic.primary, 'soft'),
-      }}
+    <NativeGlassSurface
+      variant="hero"
+      radius={theme.borderRadius['2xl']}
+      style={{ overflow: 'hidden' }}
     >
       <LinearGradient
         colors={[
@@ -69,9 +69,7 @@ export function HomeHeroCard({
         end={{ x: 0.9, y: 1 }}
         locations={[0, 0.55, 1]}
         style={{
-          borderRadius: theme.borderRadius['2xl'],
           gap: theme.spacing[3],
-          overflow: 'hidden',
           padding: theme.spacing[5],
         }}
       >
@@ -132,7 +130,10 @@ export function HomeHeroCard({
           fullWidth
           size="lg"
           variant="primary"
-          onPress={onPressPrimary}
+          onPress={() => {
+            glassHaptics.primaryAction();
+            onPressPrimary();
+          }}
           accessibilityLabel={priority.cta.text}
           accessibilityRole="button"
           accessibilityHint="Starts the highest-priority action for today"
@@ -140,6 +141,6 @@ export function HomeHeroCard({
           {priority.cta.text}
         </Button>
       </LinearGradient>
-    </View>
+    </NativeGlassSurface>
   );
 }

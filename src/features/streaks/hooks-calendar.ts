@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { streakKeys } from './hooks';
+import { streakKeys } from './streakKeys';
 
 export interface StreakCalendarData {
   month: number;

@@ -47,6 +47,7 @@ import {
   getSessionHistory as getSessionHistoryAccessor,
   getSessionStats as getSessionStatsAccessor,
 } from './orchestrator-accessors';
+import { loadActiveSession } from './orchestrators/SessionCore';
 
 export class SessionOrchestrator extends SessionOrchestratorBase {
   handleTimerTick(
@@ -126,18 +127,10 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   getActiveSessionInMemory(): SessionState | null {
     return getActiveSessionAccessor(this);
   }
-  getTimerState() {
-    return getTimerStateAccessor(this);
-  }
-  getRemainingSeconds() {
-    return getRemainingSecondsAccessor(this);
-  }
-  getElapsedSeconds() {
-    return getElapsedSecondsAccessor(this);
-  }
-  getPercentageComplete() {
-    return getPercentageCompleteAccessor(this);
-  }
+  getTimerState() {return getTimerStateAccessor(this);}
+  getRemainingSeconds() {return getRemainingSecondsAccessor(this);}
+  getElapsedSeconds() {return getElapsedSecondsAccessor(this);}
+  getPercentageComplete() {return getPercentageCompleteAccessor(this);}
   isSessionActive(): boolean {
     return isSessionActiveAccessor(this);
   }
@@ -150,24 +143,12 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   getPurityLabel(): 'Elite' | 'Good' | 'Okay' | 'Distracted' {
     return getPurityLabelAccessor(this);
   }
-  getInterruptions(): InterruptionRecord[] {
-    return getInterruptionsAccessor(this);
-  }
-  getRecoveries(): RecoveryRecord[] {
-    return getRecoveriesAccessor(this);
-  }
-  applyStudyQuizBonus(correct: number): void {
-    applyStudyQuizBonusAccessor(this, correct);
-  }
-  updateFocusQuality(quality: number): void {
-    updateFocusQualityAccessor(this, quality);
-  }
-  addDocument(docId: string): void {
-    addDocumentAccessor(this, docId);
-  }
-  removeDocument(docId: string): void {
-    removeDocumentAccessor(this, docId);
-  }
+  getInterruptions(): InterruptionRecord[] {return getInterruptionsAccessor(this);}
+  getRecoveries(): RecoveryRecord[] {return getRecoveriesAccessor(this);}
+  applyStudyQuizBonus(correct: number): void {applyStudyQuizBonusAccessor(this, correct);}
+  updateFocusQuality(quality: number): void {updateFocusQualityAccessor(this, quality);}
+  addDocument(docId: string): void {addDocumentAccessor(this, docId);}
+  removeDocument(docId: string): void {removeDocumentAccessor(this, docId);}
   getSessionHistoryFromAccessor(limit = 10): Promise<SessionState[]> {
     return getSessionHistoryAccessor(this, limit);
   }
@@ -184,4 +165,32 @@ export class SessionOrchestrator extends SessionOrchestratorBase {
   }
 }
 
-export { getSessionOrchestrator, resetSessionOrchestrator, createSessionOrchestrator } from './session-orchestrator-factory';
+let orchestratorInstance: SessionOrchestrator | null = null;
+let sessionLoaded = false;
+
+export function getSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
+  if (!orchestratorInstance) {
+    orchestratorInstance = new SessionOrchestrator(config);
+  }
+  if (!sessionLoaded) {
+    sessionLoaded = true;
+    loadActiveSession(orchestratorInstance);
+  }
+  return orchestratorInstance;
+}
+
+export function resetSessionOrchestrator(): void {
+  if (!orchestratorInstance) {
+    return;
+  }
+  orchestratorInstance.destroy();
+  orchestratorInstance = null;
+  sessionLoaded = false;
+}
+
+export function createSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
+  const inst = new SessionOrchestrator(config);
+  loadActiveSession(inst);
+  return inst;
+}
+

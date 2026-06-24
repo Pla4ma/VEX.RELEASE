@@ -1,8 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { NativeGlassSurface } from './native/NativeGlassSurface';
 import { GlassBlurLayer } from './GlassBlurLayer';
-
 export type GlassPillTone = 'neutral' | 'mint' | 'fire' | 'premium' | 'warning';
 
 type AccessibilityRole = 'button' | 'link' | 'header' | 'image' | 'text' | 'none' | undefined;
@@ -114,8 +113,30 @@ export function GlassPillSurface({
   accessibilityHint,
 }: GlassPillSurfaceProps): React.ReactNode {
   const v = selected ? SELECTED_CONFIG : TONE_CONFIG[tone];
+  if (selected) {
+    return (
+      <NativeGlassSurface
+        variant="pill"
+        radius={height / 2}
+        testID={testID}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole={accessibilityRole}
+        accessibilityHint={accessibilityHint}
+        style={[
+          {
+            borderColor: v.border,
+            borderWidth: 1.2,
+            height,
+          },
+          style,
+        ]}
+      >
+        {children}
+      </NativeGlassSurface>
+    );
+  }
   return (
-      <View
+    <View
       testID={testID}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityRole}
@@ -133,40 +154,8 @@ export function GlassPillSurface({
       ]}
     >
       <GlassBlurLayer
-        intensity={selected ? 82 : 72}
+        intensity={72}
         radius={height / 2}
-      />
-      <LinearGradient
-        colors={[v.gradientTop, v.gradientBottom]}
-        end={{ x: 0, y: 1 }}
-        locations={[0, 1]}
-        start={{ x: 0, y: 0 }}
-        style={{
-          bottom: 0,
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
-      <LinearGradient
-        colors={[v.highlight, 'rgba(255, 255, 255, 0)']}
-        end={{ x: 0, y: 1 }}
-        locations={[0, 0.6]}
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderTopLeftRadius: height / 2,
-          borderTopRightRadius: height / 2,
-          height: '55%',
-          left: 1,
-          position: 'absolute',
-          right: 1,
-          top: 1,
-        }}
-      />
-      <View
-        pointerEvents="none"
-        style={{}}
       />
       {children}
     </View>

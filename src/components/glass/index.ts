@@ -13,3 +13,12 @@ export { CrystalAvatar } from './CrystalAvatar';
 export { LiquidProgressBar } from './LiquidProgressBar';
 export { EmptyStateLens } from './EmptyStateLens';
 export { FloatingDroplets } from './FloatingDroplets';
+// --- Native glass primitives (Phase 1) ---
+export { canUseNativeGlass, getGlassRuntimeLabel } from './native/glassAvailability';
+export { NativeGlassSurface } from './native/NativeGlassSurface';
+export type { NativeGlassSurfaceProps, NativeGlassSurfaceVariant } from './native/NativeGlassSurface';
+export { NativeGlassContainer } from './native/NativeGlassContainer';
+export type { NativeGlassContainerProps } from './native/NativeGlassContainer';
+export { GlassSheetBackground } from './native/GlassSheetBackground';
+export { NativeGlassOverlay } from './native/NativeGlassOverlay';
+export type { NativeGlassOverlayProps } from './native/NativeGlassOverlay';

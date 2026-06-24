@@ -1,10 +1,14 @@
-import { AuthError, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+// AuthError from @supabase/supabase-js is undefined in Metro due to
+// ESM/CJS interop. Use plain Error for mock paths.
+const MockAuthError = Error;
 
 export function createMockSupabaseClient(): SupabaseClient {
   const err = new Error(
     'Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.',
   );
-  const authErr = new AuthError(err.message, 500, 'mock_error');
+  const authErr = new MockAuthError(err.message);
   const mockClient = {
     auth: {
       signUp: async () => ({ data: { user: null, session: null }, error: authErr }),
