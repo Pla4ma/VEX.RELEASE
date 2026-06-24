@@ -17,17 +17,25 @@ export class CompanionService {
   }
 
   startSession(_sessionDurationMinutes?: number): void {
-    if (!this.state) {return;}
-    this.state.currentMood = 'SLEEPY';
-    this.state.sessionProgress = 0;
-    this.state.energyLevel = 50;
-    this.lastMilestone = 0;
-    this.currentStreakSeconds = 0;
-    this.emitEvent({
-      type: 'MOOD_SHIFT',
-      timestamp: Date.now(),
-      data: { mood: 'SLEEPY', message: 'Your companion awakens...' },
-    });
+    try {
+      if (!this.state) {return;}
+      this.state.currentMood = 'SLEEPY';
+      this.state.sessionProgress = 0;
+      this.state.energyLevel = 50;
+      this.lastMilestone = 0;
+      this.currentStreakSeconds = 0;
+      this.emitEvent({
+        type: 'MOOD_SHIFT',
+        timestamp: Date.now(),
+        data: { mood: 'SLEEPY', message: 'Your companion awakens...' },
+      });
+    } catch (error) {
+      // Capture unexpected errors
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const Sentry = require('@sentry/react-native');
+      Sentry.captureException(error);
+      throw error;
+    }
   }
   tick(
     elapsedSeconds: number,

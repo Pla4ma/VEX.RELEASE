@@ -4,6 +4,9 @@ import { eventBus } from '../../events/EventBus';
 import type { SessionConfig, SessionState } from '../types';
 import type { SessionActions } from './useSessionActions';
 import { createSessionActions } from './useSessionActions';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('hooks:useSession');
 
 export { useSessionHistory } from './useSessionHistory';
 export { useSessionPresets } from './useSessionPresets';
@@ -65,6 +68,7 @@ export function useSession(userId: string): UseSessionReturn {
         error: null,
       }));
     } catch (err) {
+      debug.error('useSession refresh error:', err as Error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -146,6 +150,7 @@ export function useSession(userId: string): UseSessionReturn {
           refresh();
           return result;
         } catch (err) {
+          debug.error('useSession action error:', err as Error);
           setState((prev) => ({
             ...prev,
             isLoading: false,
@@ -167,6 +172,7 @@ export function useSession(userId: string): UseSessionReturn {
         refresh();
         return session;
       } catch (err) {
+        debug.error('useSession createSession error:', err as Error);
         setState((prev) => ({
           ...prev,
           isLoading: false,

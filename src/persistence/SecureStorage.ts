@@ -1,4 +1,5 @@
 import { captureSilentFailure } from '../utils/silent-failure';
+import { createSecureStorageCredentials } from './SecureStorageCredentials';
 /**
  * Secure Storage Adapter
  *
@@ -7,7 +8,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Used for tokens, credentials, and private keys.
  */
 
- import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Nullable } from '../types/global';
 import type { StorageAdapter, StorageResult } from './StorageAdapter';
@@ -24,9 +25,11 @@ const WEB_STORAGE_PREFIX = 'vex_secure_';
  */
 export class SecureStorage implements StorageAdapter {
   private isWeb: boolean;
+  private credentials: ReturnType<typeof createSecureStorageCredentials<SecureStorage>>;
 
   constructor() {
     this.isWeb = Platform.OS === 'web';
+    this.credentials = createSecureStorageCredentials(this);
   }
 
   /**
@@ -145,42 +148,21 @@ export class SecureStorage implements StorageAdapter {
     key: string,
     value: string,
   ): Promise<StorageResult<void>> {
-    try {
-      await this.setItem(key, value);
-      return { success: true };
-    } catch (error) {
-      debug.error('[SecureStorage] setCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
+    return this.credentials.setCredentials(key, value);
   }
 
   /**
    * Get credentials securely
    */
   async getCredentials(key: string): Promise<StorageResult<string>> {
-    try {
-      const value = await this.getItem(key);
-      if (value) {
-        return { success: true, data: value };
-      }
-      return { success: false, error: new Error('No credentials found') };
-    } catch (error) {
-      debug.error('[SecureStorage] getCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
+    return this.credentials.getCredentials(key);
   }
 
   /**
    * Clear credentials
    */
   async clearCredentials(key: string): Promise<StorageResult<void>> {
-    try {
-      await this.removeItem(key);
-      return { success: true };
-    } catch (error) {
-      debug.error('[SecureStorage] clearCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
+    return this.credentials.clearCredentials(key);
   }
 }
 
