@@ -72,8 +72,16 @@ type SessionCompletedEvent = z.infer<typeof SessionCompletedEventSchema>;
 export async function orchestrateSessionCompletion(
   event: SessionCompletedEvent,
 ): Promise<PostSessionStoryViewModel | null> {
-  const parsed = SessionCompletedEventSchema.parse(event);
-  const summary = SessionSummarySchema.parse(parsed.summary);
+  let parsed: SessionCompletedEvent;
+  let summary: any;
+  try {
+    parsed = SessionCompletedEventSchema.parse(event);
+    summary = SessionSummarySchema.parse(parsed.summary);
+  } catch (error) {
+    Sentry.captureException(error, { tags: { feature: 'session-completion-orchestrator-parse' } });
+    // If parsing fails, abort processing
+    return null;
+  }
   const isOnline = getConnectionState() !== 'offline';
 
   // LAYER 1: Local completion receipt — always succeeds

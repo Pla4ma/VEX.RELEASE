@@ -1,19 +1,4 @@
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { createDebugger } from '../../../utils/debug';
-import {
-  askCoachQuestion,
-  getCoachHistory,
-  getCoachState,
-  type CoachQuestionResponse,
-} from '../service/coach-screen-service';
-import type { CoachMessage, CoachState } from '../types';
-import { useAuthStore } from '../../../store';
-
-const debug = createDebugger('coach:hooks');
+import {\n  useMutation,\n  useQuery,\n  useQueryClient,\n} from '@tanstack/react-query';\nimport { createDebugger } from '../../../utils/debug';\nimport {\n  askCoachQuestion,\n  getCoachHistory,\n  getCoachState,\n  type CoachQuestionResponse,\n} from '../service/coach-screen-service';\nimport type { CoachMessage, CoachState } from '../types';\nimport { useAuthStore } from '../../../store';\nimport * as Sentry from '@sentry/react-native';\n\nconst debug = createDebugger('coach:hooks');
 
 export function useCoachScreenState(): {
   coachState: CoachState | undefined;

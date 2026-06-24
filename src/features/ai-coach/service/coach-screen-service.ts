@@ -22,10 +22,17 @@ export interface CoachRecommendation {
 }
 
 export async function getCoachState(userId: string): Promise<CoachState> {
-  const row = await fetchCoachState(userId);
-  if (row) {
-    return row;
+  try {
+    const row = await fetchCoachState(userId);
+    if (row) {
+      return row;
+    }
+  } catch (error) {
+    // Capture unexpected repository errors and rethrow for higher-level handling
+    // The caller should log via Sentry; we preserve the original error message
+    throw new Error(`Failed to fetch coach state: ${error instanceof Error ? error.message : String(error)}`);
   }
+  // Fallback default state when no data exists
   return {
     userId,
     currentState: 'HIGH_CONFIDENCE',
@@ -48,12 +55,19 @@ export async function askCoachQuestion(
   question: string,
   userId?: string,
 ): Promise<CoachQuestionResponse> {
-  const aiResponse = await askAiCoachFunction(question, userId);
-  if (aiResponse) {
-    return aiResponse;
-  }
+  try {
+    const aiResponse = await askAiCoachFunction(question, userId);
+    if (aiResponse) {
+      return aiResponse;
+    }
 
-  return getFallbackCoachResponse(question);
+    return getFallbackCoachResponse(question);
+  } catch (error) {
+    // AI function failed - return fallback instead of throwing
+    // The fallback provides a meaningful response without exposing internal errors
+    console.warn('[askCoachQuestion] AI failed, using fallback:', error);
+    return getFallbackCoachResponse(question);
+  }
 }
 
 export function getCurrentRecommendation(
