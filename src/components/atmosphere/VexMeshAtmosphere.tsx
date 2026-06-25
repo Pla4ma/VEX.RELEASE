@@ -1,6 +1,17 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+
+let _LinearGradient: React.ComponentType<Record<string, unknown>> | null = null;
+function getLinearGradient(): React.ComponentType<Record<string, unknown>> {
+  if (_LinearGradient) return _LinearGradient;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    _LinearGradient = (require('expo-linear-gradient') as { LinearGradient: React.ComponentType<Record<string, unknown>> }).LinearGradient;
+  } catch {
+    _LinearGradient = View as unknown as React.ComponentType<Record<string, unknown>>;
+  }
+  return _LinearGradient;
+}
 
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 import { atmosphereMesh, type AtmosphereVariant } from './atmosphereTokens';
@@ -98,6 +109,7 @@ const FALLBACK_GRADIENT: Record<
 
 function LinearGradientFallback({ variant }: { variant: AtmosphereVariant }) {
   const cfg = FALLBACK_GRADIENT[variant];
+  const LinearGradient = getLinearGradient();
   return (
     <>
       <LinearGradient

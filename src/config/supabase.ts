@@ -1,4 +1,9 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+// Metro 0.84.4 ESM/CJS interop bug: `import { createClient }` from @supabase/supabase-js
+// resolves the .cjs file but Rolldown's __commonJSMin wrapper prevents named export
+// extraction — createClient ends up undefined. require() returns module.exports directly.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { CURRENT_CONFIG } from '../constants/app';
 import type { Database } from '../types/supabase';
 import { getSecureStorage } from '../persistence/SecureStorage';
@@ -54,12 +59,15 @@ function createSupabaseClient(): SupabaseClient {
       },
     });
   } catch (error: unknown) {
-    // createClient failed — Metro ESM/CJS interop may still be broken.
+    // createClient failed — Metro ESM/CJS interop or runtime initialization issue.
     // Fall back to mock to prevent a hard crash.
     const message = error instanceof Error ? error.message : String(error);
+    const stack = error instanceof Error ? error.stack : '';
     console.error(
       '[supabase] createClient failed. Falling back to mock client. Error:',
       message,
+      '\nStack:',
+      stack,
     );
     return createMockSupabaseClient();
   }

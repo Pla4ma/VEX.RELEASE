@@ -10,7 +10,7 @@
 // Service exports
 export {
   analyticsService,
-  PostHogProvider,
+  getPostHogProvider,
   capture,
   identify,
   reset,

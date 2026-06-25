@@ -5,11 +5,9 @@ import { Animated as RNAnimated, Easing as RNEasing } from 'react-native';
 
 const identity = (value) => value;
 const noop = () => {};
-
-function createSharedValue(initialValue) {
+function makeMutable(initialValue) {
   return { value: initialValue };
 }
-
 function runCallback(callback, value) {
   if (typeof callback === 'function') {
     callback(true, value);
@@ -64,11 +62,9 @@ export const withSequence = (...animations) => animations[animations.length - 1]
 export const cancelAnimation = noop;
 export const runOnJS = (fn) => fn;
 export const runOnUI = (fn) => fn;
-export const measure = () => null;
-export const scrollTo = noop;
-
-export function interpolate(value, inputRange, outputRange) {
-  if (!inputRange.length || !outputRange.length) {
+export const makeMutable = makeMutable;
+export const addWhitelistedUIProps = noop;
+export const addWhitelistedNativeProps = noop;
     return value;
   }
   const start = inputRange[0];
@@ -128,6 +124,9 @@ const Animated = {
   Image: RNAnimated.Image,
   ScrollView: RNAnimated.ScrollView,
   FlatList: RNAnimated.FlatList,
+  addWhitelistedUIProps: noop,
+  addWhitelistedNativeProps: noop,
+  makeMutable: makeMutable,
 };
 
 export default Animated;

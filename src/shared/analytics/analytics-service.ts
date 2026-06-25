@@ -1,4 +1,18 @@
-import { PostHog, PostHogProvider } from 'posthog-react-native';
+// Lazy-load posthog-react-native to avoid [runtime not ready] crash at module evaluation time
+let _PostHog: (typeof import('posthog-react-native'))['PostHog'] | null = null;
+let _PostHogProvider: (typeof import('posthog-react-native'))['PostHogProvider'] | null = null;
+function getPostHogModule() {
+  if (_PostHog) return { PostHog: _PostHog, PostHogProvider: _PostHogProvider! };
+  try {
+    const mod = require('posthog-react-native') as typeof import('posthog-react-native');
+    _PostHog = mod.PostHog;
+    _PostHogProvider = mod.PostHogProvider;
+  } catch {
+    _PostHog = null;
+    _PostHogProvider = null;
+  }
+  return { PostHog: _PostHog, PostHogProvider: _PostHogProvider };
+}
 import { Platform } from 'react-native';
 import { createDebugger } from '../../utils/debug';
 import {
@@ -53,11 +67,12 @@ class AnalyticsService {
     }
 
     try {
-      this.client = new PostHog(POSTHOG_API_KEY, {
+      const { PostHog: PH } = getPostHogModule();
+      this.client = PH ? new PH(POSTHOG_API_KEY, {
         host: POSTHOG_HOST,
         flushAt: 20,
         flushInterval: 10000,
-      });
+      }) : null;
       this.initialized = true;
       return true;
     } catch (error) {
@@ -179,9 +194,10 @@ class AnalyticsService {
 function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
-
 export const analyticsService = new AnalyticsService();
-export { PostHogProvider };
+export function getPostHogProvider() {
+  return getPostHogModule().PostHogProvider;
+}
 
 export const capture = (eventName: string, properties?: object): void =>
   analyticsService.capture(eventName, properties);

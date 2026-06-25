@@ -17,14 +17,10 @@ const config = getDefaultConfig(__dirname);
 // Ensure web platform is properly configured
 config.resolver.platforms = ["ios", "android", "web"];
 
-// Enable package exports resolution for Zod named exports.
-// Supabase is handled by a resolveRequest fallback (see below).
 config.resolver.unstable_enablePackageExports = true;
 
-// Add .cjs to assetExts
+// Add .riv to assetExts (audio files for VEX)
 if (!config.resolver.assetExts) config.resolver.assetExts = [];
-if (!config.resolver.assetExts.includes("cjs"))
-  config.resolver.assetExts.push("cjs");
 if (!config.resolver.assetExts.includes("riv"))
   config.resolver.assetExts.push("riv");
 
@@ -85,6 +81,16 @@ const SHIMS = {
     __dirname,
     "shims/expo-apple-authentication.js",
   ),
+  // expo-font calls requireNativeModule('ExpoFontLoader') at module evaluation
+  // time (ExpoFontLoader.js top-level const). Pulled in transitively by `expo`
+  // which is imported at the top of App.tsx. Fires before the bridge is ready.
+  "expo-font": path.resolve(__dirname, "shims/expo-font.js"),
+  // expo-asset calls requireNativeModule('ExpoAsset') at module evaluation
+  // time (ExpoAsset.js top-level). Pulled in transitively by `expo`.
+  "expo-asset": path.resolve(__dirname, "shims/expo-asset.js"),
+  // expo-keep-awake calls requireNativeModule('ExpoKeepAwake') at module
+  // evaluation time. Common transitive dependency.
+  "expo-keep-awake": path.resolve(__dirname, "shims/expo-keep-awake.js"),
   "react-native-svg": path.resolve(__dirname, "shims/react-native-svg.js"),
   "@react-native-community/netinfo": path.resolve(
     __dirname,
@@ -141,6 +147,13 @@ const SHIMS = {
   "expo-haptics": path.resolve(__dirname, "shims/expo-haptics.js"),
   "expo-splash-screen": path.resolve(__dirname, "shims/expo-splash-screen.js"),
   "@expo/ui": path.resolve(__dirname, "shims/expo-ui.js"),
+  // @supabase/supabase-js: Rolldown's __commonJSMin CJS bundle breaks Metro's
+  // ESM/CJS interop — named exports (createClient) come back undefined.
+  // Shim loads the real CJS file by absolute path, bypassing package resolution.
+  "@supabase/supabase-js": path.resolve(
+    __dirname,
+    "shims/supabase-js.js",
+  ),
 };
 
 // IMPORTANT:
@@ -166,6 +179,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   if (ALWAYS_SHIM.has(moduleName) || (SHIMS_ENABLED && SHIMS[moduleName])) {
     const shimPath = SHIMS[moduleName];
     if (shimPath) {
+      if (process.env.NODE_ENV !== 'production') console.log('[metro-resolve] SHIM:', moduleName, '->', shimPath);
       return {
         filePath: shimPath,
         type: "sourceFile",
@@ -189,21 +203,24 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
     }
   }
 
-  // 3. Supabase CJS fallback — forces @supabase/* top-level packages
-  //    to their CJS entry via Node's require.resolve (uses 'require'
-  //    condition). Only matches top-level packages (e.g.
-  //    @supabase/postgrest-js), NOT sub-paths (e.g.
-  //    @supabase/postgrest-js/dist/foo).
+  // 3. Supabase CJS resolution — force @supabase/* packages to their CJS
+  //    entry via require.resolve. Metro's unstable_enablePackageExports
+  //    resolves the "react-native" condition to dist/index.cjs, but the
+  //    Rolldown-bundled CJS wrapper (__commonJSMin pattern) breaks when
+  //    Metro's Babel transform processes the .cjs file. Using require.resolve
+  //    gives us the same .cjs path but ensures Metro treats it as a source
+  //    file with the correct CJS semantics.
+  //    Only intercept top-level packages (e.g. @supabase/auth-js), NOT
   if (moduleName.startsWith('@supabase/') && moduleName.split('/').length === 2) {
     try {
+      const resolved = require.resolve(moduleName);
+      if (process.env.NODE_ENV !== 'production') console.log('[metro-resolve] SUPABASE:', moduleName, '->', resolved);
       return {
-        filePath: require.resolve(moduleName),
+        filePath: resolved,
         type: 'sourceFile',
       };
     } catch (_e) { /* fall through */ }
   }
-
-  // Fall back to the existing resolver (or Metro's default)
   if (originalResolveRequest) {
     return originalResolveRequest(context, moduleName, platform);
   }
