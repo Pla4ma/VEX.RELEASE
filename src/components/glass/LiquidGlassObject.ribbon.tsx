@@ -27,7 +27,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx + size * 0.28} ${cy + size * 0.22} ${cx + size * 0.22} ${cy + size * 0.18}`}
         fill="none"
         opacity={0.22}
-        stroke="#0A5E4D"
+        stroke="theme.glassColors.vexDeepTeal"
         strokeLinecap="round"
         strokeWidth={size * 0.02}
       />
@@ -50,7 +50,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx - size * 0.08} ${cy - size * 0.28} ${cx + size * 0.08} ${cy - size * 0.15}`}
         fill="none"
         opacity={0.78}
-        stroke="#FFFFFF"
+        stroke="theme.glassColors.vexWhite"
         strokeLinecap="round"
         strokeWidth={size * 0.015}
       />
@@ -59,7 +59,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx + size * 0.22} ${cy + size * 0.22} ${cx + size * 0.18} ${cy + size * 0.08}`}
         fill="none"
         opacity={0.45}
-        stroke="#FFFFFF"
+        stroke="theme.glassColors.vexWhite"
         strokeLinecap="round"
         strokeWidth={size * 0.01}
       />

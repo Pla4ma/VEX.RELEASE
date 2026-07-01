@@ -14,7 +14,7 @@ type Star = {
 
           
 const STAR_COUNT = 38;
-const STAR_PALETTE = ['#FFFFFF', '#E7F1FB', '#FFE9C2', '#FFD9E0'];
+const STAR_PALETTE = ['theme.glassColors.vexWhite', '#E7F1FB', '#FFE9C2', '#FFD9E0'];
 
 function buildStars(count: number): Star[] {
   const arr: Star[] = [];
@@ -23,7 +23,7 @@ function buildStars(count: number): Star[] {
       x: (i * 41 + 7) % 100,
       y: (i * 17 + 3) % 45,
       r: 0.6 + ((i * 13) % 8) * 0.15,
-      color: STAR_PALETTE[i % STAR_PALETTE.length] ?? '#FFFFFF',
+      color: STAR_PALETTE[i % STAR_PALETTE.length] ?? 'theme.glassColors.vexWhite',
     });
   }
   return arr;

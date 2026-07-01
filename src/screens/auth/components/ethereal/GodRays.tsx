@@ -46,7 +46,7 @@ function RayBeam({
   return (
     <Group opacity={opacity} transform={[{ translateX: centerX }, { translateY: 0 }]}>
       <RoundedRect
-        color="#FFFBEF"
+        color="theme.glassColors.vexWarmWhite"
         height={height}
         r={xWidth}
         width={xWidth}
