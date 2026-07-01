@@ -9,8 +9,24 @@ import { buildGuardrailReply } from './coach-guardrails.ts';
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
 const httpRequest = globalThis.fetch.bind(globalThis);
 const MAX_BODY_LENGTH = 10000;
+const MAX_USER_MESSAGE_LENGTH = 500;
 const COACH_MODEL_TIMEOUT_MS = 4500;
 const COACH_TOTAL_TIMEOUT_MS = 12000;
+
+/**
+ * Sanitize user input against prompt injection.
+ * Normalize Unicode, remove control characters, and filter known bypass patterns.
+ */
+function sanitizeUserInput(text: string, maxLength: number = MAX_USER_MESSAGE_LENGTH): string {
+  return text
+    .normalize('NFKC')                              // Prevent homoglyph attacks
+    .replace(/[^\x20-\x7E\u00A0-\u024F\u0400-\u04FF\u4E00-\u9FFF\uAC00-\uD7AF]/g, '')  // Strip non-printable
+    .replace(/system\s*instruction/gi, '[filtered]')
+    .replace(/ignore\s+(all\s+)?previous\s+instructions/gi, '[filtered]')
+    .replace(/developer\s*message/gi, '[filtered]')
+    .replace(/\b(DAN|jailbreak|ignore|override|bypass)\b/gi, '[filtered]')
+    .slice(0, maxLength);
+}
 
 Deno.serve(async (request) => {
   try {
@@ -110,7 +126,7 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
   if (request.requestType === 'GENERATE_COACH_MESSAGE') {
     const recent = (request.context.recentSessionOutcomes ?? []).map((e, i) => `#${i + 1}: score=${e.score}, quality=${e.focusQuality ?? e.score}, duration=${e.durationMinutes ?? 0}m`).join('; ') || 'none';
     const userMessage = typeof request.context.userMessage === 'string'
-      ? request.context.userMessage.slice(0, 500)
+      ? sanitizeUserInput(request.context.userMessage)
       : '';
     return {
       system: '',
@@ -132,7 +148,7 @@ async function callGemini(apiKey: string, systemPrompt: string, userPrompt: stri
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 9000);
   try {
-    const response = await httpRequest('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { role: 'user', parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
+    const response = await httpRequest('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey }, signal: controller.signal, body: JSON.stringify({ systemInstruction: { parts: [{ text: systemPrompt }] }, contents: [{ role: 'user', parts: [{ text: userPrompt }] }], generationConfig: { temperature: 0.4, maxOutputTokens } }) });
     if (!response.ok) {throw new Error(`Gemini API error: ${response.status}`);}
     return (await response.json()) as GeminiResponse;
   } finally { clearTimeout(timeoutId); }

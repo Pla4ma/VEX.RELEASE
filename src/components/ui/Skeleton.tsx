@@ -130,7 +130,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
       <View style={skeletonStyles.cardContent}>
         {Array.from({ length: lines }).map((_, i) => (
           <Skeleton
-            key={i}
+            key={`item-${i}`}
             width={i === lines - 1 ? '80%' : '100%'}
             height={14}
             animate={false}
@@ -148,7 +148,7 @@ export const SkeletonList: React.FC<{
   return (
     <View style={skeletonStyles.list}>
       {Array.from({ length: count }).map((_, index) => (
-        <View key={index} style={[skeletonStyles.listItem, { height: itemHeight }]}>
+        <View key={`item-${index}`} style={[skeletonStyles.listItem, { height: itemHeight }]}>
           <Skeleton width={48} height={48} variant="circular" />
           <View style={skeletonStyles.listItemContent}>
             <Skeleton width={150} height={16} />

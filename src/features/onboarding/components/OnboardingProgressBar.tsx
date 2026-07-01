@@ -93,7 +93,7 @@ export function OnboardingDots({
 
         return (
           <Animated.View
-            key={index}
+            key={`item-${index}`}
             style={{
               width: isActive ? 24 : 8,
               height: 8,

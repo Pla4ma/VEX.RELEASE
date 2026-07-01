@@ -75,7 +75,7 @@ export const EmptyStateLens: React.FC<EmptyStateLensProps> = ({
           const startX = cx - totalWidth / 2 + (r * 0.14) / 2;
           const x = startX + i * ((r * 0.14) + (r * 0.08));
           return (
-            <Circle key={i} cx={x} cy={cy} r={r * 0.07} fill="rgba(12, 118, 95, 0.42)" />
+            <Circle key={`item-${i}`} cx={x} cy={cy} r={r * 0.07} fill="rgba(12, 118, 95, 0.42)" />
           );
         })}
       </>

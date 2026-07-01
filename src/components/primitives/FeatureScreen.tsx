@@ -125,7 +125,7 @@ export const FeatureScreen: React.FC<FeatureScreenProps> = ({
             <Box pt="lg">
               {Array.from({ length: skeletonCount }).map((_, i) => (
                 <Skeleton
-                  key={i}
+                  key={`item-${i}`}
                   variant="rounded"
                   height={80}
                   style={{ marginBottom: 12 }}

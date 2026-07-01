@@ -21,7 +21,7 @@ function logStructured(
   message: string,
   data?: Record<string, unknown>,
 ): void {
-  console.log(
+  console.debug(
     JSON.stringify({
       level,
       feature: 'rate-limit',

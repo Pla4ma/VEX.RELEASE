@@ -36,7 +36,7 @@ export function Skeleton({
     <View style={[styles.skeletonContainer, style]} testID={testID}>
       {Array.from({ length: count }, (_, index) => (
         <Animated.View
-          key={index}
+          key={`item-${index}`}
           style={[
             styles.skeletonBase,
             { backgroundColor: theme.colors.background.tertiary },

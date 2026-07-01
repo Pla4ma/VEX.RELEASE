@@ -63,8 +63,8 @@ export function ConfettiBurst({ count = 50 }: { count?: number }): React.ReactNo
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <ConfettiPiece key={i} index={i} color={colors[i % colors.length]!} />
+        <ConfettiPiece key={`item-${i}`} index={i} color={colors[i % colors.length]!} />
       ))}
     </>
   );
-}
+}

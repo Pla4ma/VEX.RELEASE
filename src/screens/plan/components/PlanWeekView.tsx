@@ -41,7 +41,7 @@ export function PlanWeekView({
     return (
       <View style={{ gap: 10 }}>
         {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton borderRadius={20} height={70} key={index} width="100%" />
+          <Skeleton borderRadius={20} height={70} key={`item-${index}`} width="100%" />
         ))}
       </View>
     );

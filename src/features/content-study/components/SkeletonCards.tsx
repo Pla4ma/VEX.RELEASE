@@ -43,7 +43,7 @@ export const StudyPlanSkeleton: React.FC = () => {
       />
       <View style={styles.taskList}>
         {[1, 2, 3, 4].map((i) => (
-          <View key={i} style={styles.taskItem}>
+          <View key={`item-${i}`} style={styles.taskItem}>
             <Skeleton width={24} height={24} borderRadius={12} />
             <View style={styles.taskText}>
               <Skeleton
@@ -71,7 +71,7 @@ export const StudyPlanSkeleton: React.FC = () => {
       />
       <View style={styles.quizList}>
         {[1, 2, 3].map((i) => (
-          <View key={i} style={styles.quizItem}>
+          <View key={`item-${i}`} style={styles.quizItem}>
             <Skeleton width="100%" height={16} borderRadius={4} />
             <View style={styles.options}>
               <Skeleton
@@ -105,7 +105,7 @@ export const ContentHistorySkeleton: React.FC = () => {
     >
       {[1, 2, 3, 4, 5].map((i) => (
         <View
-          key={i}
+          key={`item-${i}`}
           style={[
             styles.listItem,
             { backgroundColor: theme.colors.background.secondary },
@@ -161,7 +161,7 @@ export const ExtractionSkeleton: React.FC = () => {
 
       <View style={styles.stages}>
         {[1, 2, 3, 4, 5].map((i) => (
-          <View key={i} style={styles.stage}>
+          <View key={`item-${i}`} style={styles.stage}>
             <Skeleton width={12} height={12} borderRadius={6} />
             <Skeleton
               width={50}

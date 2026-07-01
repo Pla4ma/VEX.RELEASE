@@ -45,7 +45,7 @@ export function LiveFocusingSkeleton({
         <Box flexDirection="row">
           {[1, 2, 3].map((i) => (
             <Box
-              key={i}
+              key={`item-${i}`}
               width={32}
               height={32}
               borderRadius="full"
@@ -85,7 +85,7 @@ export function LiveFocusingSkeleton({
         <Box flexDirection="row" gap="sm">
           {[1, 2, 3, 4].map((i) => (
             <Box
-              key={i}
+              key={`item-${i}`}
               width={40}
               height={40}
               borderRadius="full"
@@ -121,7 +121,7 @@ export function LiveFocusingSkeleton({
         bg="background.tertiary"
       >
         {[1, 2, 3].map((i) => (
-          <Box key={i} alignItems="center" gap="xs">
+          <Box key={`item-${i}`} alignItems="center" gap="xs">
             <Box
               width={30}
               height={24}

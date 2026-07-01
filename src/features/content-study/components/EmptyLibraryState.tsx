@@ -30,7 +30,7 @@ export function EmptyLibraryState({
     return (
       <>
         {[1, 2, 3, 4, 5].map((i) => (
-          <Box key={i} mb="sm">
+          <Box key={`item-${i}`} mb="sm">
             <Skeleton height={80} borderRadius={12} />
           </Box>
         ))}

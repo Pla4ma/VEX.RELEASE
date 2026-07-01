@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events/EventBus';
 import { createSessionActions } from './useSessionActions';
+import type { SessionActions } from './useSessionActions';
+import type { SessionConfig, SessionState } from '../types';
 import { UseSessionState, UseSessionReturn, debug } from './useSessionHelpers';
 
 export { useSessionHistory } from './useSessionHistory';

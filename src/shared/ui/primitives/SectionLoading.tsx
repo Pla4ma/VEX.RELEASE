@@ -25,7 +25,7 @@ export function SectionLoading({
       return (
         <View style={[styles.sectionContainer, style]}>
           {Array.from({ length: count }).map((_, i) => (
-            <SkeletonCard key={i} style={styles.sectionItem} />
+            <SkeletonCard key={`item-${i}`} style={styles.sectionItem} />
           ))}
         </View>
       );

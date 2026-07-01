@@ -124,7 +124,7 @@ export const ChallengeHub = React.memo(({
           <View style={styles.streakDays}>
             {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
               <View
-                key={index}
+                key={`item-${index}`}
                 style={[styles.streakDay, index < 3 && styles.streakDayCompleted]}
               >
                 <Text style={[styles.streakDayText, index < 3 && styles.streakDayTextCompleted]}>
