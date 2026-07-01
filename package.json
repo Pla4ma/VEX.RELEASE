@@ -37,6 +37,8 @@
     "check:debt-freeze": "node scripts/check-debt-freeze.js",
     "audit:debt-freeze": "node scripts/check-debt-freeze.js --audit",
     "rebuild:debt-baseline": "node scripts/check-debt-freeze.js --rebuild-baseline",
+    "audit:supply-chain": "node scripts/audit-supply-chain.js",
+    "audit:supply-chain:full": "node scripts/audit-supply-chain.js --include-dev",
     "types:supabase": "node scripts/generate-supabase-types.js",
     "clean": "react-native clean",
     "pod-install": "cd ios && pod install && cd ..",
@@ -132,12 +134,12 @@
   },
   "overrides": {
     "uuid": ">=11.1.1",
-    "cookie": ">=0.7.0",
+    "cookie": ">=1.2.0",
     "systeminformation": ">=5.31.6",
     "ws": ">=8.21.0",
     "@opentelemetry/core": ">=2.8.0",
     "undici": ">=8.5.0",
-    "js-yaml": ">=4.11.0",
+    "js-yaml": ">=5.2.0",
     "brace-expansion": "^2.0.2",
     "form-data": ">=4.0.6",
     "protobufjs": ">=7.6.3"
