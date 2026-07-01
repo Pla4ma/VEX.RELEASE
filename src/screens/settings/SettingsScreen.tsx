@@ -65,13 +65,13 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
-    navigateToCoach: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'CoachSettings'),
-    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'NotificationSettings'),
-    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'AppearanceSettings'),
-    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'PrivacySettings'),
-    navigateToAccount: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'AccountSettings'),
-    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'LaneMode'),
-    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'DataExport'),
+    navigateToCoach: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'CoachSettings'),
+    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'NotificationSettings'),
+    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'AppearanceSettings'),
+    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'PrivacySettings'),
+    navigateToAccount: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'AccountSettings'),
+    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'LaneMode'),
+    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'DataExport'),
   });
 
   const filteredGroups = settingGroups
@@ -114,7 +114,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           displayName={user?.displayName || 'User'}
           userId={user?.id || ''}
           theme={theme}
-          onPress={() => navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' })}
+          onPress={() => navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' })}
         />
 
         <Box px={16}>

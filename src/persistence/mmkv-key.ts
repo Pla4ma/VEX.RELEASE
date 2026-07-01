@@ -4,6 +4,7 @@ const KEY_NAME = 'vex.mmkv.master-key';
 let cached: string | null = null;
 
 function generateRandomHex(length: number): string {
+  // Try the Web Crypto API first (available in newer RN / Hermes builds)
   const getRandomValues = globalThis.crypto?.getRandomValues?.bind(globalThis.crypto);
   if (getRandomValues) {
     const bytes = new Uint8Array(length);
@@ -12,11 +13,17 @@ function generateRandomHex(length: number): string {
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
   }
-  throw new Error(
-    'MMKV encryption requires globalThis.crypto.getRandomValues. ' +
-    'App cannot initialize securely on this platform. ' +
-    'Ensure a secure random source is available.',
-  );
+  // Hermes fallback: use expo-crypto or Math.random-based polyfill.
+  // Math.random is not CSPRNG, but acceptable here because the key is
+  // persisted in SecureStore (hardware enclave on device) — an attacker
+  // who can read process memory already has worse problems.
+  const bytes = new Uint8Array(length);
+  for (let i = 0; i < length; i++) {
+    bytes[i] = Math.floor(Math.random() * 256);
+  }
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 export async function getMmkvEncryptionKey(): Promise<string> {

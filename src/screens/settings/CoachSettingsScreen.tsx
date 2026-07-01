@@ -29,7 +29,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
           
-const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
+const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
   const { theme } = useTheme();
 
   

@@ -12,7 +12,7 @@ import {
   xpBonusStyle,
 } from './styles';
 
-export const GambleOption: React.FC<GambleOptionProps> = ({
+export const GambleOption: React.ComponentType<GambleOptionProps> = ({
   type,
   description,
   xpBonus,

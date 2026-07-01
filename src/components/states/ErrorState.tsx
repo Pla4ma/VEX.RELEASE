@@ -43,7 +43,7 @@ export interface ErrorStateProps {
  * ErrorState component
  */
         
-export const ErrorState: React.FC<ErrorStateProps> = ({
+export const ErrorState: React.ComponentType<ErrorStateProps> = ({
   title = 'Something went wrong',
   description = 'We ran into an issue. Please try again.',
   errorCode,

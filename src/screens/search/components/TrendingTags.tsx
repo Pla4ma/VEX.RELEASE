@@ -17,7 +17,7 @@ const TRENDING_TAGS = [
   'yoga',
 ] as const;
 
-export const TrendingTags: React.FC<TrendingTagsProps> = ({ onSelect }) => {
+export const TrendingTags: React.ComponentType<TrendingTagsProps> = ({ onSelect }) => {
   const { theme } = useTheme();
 
   return (

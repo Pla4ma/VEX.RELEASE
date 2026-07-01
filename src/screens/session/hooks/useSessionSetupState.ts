@@ -15,6 +15,30 @@ import {
 
 type SessionSetupParams = SessionStackParams['SessionSetup'];
 
+// Lazy-initialized state defaults to avoid recomputing on every render
+function resolveInitialPreset(params: SessionSetupParams | undefined): PresetWithIcon {
+  if (params?.presetId) {
+    return (
+      PRESETS.find((preset) => preset.id === params.presetId) ?? PRESETS[1]!
+    );
+  }
+  return PRESETS[1]!;
+}
+
+function resolveInitialDuration(params: SessionSetupParams | undefined): number {
+  return params?.presetDuration
+    ? Math.max(1, Math.round(params.presetDuration / 60))
+    : 30;
+}
+
+function resolveInitialSessionMode(params: SessionSetupParams | undefined): SessionMode {
+  return params?.presetMode
+    ? resolveSessionMode(params.presetMode)
+    : params?.source === 'content-study'
+      ? SessionMode.STUDY
+      : SessionMode.LIGHT_FOCUS;
+}
+
 export function useSessionSetupState(
   userId: string,
   params: SessionSetupParams | undefined,
@@ -23,14 +47,7 @@ export function useSessionSetupState(
   const storage = useMemo(() => getDefaultStorageAdapter(), []);
   const sessionDraftKey = `session_draft_${userId}`;
   const masteryStateKey = `mastery_state_${userId}`;
-  const initialPreset = useMemo(() => {
-    if (params?.presetId) {
-      return (
-        PRESETS.find((preset) => preset.id === params.presetId) ?? PRESETS[1]! // ponytail: PRESETS has >= 2 entries
-      );
-    }
-    return PRESETS[1]!; // ponytail: PRESETS has >= 2 entries
-  }, [params?.presetId]);
+  const initialPreset = useMemo(() => resolveInitialPreset(params), [params?.presetId]);
   const [selectedPreset, setSelectedPreset] = useState<PresetWithIcon>(
     initialPreset!, // ponytail: initialPreset always set by useMemo
   );
@@ -39,23 +56,17 @@ export function useSessionSetupState(
   );
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [customDuration, setCustomDuration] = useState(
-    params?.presetDuration
-      ? Math.max(1, Math.round(params.presetDuration / 60))
-      : 30,
+    () => resolveInitialDuration(params),
   );
   const [draftGoal, setDraftGoal] = useState(params?.goal);
   const [selectedThemeId, setSelectedThemeId] = useState(
     params?.selectedThemeId ?? 'default',
   );
   const [selectedSessionMode, setSelectedSessionMode] = useState<SessionMode>(
-    params?.presetMode
-      ? resolveSessionMode(params.presetMode)
-      : params?.source === 'content-study'
-        ? SessionMode.STUDY
-        : SessionMode.LIGHT_FOCUS,
+    () => resolveInitialSessionMode(params),
   );
   const [showCustomization, setShowCustomization] = useState(
-    shouldOpenCustomizationByDefault(params ?? {}),
+    () => shouldOpenCustomizationByDefault(params ?? {}),
   );
   const [hasHydratedDraft, setHasHydratedDraft] = useState(false);
   const [hasSavedDraft, setHasSavedDraft] = useState(false);
@@ -65,6 +76,8 @@ export function useSessionSetupState(
   const [smartSuggestion, setSmartSuggestion] =
     useState<SmartSuggestion | null>(null);
 
+  // SAFETY: params changes require synchronizing derived UI selections;
+  // this effect is the single source of truth for parameter-drive state.
   useEffect(() => {
     if (params?.presetId) {
       const matchedPreset = PRESETS.find(
@@ -93,6 +106,8 @@ export function useSessionSetupState(
     }
   }, [params?.goal, params?.presetDuration, params?.presetId, params?.presetMode, params?.selectedThemeId, params?.suggestedDurationSeconds]);
 
+  // SAFETY: restoreSessionDraft performs async I/O (storage reads + master state fetch);
+  // must run as effect triggered by user/session identity changes.
   useEffect(() => {
     let isCancelled = false;
     const run = async () => {
@@ -163,6 +178,8 @@ export function useSessionSetupState(
     }
   }
 
+  // SAFETY: saveSessionDraft is an async side-effect that persists UI state to storage;
+  // must run as an effect triggered by changes to draftable fields.
   useEffect(() => {
     if (!userId || !hasHydratedDraft) {return;}
     saveSessionDraft(storage, sessionDraftKey, {

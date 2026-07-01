@@ -14,7 +14,7 @@ interface LiquidProgressBarProps {
 }
 
   
-export const LiquidProgressBar: React.FC<LiquidProgressBarProps> = ({
+export const LiquidProgressBar: React.ComponentType<LiquidProgressBarProps> = ({
   progress,
   width = 200,
   height = 8,

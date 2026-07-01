@@ -1,5 +1,7 @@
 import { SessionMode } from '../../../session/modes';
-import { buildPostSessionStoryViewModel, parseSessionCompletionParams, buildSessionSummaryFromCompletionLedger } from '../service';
+import { buildPostSessionStoryViewModel } from '../post-session-story-view-model';
+import { parseSessionCompletionParams } from '../params-parser';
+import { buildSessionSummaryFromCompletionLedger } from '../session-summary-builder';
 
 jest.mock('../../../session/types', () => ({
   SessionSummarySchema: { parse: (v: unknown) => v },

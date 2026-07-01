@@ -9,7 +9,7 @@ interface SessionSummaryStatsProps {
   summary: SessionSummaryType;
 }
 
-export const SessionSummaryStats: React.FC<SessionSummaryStatsProps> = ({
+export const SessionSummaryStats: React.ComponentType<SessionSummaryStatsProps> = ({
   summary,
 }) => {
   return (

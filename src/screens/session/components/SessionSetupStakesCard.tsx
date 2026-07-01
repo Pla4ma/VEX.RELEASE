@@ -51,10 +51,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.boss_tab),
             )
           ) {
-            navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Boss');
+            navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Boss');
           }
           if (stakeId === 'streak') {
-            navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Main', { screen: 'Progress' });
+            navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Progress' });
           }
           if (
             stakeId === 'challenge' &&
@@ -62,10 +62,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.challenges),
             )
           ) {
-            navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Challenges');
+            navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Challenges');
           }
           if (stakeId === 'rival') {
-            navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Main', { screen: 'Home' });
+            navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Home' });
           }
         }}
       />

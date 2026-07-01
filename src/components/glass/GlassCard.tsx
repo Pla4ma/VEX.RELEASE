@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
+
 import {
   resolveVariant,
   SIZE_PADDING,
@@ -7,20 +8,7 @@ import {
   type GlassCardSize,
   type GlassCardVariant,
 } from './GlassCard.tokens';
-import {
-  GlassCardTopEdge,
-  GlassCardSecondEdge,
-  GlassCardBottomEdge,
-  GlassCardBottomSecondaryEdge,
-} from './GlassCard.edges';
-import {
-  GlassCardTopLight,
-  GlassCardMintGlow,
-  GlassCardBottomShadow,
-  GlassCardRightEdge,
-  GlassCardLeftEdge,
-  GlassCardShineStreak,
-} from './GlassCard.gradients';
+import { NativeLiquidGlass } from './native/NativeLiquidGlass';
 
 export type { GlassCardSize, GlassCardVariant };
 
@@ -36,54 +24,63 @@ export interface GlassCardProps {
   glowMint?: boolean;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = React.memo(function GlassCard({
-  children,
-  variant = 'default',
-  size,
-  padding,
-  radius,
-  style,
-  testID,
-  accessibilityLabel,
-  glowMint = false,
-}: GlassCardProps): React.ReactNode {
-  const v = resolveVariant(variant);
-  const resolvedPadding = padding ?? (size ? SIZE_PADDING[size] : 18);
-  const resolvedRadius = radius ?? (size ? SIZE_RADIUS[size] : 24);
-  const showTopBar = variant === 'hero' || variant === 'premium' || variant === 'selected';
+/**
+ * Glass card primitive. Routes to native liquid glass (iOS 26+) with real-time
+ * refraction, or falls back to expo-glass-effect / BlurView on other platforms.
+ *
+ * No opaque backgrounds, no gradient overlays, no CSS fake glass.
+ * The native glass provides its own highlights, refraction, and depth.
+ */
+export const GlassCard: React.ComponentType<GlassCardProps> = React.memo(
+  function GlassCard({
+    children,
+    variant = 'default',
+    size,
+    padding,
+    radius,
+    style,
+    testID,
+    accessibilityLabel,
+    glowMint = false,
+  }: GlassCardProps): React.ReactNode {
+    const v = resolveVariant(variant);
+    const resolvedPadding = padding ?? (size ? SIZE_PADDING[size] : 18);
+    const resolvedRadius = radius ?? (size ? SIZE_RADIUS[size] : 24);
+    const showTopBar =
+      variant === 'hero' || variant === 'premium' || variant === 'selected';
 
-  return (
-    <View
-      accessibilityLabel={accessibilityLabel}
-      accessible={accessibilityLabel ? true : undefined}
-      testID={testID}
-      style={[
-        {
-          backgroundColor: v.background, borderColor: v.border,
-          borderRadius: resolvedRadius, borderWidth: 1.35, elevation: 3, overflow: 'hidden',
-          boxShadow: glowMint
-            ? '0px 10px 22px rgba(18, 184, 148, 0.22)'
-            : `0px 10px 22px ${v.shadowColor}`,
-        },
-        style,
-      ]}
-    >
-      {showTopBar && v.accentTopBar ? (
-        <View style={{ backgroundColor: v.accentTopBar, height: 2.5, opacity: 0.85, width: '100%' }} />
-      ) : null}
-
-      <GlassCardTopEdge resolvedRadius={resolvedRadius} />
-      <GlassCardSecondEdge showTopBar={showTopBar && !!v.accentTopBar} />
-      <GlassCardBottomEdge />
-      <GlassCardBottomSecondaryEdge />
-      <GlassCardTopLight resolvedRadius={resolvedRadius} />
-      <GlassCardMintGlow resolvedRadius={resolvedRadius} />
-      <GlassCardBottomShadow resolvedRadius={resolvedRadius} />
-      <GlassCardRightEdge resolvedRadius={resolvedRadius} />
-      <GlassCardLeftEdge resolvedRadius={resolvedRadius} />
-      <GlassCardShineStreak resolvedRadius={resolvedRadius} />
-
-      <View style={{ padding: resolvedPadding, zIndex: 20 }}>{children}</View>
-    </View>
-  );
-});
+    return (
+      <NativeLiquidGlass
+        accessibilityLabel={accessibilityLabel}
+        accessible={accessibilityLabel ? true : undefined}
+        interactive={variant === 'premium' || variant === 'selected'}
+        radius={resolvedRadius}
+        tintColor={glowMint ? 'rgba(95,230,197,0.08)' : 'transparent'}
+        testID={testID}
+        style={[
+          {
+            borderColor: v.borderColor,
+            borderWidth: 0.5,
+          },
+          style,
+        ]}
+      >
+        {showTopBar && v.accentTopBar ? (
+          <View
+            pointerEvents="none"
+            style={{
+              backgroundColor: v.accentTopBar,
+              height: 2.5,
+              borderTopLeftRadius: resolvedRadius,
+              borderTopRightRadius: resolvedRadius,
+              opacity: 0.7,
+            }}
+          />
+        ) : null}
+        <View style={{ padding: resolvedPadding }}>
+          {children}
+        </View>
+      </NativeLiquidGlass>
+    );
+  },
+);

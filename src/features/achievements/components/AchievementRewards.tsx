@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { Icon } from '@/icons/components/Icon';
 import { useTheme } from '@/theme';
 import type { Achievement } from '../types';
@@ -9,7 +10,7 @@ interface AchievementRewardsProps {
   achievement: Achievement;
 }
 
-export const AchievementRewards: React.FC<AchievementRewardsProps> = ({
+export const AchievementRewards: React.ComponentType<AchievementRewardsProps> = ({
   achievement,
 }) => {
   const { theme } = useTheme();

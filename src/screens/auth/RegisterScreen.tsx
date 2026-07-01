@@ -26,7 +26,7 @@ import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScr
 type Props = NativeStackScreenProps<AuthStackParams, 'Register'>;
 type RegisterErrors = Partial<Record<keyof RegisterFormData, string>>;
 
-const RegisterScreen: React.FC<Props> = ({ navigation }) => {
+const RegisterScreen: React.ComponentType<Props> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const { register, isLoading } = useAuthStore();
   const { show: showToast } = useToast();

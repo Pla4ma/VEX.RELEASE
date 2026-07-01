@@ -23,7 +23,7 @@ export interface DividerProps {
   spacing?: number;
 }
 
-export const Divider: React.FC<DividerProps> = ({
+export const Divider: React.ComponentType<DividerProps> = ({
   orientation = 'horizontal',
   thickness = 1,
   color = lightColors.surface.pressed,

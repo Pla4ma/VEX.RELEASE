@@ -20,6 +20,7 @@ export type MascotSizeConfig = {
   bubbleRadius: number;
 };
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 export const MOOD_ASSET_MAP: Record<MascotMood, ImageSourcePropType> = {
   default: require('../../../../../assets/mascot/mascot_default.png'),
   wave: require('../../../../../assets/mascot/mascot_wave.png'),

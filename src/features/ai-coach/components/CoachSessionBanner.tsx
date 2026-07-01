@@ -8,7 +8,7 @@
  * @phase 6
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -56,11 +56,13 @@ export function CoachSessionBanner({
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // Get messages for this persona
+  // Get messages for this persona (computed, not stored in state)
   const messages =
     ENCOURAGEMENT_MESSAGES[personaStyle] || ENCOURAGEMENT_MESSAGES.MENTOR;
 
-  // Rotate messages every 5 minutes, max 3 messages
+  // SAFETY: message rotation depends on elapsedSeconds, which is a prop updated
+  // every tick by the parent timer effect. Computing the index in an effect keeps
+  // it in sync without causing extra re-renders.
   useEffect(() => {
     if (isPaused) {
       return;
@@ -97,38 +99,41 @@ export function CoachSessionBanner({
 
   const currentMessage = messages[currentMessageIndex];
 
+  // Memoize the banner style to avoid re-creating the large inline object every render
+  const bannerStyle = useMemo(() => ({
+    position: 'absolute' as const,
+    top: 140,
+    left: theme.spacing[4],
+    right: theme.spacing[4],
+    backgroundColor: theme.colors.background.elevated + 'E6',
+    borderRadius: theme.borderRadius.lg,
+    paddingVertical: theme.spacing[2],
+    paddingHorizontal: theme.spacing[3],
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: theme.spacing[2],
+    boxShadow: `0px 2px 4px ${theme.colors.text.primary}20`,
+    elevation: 3,
+    zIndex: 10,
+  }), [theme]);
+
+  const avatarStyle = useMemo(() => ({
+    width: 28,
+    height: 28,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: theme.colors.primary[500] + '20',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+  }), [theme]);
+
   return (
     <Animated.View
       entering={FadeIn.duration(500)}
       exiting={FadeOut.duration(300)}
-      style={{
-        position: 'absolute',
-        top: 140, // Below mode indicator badge
-        left: theme.spacing[4],
-        right: theme.spacing[4],
-        backgroundColor: theme.colors.background.elevated + 'E6', // 90% opacity
-        borderRadius: theme.borderRadius.lg,
-        paddingVertical: theme.spacing[2],
-        paddingHorizontal: theme.spacing[3],
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: theme.spacing[2],
-        boxShadow: '0px 2px 4px ' + theme.colors.text.primary + '20',
-        elevation: 3,
-        zIndex: 10,
-      }}
+      style={bannerStyle}
     >
       {/* Coach Avatar Placeholder */}
-      <View
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: theme.borderRadius.full,
-          backgroundColor: theme.colors.primary[500] + '20',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <View style={avatarStyle}>
         <Text fontSize={14} />
       </View>
 

@@ -15,7 +15,7 @@ import Animated, {
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { styles } from './loading-variants.styles';
 
-export const Pulse: React.FC<{ size: number; color: string }> = ({
+export const Pulse: React.ComponentType<{ size: number; color: string }> = ({
   size,
   color,
 }) => {

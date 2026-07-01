@@ -7,7 +7,7 @@ import {
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { SessionStackParams } from '../../navigation/types';
-import { parseSessionCompletionParams } from './service';
+import { parseSessionCompletionParams } from './params-parser';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 type SessionCompleteRouteProp = RouteProp<

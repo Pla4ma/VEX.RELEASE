@@ -20,7 +20,7 @@ interface NotificationCategoryToggleProps {
   onToggle: (id: string) => void;
 }
 
-export const NotificationCategoryToggle: React.FC<
+export const NotificationCategoryToggle: React.ComponentType<
   NotificationCategoryToggleProps
 > = ({ item, value, onToggle }) => {
   const { theme } = useTheme();

@@ -6,6 +6,7 @@ import { PngMascotRenderer } from './PngMascotRenderer';
 import type { AnimatedMascotProps } from './AnimatedMascot';
 import { MASCOT_MOOD_NUMBER } from './VexMascotGuide.tokens';
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 const RIVE_MASCOT_FILE: number = require('../../../../../assets/mascot/vex_mascot.riv');
 export function RiveMascotRenderer(
   props: AnimatedMascotProps,

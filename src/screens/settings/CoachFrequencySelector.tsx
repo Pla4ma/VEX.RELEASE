@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
-import { Box, Text, Card } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -41,7 +43,7 @@ interface CoachFrequencySelectorProps {
   onFrequencyChange: (freq: MessageFrequency) => void;
 }
 
-export const CoachFrequencySelector: React.FC<
+export const CoachFrequencySelector: React.ComponentType<
   CoachFrequencySelectorProps
 > = ({ frequency, onFrequencyChange }) => {
   const { theme } = useTheme();

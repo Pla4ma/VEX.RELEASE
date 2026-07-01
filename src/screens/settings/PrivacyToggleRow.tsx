@@ -20,7 +20,7 @@ interface PrivacyToggleRowProps {
   onToggle: (key: ToggleKey) => void;
 }
 
-export const PrivacyToggleRow: React.FC<PrivacyToggleRowProps> = ({
+export const PrivacyToggleRow: React.ComponentType<PrivacyToggleRowProps> = ({
   row,
   value,
   onToggle,

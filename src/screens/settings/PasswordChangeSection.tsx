@@ -10,7 +10,7 @@ import { lightColors } from '@/theme/tokens/colors';
 import { PasswordField } from './PasswordField';
 import { usePasswordChange } from './usePasswordChange';
 
-export const PasswordChangeSection: React.FC = () => {
+export const PasswordChangeSection: React.ComponentType = () => {
   const { theme } = useTheme();
   const {
     currentPassword,

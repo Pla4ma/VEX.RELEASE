@@ -31,7 +31,7 @@ export const RARITY_COLORS = {
   legendary: lightColors.semantic.warning,
 };
 
-export const LockedSlot: React.FC<{
+export const LockedSlot: React.ComponentType<{
   slotIndex: number;
   onPress?: () => void;
   isEditable?: boolean;
@@ -74,7 +74,7 @@ export const LockedSlot: React.FC<{
   );
 };
 
-export const AchievementSlot: React.FC<{
+export const AchievementSlot: React.ComponentType<{
   achievement: FeaturedAchievement;
   slotIndex: number;
   isDragging?: boolean;

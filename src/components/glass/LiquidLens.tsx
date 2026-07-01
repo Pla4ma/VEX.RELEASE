@@ -11,7 +11,7 @@ interface LiquidLensProps {
   opacity?: number;
 }
 
-export const LiquidLens: React.FC<LiquidLensProps> = ({
+export const LiquidLens: React.ComponentType<LiquidLensProps> = ({
   size = 180,
   intensity = 1,
   top,

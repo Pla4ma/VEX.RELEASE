@@ -27,6 +27,7 @@ describe('Session completion repository', () => {
     eq: jest.fn().mockReturnThis(),
     from: jest.fn().mockReturnThis(),
     insert: jest.fn().mockReturnThis(),
+    rpc: jest.fn().mockReturnThis(),
     select: jest.fn().mockReturnThis(),
     single: jest.fn(),
     update: jest.fn().mockReturnThis(),

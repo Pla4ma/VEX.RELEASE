@@ -31,7 +31,7 @@ export interface MicroRewardBannerProps {
   style?: ViewStyle;
 }
 
-export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
+export const MicroRewardBanner: React.ComponentType<MicroRewardBannerProps> = ({
   type,
   amount,
   label: customLabel,

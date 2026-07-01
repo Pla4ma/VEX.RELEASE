@@ -42,7 +42,7 @@ const sizeStyleMap: Record<CardSize, { padding: number; borderRadius: number }> 
   lg: { padding: 20, borderRadius: 20 },
 };
 
-export const InteractiveCard: React.FC<InteractiveCardProps> = ({
+export const InteractiveCard: React.ComponentType<InteractiveCardProps> = ({
   children,
   onPress,
   onLongPress,

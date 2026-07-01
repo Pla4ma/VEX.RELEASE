@@ -16,7 +16,7 @@ function formatDuration(minutes: number): string {
 import { TaskCard } from './TaskCard';
 import { styles } from './study-task-list-styles';
 
-export const StudyTaskList: React.FC<StudyTaskListProps> = ({
+export const StudyTaskList: React.ComponentType<StudyTaskListProps> = ({
   tasks,
   completedIds,
   activeId,

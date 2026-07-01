@@ -69,9 +69,10 @@ export function SessionQuickStartCard({
             <Text variant="body" color="text.secondary">
               {heroBody}
             </Text>
-          </Box>
-          <Image
-            source={require('../../assets/generated/session/focus-artifact.png')}
+        </Box>
+        {/* SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time. */}
+        <Image
+          source={require('../../assets/generated/session/focus-artifact.png')}
             resizeMode="contain"
             style={{ height: 108, width: 108 }}
             accessibilityLabel="Liquid glass focus artifact"

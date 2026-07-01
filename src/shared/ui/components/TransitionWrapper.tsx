@@ -39,7 +39,7 @@ function StaggerContainer({
     </>
   );
 }
-export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
+export const TransitionWrapper: React.ComponentType<TransitionWrapperProps> = ({
   children,
   visible,
   enterConfig = { preset: 'fade', duration: 300, easing: 'ease' },
@@ -105,7 +105,7 @@ interface LayoutTransitionProps {
   layoutId: string;
   style?: import('react-native').ViewStyle;
 }
-export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
+export const LayoutTransition: React.ComponentType<LayoutTransitionProps> = ({
   children,
   style,
 }) => {

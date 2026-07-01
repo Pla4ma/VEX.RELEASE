@@ -15,7 +15,7 @@ interface SessionEmptyStateProps {
   onBrowsePresets?: () => void;
 }
 
-export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
+export const SessionEmptyState: React.ComponentType<SessionEmptyStateProps> = ({
   onCreateSession,
   onBrowsePresets,
 }) => {

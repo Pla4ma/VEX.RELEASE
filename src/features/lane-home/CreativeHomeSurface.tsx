@@ -79,6 +79,7 @@ export function CreativeHomeSurface({ viewModel }: CreativeHomeSurfaceProps): Re
                   key={project.name}
                   accessibilityLabel={`Project ${project.name}`}
                   accessibilityRole="button"
+                  accessibilityHint="Shows this project progress"
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
                 >
@@ -114,10 +115,11 @@ export function CreativeHomeSurface({ viewModel }: CreativeHomeSurfaceProps): Re
 
         {/* Inspiration Prompt */}
         {viewModel.inspirationPrompt && (
-          <Pressable
-            accessibilityLabel="Inspiration prompt"
-            accessibilityRole="button"
-            onPressIn={handlePressIn}
+<Pressable
+accessibilityLabel="Inspiration prompt"
+accessibilityRole="button"
+accessibilityHint="Shows today's creative inspiration prompt"
+onPressIn={handlePressIn}
             onPressOut={handlePressOut}
           >
             <Box

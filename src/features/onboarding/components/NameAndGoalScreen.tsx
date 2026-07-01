@@ -70,7 +70,13 @@ export function NameAndGoalScreen({
         <Box flex={1} bg="background.primary" px="lg" py="xl">
           <Box flexDirection="row" alignItems="center" mb="md">
             {onBack && (
-              <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+              <Pressable
+                onPress={onBack}
+                accessibilityLabel="Go back"
+                accessibilityRole="button"
+                accessibilityHint="Returns to the previous onboarding step"
+                style={{ marginRight: 12 }}
+              >
                 <Box p="xs">
                   <Text variant="h3" color="text.secondary">
                     ‹

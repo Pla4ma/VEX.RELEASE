@@ -21,7 +21,7 @@ interface SkeletonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({
+const Skeleton: React.ComponentType<SkeletonProps> = ({
   width = '100%',
   height = 12,
   borderRadius = 6,

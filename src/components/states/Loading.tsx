@@ -34,7 +34,7 @@ interface VariantDisplayProps {
   color: string;
 }
 
-const VariantDisplay: React.FC<VariantDisplayProps> = ({ variant, size, color }) => {
+const VariantDisplay: React.ComponentType<VariantDisplayProps> = ({ variant, size, color }) => {
   switch (variant) {
     case 'dots':
       return <Dots size={size} color={color} />;
@@ -46,7 +46,7 @@ const VariantDisplay: React.FC<VariantDisplayProps> = ({ variant, size, color })
   }
 };
 
-export const Loading: React.FC<LoadingProps> = ({
+export const Loading: React.ComponentType<LoadingProps> = ({
   variant = 'spinner',
   size = 'md',
   text,

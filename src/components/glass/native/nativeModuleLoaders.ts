@@ -1,79 +1,72 @@
 import { View } from 'react-native';
 
-/**
- * Shared lazy-load helpers for native Expo glass modules.
- *
- * Static imports from expo-blur, expo-glass-effect, and expo-linear-gradient
- * trigger requireNativeViewManager / requireNativeView at module eval time,
- * before the React Native bridge is ready, causing:
- *   ERROR  [runtime not ready]: TypeError: undefined is not a function
- *
- * These helpers use require() inside a try-catch so native module access is
- * deferred until the first component render — after the bridge is initialized.
- * Each module is cached in a module-level variable so the require only fires once.
- */
+type NativeComponent = React.ComponentType<Record<string, unknown>>;
 
-// Dynamic require boundary – package exports validated at runtime
-let _BlurView: React.ComponentType<Record<string, unknown>> | null = null;
+let blurView: NativeComponent | null = null;
+let glassView: NativeComponent | null = null;
+let glassContainer: NativeComponent | null = null;
+let linearGradient: NativeComponent | null = null;
+let callstackGlassView: NativeComponent | null = null;
 
-export function getBlurView(): React.ComponentType<Record<string, unknown>> {
-  if (_BlurView) return _BlurView;
+export function getBlurView(): NativeComponent {
+  if (blurView) return blurView;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _BlurView = (
-      require('expo-blur') as { BlurView: React.ComponentType<Record<string, unknown>> }
-    ).BlurView;
+    blurView = (require('expo-blur') as { BlurView: NativeComponent }).BlurView;
   } catch {
-    // Fall back to plain View — safe, all extra props are silently ignored
-    _BlurView = View as unknown as React.ComponentType<Record<string, unknown>>;
+    blurView = View as NativeComponent;
   }
-  return _BlurView;
+  return blurView;
 }
 
-// Dynamic require boundary – package exports validated at runtime
-let _GlassView: React.ComponentType<Record<string, unknown>> | null = null;
-
-export function getGlassView(): React.ComponentType<Record<string, unknown>> {
-  if (_GlassView) return _GlassView;
+export function getGlassView(): NativeComponent {
+  if (glassView) return glassView;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _GlassView = (
-      require('expo-glass-effect') as { GlassView: React.ComponentType<Record<string, unknown>> }
+    glassView = (
+      require('expo-glass-effect') as { GlassView: NativeComponent }
     ).GlassView;
   } catch {
-    _GlassView = View as unknown as React.ComponentType<Record<string, unknown>>;
+    glassView = View as NativeComponent;
   }
-  return _GlassView;
+  return glassView;
 }
 
-// Dynamic require boundary – package exports validated at runtime
-let _GlassContainer: React.ComponentType<Record<string, unknown>> | null = null;
-
-export function getGlassContainer(): React.ComponentType<Record<string, unknown>> {
-  if (_GlassContainer) return _GlassContainer;
+export function getCallstackGlassView(): NativeComponent {
+  if (callstackGlassView) return callstackGlassView;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _GlassContainer = (
-      require('expo-glass-effect') as { GlassContainer: React.ComponentType<Record<string, unknown>> }
+    callstackGlassView = (
+      require('@callstack/liquid-glass') as { LiquidGlassView: NativeComponent }
+    ).LiquidGlassView;
+  } catch {
+    callstackGlassView = null;
+  }
+  return callstackGlassView ?? getGlassView();
+}
+
+export function getGlassContainer(): NativeComponent {
+  if (glassContainer) return glassContainer;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    glassContainer = (
+      require('expo-glass-effect') as { GlassContainer: NativeComponent }
     ).GlassContainer;
   } catch {
-    _GlassContainer = View as unknown as React.ComponentType<Record<string, unknown>>;
+    glassContainer = View as NativeComponent;
   }
-  return _GlassContainer;
+  return glassContainer;
 }
 
-// Dynamic require boundary – package exports validated at runtime
-let _LinearGradient: React.ComponentType<Record<string, unknown>> | null = null;
-
-export function getLinearGradient(): React.ComponentType<Record<string, unknown>> {
-  if (_LinearGradient) return _LinearGradient;
+export function getLinearGradient(): NativeComponent {
+  if (linearGradient) return linearGradient;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _LinearGradient = (
-      require('expo-linear-gradient') as { LinearGradient: React.ComponentType<Record<string, unknown>> }
+    linearGradient = (
+      require('expo-linear-gradient') as { LinearGradient: NativeComponent }
     ).LinearGradient;
   } catch {
-    _LinearGradient = View as unknown as React.ComponentType<Record<string, unknown>>;
+    linearGradient = View as NativeComponent;
   }
-  return _LinearGradient;
+  return linearGradient;
 }

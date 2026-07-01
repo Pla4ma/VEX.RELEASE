@@ -26,7 +26,7 @@ interface RecoveryPromptProps {
   hasStreakSave: boolean;
   streakDays: number;
 }
-export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
+export const RecoveryPrompt: React.ComponentType<RecoveryPromptProps> = ({
   isVisible,
   sessionId: _sessionId,
   timeLost,

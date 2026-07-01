@@ -22,7 +22,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 
-const PrivacySettingsScreen: React.FC<Props> = () => {
+const PrivacySettingsScreen: React.ComponentType<Props> = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);

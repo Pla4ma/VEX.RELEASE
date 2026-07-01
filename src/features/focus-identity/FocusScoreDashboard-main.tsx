@@ -149,9 +149,9 @@ export const FocusScoreDashboard = withScreenErrorBoundary(
             <Button
               accessibilityLabel="View Monthly Report"
               onPress={() =>
-                navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Analytics', {
+                navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Analytics', ({
                   month: currentMonth,
-                } as unknown as MainStackParams['Analytics'])
+                } as unknown) as MainStackParams['Analytics'])
               }
               variant="secondary"
             >

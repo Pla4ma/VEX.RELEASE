@@ -8,7 +8,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './DataList.styles';
 import type { SelectionToolbarProps } from './DataList.types';
 
-export const SelectionToolbar: React.FC<SelectionToolbarProps> = ({
+export const SelectionToolbar: React.ComponentType<SelectionToolbarProps> = ({
   selectedCount,
   totalCount,
   onClear,

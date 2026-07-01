@@ -5,7 +5,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { PERFECT_PARTICLE_COUNT } from '../utils/active-session';
 
-export const PerfectFocusBurstParticle: React.FC<{
+export const PerfectFocusBurstParticle: React.ComponentType<{
   color: string;
   index: number;
   progress: SharedValue<number>;

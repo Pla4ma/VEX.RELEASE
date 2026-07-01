@@ -15,7 +15,7 @@ import type { AuthStackParams } from './types';
 
 const Stack = createNativeStackNavigator<AuthStackParams>();
 
-export const AuthNavigator: React.FC = () => {
+export const AuthNavigator: React.ComponentType = () => {
   return (
     <Stack.Navigator
       screenOptions={{

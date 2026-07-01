@@ -71,6 +71,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
   ): void {
     // P1-16: Capture all uncaught errors in Sentry
     try {
+      // SAFETY: require() defers optional Sentry native module access until error capture path.
       const Sentry = require('@sentry/react-native');
       Sentry.captureException(error, {
         tags: { errorBoundary: 'root', category },

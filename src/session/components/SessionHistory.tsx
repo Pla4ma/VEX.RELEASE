@@ -16,7 +16,7 @@ interface SessionHistoryProps {
   onSelectSession?: (entry: import('../types').SessionHistoryEntry) => void;
 }
 
-export const SessionHistory: React.FC<SessionHistoryProps> = ({
+export const SessionHistory: React.ComponentType<SessionHistoryProps> = ({
   userId,
   onSelectSession,
 }) => {

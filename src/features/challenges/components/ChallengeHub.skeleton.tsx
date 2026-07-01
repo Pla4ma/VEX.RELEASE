@@ -5,7 +5,7 @@ import { Card } from '../../../components/primitives/Card';
 import { SkeletonItem } from '../../../shared/ui/components/SkeletonItem';
 import { styles } from './challenge-hub-styles';
 
-export const ChallengeHubSkeleton: React.FC = () => {
+export const ChallengeHubSkeleton: React.ComponentType = () => {
   const theme = useThemeObject();
 
   return (

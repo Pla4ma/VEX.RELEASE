@@ -19,7 +19,7 @@ import {
   type ActiveSessionProgressRingProps,
 } from './progress-ring-types';
 
-export const ActiveSessionProgressRing: React.FC<
+export const ActiveSessionProgressRing: React.ComponentType<
   ActiveSessionProgressRingProps
 > = ({
   CIRCUMFERENCE,

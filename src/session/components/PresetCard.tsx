@@ -32,7 +32,7 @@ const getCategoryIcon = (category?: string): string => {
   }
 };
 
-export const PresetCard: React.FC<PresetCardProps> = ({
+export const PresetCard: React.ComponentType<PresetCardProps> = ({
   preset,
   onSelect,
   onDelete,

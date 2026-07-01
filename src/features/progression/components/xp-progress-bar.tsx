@@ -16,7 +16,7 @@ import type { XpProgressBarProps } from './xp-progress-bar-types';
 
 const BAR_HEIGHT = 24;
 
-export const XpProgressBar: React.FC<XpProgressBarProps> = ({
+export const XpProgressBar: React.ComponentType<XpProgressBarProps> = ({
   currentXp,
   threshold,
   level,

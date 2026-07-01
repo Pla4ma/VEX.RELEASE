@@ -19,6 +19,8 @@ import { InvisibleAgentCard } from '../../../features/invisible-agent/components
 import type { CoachAgentDecision } from '../../../features/invisible-agent';
 import type { useHomeData } from '../hooks/useHomeData';
 import type { UseQueryResult } from '@tanstack/react-query';
+import { HomeActionDock, type HomeSheet } from './HomeActionDock';
+import { HomeQuickSheet } from './HomeQuickSheet';
 
 type HomeData = ReturnType<typeof useHomeData> & {
   invisibleAgentQuery?: UseQueryResult<CoachAgentDecision>;
@@ -36,7 +38,7 @@ interface HomeContentProps {
   firstWeekExperience?: FirstWeekExperience;
 }
 
-export const HomeContent: React.FC<HomeContentProps> = ({
+export const HomeContent: React.ComponentType<HomeContentProps> = ({
   controller,
   data,
   handleClaimReward: _handleClaimReward,
@@ -47,7 +49,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   resolvedExperience,
   firstWeekExperience,
 }) => {
-  const { showToast } = data;
+const [activeSheet, setActiveSheet] = React.useState<HomeSheet | null>(null);
+const { showToast } = data;
   const completedSessions = controller.disclosure.inputs.totalCompletedSessions;
   const showUnlockPath = completedSessions < 2;
   const isDayZero = completedSessions === 0;
@@ -88,8 +91,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     controller.openSetup(decision.actionPayload);
   };
 
-  return (
-    <StaggeredEnter
+return (
+<StaggeredEnter
       containerStyle={staggeredEnterStyle.container}
       direction="up"
       initialDelay={100}
@@ -103,16 +106,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         onRetry={controller.retryAll}
       />
 
-      {data.invisibleAgentQuery ? (
-        <InvisibleAgentCard
-          decision={data.invisibleAgentQuery.data ?? null}
-          isPending={data.invisibleAgentQuery.isPending}
-          isError={data.invisibleAgentQuery.isError}
-          onConfirm={handleAgentConfirm}
-          onRetry={() => { void data.invisibleAgentQuery?.refetch(); }}
-        />
-      ) : null}
-
       {isDayZero ? (
         <HomeDayZeroLaunchpad
           onStartSession={() => controller.openSetup()}
@@ -121,33 +114,65 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         />
       ) : null}
 
-      {showUnlockPath ? (
-        <HomeUnlockPath
-          model={unlockPathModel}
-          onStartSession={() => controller.openSetup()}
-          onPeekLocked={handlePeekLocked}
-        />
-      ) : null}
-
       {!isDayZero ? (
         <>
           <HomeDailyCards
             controller={controller}
+            includeCoachCard={false}
             onStartSession={() => controller.openSetup()}
           />
-          <HomeMetricsRow
-            controller={controller}
-            focusScore={focusScore}
-          />
-          <HomeContinueCard
-            controller={controller}
-            completedSessions={completedSessions}
-            surfaceMap={surfaceMap}
-            resolvedExperience={resolvedExperience}
-            firstWeekExperience={firstWeekExperience}
+          <HomeActionDock
+            showUnlocks={showUnlockPath}
+            onOpen={setActiveSheet}
           />
         </>
       ) : null}
+
+      <HomeQuickSheet
+        sheet={activeSheet}
+        onClose={() => setActiveSheet(null)}
+      >
+        {activeSheet === 'coach' ? (
+          <>
+          <HomeDailyCards
+            controller={controller}
+            includeDailyFocus={false}
+            onStartSession={() => controller.openSetup()}
+          />
+          {data.invisibleAgentQuery ? (
+            <InvisibleAgentCard
+              decision={data.invisibleAgentQuery.data ?? null}
+              isPending={data.invisibleAgentQuery.isPending}
+              isError={data.invisibleAgentQuery.isError}
+              onConfirm={handleAgentConfirm}
+              onRetry={() => { void data.invisibleAgentQuery?.refetch(); }}
+            />
+          ) : null}
+          </>
+        ) : null}
+        {activeSheet === 'progress' ? (
+          <>
+            <HomeMetricsRow
+              controller={controller}
+              focusScore={focusScore}
+            />
+            <HomeContinueCard
+              controller={controller}
+              completedSessions={completedSessions}
+              surfaceMap={surfaceMap}
+              resolvedExperience={resolvedExperience}
+              firstWeekExperience={firstWeekExperience}
+            />
+          </>
+        ) : null}
+        {activeSheet === 'unlocks' && showUnlockPath ? (
+            <HomeUnlockPath
+              model={unlockPathModel}
+              onStartSession={() => controller.openSetup()}
+              onPeekLocked={handlePeekLocked}
+            />
+        ) : null}
+      </HomeQuickSheet>
 
       {showAtRiskBanner && (
         <AtRiskBanner

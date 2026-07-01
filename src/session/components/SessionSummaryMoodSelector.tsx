@@ -20,7 +20,7 @@ interface SessionSummaryMoodSelectorProps {
   onReflectionChange: (text: string) => void;
 }
 
-export const SessionSummaryMoodSelector: React.FC<
+export const SessionSummaryMoodSelector: React.ComponentType<
   SessionSummaryMoodSelectorProps
 > = ({ mood, reflection, onMoodChange, onReflectionChange }) => {
   return (

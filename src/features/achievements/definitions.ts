@@ -30,30 +30,32 @@ export {
 } from './definitions/index';
 
 import { ALL_ACHIEVEMENTS } from './definitions/index';
+import {
+  getAchievementById as findAchievementById,
+  getAchievementsByCategory as findAchievementsByCategory,
+  getAchievementsByRarity as findAchievementsByRarity,
+  getVisibleAchievements as findVisibleAchievements,
+} from './definitions/helpers';
 
 // Backward-compatible function wrappers
 export function getAchievementById(id: string) {
-  const { getAchievementById: fn } = require('./definitions/helpers');
-  return fn(ALL_ACHIEVEMENTS, id);
+  return findAchievementById(ALL_ACHIEVEMENTS, id);
 }
 
 export function getAchievementsByCategory(
   category: import('./types').AchievementCategory,
 ) {
-  const { getAchievementsByCategory: fn } = require('./definitions/helpers');
-  return fn(ALL_ACHIEVEMENTS, category);
+  return findAchievementsByCategory(ALL_ACHIEVEMENTS, category);
 }
 
 export function getAchievementsByRarity(
   rarity: import('./types').AchievementRarity,
 ) {
-  const { getAchievementsByRarity: fn } = require('./definitions/helpers');
-  return fn(ALL_ACHIEVEMENTS, rarity);
+  return findAchievementsByRarity(ALL_ACHIEVEMENTS, rarity);
 }
 
 export function getVisibleAchievements() {
-  const { getVisibleAchievements: fn } = require('./definitions/helpers');
-  return fn(ALL_ACHIEVEMENTS);
+  return findVisibleAchievements(ALL_ACHIEVEMENTS);
 }
 
 // Phase 3.3 - Achievement System Enhancement

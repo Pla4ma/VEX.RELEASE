@@ -3,6 +3,7 @@ import { View, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { VexMeshAtmosphere } from '../atmosphere/VexMeshAtmosphere';
+import { LiquidGlassField } from './LiquidGlassField';
 import type { AtmosphereVariant } from '../atmosphere/atmosphereTokens';
 import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
@@ -17,7 +18,7 @@ interface GlassScreenProps {
   variant?: GlassScreenAtmosphereVariant;
 }
 
-export const GlassScreen: React.FC<GlassScreenProps> = React.memo(function GlassScreen({
+export const GlassScreen: React.ComponentType<GlassScreenProps> = React.memo(function GlassScreen({
   children,
   showAura = true,
   contentStyle,
@@ -31,6 +32,7 @@ export const GlassScreen: React.FC<GlassScreenProps> = React.memo(function Glass
       style={{ backgroundColor: vexLightGlass.background.pageMid, flex: 1 }}
       testID={testID}
     >
+      <LiquidGlassField />
       {showAura ? <VexMeshAtmosphere variant={variant} /> : null}
       <View style={[{ flex: 1, paddingTop: insets.top, zIndex: 2 }, contentStyle]}>
         {children}

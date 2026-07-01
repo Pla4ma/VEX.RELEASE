@@ -23,7 +23,7 @@ const tabs = [
 const TAB_WIDTH = 92;
 const TAB_GAP = 3;
 
-export const ProfileGlassTabs: React.FC<ProfileGlassTabsProps> = ({
+export const ProfileGlassTabs: React.ComponentType<ProfileGlassTabsProps> = ({
   activeTab,
   onChange,
 }) => {

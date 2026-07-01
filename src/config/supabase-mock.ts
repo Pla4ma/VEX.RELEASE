@@ -34,5 +34,5 @@ export function createMockSupabaseClient(): SupabaseClient {
   };
   // safe-cast: Partial mock — SupabaseClient has hundreds of methods.
   // Proper fix: use msw or a full mock library. Cast is safe for test paths.
-  return mockClient as unknown as SupabaseClient;
+  return (mockClient as unknown) as SupabaseClient;
 }

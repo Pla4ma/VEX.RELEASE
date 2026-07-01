@@ -39,7 +39,7 @@ describe('coach screen service', () => {
   });
 
   it('uses deterministic fallback when AI backend is unavailable', async () => {
-    const response = await askCoachQuestion('I need to study');
+    const response = await askCoachQuestion('I need to study', '00000000-0000-4000-8000-000000000001');
 
     expect(response.message.toLowerCase()).toContain('study');
     expect(response.hasAction).toBe(true);

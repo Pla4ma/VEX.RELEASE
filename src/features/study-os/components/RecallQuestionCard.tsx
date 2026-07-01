@@ -64,6 +64,7 @@ export function RecallQuestionCard({
             onPress={handleDismiss}
             accessibilityLabel="Dismiss recall question"
             accessibilityRole="button"
+            accessibilityHint="Dismisses this recall question"
           >
             <Text variant="bodySmall" color="text.muted">
               ✕
@@ -87,6 +88,7 @@ export function RecallQuestionCard({
             style={{ flex: 1 }}
             accessibilityLabel="Dismiss recall question"
             accessibilityRole="button"
+            accessibilityHint="Marks this recall question done"
           >
             <Box
               p={2}
@@ -105,6 +107,7 @@ export function RecallQuestionCard({
                 onPress={() => { cardSelection(); onReview(); }}
                 accessibilityLabel="Review question in study session"
                 accessibilityRole="button"
+                accessibilityHint="Opens this question for review"
               >
                 <Box
                   p={2}

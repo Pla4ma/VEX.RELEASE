@@ -32,7 +32,7 @@ type ActiveSessionControlDockProps = {
 };
 
             
-export const ActiveSessionControlDock: React.FC<
+export const ActiveSessionControlDock: React.ComponentType<
   ActiveSessionControlDockProps
 > = ({
   completionPercentage,

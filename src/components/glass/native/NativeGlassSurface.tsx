@@ -35,20 +35,10 @@ export interface NativeGlassSurfaceProps {
 
 function getTintColor(variant: NativeGlassSurfaceVariant): string {
   switch (variant) {
-    case 'hero':
-      return 'rgba(255, 255, 255, 0.22)';
-    case 'nav':
-      return 'rgba(255, 255, 255, 0.18)';
-    case 'pill':
-      return 'rgba(255, 255, 255, 0.14)';
     case 'selected':
-      return 'rgba(95, 230, 197, 0.18)';
-    case 'sheet':
-      return 'rgba(255, 255, 255, 0.20)';
-    case 'subtle':
-      return 'rgba(255, 255, 255, 0.08)';
+      return 'rgba(95, 230, 197, 0.12)';
     default:
-      return 'rgba(255, 255, 255, 0.16)';
+      return 'transparent';
   }
 }
 
@@ -68,16 +58,16 @@ function getFallbackMaterial(variant: NativeGlassSurfaceVariant): ViewStyle {
   }
 }
 
+
 function getGlassEffectStyle(variant: NativeGlassSurfaceVariant): 'clear' | 'regular' {
   switch (variant) {
-    case 'subtle':
-    case 'pill':
-      return 'clear';
-    default:
+    case 'hero':
+    case 'nav':
       return 'regular';
+    default:
+      return 'clear';
   }
 }
-
 const absoluteFill: ViewStyle = {
   bottom: 0,
   left: 0,
@@ -85,8 +75,6 @@ const absoluteFill: ViewStyle = {
   right: 0,
   top: 0,
 };
-
-// ─── Component ───────────────────────────────────────────────────────
 
 /**
  * NativeGlassSurface
@@ -124,7 +112,7 @@ export const NativeGlassSurface = React.memo(function NativeGlassSurface({
         accessibilityHint={accessibilityHint}
         accessible={accessible ?? Boolean(accessibilityLabel)}
         pointerEvents={pointerEvents}
-        colorScheme="light"
+        colorScheme="system"
         isInteractive={interactive}
         tintColor={getTintColor(variant)}
         glassEffectStyle={getGlassEffectStyle(variant)}
@@ -170,9 +158,9 @@ export const NativeGlassSurface = React.memo(function NativeGlassSurface({
       />
       <LinearGradientC
         colors={[
-          'rgba(255, 255, 255, 0.82)',
-          'rgba(255, 255, 255, 0.24)',
-          'rgba(255, 255, 255, 0.08)',
+          'rgba(255, 255, 255, 0.42)',
+          'rgba(255, 255, 255, 0.14)',
+          'rgba(255, 255, 255, 0.04)',
         ]}
         locations={[0, 0.46, 1]}
         pointerEvents="none"

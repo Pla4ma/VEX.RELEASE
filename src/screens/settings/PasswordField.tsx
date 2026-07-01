@@ -12,7 +12,7 @@ interface PasswordFieldProps {
   marginBottom?: number;
 }
 
-export const PasswordField: React.FC<PasswordFieldProps> = ({
+export const PasswordField: React.ComponentType<PasswordFieldProps> = ({
   label,
   value,
   onChangeText,

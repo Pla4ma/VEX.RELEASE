@@ -24,7 +24,7 @@ import {
 
 export type { CounterSize, CounterVariant, AnimatedCounterProps };
 
-const TrendIndicator: React.FC<{
+const TrendIndicator: React.ComponentType<{
   direction: 'up' | 'down' | 'neutral';
   size: number;
   color?: string;
@@ -46,7 +46,7 @@ const TrendIndicator: React.FC<{
   );
 };
 
-export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
+export const AnimatedCounter: React.ComponentType<AnimatedCounterProps> = ({
   value,
   previousValue,
   variant = 'default',

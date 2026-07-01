@@ -33,7 +33,7 @@ export interface ProfileStatTileProps {
   loading?: boolean;
 }
 
-export const ProfileStatTile: React.FC<ProfileStatTileProps> = ({
+export const ProfileStatTile: React.ComponentType<ProfileStatTileProps> = ({
   item,
   loading,
 }) => {

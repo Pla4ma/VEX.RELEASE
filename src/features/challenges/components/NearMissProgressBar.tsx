@@ -3,7 +3,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import type {} from 'react-native-reanimated';
 
 interface NearMissProgressBarProps {
@@ -15,7 +16,7 @@ interface NearMissProgressBarProps {
   tertiaryText: string;
 }
 
-export const NearMissProgressBar: React.FC<NearMissProgressBarProps> = ({
+export const NearMissProgressBar: React.ComponentType<NearMissProgressBarProps> = ({
   progressPercent,
   progressStyle,
   pulseStyle,

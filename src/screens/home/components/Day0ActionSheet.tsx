@@ -107,9 +107,10 @@ export function Day0ActionSheet({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1, justifyContent: 'flex-end' }}
       >
-        <Pressable
+<Pressable
           accessibilityLabel="Close Day 0 action"
           accessibilityRole="button"
+          accessibilityHint="Closes the Day 0 action sheet"
           onPress={onClose}
           style={{ flex: 1 }}
         />

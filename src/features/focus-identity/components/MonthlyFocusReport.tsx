@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, Share } from 'react-native';
+import { View, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,14 +12,14 @@ import { useMonthlyReport } from '../hooks';
 import { useFocusScoreColor } from '../hooks';
 import {
   publishMonthlyReportViewed,
-  publishMonthlyReportShared,
   publishMonthlyReportDismissed,
 } from '../events';
-import { capture } from '../../../shared/analytics/analytics-service';
 import { MonthlyReportSkeleton } from './MonthlyReportSkeleton';
 import { MonthlyReportErrorState, MonthlyReportEmptyState } from './MonthlyReportStates';
 import { useMonthlyReportComputed } from './useMonthlyReportComputed';
 import { ReportCards } from './ReportCards';
+import { buildReportSummary, type ReportSummaryDisplay } from './reportSummaryBuilder';
+import { shareMonthlyReport } from './shareMonthlyReport';
 
 interface MonthlyFocusReportProps {
   userId: string;
@@ -43,6 +43,10 @@ export function MonthlyFocusReport({
     refetch: refresh,
   } = useMonthlyReport(userId, year, month);
   const [hasPublishedView, setHasPublishedView] = React.useState(false);
+  const reportSummary: ReportSummaryDisplay | undefined = React.useMemo(
+    () => (report ? buildReportSummary(report) : undefined),
+    [report],
+  );
   const prevReportIdRef = React.useRef(report?.id);
 
   if (report && report.id !== prevReportIdRef.current) {
@@ -51,16 +55,16 @@ export function MonthlyFocusReport({
   }
 
   React.useEffect(() => {
-    if (report && !hasPublishedView) {
+    if (report && reportSummary && !hasPublishedView) {
       publishMonthlyReportViewed(
         userId,
-        report.month,
+        reportSummary.month,
         report.grade,
-        report.change,
+        reportSummary.change,
       );
       setHasPublishedView(true);
     }
-  }, [report, hasPublishedView, userId]);
+  }, [report, reportSummary, hasPublishedView, userId]);
 
   const scale = useSharedValue(0.8);
   const opacity = useSharedValue(0);
@@ -79,33 +83,23 @@ export function MonthlyFocusReport({
   }));
 
   const { scoreDrivers, identityStatement, percentile } =
-    useMonthlyReportComputed(report);
+    useMonthlyReportComputed(reportSummary);
 
   const handleShare = async () => {
-    if (!report) {
+    if (!report || !reportSummary) {
       return;
     }
-    const shareText = `Monthly Focus Report - ${report.month}\n\n${identityStatement}\n\nScore: ${report.endingScore} (${report.change > 0 ? '+' : ''}${report.change})\nGrade: ${report.grade}\nSessions: ${report.sessionsCompleted}\nPercentile: Top ${100 - percentile}%\n\n${report.highlight}\n\n#VEX #FocusProductivity`;
-    try {
-      await Share.share({ message: shareText, title: 'Monthly Focus Report' });
-      if (report) {
-        publishMonthlyReportShared(userId, report.month, report.grade);
-      }
-    } catch (shareError) {
-      if (shareError instanceof Error) {
-        capture('monthly_report_share_failed', { error: shareError.message });
-      }
-    }
+    await shareMonthlyReport(reportSummary, identityStatement, report.grade, userId, percentile);
   };
 
   const handleClose = () => {
     if (report) {
-      publishMonthlyReportDismissed(userId, report.month);
+      publishMonthlyReportDismissed(userId, reportSummary?.month ?? String(report.month));
     }
     onClose();
   };
 
-  if (loadingState === 'loading' || loadingState === 'pending') {
+  if (loadingState === 'pending') {
     return <MonthlyReportSkeleton />;
   }
 
@@ -119,7 +113,7 @@ export function MonthlyFocusReport({
     );
   }
 
-  if (!report) {
+  if (!report || !reportSummary) {
     return <MonthlyReportEmptyState onClose={handleClose} />;
   }
 
@@ -139,9 +133,11 @@ export function MonthlyFocusReport({
         <Text variant="heading2" color="text">
           Monthly Focus Report
         </Text>
-        <Pressable
+<Pressable
           onPress={handleClose}
           accessibilityLabel="Close monthly focus report"
+          accessibilityRole="button"
+          accessibilityHint="Closes the monthly focus report"
           style={{ padding: theme.spacing[2] }}
         >
           <Text variant="heading3" color="textSecondary">
@@ -161,14 +157,14 @@ export function MonthlyFocusReport({
       >
         <ReportCards
           theme={theme}
-          month={report.month}
+          month={reportSummary.month}
           endingScore={report.endingScore}
           grade={report.grade}
-          change={report.change}
+          change={reportSummary.change}
           scoreColor={scoreColor}
           scoreDrivers={scoreDrivers}
-          sessionsCompleted={report.sessionsCompleted}
-          highlight={report.highlight}
+          sessionsCompleted={reportSummary.sessionsCompleted}
+          highlight={reportSummary.highlight}
           percentile={percentile}
           identityStatement={identityStatement}
           onShare={handleShare}

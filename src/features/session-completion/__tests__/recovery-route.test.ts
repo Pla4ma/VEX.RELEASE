@@ -1,7 +1,5 @@
-import {
-  buildSessionSummaryFromCompletionLedger,
-  parseSessionCompletionParams,
-} from '../service';
+import { buildSessionSummaryFromCompletionLedger } from '../session-summary-builder';
+import { parseSessionCompletionParams } from '../params-parser';
 import { createCompletionLedger, SESSION_ID } from './ledger-test-utils';
 
 describe('session completion route recovery', () => {

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme, type ThemeMode } from '@/theme';
-import { Box, Text, Card } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -23,7 +25,7 @@ interface ThemePickerProps {
   onThemeChange: (theme: ThemeMode) => void;
 }
 
-export const ThemePicker: React.FC<ThemePickerProps> = ({
+export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
   selectedTheme,
   onThemeChange,
 }) => {

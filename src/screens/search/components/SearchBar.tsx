@@ -12,7 +12,7 @@ interface SearchBarProps {
   paddingTop: number;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+export const SearchBar: React.ComponentType<SearchBarProps> = ({
   query,
   onQueryChange,
   onSubmit,

@@ -14,7 +14,7 @@ interface SessionLoadingStateProps {
   message?: string;
 }
 
-export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
+export const SessionLoadingState: React.ComponentType<SessionLoadingStateProps> = ({
   message = 'Loading session...',
 }) => {
   const { theme } = useTheme();

@@ -1,9 +1,11 @@
 // Lazy-load posthog-react-native to avoid [runtime not ready] crash at module evaluation time
+import type { PostHog } from 'posthog-react-native';
 let _PostHog: (typeof import('posthog-react-native'))['PostHog'] | null = null;
 let _PostHogProvider: (typeof import('posthog-react-native'))['PostHogProvider'] | null = null;
 function getPostHogModule() {
   if (_PostHog) return { PostHog: _PostHog, PostHogProvider: _PostHogProvider! };
   try {
+    // SAFETY: require() used dynamic/native lazy loading to avoid Metro ESM/CJS interop crashes.
     const mod = require('posthog-react-native') as typeof import('posthog-react-native');
     _PostHog = mod.PostHog;
     _PostHogProvider = mod.PostHogProvider;
@@ -21,7 +23,6 @@ import {
   sanitizeUserTraits,
   type SafeAnalyticsProperties,
 } from './privacy';
-
 const debug = createDebugger('analytics');
 const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST =
@@ -31,20 +32,16 @@ const ANALYTICS_DISABLED =
 const FORCE_DEV_ANALYTICS =
   process.env.EXPO_PUBLIC_ANALYTICS_FORCE_ENABLE === 'true';
 const CAN_INITIALIZE_POSTHOG = Platform.OS !== 'web';
-
 interface AnalyticsConfig {
   enabled: boolean;
   debug: boolean;
 }
-
 export type UserTraits = Record<string, unknown>;
-
 class AnalyticsService {
   private client: PostHog | null = null;
   private config: AnalyticsConfig;
   private initialized = false;
   private currentUserId: string | null = null;
-
   constructor() {
     this.config = {
       enabled:
@@ -55,17 +52,14 @@ class AnalyticsService {
       debug: __DEV__,
     };
   }
-
   async initialize(): Promise<boolean> {
     if (this.initialized) {
       return this.isEnabled();
     }
-
     if (!this.config.enabled || !POSTHOG_API_KEY) {
       debug.info('[Analytics] Provider disabled or not configured');
       return false;
     }
-
     try {
       const { PostHog: PH } = getPostHogModule();
       this.client = PH ? new PH(POSTHOG_API_KEY, {
@@ -81,11 +75,9 @@ class AnalyticsService {
       return false;
     }
   }
-
   isEnabled(): boolean {
     return this.config.enabled && this.initialized && this.client !== null;
   }
-
   setEnabled(enabled: boolean): void {
     this.config.enabled =
       enabled && Boolean(POSTHOG_API_KEY) && (!__DEV__ || FORCE_DEV_ANALYTICS);
@@ -94,15 +86,12 @@ class AnalyticsService {
       this.initialized = false;
     }
   }
-
   capture(eventName: string, properties: object = {}): void {
     if (!this.isEnabled()) {
       return;
     }
-
     const safeEventName = sanitizeEventName(eventName);
     const safeProperties = this.buildEventProperties(properties);
-
     try {
       this.client?.capture(safeEventName, safeProperties);
       debug.debug('[Analytics] Event captured: %s', safeEventName);
@@ -110,22 +99,18 @@ class AnalyticsService {
       debug.error('[Analytics] Event capture failed', toError(error));
     }
   }
-
   identify(userId: string, traits: UserTraits = {}): void {
     if (!this.isEnabled()) {
       return;
     }
-
     const safeTraits = sanitizeUserTraits(traits);
     this.currentUserId = userId;
-
     try {
       this.client?.identify(userId, safeTraits);
     } catch (error) {
       debug.error('[Analytics] Identify failed', toError(error));
     }
   }
-
   reset(): void {
     this.currentUserId = null;
     try {
@@ -134,63 +119,52 @@ class AnalyticsService {
       debug.error('[Analytics] Reset failed', toError(error));
     }
   }
-
   updateUserProperties(traits: UserTraits): void {
     if (!this.currentUserId) {
       return;
     }
-
     this.identify(this.currentUserId, traits);
   }
-
   screen(screenName: string, properties: object = {}): void {
     this.capture('screen_viewed', {
       screen_name: screenName,
       ...properties,
     });
   }
-
   async flush(): Promise<void> {
     if (!this.isEnabled()) {
       return;
     }
-
     try {
       await this.client?.flush();
     } catch (error) {
       debug.error('[Analytics] Flush failed', toError(error));
     }
   }
-
   getFeatureFlag(key: string): boolean | string | undefined {
     if (!this.isEnabled()) {
       return undefined;
     }
-
     return this.client?.getFeatureFlag(key);
   }
-
   isFeatureEnabled(key: string): boolean {
     if (!this.isEnabled()) {
       return false;
     }
-
     return this.client?.isFeatureEnabled(key) ?? false;
   }
-
   getCurrentUserId(): string | null {
     return this.currentUserId;
   }
-
   private buildEventProperties(properties: object): SafeAnalyticsProperties {
     return {
       ...sanitizeAnalyticsProperties(properties),
       platform: 'mobile',
+      // SAFETY: require() reads static app metadata bundled by Metro at build time.
       app_version: process.env.EXPO_PUBLIC_APP_VERSION || require('../../../app.json').version || '0.0.0',
     };
   }
 }
-
 function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
@@ -198,7 +172,6 @@ export const analyticsService = new AnalyticsService();
 export function getPostHogProvider() {
   return getPostHogModule().PostHogProvider;
 }
-
 export const capture = (eventName: string, properties?: object): void =>
   analyticsService.capture(eventName, properties);
 export const identify = (userId: string, traits?: UserTraits): void =>

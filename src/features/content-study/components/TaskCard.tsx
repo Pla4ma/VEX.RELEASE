@@ -20,7 +20,7 @@ interface TaskCardProps {
   formatDuration: (minutes: number) => string;
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({
+export const TaskCard: React.ComponentType<TaskCardProps> = ({
   task,
   isCompleted,
   isActive,

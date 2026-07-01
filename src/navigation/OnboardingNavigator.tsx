@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator<OnboardingStackParams>();
 /**
  * Onboarding navigator component
  */
-export const OnboardingNavigator: React.FC = () => {
+export const OnboardingNavigator: React.ComponentType = () => {
   const route = useRoute<RouteProp<RootStackParams, 'Onboarding'>>();
 
   return (

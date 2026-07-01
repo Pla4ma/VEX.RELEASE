@@ -25,7 +25,7 @@ export interface ProgressBarProps {
   style?: object;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar: React.ComponentType<ProgressBarProps> = ({
   progress,
   backgroundColor = lightColors.border.light,
   fillColor = lightColors.accent.blue,

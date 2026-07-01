@@ -121,11 +121,12 @@ export function CelebrationOverlay({
           </View>
 
           {decision.evidence.length > 0 && (
-            <Pressable
-              onPress={() => setShowEvidence((v) => !v)}
-              accessibilityLabel="Why am I seeing this"
-              accessibilityRole="button"
-              style={{
+<Pressable
+onPress={() => setShowEvidence((v) => !v)}
+accessibilityLabel="Why am I seeing this"
+accessibilityRole="button"
+accessibilityHint="Shows or hides evidence for this celebration"
+style={{
                 alignItems: 'center',
                 flexDirection: 'row',
                 gap: spacing[1],

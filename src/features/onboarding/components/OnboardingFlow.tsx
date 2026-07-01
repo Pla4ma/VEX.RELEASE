@@ -23,7 +23,7 @@ function NotificationPermissionScreen({
   onComplete: () => void;
 }): React.ReactNode {
   const { theme } = useTheme();
-  const [NotificationCard, setNotificationCard] = React.useState<React.FC<{
+  const [NotificationCard, setNotificationCard] = React.useState<React.ComponentType<{
     userId: string;
   }> | null>(null);
   const mountedRef = React.useRef(true);
@@ -76,7 +76,7 @@ function FirstResultScreenInner({
 }: {
   onComplete: () => void;
 }): React.ReactNode {
-  const [FirstResult, setFirstResult] = React.useState<React.FC<{
+  const [FirstResult, setFirstResult] = React.useState<React.ComponentType<{
     userName: string;
     sessionDuration: number;
     sessionData: {
@@ -104,7 +104,7 @@ function FirstResultScreenInner({
         if (!mountedRef.current) { return; }
         setFirstResult(
           () =>
-            mod.FirstResultScreen as React.FC<{
+            mod.FirstResultScreen as React.ComponentType<{
               userName: string;
               sessionDuration: number;
               sessionData: {

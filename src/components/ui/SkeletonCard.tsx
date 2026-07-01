@@ -17,7 +17,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { skeletonStyles } from './Skeleton.styles';
 import { Skeleton } from './Skeleton';
 
-export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
+export const SkeletonCard: React.ComponentType<{ lines?: number; height?: number }> = ({
   lines = 3,
   height: _height = 120,
 }) => {

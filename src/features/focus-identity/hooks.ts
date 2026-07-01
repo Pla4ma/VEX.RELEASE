@@ -6,6 +6,7 @@
 
 import { useMemo } from 'react';
 import { useFocusScore } from './hooks-focus-score';
+import { useMonthlyReport as useMonthlyReportImpl } from './monthly-report';
 import {
   FocusIdentityEngine,
   type ScoreBand,
@@ -127,9 +128,5 @@ export function useFocusIdentity(_userId: string) {
  * Hook for monthly focus report data
  */
 export function useMonthlyReport(userId: string, year: number, month: number) {
-  // Import from the new monthly report system
-  const {
-    useMonthlyReport: useMonthlyReportImpl,
-  } = require('./monthly-report');
   return useMonthlyReportImpl(userId, year, month);
 }

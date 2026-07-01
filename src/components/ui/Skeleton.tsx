@@ -25,7 +25,7 @@ interface SkeletonProps {
   animate?: boolean;
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({
+export const Skeleton: React.ComponentType<SkeletonProps> = ({
   width = '100%',
   height = 16,
   borderRadius,
@@ -89,7 +89,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   );
 };
 
-export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
+export const SkeletonCard: React.ComponentType<{ lines?: number; height?: number }> = ({
   lines = 3,
   height: _height = 120,
 }) => {
@@ -141,7 +141,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
   );
 };
 
-export const SkeletonList: React.FC<{
+export const SkeletonList: React.ComponentType<{
   count?: number;
   itemHeight?: number;
 }> = ({ count = 5, itemHeight = 72 }) => {

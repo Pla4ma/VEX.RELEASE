@@ -5,6 +5,7 @@ import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { callGemini } from './gemini.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
 import { getOpenAICompatibleConfig, getOpenAICompatibleModel } from '../_shared/openai-compatible.ts';
+import { requireConfig } from '../_shared/config.ts';
 
 function jsonResponse(payload: unknown, status: number, corsHeaders: Record<string, string>): Response {
   return new Response(JSON.stringify(payload), {
@@ -34,12 +35,13 @@ Deno.serve(async (request) => {
   const auth = await verifyAuthorizedUser(request, jsonResponse);
   if (!auth.ok) return auth.response;
 
-  const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!supabaseUrl || !serviceRoleKey) {
+  let config: ReturnType<typeof requireConfig>;
+  try {
+    config = requireConfig();
+  } catch {
     return jsonResponse({ error: 'Server configuration error' }, 500, corsHeaders);
   }
-  const rateLimit = await checkRateLimit(auth.user.id, 'ai:generate', supabaseUrl, serviceRoleKey);
+  const rateLimit = await checkRateLimit(auth.user.id, 'ai:generate', config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
   if (!rateLimit.allowed) {
     return jsonResponse(
       {
@@ -61,7 +63,7 @@ Deno.serve(async (request) => {
     if (!parsedRequest.success) return jsonResponse({ error: 'Invalid AI request payload' }, 400, corsHeaders);
     if (parsedRequest.data.requestType !== expectedRequestType) return jsonResponse({ error: `Route expects ${expectedRequestType}, received ${parsedRequest.data.requestType}` }, 400, corsHeaders);
     if (parsedRequest.data.userId !== auth.user.id) return jsonResponse({ error: 'Forbidden: request user does not match auth token' }, 403, corsHeaders);
-    const response = await generateAIResponse(parsedRequest.data);
+    const response = await generateAIResponse(parsedRequest.data, config);
     return jsonResponse(response, 200, corsHeaders);
   } catch (error) {
     if (error instanceof SyntaxError) return jsonResponse({ error: 'Invalid JSON payload' }, 400, corsHeaders);
@@ -75,10 +77,10 @@ function getRouteSlug(url: string): string {
   return parts[parts.length - 1] ?? '';
 }
 
-async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
+async function generateAIResponse(request: AIRequest, config: ReturnType<typeof requireConfig>): Promise<AIResponse> {
   const startedAt = Date.now();
   const llmConfig = getOpenAICompatibleConfig();
-  const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
+  const geminiApiKey = config.GEMINI_API_KEY;
   if (!llmConfig && !geminiApiKey) return buildFallbackResponse(request, 'Missing LLM configuration', 0, 503);
 
   try {

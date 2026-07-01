@@ -20,7 +20,7 @@ type LevelUpCelebrationProps = {
   onDismiss: () => void;
 };
 
-export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
+export const LevelUpCelebration: React.ComponentType<LevelUpCelebrationProps> = ({
   oldLevel,
   newLevel,
   rewards,

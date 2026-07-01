@@ -8,7 +8,6 @@ import {
   presenceCallbacks,
   resetCurrentUserId,
   setCurrentUserId,
-  type BroadcastMessage,
   type PresenceStatus,
   type SquadPresence,
   type UserPresence,
@@ -26,6 +25,12 @@ import { cancelPendingBroadcastCleanups } from './realtimeSubscriptions';
 const debug = createDebugger('realtime');
 export async function initializePresence(userId: string): Promise<void> {
   setCurrentUserId(userId);
+  const presenceKey = `presence:${userId}`;
+  const existingChannel = activeChannels.get(presenceKey);
+  if (existingChannel) {
+    await existingChannel.unsubscribe();
+    activeChannels.delete(presenceKey);
+  }
   const client = getSupabaseClient();
   const channel = client.channel(CHANNELS.user(userId), {
     config: { presence: { key: userId } },
@@ -55,7 +60,7 @@ export async function initializePresence(userId: string): Promise<void> {
       }
     }
   });
-  activeChannels.set(`presence:${userId}`, channel);
+  activeChannels.set(presenceKey, channel);
 }
 
 export async function updatePresence(
@@ -190,6 +195,4 @@ export async function cleanupRealtime(): Promise<void> {
   activeChannels.clear();
   resetCurrentUserId();
 }
-export function getActiveChannelCount(): number {
-  return activeChannels.size;
-}
+export function getActiveChannelCount(): number { return activeChannels.size; }

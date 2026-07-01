@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import type { AchievementCategory } from '@/features/achievements/types';
 import { lightColors } from '@/theme/tokens/colors';
@@ -25,7 +26,7 @@ export const CATEGORIES: CategoryItem[] = [
   { id: 'PROGRESSION', label: 'Progression', icon: '📈' },
 ];
 
-export const CategoryTabs: React.FC<{
+export const CategoryTabs: React.ComponentType<{
   selected: AchievementCategory | 'ALL';
   onSelect: (category: AchievementCategory | 'ALL') => void;
 }> = ({ selected, onSelect }) => {
@@ -82,7 +83,7 @@ export const CategoryTabs: React.FC<{
   );
 };
 
-export const FilterSortBar: React.FC<{
+export const FilterSortBar: React.ComponentType<{
   filter: FilterType;
   onFilterChange: (filter: FilterType) => void;
   sort: SortType;

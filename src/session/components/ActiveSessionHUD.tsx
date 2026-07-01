@@ -18,7 +18,7 @@ interface ActiveSessionHUDProps {
   onAbandon?: () => void;
 }
 
-export const ActiveSessionHUD: React.FC<ActiveSessionHUDProps> = ({
+export const ActiveSessionHUD: React.ComponentType<ActiveSessionHUDProps> = ({
   userId,
   onPause,
   onResume,
@@ -171,19 +171,19 @@ export const ActiveSessionHUD: React.FC<ActiveSessionHUDProps> = ({
   );
 };
 
-const SessionHUDLoadingState: React.FC = () => (
+const SessionHUDLoadingState: React.ComponentType = () => (
   <View style={styles.container}>
     <Text style={styles.loadingText}>Loading session...</Text>
   </View>
 );
 
-const SessionHUDErrorState: React.FC<{ error: Error }> = ({ error }) => (
+const SessionHUDErrorState: React.ComponentType<{ error: Error }> = ({ error }) => (
   <View style={styles.container}>
     <Text style={styles.errorText}>Error: {sanitizeErrorMessage(error)}</Text>
   </View>
 );
 
-const SessionHUDEmptyState: React.FC = () => (
+const SessionHUDEmptyState: React.ComponentType = () => (
   <View style={styles.container}>
     <Text style={styles.emptyText}>No active session</Text>
     <Text style={styles.emptySubtext}>Create a session to get started</Text>

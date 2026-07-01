@@ -4,11 +4,12 @@ import { Platform, View } from 'react-native';
 let _LinearGradient: React.ComponentType<Record<string, unknown>> | null = null;
 function getLinearGradient(): React.ComponentType<Record<string, unknown>> {
   if (_LinearGradient) return _LinearGradient;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _LinearGradient = (require('expo-linear-gradient') as { LinearGradient: React.ComponentType<Record<string, unknown>> }).LinearGradient;
+try {
+  // SAFETY: require() used dynamic/native lazy loading to avoid Metro/native module evaluation crashes.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  _LinearGradient = (require('expo-linear-gradient') as { LinearGradient: React.ComponentType<Record<string, unknown>> }).LinearGradient;
   } catch {
-    _LinearGradient = View as unknown as React.ComponentType<Record<string, unknown>>;
+    _LinearGradient = View as React.ComponentType<Record<string, unknown>>;
   }
   return _LinearGradient;
 }
@@ -25,9 +26,10 @@ function getMeshGradientView(): React.ComponentType<Record<string, unknown>> | n
     _MeshGradientView = null;
     return null;
   }
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const mod = require('expo-mesh-gradient');
+try {
+  // SAFETY: require() used dynamic/native lazy loading to avoid startup crashes when expo-mesh-gradient is unavailable.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mod = require('expo-mesh-gradient');
     // safe: MeshGradientView is the named export from expo-mesh-gradient module
     _MeshGradientView = (mod.MeshGradientView as React.ComponentType<Record<string, unknown>> | undefined) ?? null;
   } catch {

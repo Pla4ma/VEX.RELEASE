@@ -8,11 +8,12 @@
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { extractFromYouTube, extractFromPDF } from './extractors.ts';
 import { json } from './handlers.ts';
+import { STUDY_CONTENT_COLUMNS } from './columns.ts';
 
 export async function handleExtract(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
   const { contentId } = await req.json();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
-  const { data: content, error } = await supabase.from('study_content').select('id, user_id, source_type, source_url, original_filename, storage_path, title, extracted_text, extracted_length, language, user_edited_text, is_user_edited, status, error_message, generation_count_today, last_generation_date, deleted_at, created_at, updated_at, extracted_at').eq('id', contentId).eq('user_id', userId).single();
+  const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_COLUMNS).eq('id', contentId).eq('user_id', userId).single();
   if (error || !content) return json({ success: false, error: 'Content not found' }, 400);
   await supabase.from('study_content').update({ status: 'EXTRACTING' }).eq('id', contentId);
   try {

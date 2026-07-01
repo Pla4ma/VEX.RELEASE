@@ -3,9 +3,9 @@ import { getFocusProfile } from '../focus-profile/service';
 import { resolveInitialLane } from '../lane-engine/service';
 import { buildCompletionPersonalizationResult } from './completion-personalization';
 import type { CompletionLedger } from './schemas';
-import type { PostSessionStoryViewModel } from './service';
+import type { PostSessionStoryViewModel } from './post-session-story-view-model';
 import type { SessionSummary } from '../../session/types';
-import { buildPostSessionStoryViewModel } from './service';
+import { buildPostSessionStoryViewModel } from './post-session-story-view-model';
 import { buildFeatureAccess } from '../liveops-config/feature-access';
 import { useOnboardingStore } from '../onboarding/store';
 import {

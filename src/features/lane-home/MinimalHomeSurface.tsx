@@ -100,10 +100,11 @@ export function MinimalHomeSurface({ viewModel }: MinimalHomeSurfaceProps): Reac
 
         {/* Last Session */}
         {viewModel.lastSession && (
-          <Pressable
-            accessibilityLabel="Last session"
-            accessibilityRole="button"
-            onPressIn={handlePressIn}
+<Pressable
+accessibilityLabel="Last session"
+accessibilityRole="button"
+accessibilityHint="Shows details from your last session"
+onPressIn={handlePressIn}
             onPressOut={handlePressOut}
           >
             <Box

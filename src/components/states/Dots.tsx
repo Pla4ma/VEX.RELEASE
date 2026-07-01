@@ -15,7 +15,7 @@ import Animated, {
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { styles } from './loading-variants.styles';
 
-export const Dots: React.FC<{ size: number; color: string }> = ({
+export const Dots: React.ComponentType<{ size: number; color: string }> = ({
   size,
   color,
 }) => {

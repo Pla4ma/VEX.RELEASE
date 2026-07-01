@@ -32,7 +32,7 @@ function groupToastsByPosition(
   return grouped;
 }
 
-export const ToastContainer: React.FC<ToastContainerProps> = ({
+export const ToastContainer: React.ComponentType<ToastContainerProps> = ({
   toasts,
   onDismiss,
 }) => {

@@ -4,7 +4,7 @@ import { Text } from '../../../components/primitives/Text';
 import type { BreadcrumbProps } from './TabBar.types';
 import { styles } from './TabBar.styles';
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = ({
+export const Breadcrumb: React.ComponentType<BreadcrumbProps> = ({
   items,
   separator = '/',
   style,

@@ -3,6 +3,7 @@ import { Image, View } from 'react-native';
 
 import { glassMaterials, glassRadius } from '../../../theme/tokens/vex-light-glass';
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 const MASCOT = require('../../../../assets/mascot/mascot_pointing.png');
 
 interface Day0MascotProps {

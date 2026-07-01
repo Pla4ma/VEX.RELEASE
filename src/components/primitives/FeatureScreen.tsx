@@ -34,7 +34,7 @@ interface FeatureScreenProps {
   padded?: boolean; // default true — adds px="lg" to content
 }
 
-export const FeatureScreen: React.FC<FeatureScreenProps> = ({
+export const FeatureScreen: React.ComponentType<FeatureScreenProps> = ({
   title,
   subtitle,
   isLoading = false,

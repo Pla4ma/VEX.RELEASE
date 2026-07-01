@@ -6,7 +6,7 @@ import type { ProgressStepsProps, StepStatus } from './progress-steps-types';
 import { StepIndicator } from './StepIndicator';
 import { Connector } from './Connector';
 
-export const ProgressSteps: React.FC<ProgressStepsProps> = ({
+export const ProgressSteps: React.ComponentType<ProgressStepsProps> = ({
   steps,
   currentStep,
   orientation = 'horizontal',

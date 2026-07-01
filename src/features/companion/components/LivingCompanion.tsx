@@ -40,7 +40,7 @@ interface LivingCompanionProps {
   onMilestone?: (milestone: number) => void;
 }
 
-export const LivingCompanion: React.FC<LivingCompanionProps> = ({
+export const LivingCompanion: React.ComponentType<LivingCompanionProps> = ({
   companionState,
   sessionProgress,
   purityScore,

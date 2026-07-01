@@ -28,6 +28,7 @@ export function SessionSmartPickCard({
           alignItems="center"
           justifyContent="center"
         >
+          {/* SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time. */}
           <Image
             source={require('../../../assets/generated/session/focus-talisman.png')}
             resizeMode="contain"

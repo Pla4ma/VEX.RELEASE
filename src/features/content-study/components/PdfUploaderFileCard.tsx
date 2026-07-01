@@ -31,7 +31,7 @@ interface FileCardProps {
   getFileIcon: (mimeType: string) => string;
 }
 
-export const PdfUploaderFileCard: React.FC<FileCardProps> = ({
+export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
   fileName,
   fileSize,
   fileType,

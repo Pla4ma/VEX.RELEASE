@@ -27,7 +27,7 @@ function formatDate(ts: number): string {
   });
 }
 
-const MemoryConsoleScreen: React.FC<Props> = () => {
+const MemoryConsoleScreen: React.ComponentType<Props> = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuthStore();

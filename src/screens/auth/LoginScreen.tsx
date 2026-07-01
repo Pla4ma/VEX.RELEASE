@@ -14,9 +14,12 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
+import { useOnboardingStore } from '../../features/onboarding/store';
+import { useAuthStore } from '../../store';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { etherealText } from '@/theme/tokens/ethereal-sky';
+import type { User } from '../../types/models/user';
 
 import {
   EtherealAuthButtons,
@@ -36,7 +39,65 @@ const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null
   email: null,
 };
 
-const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
+const DEV_BYPASS_USER_ID = '00000000-0000-0000-0000-000000000001';
+
+const createDevBypassUser = (): User => {
+  const now = new Date().toISOString();
+
+  return {
+    id: DEV_BYPASS_USER_ID,
+    createdAt: now,
+    updatedAt: now,
+    username: 'localdev',
+    email: 'local-dev@vex.app',
+    firstName: 'Local',
+    lastName: 'Dev',
+    displayName: 'Local Dev',
+    verified: true,
+    role: 'user',
+    status: 'active',
+    onboardingCompletedAt: now,
+    preferences: {
+      theme: 'system',
+      language: 'en',
+      notifications: {
+        push: false,
+        email: false,
+        sms: false,
+        inApp: true,
+        digestFrequency: 'never',
+        quietHours: {
+          enabled: false,
+          start: '22:00',
+          end: '07:00',
+          timezone: 'America/New_York',
+        },
+      },
+      privacy: {
+        profileVisibility: 'private',
+        activityStatus: false,
+        readReceipts: false,
+        allowTagging: false,
+        allowMentions: false,
+        dataSharing: false,
+      },
+      accessibility: {
+        reduceMotion: false,
+        highContrast: false,
+        largeText: false,
+        screenReaderOptimized: false,
+      },
+    },
+    metadata: {
+      lastLoginAt: now,
+      loginCount: 1,
+      signupSource: 'dev-bypass',
+      deviceHistory: [],
+    },
+  };
+};
+
+const LoginScreen: React.ComponentType<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -67,7 +128,7 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
         return;
       }
       if (mapped) {
-        void handleOAuthLogin(mapped);
+        handleOAuthLogin(mapped).catch(() => undefined);
       }
     },
     [handleOAuthLogin],
@@ -80,6 +141,11 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const onCreateAccount = useCallback(() => {
     navigation.navigate({ name: 'Register', params: undefined });
   }, [navigation]);
+
+  const onSkipLogin = useCallback(() => {
+    useAuthStore.getState().login(createDevBypassUser());
+    useOnboardingStore.getState().completeOnboarding(DEV_BYPASS_USER_ID);
+  }, []);
 
   return (
     <AppScreen
@@ -111,6 +177,37 @@ const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
               onProviderPress={onProviderPress}
               startDelayMs={900}
             />
+
+            {__DEV__ ? (
+              <Pressable
+                accessibilityHint="Opens the app with a local development account"
+                accessibilityLabel="Skip login and onboarding"
+                accessibilityRole="button"
+                onPress={onSkipLogin}
+                style={({ pressed }) => [
+                  getMinTouchTargetStyle(),
+                  {
+                    alignItems: 'center',
+                    borderColor: etherealText.subtitle,
+                    borderRadius: theme.borderRadius.lg,
+                    borderWidth: 1,
+                    justifyContent: 'center',
+                    opacity: pressed ? 0.72 : 1,
+                    paddingHorizontal: theme.spacing[4],
+                    paddingVertical: theme.spacing[3],
+                  },
+                ]}
+              >
+                <Text
+                  color={etherealText.heading}
+                  fontSize={14}
+                  fontWeight="700"
+                  textAlign="center"
+                >
+                  Skip login
+                </Text>
+              </Pressable>
+            ) : null}
 
             {showEmailForm ? (
               <LoginEmailForm

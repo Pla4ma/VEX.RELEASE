@@ -46,10 +46,11 @@ export function StudentHomeSurface({ viewModel }: StudentHomeSurfaceProps): Reac
     <Animated.View style={containerStyle}>
       <Box gap="md">
         {/* Study Plan Card */}
-        <Pressable
-          accessibilityLabel="Study plan"
-          accessibilityRole="button"
-          onPressIn={handlePressIn}
+<Pressable
+accessibilityLabel="Study plan"
+accessibilityRole="button"
+accessibilityHint="Shows today's study plan"
+onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         >
           <Box

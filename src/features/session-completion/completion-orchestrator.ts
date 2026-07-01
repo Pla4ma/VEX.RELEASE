@@ -10,7 +10,7 @@ import { useSessionUIStore } from '../../store/session-state';
 import { applyCompletionSubsystems } from './completion-subsystems';
 import { buildCompletionLedger } from './ledger-service';
 import { applyPersonalizationAndSideEffects } from './completion-personalization-step';
-import type { PostSessionStoryViewModel } from './service';
+import type { PostSessionStoryViewModel } from './post-session-story-view-model';
 import {
   getCompletionLedgerByIdempotencyKey,
   persistCompletionLedger,

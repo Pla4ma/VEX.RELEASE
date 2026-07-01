@@ -15,7 +15,7 @@ import { progressStepsStyles as styles } from './progress-steps-styles';
 import type { StepIndicatorProps } from './progress-steps-types';
 import { Text as VexText } from '../../../components/primitives/Text';
 
-export const StepIndicator: React.FC<StepIndicatorProps> = ({
+export const StepIndicator: React.ComponentType<StepIndicatorProps> = ({
   status,
   index,
   size = 'md',

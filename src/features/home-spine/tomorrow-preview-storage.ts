@@ -18,6 +18,7 @@ type PreviewStorage = {
 
 function getStorage(): PreviewStorage | null {
   try {
+    // SAFETY: require() defers MMKV-backed storage access so non-native runtimes can fall back cleanly.
     const { storage } = require('../../store/mmkv-storage');
     return z.custom<PreviewStorage>().parse(storage);
   } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, Modal, Pressable, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -19,7 +19,7 @@ import {
 import { levelUpStyles as styles } from './level-up-styles';
 import { lightColors } from '@/theme/tokens/colors';
 
-export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
+export const LevelUpOverlay: React.ComponentType<LevelUpOverlayProps> = ({
   isVisible,
   previousLevel,
   newLevel,
@@ -32,12 +32,16 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
   const opacityAnim = useSharedValue(0);
   const rotateAnim = useSharedValue(0);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
+  const prevIsVisibleRef = useRef(isVisible);
   const { width, height } = useWindowDimensions();
 
+  // SAFETY: isVisible triggers a visual transition with haptics and animation;
+  // this effect is the entry point for the level-up sequence, not business logic.
   useEffect(() => {
-    if (isVisible === prevIsVisible) { return; }
-    setPrevIsVisible(isVisible);
+    const wasVisible = prevIsVisibleRef.current;
+    prevIsVisibleRef.current = isVisible;
+
+    if (isVisible === wasVisible) { return; }
     if (isVisible) {
       levelUp();
       const pieces: ConfettiPiece[] = Array.from({ length: 100 }, (_, i) => ({
@@ -65,16 +69,19 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({
       rotateAnim.value = 0;
       setShowConfetti(false);
     }
-  }, [isVisible, prevIsVisible, width, height, scaleAnim, opacityAnim, rotateAnim]);
+  }, [isVisible, width, height, scaleAnim, opacityAnim, rotateAnim]);
 
+  // SAFETY: confetti auto-dismiss after 5s requires a side-effect with cleanup;
+  // this effect manages the confetti timer lifecycle.
   useEffect(() => {
     if (!isVisible) {return;}
     const timer = setTimeout(() => setShowConfetti(false), 5000);
     return () => clearTimeout(timer);
   }, [isVisible]);
 
-  const [startColor, endColor] = getTierColor(newLevel);
-  const tierTitle = getTierTitle(newLevel);
+  // Compute derived values with useMemo instead of copying to state
+  const [startColor, endColor] = useMemo(() => getTierColor(newLevel), [newLevel]);
+  const tierTitle = useMemo(() => getTierTitle(newLevel), [newLevel]);
 
   const contentStyle = useAnimatedStyle(() => ({
     opacity: opacityAnim.value,

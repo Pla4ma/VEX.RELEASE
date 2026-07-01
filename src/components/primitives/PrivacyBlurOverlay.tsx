@@ -5,11 +5,12 @@ import { AppState, StyleSheet, View } from 'react-native';
 let _BlurView: React.ComponentType<Record<string, unknown>> | null = null;
 function getBlurView(): React.ComponentType<Record<string, unknown>> {
   if (_BlurView) return _BlurView;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _BlurView = (require('expo-blur') as { BlurView: React.ComponentType<Record<string, unknown>> }).BlurView;
+try {
+  // SAFETY: require() used dynamic/native lazy loading to avoid startup crashes when expo-blur is unavailable.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  _BlurView = (require('expo-blur') as { BlurView: React.ComponentType<Record<string, unknown>> }).BlurView;
   } catch {
-    _BlurView = View as unknown as React.ComponentType<Record<string, unknown>>;
+    _BlurView = View as React.ComponentType<Record<string, unknown>>;
   }
   return _BlurView;
 }

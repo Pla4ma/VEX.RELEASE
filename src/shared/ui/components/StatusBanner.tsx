@@ -13,7 +13,7 @@ import {
   getStatusColor,
 } from './StatusFeedback.types';
 
-export const StatusBanner: React.FC<StatusFeedbackProps> = ({
+export const StatusBanner: React.ComponentType<StatusFeedbackProps> = ({
   status,
   message,
   description,

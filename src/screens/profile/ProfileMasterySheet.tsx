@@ -22,7 +22,7 @@ interface ProfileMasterySheetProps {
   challenges: Challenge[];
 }
 
-export const ProfileMasterySheet: React.FC<ProfileMasterySheetProps> = ({
+export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> = ({
   rankDisplay,
   totalMasteryPoints,
   challenges,

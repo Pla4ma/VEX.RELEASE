@@ -19,7 +19,7 @@ import {
   PhaseIndicators,
 } from './companion-evolution-effects';
 
-export const CompanionEvolutionCeremony: React.FC<
+export const CompanionEvolutionCeremony: React.ComponentType<
   CompanionEvolutionCeremonyProps
 > = ({ previousState, newPhase, onComplete }) => {
   const { theme } = useTheme();

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { Skeleton } from '@/shared/ui/primitives';
 import { useTheme } from '@/theme';
 import { getRarityColor, getAchievementDisplayInfo } from '@/features/achievements/definitions';
@@ -15,7 +16,7 @@ export interface AchievementWithStatus extends Achievement {
   completionPercentage: number;
 }
 
-export const AchievementCard: React.FC<{
+export const AchievementCard: React.ComponentType<{
   achievement: AchievementWithStatus;
   onPress: () => void;
 }> = ({ achievement, onPress }) => {
@@ -106,7 +107,7 @@ export const AchievementCard: React.FC<{
   );
 };
 
-export const AchievementSkeletonCard: React.FC = () => {
+export const AchievementSkeletonCard: React.ComponentType = () => {
   const { theme } = useTheme();
   return (
     <Box p={4} mx={4} my={2} borderRadius={16} bg={theme.colors.background.secondary}>
@@ -122,7 +123,7 @@ export const AchievementSkeletonCard: React.FC = () => {
   );
 };
 
-export const EmptyState: React.FC<{
+export const EmptyState: React.ComponentType<{
   onStartSession?: () => void;
 }> = ({ onStartSession }) => {
   const { theme } = useTheme();

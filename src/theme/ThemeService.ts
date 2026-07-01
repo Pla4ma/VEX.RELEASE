@@ -123,6 +123,7 @@ export class ThemeService {
   isSystemDarkModeSupported(): boolean {
     // Check if Appearance API is available
     try {
+      // SAFETY: require() defers React Native Appearance access until runtime availability is known.
       const { Appearance } = require('react-native');
       return Appearance !== undefined;
     } catch (error) {
@@ -140,6 +141,7 @@ export class ThemeService {
    */
   getSystemColorScheme(): 'light' | 'dark' | null {
     try {
+      // SAFETY: require() defers React Native Appearance access until runtime availability is known.
       const { Appearance } = require('react-native');
       return Appearance.getColorScheme();
     } catch (error) {
@@ -159,6 +161,7 @@ export class ThemeService {
     callback: (colorScheme: 'light' | 'dark' | null) => void,
   ): () => void {
     try {
+      // SAFETY: require() defers React Native Appearance access until runtime availability is known.
       const { Appearance } = require('react-native');
       const subscription = Appearance.addChangeListener(
         ({ colorScheme }: { colorScheme: 'light' | 'dark' | null }) => {

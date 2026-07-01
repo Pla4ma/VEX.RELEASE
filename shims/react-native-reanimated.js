@@ -5,13 +5,25 @@ import { Animated as RNAnimated, Easing as RNEasing } from 'react-native';
 
 const identity = (value) => value;
 const noop = () => {};
-function makeMutable(initialValue) {
+
+export function makeMutable(initialValue) {
   return { value: initialValue };
 }
+
 function runCallback(callback, value) {
   if (typeof callback === 'function') {
     callback(true, value);
   }
+}
+
+function makeTransition() {
+  const transition = {
+    delay: () => transition,
+    duration: () => transition,
+    easing: () => transition,
+    springify: () => transition,
+  };
+  return transition;
 }
 
 export const Easing = {
@@ -34,8 +46,8 @@ export const ReduceMotion = {
   System: 'system',
 };
 
-export const useSharedValue = createSharedValue;
-export const useDerivedValue = (factory) => createSharedValue(factory());
+export const useSharedValue = makeMutable;
+export const useDerivedValue = (factory) => makeMutable(factory());
 export const useAnimatedStyle = (factory) => factory();
 export const useAnimatedProps = (factory) => factory();
 export const useAnimatedRef = () => React.useRef(null);
@@ -62,11 +74,10 @@ export const withSequence = (...animations) => animations[animations.length - 1]
 export const cancelAnimation = noop;
 export const runOnJS = (fn) => fn;
 export const runOnUI = (fn) => fn;
-export const makeMutable = makeMutable;
 export const addWhitelistedUIProps = noop;
 export const addWhitelistedNativeProps = noop;
-    return value;
-  }
+
+export const interpolate = (value, inputRange, outputRange) => {
   const start = inputRange[0];
   const end = inputRange[inputRange.length - 1];
   const outStart = outputRange[0];
@@ -76,22 +87,9 @@ export const addWhitelistedNativeProps = noop;
   }
   const progress = Math.max(0, Math.min(1, (value - start) / (end - start)));
   return outStart + (outEnd - outStart) * progress;
-}
-
-export const interpolateColor = (_value, _inputRange, outputRange) =>
-  outputRange[0];
-
+};
+export const interpolateColor = (_value, _inputRange, outputRange) => outputRange[0];
 export const createAnimatedComponent = (component) => component;
-
-function makeTransition() {
-  const transition = {
-    delay: () => transition,
-    duration: () => transition,
-    easing: () => transition,
-    springify: () => transition,
-  };
-  return transition;
-}
 
 export const FadeIn = makeTransition();
 export const FadeInDown = makeTransition();
@@ -124,9 +122,9 @@ const Animated = {
   Image: RNAnimated.Image,
   ScrollView: RNAnimated.ScrollView,
   FlatList: RNAnimated.FlatList,
-  addWhitelistedUIProps: noop,
-  addWhitelistedNativeProps: noop,
-  makeMutable: makeMutable,
+  addWhitelistedUIProps,
+  addWhitelistedNativeProps,
+  makeMutable,
 };
 
 export default Animated;

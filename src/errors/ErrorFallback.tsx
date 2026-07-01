@@ -59,6 +59,7 @@ export function ErrorFallback({
       extra: { category, component: 'ErrorBoundary', action: 'restart' },
     });
     try {
+      // SAFETY: require() defers optional expo-updates native module access until recovery action.
       const { reloadAsync } = require('expo-updates');
       void reloadAsync();
     } catch {

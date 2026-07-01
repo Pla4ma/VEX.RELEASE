@@ -29,7 +29,7 @@ interface StreakFlameChainProps {
   }>;
 }
 
-export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({
+export const StreakFlameChain: React.ComponentType<StreakFlameChainProps> = ({
   currentStreak,
   longestStreak,
   isAtRisk,

@@ -1,7 +1,7 @@
 # VEX Native Glass & Atmosphere Architecture
 
-**Date:** June 23, 2026
-**Status:** Final Deliverable (Phase 10 Polish & QA)
+**Date:** June 27, 2026
+**Status:** Updated — @callstack/liquid-glass integration + 3-tier fallback
 
 This document describes the unified architecture of the VEX native glass material system.
 
@@ -9,7 +9,7 @@ This document describes the unified architecture of the VEX native glass materia
 
 All glass elements in VEX are built from four core primitives under `src/components/glass/native/`:
 
-1. **`glassAvailability.ts`**: Centralized capability detection.
+   - `canUseCallstackGlass()` returns `true` on iOS 26+ with `@callstack/liquid-glass` (real-time refraction, shimmer on touch, system-adaptive color scheme).
    - `canUseNativeGlass()` returns `true` on iOS 26+ devices that support the `UIVisualEffectView` native glass layer, and `false` on Android, Web, and in Jest testing environments.
 2. **`NativeGlassSurface.tsx`**: The main material wrapper.
    - Automatically chooses between the native `GlassView` (on iOS) and a high-fidelity `BlurView` + custom gradient overlay fallback on other platforms.
@@ -20,6 +20,15 @@ All glass elements in VEX are built from four core primitives under `src/compone
    - Multiplies native reflection sheens on select hero elements without rendering nested child contents.
 5. **`GlassSheetBackground.tsx`**: Reusable backdrop for `@gorhom/bottom-sheet`.
    - Passes standard layout styles through to `NativeGlassSurface variant="sheet"`.
+## 1b. 3-Tier Glass Fallback (NativeLiquidGlass)
+
+`NativeLiquidGlass` is the primary glass primitive for cards, buttons, and interactive surfaces. It uses a 3-tier fallback:
+
+1. **`@callstack/liquid-glass`** (iOS 26+) — Real-time refraction, shimmer on touch, system-adaptive color scheme. Preferred path.
+2. **`expo-glass-effect`** (iOS 26+ without callstack) — `GlassView` with `clear` style. Fallback for Expo managed workflow.
+3. **CSS fallback** (Android, Web, older iOS) — `BlurView` (intensity 42) + `LinearGradient` (white-to-transparent) + `atmosphericPearl` background.
+
+Module loading is lazy via `nativeModuleLoaders.ts` with try/catch fallbacks to `View`.
 
 ## 2. Atmosphere & Gradients Layer
 

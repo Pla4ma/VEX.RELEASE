@@ -37,12 +37,12 @@ function useUnreadNotificationsCount(_userId: string | null): UseQueryResult<num
     isPending: false,
     isEnabled: true,
     errorUpdateCount: 0,
-    promise: Promise.resolve(0) as unknown as Promise<number>,
+    promise: Promise.resolve(0) as Promise<number>,
     refetch: () => Promise.resolve({} as UseQueryResult<number>),
     status: 'success',
     fetchFailureCount: 0,
     isFetchedAfterReconnect: false,
-  } as unknown as UseQueryResult<number>;
+  } as UseQueryResult<number>;
 }
 
 interface NotificationBadgeProps {

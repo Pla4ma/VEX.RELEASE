@@ -8,7 +8,7 @@ import Animated, {
 import type { Theme } from '../../../theme';
 import { progressStepsStyles as styles, interpolateColor } from './progress-steps-styles';
 
-export const Connector: React.FC<{
+export const Connector: React.ComponentType<{
   completed: boolean;
   orientation: 'horizontal' | 'vertical';
   theme: Theme;

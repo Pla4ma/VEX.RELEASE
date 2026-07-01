@@ -1,4 +1,4 @@
-import { buildSessionCompletionHero, buildSessionCompletionReturnPlan } from '../service';
+import { buildSessionCompletionHero, buildSessionCompletionReturnPlan } from '../hero-return-plan';
 
 describe('buildSessionCompletionHero', () => {
   it('returns Clean finish for zero interruptions', () => {

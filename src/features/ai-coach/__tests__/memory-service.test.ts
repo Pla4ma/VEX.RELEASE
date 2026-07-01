@@ -45,6 +45,7 @@ describe('memory-service', () => {
       'Evening focus',
       'Strong sessions after 8 PM',
       { confidence: 0.8 },
+      null,
     );
     expect(eventBus.getHistory()).toEqual([
       expect.objectContaining({

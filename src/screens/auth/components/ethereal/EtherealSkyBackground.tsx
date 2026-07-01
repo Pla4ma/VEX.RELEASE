@@ -12,6 +12,7 @@ import Animated, {
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 const ENTRY_BACKGROUND = require('../../../../../assets/auth/vex-liquid-glass-entry-clean.png');
 
 export const EtherealSkyBackground = React.memo(function EtherealSkyBackground(): React.JSX.Element {

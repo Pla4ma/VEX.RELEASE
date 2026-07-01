@@ -24,7 +24,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AppearanceSettings'>;
 
-const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
+const AppearanceSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
   const { theme, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const [selectedTheme, setSelectedTheme] = useState<ThemeMode>(mode);

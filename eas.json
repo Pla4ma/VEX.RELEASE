@@ -10,10 +10,11 @@
       "channel": "development",
       "ios": { "resourceClass": "m-medium" },
       "android": { "resourceClass": "medium" },
-      "env": {
-        "APP_ENV": "development",
-        "EXPO_PUBLIC_ENVIRONMENT": "development",
-        "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1"
+        "env": {
+          "APP_ENV": "development",
+          "EXPO_PUBLIC_ENVIRONMENT": "development",
+          "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
+          "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     },
     "development-device": {
@@ -30,10 +31,11 @@
         "resourceClass": "m-medium",
         "simulator": true
       },
-      "env": {
-        "APP_ENV": "development",
-        "EXPO_PUBLIC_ENVIRONMENT": "development",
-        "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1"
+        "env": {
+          "APP_ENV": "development",
+          "EXPO_PUBLIC_ENVIRONMENT": "development",
+          "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
+          "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     },
     "preview": {
@@ -41,9 +43,10 @@
       "channel": "preview",
       "ios": { "resourceClass": "m-medium" },
       "android": { "resourceClass": "medium" },
-      "env": {
-        "APP_ENV": "preview",
-        "EXPO_PUBLIC_ENVIRONMENT": "staging"
+        "env": {
+          "APP_ENV": "preview",
+          "EXPO_PUBLIC_ENVIRONMENT": "staging",
+          "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     },
     "production": {
@@ -52,9 +55,10 @@
       "environment": "production",
       "ios": { "resourceClass": "m-large" },
       "android": { "resourceClass": "large" },
-      "env": {
-        "APP_ENV": "production",
-        "EXPO_PUBLIC_ENVIRONMENT": "production"
+        "env": {
+          "APP_ENV": "production",
+          "EXPO_PUBLIC_ENVIRONMENT": "production",
+          "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     }
   },

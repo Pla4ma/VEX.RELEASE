@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
+import { requireConfig } from '../_shared/config.ts';
 import { CompleteSessionRequestSchema, CompleteSessionResponseSchema, type CompleteSessionRequest, type CompleteSessionResponse } from './schemas.ts';
 
 const RATE_LIMIT_OPERATION = 'session:complete';
@@ -26,17 +27,19 @@ Deno.serve(async (request: Request) => {
   const startedAt = Date.now();
 
   // --- Server configuration ---
-  const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  let config: ReturnType<typeof requireConfig>;
+  try {
+    config = requireConfig();
+  } catch {
+    return respond({ success: false, error: { code: 'CONFIG_ERROR', message: 'Missing Supabase configuration' } }, 500, request);
+  }
 
   // --- Rate Limiting ---
-  if (!supabaseUrl || !serviceRoleKey) return respond({ success: false, error: { code: 'CONFIG_ERROR', message: 'Missing Supabase configuration' } }, 500, request);
-
   const rateLimit = await checkRateLimit(
     auth.user.id,
     RATE_LIMIT_OPERATION,
-    supabaseUrl,
-    serviceRoleKey,
+    config.SUPABASE_URL,
+    config.SUPABASE_SERVICE_ROLE_KEY,
     { maxRequests: RATE_LIMIT_MAX, windowSeconds: RATE_LIMIT_WINDOW },
   );
 
@@ -80,9 +83,7 @@ Deno.serve(async (request: Request) => {
   // Streak is now fully server-authoritative — no client-provided streakDays sent to RPC
 
   // --- Execute Server-Authoritative Completion ---
-  if (!supabaseUrl || !serviceRoleKey) return respond({ success: false, error: { code: 'CONFIG_ERROR', message: 'Missing Supabase configuration' } }, 500, request);
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
 
   const { data, error } = await supabase.rpc('complete_session', {
     p_user_id: auth.user.id,

@@ -25,7 +25,7 @@ interface ProgressionStatCardProps {
   progress?: number;
 }
 
-export const ProgressionStatCard: React.FC<ProgressionStatCardProps> = ({
+export const ProgressionStatCard: React.ComponentType<ProgressionStatCardProps> = ({
   label,
   orb,
   value,

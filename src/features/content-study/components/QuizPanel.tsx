@@ -7,7 +7,7 @@ import type { QuizPanelProps } from '../types';
 import { quizPanelStyles } from './QuizPanelStyles';
 import { QuizCard } from './QuizCard';
 
-export const QuizPanel: React.FC<QuizPanelProps> = ({
+export const QuizPanel: React.ComponentType<QuizPanelProps> = ({
   items,
   answers,
   activeId,

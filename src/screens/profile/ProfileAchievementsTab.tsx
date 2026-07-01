@@ -33,7 +33,7 @@ interface ProfileAchievementsTabProps {
   onStartSession: () => void;
 }
 
-export const ProfileAchievementsTab: React.FC<ProfileAchievementsTabProps> = ({
+export const ProfileAchievementsTab: React.ComponentType<ProfileAchievementsTabProps> = ({
   theme,
   isLoading,
   isError,

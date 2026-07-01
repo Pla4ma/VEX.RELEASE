@@ -23,7 +23,7 @@ interface EmptyStateProps {
   testID?: string;
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
+export const EmptyState: React.ComponentType<EmptyStateProps> = ({
   icon,
   title,
   description,
@@ -96,7 +96,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 };
 
 // Predefined empty states for common scenarios
-export const NoHistoryEmptyState: React.FC<{ onCreate: () => void }> = ({
+export const NoHistoryEmptyState: React.ComponentType<{ onCreate: () => void }> = ({
   onCreate,
 }) => (
   <EmptyState
@@ -109,7 +109,7 @@ export const NoHistoryEmptyState: React.FC<{ onCreate: () => void }> = ({
   />
 );
 
-export const NoDraftsEmptyState: React.FC<{ onCreate: () => void }> = ({
+export const NoDraftsEmptyState: React.ComponentType<{ onCreate: () => void }> = ({
   onCreate,
 }) => (
   <EmptyState
@@ -122,7 +122,7 @@ export const NoDraftsEmptyState: React.FC<{ onCreate: () => void }> = ({
   />
 );
 
-export const OfflineEmptyState: React.FC<{ onRetry: () => void }> = ({
+export const OfflineEmptyState: React.ComponentType<{ onRetry: () => void }> = ({
   onRetry,
 }) => (
   <EmptyState
@@ -135,7 +135,7 @@ export const OfflineEmptyState: React.FC<{ onRetry: () => void }> = ({
   />
 );
 
-export const ErrorEmptyState: React.FC<{
+export const ErrorEmptyState: React.ComponentType<{
   message: string;
   onRetry: () => void;
 }> = ({ message, onRetry }) => (

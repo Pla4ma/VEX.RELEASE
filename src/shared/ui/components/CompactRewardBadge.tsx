@@ -15,7 +15,7 @@ export interface CompactRewardBadgeProps {
   style?: ViewStyle;
 }
 
-export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
+export const CompactRewardBadge: React.ComponentType<CompactRewardBadgeProps> = ({
   type,
   amount,
   style,

@@ -59,17 +59,30 @@ function createSupabaseClient(): SupabaseClient {
       },
     });
   } catch (error: unknown) {
-    // createClient failed — Metro ESM/CJS interop or runtime initialization issue.
-    // Fall back to mock to prevent a hard crash.
+    // Tests and dev can use the mock client; production must not silently drop data.
     const message = error instanceof Error ? error.message : String(error);
     const stack = error instanceof Error ? error.stack : '';
     console.error(
-      '[supabase] createClient failed. Falling back to mock client. Error:',
+      '[supabase] createClient failed. Error:',
       message,
       '\nStack:',
       stack,
     );
-    return createMockSupabaseClient();
+
+    if (IS_JEST) {
+      console.warn('[Supabase] Jest environment — using mock client after createClient failure');
+      return createMockSupabaseClient();
+    }
+
+    if (__DEV__) {
+      console.warn('[Supabase] Development — using mock client after createClient failure');
+      return createMockSupabaseClient();
+    }
+
+    throw new Error(
+      `Failed to initialize Supabase client: ${message}. ` +
+        'The app cannot function without database connection.',
+    );
   }
 }
 

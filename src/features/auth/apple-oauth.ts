@@ -1,15 +1,17 @@
-import * as repository from './repository';
 import { UserSchema } from './schemas';
 import type { AuthResult } from './types';
+import * as repository from './repository';
 
-const NONCE_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
-const NONCE_LENGTH = 32;
-type AppleSignInOptions =
-  Parameters<typeof import('expo-apple-authentication').signInAsync>[0];
+type AppleSignInOptions = Parameters<
+  typeof import('expo-apple-authentication').signInAsync
+>[0];
+
 type AppleNoncePair = {
+  rawNonce: string;
   hashedNonce: string;
-  nonce: string;
 };
+
+const nonceAlphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
 
 function isMissingAppleModule(error: unknown): boolean {
   return error instanceof Error
@@ -17,7 +19,9 @@ function isMissingAppleModule(error: unknown): boolean {
 }
 
 function isAppleCancellation(error: unknown): boolean {
-  return error instanceof Error && error.message === 'ERR_REQUEST_CANCELED';
+  return error instanceof Error
+    && (error.message === 'ERR_REQUEST_CANCELED'
+      || error.message === 'The operation couldn’t be completed. (com.apple.AuthenticationServices.AuthorizationError error 1001.)');
 }
 
 function createAppleNonceBytes(): Uint8Array | null {
@@ -25,30 +29,28 @@ function createAppleNonceBytes(): Uint8Array | null {
   if (!getRandomValues) {
     return null;
   }
-  const bytes = new Uint8Array(NONCE_LENGTH);
+
+  const bytes = new Uint8Array(32);
   getRandomValues(bytes);
   return bytes;
 }
 
-function createAppleNonce(bytes: Uint8Array): string {
-  return Array.from(bytes)
-    .map((byte) => NONCE_ALPHABET[byte % NONCE_ALPHABET.length]!).join('');
+function bytesToHex(bytes: ArrayBuffer): string {
+  return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
 async function createAppleNoncePair(): Promise<AppleNoncePair | null> {
-  if (!globalThis.crypto?.subtle) {
-    return null;
-  }
   const bytes = createAppleNonceBytes();
-  if (!bytes) {
+  const digest = globalThis.crypto?.subtle?.digest?.bind(globalThis.crypto.subtle);
+  if (!bytes || !digest) {
     return null;
   }
-  const nonce = createAppleNonce(bytes);
-  const encoded = new TextEncoder().encode(nonce);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', encoded);
-  const hashedNonce = Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0')).join('');
-  return { hashedNonce, nonce };
+
+  const rawNonce = Array.from(bytes, byte => nonceAlphabet[byte % nonceAlphabet.length]).join('');
+  const encodedNonce = new TextEncoder().encode(rawNonce);
+  const hashedNonce = bytesToHex(await digest('SHA-256', encodedNonce));
+
+  return { rawNonce, hashedNonce };
 }
 
 export async function signInWithNativeApple(): Promise<AuthResult> {
@@ -62,12 +64,12 @@ export async function signInWithNativeApple(): Promise<AuthResult> {
 
     const noncePair = await createAppleNoncePair();
     const options: AppleSignInOptions = {
-      requestedScopes: [AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-        AppleAuthentication.AppleAuthenticationScope.EMAIL],
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+      ...(noncePair ? { nonce: noncePair.hashedNonce } : {}),
     };
-    if (noncePair) {
-      options.nonce = noncePair.hashedNonce;
-    }
     const credential = await AppleAuthentication.signInAsync(options);
 
     if (!credential.identityToken) {
@@ -76,10 +78,10 @@ export async function signInWithNativeApple(): Promise<AuthResult> {
 
     const result = await repository.signInWithAppleIdToken(
       credential.identityToken,
-      noncePair?.nonce ?? null,
+      noncePair?.rawNonce ?? null,
     );
     if (result.user) {
-      UserSchema.parse(result.user);
+      return { ...result, user: UserSchema.parse(result.user) };
     }
     return result;
   } catch (error) {
@@ -89,7 +91,7 @@ export async function signInWithNativeApple(): Promise<AuthResult> {
     if (isMissingAppleModule(error)) {
       return {
         user: null,
-        error: new Error('Apple sign in needs a rebuilt app before it can run.'),
+        error: new Error('Apple sign in needs a rebuilt app before it can run in app.'),
       };
     }
     return {

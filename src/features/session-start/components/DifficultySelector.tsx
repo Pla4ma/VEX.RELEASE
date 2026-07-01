@@ -136,10 +136,11 @@ function DifficultyCard({
             boxShadow: '0px 10px isSelected ? 18 : 10px theme.colors.semantic.shadow / isSelected ? 0.2 : 0.08',
           },
         ]}
-        accessibilityLabel={`${option.name} difficulty: ${option.pauseLimit} pauses, ${option.xpMultiplier} XP. ${option.description}`}
-        accessibilityRole="button"
-        accessibilityState={{ selected: isSelected }}
-      >
+accessibilityLabel={`${option.name} difficulty: ${option.pauseLimit} pauses, ${option.xpMultiplier} XP. ${option.description}`}
+accessibilityRole="button"
+accessibilityHint={`Selects ${option.name} difficulty`}
+accessibilityState={{ selected: isSelected }}
+>
         <SessionGlyph name={option.glyph} size={48} />
 
         <Text

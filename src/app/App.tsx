@@ -7,6 +7,15 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  Urbanist_400Regular,
+  Urbanist_500Medium,
+  Urbanist_600SemiBold,
+  Urbanist_700Bold,
+  Urbanist_800ExtraBold,
+  Urbanist_900Black,
+  useFonts,
+} from '@expo-google-fonts/urbanist';
 
 import { QueryProvider } from '../api/QueryProvider';
 import { initSentry, wireSentryToDebug } from '../config/sentry';
@@ -37,7 +46,11 @@ function useAppRuntimeBootstrap(): boolean {
         // Sentry init failure is non-fatal; already captured by ErrorBoundary
       }
 
-      await bootstrapApp();
+      try {
+        await bootstrapApp();
+      } catch {
+        // Startup services must not block rendering the app shell.
+      }
 
       try {
         initializeDevContrastChecker();
@@ -60,6 +73,7 @@ let GestureHandlerRootView: React.ComponentType<{
 
 if (Platform.OS !== 'web') {
   try {
+    // SAFETY: require() used dynamic/native lazy loading to avoid startup crashes before native module availability is known.
     const gestureHandler = require('react-native-gesture-handler');
     GestureHandlerRootView =
       gestureHandler.GestureHandlerRootView ||
@@ -73,8 +87,19 @@ if (Platform.OS !== 'web') {
 
 export function App() {
   const isReady = useAppRuntimeBootstrap();
+  const [fontsLoaded, fontError] = useFonts({
+    Urbanist_400Regular,
+    Urbanist_500Medium,
+    Urbanist_600SemiBold,
+    Urbanist_700Bold,
+    Urbanist_800ExtraBold,
+    Urbanist_900Black,
+  });
 
-  if (!isReady) {
+  // If fonts fail to load (e.g. web native module shim issue), proceed without them
+  const isFontReady = fontsLoaded || fontError != null;
+
+  if (!isReady || !isFontReady) {
     return (
       <GestureHandlerRootView style={rootViewStyle}>
         <View style={rootViewStyle} />

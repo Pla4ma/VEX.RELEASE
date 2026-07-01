@@ -4,7 +4,8 @@ import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { Skeleton } from '@/shared/ui/primitives';
 import { useTheme } from '@/theme';
 import { useAchievements, achievementKeys } from '@/features/achievements/hooks';

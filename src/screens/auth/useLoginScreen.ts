@@ -58,13 +58,24 @@ export function useLoginScreen(initialEmail: string) {
   const handleOAuthLogin = useCallback(async (
     provider: AuthOAuthProvider,
   ): Promise<void> => {
-    await buttonTap();
-    const success = await loginWithOAuth(provider);
-    if (!success) {
-      const authError = useAuthStore.getState().error ?? error;
+    try {
+      await buttonTap();
+      const success = await loginWithOAuth(provider);
+      if (!success) {
+        const authError = useAuthStore.getState().error ?? error;
+        showToast({
+          duration: 4000,
+          message: authError ?? `Try ${provider} again, or use email to enter VEX.`,
+          title: 'Social sign in failed',
+          type: 'error',
+        });
+      }
+    } catch (caught) {
       showToast({
         duration: 4000,
-        message: authError ?? `Try ${provider} again, or use email to enter VEX.`,
+        message: caught instanceof Error
+          ? caught.message
+          : `Try ${provider} again, or use email to enter VEX.`,
         title: 'Social sign in failed',
         type: 'error',
       });

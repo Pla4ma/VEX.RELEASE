@@ -10,6 +10,7 @@ interface RealisticModeOrbProps {
   size?: number;
 }
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 const ORB_ASSETS: Record<RealisticModeOrbMode, ImageSourcePropType> = {
   sprint: require('../../../assets/water/vex_orb_sprint_orange_v1.png'),
   light: require('../../../assets/water/vex_orb_light_focus_v1.png'),

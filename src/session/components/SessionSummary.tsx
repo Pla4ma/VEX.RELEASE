@@ -19,7 +19,7 @@ interface SessionSummaryProps {
   onStartNew?: () => void;
 }
 
-export const SessionSummary: React.FC<SessionSummaryProps> = ({
+export const SessionSummary: React.ComponentType<SessionSummaryProps> = ({
   summary,
   onClose,
   onShare,

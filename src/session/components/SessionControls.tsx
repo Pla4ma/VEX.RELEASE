@@ -12,7 +12,7 @@ interface SessionControlsProps {
   onAbandon: () => void;
   disabled?: boolean;
 }
-export const SessionControls: React.FC<SessionControlsProps> = ({
+export const SessionControls: React.ComponentType<SessionControlsProps> = ({
   isActive,
   isPaused,
   onStart,

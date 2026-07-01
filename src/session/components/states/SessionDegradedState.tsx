@@ -15,7 +15,7 @@ interface SessionDegradedStateProps {
   onRetryFullMode?: () => void;
   onEndSession?: () => void;
 }
-export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
+export const SessionDegradedState: React.ComponentType<SessionDegradedStateProps> = ({
   reason,
   features,
   onContinueAnyway,

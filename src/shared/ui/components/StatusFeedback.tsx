@@ -9,7 +9,7 @@ export { StatusBanner }
 export { CardStatusOverlay }
 export type { AsyncStatus, StatusFeedbackProps } from './StatusFeedback.types';
 
-export const StatusFeedback: React.FC<StatusFeedbackProps> = (props) => {
+export const StatusFeedback: React.ComponentType<StatusFeedbackProps> = (props) => {
   switch (props.variant) {
     case 'inline':
       return (

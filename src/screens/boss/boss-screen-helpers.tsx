@@ -58,7 +58,7 @@ export const nextResetLabel = (): string => {
   return `${d}d ${h}h`;
 };
 
-export const BossFallback: React.FC<{
+export const BossFallback: React.ComponentType<{
   intensity: string;
   onStartSession: () => void;
   unlockReason: string;

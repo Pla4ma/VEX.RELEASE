@@ -12,7 +12,7 @@ interface SkeletonLinesProps {
   backgroundColor: string;
 }
 
-export const SkeletonLines: React.FC<SkeletonLinesProps> = ({
+export const SkeletonLines: React.ComponentType<SkeletonLinesProps> = ({
   lines,
   width,
   height,

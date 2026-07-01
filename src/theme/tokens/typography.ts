@@ -3,8 +3,8 @@ import type { FontFamilies, FontWeights, TypographyScale } from '../types';
 import { lightColors } from './primary-palette';
 
 export const fontFamilies: FontFamilies = {
-  primary: 'Inter',
-  secondary: 'Inter',
+  primary: 'Urbanist_400Regular',
+  secondary: 'Urbanist_600SemiBold',
   mono: 'JetBrains Mono',
 };
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
-import { Box, Text, Card } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -22,7 +24,7 @@ interface ColorSchemeToggleProps {
 }
 
               
-export const ColorSchemeToggle: React.FC<ColorSchemeToggleProps> = ({
+export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
   accentColor,
   onAccentColorChange,
   timerFormat,

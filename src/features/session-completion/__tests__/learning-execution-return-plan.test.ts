@@ -1,4 +1,4 @@
-import { buildSessionCompletionReturnPlan } from '../service';
+import { buildSessionCompletionReturnPlan } from '../hero-return-plan';
 
 describe('learning execution completion return plan', () => {
   it('uses plan wording instead of school-only copy for tied follow-ups', () => {

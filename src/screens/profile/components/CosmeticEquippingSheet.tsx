@@ -36,7 +36,7 @@ interface CosmeticEquippingSheetProps {
   style?: ViewStyle;
 }
 
-export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
+export const CosmeticEquippingSheet: React.ComponentType<CosmeticEquippingSheetProps> = ({
   type,
   items,
   visible,

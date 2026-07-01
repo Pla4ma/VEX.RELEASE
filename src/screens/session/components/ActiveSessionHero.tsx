@@ -41,7 +41,7 @@ type ActiveSessionHeroProps = {
   isReducedMotion: boolean;
 };
 
-export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = ({
+export const ActiveSessionHero: React.ComponentType<ActiveSessionHeroProps> = ({
   viewModel,
   progressRingProps,
   themeColors,

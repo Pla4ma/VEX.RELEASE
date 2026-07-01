@@ -9,7 +9,7 @@ interface SessionErrorActionsProps {
   onContactSupport?: () => void;
 }
 
-export const SessionErrorActions: React.FC<SessionErrorActionsProps> = ({
+export const SessionErrorActions: React.ComponentType<SessionErrorActionsProps> = ({
   onRetry,
   onGoBack,
   onContactSupport,

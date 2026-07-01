@@ -22,7 +22,7 @@ import {
   getFieldMessageColor,
 } from './FormFieldTypes';
 
-export const FormField: React.FC<FormFieldProps> = ({
+export const FormField: React.ComponentType<FormFieldProps> = ({
   label,
   placeholder,
   error,

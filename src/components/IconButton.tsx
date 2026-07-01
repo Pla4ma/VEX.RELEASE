@@ -35,7 +35,7 @@ const ICON_SIZE_MAP = {
   lg: 24,
 };
 
-export const IconButton: React.FC<IconButtonProps> = ({
+export const IconButton: React.ComponentType<IconButtonProps> = ({
   icon,
   size = 'md',
   variant = 'default',

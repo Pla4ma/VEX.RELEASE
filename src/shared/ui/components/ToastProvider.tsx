@@ -23,7 +23,7 @@ export const useToast = (): ToastContextValue => {
   return context;
 };
 
-export const ToastProvider: React.FC<ToastProviderProps> = ({
+export const ToastProvider: React.ComponentType<ToastProviderProps> = ({
   children,
   maxToasts = 3,
 }) => {

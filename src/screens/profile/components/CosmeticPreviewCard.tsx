@@ -39,7 +39,7 @@ export const RARITY_COLORS: Record<string, string> = {
 
 export const RARITY_ORDER = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
 
-export const CosmeticPreviewCard: React.FC<{
+export const CosmeticPreviewCard: React.ComponentType<{
   item: CosmeticItem;
   isSelected: boolean;
   isEquipped: boolean;

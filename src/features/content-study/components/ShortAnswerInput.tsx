@@ -17,7 +17,7 @@ interface ShortAnswerInputProps {
   onSubmit: () => void;
 }
 
-export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
+export const ShortAnswerInput: React.ComponentType<ShortAnswerInputProps> = ({
   value,
   onChangeText,
   onSubmit,

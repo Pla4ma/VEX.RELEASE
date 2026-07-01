@@ -65,7 +65,7 @@ const getTypeColors = (theme: ReturnType<typeof useTheme>['theme']) => ({
     icon: lightColors.semantic.danger,
   },
 });
-export const Toast: React.FC<ToastProps> = ({
+export const Toast: React.ComponentType<ToastProps> = ({
   message,
   type = 'info',
   position = 'top',

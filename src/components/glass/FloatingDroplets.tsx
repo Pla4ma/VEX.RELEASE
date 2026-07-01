@@ -13,7 +13,7 @@ interface FloatingDropletsProps {
   size?: number;
 }
 
-export const FloatingDroplets: React.FC<FloatingDropletsProps> = ({
+export const FloatingDroplets: React.ComponentType<FloatingDropletsProps> = ({
   count = 3,
   top,
   left,

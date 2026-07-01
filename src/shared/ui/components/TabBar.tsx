@@ -11,7 +11,7 @@ import { styles } from './TabBar.styles';
 import { TabItemComponent } from './TabItemComponent';
 import { Breadcrumb } from './Breadcrumb';
 
-export const TabBar: React.FC<TabBarProps> = ({
+export const TabBar: React.ComponentType<TabBarProps> = ({
   tabs,
   activeTab,
   onChange,

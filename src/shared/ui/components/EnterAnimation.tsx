@@ -30,7 +30,7 @@ export interface StaggeredEnterProps {
   containerStyle?: ViewStyle;
 }
 
-export const EnterAnimation: React.FC<EnterAnimationProps> = ({
+export const EnterAnimation: React.ComponentType<EnterAnimationProps> = ({
   children,
   direction = 'up',
   speed = 'normal',
@@ -58,7 +58,7 @@ export const EnterAnimation: React.FC<EnterAnimationProps> = ({
   );
 };
 
-export const StaggeredEnter: React.FC<StaggeredEnterProps> = ({
+export const StaggeredEnter: React.ComponentType<StaggeredEnterProps> = ({
   children,
   direction = 'up',
   speed = 'normal',
@@ -105,7 +105,7 @@ export interface CardEnterAnimationProps {
   style?: ViewStyle;
 }
 
-export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
+export const CardEnterAnimation: React.ComponentType<CardEnterAnimationProps> = ({
   children,
   index = 0,
   total: _total = 1,
@@ -123,7 +123,7 @@ export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
   );
 };
 
-export const ScreenEnterAnimation: React.FC<{
+export const ScreenEnterAnimation: React.ComponentType<{
   children: React.ReactNode;
   style?: ViewStyle;
 }> = ({ children, style }) => {
@@ -138,7 +138,7 @@ export const ScreenEnterAnimation: React.FC<{
   );
 };
 
-export const HeroEnterAnimation: React.FC<{
+export const HeroEnterAnimation: React.ComponentType<{
   children: React.ReactNode;
   delay?: number;
   style?: ViewStyle;

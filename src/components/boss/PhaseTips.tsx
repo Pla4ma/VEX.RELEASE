@@ -28,7 +28,7 @@ const PHASE_TIPS: Record<string, string[]> = {
   EXECUTE: ['Final window', 'FINAL PUSH REQUIRED', 'All or nothing'],
 };
 
-export const PhaseTips: React.FC<{ phase: BossPhase }> = ({ phase }) => {
+export const PhaseTips: React.ComponentType<{ phase: BossPhase }> = ({ phase }) => {
   const phaseTips = PHASE_TIPS[phase] ?? PHASE_TIPS.PHASE_1 ?? [];
   return (
     <View>

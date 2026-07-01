@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator<SessionStackParams>();
 /**
  * Session navigator - Core Focus Loop
  */
-export const SessionNavigator: React.FC = () => {
+export const SessionNavigator: React.ComponentType = () => {
   useEffect(() => {
     initializeSessionRuntime();
   }, []);
@@ -33,12 +33,14 @@ export const SessionNavigator: React.FC = () => {
       <Stack.Screen
         name="SessionSetup"
         getComponent={() =>
+          // SAFETY: require() keeps session screens lazy-loaded for navigation startup performance.
           require('../screens/session/SessionSetupScreen').SessionSetupScreen
         }
       />
       <Stack.Screen
         name="ActiveSession"
         getComponent={() =>
+          // SAFETY: require() keeps session screens lazy-loaded for navigation startup performance.
           require('../screens/session/ActiveSessionScreen').ActiveSessionScreen
         }
         options={{ gestureEnabled: false }}
@@ -46,6 +48,7 @@ export const SessionNavigator: React.FC = () => {
       <Stack.Screen
         name="SessionComplete"
         getComponent={() =>
+          // SAFETY: require() keeps session screens lazy-loaded for navigation startup performance.
           require('../screens/session/SessionCompleteScreen')
             .SessionCompleteScreen
         }
@@ -53,6 +56,7 @@ export const SessionNavigator: React.FC = () => {
       <Stack.Screen
         name="SessionHistory"
         getComponent={() =>
+          // SAFETY: require() keeps session screens lazy-loaded for navigation startup performance.
           require('../screens/session/SessionHistoryScreen')
             .SessionHistoryScreen
         }

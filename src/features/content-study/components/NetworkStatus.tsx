@@ -21,7 +21,7 @@ interface NetworkStatusProps {
   onDismiss?: () => void;
 }
 
-export const NetworkStatus: React.FC<NetworkStatusProps> = ({
+export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
   isOffline,
   isSlowConnection,
   pendingSyncCount,
@@ -109,7 +109,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
 };
 
 // Inline network indicator for inline usage
-export const InlineNetworkIndicator: React.FC<{
+export const InlineNetworkIndicator: React.ComponentType<{
   isOffline: boolean;
   size?: 'sm' | 'md';
 }> = ({ isOffline, size = 'sm' }) => {

@@ -50,7 +50,7 @@ const TEXT_COLOR_FOR: Record<GlassPillVariant, string> = {
 
 const SELECTED_TEXT_COLOR = vexLightGlass.text.inverse;
 
-export const GlassPill: React.FC<GlassPillProps> = React.memo(function GlassPill({
+export const GlassPill: React.ComponentType<GlassPillProps> = React.memo(function GlassPill({
   label,
   selected = false,
   variant = 'neutral',

@@ -9,7 +9,7 @@ import { GAMBLE_SUCCESS_GRADES, GAMBLE_BONUS_XP } from './types';
 import { PromptView } from './PromptView';
 import { GamblingView, WonView, LostView } from './OutcomeViews';
 
-const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({
+const StreakGamblePrompt: React.ComponentType<StreakGamblePromptProps> = ({
   streakDays,
   hoursRemaining,
   shieldsAvailable,

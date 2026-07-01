@@ -113,6 +113,7 @@ export function createRuntimeMMKV(
   }
 
   try {
+    // SAFETY: require() defers native MMKV access so unsupported runtimes can fall back cleanly.
     const { MMKV } = require('react-native-mmkv');
     return new MMKV(configuration);
   } catch (error) {

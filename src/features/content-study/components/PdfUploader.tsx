@@ -26,7 +26,7 @@ import { CONTENT_STUDY_CONSTANTS } from '../types';
 import { styles } from './PdfUploader.styles';
 import { PdfUploaderFileCard } from './PdfUploaderFileCard';
 
-export const PdfUploader: React.FC<PdfUploaderProps> = ({
+export const PdfUploader: React.ComponentType<PdfUploaderProps> = ({
   selectedFile,
   onFileSelect,
   disabled = false,

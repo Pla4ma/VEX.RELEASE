@@ -2,7 +2,7 @@ import { SessionMode } from '../../../session/modes';
 import {
   buildCompletionPersonalization,
   buildCompletionPersonalizationResult,
-} from '../service';
+} from '../completion-personalization';
 import { createSessionSummary } from './ledger-test-utils';
 import {
   LANES,

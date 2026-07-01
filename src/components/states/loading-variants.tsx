@@ -5,7 +5,7 @@
  */
 import { Skeleton } from '../ui/Skeleton';
 
-export const Spinner: React.FC<{ size: number; color: string }> = ({
+export const Spinner: React.ComponentType<{ size: number; color: string }> = ({
   size,
   color,
 }) => {

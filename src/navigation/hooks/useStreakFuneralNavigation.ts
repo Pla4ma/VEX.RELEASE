@@ -180,7 +180,7 @@ export function useStreakFuneralNavigation({
     }
 
     setLastFuneralShown();
-    navigateToRootScreen(navigationRef as unknown as NavigationProp<RootStackParams>, 'StreakFuneral', currentData);
+    navigateToRootScreen(navigationRef as NavigationProp<RootStackParams>, 'StreakFuneral', currentData);
     setShowStreakFuneral(false);
     setStreakFuneralData(null);
   }, [

@@ -8,7 +8,8 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import { achievementUnlocked } from '@/utils/haptics';
 import type { AchievementRarity } from '../types';
@@ -29,7 +30,7 @@ interface AchievementUnlockToastProps {
   onDismiss: () => void;
   visible: boolean;
 }
-export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
+export const AchievementUnlockToast: React.ComponentType<AchievementUnlockToastProps> = ({
   achievement,
   onPress,
   onDismiss,

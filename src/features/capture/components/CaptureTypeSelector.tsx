@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { spacing } from '../../../theme/tokens/spacing';
 import { springPresets } from '../../../theme/tokens/motion';
@@ -63,6 +64,7 @@ function CaptureTypeButton({
   onPress: () => void;
 }): React.ReactNode {
   const scale = useSharedValue(1);
+  const { isReducedMotion } = useReducedMotion();
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -73,10 +75,12 @@ function CaptureTypeButton({
   }));
 
   const handlePressIn = () => {
+    if (isReducedMotion) {return;}
     scale.value = withSpring(0.92, springPresets.tactile);
   };
 
   const handlePressOut = () => {
+    if (isReducedMotion) {return;}
     scale.value = withSpring(1, springPresets.tactile);
   };
 
@@ -100,6 +104,7 @@ function CaptureTypeButton({
         onPressOut={handlePressOut}
         accessibilityLabel={item.label}
         accessibilityRole="button"
+        accessibilityHint={`Selects ${item.label.toLowerCase()} capture mode`}
         accessibilityState={{ selected: isSelected }}
         style={{ alignItems: 'center', gap: spacing[2] }}
       >

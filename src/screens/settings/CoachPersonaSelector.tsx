@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
-import { Box, Text, Card } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
 import { lightColors } from '@/theme/tokens/colors';
 
@@ -18,7 +20,7 @@ interface CoachPersonaSelectorProps {
   onSelectPersona: (persona: CoachPersona) => void;
 }
 
-export const CoachPersonaSelector: React.FC<CoachPersonaSelectorProps> = ({
+export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps> = ({
   selectedPersona,
   onSelectPersona,
 }) => {

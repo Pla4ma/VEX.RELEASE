@@ -24,7 +24,7 @@ const Stack = createNativeStackNavigator<SettingsStackParams>();
 /**
  * Settings navigator component
  */
-export const SettingsNavigator: React.FC = () => {
+export const SettingsNavigator: React.ComponentType = () => {
   return (
     <Stack.Navigator
       screenOptions={{

@@ -12,7 +12,7 @@ interface CrystalAvatarProps {
   active?: boolean;
 }
 
-export const CrystalAvatar: React.FC<CrystalAvatarProps> = ({
+export const CrystalAvatar: React.ComponentType<CrystalAvatarProps> = ({
   size = 72,
   top,
   left,

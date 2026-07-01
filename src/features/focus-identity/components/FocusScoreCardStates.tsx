@@ -96,6 +96,8 @@ export function FocusScoreCardError({
         onPress={() => retry?.()}
         disabled={isRetrying}
         accessibilityLabel={isRetrying ? 'Retrying...' : 'Try Again'}
+        accessibilityRole="button"
+        accessibilityHint="Retries loading your Focus Score"
         style={{
           paddingHorizontal: 16,
           paddingVertical: 8,

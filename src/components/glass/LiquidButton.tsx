@@ -6,6 +6,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { springPresets } from '../../theme/tokens/motion';
 import { buttonTap, triggerHaptic } from '../../utils/haptics';
@@ -17,6 +18,7 @@ import {
   type LiquidButtonVariant,
 } from './LiquidButton.tokens';
 import { LiquidButtonGlassEffects } from './LiquidButton.effects';
+import { NativeLiquidGlass } from './native/NativeLiquidGlass';
 
 export type { LiquidButtonSize, LiquidButtonVariant };
 
@@ -35,7 +37,6 @@ interface LiquidButtonProps {
   testID?: string;
 }
 
-        
 export function LiquidButton({
   label,
   onPress,
@@ -52,10 +53,13 @@ export function LiquidButton({
 }: LiquidButtonProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
   const scale = useSharedValue(1);
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+  const s = LIQUID_SIZE[size];
+  const v = resolveLiquidVariant(variant, false);
+  const isPrimary =
+    variant === 'primary' || variant === 'fire' || variant === 'ocean';
 
   const onPressIn = (): void => {
     if (!isReducedMotion) {
@@ -63,13 +67,11 @@ export function LiquidButton({
     }
     buttonTap();
   };
-
   const onPressOut = (): void => {
     if (!isReducedMotion) {
       scale.value = withSpring(1, springPresets.settle);
     }
   };
-
   const onActualPress = (): void => {
     if (!disabled) {
       triggerHaptic('impactLight');
@@ -77,14 +79,12 @@ export function LiquidButton({
     }
   };
 
-  const s = LIQUID_SIZE[size];
-  const v = resolveLiquidVariant(variant, false);
-  const isPrimary =
-    variant === 'primary' || variant === 'fire' || variant === 'ocean';
-
   return (
     <Animated.View
-      style={[{ borderRadius: 999, width: fullWidth ? '100%' : undefined }, animatedStyle]}
+      style={[
+        { borderRadius: 999, width: fullWidth ? '100%' : undefined },
+        animatedStyle,
+      ]}
     >
       <Pressable
         accessibilityHint={accessibilityHint ?? `Activates ${label}`}
@@ -96,49 +96,57 @@ export function LiquidButton({
         onPressIn={onPressIn}
         onPressOut={onPressOut}
         testID={testID}
-        style={({ pressed: isPressed }) => {
-          const liveV = resolveLiquidVariant(variant, isPressed);
-          return [{
-            alignItems: 'center',
-            alignSelf: fullWidth ? 'stretch' : 'flex-start',
-            backgroundColor: liveV.background ?? 'transparent',
-            borderColor: liveV.borderColor ?? 'transparent',
-            borderRadius: 999,
-            borderWidth: liveV.borderColor ? 1.2 : 0,
-            elevation: isPrimary ? 4 : 2,
-            flexDirection: 'row',
-            gap: 8,
-            justifyContent: 'center',
-            minHeight: s.minHeight,
-            opacity: disabled ? 0.55 : 1,
-            overflow: 'hidden',
-            paddingHorizontal: s.paddingH,
-            paddingVertical: s.paddingV,
-            shadowColor: isPrimary ? liveV.shadowColor : liveV.shadowColor,
-            shadowOffset: { width: 0, height: isPrimary ? 8 : 3 },
-            shadowOpacity: isPrimary ? 0.28 : 0.14,
-            shadowRadius: isPrimary ? 12 : 6,
-          }];
+        style={({ pressed }) => {
+          const liveV = resolveLiquidVariant(variant, pressed);
+          return [
+            {
+              alignItems: 'center',
+              alignSelf: fullWidth ? 'stretch' : 'flex-start',
+              backgroundColor: liveV.background ?? 'transparent',
+              borderColor: liveV.borderColor ?? 'transparent',
+              borderRadius: 999,
+              borderWidth: liveV.borderColor ? 1.2 : 0,
+              elevation: isPrimary ? 4 : 2,
+              flexDirection: 'row',
+              gap: 8,
+              justifyContent: 'center',
+              minHeight: s.minHeight,
+              opacity: disabled ? 0.55 : 1,
+              overflow: 'hidden',
+              paddingHorizontal: s.paddingH,
+              paddingVertical: s.paddingV,
+              shadowColor: liveV.shadowColor,
+              shadowOffset: { width: 0, height: isPrimary ? 8 : 3 },
+              shadowOpacity: isPrimary ? 0.28 : 0.14,
+              shadowRadius: isPrimary ? 12 : 6,
+            },
+          ];
         }}
       >
         <LinearGradient
           colors={v.gradientColors as readonly [string, string, ...string[]]}
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
-          style={{
-            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          }}
+          style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }}
         />
-
+        <NativeLiquidGlass
+          interactive={!disabled}
+          radius={999}
+          tintColor={
+            isPrimary
+              ? 'rgba(24, 184, 148, 0.22)'
+              : 'rgba(255, 255, 255, 0.28)'
+          }
+          style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }}
+        />
         <LiquidButtonGlassEffects variant={variant} isPrimary={isPrimary} />
-
         {leftIcon}
         <Text
           style={{
             color: v.textColor,
             fontSize: s.fontSize,
             fontWeight: '800',
-            letterSpacing: 0.2,
+            letterSpacing: 0,
             textShadowColor: isPrimary ? 'rgba(6, 67, 56, 0.18)' : undefined,
             textShadowOffset: isPrimary ? { width: 0, height: 1 } : undefined,
             textShadowRadius: isPrimary ? 2 : undefined,
@@ -147,13 +155,7 @@ export function LiquidButton({
           {label}
         </Text>
         {subLabel ? (
-          <Text
-            style={{
-              color: v.textColor,
-              fontSize: 12,
-              opacity: 0.78,
-            }}
-          >
+          <Text style={{ color: v.textColor, fontSize: 12, opacity: 0.78 }}>
             {subLabel}
           </Text>
         ) : null}

@@ -26,27 +26,22 @@ export function setupGlobalErrorHandler(): void {
 }
 
 export function setupRejectionHandler(): void {
-  try {
-    const tracking = require('promise/setimmediate/rejection-tracking');
-    tracking.enable({
-      allRejections: true,
-      onUnhandled: (_id: string, error: Error) => {
-        debug.error('Unhandled promise rejection', error);
-        captureException(error, { area: 'unhandledRejection' });
-      },
-      onHandled: () => {},
-    });
-  } catch (error: unknown) {
-    globalThis.addEventListener?.(
-      'unhandledrejection',
-      (event: PromiseRejectionEvent) => {
-        const rejectionError =
-          event.reason instanceof Error
-            ? event.reason
-            : new Error(String(event.reason));
-        debug.error('Unhandled promise rejection (fallback)', rejectionError);
-        captureException(rejectionError, { area: 'unhandledRejectionFallback' });
-      },
-    );
+  const addEventListener = globalThis.addEventListener;
+  if (typeof addEventListener !== 'function') {
+    return;
   }
+
+  addEventListener.call(
+    globalThis,
+    'unhandledrejection',
+    (event: Event) => {
+      const reason = 'reason' in event ? event.reason : event;
+      const rejectionError =
+        reason instanceof Error
+          ? reason
+          : new Error(String(reason));
+      debug.error('Unhandled promise rejection', rejectionError);
+      captureException(rejectionError, { area: 'unhandledRejection' });
+    },
+  );
 }

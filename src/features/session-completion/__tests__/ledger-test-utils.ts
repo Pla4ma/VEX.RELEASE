@@ -113,5 +113,6 @@ export function createLedgerRow(
     timezone: ledger.timezone,
     user_id: ledger.userId,
     xp_delta: ledger.xpDelta,
+    ledger_payload: ledger,
   };
 }

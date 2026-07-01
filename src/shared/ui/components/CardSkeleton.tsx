@@ -11,7 +11,7 @@ import { Skeleton } from '../state-components/skeleton';
 import type { CardVariant, CardSize } from './InteractiveCardTypes';
 import { cardStyles as styles } from './InteractiveCardStyles';
 
-export const CardSkeleton: React.FC<{
+export const CardSkeleton: React.ComponentType<{
   variant?: CardVariant;
   size?: CardSize;
   lines?: number;

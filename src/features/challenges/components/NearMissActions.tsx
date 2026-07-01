@@ -1,6 +1,8 @@
 import React from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Box, Text, Button } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box';
+import { Text } from '@/components/primitives/Text';
+import { Button } from '@/components/primitives/Button';
 import { formatTimeUntil } from './near-miss-helpers';
 import { Text as VexText } from '../../../components/primitives/Text';
 
@@ -18,7 +20,7 @@ interface NearMissActionsProps {
   infoColor: string;
 }
 
-export const NearMissActions: React.FC<NearMissActionsProps> = ({
+export const NearMissActions: React.ComponentType<NearMissActionsProps> = ({
   userName,
   progressPercent,
   hoursUntilNext,

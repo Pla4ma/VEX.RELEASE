@@ -19,7 +19,7 @@ interface CreatePresetFormProps {
   onCreate: (name: string, durationSeconds: number) => void;
 }
 
-export const CreatePresetForm: React.FC<CreatePresetFormProps> = ({
+export const CreatePresetForm: React.ComponentType<CreatePresetFormProps> = ({
   visible,
   onClose,
   onCreate,

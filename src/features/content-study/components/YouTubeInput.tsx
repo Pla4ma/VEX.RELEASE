@@ -10,7 +10,7 @@ import { styles } from './YouTubeInputStyles';
 import { buttonTap } from '../../../utils/haptics';
 import { YouTubeVideoPreview } from './YouTubeVideoPreview';
 
-export const YouTubeInput: React.FC<YouTubeInputProps> = ({
+export const YouTubeInput: React.ComponentType<YouTubeInputProps> = ({
   value,
   onChange,
   onValidationChange,

@@ -31,33 +31,33 @@ export function navigateFromSafeIntent(
       return navigateToRescueSession(navigation, params);
     case 'OPEN_BOSS': {
       if (!canUseFeature(featureAccess, 'boss_tab')) {return blocked('Boss');}
-      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'Boss');
+      navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Boss');
       return { success: true, screen: 'Boss' };
     }
     case 'OPEN_PROGRESS':
-      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Progress');
+      navigateToMainTab(navigation as NavigationProp<RootStackParams>, 'Progress');
       return { success: true, screen: 'Progress' };
     case 'OPEN_PROFILE':
-      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Profile');
+      navigateToMainTab(navigation as NavigationProp<RootStackParams>, 'Profile');
       return { success: true, screen: 'Profile' };
     case 'OPEN_COACH': {
       if (!canUseFeature(featureAccess, 'ai_coach_advanced'))
         {return blocked('AICoach');}
-      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'AICoach');
+      navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'AICoach');
       return { success: true, screen: 'AICoach' };
     }
     case 'OPEN_STUDY_LAYER': {
       if (!canUseFeature(featureAccess, 'content_study'))
         {return blocked('ContentStudy');}
-      navigateToMainStackScreen(navigation as unknown as NavigationProp<MainStackParams>, 'ContentStudy');
+      navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'ContentStudy');
       return { success: true, screen: 'ContentStudy' };
     }
     case 'OPEN_SETTINGS':
-      navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Settings');
+      navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Settings');
       return { success: true, screen: 'Settings' };
     case 'OPEN_HOME':
     default:
-      navigateToMainTab(navigation as unknown as NavigationProp<RootStackParams>, 'Home');
+      navigateToMainTab(navigation as NavigationProp<RootStackParams>, 'Home');
       return { success: true, screen: 'Home' };
   }
 }

@@ -12,7 +12,7 @@ interface EmailChangeSectionProps {
   email: string | undefined;
 }
 
-export const EmailChangeSection: React.FC<EmailChangeSectionProps> = ({
+export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = ({
   email,
 }) => {
   const { theme } = useTheme();

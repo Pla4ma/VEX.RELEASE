@@ -17,14 +17,26 @@ export function NotificationCenter({
   const unreadCount = notifications.filter((n) => !n.read).length;
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.overlay}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+      <Pressable
+        style={StyleSheet.absoluteFill}
+        onPress={onClose}
+        accessibilityLabel="Close notifications"
+        accessibilityRole="button"
+        accessibilityHint="Closes the notification center"
+      />
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>
             Notifications {unreadCount > 0 && `(${unreadCount})`}
           </Text>
           {unreadCount > 0 && (
-            <Pressable style={styles.markAllButton} onPress={onMarkAllRead}>
+            <Pressable
+              style={styles.markAllButton}
+              onPress={onMarkAllRead}
+              accessibilityLabel="Mark all notifications read"
+              accessibilityRole="button"
+              accessibilityHint="Marks every notification as read"
+            >
               <Text style={styles.markAllText}>Mark all read</Text>
             </Pressable>
           )}
@@ -39,6 +51,13 @@ export function NotificationCenter({
               <Pressable
                 key={notification.id}
                 style={styles.notificationItem}
+                accessibilityLabel={notification.title}
+                accessibilityRole="button"
+                accessibilityHint={
+                  notification.action
+                    ? 'Opens this notification action'
+                    : 'Marks this notification as read'
+                }
                 onPress={() => {
                   if (!notification.read) {
                     onMarkRead(notification.id);
@@ -79,6 +98,9 @@ export function NotificationCenter({
                     <Pressable
                       style={styles.actionButton}
                       onPress={() => onAction(notification)}
+                      accessibilityLabel={notification.action.type}
+                      accessibilityRole="button"
+                      accessibilityHint="Runs this notification action"
                     >
                       <Text style={styles.actionButtonText}>
                         {notification.action.type === 'start_session' &&
@@ -95,6 +117,8 @@ export function NotificationCenter({
                 <Pressable
                   onPress={() => onDismiss(notification.id)}
                   accessibilityLabel="Dismiss notification"
+                  accessibilityRole="button"
+                  accessibilityHint="Removes this notification"
                 >
                   <Text style={styles.dismissText}>×</Text>
                 </Pressable>
@@ -102,7 +126,13 @@ export function NotificationCenter({
             ))
           )}
         </ScrollView>
-        <Pressable style={styles.closeButton} onPress={onClose}>
+        <Pressable
+          style={styles.closeButton}
+          onPress={onClose}
+          accessibilityLabel="Close notifications"
+          accessibilityRole="button"
+          accessibilityHint="Closes the notification center"
+        >
           <Text style={styles.closeButtonText}>Close</Text>
         </Pressable>
       </View>

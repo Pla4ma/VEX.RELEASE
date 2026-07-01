@@ -8,7 +8,9 @@ import Animated, {
   withSequence,
   runOnJS,
 } from 'react-native-reanimated';
-import { Box, Text, Button } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Button } from '@/components/primitives/Button';
 import { useTheme } from '@/theme';
 import { GAMBLE_BONUS_XP } from './types';
 
@@ -18,7 +20,7 @@ interface GambleActionButtonsProps {
   onGamble: () => void;
 }
 
-export const GambleActionButtons: React.FC<GambleActionButtonsProps> = ({
+export const GambleActionButtons: React.ComponentType<GambleActionButtonsProps> = ({
   shieldsAvailable,
   onUseShield,
   onGamble,

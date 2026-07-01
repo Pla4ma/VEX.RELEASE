@@ -47,7 +47,7 @@ export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[
       title: 'Profile',
       items: [
         { id: 'edit-profile', icon: 'user', title: 'Edit Profile', subtitle: 'Name, photo, bio', type: 'link',
-          onPress: () => navigateToRootScreen(p.navigation as unknown as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' }) },
+          onPress: () => navigateToRootScreen(p.navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' }) },
         { id: 'focus-mode', icon: 'target', title: 'Focus Mode', subtitle: 'Study, Run, Project, or Clean', type: 'link',
           onPress: p.navigateToLaneMode },
         { id: 'account', icon: 'shield', title: 'Account', subtitle: 'Password, 2FA, email', type: 'link',

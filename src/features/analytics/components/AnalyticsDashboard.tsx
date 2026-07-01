@@ -1,5 +1,5 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, Text, Pressable, View } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
@@ -17,6 +17,23 @@ import { DashboardContent } from './DashboardContent';
 import { styles } from './AnalyticsDashboard.styles';
 import { timeRangeToWeeks } from './AnalyticsDashboard.helpers';
 import type { DashboardState, DashboardTimeRange, DashboardError, AnalyticsDashboardProps } from './AnalyticsDashboard.types';
+
+// Memoize refresh control outside render to avoid JSX-as-prop re-creation
+const DashboardRefreshControl = React.memo(function DashboardRefreshControl({
+  isRefreshing,
+  onRefresh,
+}: {
+  isRefreshing: boolean;
+  onRefresh: () => void;
+}): React.JSX.Element {
+  return (
+    <RefreshControl
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+      tintColor={lightColors.semantic.primary}
+    />
+  );
+});
 
 export function AnalyticsDashboard({
   userId,
@@ -42,9 +59,11 @@ export function AnalyticsDashboard({
   } = useSessionHeatmapData(userId, weeks);
   const { data: insights, isLoading: insightsLoading } = useInsights(userId, { limit: 5 });
 
-  const prevDataErrorRef = React.useRef(dataError);
-  const prevDataErrorObjRef = React.useRef(dataErrorObj);
+  const prevDataErrorRef = useRef(dataError);
+  const prevDataErrorObjRef = useRef(dataErrorObj);
 
+  // SAFETY: error-to-error-state mapping must run as effect because setError
+  // is a side-effect; error state propagates from data-fetch failure to UI state.
   React.useEffect(() => {
     if (dataError !== prevDataErrorRef.current || dataErrorObj !== prevDataErrorObjRef.current) {
       prevDataErrorRef.current = dataError;
@@ -61,6 +80,8 @@ export function AnalyticsDashboard({
     }
   }, [dataError, dataErrorObj, refetchData]);
 
+  // SAFETY: Sentry error capture is a fire-and-forget side effect; must run
+  // from an effect when data-fetch errors change.
   React.useEffect(() => {
     if (!dataError || !dataErrorObj) {return;}
     const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
@@ -70,6 +91,7 @@ export function AnalyticsDashboard({
     });
   }, [dataError, dataErrorObj, userId, timeRange, selectedMetrics]);
 
+  // Compute dashboard state with useMemo instead of useEffect + useState
   const state = useMemo<DashboardState>(() => {
     if (dataLoading || insightsLoading) {return 'loading';}
     if (dataError) {return 'error';}
@@ -108,6 +130,8 @@ export function AnalyticsDashboard({
 
   const handleInsightPress = useCallback((insightId: string) => {
     onInsightPress?.(insightId);
+    // SAFETY: event publishing is a fire-and-forget side effect; publishing via
+    // eventBus from a callback is the expected React pattern for user-driven events.
     eventBus.publish('analytics:insight_read', { userId, insightId });
   }, [onInsightPress, userId]);
 
@@ -149,11 +173,7 @@ export function AnalyticsDashboard({
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            tintColor={lightColors.semantic.primary}
-          />
+          <DashboardRefreshControl isRefreshing={isRefreshing} onRefresh={handleRefresh} />
         }
         showsVerticalScrollIndicator={false}
       >

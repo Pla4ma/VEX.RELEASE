@@ -50,6 +50,7 @@ export class NetInfoAdapter {
     if (this.initialized) {return;}
     this.initialized = true;
     try {
+      // SAFETY: require() defers native NetInfo access until network adapter initialization.
       const NetInfo = require('@react-native-community/netinfo').default;
       this.netInfo = NetInfo;
 

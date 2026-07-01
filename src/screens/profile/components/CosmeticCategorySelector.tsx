@@ -16,7 +16,7 @@ export const TYPE_CONFIG: Record<CosmeticType, { label: string; icon: string }> 
   title: { label: 'Titles', icon: 'type' },
 };
 
-export const CosmeticCategoryHeader: React.FC<{
+export const CosmeticCategoryHeader: React.ComponentType<{
   type: CosmeticType;
   ownedCount: number;
   onClose: () => void;
@@ -66,7 +66,7 @@ export const CosmeticCategoryHeader: React.FC<{
   );
 };
 
-export const CosmeticEquipBar: React.FC<{
+export const CosmeticEquipBar: React.ComponentType<{
   selectedId: string | null;
   currentEquippedId?: string | null;
   isEquipping: boolean;

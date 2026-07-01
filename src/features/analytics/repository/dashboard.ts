@@ -11,7 +11,7 @@ const DASHBOARD_WIDGET_COLUMNS = tableColumns('dashboard_widgets');
 /** Extracts id from a supabase row that has passed error check */
 function getIdFromSupabaseRow<T extends { id: string }>(row: T | { error: true }): string {
   // Supabase types don't narrow properly after error check; cast via unknown
-  return (row as unknown as { id: string }).id;
+  return (row as { id: string }).id;
 }
 
 export async function fetchDashboardLayouts(userId: string) {

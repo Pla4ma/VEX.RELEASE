@@ -12,7 +12,7 @@ interface EmptyStateLensProps {
   sessionsNeeded?: number;
 }
 
-export const EmptyStateLens: React.FC<EmptyStateLensProps> = ({
+export const EmptyStateLens: React.ComponentType<EmptyStateLensProps> = ({
   size = 100,
   top,
   left,

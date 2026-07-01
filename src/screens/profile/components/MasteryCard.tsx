@@ -36,7 +36,7 @@ export interface MasteryCardProps {
   techniques: TechniqueItem[];
 }
 
-export const MasteryCard: React.FC<MasteryCardProps> = ({
+export const MasteryCard: React.ComponentType<MasteryCardProps> = ({
   mastery,
   masteryLoading,
   onPress,

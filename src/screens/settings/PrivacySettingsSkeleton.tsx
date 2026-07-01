@@ -3,7 +3,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box';
 import { SkeletonItem } from '../../shared/ui/components/SkeletonItem';
 
-export const PrivacySettingsSkeleton: React.FC = () => {
+export const PrivacySettingsSkeleton: React.ComponentType = () => {
   const { theme } = useTheme();
 
   return (

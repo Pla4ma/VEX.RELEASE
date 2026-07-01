@@ -1,4 +1,4 @@
-import { buildPostSessionStoryViewModel } from '../service';
+import { buildPostSessionStoryViewModel } from '../post-session-story-view-model';
 import { CompletionLedgerSchema } from '../schemas';
 import { ValidateSessionSummarySchema } from '../../../session/validation/schemas';
 

@@ -103,7 +103,7 @@ function resolveSpacing(
 // Component
 // ============================================================================
 
-export const Stack: React.FC<StackProps> = ({
+export const Stack: React.ComponentType<StackProps> = ({
   direction = 'column',
   gap,
   align,

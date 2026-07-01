@@ -95,7 +95,7 @@ export function useActiveSessionHandlers({
         message: 'Session completed',
         level: 'info',
       });
-      navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'SessionComplete', {
+      navigateToSessionStackScreen(navigation as NavigationProp<RootStackParams>, 'SessionComplete', {
         sessionId,
         summary: SessionSummarySchema.parse({
           ...result,

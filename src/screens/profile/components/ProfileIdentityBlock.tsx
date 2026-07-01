@@ -14,7 +14,7 @@ interface ProfileIdentityBlockProps {
   level: number;
 }
 
-export const ProfileIdentityBlock: React.FC<ProfileIdentityBlockProps> = ({
+export const ProfileIdentityBlock: React.ComponentType<ProfileIdentityBlockProps> = ({
   user,
   streakDays,
   level,

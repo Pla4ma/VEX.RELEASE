@@ -12,7 +12,7 @@ interface QuietHours {
   start: string;
   end: string;
 }
-export const NotificationScheduleSection: React.FC = () => {
+export const NotificationScheduleSection: React.ComponentType = () => {
   const { theme } = useTheme();
   const [quietHours, setQuietHours] = useState<QuietHours>({
     enabled: false,

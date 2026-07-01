@@ -29,7 +29,7 @@ export interface LoadingStateProps {
 // Component
 // ============================================================================
 
-export const LoadingState: React.FC<LoadingStateProps> = ({
+export const LoadingState: React.ComponentType<LoadingStateProps> = ({
   message,
   size = 'large',
   fullScreen = false,

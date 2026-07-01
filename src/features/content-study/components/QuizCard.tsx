@@ -23,7 +23,7 @@ interface QuizCardProps {
   onShortAnswerSubmit: () => void;
 }
 
-export const QuizCard: React.FC<QuizCardProps> = ({
+export const QuizCard: React.ComponentType<QuizCardProps> = ({
   quiz,
   index,
   answer,

@@ -19,10 +19,11 @@ function SectionErrorFallback({
 }): React.ReactNode {
   return (
     <Pressable
-      onPress={onRetry}
-      accessibilityLabel={`Retry ${sectionName}`}
-      accessibilityRole="button"
-    >
+onPress={onRetry}
+accessibilityLabel={`Retry ${sectionName}`}
+accessibilityRole="button"
+accessibilityHint={`Retries loading ${sectionName}`}
+>
       <GlassCard variant="subtle" style={{ marginBottom: 12 }}>
         <Text
           variant="bodySmall"

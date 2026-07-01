@@ -17,7 +17,7 @@ import { sizeConfig } from './TabBar.types';
 import { styles } from './TabBar.styles';
 import { getVariantStyles } from './TabBar.variants';
 
-const TabItemComponent: React.FC<TabItemProps> = ({
+const TabItemComponent: React.ComponentType<TabItemProps> = ({
   item,
   isActive,
   onPress,

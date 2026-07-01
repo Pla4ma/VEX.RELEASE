@@ -18,7 +18,7 @@ interface RootStackScreensProps {
 const Stack = createNativeStackNavigator<ExtendedRootStackParams>();
 const SessionNavigator = React.lazy(() => import('./SessionNavigator'));
 
-export const RootStackScreens: React.FC<RootStackScreensProps> = ({
+export const RootStackScreens: React.ComponentType<RootStackScreensProps> = ({
   hasCompletedOnboarding,
   features,
   isAuthenticated,

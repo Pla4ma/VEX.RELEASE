@@ -19,7 +19,7 @@ export interface ProgressionDashboardProps {
   userId?: string;
 }
 
-export const ProgressionDashboard: React.FC<ProgressionDashboardProps> = ({
+export const ProgressionDashboard: React.ComponentType<ProgressionDashboardProps> = ({
   level = 1,
   nextLevelThreshold = 100,
   xp = 0,

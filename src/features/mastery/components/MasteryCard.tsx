@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -27,16 +27,12 @@ export function MasteryCard({
 }: Props): React.ReactNode {
   const { theme } = useTheme();
   const { claimChallenge, getMasteryState } = useMasteryActions();
-  const [cardState, setCardState] = useState(state);
 
-  useEffect(() => {
-    setCardState(state);
-  }, [state]);
+  // Use prop directly instead of mirroring into state via useEffect
 
   const handleClaim = (challengeId: string) => {
     const updatedState = claimChallenge(userId, challengeId);
     if (!updatedState) { return; }
-    setCardState(updatedState);
     onStateChange?.(updatedState);
   };
 
@@ -53,12 +49,12 @@ export function MasteryCard({
     >
       <View style={{ gap: theme.spacing[2] }}>
         <MasteryRankBadge
-          rank={cardState.rank}
-          totalPoints={cardState.totalMasteryPoints}
+          rank={state.rank}
+          totalPoints={state.totalMasteryPoints}
           size="md"
         />
         <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          {cardState.totalMasteryPoints} mastery points
+          {state.totalMasteryPoints} mastery points
         </Text>
       </View>
 
@@ -67,7 +63,7 @@ export function MasteryCard({
           <TechniqueBar
             key={item.key}
             label={item.label}
-            value={cardState.techniques[item.key]}
+            value={state.techniques[item.key]}
             color={
               item.key === 'durationMastery'
                 ? theme.colors.primary[500]
@@ -81,7 +77,7 @@ export function MasteryCard({
         <Text variant="h4" color={theme.colors.text.primary}>
           Active Challenges
         </Text>
-        {cardState.activeChallenges.slice(0, 3).map((challenge) => {
+        {state.activeChallenges.slice(0, 3).map((challenge) => {
           const badgeColor = difficultyColors[challenge.difficulty];
           const progress =
             challenge.target > 0

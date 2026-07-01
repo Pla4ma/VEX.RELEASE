@@ -34,6 +34,7 @@ let mmkvAdapter: {
 function getStorage(): NonNullable<typeof mmkvAdapter> {
   if (mmkvAdapter) {return mmkvAdapter;}
   try {
+    // SAFETY: require() defers MMKV adapter access so unsupported runtimes can fall back cleanly.
     const {
       getMMKVStorageAdapter,
     } = require('../../persistence/MMKVStorageAdapter');

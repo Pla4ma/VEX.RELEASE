@@ -46,6 +46,8 @@
     "storybook:build": "build-storybook -o docs/storybook"
   },
   "dependencies": {
+    "@callstack/liquid-glass": "^0.8.0",
+    "@expo-google-fonts/urbanist": "^0.4.2",
     "@expo/ui": "~56.0.18",
     "@gorhom/bottom-sheet": "^5.2.13",
     "@react-native-community/netinfo": "12.0.1",
@@ -136,7 +138,7 @@
     "@opentelemetry/core": ">=2.8.0",
     "undici": ">=8.5.0",
     "js-yaml": ">=4.11.0",
-    "brace-expansion": ">=5.0.6",
+    "brace-expansion": "^2.0.2",
     "form-data": ">=4.0.6",
     "protobufjs": ">=7.6.3"
   },

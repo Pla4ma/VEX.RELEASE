@@ -158,6 +158,13 @@ export const MonthlyFocusReportSummarySchema = z
   })
   .strict();
 
+export const MonthlyReportUiAliasesSchema = z.object({
+  change: z.number().optional(),
+  sessionsCompleted: z.number().optional(),
+  highlight: z.string().optional(),
+  month: z.union([z.string(), z.number()]).optional(),
+});
+
 export function getFocusScoreFactorsWeightTotal(
   factors: z.infer<typeof FocusScoreFactorsSchema>,
 ): number {

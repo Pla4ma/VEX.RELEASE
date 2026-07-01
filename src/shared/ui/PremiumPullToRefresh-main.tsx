@@ -20,7 +20,7 @@ interface PremiumPullToRefreshProps {
 
 type RefreshState = 'idle' | 'pulling' | 'willRefresh' | 'refreshing';
 
-export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
+export const PremiumPullToRefresh: React.ComponentType<PremiumPullToRefreshProps> = ({
   onRefresh,
   refreshing: controlledRefreshing,
   children,

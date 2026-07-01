@@ -37,7 +37,7 @@ function readOnboardingCompletedAt(user: unknown): string | null {
   return typeof value === 'string' ? value : null;
 }
 
-export const RootNavigator: React.FC = () => {
+export const RootNavigator: React.ComponentType = () => {
   const {
     completeOAuthCallback,
     isAuthenticated,

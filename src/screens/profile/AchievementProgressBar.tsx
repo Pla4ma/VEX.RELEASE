@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 
-export const AchievementsHeader: React.FC<{
+export const AchievementsHeader: React.ComponentType<{
   total: number;
   unlocked: number;
   totalPoints: number;

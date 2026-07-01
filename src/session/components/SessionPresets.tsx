@@ -17,7 +17,7 @@ interface SessionPresetsProps {
 
 const categories = ['All', 'Focus', 'Study', 'Work', 'Creative', 'Health'];
 
-export const SessionPresets: React.FC<SessionPresetsProps> = ({
+export const SessionPresets: React.ComponentType<SessionPresetsProps> = ({
   userId: _userId,
   onSelectPreset,
   onCreateCustom: _onCreateCustom,

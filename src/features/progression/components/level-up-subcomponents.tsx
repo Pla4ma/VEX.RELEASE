@@ -11,7 +11,7 @@ interface ConfettiFieldProps {
   screenHeight: number;
 }
 
-export const ConfettiField: React.FC<ConfettiFieldProps> = ({
+export const ConfettiField: React.ComponentType<ConfettiFieldProps> = ({
   confetti,
   showConfetti,
   screenHeight,
@@ -48,7 +48,7 @@ interface RewardsSectionProps {
   rewards: Array<{ type: string; amount: number; itemName?: string }>;
 }
 
-export const RewardsSection: React.FC<RewardsSectionProps> = ({ rewards }) => {
+export const RewardsSection: React.ComponentType<RewardsSectionProps> = ({ rewards }) => {
   if (rewards.length === 0) {
     return null;
   }
@@ -88,7 +88,7 @@ interface UnlocksSectionProps {
   unlocks: string[];
 }
 
-export const UnlocksSection: React.FC<UnlocksSectionProps> = ({ unlocks }) => {
+export const UnlocksSection: React.ComponentType<UnlocksSectionProps> = ({ unlocks }) => {
   if (unlocks.length === 0) {
     return null;
   }

@@ -11,7 +11,7 @@ interface WaterBubbleProps {
   variant?: 'soft' | 'lens' | 'crystal';
 }
 
-export const WaterBubble: React.FC<WaterBubbleProps> = ({
+export const WaterBubble: React.ComponentType<WaterBubbleProps> = ({
   size = 44,
   top,
   left,

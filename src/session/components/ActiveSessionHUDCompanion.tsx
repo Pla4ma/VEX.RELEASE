@@ -28,7 +28,7 @@ interface ActiveSessionHUDCompanionProps {
   isActive: boolean;
 }
 
-export const ActiveSessionHUDCompanion: React.FC<
+export const ActiveSessionHUDCompanion: React.ComponentType<
   ActiveSessionHUDCompanionProps
 > = ({
   userId,

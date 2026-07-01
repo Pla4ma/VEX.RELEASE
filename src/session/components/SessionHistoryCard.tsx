@@ -15,7 +15,7 @@ interface SessionHistoryCardProps {
   onSelect?: (entry: SessionHistoryEntry) => void;
 }
 
-export const SessionHistoryCard: React.FC<SessionHistoryCardProps> = ({
+export const SessionHistoryCard: React.ComponentType<SessionHistoryCardProps> = ({
   entry,
   onSelect,
 }) => {

@@ -6,29 +6,23 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Falls back to sessionStorage for web platform.
  * Used for tokens, credentials, and private keys.
  */
-
  import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Nullable } from '../types/global';
 import type { StorageAdapter, StorageResult } from './StorageAdapter';
 import { createDebugger } from '../utils/debug';
-
 const debug = createDebugger('storage');
-
 // Web storage prefix to avoid collisions
 const WEB_STORAGE_PREFIX = 'vex_secure_';
-
 /**
  * Secure storage adapter implementation
  * Uses expo-secure-store on native, localStorage on web (RB-006 fix)
  */
 export class SecureStorage implements StorageAdapter {
   private isWeb: boolean;
-
   constructor() {
     this.isWeb = Platform.OS === 'web';
   }
-
   /**
    * Get item from secure storage
    */
@@ -51,7 +45,6 @@ export class SecureStorage implements StorageAdapter {
       return null;
     }
   }
-
   /**
    * Set item in secure storage
    */
@@ -72,7 +65,6 @@ export class SecureStorage implements StorageAdapter {
       throw error;
     }
   }
-
   /**
    * Remove item from secure storage
    */
@@ -89,7 +81,6 @@ export class SecureStorage implements StorageAdapter {
       throw error;
     }
   }
-
   /**
    * Check if key exists
    */
@@ -110,7 +101,6 @@ export class SecureStorage implements StorageAdapter {
       return false;
     }
   }
-
   /**
    * Get all keys (limited - secure store doesn't expose all keys)
    * Note: SecureStore doesn't support listing keys, this checks known keys
@@ -119,7 +109,6 @@ export class SecureStorage implements StorageAdapter {
     // SecureStore doesn't support listing all keys
     return [];
   }
-
   /**
    * Clear all storage (limited - must know keys)
    * Note: SecureStore doesn't support clearing all, requires known keys
@@ -130,14 +119,12 @@ export class SecureStorage implements StorageAdapter {
       '[SecureStorage] clear() not supported - delete keys individually',
     );
   }
-
   /**
    * Get storage size (not supported by SecureStore)
    */
   async getSize(): Promise<number> {
     return 0;
   }
-
   /**
    * Store credentials securely
    */
@@ -153,7 +140,6 @@ export class SecureStorage implements StorageAdapter {
       return { success: false, error: error as Error };
     }
   }
-
   /**
    * Get credentials securely
    */
@@ -169,7 +155,6 @@ export class SecureStorage implements StorageAdapter {
       return { success: false, error: error as Error };
     }
   }
-
   /**
    * Clear credentials
    */
@@ -183,12 +168,10 @@ export class SecureStorage implements StorageAdapter {
     }
   }
 }
-
 /**
  * Secure storage singleton
  */
 let secureStorage: SecureStorage | null = null;
-
 /**
  * Get secure storage instance
  */
@@ -198,6 +181,5 @@ export function getSecureStorage(): SecureStorage {
   }
   return secureStorage;
 }
-
 export { SecureStorageKeys } from './secure-storage-keys';
 export type { SecureStorageKey } from './secure-storage-keys';

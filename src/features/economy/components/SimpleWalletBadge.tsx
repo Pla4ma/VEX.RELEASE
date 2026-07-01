@@ -14,9 +14,10 @@ export function SimpleWalletBadge({
   onPress,
 }: Props): React.ReactElement {
   return (
-    <Pressable
+ <Pressable
       accessibilityLabel="Progress badge"
       accessibilityRole="button"
+      accessibilityHint="Opens your wallet and progress details"
       onPress={onPress}
       style={{
         paddingHorizontal: 12,

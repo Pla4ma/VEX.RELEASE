@@ -1,6 +1,8 @@
 import React from 'react';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
-import { Box, Text, Button } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Button } from '@/components/primitives/Button';
 import { useTheme } from '@/theme';
 import type { GambleOutcome } from './types';
 import { Text as VexText } from '../../../../components/primitives/Text';
@@ -9,7 +11,7 @@ interface GamblingViewProps {
   streakDays: number;
 }
 
-export const GamblingView: React.FC<GamblingViewProps> = ({ streakDays }) => {
+export const GamblingView: React.ComponentType<GamblingViewProps> = ({ streakDays }) => {
   const { theme } = useTheme();
 
   return (
@@ -60,7 +62,7 @@ interface WonViewProps {
   onDismiss: () => void;
 }
 
-export const WonView: React.FC<WonViewProps> = ({ outcome, onDismiss }) => {
+export const WonView: React.ComponentType<WonViewProps> = ({ outcome, onDismiss }) => {
   const { theme } = useTheme();
 
   return (
@@ -124,7 +126,7 @@ interface LostViewProps {
   onDismiss: () => void;
 }
 
-export const LostView: React.FC<LostViewProps> = ({
+export const LostView: React.ComponentType<LostViewProps> = ({
   outcome,
   streakDays,
   onDismiss,

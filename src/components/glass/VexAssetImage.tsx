@@ -19,6 +19,7 @@ interface VexAssetImageProps {
   opacity?: number;
 }
 
+// SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
 const ASSETS: Record<VexAssetName, ImageSourcePropType> = {
   sculpture: require('../../../assets/water/vex_liquid_sculpture_v1.png'),
   coachStar: require('../../../assets/water/vex_coach_star_v1.png'),

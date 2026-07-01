@@ -56,7 +56,7 @@ jest.mock('../../../../config/sentry', () => ({
   captureException: jest.fn(),
 }));
 
-const ThrowingComponent: React.FC<{
+const ThrowingComponent: React.ComponentType<{
   shouldThrow?: boolean;
   message?: string;
 }> = ({ shouldThrow, message = 'Test error' }) => {

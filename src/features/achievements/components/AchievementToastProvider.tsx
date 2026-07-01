@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box';
 import type { Achievement } from '../types';
+import { getAchievementById } from '../definitions';
 import { AchievementUnlockToast } from './AchievementUnlockToast.main';
 
 export function useAchievementUnlockToast(
@@ -24,8 +25,7 @@ export function useAchievementUnlockToast(
       unlockedAt: number;
     }) => {
       if (event.userId !== userId) {return;}
-      const { getAchievementById } = require('../definitions');
-      const achievement = getAchievementById(event.achievementId);
+    const achievement = getAchievementById(event.achievementId);
       if (!achievement) {return;}
       toastQueue.current.push(achievement);
       if (!currentToast) {showNextToast();}
@@ -47,7 +47,7 @@ interface AchievementToastProviderProps {
   onAchievementPress: (achievementId: string) => void;
 }
 
-export const AchievementToastProvider: React.FC<
+export const AchievementToastProvider: React.ComponentType<
   AchievementToastProviderProps
 > = ({ children, userId, onAchievementPress }) => {
   const { currentToast, dismissToast } = useAchievementUnlockToast(

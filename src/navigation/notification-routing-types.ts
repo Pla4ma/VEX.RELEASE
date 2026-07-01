@@ -105,7 +105,7 @@ export function navigateToSessionSetup(
     presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
     source: payload?.source === 'content-study' ? 'content-study' : undefined,
   };
-  navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
+  navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
   return { success: true, screen: 'SessionSetup' };
 }
 
@@ -121,7 +121,7 @@ export function navigateToRescueSession(
       payload?.suggestedDurationSeconds,
     ),
   };
-  navigateToRootScreen(navigation as unknown as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
+  navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
   return { success: true, screen: 'SessionSetup' };
 }
 

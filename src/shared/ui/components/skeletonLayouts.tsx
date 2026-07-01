@@ -9,7 +9,7 @@ export interface SkeletonLayoutProps {
   style?: ViewStyle;
 }
 
-export const CardSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
+export const CardSkeleton: React.ComponentType<{ style?: ViewStyle }> = ({ style }) => {
   const { theme } = useTheme();
   return (
     <View
@@ -44,7 +44,7 @@ export const CardSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
   );
 };
 
-export const HeroSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
+export const HeroSkeleton: React.ComponentType<{ style?: ViewStyle }> = ({ style }) => {
   const { theme } = useTheme();
   return (
     <View
@@ -79,7 +79,7 @@ export const HeroSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
   );
 };
 
-export const ListSkeleton: React.FC<{ count?: number; style?: ViewStyle }> = ({
+export const ListSkeleton: React.ComponentType<{ count?: number; style?: ViewStyle }> = ({
   count = 3,
   style,
 }) => {
@@ -93,7 +93,7 @@ export const ListSkeleton: React.FC<{ count?: number; style?: ViewStyle }> = ({
   );
 };
 
-export const StatsSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
+export const StatsSkeleton: React.ComponentType<{ style?: ViewStyle }> = ({ style }) => {
   const { theme } = useTheme();
   return (
     <View style={[{ flexDirection: 'row', gap: theme.spacing[3] }, style]}>
@@ -116,7 +116,7 @@ export const StatsSkeleton: React.FC<{ style?: ViewStyle }> = ({ style }) => {
   );
 };
 
-export const TextBlockSkeleton: React.FC<{
+export const TextBlockSkeleton: React.ComponentType<{
   lines?: number;
   style?: ViewStyle;
 }> = ({ lines = 4, style }) => {
@@ -135,7 +135,7 @@ export const TextBlockSkeleton: React.FC<{
   );
 };
 
-export const EnhancedSkeleton: React.FC<SkeletonLayoutProps> = ({
+export const EnhancedSkeleton: React.ComponentType<SkeletonLayoutProps> = ({
   type,
   count = 3,
   style,
@@ -156,7 +156,7 @@ export const EnhancedSkeleton: React.FC<SkeletonLayoutProps> = ({
   }
 };
 
-export const ScreenLoadingState: React.FC<{
+export const ScreenLoadingState: React.ComponentType<{
   hero?: boolean;
   stats?: boolean;
   cards?: number;

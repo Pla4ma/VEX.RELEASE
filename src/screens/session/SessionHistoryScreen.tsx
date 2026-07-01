@@ -61,7 +61,7 @@ function SessionHistoryScreen(): React.ReactNode {
   const handleItemPress = useCallback(
     (entry: SessionHistoryItem) => {
       if (entry.summary) {
-        navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'SessionComplete', {
+        navigateToSessionStackScreen(navigation as NavigationProp<RootStackParams>, 'SessionComplete', {
           sessionId: entry.sessionId,
           summary: entry.summary,
         });

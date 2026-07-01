@@ -13,7 +13,7 @@ interface StepIndicatorProps {
 }
 
             
-export const StepIndicator: React.FC<StepIndicatorProps> = ({
+export const StepIndicator: React.ComponentType<StepIndicatorProps> = ({
   steps,
   currentStep,
   labels,

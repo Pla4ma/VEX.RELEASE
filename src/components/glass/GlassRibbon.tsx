@@ -13,7 +13,7 @@ interface GlassRibbonProps {
   curve?: string;
 }
 
-export const GlassRibbon: React.FC<GlassRibbonProps> = ({
+export const GlassRibbon: React.ComponentType<GlassRibbonProps> = ({
   width = 120,
   height = 20,
   top,

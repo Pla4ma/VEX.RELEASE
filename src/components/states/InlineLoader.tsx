@@ -7,4 +7,4 @@ import React from 'react';
 import { LoadingState } from './LoadingState';
 
 /** Compact inline loader */
-export const InlineLoader: React.FC = () => <LoadingState size="small" />;
+export const InlineLoader: React.ComponentType = () => <LoadingState size="small" />;

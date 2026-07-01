@@ -23,7 +23,7 @@ export interface FactorMapProps {
   model: FocusScoreDashboardModel;
 }
 
-export const FactorMap: React.FC<FactorMapProps> = ({ model }) => {
+export const FactorMap: React.ComponentType<FactorMapProps> = ({ model }) => {
   const factors = model.current?.factors;
   if (!factors) {return null;}
 

@@ -23,7 +23,7 @@ function renderVexTabBar(props: BottomTabBarProps): React.JSX.Element {
   return <VexTabBar {...props} />;
 }
 
-export const MainNavigator: React.FC = () => {
+export const MainNavigator: React.ComponentType = () => {
   return (
     <Tab.Navigator
       tabBar={renderVexTabBar}

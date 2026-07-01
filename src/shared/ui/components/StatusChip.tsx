@@ -16,7 +16,7 @@ import {
   getStatusColor,
 } from './StatusFeedback.types';
 
-export const StatusChip: React.FC<{
+export const StatusChip: React.ComponentType<{
   status: AsyncStatus;
   label?: string;
   onPress?: () => void;

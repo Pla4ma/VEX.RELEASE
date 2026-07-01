@@ -23,7 +23,7 @@ export interface WhatChangedProps {
   onOpenMonthlyReport: () => void;
 }
 
-export const WhatChanged: React.FC<WhatChangedProps> = ({ model }) => {
+export const WhatChanged: React.ComponentType<WhatChangedProps> = ({ model }) => {
   const current = model.current;
   if (!current) {return null;}
 

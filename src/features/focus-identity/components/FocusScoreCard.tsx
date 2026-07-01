@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import {
   useFocusIdentity,
@@ -39,6 +40,7 @@ export function FocusScoreCard({
     scoreChange,
   } = useFocusIdentity(userId);
   const scoreColor = useFocusScoreColor(profile?.currentScore || null);
+  const { isReducedMotion } = useReducedMotion();
   const identityStatement = useIdentityStatement(
     currentBand,
     profile?.streakInCurrentBand || 0,
@@ -56,14 +58,18 @@ export function FocusScoreCard({
   }, [profile]);
   React.useEffect(() => {
     if (animate && profile) {
-      progress.value = withTiming(scoreProgress, { duration: 1000 });
+      progress.value = isReducedMotion
+        ? scoreProgress
+        : withTiming(scoreProgress, { duration: 1000 });
     }
-  }, [profile, animate, scoreProgress, progress]);
+  }, [profile, animate, scoreProgress, progress, isReducedMotion]);
   const handlePress = () => {
     if (onPress) {
-      scale.value = withSpring(0.95, {}, () => {
-        scale.value = withSpring(1);
-      });
+      if (!isReducedMotion) {
+        scale.value = withSpring(0.95, {}, () => {
+          scale.value = withSpring(1);
+        });
+      }
       onPress();
     }
   };

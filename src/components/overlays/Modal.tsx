@@ -41,7 +41,7 @@ const contentOverlayStyle: ViewStyle = {
   borderRadius: 0,
 };
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: React.ComponentType<ModalProps> = ({
   visible,
   children,
   title,
@@ -81,11 +81,12 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <View style={styles.container} testID={testID}>
-      <TouchableWithoutFeedback
-        onPress={handleBackdropPress}
-        accessibilityLabel="Close modal backdrop"
-        accessibilityRole="button"
-      >
+<TouchableWithoutFeedback
+onPress={handleBackdropPress}
+accessibilityLabel="Close modal backdrop"
+accessibilityRole="button"
+accessibilityHint="Closes the modal when backdrop closing is enabled"
+>
         <Animated.View
           style={[
             styles.backdrop,

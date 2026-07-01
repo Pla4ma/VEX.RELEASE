@@ -12,6 +12,8 @@ type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
+// SAFETY: lazy() + dynamic import() for code-splitting; these are component references
+// needed in the render function below. They must be at module scope for Suspense to work.
 const CompanionDetailScreen = React.lazy(
   () => import('../screens/companion/CompanionDetailScreen'),
 );

@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { type AnimatedStyle } from 'react-native-reanimated';
+import { NativeGlassSurface } from '../../components/glass';
 
 interface ActiveTabPillProps {
   pillStyle: AnimatedStyle<StyleProp<ViewStyle>>;
   height: number;
 }
 
-      
+/**
+ * Active tab indicator pill. Uses native glass surface for the selected
+ * tab highlight — real refraction instead of CSS gradient overlays.
+ */
 export function ActiveTabPill({
   pillStyle,
   height,
@@ -19,47 +22,18 @@ export function ActiveTabPill({
       style={[
         {
           alignSelf: 'center',
-          borderRadius: 999,
-          height,
           left: 12,
           position: 'absolute',
           right: 12,
-          boxShadow: `0px 2px 6px rgba(18, 184, 148, 0.102)`,
           top: 6,
         },
         pillStyle,
       ]}
     >
-      <View
-        style={{}}
-      />
-      <LinearGradient
-        colors={['rgba(255, 255, 255, 0.42)', 'rgba(255, 255, 255, 0.06)']}
-        end={{ x: 0, y: 1 }}
-        locations={[0, 0.6]}
-        start={{ x: 0, y: 0 }}
-        style={{
-          borderTopLeftRadius: 999,
-          borderTopRightRadius: 999,
-          height: '52%',
-          left: 0,
-          position: 'absolute',
-          right: 0,
-          top: 0,
-        }}
-      />
-      {/* Top glass edge highlight */}
-      <View
-        pointerEvents="none"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.78)',
-          borderRadius: 999,
-          height: 1,
-          left: 8,
-          position: 'absolute',
-          right: 8,
-          top: 1.2,
-        }}
+      <NativeGlassSurface
+        variant="selected"
+        radius={height / 2}
+        style={{ height }}
       />
     </Animated.View>
   );

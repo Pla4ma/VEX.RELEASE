@@ -7,7 +7,7 @@ import type { CompanionPhase } from '../types';
 import { PHASE_NAMES } from './companion-evolution-types';
 import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
-export const ParticleLayer: React.FC<{
+export const ParticleLayer: React.ComponentType<{
   particleStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
 }> = ({ particleStyle, themeColors }) => (
@@ -39,7 +39,7 @@ export const ParticleLayer: React.FC<{
   </Animated.View>
 );
 
-export const CelebrationLayer: React.FC<{
+export const CelebrationLayer: React.ComponentType<{
   textStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
   newPhase: CompanionPhase;
@@ -81,7 +81,7 @@ export const CelebrationLayer: React.FC<{
   </Animated.View>
 );
 
-export const PhaseIndicators: React.FC<{
+export const PhaseIndicators: React.ComponentType<{
   ceremonyPhase: EvolutionPhase;
   themeColors: ElementThemeColors;
 }> = ({ ceremonyPhase, themeColors }) => (

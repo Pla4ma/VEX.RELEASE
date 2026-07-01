@@ -29,7 +29,7 @@ export interface SkeletonItemProps {
   style?: ViewStyle;
 }
 
-export const SkeletonItem: React.FC<SkeletonItemProps> = ({
+export const SkeletonItem: React.ComponentType<SkeletonItemProps> = ({
   variant = 'text',
   width,
   height,

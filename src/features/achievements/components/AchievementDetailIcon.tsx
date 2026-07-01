@@ -3,7 +3,8 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import type { Achievement } from '../types';
 import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
@@ -13,7 +14,7 @@ interface AchievementDetailIconProps {
   isUnlocked: boolean;
 }
 
-export const AchievementDetailIcon: React.FC<AchievementDetailIconProps> = ({
+export const AchievementDetailIcon: React.ComponentType<AchievementDetailIconProps> = ({
   achievement,
   isUnlocked,
 }) => {

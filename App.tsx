@@ -3,7 +3,6 @@
  */
 
 import 'react-native-gesture-handler';
-import React from 'react';
 import { registerRootComponent } from 'expo';
 import { App } from './src/app/App';
 
@@ -12,6 +11,7 @@ registerRootComponent(App);
 // Metro dead-code-eliminates this block in production builds
 if (__DEV__) {
   try {
+    // SAFETY: require() keeps dev-only bootstrap out of production module evaluation.
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { bootstrapDevelopment } = require('./src/app/bootstrap');
     bootstrapDevelopment();

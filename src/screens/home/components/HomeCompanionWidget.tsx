@@ -45,6 +45,7 @@ export function HomeCompanionWidget({
         activeOpacity={0.85}
         accessibilityLabel="Retry loading companion"
         accessibilityRole="button"
+        accessibilityHint="Retries loading the companion widget"
       >
         <GlassCard variant="warning" padding={16} radius={20}>
           <View style={{ alignItems: 'center' }}>

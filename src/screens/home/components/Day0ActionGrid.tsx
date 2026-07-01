@@ -2,100 +2,40 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
-import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import { type } from '../../reference-ui/referenceTokens';
 import type { Day0Mode } from '../services/day0-agent-schemas';
 import { DAY0_ACTIONS, type Day0Action } from './day0ActionData';
 
 interface Day0ActionGridProps {
   onSelect: (mode: Day0Mode) => void;
+  onOpenCoach: () => void;
 }
 
-interface Day0ActionRowProps {
-  action: Day0Action;
-  onSelect: (mode: Day0Mode) => void;
-}
+type NavItem = Day0Action | {
+  id: 'coach';
+  title: string;
+  eyebrow: string;
+  body: string;
+};
 
-function Day0ActionRow({
-  action,
+export function Day0ActionGrid({
+  onOpenCoach,
   onSelect,
-}: Day0ActionRowProps): React.ReactNode {
-  return (
-    <Pressable
-      accessibilityHint={action.body}
-      accessibilityLabel={`Start ${action.title}`}
-      accessibilityRole="button"
-      onPress={(): void => onSelect(action.id)}
-      style={({ pressed }) => ({
-        opacity: pressed ? 0.88 : 1,
-        transform: [{ scale: pressed ? 0.985 : 1 }],
-      })}
-    >
-      <View
-        style={{
-          alignItems: 'center',
-          backgroundColor: vexLightGlass.glass.fillStrong,
-          borderColor: vexLightGlass.glass.border,
-          borderRadius: borderRadius.xl,
-          borderWidth: 1,
-          flexDirection: 'row',
-          gap: spacing[3],
-          minHeight: 92,
-          padding: spacing[3],
-          shadowColor: vexLightGlass.glass.shadow,
-          shadowOffset: { height: 5, width: 0 },
-          shadowOpacity: 0.08,
-          shadowRadius: 12,
-        }}
-      >
-        <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: vexLightGlass.mint[100],
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: borderRadius.full,
-            borderWidth: 1,
-            height: 52,
-            justifyContent: 'center',
-            width: 52,
-            ...getMinTouchTargetStyle(),
-          }}
-        >
-          <Icon
-            color={vexLightGlass.mint[800]}
-            name={action.icon}
-            size="md"
-          />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={[type.kicker, { color: vexLightGlass.text.tertiary }]}>
-            {action.eyebrow}
-          </Text>
-          <Text style={[type.title, { marginTop: spacing[1] }]}>
-            {action.title}
-          </Text>
-          <Text
-            numberOfLines={2}
-            style={[type.body, { marginTop: spacing[1] }]}
-          >
-            {action.body}
-          </Text>
-        </View>
-        <Icon color={vexLightGlass.text.tertiary} name="arrowRight" size="sm" />
-      </View>
-    </Pressable>
-  );
-}
-
-export function Day0ActionGrid({ onSelect }: Day0ActionGridProps): React.ReactNode {
-  const secondaryActions = DAY0_ACTIONS.filter((action) => action.id !== 'focus');
+}: Day0ActionGridProps): React.ReactNode {
+  const items: NavItem[] = [
+    ...DAY0_ACTIONS.filter((action) => action.id !== 'focus'),
+    {
+      id: 'coach',
+      title: 'Coach',
+      eyebrow: 'AI guide',
+      body: 'Open the AI coach.',
+    },
+  ];
 
   return (
-    <View style={{ gap: spacing[3] }}>
+    <View style={{ gap: spacing[3], marginBottom: spacing[5] }}>
       <View
         style={{
           alignItems: 'center',
@@ -103,19 +43,78 @@ export function Day0ActionGrid({ onSelect }: Day0ActionGridProps): React.ReactNo
           justifyContent: 'space-between',
         }}
       >
-        <Text style={type.kicker}>OTHER STARTS</Text>
+        <Text style={type.kicker}>Navigation</Text>
         <Text style={[type.body, { color: vexLightGlass.text.tertiary }]}>
-          Choose shape
+          choose next
         </Text>
       </View>
-      {secondaryActions.map((action) => (
-        <Day0ActionRow
-          action={action}
-          key={action.id}
-          onSelect={onSelect}
-        />
-      ))}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
+        {items.map((item) => (
+          <NavTextButton
+            item={item}
+            key={item.id}
+            onOpenCoach={onOpenCoach}
+            onSelect={onSelect}
+          />
+        ))}
+      </View>
     </View>
   );
 }
 
+function NavTextButton({
+  item,
+  onOpenCoach,
+  onSelect,
+}: {
+  item: NavItem;
+  onOpenCoach: () => void;
+  onSelect: (mode: Day0Mode) => void;
+}): React.ReactNode {
+  const handlePress = (): void => {
+    if (item.id === 'coach') {
+      onOpenCoach();
+      return;
+    }
+    onSelect(item.id);
+  };
+  return (
+    <Pressable
+      accessibilityHint={item.body}
+      accessibilityLabel={`Open ${item.title}`}
+      accessibilityRole="button"
+      onPress={handlePress}
+      style={({ pressed }) => ({
+        minHeight: 44,
+        opacity: pressed ? 0.64 : 1,
+        transform: [{ translateY: pressed ? 1 : 0 }],
+      })}
+    >
+      <Text
+        style={[
+          type.title,
+          {
+            color: vexLightGlass.text.primary,
+            fontFamily: 'Urbanist_800ExtraBold',
+            fontSize: 22,
+            letterSpacing: 0,
+          },
+        ]}
+      >
+        {item.title}
+      </Text>
+      <Text
+        style={[
+          type.body,
+          {
+            color: vexLightGlass.text.tertiary,
+            fontFamily: 'Urbanist_600SemiBold',
+            fontSize: 13,
+          },
+        ]}
+      >
+        {item.eyebrow}
+      </Text>
+    </Pressable>
+  );
+}

@@ -46,10 +46,11 @@ export function GameLikeHomeSurface({ viewModel }: GameLikeHomeSurfaceProps): Re
     <Animated.View style={style}>
       <Box gap="md">
         {/* Boss Battle Card */}
-        <Pressable
-          accessibilityLabel="Boss battle"
-          accessibilityRole="button"
-          onPressIn={handlePressIn}
+<Pressable
+accessibilityLabel="Boss battle"
+accessibilityRole="button"
+accessibilityHint="Shows current boss battle progress"
+onPressIn={handlePressIn}
           onPressOut={handlePressOut}
         >
           <Box

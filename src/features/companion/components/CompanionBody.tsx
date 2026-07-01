@@ -14,7 +14,7 @@ interface CompanionBodyProps {
   size: number;
 }
 
-export const CompanionBody: React.FC<CompanionBodyProps> = ({
+export const CompanionBody: React.ComponentType<CompanionBodyProps> = ({
   phase,
   theme,
   size,

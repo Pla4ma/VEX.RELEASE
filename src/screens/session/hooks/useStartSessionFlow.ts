@@ -130,7 +130,7 @@ export function useStartSessionFlow({
         }, 120);
       }
 
-      navigateToSessionStackScreen(navigation as unknown as NavigationProp<RootStackParams>, 'ActiveSession', {
+      navigateToSessionStackScreen(navigation as NavigationProp<RootStackParams>, 'ActiveSession', {
         sessionId: session.id,
         selectedThemeId: selectedThemeOwned ? selectedThemeId : 'default',
       });

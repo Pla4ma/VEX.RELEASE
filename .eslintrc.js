@@ -17,7 +17,7 @@ module.exports = {
       rules: { 'no-restricted-imports': 'off' },
     },
     {
-      files: ['src/**/*.{ts,tsx}'],
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
       excludedFiles: ['src/utils/haptics.ts', 'src/utils/haptics-types.ts'],
       rules: {
         'no-restricted-imports': [

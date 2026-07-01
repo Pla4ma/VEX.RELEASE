@@ -22,7 +22,7 @@ interface AchievementShowcaseProps {
   isEditable?: boolean;
 }
 
-export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
+export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> = ({
   achievements,
   onReorder,
   onSelectSlot,

@@ -21,7 +21,7 @@ interface ErrorActionButtonsProps {
   secondaryColor: string;
 }
 
-export const ErrorActionButtons: React.FC<ErrorActionButtonsProps> = ({
+export const ErrorActionButtons: React.ComponentType<ErrorActionButtonsProps> = ({
   hasMoreRetries,
   onRetry,
   isRetrying,

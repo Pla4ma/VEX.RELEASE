@@ -23,6 +23,7 @@ async function openSystemAuthSession(url: string): Promise<AuthResult> {
     };
   }
   try {
+    // SAFETY: require() defers native WebBrowser module access until OAuth runtime flow.
     const WebBrowser: typeof import('expo-web-browser') = require('expo-web-browser');
     const authResult = await WebBrowser.openAuthSessionAsync(
       url,

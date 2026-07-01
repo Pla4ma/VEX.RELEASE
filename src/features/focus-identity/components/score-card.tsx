@@ -12,7 +12,7 @@ export interface ScoreCardProps {
   score: number;
 }
 
-export const ScoreCard: React.FC<ScoreCardProps> = ({ score }) => {
+export const ScoreCard: React.ComponentType<ScoreCardProps> = ({ score }) => {
   return (
     <GlassCard glowMint padding={16} radius={24} variant="hero">
       <View

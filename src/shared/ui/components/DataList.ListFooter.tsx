@@ -13,7 +13,7 @@ interface ListFooterProps {
   theme: Theme;
 }
 
-export const ListFooter: React.FC<ListFooterProps> = ({
+export const ListFooter: React.ComponentType<ListFooterProps> = ({
   loading,
   hasMore = true,
   theme,

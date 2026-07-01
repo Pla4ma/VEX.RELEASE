@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Box, Text } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import type { Achievement } from '../types';
 import { getRarityColor } from '../definitions';
@@ -11,7 +12,7 @@ interface AchievementUnlockStatusProps {
   unlockedAt?: number;
 }
 
-export const AchievementUnlockStatus: React.FC<
+export const AchievementUnlockStatus: React.ComponentType<
   AchievementUnlockStatusProps
 > = ({ achievement, isUnlocked, progress, unlockedAt }) => {
   const { theme } = useTheme();

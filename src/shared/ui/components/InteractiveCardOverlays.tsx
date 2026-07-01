@@ -6,7 +6,7 @@ import { Icon } from '../../../icons/components/Icon';
 import type { Theme } from '../../../theme';
 import { cardStyles as styles } from './InteractiveCardStyles';
 
-export const LoadingOverlay: React.FC<{ message?: string; theme: Theme }> = ({
+export const LoadingOverlay: React.ComponentType<{ message?: string; theme: Theme }> = ({
   message,
   theme,
 }) => (
@@ -31,7 +31,7 @@ export const LoadingOverlay: React.FC<{ message?: string; theme: Theme }> = ({
   </View>
 );
 
-export const DisabledOverlay: React.FC<{ reason?: string; theme: Theme }> = ({
+export const DisabledOverlay: React.ComponentType<{ reason?: string; theme: Theme }> = ({
   reason,
   theme,
 }) => (
@@ -54,7 +54,7 @@ export const DisabledOverlay: React.FC<{ reason?: string; theme: Theme }> = ({
   </View>
 );
 
-export const ErrorOverlay: React.FC<{
+export const ErrorOverlay: React.ComponentType<{
   message?: string;
   onRetry?: () => void;
   theme: Theme;
@@ -98,7 +98,7 @@ export const ErrorOverlay: React.FC<{
   </View>
 );
 
-export const SelectedOverlay: React.FC<{ icon?: string; theme: Theme }> = ({
+export const SelectedOverlay: React.ComponentType<{ icon?: string; theme: Theme }> = ({
   icon = 'check-circle',
   theme,
 }) => (

@@ -1,19 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
 import { useToast } from '../../../shared/ui/components/ToastProvider';
-import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
-import { ReferenceCard } from '../../reference-ui/ReferenceCard';
-import { type } from '../../reference-ui/referenceTokens';
 import type { Day0Mode } from '../services/day0-agent-schemas';
 import { Day0ActionGrid } from './Day0ActionGrid';
 import { Day0ActionSheet } from './Day0ActionSheet';
-import { Day0Mascot } from './Day0Mascot';
 import { Day0VexOsCard } from './Day0VexOsCard';
 
 interface HomeDayZeroLaunchpadProps {
@@ -54,53 +47,8 @@ export function HomeDayZeroLaunchpad({
         onStartSession={onStartSession}
       />
       <View style={{ marginBottom: spacing[4] }}>
-        <Day0ActionGrid onSelect={handleSelect} />
+        <Day0ActionGrid onOpenCoach={onOpenCoach} onSelect={handleSelect} />
       </View>
-
-      <Pressable
-        accessibilityHint="Opens the VEX coach to calibrate your first day"
-        accessibilityLabel="Meet VEX Anchor"
-        accessibilityRole="button"
-        onPress={onOpenCoach}
-        style={({ pressed }) => ({
-          opacity: pressed ? 0.86 : 1,
-          transform: [{ scale: pressed ? 0.985 : 1 }],
-        })}
-      >
-        <ReferenceCard showAsset={false} style={{ marginBottom: spacing[8] }}>
-          <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: vexLightGlass.mint[100],
-                borderColor: vexLightGlass.glass.border,
-                borderRadius: borderRadius['2xl'],
-                borderWidth: 1,
-                height: 76,
-                justifyContent: 'center',
-                width: 76,
-              }}
-            >
-              <Day0Mascot size={58} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={type.kicker}>VEX ANCHOR</Text>
-              <Text style={[type.title, { marginTop: spacing[1] }]}>
-                Check in before you start.
-              </Text>
-              <Text style={[type.body, { marginTop: spacing[1] }]}>
-                Tell VEX what today feels like. It will shape the next move.
-              </Text>
-            </View>
-            <Icon
-              color={vexLightGlass.semantic.fireDeep}
-              name="arrowRight"
-              size="sm"
-            />
-          </View>
-        </ReferenceCard>
-      </Pressable>
-
       <Day0ActionSheet
         mode={activeMode}
         onClose={(): void => setActiveMode(null)}

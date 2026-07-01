@@ -10,7 +10,7 @@ interface ResolvedSuccessCardProps {
   successColor: string;
 }
 
-export const ResolvedSuccessCard: React.FC<ResolvedSuccessCardProps> = ({
+export const ResolvedSuccessCard: React.ComponentType<ResolvedSuccessCardProps> = ({
   animatedStyle,
   successBg,
   successColor,

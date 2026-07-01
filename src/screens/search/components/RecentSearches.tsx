@@ -12,7 +12,7 @@ interface RecentSearchesProps {
   onSelect: (search: string) => void;
 }
 
-export const RecentSearches: React.FC<RecentSearchesProps> = ({ onSelect }) => {
+export const RecentSearches: React.ComponentType<RecentSearchesProps> = ({ onSelect }) => {
   const { theme } = useTheme();
 
   return (

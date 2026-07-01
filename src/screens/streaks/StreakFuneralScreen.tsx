@@ -22,7 +22,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, 'StreakFuneral'>;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-const StreakFuneralScreen: React.FC = () => {
+const StreakFuneralScreen: React.ComponentType = () => {
   const { theme } = useTheme();
   const { show: showToast } = useToast();
   const { user } = useAuthStore();

@@ -10,7 +10,7 @@ import { PRESETS, type EmptyStateProps } from './EmptyState.presets';
 
 export type { EmptyStateProps } from './EmptyState.presets';
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
+export const EmptyState: React.ComponentType<EmptyStateProps> = ({
   icon,
   title,
   description,
@@ -137,28 +137,28 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   );
 };
 
-export const InventoryEmptyState: React.FC<
+export const InventoryEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.inventory} {...props} />;
-export const FeedEmptyState: React.FC<
+export const FeedEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.feed} {...props} />;
-export const LeaderboardEmptyState: React.FC<
+export const LeaderboardEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.leaderboards} {...props} />;
-export const ChallengeEmptyState: React.FC<
+export const ChallengeEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.challenges} {...props} />;
-export const ShopEmptyState: React.FC<
+export const ShopEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.shop} {...props} />;
-export const SquadWarsEmptyState: React.FC<
+export const SquadWarsEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description'>
 > = (props) => <EmptyState {...PRESETS.squadWars} {...props} />;
-export const OfflineEmptyState: React.FC<
+export const OfflineEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description' | 'variant'>
 > = (props) => <EmptyState {...PRESETS.offline} {...props} />;
-export const ErrorEmptyState: React.FC<
+export const ErrorEmptyState: React.ComponentType<
   Omit<EmptyStateProps, 'icon' | 'title' | 'description' | 'variant'>
 > = (props) => <EmptyState {...PRESETS.error} {...props} />;
 

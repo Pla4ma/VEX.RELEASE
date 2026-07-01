@@ -1,5 +1,6 @@
 import { buildCorsHeaders, withCorsHeaders } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
+import { requireConfig, respondError } from '../_shared/config.ts';
 import {
   handleSubmit,
   handleExtract,
@@ -13,12 +14,8 @@ let cachedServiceClient: SupabaseClient | null = null;
 
 function getServiceClient(): SupabaseClient {
   if (!cachedServiceClient) {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!supabaseUrl || !serviceRoleKey) {
-      throw new Error('Missing Supabase service configuration');
-    }
-    cachedServiceClient = createClient(supabaseUrl, serviceRoleKey, {
+    const config = requireConfig();
+    cachedServiceClient = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
   }
@@ -38,7 +35,12 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
   const routePath = url.pathname.replace('/functions/v1/content-study', '').replace(/^\//, '');
-  const supabase = getServiceClient();
+  let supabase: SupabaseClient;
+  try {
+    supabase = getServiceClient();
+  } catch {
+    return respondError('Missing Supabase service configuration', 500, req);
+  }
   if (req.method === 'POST' && routePath === 'submit') return withCorsHeaders(await handleSubmit(req, supabase, auth.user.id), corsHeaders);
   if (req.method === 'POST' && routePath === 'extract') return withCorsHeaders(await handleExtract(req, supabase, auth.user.id), corsHeaders);
   if (req.method === 'POST' && routePath === 'generate') return withCorsHeaders(await handleGenerate(req, supabase, auth.user.id), corsHeaders);

@@ -21,7 +21,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { styles, getToastTypeStyle } from './Toast.styles';
 import type { ToastProps } from './Toast.types';
 
-export const ToastComponent: React.FC<ToastProps> = ({ toast, onDismiss }) => {
+export const ToastComponent: React.ComponentType<ToastProps> = ({ toast, onDismiss }) => {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
   const translateY = useSharedValue(0);

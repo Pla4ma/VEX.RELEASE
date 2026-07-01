@@ -64,7 +64,7 @@ function ProfileStatsError(): React.ReactNode {
   );
 }
 
-export const ProfileStatsTab: React.FC<ProfileStatsTabProps> = ({
+export const ProfileStatsTab: React.ComponentType<ProfileStatsTabProps> = ({
   stats,
   hasError,
   mastery,

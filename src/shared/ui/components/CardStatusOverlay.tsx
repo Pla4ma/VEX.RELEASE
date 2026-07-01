@@ -7,7 +7,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import type { AsyncStatus } from './StatusFeedback.types';
 import { Text as VexText } from '../../../components/primitives/Text';
 
-export const CardStatusOverlay: React.FC<{
+export const CardStatusOverlay: React.ComponentType<{
   status: AsyncStatus;
   message?: string;
   onRetry?: () => void;

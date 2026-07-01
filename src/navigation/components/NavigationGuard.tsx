@@ -14,7 +14,7 @@ interface NavigationGuardProps {
   fallback?: React.ReactNode;
 }
 
-export const NavigationGuard: React.FC<NavigationGuardProps> = ({
+export const NavigationGuard: React.ComponentType<NavigationGuardProps> = ({
   featureFlag,
   children,
   fallback,

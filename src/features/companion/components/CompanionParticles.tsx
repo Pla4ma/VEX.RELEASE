@@ -12,7 +12,7 @@ interface CompanionParticlesProps {
 }
 
         
-export const CompanionParticles: React.FC<CompanionParticlesProps> = ({
+export const CompanionParticles: React.ComponentType<CompanionParticlesProps> = ({
   count,
   companionSize,
   theme,

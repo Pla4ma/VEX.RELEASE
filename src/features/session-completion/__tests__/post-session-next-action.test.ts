@@ -1,4 +1,4 @@
-import { buildPostSessionNextAction } from '../service';
+import { buildPostSessionNextAction } from '../post-session-next-action';
 import { createSessionSummary, SESSION_ID } from './ledger-test-utils';
 
 describe('post-session next action', () => {

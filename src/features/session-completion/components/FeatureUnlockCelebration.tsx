@@ -73,17 +73,18 @@ export function FeatureUnlockCelebration({
         overlayStyle,
       ]}
     >
-      <Pressable
-        onPress={onDismiss}
-        style={{
+<Pressable
+onPress={onDismiss}
+accessibilityLabel="Dismiss feature unlock"
+accessibilityRole="button"
+accessibilityHint="Closes this feature unlock celebration"
+style={{
           bottom: 0,
           left: 0,
           position: 'absolute',
           right: 0,
           top: 0,
         }}
-        accessibilityLabel="Dismiss feature unlock announcement"
-        accessibilityRole="button"
       />
 
       <CelebrationOverlay

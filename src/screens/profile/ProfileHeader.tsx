@@ -19,7 +19,7 @@ interface ProfileHeaderProps {
   onLogout: () => void;
 }
 
-export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
+export const ProfileHeader: React.ComponentType<ProfileHeaderProps> = ({
   user,
   streakDays,
   level,

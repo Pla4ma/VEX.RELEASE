@@ -1,10 +1,10 @@
 import { z } from 'npm:zod';
-
 import { configure } from 'npm:@trigger.dev/sdk@latest';
 import { finalizeSeasonTask } from '../../../jobs/seasons/finalize-season.ts';
 import { buildCorsHeaders, jsonWithCors } from '../_shared/cors.ts';
 import { verifyAuthorizedUser } from '../_shared/auth.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
+import { requireConfig } from '../_shared/config.ts';
 
 configure({
   apiKey: Deno.env.get('TRIGGER_SECRET_KEY') ?? '',
@@ -17,24 +17,37 @@ const BodySchema = z.object({
   seasonId: z.string().uuid(),
 });
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request): Promise<Response> => {
   const corsHeaders = buildCorsHeaders(req);
-
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
-  }
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
   const authResult = await verifyAuthorizedUser(req, jsonWithCors);
   if (!authResult.ok) return authResult.response;
-  const userId = authResult.user.id;
+
+  let config: ReturnType<typeof requireConfig>;
+  try {
+    config = requireConfig();
+  } catch {
+    return jsonWithCors(req, { success: false, error: 'Missing Supabase configuration' }, 500);
+  }
 
   const rateLimitResult = await checkRateLimit(
-    userId, 'season:finalize',
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    authResult.user.id,
+    'season:finalize',
+    config.SUPABASE_URL,
+    config.SUPABASE_SERVICE_ROLE_KEY,
   );
+
   if (!rateLimitResult.allowed) {
-    return jsonWithCors(req, { success: false, error: 'Rate limit exceeded', remaining: rateLimitResult.remaining }, 429);
+    return jsonWithCors(
+      req,
+      {
+        success: false,
+        error: 'Rate limit exceeded',
+        remaining: rateLimitResult.remaining,
+      },
+      429,
+    );
   }
 
   try {

@@ -37,7 +37,7 @@ interface SessionErrorStateProps {
   onContactSupport?: () => void;
 }
 
-export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
+export const SessionErrorState: React.ComponentType<SessionErrorStateProps> = ({
   error,
   onRetry,
   onGoBack,

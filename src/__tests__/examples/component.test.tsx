@@ -13,7 +13,7 @@ interface WalletCardProps {
   onAddCoins?: () => void;
   loading?: boolean;
 }
-const WalletCard: React.FC<WalletCardProps> = ({
+const WalletCard: React.ComponentType<WalletCardProps> = ({
   coins,
   gems,
   onAddCoins,
@@ -42,7 +42,7 @@ const WalletCard: React.FC<WalletCardProps> = ({
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
 }
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+const LoginForm: React.ComponentType<LoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');

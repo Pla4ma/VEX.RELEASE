@@ -9,7 +9,7 @@ import { useUIStore } from '../../store/index';
 import { lightColors } from '@/theme/tokens/colors';
 
 
-export const TwoFactorSection: React.FC = () => {
+export const TwoFactorSection: React.ComponentType = () => {
   const { theme } = useTheme();
   const { showToast } = useUIStore();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);

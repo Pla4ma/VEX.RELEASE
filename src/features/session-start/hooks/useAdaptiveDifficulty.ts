@@ -6,7 +6,7 @@
  * difficulty recommendations.
  */
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import * as Sentry from '@sentry/react-native';
 import {
   getAdaptiveDifficultySuggestion,
@@ -54,41 +54,37 @@ export function useAdaptiveDifficulty(
   const [hasAccepted, setHasAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load dismissed timestamp from storage
+  // SAFETY: async I/O to load persisted dismissal timestamp; must run as effect
   useEffect(() => {
     if (!userId) {
       return;
     }
-
     const stored = dismissStorage.getItemSync(STORAGE_KEY_PREFIX + userId);
     if (stored) {
       setDismissedAt(parseInt(stored, 10));
     }
   }, [userId]);
 
-  // Generate suggestion
+  // Compute suggestion with useMemo instead of storing in separate effect+useState
   const suggestion = useMemo(() => {
     if (!recentSessions || recentSessions.length === 0) {
       return null;
     }
-
     return getAdaptiveDifficultySuggestion(recentSessions, currentDifficulty);
   }, [recentSessions, currentDifficulty]);
 
-  // Check if suggestion should be shown
+  // Compute visibility from suggestion, dismissal state, and acceptance — no separate state needed
   const showSuggestion = useMemo(() => {
     if (!suggestion || !suggestion.suggestion) {
       return false;
     }
-
     if (hasAccepted) {
       return false;
     }
-
     return shouldShowSuggestion(dismissedAt);
   }, [suggestion, dismissedAt, hasAccepted]);
 
-  // Track when suggestion becomes visible
+  // SAFETY: analytics tracking for visibility is a fire-and-forget side effect
   useEffect(() => {
     if (showSuggestion && suggestion?.suggestion && userId) {
       trackDifficultySuggestionShown(
@@ -100,8 +96,7 @@ export function useAdaptiveDifficulty(
     }
   }, [showSuggestion, suggestion, userId, currentDifficulty]);
 
-  // Dismiss the suggestion
-  const dismissSuggestion = useCallback(async () => {
+  const dismissSuggestion = useCallback(() => {
     const now = Date.now();
     setDismissedAt(now);
 
@@ -109,32 +104,31 @@ export function useAdaptiveDifficulty(
       return;
     }
 
-    // Track analytics
+    // SAFETY: analytics + persistence are fire-and-forget side effects in callback
     trackDifficultySuggestionDismissed(userId, suggestion.suggestion);
 
-    // Persist dismissal
-    try {
-      const preference = await getDifficultyPreference(userId);
-      if (preference) {
-        await saveDifficultyPreference({
-          ...preference,
-          suggestionDismissedAt: now,
+    (async () => {
+      try {
+        const preference = await getDifficultyPreference(userId);
+        if (preference) {
+          await saveDifficultyPreference({
+            ...preference,
+            suggestionDismissedAt: now,
+          });
+        }
+        dismissStorage.setItemSync(STORAGE_KEY_PREFIX + userId, now.toString());
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            feature: 'session-start',
+            operation: 'persist-difficulty-dismissal',
+          },
         });
       }
-
-      dismissStorage.setItemSync(STORAGE_KEY_PREFIX + userId, now.toString());
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          feature: 'session-start',
-          operation: 'persist-difficulty-dismissal',
-        },
-      });
-    }
+    })();
   }, [userId, suggestion]);
 
-  // Accept the suggestion
-  const acceptSuggestion = useCallback(async () => {
+  const acceptSuggestion = useCallback(() => {
     if (!suggestion?.suggestion || !userId) {
       return;
     }
@@ -142,37 +136,36 @@ export function useAdaptiveDifficulty(
     setHasAccepted(true);
     setIsLoading(true);
 
-    try {
-      // Track analytics
-      trackDifficultySuggestionAccepted(
-        userId,
-        currentDifficulty,
-        suggestion.suggestion,
-        suggestion.stats,
-      );
+    // SAFETY: analytics + persistence are fire-and-forget side effects in callback
+    trackDifficultySuggestionAccepted(
+      userId,
+      currentDifficulty,
+      suggestion.suggestion,
+      suggestion.stats,
+    );
 
-      // Persist the change
-      await updateCurrentDifficulty(userId, suggestion.suggestion);
-
-      // Update preference record
-      const preference = await getDifficultyPreference(userId);
-      if (preference) {
-        await saveDifficultyPreference({
-          ...preference,
-          currentDifficulty: suggestion.suggestion,
-          timesAccepted: preference.timesAccepted + 1,
+    (async () => {
+      try {
+        await updateCurrentDifficulty(userId, suggestion.suggestion!);
+        const preference = await getDifficultyPreference(userId);
+        if (preference) {
+          await saveDifficultyPreference({
+            ...preference,
+            currentDifficulty: suggestion.suggestion!,
+            timesAccepted: preference.timesAccepted + 1,
+          });
+        }
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: {
+            feature: 'session-start',
+            operation: 'accept-difficulty-suggestion',
+          },
         });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: {
-          feature: 'session-start',
-          operation: 'accept-difficulty-suggestion',
-        },
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    })();
   }, [suggestion, userId, currentDifficulty]);
 
   return {

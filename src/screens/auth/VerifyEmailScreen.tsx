@@ -16,7 +16,7 @@ import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
-const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
+const VerifyEmailScreen: React.ComponentType<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { email } = route.params;
@@ -62,7 +62,7 @@ const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   }, []);
 
   const handleContinue = useCallback(() => {
-    navigateToAuthScreen(navigation as unknown as NavigationProp<RootStackParams>, 'Login', { email });
+    navigateToAuthScreen(navigation as NavigationProp<RootStackParams>, 'Login', { email });
   }, [navigation, email]);
 
   return (

@@ -24,7 +24,7 @@ interface StreakInsurancePromptProps {
   onDismiss: () => void;
 }
 
-export const StreakInsurancePrompt: React.FC<StreakInsurancePromptProps> = ({
+export const StreakInsurancePrompt: React.ComponentType<StreakInsurancePromptProps> = ({
   streakDays,
   insuranceCost = 200,
   userCoins,

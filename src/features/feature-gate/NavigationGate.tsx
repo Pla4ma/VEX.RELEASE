@@ -63,6 +63,8 @@ export function NavigationGate({
         <Button
           variant="primary"
           onPress={handleGoBack}
+          accessibilityLabel={suggestedAction}
+          accessibilityHint={`Navigates away from unavailable ${featureName}`}
           style={{ marginTop: theme.spacing[4] }}
         >
           {suggestedAction}

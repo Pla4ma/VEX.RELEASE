@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VEX Motion Drop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="film" aria-label="Five second VEX motion prototype">
+      <canvas id="field" aria-hidden="true"></canvas>
+      <section class="shot" id="shot">
+        <div class="scan" aria-hidden="true"></div>
+        <div class="halo" aria-hidden="true"></div>
+        <svg class="sigil" viewBox="0 0 640 640" aria-hidden="true">
+          <defs>
+            <linearGradient id="stroke" x1="80" x2="560" y1="80" y2="560">
+              <stop stop-color="#f8ff7a" />
+              <stop offset=".45" stop-color="#00f0ff" />
+              <stop offset="1" stop-color="#ff3d8b" />
+            </linearGradient>
+          </defs>
+          <path class="orbit one" d="M320 62 C486 62 578 156 578 320 C578 484 486 578 320 578 C154 578 62 484 62 320 C62 156 154 62 320 62Z" />
+          <path class="orbit two" d="M164 410 C258 172 382 172 476 410" />
+          <path class="slash" d="M188 152 L316 496 L454 152" />
+        </svg>
+        <div class="copy">
+          <p class="pre">Config energy / VEX translation</p>
+          <h1>
+            <span>Motion</span>
+            <span>becomes</span>
+            <span>material.</span>
+          </h1>
+          <p class="sub">Five seconds. One system. Timeline, shader, token, code.</p>
+        </div>
+        <div class="ticker" aria-hidden="true">
+          <span>KEYFRAMES</span><span>SHADERS</span><span>EXPORT</span><span>REANIMATED</span>
+        </div>
+        <button id="replay" type="button" aria-label="Replay five second motion prototype">
+          Replay
+        </button>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

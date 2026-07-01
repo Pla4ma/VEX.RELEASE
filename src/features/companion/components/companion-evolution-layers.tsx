@@ -10,7 +10,7 @@ import { lightColors } from '@/theme/tokens/colors';
 import { PHASE_NAMES, PHASE_EMOJIS } from './companion-evolution-types';
 import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
-export const GlowLayer: React.FC<{
+export const GlowLayer: React.ComponentType<{
   glowStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
   ceremonyPhase: EvolutionPhase;
@@ -49,7 +49,7 @@ export const GlowLayer: React.FC<{
   );
 };
 
-export const FlashLayer: React.FC<{ flashStyle: AnimatedStyle }> = ({
+export const FlashLayer: React.ComponentType<{ flashStyle: AnimatedStyle }> = ({
   flashStyle,
 }) => (
   <Animated.View
@@ -69,7 +69,7 @@ export const FlashLayer: React.FC<{ flashStyle: AnimatedStyle }> = ({
   />
 );
 
-export const OldFormLayer: React.FC<{
+export const OldFormLayer: React.ComponentType<{
   oldFormStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
   previousPhase: CompanionPhase;
@@ -100,7 +100,7 @@ export const OldFormLayer: React.FC<{
   </Animated.View>
 );
 
-export const NewFormLayer: React.FC<{
+export const NewFormLayer: React.ComponentType<{
   newFormStyle: AnimatedStyle;
   themeColors: ElementThemeColors;
   newPhase: CompanionPhase;

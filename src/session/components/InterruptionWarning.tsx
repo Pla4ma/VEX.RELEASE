@@ -17,7 +17,7 @@ import {
 } from './InterruptionWarning.helpers';
 import { buttonTap } from '../../utils/haptics';
 
-export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
+export const InterruptionWarning: React.ComponentType<InterruptionWarningProps> = ({
   countdownSeconds,
   hasStreakSave = false,
   interruptionType,

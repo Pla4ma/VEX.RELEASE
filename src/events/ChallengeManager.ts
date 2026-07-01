@@ -53,13 +53,15 @@ export class ChallengeManager {
   updateChallengeProgress(type: ChallengeType, amount: number): void {
     const userId = this.getUserId();
     if (!userId) {return;}
-    for (const challenge of this.activeChallenges.values()) {
+    const challenges = this.activeChallenges; // Cache map reference
+    for (const challenge of challenges.values()) {
       if (challenge.type !== type) {continue;}
       if (!challenge.participants.includes(userId)) {continue;}
       if (challenge.status !== 'ACTIVE') {continue;}
       const oldProgress = challenge.progress;
+      const target = challenge.requirement.target; // Cache repeated property access
       challenge.progress = Math.min(
-        challenge.requirement.target,
+        target,
         challenge.progress + amount,
       );
       challenge.progressHistory.push({ timestamp: Date.now(), value: challenge.progress });
@@ -68,7 +70,7 @@ export class ChallengeManager {
         progress: challenge.progress,
       });
       if (
-        challenge.progress >= challenge.requirement.target &&
+        challenge.progress >= target &&
         !challenge.completedBy.includes(userId)
       ) {
         this.completeChallenge(challenge.id);
@@ -78,8 +80,8 @@ export class ChallengeManager {
           userId,
           challengeId: challenge.id,
           progress: challenge.progress,
-          target: challenge.requirement.target,
-          percent: Math.floor((challenge.progress / challenge.requirement.target) * 100),
+          target,
+          percent: Math.floor((challenge.progress / target) * 100),
         });
       }
     }

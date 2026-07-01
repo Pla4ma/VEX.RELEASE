@@ -7,7 +7,9 @@ import Animated, {
   withSequence,
   FadeInUp,
 } from 'react-native-reanimated';
-import { Box, Text, Button } from '@/components/primitives';
+import { Box } from '@/components/primitives/Box'
+import { Text } from '@/components/primitives/Text'
+import { Button } from '@/components/primitives/Button';
 import { useTheme } from '@/theme';
 import * as Sentry from '@sentry/react-native';
 import { getRiskText } from './helpers';
@@ -22,7 +24,7 @@ interface PromptViewProps {
   onDismiss: () => void;
 }
 
-export const PromptView: React.FC<PromptViewProps> = ({
+export const PromptView: React.ComponentType<PromptViewProps> = ({
   streakDays,
   hoursRemaining,
   shieldsAvailable,

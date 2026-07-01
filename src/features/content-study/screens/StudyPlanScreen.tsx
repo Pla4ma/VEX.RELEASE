@@ -53,7 +53,7 @@ function StudyPlanScreen() {
   const handleStartSession = useCallback(async () => {
     const sessionConfig = await startSession();
     if (sessionConfig && generation) {
-      navigateToRootScreen(navigation as unknown as RootNavigationProp<import('../../../navigation/types').RootStackParams>, 'SessionStack', {
+      navigateToRootScreen((navigation as unknown) as RootNavigationProp<import('../../../navigation/types').RootStackParams>, 'SessionStack', {
         screen: 'SessionSetup',
         params: {
           suggestedDurationSeconds: sessionConfig.duration,

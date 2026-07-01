@@ -4,7 +4,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Skeleton } from './SkeletonBase';
 import { styles } from './skeleton-styles';
 
-export const StudyPlanSkeleton: React.FC = () => {
+export const StudyPlanSkeleton: React.ComponentType = () => {
   const { theme } = useTheme();
   return (
     <View
@@ -94,7 +94,7 @@ export const StudyPlanSkeleton: React.FC = () => {
   );
 };
 
-export const ContentHistorySkeleton: React.FC = () => {
+export const ContentHistorySkeleton: React.ComponentType = () => {
   const { theme } = useTheme();
   return (
     <View
@@ -130,7 +130,7 @@ export const ContentHistorySkeleton: React.FC = () => {
   );
 };
 
-export const ExtractionSkeleton: React.FC = () => {
+export const ExtractionSkeleton: React.ComponentType = () => {
   const { theme } = useTheme();
   return (
     <View

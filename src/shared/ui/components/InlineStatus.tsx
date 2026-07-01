@@ -8,7 +8,7 @@ import {
   getStatusColor,
 } from './StatusFeedback.types';
 
-export const InlineStatus: React.FC<{
+export const InlineStatus: React.ComponentType<{
   status: AsyncStatus;
   message?: string;
   size?: 'sm' | 'md';

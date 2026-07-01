@@ -16,7 +16,7 @@ interface MultipleChoiceOptionsProps {
   onSelect: (option: string) => void;
 }
 
-export const MultipleChoiceOptions: React.FC<MultipleChoiceOptionsProps> = ({
+export const MultipleChoiceOptions: React.ComponentType<MultipleChoiceOptionsProps> = ({
   options,
   correctAnswer,
   selectedAnswer,
