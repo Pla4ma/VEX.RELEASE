@@ -13,7 +13,7 @@ export function SuggestionsSkeleton(): React.ReactNode {
     <Box gap="sm">
       {[1, 2].map((i) => (
         <Box
-          key={i}
+          key={`item-${i}`}
           flexDirection="row"
           alignItems="center"
           gap="md"

@@ -39,6 +39,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>): {
         setData(newData);
         return true;
       } catch (err) {
+        debug.error('usePersistence save error:', err as Error);
         setError(err instanceof Error ? err : new Error('Save failed'));
         return false;
       }

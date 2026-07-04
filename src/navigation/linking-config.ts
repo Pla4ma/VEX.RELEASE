@@ -26,7 +26,9 @@ function isAllowedDeepLink(url: string): boolean {
   }
 }
 
+// Added missing deep link routes for all root stack screens
 const SCREEN_CONFIG = {
+  // Existing screens
   Auth: {
     screens: {
       Login: 'login',
@@ -46,6 +48,7 @@ const SCREEN_CONFIG = {
   },
   Onboarding: 'onboarding',
   Paywall: 'paywall',
+  VipPaywall: 'vip-paywall',
   Settings: {
     path: 'settings',
     screens: {

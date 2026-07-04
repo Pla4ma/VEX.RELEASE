@@ -36,7 +36,7 @@ export function PlanTodayView({
     return (
       <View style={{ padding: 20, gap: 12 }}>
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} width="100%" height={64} borderRadius={12} />
+          <Skeleton key={`item-${i}`} width="100%" height={64} borderRadius={12} />
         ))}
       </View>
     );

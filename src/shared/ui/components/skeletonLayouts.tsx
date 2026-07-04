@@ -87,7 +87,7 @@ export const ListSkeleton: React.ComponentType<{ count?: number; style?: ViewSty
   return (
     <View style={[{ gap: theme.spacing[3] }, style]}>
       {Array.from({ length: count }).map((_, index) => (
-        <CardSkeleton key={index} />
+        <CardSkeleton key={`item-${index}`} />
       ))}
     </View>
   );
@@ -99,7 +99,7 @@ export const StatsSkeleton: React.ComponentType<{ style?: ViewStyle }> = ({ styl
     <View style={[{ flexDirection: 'row', gap: theme.spacing[3] }, style]}>
       {[1, 2, 3].map((i) => (
         <View
-          key={i}
+          key={`item-${i}`}
           style={{
             flex: 1,
             backgroundColor: theme.colors.background.secondary,
@@ -126,7 +126,7 @@ export const TextBlockSkeleton: React.ComponentType<{
       <SkeletonItem variant="title" width="70%" />
       {Array.from({ length: lines - 1 }).map((_, index) => (
         <SkeletonItem
-          key={index}
+          key={`item-${index}`}
           variant="text"
           width={index === lines - 2 ? '50%' : '100%'}
         />

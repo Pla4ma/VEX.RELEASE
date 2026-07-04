@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { getConnectionState } from '../../lib/repository/base';
 import { enqueue } from '../../lib/offline/queue';
-import { SessionSummarySchema } from '../../session/types/schemas';
+import { SessionSummarySchema, type SessionSummary } from '../../session/types/schemas';
 import { createDebugger } from '../../utils/debug';
 import { queryClient, QueryKeys } from '../../api/QueryProvider';
 import { useSessionUIStore } from '../../store/session-state';
@@ -72,8 +72,16 @@ type SessionCompletedEvent = z.infer<typeof SessionCompletedEventSchema>;
 export async function orchestrateSessionCompletion(
   event: SessionCompletedEvent,
 ): Promise<PostSessionStoryViewModel | null> {
-  const parsed = SessionCompletedEventSchema.parse(event);
-  const summary = SessionSummarySchema.parse(parsed.summary);
+  let parsed: SessionCompletedEvent;
+  let summary: SessionSummary;
+  try {
+    parsed = SessionCompletedEventSchema.parse(event);
+    summary = SessionSummarySchema.parse(parsed.summary);
+  } catch (error) {
+    Sentry.captureException(error, { tags: { feature: 'session-completion-orchestrator-parse' } });
+    // If parsing fails, abort processing
+    return null;
+  }
   const isOnline = getConnectionState() !== 'offline';
 
   // LAYER 1: Local completion receipt — always succeeds

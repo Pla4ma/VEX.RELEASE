@@ -40,7 +40,7 @@ export function renderNoiseGrain(): React.JSX.Element {
     >
       {Array.from({ length: 40 }).map((_, i) => (
         <View
-          key={i}
+          key={`item-${i}`}
           style={{}}
         />
       ))}

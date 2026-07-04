@@ -17,7 +17,7 @@ export const ChallengeHubSkeleton: React.ComponentType = () => {
         <SkeletonItem variant="title" width="50%" style={{ marginBottom: 12 }} />
         <View style={styles.statsGrid}>
           {[0, 1, 2, 3].map((i) => (
-            <View key={i} style={styles.statItem}>
+            <View key={`item-${i}`} style={styles.statItem}>
               <SkeletonItem variant="text" width={32} height={24} />
               <SkeletonItem variant="text" width={48} height={12} style={{ marginTop: 4 }} />
             </View>
@@ -41,7 +41,7 @@ export const ChallengeHubSkeleton: React.ComponentType = () => {
       </View>
 
       {[0, 1, 2].map((i) => (
-        <Card key={i} style={{ padding: 16, marginBottom: 12 }}>
+        <Card key={`item-${i}`} style={{ padding: 16, marginBottom: 12 }}>
           <View style={{ flexDirection: 'row', gap: 8, marginBottom: 12 }}>
             <SkeletonItem variant="button" width={60} height={24} style={{ borderRadius: 12 }} />
             <SkeletonItem variant="button" width={60} height={24} style={{ borderRadius: 12 }} />

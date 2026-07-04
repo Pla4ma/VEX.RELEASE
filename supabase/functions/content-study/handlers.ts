@@ -8,7 +8,7 @@
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
 import { SubmitContentSchema, GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
 import { generateStudyPlan, resolveStudyPlanModel } from './extractors.ts';
-import { STUDY_CONTENT_COLUMNS, STUDY_CONTENT_WITH_GENERATIONS_COLUMNS } from './columns.ts';
+import { STUDY_CONTENT_COLUMNS_STR, STUDY_CONTENT_WITH_GENERATIONS } from './columns.ts';
 export { handleExtract } from './handlers-extract.ts';
 
 const MAX_CONTENT_LENGTH = 50000;
@@ -141,7 +141,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
   const validated = GenerateStudyPlanSchema.parse(body);
   const { canGenerate, remaining } = await checkRateLimit(supabase, userId);
   if (!canGenerate) return json({ success: false, error: `Daily limit reached (${DAILY_GENERATION_LIMIT}/day)`, remaining: 0 }, 429);
-  const { data: content, error: contentError } = await supabase.from('study_content').select(STUDY_CONTENT_COLUMNS).eq('id', validated.contentId).eq('user_id', userId).single();
+  const { data: content, error: contentError } = await supabase.from('study_content').select(STUDY_CONTENT_COLUMNS_STR).eq('id', validated.contentId).eq('user_id', userId).single();
   if (contentError || !content) return json({ success: false, error: 'Content not found' }, 400);
   if (content.status !== 'EXTRACTED' && content.status !== 'READY') return json({ success: false, error: `Not ready: ${content.status}` }, 400);
   await supabase.from('study_content').update({ status: 'PROCESSING' }).eq('id', validated.contentId);
@@ -169,7 +169,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
 export async function handleStatus(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
   const contentId = new URL(req.url).pathname.split('/').pop();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
-  const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_WITH_GENERATIONS_COLUMNS).eq('id', contentId).eq('user_id', userId).single();
+  const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_WITH_GENERATIONS).eq('id', contentId).eq('user_id', userId).single();
   if (error || !content) return json({ success: false, error: 'Not found' }, 400);
   return json({ success: true, contentId: content.id, status: content.status, extractedLength: content.extracted_length, errorMessage: content.error_message, generation: content.study_generations?.[0] || null });
 }

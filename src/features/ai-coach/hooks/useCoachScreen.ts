@@ -12,6 +12,7 @@ import {
 } from '../service/coach-screen-service';
 import type { CoachMessage, CoachState } from '../types';
 import { useAuthStore } from '../../../store';
+import * as Sentry from '@sentry/react-native';
 
 const debug = createDebugger('coach:hooks');
 
@@ -63,6 +64,9 @@ export function useAskCoachQuestionMutation(callbacks: {
     },
     onError: (err) => {
       callbacks.onError('Sorry, I had trouble responding. Please try again.');
+      Sentry.captureException(err, {
+        tags: { feature: 'ai-coach', operation: 'ask-coach-question' },
+      });
       debug.error(
         'Coach response error',
         err instanceof Error ? err : new Error(String(err)),

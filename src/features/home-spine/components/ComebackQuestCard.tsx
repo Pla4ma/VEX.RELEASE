@@ -132,7 +132,7 @@ export function ComebackQuestCard({
           <Box flexDirection="row" gap="sm" mb="md">
             {Array.from({ length: sessionsRequired }).map((_, index) => (
               <Box
-                key={index}
+                key={`item-${index}`}
                 flex={1}
                 height={8}
                 borderRadius="full"

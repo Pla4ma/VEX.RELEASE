@@ -39,7 +39,7 @@ export function SessionGlyph({
     >
       <Defs>
         <LinearGradient id="g" x1="10" y1="6" x2="62" y2="66">
-          <Stop offset="0" stopColor="#FFFFFF" stopOpacity="0.92" />
+          <Stop offset="0" stopColor="theme.glassColors.vexWhite" stopOpacity="0.92" />
           <Stop offset="0.55" stopColor={teal} stopOpacity="0.22" />
           <Stop offset="1" stopColor={amber} stopOpacity="0.18" />
         </LinearGradient>

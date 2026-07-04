@@ -67,7 +67,7 @@ export function LoadingDots({ count = 3 }: { count?: number }) {
   return (
     <View style={styles.dotsContainer}>
       {Array.from({ length: count }).map((_, i) => (
-        <LoadingDot key={i} index={i} />
+        <LoadingDot key={`item-${i}`} index={i} />
       ))}
     </View>
   );

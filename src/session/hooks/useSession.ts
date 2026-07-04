@@ -1,28 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getSessionOrchestrator } from '../SessionOrchestrator';
 import { eventBus } from '../../events/EventBus';
-import type { SessionConfig, SessionState } from '../types';
-import type { SessionActions } from './useSessionActions';
 import { createSessionActions } from './useSessionActions';
+import type { SessionActions } from './useSessionActions';
+import type { SessionConfig, SessionState } from '../types';
+import { UseSessionState, UseSessionReturn, debug } from './useSessionHelpers';
 
 export { useSessionHistory } from './useSessionHistory';
 export { useSessionPresets } from './useSessionPresets';
 export { useSessionStats } from './useSessionStats';
-
-interface UseSessionState {
-  session: SessionState | null;
-  isActive: boolean;
-  isPaused: boolean;
-  remainingSeconds: number;
-  elapsedSeconds: number;
-  completionPercentage: number;
-  isLoading: boolean;
-  error: Error | null;
-}
-
-export interface UseSessionReturn extends UseSessionState, SessionActions {
-  refresh: () => void;
-}
 
 export function useSession(userId: string): UseSessionReturn {
   const orchestratorRef = useRef(getSessionOrchestrator());
@@ -65,6 +51,7 @@ export function useSession(userId: string): UseSessionReturn {
         error: null,
       }));
     } catch (err) {
+      debug.error('useSession refresh error:', err as Error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -146,6 +133,7 @@ export function useSession(userId: string): UseSessionReturn {
           refresh();
           return result;
         } catch (err) {
+          debug.error('useSession action error:', err as Error);
           setState((prev) => ({
             ...prev,
             isLoading: false,
@@ -167,6 +155,7 @@ export function useSession(userId: string): UseSessionReturn {
         refresh();
         return session;
       } catch (err) {
+        debug.error('useSession createSession error:', err as Error);
         setState((prev) => ({
           ...prev,
           isLoading: false,

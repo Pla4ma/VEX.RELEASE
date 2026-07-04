@@ -82,7 +82,7 @@ export function SegmentedProgress({
     <View style={[styles.segmentedContainer, { gap }]}>
       {Array.from({ length: segments }).map((_, i) => (
         <View
-          key={i}
+          key={`item-${i}`}
           style={[
             styles.segment,
             {

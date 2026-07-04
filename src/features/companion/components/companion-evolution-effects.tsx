@@ -23,7 +23,7 @@ export const ParticleLayer: React.ComponentType<{
       const distance = 100;
       return (
         <Box
-          key={i}
+          key={`item-${i}`}
           position="absolute"
           width={8}
           height={8}

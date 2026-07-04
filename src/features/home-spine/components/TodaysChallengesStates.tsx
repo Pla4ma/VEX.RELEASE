@@ -32,7 +32,7 @@ export function ChallengesWidgetSkeleton(): React.ReactNode {
         </Box>
       </Box>
       {[1, 2, 3].map((i) => (
-        <Box key={i} mb="sm" gap="xs">
+        <Box key={`item-${i}`} mb="sm" gap="xs">
           <Box
             width="100%"
             height={8}

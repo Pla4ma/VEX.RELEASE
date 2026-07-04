@@ -58,7 +58,7 @@ export const SkeletonCard: React.ComponentType<{ lines?: number; height?: number
       <View style={skeletonStyles.cardContent}>
         {Array.from({ length: lines }).map((_, i) => (
           <Skeleton
-            key={i}
+            key={`item-${i}`}
             width={i === lines - 1 ? '80%' : '100%'}
             height={14}
             animate={false}

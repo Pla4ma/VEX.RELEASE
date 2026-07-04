@@ -116,7 +116,7 @@ export function LiquidGlassSphereRaw({
           <Circle
             cx={center - r * 0.32}
             cy={center - r * 0.38}
-            fill="#FFFFFF"
+            fill="theme.glassColors.vexWhite"
             opacity={0.95}
             r={r * 0.06}
           />
@@ -124,7 +124,7 @@ export function LiquidGlassSphereRaw({
             d={`M ${center - r * 0.55} ${center - r * 0.68} Q ${center} ${center - r * 0.88} ${center + r * 0.45} ${center - r * 0.72}`}
             fill="none"
             opacity={0.78}
-            stroke="#FFFFFF"
+            stroke="theme.glassColors.vexWhite"
             strokeLinecap="round"
             strokeWidth={size * 0.015}
           />
@@ -135,7 +135,7 @@ export function LiquidGlassSphereRaw({
             opacity={0.65}
             rx={r * 0.55}
             ry={r * 0.42}
-            stroke="#FFFFFF"
+            stroke="theme.glassColors.vexWhite"
             strokeWidth={size * 0.008}
             transform={`rotate(-20, ${center - r * 0.08}, ${center - r * 0.12})`}
           />

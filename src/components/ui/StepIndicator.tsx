@@ -41,7 +41,7 @@ export const StepIndicator: React.ComponentType<StepIndicatorProps> = ({
             : theme.colors.semantic.border;
         return (
           <View
-            key={index}
+            key={`item-${index}`}
             style={{ alignItems: 'center', flex: 1, flexDirection: 'row' }}
           >
             <View

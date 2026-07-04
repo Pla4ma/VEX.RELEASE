@@ -138,7 +138,7 @@ export function SkeletonList({ count = 3 }: { count?: number }) {
   return (
     <View style={skeletonStyles.list}>
       {Array.from({ length: count }).map((_, index) => (
-        <SkeletonCard key={index} style={skeletonStyles.listItem} />
+        <SkeletonCard key={`item-${index}`} style={skeletonStyles.listItem} />
       ))}
     </View>
   );

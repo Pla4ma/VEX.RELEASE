@@ -40,7 +40,7 @@ export function SwirlVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx + size * 0.02} ${cy - size * 0.32} C ${cx + size * 0.15} ${cy - size * 0.32} ${cx + size * 0.22} ${cy - size * 0.22} ${cx + size * 0.2} ${cy - size * 0.1}`}
         fill="none"
         opacity={0.82}
-        stroke="#FFFFFF"
+        stroke="theme.glassColors.vexWhite"
         strokeLinecap="round"
         strokeWidth={size * 0.02}
       />
@@ -48,7 +48,7 @@ export function SwirlVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - size * 0.18} ${cy + size * 0.08} C ${cx - size * 0.22} ${cy + size * 0.02} ${cx - size * 0.18} ${cy - size * 0.06} ${cx - size * 0.1} ${cy - size * 0.1}`}
         fill="none"
         opacity={0.55}
-        stroke="#FFFFFF"
+        stroke="theme.glassColors.vexWhite"
         strokeLinecap="round"
         strokeWidth={size * 0.012}
       />

@@ -61,7 +61,7 @@ export function TextSkeleton({
     <View style={styles.textContainer}>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
-          key={i}
+          key={`item-${i}`}
           height={14}
           width={i === lines - 1 ? lastLineWidth : '100%'}
           style={styles.textLine}
@@ -94,7 +94,7 @@ export function PersonaSelectorSkeleton() {
   return (
     <View style={styles.personaContainer}>
       {Array.from({ length: 3 }).map((_, i) => (
-        <View key={i} style={styles.personaCard}>
+        <View key={`item-${i}`} style={styles.personaCard}>
           <Skeleton width={64} height={64} borderRadius={32} />
           <Skeleton width={100} height={16} style={styles.personaName} />
           <Skeleton width={140} height={12} />
@@ -107,7 +107,7 @@ export function HistoryListSkeleton({ count = 5 }: { count?: number }) {
   return (
     <View style={styles.listContainer}>
       {Array.from({ length: count }).map((_, i) => (
-        <View key={i} style={styles.listItem}>
+        <View key={`item-${i}`} style={styles.listItem}>
           <Skeleton width={48} height={48} borderRadius={8} />
           <View style={styles.listContent}>
             <Skeleton width="70%" height={16} style={styles.listLine} />

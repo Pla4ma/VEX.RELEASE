@@ -34,7 +34,7 @@ export function GemVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - r * 0.5} ${cy - r * 0.72} Q ${cx} ${cy - r * 0.95} ${cx + r * 0.5} ${cy - r * 0.72}`}
         fill="none"
         opacity={0.88}
-        stroke="#FFFFFF"
+        stroke="theme.glassColors.vexWhite"
         strokeLinecap="round"
         strokeWidth={size * 0.018}
       />
@@ -42,7 +42,7 @@ export function GemVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - r * 0.72} ${cy + r * 0.42} Q ${cx} ${cy + r * 0.88} ${cx + r * 0.72} ${cy + r * 0.42}`}
         fill="none"
         opacity={0.42}
-        stroke="#0A5E4D"
+        stroke="theme.glassColors.vexDeepTeal"
         strokeLinecap="round"
         strokeWidth={size * 0.012}
       />

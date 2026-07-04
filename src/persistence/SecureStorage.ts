@@ -6,7 +6,8 @@ import { captureSilentFailure } from '../utils/silent-failure';
  * Falls back to sessionStorage for web platform.
  * Used for tokens, credentials, and private keys.
  */
- import * as SecureStore from 'expo-secure-store';
+
+import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Nullable } from '../types/global';
 import type { StorageAdapter, StorageResult } from './StorageAdapter';
@@ -125,48 +126,7 @@ export class SecureStorage implements StorageAdapter {
   async getSize(): Promise<number> {
     return 0;
   }
-  /**
-   * Store credentials securely
-   */
-  async setCredentials(
-    key: string,
-    value: string,
-  ): Promise<StorageResult<void>> {
-    try {
-      await this.setItem(key, value);
-      return { success: true };
-    } catch (error) {
-      debug.error('[SecureStorage] setCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
-  }
-  /**
-   * Get credentials securely
-   */
-  async getCredentials(key: string): Promise<StorageResult<string>> {
-    try {
-      const value = await this.getItem(key);
-      if (value) {
-        return { success: true, data: value };
-      }
-      return { success: false, error: new Error('No credentials found') };
-    } catch (error) {
-      debug.error('[SecureStorage] getCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
-  }
-  /**
-   * Clear credentials
-   */
-  async clearCredentials(key: string): Promise<StorageResult<void>> {
-    try {
-      await this.removeItem(key);
-      return { success: true };
-    } catch (error) {
-      debug.error('[SecureStorage] clearCredentials error:', error as Error);
-      return { success: false, error: error as Error };
-    }
-  }
+
 }
 /**
  * Secure storage singleton

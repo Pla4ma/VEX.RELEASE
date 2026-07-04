@@ -90,7 +90,7 @@ export function StreakCalendar({
       {}
       <View style={styles.weekdays}>
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-          <Text key={i} style={styles.weekdayText}>
+          <Text key={`item-${i}`} style={styles.weekdayText}>
             {day}
           </Text>
         ))}

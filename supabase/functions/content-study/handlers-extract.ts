@@ -10,10 +10,12 @@ import { extractFromYouTube, extractFromPDF } from './extractors.ts';
 import { json } from './handlers.ts';
 import { STUDY_CONTENT_COLUMNS } from './columns.ts';
 
+import { STUDY_CONTENT_COLUMNS_STR } from './columns.ts';
+
 export async function handleExtract(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
-  const { contentId } = await req.json();
+  const contentId = new URL(req.url).pathname.split('/').pop();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
-  const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_COLUMNS).eq('id', contentId).eq('user_id', userId).single();
+  const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_COLUMNS_STR).eq('id', contentId).eq('user_id', userId).single();
   if (error || !content) return json({ success: false, error: 'Content not found' }, 400);
   await supabase.from('study_content').update({ status: 'EXTRACTING' }).eq('id', contentId);
   try {
