@@ -23,6 +23,10 @@ interface WelcomeScreenProps {
   onStart: (path: OnboardingPath) => void;
 }
 
+// Module-scope frozen constant: path choices for onboarding. Hoisted out of the
+// component so it has a stable reference across renders (and across hook calls).
+const SELECTABLE_PATHS_STYLE: readonly OnboardingPath[] = ['focus', 'plan', 'study', 'habit'];
+
 function AnimatedBackground(): React.ReactNode {
   const { width, height } = useWindowDimensions();
   const { theme } = useTheme();
@@ -91,7 +95,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): React.ReactNode 
   const { isReducedMotion } = useReducedMotion();
   const [selectedPath, setSelectedPath] = useState<OnboardingPath>('focus');
 
-  const paths: OnboardingPath[] = ['focus', 'plan', 'study', 'habit'];
+  const paths: readonly OnboardingPath[] = SELECTABLE_PATHS_STYLE;
 
   return (
     <Box flex={1} bg="background.primary">

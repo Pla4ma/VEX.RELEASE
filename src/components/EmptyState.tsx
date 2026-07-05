@@ -15,7 +15,21 @@ interface EmptyStateProps {
   accessibilityLabel?: string;
 }
 
-      
+// Static-shape module-scope constants. Bake in only the literal CSS properties;
+// theme-driven values stay inline so dark-mode tokens override at render time.
+// Pattern: matches existing TEXT_STYLE / MAX_WIDTH_STYLE convention used elsewhere.
+const MAX_WIDTH_STYLE = { maxWidth: 320 } as const;
+// Static-shape hoist for the icon-wrapper View; theme-driven colors stay inline
+// so they correctly override per theme. Was 8 inline props; now 2 live + 6 spread.
+const ICON_WRAPPER_STYLE = {
+  width: 72,
+  height: 72,
+  borderRadius: 36,
+  borderWidth: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+} as const;
+
 export function EmptyState({
   iconName,
   title,
@@ -25,8 +39,6 @@ export function EmptyState({
   accessibilityLabel,
 }: EmptyStateProps): React.ReactNode {
   const { theme } = useTheme();
-
-  
 
   return (
     <View
@@ -42,15 +54,10 @@ export function EmptyState({
     >
       <View
         style={{
-  width: 72,
-  height: 72,
-  borderRadius: 36,
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: theme.colors.semantic.vexCyanSoft,
-  borderColor: theme.colors.semantic.border,
-  borderWidth: 1,
-}}
+          ...ICON_WRAPPER_STYLE,
+          backgroundColor: theme.colors.semantic.vexCyanSoft,
+          borderColor: theme.colors.semantic.border,
+        }}
       >
         <Icon
           name={iconName}
@@ -73,7 +80,7 @@ export function EmptyState({
           variant="bodySmall"
           textAlign="center"
           color={theme.colors.text.secondary}
-          style={{ maxWidth: 320 }}
+          style={MAX_WIDTH_STYLE}
         >
           {body}
         </Text>

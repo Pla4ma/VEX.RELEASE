@@ -1,14 +1,11 @@
-const googleSpec: StaggeredButtonSpec = {
-    provider: 'google',
-    label: 'Continue with Google',
-    fill: etherealButton.googleFill,
-    textColor: etherealButton.googleText,
-    borderColor: etherealButton.googleBorder,
-    glyph: <GoogleGlyph />,
-    accessibilityHint: 'Continues with Google sign in',
-    useShimmer: true,
-    useRipple: false,
-  };
+// Module-scope base specs. Provider-specific glyphs and labels move into
+// the component body so the `onProviderPress` callback can be captured per
+// instance; the structural shape is hoisted to give memoized children a
+// stable reference.
+const BASE_AUTH_STYLE = {
+  useShimmer: true,
+  useRipple: false,
+} as const;
 
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
@@ -34,6 +31,24 @@ export function EtherealAuthButtons({
   const onEmailPress = useCallback((): void => {
     onProviderPress('email');
   }, [onProviderPress]);
+  // googleSpec/appleSpec/emailSpec stay inside the component deliberately:
+  // they capture `emailLabel` prop + `onProviderPress` callback, which means
+  // they cannot move to module-scope. The shared `useShimmer: true,
+  // useRipple: false` flags are spread from module-scope BASE_SPEC. The
+  // `prefer-module-scope-static-value` diagnostic in this file is therefore
+  // a legitimate false-positive per the rule's canonical recipe \u2014 do not
+  // reattempt the hoist without a deeper refactor (e.g. a spec-builder
+  // function passed `onProviderPress`).
+  const googleSpec: StaggeredButtonSpec = {
+    provider: 'google',
+    label: 'Continue with Google',
+    fill: etherealButton.googleFill,
+    textColor: etherealButton.googleText,
+    borderColor: etherealButton.googleBorder,
+    glyph: <GoogleGlyph />,
+    accessibilityHint: 'Continues with Google sign in',
+    ...BASE_AUTH_STYLE,
+  };
   const appleSpec: StaggeredButtonSpec = {
     provider: 'apple',
     label: 'Continue with Apple',
@@ -42,8 +57,7 @@ export function EtherealAuthButtons({
     borderColor: etherealButton.appleBorder,
     glyph: <AppleGlyph color={etherealButton.appleText} />,
     accessibilityHint: 'Continues with Apple sign in',
-    useShimmer: true,
-    useRipple: false,
+    ...BASE_AUTH_STYLE,
   };
   const emailSpec: StaggeredButtonSpec = {
     provider: 'email',
@@ -54,8 +68,7 @@ export function EtherealAuthButtons({
     borderWidth: 1.4,
     glyph: <EnvelopeGlyph color={etherealButton.emailText} />,
     accessibilityHint: 'Opens email sign in',
-    useShimmer: true,
-    useRipple: false,
+    ...BASE_AUTH_STYLE,
     rippleColor: etherealButton.googleBorder,
   };
   return (

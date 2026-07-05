@@ -37,7 +37,14 @@ export function usePowerUserHomeData(
   );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing: Array<Record<string, unknown>> = [];
+  // Stable empty array via useMemo (deps=[]) so consumer memoization holds
+  // without violating the AGENTS.md "no `as` casts" rule. Keeps the value
+  // inside the hook per the prefer-module-scope-static-value canonical
+  // recipe's escape hatch for non-trivially-shareable mutable bindings.
+  const squadMembersFocusing = useMemo<Array<Record<string, unknown>>>(
+    () => [],
+    [],
+  );
   const { count: unreadNotificationCount } = useNotificationBadge(
     notifAvail.canQuery ? controller.userId : undefined,
   );

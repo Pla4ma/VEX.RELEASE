@@ -20,6 +20,21 @@ import {
 } from 'react-native-reanimated';
 import { vexLightGlass } from '@/theme/tokens/vex-light-glass';
 
+// Module-scope frozen constants for the statically-shaped portion of the
+// ring/glow boxes. The size-dependent parts (width/height/borderRadius) are
+// computed inside the hook and merged via spread so dark-mode tokens override.
+const RING_BASE_STYLE = {
+  position: 'absolute' as const,
+  top: 12,
+  borderWidth: 1,
+  borderColor: vexLightGlass.mint[300],
+} as const;
+const GLOW_BASE_STYLE = {
+  position: 'absolute' as const,
+  bottom: 6,
+  backgroundColor: vexLightGlass.mint[200],
+} as const;
+
 export function useMascotAnimatedStyles(
   float: SharedValue<number>,
   breath: SharedValue<number>,
@@ -66,22 +81,17 @@ export function useMascotAnimatedStyles(
   }));
 
   const ringBaseStyle = {
-    position: 'absolute' as const,
-    top: 12,
+    ...RING_BASE_STYLE,
     width: size.width * 0.86,
     height: size.width * 0.86,
     borderRadius: size.width,
-    borderWidth: 1,
-    borderColor: vexLightGlass.mint[300],
   };
 
   const glowBaseStyle = {
-    position: 'absolute' as const,
-    bottom: 6,
+    ...GLOW_BASE_STYLE,
     width: size.width * 0.9,
     height: size.height * 0.58,
     borderRadius: size.width,
-    backgroundColor: vexLightGlass.mint[200],
   };
 
 

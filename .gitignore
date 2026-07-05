@@ -10,6 +10,7 @@ build/
 web-build/
 .expo/
 .expo-shared/
+.expo-test*/
 android/
 ios/
 
@@ -60,6 +61,7 @@ doctor-*.txt
 
 # Secrets / local runtime state - never commit
 credentials.json
+src/credentials.json
 state.json
 debug_logs/
 typecheck-errors.txt
