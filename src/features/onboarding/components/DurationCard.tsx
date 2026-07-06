@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, type ViewStyle } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
@@ -18,6 +18,7 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import type { DurationOption } from '../schemas';
 
 interface DurationCardProps {
@@ -27,6 +28,17 @@ interface DurationCardProps {
   index: number;
   isRecommended?: boolean;
 }
+
+// Static layout for the pressable bubble — `borderRadius`, `alignItems`,
+// `justifyContent`, `minHeight`, `position` are stable; only `padding` and
+// `gap` are theme-spacing dependent.
+const DURATION_BUBBLE_BASE_STYLE: ViewStyle = {
+  borderRadius: 16,
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 100,
+  position: 'relative',
+};
 
 /**
  * Duration option card
@@ -39,14 +51,19 @@ export function DurationCard({
   isRecommended,
 }: DurationCardProps): React.ReactNode {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withSpring(isSelected ? 0.95 : 1, {
-          damping: 15,
-          stiffness: 150,
-        }),
+        scale: isReducedMotion
+          ? isSelected
+            ? 0.95
+            : 1
+          : withSpring(isSelected ? 0.95 : 1, {
+              damping: 15,
+              stiffness: 150,
+            }),
       },
     ],
     backgroundColor: isSelected
@@ -62,7 +79,7 @@ export function DurationCard({
 
   return (
     <Animated.View
-      entering={FadeInUp.duration(400).delay(200 + index * 100)}
+      entering={isReducedMotion ? undefined : FadeInUp.duration(400).delay(200 + index * 100)}
       style={{ flex: 1, minWidth: '45%' }}
     >
       <Pressable
@@ -73,14 +90,10 @@ export function DurationCard({
       >
         <Animated.View
           style={[
+            DURATION_BUBBLE_BASE_STYLE,
             {
               padding: theme.spacing[5],
-              borderRadius: 16,
-              alignItems: 'center',
-              justifyContent: 'center',
               gap: theme.spacing[3],
-              minHeight: 100,
-              position: 'relative',
             },
             animatedStyle,
           ]}
