@@ -6,6 +6,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import type { Theme } from '../../../theme/types';
 import { Text as VexText } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 export function SessionCompleteFooter({
   bottomInset,
@@ -26,12 +27,15 @@ export function SessionCompleteFooter({
   showCtas: boolean;
   theme: Theme;
 }) {
+  // All hooks MUST be called unconditionally on every render per Rules of Hooks.
+  const { isReducedMotion } = useReducedMotion();
+
   if (!showCtas) {
     return null;
   }
 
   return (
-    <Animated.View entering={FadeInUp.delay(120).duration(320)}>
+    <Animated.View entering={isReducedMotion ? undefined : FadeInUp.delay(120).duration(320)}>
       <Box
         position="absolute"
         left={0}

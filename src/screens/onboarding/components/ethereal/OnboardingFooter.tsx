@@ -16,6 +16,32 @@ type OnboardingFooterProps = {
   onContinue: () => void;
 };
 
+// Static layout shape for the footer row — safe to hoist (no theme/runtime deps).
+const FOOTER_BASE_STYLE: ViewStyle = {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingTop: 12,
+  paddingHorizontal: 0,
+  gap: 12,
+};
+
+// Static shape for the Continue button — only `paddingBottom`, `backgroundColor`,
+// `opacity`, and `shadowOpacity` are dynamic per render; rest is hoisted.
+const CONTINUE_BUTTON_BASE_STYLE: ViewStyle = {
+  height: 60,
+  width: '100%',
+  paddingHorizontal: 32,
+  borderRadius: 30,
+  borderColor: etherealButton.googleBorder,
+  borderWidth: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: etherealButton.buttonShadow,
+  shadowOffset: { width: 0, height: 8 },
+  shadowRadius: 18,
+};
+
 export function OnboardingFooter({
   isContinueDisabled,
   isFinishing,
@@ -27,13 +53,8 @@ export function OnboardingFooter({
   }
 
   const footerStyle: ViewStyle = {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 12,
+    ...FOOTER_BASE_STYLE,
     paddingBottom: insets.bottom + 12,
-    paddingHorizontal: 0,
-    gap: 12,
   };
 
   return (
@@ -46,23 +67,13 @@ export function OnboardingFooter({
         disabled={isContinueDisabled}
         onPress={onContinue}
         style={({ pressed }) => [
+          CONTINUE_BUTTON_BASE_STYLE,
           {
-            height: 60,
-            width: '100%',
-            paddingHorizontal: 32,
-            borderRadius: 30,
             backgroundColor: isContinueDisabled
               ? 'rgba(7, 31, 32, 0.34)'
               : etherealButton.googleFill,
-            borderColor: etherealButton.googleBorder,
-            borderWidth: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
             opacity: pressed ? 0.92 : 1,
-            shadowColor: etherealButton.buttonShadow,
-            shadowOffset: { width: 0, height: 8 },
             shadowOpacity: isContinueDisabled ? 0 : 0.38,
-            shadowRadius: 18,
           },
           getMinTouchTargetStyle(),
         ]}
