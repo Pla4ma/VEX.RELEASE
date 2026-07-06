@@ -23,10 +23,10 @@ export function validateSchema<T>(
     return { success: true, data: parsed };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      debug.error('Validation failed', new Error(JSON.stringify(error.errors)));
+      debug.error('Validation failed', new Error(JSON.stringify(error.issues)));
       const analytics = getAnalyticsService();
       analytics.track('api_validation_error', {
-        errors: error.errors.map(
+        errors: error.issues.map(
           (e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`,
         ),
         schema: schema.description || 'unknown',
@@ -34,7 +34,7 @@ export function validateSchema<T>(
       return {
         success: false,
         error: 'Response validation failed',
-        details: error.errors,
+        details: error.issues,
         rawData: data,
       };
     }
@@ -76,7 +76,7 @@ export function createApiResponseSchema<T>(dataSchema: ZodType<T>) {
   return z.object({
     success: z.literal(true),
     data: dataSchema,
-    meta: z.record(z.unknown()).optional(),
+    meta: z.record(z.string(), z.unknown()).optional(),
   });
 }
 export function createValidationInterceptor<T>(schema: ZodType<T>) {

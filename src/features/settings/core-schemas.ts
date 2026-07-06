@@ -40,7 +40,7 @@ export const UserPreferencesSchema = z
   .object({
     userId: z.string().uuid(),
     version: z.number().int().min(1),
-    settings: z.record(SettingSchema),
+    settings: z.record(z.string(), SettingSchema),
     createdAt: z.number().int().positive(),
     updatedAt: z.number().int().positive(),
   })

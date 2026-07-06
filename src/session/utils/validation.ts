@@ -87,11 +87,11 @@ export function validateSessionConfig(
     debug.info('Session config validated successfully', { name: parsed.name });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      result.errors = error.errors.map((err) => ({
+      result.errors = error.issues.map((err) => ({
         field: err.path.join('.'),
         message: err.message,
         code: err.code,
-        value: getPathValue(config, err.path),
+        value: getPathValue(config, err.path as Array<string | number>),
       }));
     } else {
       result.errors.push({

@@ -55,7 +55,7 @@ export function parseSessionHistoryJson(
 export function parseSessionSummaryMapJson(
   json: string,
 ): Record<string, SessionSummary> {
-  return z.record(SessionSummarySchema).parse(parseUnknownJson(json));
+  return z.record(z.string(), SessionSummarySchema).parse(parseUnknownJson(json));
 }
 
 export function parseSyncQueueJson(json: string): string[] {

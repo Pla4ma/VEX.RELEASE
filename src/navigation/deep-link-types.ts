@@ -29,7 +29,7 @@ export const DeepLinkUrlSchema = z.object({
   scheme: z.enum(['vex', 'https']),
   host: z.enum(['app.vex.com', 'vex.app', 'localhost', '']),
   path: z.string(),
-  queryParams: z.record(z.string()),
+  queryParams: z.record(z.string(), z.string()),
 });
 
 export const VALID_DEEP_LINK_PATHS: DeepLinkPath[] = [

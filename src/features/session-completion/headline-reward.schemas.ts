@@ -30,25 +30,25 @@ export const HeadlineRewardConsequencesSchema = z
         currentHealth: z.number().default(0),
         isEnabled: z.boolean().default(false),
       })
-      .default({}),
+      .default(() => ({ currentHealth: 0, isEnabled: false })),
     challenge: z
       .object({
         completedThisSession: z.boolean().default(false),
         isEnabled: z.boolean().default(false),
       })
-      .default({}),
+      .default(() => ({ completedThisSession: false, isEnabled: false })),
     companion: z
       .object({
         evolved: z.boolean().default(false),
       })
-      .default({}),
+      .default(() => ({ evolved: false })),
     companionReaction: z.string().nullable().optional(),
     personalBest: z
       .object({
         isPersonalBest: z.boolean().default(false),
         purityScore: z.number().optional(),
       })
-      .default({}),
+      .default(() => ({ isPersonalBest: false })),
     rewards: z.array(HeadlineRewardSchema).default([]),
     streak: z
       .object({
@@ -56,7 +56,7 @@ export const HeadlineRewardConsequencesSchema = z
         previousDays: z.number().default(0),
         streakSaved: z.boolean().default(false),
       })
-      .default({}),
+      .default(() => ({ currentDays: 0, previousDays: 0, streakSaved: false })),
     summary: z
       .object({
         focusPurityScore: z.number().optional(),
@@ -66,7 +66,7 @@ export const HeadlineRewardConsequencesSchema = z
         previousLevel: z.number().default(1),
         xpEarned: z.number().default(0),
       })
-      .default({}),
+      .default(() => ({ newLevel: 1, previousLevel: 1, xpEarned: 0 })),
   })
   .passthrough();
 

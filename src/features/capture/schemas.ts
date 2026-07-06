@@ -6,7 +6,7 @@ export const CaptureItemSchema = z.object({
   id: z.string().uuid(),
   type: CaptureTypeSchema,
   content: z.string().min(1).max(10000),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
   createdAt: z.string().datetime(),
   userId: z.string().uuid(),
 });

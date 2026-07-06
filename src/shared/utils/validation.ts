@@ -70,7 +70,7 @@ export function validateSchema<T>(
   }
   const fieldErrors: Record<string, string[]> = {};
   const errors: string[] = [];
-  result.error.errors.forEach((err) => {
+  result.error.issues.forEach((err) => {
     const path = err.path.join('.');
     const message = err.message;
     if (path) {

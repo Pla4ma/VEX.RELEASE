@@ -24,7 +24,7 @@ export const XPTransactionSchema = z.object({
   source: XPSourceSchema,
   sourceId: z.string().optional(),
   timestamp: z.number(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
   applied: z.boolean().default(false),
 });
 

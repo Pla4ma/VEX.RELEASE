@@ -28,7 +28,7 @@ export const CoachMessageActionTakenEventSchema = z.object({
   messageId: z.string().uuid(),
   action: z.string(),
   timestamp: z.number(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const CoachStateChangedEventSchema = z.object({
@@ -36,7 +36,7 @@ export const CoachStateChangedEventSchema = z.object({
   previousState: CoachUserStateSchema.nullable(),
   newState: CoachUserStateSchema,
   enteredAt: z.number(),
-  context: z.record(z.unknown()).optional(),
+  context: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const InterventionTriggeredEventSchema = z.object({

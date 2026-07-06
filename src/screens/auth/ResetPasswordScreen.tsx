@@ -38,7 +38,7 @@ const ResetPasswordScreen: React.ComponentType<Props> = ({ navigation, route }) 
 
     const result = resetPasswordSchema.safeParse({ password, confirmPassword });
     if (!result.success) {
-      setError(result.error.errors[0]?.message || 'Invalid input');
+      setError(result.error.issues[0]?.message || 'Invalid input');
       return;
     }
 

@@ -23,7 +23,7 @@ export const CoachAgentDecisionSchema = z.object({
   message: z.string().min(1).max(220),
   reasonCode: CoachAgentReasonCodeSchema,
   confidence: z.number().min(0).max(1),
-  actionPayload: z.record(z.unknown()).optional(),
+  actionPayload: z.record(z.string(), z.unknown()).optional(),
   expiresAt: z.string().datetime(),
   evidence: z.object({
     sessionIds: z.array(z.string()).optional(),

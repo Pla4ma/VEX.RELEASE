@@ -56,7 +56,7 @@ const RegisterScreen: React.ComponentType<Props> = ({ navigation }) => {
 
     if (!result.success) {
       const fieldErrors: RegisterErrors = {};
-      result.error.errors.forEach((error) => {
+      result.error.issues.forEach((error) => {
         const field = error.path[0];
         if (field === 'email' || field === 'password' || field === 'confirmPassword') {
           fieldErrors[field] = error.message;

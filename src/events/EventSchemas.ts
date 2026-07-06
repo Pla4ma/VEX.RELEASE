@@ -74,7 +74,7 @@ export const EventSchema = z.object({
   teamsEnabled: z.boolean().default(false),
   maxParticipants: z.number().optional(),
   currentParticipants: z.number().default(0),
-  rules: z.record(z.unknown()).optional(),
+  rules: z.record(z.string(), z.unknown()).optional(),
   tags: z.array(z.string()).default([]),
   seasonId: z.string().optional(),
 });

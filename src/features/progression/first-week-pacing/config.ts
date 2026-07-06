@@ -12,6 +12,7 @@ export { getNextSession, getSessionNumber } from './helpers';
 
 export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
   sessionUnlocks: {
+    COMPLETED: [],
     SESSION_1: [
       {
         session: 'SESSION_1',
@@ -107,6 +108,7 @@ export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
     ],
   },
   xpRewards: {
+    COMPLETED: 0,
     SESSION_1: 50, // Small amount to show progress
     SESSION_2: 75, // Slightly more for streak tutorial
     SESSION_3: 100, // First meaningful reward
@@ -116,6 +118,7 @@ export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
     SESSION_7: 250, // Weekly milestone bonus
   },
   companionReactions: {
+    COMPLETED: 'Your focus journey begins. One session down.',
     SESSION_1: 'Your focus journey begins. One session down.',
     SESSION_2: 'Your rhythm is taking shape. Two sessions prove consistency.',
     SESSION_3: 'Your companion awakens! It reflects your first three sessions.',
@@ -125,6 +128,7 @@ export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
     SESSION_7: 'Your companion celebrates your first full week of focus!',
   },
   tutorialSteps: {
+    COMPLETED: [],
     SESSION_1: [
       'Start your first focus session',
       'Notice how your Focus Score changes',
@@ -161,4 +165,10 @@ export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
       'Choose your path forward',
     ],
   },
-} as const satisfies FirstWeekConfig;
+  COMPLETED: {
+    sessionUnlocks: [],
+    xpRewards: 0,
+    companionReactions: 'All first-week sessions complete. Your path forward is yours to choose.',
+    tutorialSteps: [],
+  },
+} as FirstWeekConfig;

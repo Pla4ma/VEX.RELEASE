@@ -12,7 +12,7 @@ export const GenerateMessageInputSchema = z
   .object({
     userId: z.string().uuid(),
     category: MessageCategorySchema,
-    context: z.record(z.unknown()),
+    context: z.record(z.string(), z.unknown()),
     preferredDelivery: DeliveryMethodSchema,
   })
   .strict();
@@ -22,7 +22,7 @@ export const ProcessBehaviorSignalInputSchema = z
     userId: z.string().uuid(),
     signalType: SignalTypeSchema,
     value: z.number(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 
@@ -30,7 +30,7 @@ export const EvaluateInterventionsInputSchema = z
   .object({
     userId: z.string().uuid(),
     trigger: TriggerTypeSchema,
-    context: z.record(z.unknown()),
+    context: z.record(z.string(), z.unknown()),
   })
   .strict();
 
@@ -38,7 +38,7 @@ export const CreateRecommendationInputSchema = z
   .object({
     userId: z.string().uuid(),
     type: RecommendationTypeSchema,
-    context: z.record(z.unknown()),
+    context: z.record(z.string(), z.unknown()),
   })
   .strict();
 
@@ -71,7 +71,7 @@ export const MarkMessageActionInputSchema = z
   .object({
     messageId: z.string().uuid(),
     action: z.string().min(1).max(100),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 

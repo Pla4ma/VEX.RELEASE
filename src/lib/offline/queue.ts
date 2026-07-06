@@ -13,7 +13,7 @@ export const OfflineQueueEntrySchema = z
     id: z.string().uuid(),
     operation: z.enum(['CREATE', 'UPDATE', 'DELETE', 'XP_ADD', 'REWARD_CLAIM', 'STREAK_RECORD', 'SESSION_COMPLETE', 'MEMORY_CREATE']),
     feature: z.enum(['progression', 'streaks', 'rewards', 'boss', 'sessions', 'focus-memory']),
-    payload: z.record(z.unknown()),
+    payload: z.record(z.string(), z.unknown()),
     idempotencyKey: z.string(),
     createdAt: z.number(),
     retryCount: z.number().default(0),

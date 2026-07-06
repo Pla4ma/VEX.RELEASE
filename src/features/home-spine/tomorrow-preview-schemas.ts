@@ -13,7 +13,7 @@ export const TomorrowPreviewDataSchema = z.object({
   actionPrompt: z.string().optional(),
   emoji: z.string().min(1).max(4),
   headline: z.string().min(1).max(100),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
   priority: z.number().int().min(1).max(6),
   subtext: z.string().min(1).max(200),
   type: TomorrowPreviewTypeSchema,

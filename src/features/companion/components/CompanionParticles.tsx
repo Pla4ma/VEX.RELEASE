@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import Animated, { type AnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 interface CompanionParticlesProps {
   count: number;
@@ -8,7 +8,7 @@ interface CompanionParticlesProps {
   theme: {
     particle: string;
   };
-  particleContainerStyle: AnimatedStyle;
+  particleContainerStyle: ReturnType<typeof useAnimatedStyle>;
 }
 
         

@@ -14,7 +14,7 @@ export const AIBaseRequestSchema = z
   .object({
     requestType: AIRequestTypeSchema,
     userId: z.string().uuid(),
-    context: z.record(z.unknown()),
+    context: z.record(z.string(), z.unknown()),
     personaId: z.string().uuid().optional(),
     metadata: z
       .object({
@@ -32,7 +32,7 @@ export const AIBaseResponseSchema = z
     success: z.boolean(),
     requestType: AIRequestTypeSchema,
     content: z.string().max(2000).nullable(),
-    structuredData: z.record(z.unknown()).optional(),
+    structuredData: z.record(z.string(), z.unknown()).optional(),
     metadata: z.object({
       model: z.string(),
       processingTimeMs: z.number(),

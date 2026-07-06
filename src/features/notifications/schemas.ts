@@ -9,7 +9,7 @@ export const RetentionReminderTypeSchema = z.enum([
   'RETENTION_CHALLENGE_EXPIRY',
 ]);
 
-export const ReminderMetadataSchema = z.record(z.unknown());
+export const ReminderMetadataSchema = z.record(z.string(), z.unknown());
 
 export const ReminderPlanInputSchema = z
   .object({
@@ -82,7 +82,7 @@ export const NotificationCenterItemSchema = z
     avatar: z.string().optional(),
     actionText: z.string().optional(),
     actionRoute: z.string().optional(),
-    actionParams: z.record(z.unknown()).optional(),
+    actionParams: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 

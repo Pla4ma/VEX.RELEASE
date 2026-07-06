@@ -7,8 +7,10 @@ import {
   withSequence,
   withSpring,
   withTiming,
-  type AnimatedStyle,
 } from 'react-native-reanimated';
+import type { StyleProp, ViewStyle } from 'react-native';
+
+export type AnimatedStyle = StyleProp<ViewStyle> | ReturnType<typeof useAnimatedStyle<ViewStyle>>;
 
 export function usePulseStyle(enabled = true): AnimatedStyle {
   const opacity = useSharedValue(enabled ? 0.5 : 1);

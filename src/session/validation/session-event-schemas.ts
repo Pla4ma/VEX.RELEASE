@@ -26,7 +26,7 @@ export const ValidateInterruptionSchema = z.object({
     scoreImpact: z.number(),
     damagePoints: z.number().min(0),
   }),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 export const ValidateRecoveryRecordSchema = z.object({
   id: z.string().uuid(),
@@ -45,7 +45,7 @@ export const ValidateRecoveryRecordSchema = z.object({
   penalties: z.array(
     z.object({ type: z.string(), amount: z.number(), description: z.string() }),
   ),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 export const ValidateAntiCheatFlagSchema = z.object({
   id: z.string().uuid(),
@@ -63,7 +63,7 @@ export const ValidateAntiCheatFlagSchema = z.object({
   ]),
   severity: z.enum(['WARNING', 'MODERATE', 'CRITICAL']),
   detectedAt: z.number(),
-  evidence: z.record(z.unknown()),
+  evidence: z.record(z.string(), z.unknown()),
   actionTaken: z.enum([
     'NONE',
     'FLAGGED',

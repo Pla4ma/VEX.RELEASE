@@ -54,7 +54,7 @@ export const SessionViewModelSchema = z
     canComplete: z.boolean(),
     canAbandon: z.boolean(),
     isOffline: z.boolean(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 

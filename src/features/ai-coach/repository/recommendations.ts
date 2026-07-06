@@ -18,7 +18,7 @@ const RecommendationRowSchema = z.object({
   dismissed_at: z.number().int().positive().nullable().optional(),
   expires_at: z.number().int().positive(),
   id: z.string().uuid(),
-  metadata: z.record(z.unknown()).nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
   priority: z.number().int(),
   reason: z.string(),
   reasoning: z.string().nullable().optional(),

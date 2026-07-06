@@ -36,20 +36,21 @@ export async function getRealtimeAnalytics(
       fetchAggregatedStats(userId, 'today'),
       fetchInsights(userId, { unreadOnly: false, limit: 3 }),
     ]);
+    const m = (todayStats?.metrics ?? {}) as Record<string, { value?: number } | undefined>;
     stateCache.set(userId, {
-      sessionCount: todayStats?.metrics?.sessions_completed?.value || 0,
-      totalFocusTime: todayStats?.metrics?.total_focus_time?.value || 0,
-      xpEarned: todayStats?.metrics?.xp_earned?.value || 0,
-      streakDays: todayStats?.metrics?.streak_days?.value || 0,
+      sessionCount: m.sessions_completed?.value ?? 0,
+      totalFocusTime: m.total_focus_time?.value ?? 0,
+      xpEarned: m.xp_earned?.value ?? 0,
+      streakDays: m.streak_days?.value ?? 0,
       lastSync: now,
     });
     return {
       today: {
-        sessions: todayStats?.metrics?.sessions_completed?.value || 0,
-        xp: todayStats?.metrics?.xp_earned?.value || 0,
-        focusTime: todayStats?.metrics?.total_focus_time?.value || 0,
+        sessions: m.sessions_completed?.value ?? 0,
+        xp: m.xp_earned?.value ?? 0,
+        focusTime: m.total_focus_time?.value ?? 0,
       },
-      streak: todayStats?.metrics?.streak_days?.value || 0,
+      streak: m.streak_days?.value ?? 0,
       level: 1,
       recentInsights: insights.map((i: { id: string; type: string; title: string; severity: string }) => ({
         id: i.id,

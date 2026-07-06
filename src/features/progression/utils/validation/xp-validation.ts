@@ -36,7 +36,7 @@ export function validateXPTransaction(
       field: 'transaction',
       message: 'Invalid transaction structure',
       severity: 'HIGH',
-      details: { errors: schemaResult.error.errors },
+      details: { errors: schemaResult.error.issues },
     });
     result.riskScore = 100;
     return result;

@@ -27,7 +27,7 @@ export const UpdateChallengeProgressInputSchema = z
     challengeId: z.string().min(1),
     delta: z.number().int().positive(),
     source: z.string().min(1),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 

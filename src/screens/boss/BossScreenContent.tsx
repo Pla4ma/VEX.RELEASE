@@ -13,6 +13,7 @@ import type { ExtendedRootStackParams } from '../../navigation/types';
 import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import type { useTheme } from '../../theme';
 import { BossScreenSections } from './BossScreenSections';
+import type { BossEncounterSummary, BossTemplate } from '../../features/boss/schemas';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 type BossIntensity = 'subtle' | 'game-like' | 'intense';
@@ -101,7 +102,7 @@ export function BossScreenContent({
         <BossBattleHUD />
         <BossScreenSections
           bossIntensity={bossIntensity}
-          encounter={encounter}
+          encounter={encounter as unknown as BossEncounterSummary}
           onLaunchAttack={(minutes) => {
             if (levelLocked) {return;}
             navigateToRootScreen(navigation, 'SessionStack', {
@@ -119,12 +120,11 @@ export function BossScreenContent({
           progressionLevel={level}
           streakMultiplier={streakMultiplier}
           template={
-            template ?? {
+            template ?? ({
               id: encounter.bossId,
               name: encounter.bossName,
               tier: 1,
-              minLevel: 1,
-            }
+            } as BossTemplate)
           }
           userDamage={userDamage}
           userId={userId ?? ''}

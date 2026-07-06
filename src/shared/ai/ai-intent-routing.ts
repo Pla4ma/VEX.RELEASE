@@ -75,7 +75,7 @@ export const INTENT_ROUTE_MAP: Record<AIActionIntent, SafeRoute> = {
 export const ActionRouteMappingSchema = z.object({
   intent: AIActionIntentSchema,
   screen: z.string(),
-  params: z.record(z.unknown()).optional(),
+  params: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type ActionRouteMapping = z.infer<typeof ActionRouteMappingSchema>;

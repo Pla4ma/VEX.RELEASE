@@ -26,7 +26,7 @@ export const CompanionMemorySchema = z
     grade: SessionCompletionGradeSchema.nullable(),
     id: z.string().uuid(),
     purityScore: z.number().min(0).max(100).nullable(),
-    sessionDate: z.string().date(),
+    sessionDate: z.iso.date(),
     sessionId: z.string().uuid().nullable(),
     streakDay: z.number().int().min(0).nullable(),
     title: z.string().min(1).max(30),
@@ -47,7 +47,7 @@ export const CompanionMemoryRowSchema = z
     grade: SessionCompletionGradeSchema.nullable(),
     id: z.string().uuid(),
     purity_score: z.coerce.number().min(0).max(100).nullable(),
-    session_date: z.string().date(),
+    session_date: z.iso.date(),
     session_id: z.string().uuid().nullable(),
     streak_day: z.number().int().min(0).nullable(),
     title: z.string().min(1).max(30),
@@ -60,7 +60,7 @@ export const MemoryContextSchema = z
   .object({
     grade: SessionCompletionGradeSchema.nullable(),
     purityScore: z.number().min(0).max(100).nullable(),
-    sessionDate: z.string().date(),
+    sessionDate: z.iso.date(),
     sessionId: z.string().uuid().nullable(),
     streakDay: z.number().int().min(0).nullable(),
   })

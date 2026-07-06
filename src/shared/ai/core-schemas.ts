@@ -27,7 +27,7 @@ export const AICorePolicyResultSchema = z.object({
 
 export const AICoreProposedToolSchema = z.object({
   tool: AICoreToolSchema,
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
   requiresUserConfirmation: z.literal(true),
   canAutoExecute: z.literal(false),
 });
