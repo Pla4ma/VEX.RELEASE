@@ -13,6 +13,7 @@ import { View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 export type CoachPersonaStyle = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';
 
@@ -52,13 +53,18 @@ export function CoachSessionBanner({
   elapsedSeconds,
   isPaused,
 }: CoachSessionBannerProps): JSX.Element | null {
+  const { isReducedMotion } = useReducedMotion();
   const { theme } = useTheme();
+
+  // All hooks MUST be called before any early return per Rules of Hooks.
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
   // Get messages for this persona (computed, not stored in state)
   const messages =
     ENCOURAGEMENT_MESSAGES[personaStyle] || ENCOURAGEMENT_MESSAGES.MENTOR;
+
+  const totalShowTime = MAX_MESSAGES_PER_SESSION * MESSAGE_ROTATION_SECONDS;
 
   // SAFETY: message rotation depends on elapsedSeconds, which is a prop updated
   // every tick by the parent timer effect. Computing the index in an effect keeps
@@ -86,20 +92,8 @@ export function CoachSessionBanner({
     }
   }, [elapsedSeconds, isPaused, currentMessageIndex, hasStarted]);
 
-  // Don't show until session has started (after 30 seconds)
-  if (!hasStarted || elapsedSeconds < 30) {
-    return null;
-  }
-
-  // Don't show if we've shown all 3 messages and 15 minutes have passed
-  const totalShowTime = MAX_MESSAGES_PER_SESSION * MESSAGE_ROTATION_SECONDS;
-  if (elapsedSeconds > totalShowTime + 30) {
-    return null;
-  }
-
-  const currentMessage = messages[currentMessageIndex];
-
-  // Memoize the banner style to avoid re-creating the large inline object every render
+  // Memoize the banner style to avoid re-creating the large inline object every render.
+  // Declared before any early return to satisfy Rules of Hooks.
   const bannerStyle = useMemo(() => ({
     position: 'absolute' as const,
     top: 140,
@@ -126,10 +120,21 @@ export function CoachSessionBanner({
     alignItems: 'center' as const,
   }), [theme]);
 
+  // Early returns AFTER all hooks have been called.
+  if (!hasStarted || elapsedSeconds < 30) {
+    return null;
+  }
+
+  if (elapsedSeconds > totalShowTime + 30) {
+    return null;
+  }
+
+  const currentMessage = messages[currentMessageIndex];
+
   return (
     <Animated.View
-      entering={FadeIn.duration(500)}
-      exiting={FadeOut.duration(300)}
+      entering={isReducedMotion ? undefined : FadeIn.duration(500)}
+      exiting={isReducedMotion ? undefined : FadeOut.duration(300)}
       style={bannerStyle}
     >
       {/* Coach Avatar Placeholder */}

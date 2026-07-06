@@ -11,6 +11,7 @@ import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { StreakWidgetSkeleton } from './StreakWidget.parts';
 import { DayCheckRow } from './DayCheckRow';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 export interface StreakWidgetProps {
   currentDays: number;
@@ -38,12 +39,14 @@ export function StreakWidget({
   onPress,
   isLoading = false,
 }: StreakWidgetProps): React.ReactNode {
+  // All hooks MUST be called unconditionally on every render per Rules of Hooks.
+  const { isReducedMotion } = useReducedMotion();
+  const isEmpty = currentDays === 0;
+  const isUrgent = riskLevel === 'CRITICAL' || riskLevel === 'HIGH';
+
   if (isLoading) {
     return <StreakWidgetSkeleton />;
   }
-
-  const isEmpty = currentDays === 0;
-  const isUrgent = riskLevel === 'CRITICAL' || riskLevel === 'HIGH';
 
   return (
     <Pressable
@@ -52,7 +55,7 @@ export function StreakWidget({
       accessibilityRole="button"
       onPress={onPress}
     >
-      <Animated.View entering={FadeIn.duration(400)}>
+      <Animated.View entering={isReducedMotion ? undefined : FadeIn.duration(400)}>
         <GlassCard
           padding={16}
           radius={22}

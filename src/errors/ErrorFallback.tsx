@@ -7,7 +7,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { Icon } from '../icons/components/Icon';
 import { captureException } from '../config/sentry';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
-import { Text as VexText } from '../components/primitives/Text';
+import { IS_DEVELOPMENT } from '../constants/app';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
   switch (category) {
@@ -29,15 +29,17 @@ function getErrorMessage(category: ErrorCategory, error: Error | null): string {
 function getErrorIconName(category: ErrorCategory): string {
   switch (category) {
     case 'network':
-      return 'exclamation-circle';
+      return 'wifi-off';
     case 'auth':
-      return 'logout';
+      return 'lock';
     case 'server':
-      return 'exclamation-triangle';
+      return 'server';
     case 'validation':
-      return 'info';
+      return 'alert-circle';
+    case 'client':
+      return 'alert-triangle';
     default:
-      return 'x-circle';
+      return 'alert-circle';
   }
 }
 
@@ -62,9 +64,11 @@ export function ErrorFallback({
       // SAFETY: require() defers optional expo-updates native module access until recovery action.
       const { reloadAsync } = require('expo-updates');
       void reloadAsync();
-    } catch {
+    } catch (reloadError) {
+      if (IS_DEVELOPMENT) { console.warn('[VEX] Reload failed:', reloadError); }
     }
   }, [category, error]);
+
   return (
     <Box flex={1} justifyContent="center" alignItems="center" p="xl">
       <Box
@@ -73,86 +77,79 @@ export function ErrorFallback({
           width: 64,
           height: 64,
           borderRadius: 32,
-          alignItems: 'center',
+          backgroundColor: theme.colors.surface.card,
           justifyContent: 'center',
-          backgroundColor: theme.colors.semantic.vexCyanSoft,
-          borderColor: theme.colors.semantic.vexCyan,
-          borderWidth: 1,
+          alignItems: 'center',
         }}
       >
         <Icon
           name={getErrorIconName(category)}
-          size={28}
-          color={theme.colors.semantic.vexCyan}
-          variant="outline"
+          size={32}
+          color={theme.colors.semantic.danger}
         />
       </Box>
 
-      <Text variant="h3" mb="md" textAlign="center">
-        Oops! Something went wrong
-      </Text>
-
       <Text
-        variant="body"
-        color="text.secondary"
+        variant="heading"
+        color="textPrimary"
+        mb="sm"
         textAlign="center"
-        mb="lg"
       >
         {getErrorMessage(category, error)}
       </Text>
 
-      {retryCount > 0 && (
-        <Text
-          variant="caption"
-          color="text.tertiary"
-          mb="lg"
+      <Text
+        variant="body"
+        color="textSecondary"
+        mb="xl"
+        textAlign="center"
+      >
+        {category === 'network'
+          ? 'Make sure you have a stable connection.'
+          : 'If this keeps happening, try restarting the app.'}
+      </Text>
+
+      {canRetry && (
+        <Button
+          variant="primary"
+          onPress={onRetry}
+          disabled={isRetrying}
+          mb="md"
+          accessibilityLabel="Retry the failed operation"
+          accessibilityHint="Attempts to reload the content"
         >
-          Retry attempt {retryCount} of {maxRetries}
-        </Text>
+          {isRetrying ? <Text fontWeight="700">Retrying...</Text> : <Text fontWeight="700">{`Retry${retryCount > 0 ? ` (${retryCount}/${maxRetries})` : ''}`}</Text>}
+        </Button>
       )}
 
-      {isRetrying ? (
-        <Box flexDirection="row" alignItems="center" style={{ gap: 8 }}>
-          <Skeleton width={16} height={16} variant="circular" />
-          <Text variant="body" color="text.secondary">
-            Retrying...
+      {isRecoverable && onDegraded && (
+        <Button
+          variant="secondary"
+          onPress={onDegraded}
+          mb="md"
+          accessibilityLabel="Continue in degraded mode"
+          accessibilityHint="Loads the app with reduced functionality"
+        >
+          Continue Anyway
+        </Button>
+      )}
+
+      <Button
+        variant="ghost"
+        onPress={handleRestart}
+        accessibilityLabel="Restart the app"
+        accessibilityHint="Closes and reopens the app"
+      >
+        Restart App
+      </Button>
+
+      {IS_DEVELOPMENT && error && (
+        <Box mt="xl" p="md" style={{ backgroundColor: theme.colors.surface.input, borderRadius: 8, maxWidth: '100%' }}>
+          <Text variant="caption" color="textSecondary" numberOfLines={10}>
+            {error.message}
+            {'\n'}
+            {error.stack}
           </Text>
-        </Box>
-      ) : (
-        <Box flexDirection="row" style={{ gap: 12 }}>
-          {canRetry && (
-            <Button
-              variant="primary"
-              onPress={onRetry}
-              accessibilityLabel="Try again"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <VexText>Try Again</VexText>
-            </Button>
-          )}
-          {onDegraded && isRecoverable && (
-            <Button
-              variant="ghost"
-              onPress={onDegraded}
-              accessibilityLabel="Continue anyway"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to activate"
-            >
-              <VexText>Continue Anyway</VexText>
-            </Button>
-          )}
-          {category === 'client' && (
-            <Button
-              variant="primary"
-              onPress={handleRestart}
-              accessibilityLabel="Restart app"
-              accessibilityRole="button"
-              accessibilityHint="Double tap to restart the application"
-            >
-              <VexText>Restart App</VexText>
-            </Button>
-          )}
         </Box>
       )}
     </Box>
