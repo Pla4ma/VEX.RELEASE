@@ -102,11 +102,7 @@
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
-  "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/plugin-proposal-decorators": "^8.0.2",
-    "@babel/preset-env": "^8.0.2",
-    "@babel/runtime": "^8.0.0",
+  "devDependencies": {        "@babel/core": "^7.25.0",        "@babel/plugin-proposal-decorators": "^7.25.0",        "@babel/preset-env": "^7.25.0",        "@babel/runtime": "^7.25.0",
     "@playwright/test": "^1.61.1",
     "@react-native/eslint-config": "^0.86.0",
     "@react-native/jest-preset": "^0.86.0",
@@ -145,7 +141,12 @@
     "protobufjs": ">=7.6.3",
     "eslint": "9.39.4",
     "react": "$react",
-    "react-native-reanimated": "$react-native-reanimated"
+    "react-native-reanimated": "$react-native-reanimated",
+    "@babel/core": "^7.25.0",
+    "@babel/runtime": "^7.25.0",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/preset-typescript": "^7.28.0",
+    "@babel/plugin-proposal-decorators": "^7.25.0"
   },
   "engines": {
     "node": ">=20.0.0"
