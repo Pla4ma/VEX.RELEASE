@@ -1,0 +1,8 @@
+src/features/analytics/integration-queries/realtime.ts(40,62): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(41,62): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(42,49): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(43,53): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(48,60): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(49,45): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(50,59): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(52,49): error TS2339: Property 'value' does not exist on type '{}'.

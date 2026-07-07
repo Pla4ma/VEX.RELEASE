@@ -1,3 +1,11 @@
+.env
+.env.local
+.env.*.local
+.env.server
+.env.server.local
+credentials.json
+src/credentials.json
+
 .agents/
 .codebase-memory/
 .opencode/

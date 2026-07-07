@@ -6,13 +6,13 @@ Always use `rtk` (bash) for every command. Never use task agents, explore agents
 ---
 
 ## STACK — EXACT VERSIONS, NO SUBSTITUTIONS
-- Expo SDK 56 (managed workflow)
+- Expo SDK 57 (managed workflow)
 - TypeScript 6.0.3 — strict: true, noImplicitAny, strictNullChecks, noUncheckedIndexedAccess
 - TanStack Query v5 — server state only
 - Zustand — persistent client state only
 - Zod — schemas are the source of truth, all types inferred via z.infer<>
 - React Navigation v6 — fully typed, all routes in RootStackParamList
-- Reanimated 4.3.1 — the ONLY animation library. Never use from react-native.
+- Reanimated 4.5.1 — the ONLY animation library. Never use from react-native.
 - Supabase — Postgres + Auth + Realtime + Storage
 - MMKV — non-sensitive fast storage only
 - expo-secure-store — auth tokens and secrets only, via the existing SecureStorage wrapper
@@ -82,7 +82,7 @@ type Input = z.infer<typeof InputSchema>
 - `console.log` — use logger or Sentry breadcrumbs
 - `@ts-nocheck` or `@ts-ignore`
 - `// TODO` in shipped code — implement it or delete it
-- `Animated` from react-native — use Reanimated 4.3.1 only
+- `Animated` from react-native — use Reanimated 4.5.1 only
 - `StyleSheet.create` — use inline styles with theme tokens
 - `FlatList` — use FlashList with estimatedItemSize set to the actual item height
 - `AsyncStorage` — use MMKV for non-sensitive, SecureStorage for sensitive
@@ -124,7 +124,7 @@ Every data-driven component ships with all of these:
 Additional UI rules:
 - All interactive elements: accessibilityLabel, accessibilityRole, accessibilityHint — always.
 - Minimum touch target: 44×44 points. Use src/utils/touchTarget.ts.
-- All animations: Reanimated 4.3.1 only. useSharedValue, useAnimatedStyle, withSpring, withTiming.
+- All animations: Reanimated 4.5.1 only. useSharedValue, useAnimatedStyle, withSpring, withTiming.
 - All lists: FlashList with estimatedItemSize set to the actual measured item height.
 - Check useReducedMotion() before playing any animation — skip or simplify if true.
 - All form screens: KeyboardAvoidingView + ScrollView.

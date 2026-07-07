@@ -81,12 +81,15 @@ async function handleRequest(request: Request): Promise<Response> {
   const llmConfig = getOpenAICompatibleConfig();
   const apiKey = config.GEMINI_API_KEY;
   if (!llmConfig && !apiKey) {return respond(buildError(parsed.data.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);}
-  if (
-    parsed.data.requestType === 'GENERATE_COACH_MESSAGE' &&
-    isUuid(parsed.data.userId)
-  ) {
-    const rateLimit = await checkRateLimit(parsed.data.userId, 'ai:coach', config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
-    if (!rateLimit.allowed) {return respond(buildError(parsed.data.requestType, startedAt, 'AI_COACH_RATE_LIMIT', 'Hourly AI coach message limit reached', true), 200, request);}
+  const rateLimitBucket =
+    parsed.data.requestType === 'GENERATE_COACH_MESSAGE'
+      ? 'ai:coach'
+      : parsed.data.requestType === 'GENERATE_AGENT_DECISION'
+        ? 'ai:agent-decision'
+        : null;
+  if (rateLimitBucket && isUuid(parsed.data.userId)) {
+    const rateLimit = await checkRateLimit(parsed.data.userId, rateLimitBucket, config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);
+    if (!rateLimit.allowed) {return respond(buildError(parsed.data.requestType, startedAt, 'AI_COACH_RATE_LIMIT', 'Hourly AI request limit reached', true), 200, request);}
   }
   try {
     const prompt = buildPrompt(parsed.data);
@@ -147,9 +150,10 @@ function buildPrompt(request: AIRequest): { system: string; user: string; maxOut
     };
   }
   if (request.requestType === 'GENERATE_AGENT_DECISION') {
+    const sanitizedContext = sanitizeUserInput(JSON.stringify({ context: request.context, requiredPolicy: { requiresUserConfirmation: true, canAutoExecute: false } }));
     return {
       system: 'You are VEX Invisible Agent. Return only strict JSON. Pick one safe next-best action. Never auto-execute. Never guilt user. If completedToday true, choose NO_ACTION.',
-      user: JSON.stringify({ context: request.context, requiredPolicy: { requiresUserConfirmation: true, canAutoExecute: false } }),
+      user: sanitizedContext,
       maxOutputTokens: 260,
     };
   }
@@ -192,16 +196,25 @@ async function callGemini(
 }
 
 function sanitizeUserPrompt(userPrompt: string): string {
-  return userPrompt
-    .replace(/system\s*instruction/gi, 'user text')
-    .replace(/ignore\s+(all\s+)?previous\s+instructions/gi, 'user text')
-    .replace(/developer\s*message/gi, 'user text')
-    .slice(0, MAX_BODY_LENGTH);
+  return sanitizeUserInput(userPrompt, MAX_BODY_LENGTH);
 }
 
+function safeParseDecision(raw: string): unknown | null {
+  const match = raw.replace(/```json|```/g, '').match(/\{[\s\S]*\}/);
+  const jsonBlob = match?.[0];
+  if (!jsonBlob || jsonBlob.length > MAX_AGENT_DECISION_JSON_LENGTH) return null;
+  try {
+    const parsed = JSON.parse(jsonBlob) as unknown;
+    return typeof parsed === 'object' && parsed !== null ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+const MAX_AGENT_DECISION_JSON_LENGTH = 5000;
+
 function readAgentDecision(rawText: string, request: AIRequest) {
-  const match = rawText.replace(/\`\`\`json|\`\`\`/g, '').match(/\{[\s\S]*\}/);
-  const parsed = match ? JSON.parse(match[0]) as unknown : null;
+  const parsed = safeParseDecision(rawText);
   return CoachAgentDecisionSchema.parse(parsed ?? localAgentDecision(request));
 }
 

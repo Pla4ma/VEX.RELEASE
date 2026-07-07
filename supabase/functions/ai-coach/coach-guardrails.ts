@@ -1,5 +1,13 @@
+export function hasBlockedContent(text: string): boolean {
+  const blocked = /(ignore all|previous instructions|you are now|act as|pretend|override safety)/gi;
+  return blocked.test(text);
+}
+
 export function buildGuardrailReply(userMessage: string): string | null {
   const lower = userMessage.trim().toLowerCase();
+  if (hasBlockedContent(userMessage)) {
+    return 'I\'m here to help with focus. Let\'s keep the conversation on track.';
+  }
   if (asksModelIdentity(lower)) {
     return 'I am VEX inside the app: a focus coach for clean starts, tight sessions, and follow-through.';
   }

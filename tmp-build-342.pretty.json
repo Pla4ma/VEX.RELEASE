@@ -1,0 +1,46 @@
+{
+  "id": "342f87f2-2fc1-44fc-b2f4-c1c410a30dbb",
+  "status": "ERRORED",
+  "platform": "IOS",
+  "error": {
+    "errorCode": "UNKNOWN_ERROR",
+    "message": "Unknown error. See logs of the Install dependencies build phase for more information."
+  },
+  "artifacts": {},
+  "initiatingActor": {
+    "id": "9ba416e3-9e00-4a38-96c2-1e9f29a3f335",
+    "displayName": "jeppygeja"
+  },
+  "logFiles": [
+    "https://storage.googleapis.com/eas-workflows-production/logs/d4b472ef-85f4-49a2-895d-4f3c5fce10fc/342f87f2-2fc1-44fc-b2f4-c1c410a30dbb/2026-07-06T22%3A33%3A10Z-e23bc364-0803-448b-8924-f3eb494c37f8.txt?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=www-production%40exponentjs.iam.gserviceaccount.com%2F20260706%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260706T224001Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=2326f486aa3dc56b872a00326bb29c76fd6c418c6c3a51f2ce154bff7ef3313a603ff350250d60d39ee42aba9be64d158851ded969c3ba97b74458aa07439feda5bd9c61017911749427677c733012fc26a5aee73589fe6ed0442ae8f57048f934f5e653c8cd74e85a0ce39850c31f0c8522d619c7128626607377a18ce519eeccde006e9361958f35ac2140a10dcff7a08f3e5cf3e965232eafd61d51abbe8acfde33f23d0b9304d5cdd61912a9f0b85ab376f4e0da53c03eb0b3ca8244944a3fe5aff93c3499b1626b3086aede6591a8b8db7490677e89a38871ee2284160a0b24c41670b649f8dc6533cc4c262f671868928dcf8eb76271546f0e53b136d0"
+  ],
+  "project": {
+    "id": "d4b472ef-85f4-49a2-895d-4f3c5fce10fc",
+    "name": "vex-app",
+    "slug": "vex-app",
+    "ownerAccount": {
+      "id": "5bbf5962-6c9e-4aa6-bc88-ccac4656a826",
+      "name": "jeppygeja"
+    }
+  },
+  "channel": "development",
+  "distribution": "INTERNAL",
+  "buildProfile": "development-device",
+  "sdkVersion": "57.0.0",
+  "appVersion": "1.0.0",
+  "appBuildVersion": "1",
+  "runtimeVersion": "1.0.0",
+  "gitCommitHash": "97a4c0e12eac189bba9cc02af9cbe35582a9eeb3",
+  "gitCommitMessage": "fix(deps): override react + react-native-reanimated to root versions\n\nEAS build ac747a43 failed in install-deps with ERESOLVE:\n\n  Found: react@18.2.0\n\n  peer react@'16.8 || 17.0.2' from react-native-reanimated@2.14.4\n\nRoot cause: stale package-lock.json had snapshot of pre-SDK-57 deps.\n\nnpm ci honors the lockfile strictly, so EAS installed the OLD react 18.2.0 + reanimated 2.14.4 from the lockfile, not the package.json values (react ~19.2.7, reanimated 4.5.1).\n\nFix:\n\n- Add 'react: $react' and 'react-native-reanimated: $react-native-reanimated' to overrides block. $X syntax forces all transitive installs to use the root-declared version.\n\n- Regenerate package-lock.json (npm install --legacy-peer-deps) so the lockfile pins the modern versions and future npm ci runs use them.\n\nVerified:\n\n- npm install --legacy-peer-deps: succeeds\n\n- npm ci --include=dev --legacy-peer-deps (matches EAS flow): succeeds\n\n- npm ls react: react@19.2.7 (root-pinned, deduped)\n\n- npm ls react-native-reanimated: 4.5.1 (root-pinned, deduped)\n\n- npx tsc --noEmit: 0 errors",
+  "priority": "NORMAL",
+  "createdAt": "2026-07-06T22:33:03.842Z",
+  "updatedAt": "2026-07-06T22:34:08.316Z",
+  "completedAt": "2026-07-06T22:34:03.951Z",
+  "expirationDate": "2026-07-20T22:33:03.915Z",
+  "isForIosSimulator": false,
+  "metrics": {
+    "buildWaitTime": 4458,
+    "buildQueueTime": 39380,
+    "buildDuration": 16271
+  }
+}

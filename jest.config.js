@@ -89,5 +89,4 @@ module.exports = {
   restoreMocks: true,
   verbose: true,
   testTimeout: 10000,
-  globals: { 'ts-jest': { tsconfig: { jsx: 'react-jsx' } } },
 };

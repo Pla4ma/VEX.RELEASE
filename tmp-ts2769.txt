@@ -1,0 +1,7 @@
+src/features/onboarding/utils/schemas.ts(7,39): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(33,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(39,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(44,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(51,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(59,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(69,16): error TS2769: No overload matches this call.

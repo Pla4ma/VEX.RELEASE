@@ -17,19 +17,12 @@ const DEFAULT_CONFIGS: Record<string, RateLimitConfig> = {
 };
 
 function logStructured(
-  level: string,
-  message: string,
-  data?: Record<string, unknown>,
+  _level: string,
+  _message: string,
+  _data?: Record<string, unknown>,
 ): void {
-  console.debug(
-    JSON.stringify({
-      level,
-      feature: 'rate-limit',
-      message,
-      timestamp: new Date().toISOString(),
-      ...data,
-    }),
-  );
+  // Intentionally no-op: edge functions should not emit unstructured logs.
+  // Rate-limit telemetry should be captured via Supabase analytics or similar.
 }
 
 export async function checkRateLimit(

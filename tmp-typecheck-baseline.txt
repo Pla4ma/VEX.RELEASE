@@ -1,0 +1,102 @@
+src/api/validation.ts(26,71): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/api/validation.ts(29,23): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/api/validation.ts(37,24): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/api/validation.ts(79,13): error TS2554: Expected 2-3 arguments, but got 1.
+src/events/EventSchemas.ts(77,12): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/components/coach-chat-types.ts(9,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/event-detail/event-schemas.ts(31,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/event-detail/event-schemas.ts(39,14): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/memory/memory-schemas.ts(28,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/memory/memory-schemas.ts(44,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/memory/memory-schemas.ts(56,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/notification/notification-budget-schema.ts(43,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/repository/recommendations.ts(21,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/behavior.ts(12,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/inputs.ts(14,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/inputs.ts(24,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/inputs.ts(32,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/inputs.ts(40,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/inputs.ts(73,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/interventions.ts(54,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/interventions.ts(70,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/ai-coach/schemas/recommendations.ts(19,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/data-schemas.ts(43,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/data-schemas.ts(98,22): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/data-schemas.ts(161,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/input-schemas.ts(38,22): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/input-schemas.ts(74,19): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/analytics/integration-queries/realtime.ts(40,62): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(41,62): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(42,49): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(43,53): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(48,60): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(49,45): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(50,59): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/integration-queries/realtime.ts(52,49): error TS2339: Property 'value' does not exist on type '{}'.
+src/features/analytics/repository/helpers.ts(26,21): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/capture/repository.ts(17,3): error TS2322: Type '{ id: string; type: "link" | "voice" | "photo" | "braindump"; content: string; createdAt: string; userId: string; metadata?: Record<string, unknown> | undefined; }' is not assignable to type 'CaptureItem'.
+src/features/capture/schemas.ts(9,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/challenges/schemas/inputs.ts(30,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/economy/schemas.ts(29,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/economy/schemas.ts(42,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/home-spine/priority-core-schemas.ts(27,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/home-spine/tomorrow-preview-schemas.ts(16,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/invisible-agent/schemas.ts(26,20): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/monetization/subscription-store.ts(20,33): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/notifications/push-delivery.ts(23,11): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/notifications/schemas.ts(12,41): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/notifications/schemas.ts(85,21): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/onboarding/utils/schemas.ts(7,39): error TS2769: No overload matches this call.
+src/features/progression/first-week-pacing/config.ts(13,14): error TS2322: Type '{ readonly sessionUnlocks: { readonly SESSION_1: [{ readonly session: "SESSION_1"; readonly unlockType: "FEATURE"; readonly title: "Focus Score Active"; readonly description: "Your Focus Score now changes based on session quality and consistency."; readonly actionRequired: false; readonly icon: "📊"; readonly priori...' is not assignable to type '{ sessionUnlocks: Record<"COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7", { session: "COMPLETED" | "SESSION_1" | "SESSION_2" | ... 4 more ... | "SESSION_7"; ... 6 more ...; actionText?: string | undefined; }[]>; xpRewards: Record<...>; companionReactions:...'.
+src/features/progression/first-week-pacing/config.ts(14,3): error TS2741: Property 'COMPLETED' is missing in type '{ readonly SESSION_1: [{ readonly session: "SESSION_1"; readonly unlockType: "FEATURE"; readonly title: "Focus Score Active"; readonly description: "Your Focus Score now changes based on session quality and consistency."; readonly actionRequired: false; readonly icon: "📊"; readonly priority: 1; }]; ... 5 more ...; ...' but required in type 'Record<"COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7", { session: "COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7"; ... 6 more ...; actionText?: string | undefined; }[]>'.
+src/features/progression/first-week-pacing/config.ts(109,3): error TS2741: Property 'COMPLETED' is missing in type '{ readonly SESSION_1: 50; readonly SESSION_2: 75; readonly SESSION_3: 100; readonly SESSION_4: 125; readonly SESSION_5: 150; readonly SESSION_6: 175; readonly SESSION_7: 250; }' but required in type 'Record<"COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7", number>'.
+src/features/progression/first-week-pacing/config.ts(118,3): error TS2741: Property 'COMPLETED' is missing in type '{ readonly SESSION_1: "Your focus journey begins. One session down."; readonly SESSION_2: "Your rhythm is taking shape. Two sessions prove consistency."; readonly SESSION_3: "Your companion awakens! It reflects your first three sessions."; readonly SESSION_4: "Your companion learns your focus patterns."; readonly SE...' but required in type 'Record<"COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7", string>'.
+src/features/progression/first-week-pacing/config.ts(127,3): error TS2741: Property 'COMPLETED' is missing in type '{ readonly SESSION_1: ["Start your first focus session", "Notice how your Focus Score changes", "One session is all that matters today"]; readonly SESSION_2: ["Complete your second session", "Learn how your rhythm builds", "Understand the daily anchor concept"]; ... 4 more ...; readonly SESSION_7: [...]; }' but required in type 'Record<"COMPLETED" | "SESSION_1" | "SESSION_2" | "SESSION_3" | "SESSION_4" | "SESSION_5" | "SESSION_6" | "SESSION_7", string[]>'.
+src/features/progression/progression-row-schemas.ts(31,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/progression/utils/validation/types.ts(27,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/progression/utils/validation/xp-validation.ts(39,45): error TS2339: Property 'errors' does not exist on type 'ZodError<{ id: string; userId: string; amount: number; source: "SESSION_COMPLETE" | "BOSS_DEFEAT" | "STREAK_BONUS" | "DAILY_LOGIN" | "ACHIEVEMENT_UNLOCK" | "BOSS_DAMAGE" | "CHALLENGE_COMPLETE" | ... 4 more ... | "REFUND"; timestamp: number; applied: boolean; sourceId?: string | undefined; metadata?: Record<...> | un...'.
+src/features/session-completion/headline-reward.schemas.ts(33,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(39,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(44,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(51,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(59,16): error TS2769: No overload matches this call.
+src/features/session-completion/headline-reward.schemas.ts(69,16): error TS2769: No overload matches this call.
+src/features/session/schemas.ts(57,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/settings/core-schemas.ts(43,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/settings/enums.ts(66,5): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/settings/notification-schemas.ts(34,20): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/settings/notification-schemas.ts(51,25): error TS2554: Expected 2-3 arguments, but got 1.
+src/features/vex-actions/schemas.ts(75,17): error TS2554: Expected 2-3 arguments, but got 1.
+src/lib/offline/queue.ts(16,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/navigation/deep-link-types.ts(32,18): error TS2554: Expected 2-3 arguments, but got 1.
+src/navigation/root-navigation-theme.ts(8,3): error TS2741: Property 'fonts' is missing in type '{ dark: boolean; colors: { primary: string; background: string; card: string; text: string; border: string; notification: string; }; }' but required in type 'Theme'.
+src/persistence/PersistenceConfigs.ts(7,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/persistence/PersistenceConfigs.ts(12,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/persistence/PersistenceConfigs.ts(23,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/persistence/PersistenceConfigs.ts(34,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/persistence/PersistenceConfigs.ts(39,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/persistence/PersistenceConfigs.ts(54,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/screens/auth/RegisterScreen.tsx(59,20): error TS2339: Property 'errors' does not exist on type 'ZodError<{ agreeToTerms: boolean; confirmPassword: string; email: string; firstName: string; lastName: string; password: string; phone?: string | undefined; }>'.
+src/screens/auth/RegisterScreen.tsx(59,36): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/screens/auth/RegisterScreen.tsx(62,11): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Partial<Record<"email" | "phone" | "firstName" | "lastName" | "password" | "agreeToTerms" | "confirmPassword", string>>'.
+src/screens/auth/ResetPasswordScreen.tsx(41,29): error TS2339: Property 'errors' does not exist on type 'ZodError<{ confirmPassword: string; password: string; token: string; }>'.
+src/screens/auth/useLoginScreen.ts(37,20): error TS2339: Property 'errors' does not exist on type 'ZodError<{ email: string; password: string; rememberMe: boolean; }>'.
+src/screens/auth/useLoginScreen.ts(37,36): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/screens/auth/useLoginScreen.ts(40,11): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'LoginErrors'.
+src/screens/boss/BossScreenContent.tsx(104,11): error TS2322: Type 'BossEncounterStub' is not assignable to type 'BossEncounterSummary'.
+src/session/repository/SessionRepositoryParsers.ts(58,3): error TS2322: Type 'Record<string | number | symbol, unknown>' is not assignable to type 'Record<string, { sessionId: string; userId: string; status: "COMPLETED" | "PREPARING" | "STARTING" | "ACTIVE" | "PAUSED" | "BACKGROUNDED" | "INTERRUPTION_RISK" | "DEGRADED" | "COMPLETING" | ... 4 more ... | "CONFLICT"; ... 35 more ...; completedAt?: number | undefined; }>'.
+src/session/repository/SessionRepositoryParsers.ts(58,12): error TS2554: Expected 2-3 arguments, but got 1.
+src/session/types/schemas.ts(95,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/session/types/schemas.ts(187,11): error TS2554: Expected 2-3 arguments, but got 1.
+src/session/utils/validation.ts(90,29): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/session/utils/validation.ts(90,41): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/session/validation/session-event-schemas.ts(29,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/session/validation/session-event-schemas.ts(48,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/session/validation/session-event-schemas.ts(66,15): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/ai/ai-base-schemas.ts(17,16): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/ai/ai-base-schemas.ts(35,23): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/ai/ai-event-schemas.ts(177,14): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/ai/ai-intent-routing.ts(78,13): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/ai/core-schemas.ts(30,14): error TS2554: Expected 2-3 arguments, but got 1.
+src/shared/utils/validation.ts(73,16): error TS2339: Property 'errors' does not exist on type 'ZodError<T>'.
+src/shared/utils/validation.ts(73,32): error TS7006: Parameter 'err' implicitly has an 'any' type.
