@@ -6,6 +6,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+
+// TEMPORARY STARTUP DEBUG: capture full uncaught error stacks on device.
+const logError = (label: string, err: unknown): void => {
+  const e = err instanceof Error ? err : new Error(String(err));
+  console.error(`[STARTUP-DEBUG ${label}]`, e.message, e.stack);
+};
+(globalThis as { addEventListener?: (type: string, cb: (event: Event) => void) => void }).addEventListener?.(
+  'unhandledrejection',
+  (event: Event) => {
+    const reason = 'reason' in event ? (event as { reason?: unknown }).reason : event;
+    logError('unhandledrejection', reason);
+  },
+);
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   Urbanist_400Regular,
