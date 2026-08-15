@@ -1,0 +1,59 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/lib/commonjs/components/bottomSheet/BottomSheet.js b/node_modules/@gorhom/bottom-sheet/lib/commonjs/components/bottomSheet/BottomSheet.js
+index a7748c0..a94d0ba 100644
+--- a/node_modules/@gorhom/bottom-sheet/lib/commonjs/components/bottomSheet/BottomSheet.js
++++ b/node_modules/@gorhom/bottom-sheet/lib/commonjs/components/bottomSheet/BottomSheet.js
+@@ -26,9 +26,11 @@ function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r
+ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+ // import BottomSheetDebugView from '../bottomSheetDebugView';
+ 
+-_reactNativeReanimated.default.addWhitelistedUIProps({
+-  decelerationRate: true
+-});
++if (typeof _reactNativeReanimated.default.addWhitelistedUIProps === 'function') {
++  _reactNativeReanimated.default.addWhitelistedUIProps({
++    decelerationRate: true
++  });
++}
+ const BottomSheetComponent = /*#__PURE__*/(0, _react.forwardRef)(function BottomSheet(props, ref) {
+   //#region extract props
+   const {
+diff --git a/node_modules/@gorhom/bottom-sheet/lib/module/components/bottomSheet/BottomSheet.js b/node_modules/@gorhom/bottom-sheet/lib/module/components/bottomSheet/BottomSheet.js
+index ca4bb3b..7fcc9b2 100644
+--- a/node_modules/@gorhom/bottom-sheet/lib/module/components/bottomSheet/BottomSheet.js
++++ b/node_modules/@gorhom/bottom-sheet/lib/module/components/bottomSheet/BottomSheet.js
+@@ -19,9 +19,11 @@ import { BottomSheetBody } from './BottomSheetBody';
+ import { BottomSheetContent } from './BottomSheetContent';
+ import { DEFAULT_ACCESSIBILITY_LABEL, DEFAULT_ACCESSIBILITY_ROLE, DEFAULT_ACCESSIBLE, DEFAULT_ANIMATE_ON_MOUNT, DEFAULT_DYNAMIC_SIZING, DEFAULT_ENABLE_BLUR_KEYBOARD_ON_GESTURE, DEFAULT_ENABLE_CONTENT_PANNING_GESTURE, DEFAULT_ENABLE_OVER_DRAG, DEFAULT_ENABLE_PAN_DOWN_TO_CLOSE, DEFAULT_KEYBOARD_BEHAVIOR, DEFAULT_KEYBOARD_BLUR_BEHAVIOR, DEFAULT_KEYBOARD_INDEX, DEFAULT_KEYBOARD_INPUT_MODE, DEFAULT_OVER_DRAG_RESISTANCE_FACTOR, INITIAL_VALUE } from './constants';
+ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+-Animated.addWhitelistedUIProps({
+-  decelerationRate: true
+-});
++if (typeof Animated.addWhitelistedUIProps === 'function') {
++  Animated.addWhitelistedUIProps({
++    decelerationRate: true
++  });
++}
+ const BottomSheetComponent = /*#__PURE__*/forwardRef(function BottomSheet(props, ref) {
+   //#region extract props
+   const {
+diff --git a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+index fc52033..9109987 100644
+--- a/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
++++ b/node_modules/@gorhom/bottom-sheet/src/components/bottomSheet/BottomSheet.tsx
+@@ -84,9 +84,13 @@ import {
+ } from './constants';
+ import type { AnimateToPositionType, BottomSheetProps } from './types';
+ 
+-Animated.addWhitelistedUIProps({
+-  decelerationRate: true,
+-});
++// Reanimated 4 removed addWhitelistedUIProps (UI props are auto-whitelisted).
++// Guard the call so the module loads on both Reanimated 3 and 4.
++if (typeof Animated.addWhitelistedUIProps === 'function') {
++  Animated.addWhitelistedUIProps({
++    decelerationRate: true,
++  });
++}
+ 
+ type BottomSheet = BottomSheetMethods;
+ 
