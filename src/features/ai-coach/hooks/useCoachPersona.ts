@@ -5,6 +5,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
+import { useShallow } from 'zustand/react/shallow';
 import * as repository from '../repository';
 import * as service from '../service/service';
 import { useCoachStore } from '../store';
@@ -34,26 +35,30 @@ export function useCoachPersona(personaId: string) {
 }
 
 export function useCoachUIState() {
-  return useCoachStore((state) => ({
-    activeMessage: state.activeMessage,
-    showHistory: state.showHistory,
-    selectedPersona: state.selectedPersona,
-    mutedCategories: state.mutedCategories,
-    reduceNotifications: state.reduceNotifications,
-  }));
+  return useCoachStore(
+    useShallow((state) => ({
+      activeMessage: state.activeMessage,
+      showHistory: state.showHistory,
+      selectedPersona: state.selectedPersona,
+      mutedCategories: state.mutedCategories,
+      reduceNotifications: state.reduceNotifications,
+    })),
+  );
 }
 
 export function useCoachUIActions() {
-  return useCoachStore((state) => ({
-    setActiveMessage: state.setActiveMessage,
-    dismissMessage: state.dismissMessage,
-    toggleHistory: state.toggleHistory,
-    selectPersona: state.selectPersona,
-    muteCategory: state.muteCategory,
-    unmuteCategory: state.unmuteCategory,
-    setReduceNotifications: state.setReduceNotifications,
-    closeModal: state.closeModal,
-  }));
+  return useCoachStore(
+    useShallow((state) => ({
+      setActiveMessage: state.setActiveMessage,
+      dismissMessage: state.dismissMessage,
+      toggleHistory: state.toggleHistory,
+      selectPersona: state.selectPersona,
+      muteCategory: state.muteCategory,
+      unmuteCategory: state.unmuteCategory,
+      setReduceNotifications: state.setReduceNotifications,
+      closeModal: state.closeModal,
+    })),
+  );
 }
 
 export function useHasDismissedMessage(messageId: string) {

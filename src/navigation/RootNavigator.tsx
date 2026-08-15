@@ -11,6 +11,8 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 
+import { useShallow } from 'zustand/react/shallow';
+
 import { useAuthStore } from '../store';
 import { useTheme } from '../theme/ThemeContext';
 import { useOnboardingStore } from '../onboarding';
@@ -55,13 +57,15 @@ export const RootNavigator: React.ComponentType = () => {
     isOnboarded,
     resetOnboarding,
     setCompletionFromBackend,
-  } = useOnboardingStore((state) => ({
-    completedAt: state.completedAt,
-    completedForUserId: state.completedForUserId,
-    isOnboarded: state.isOnboarded,
-    resetOnboarding: state.resetOnboarding,
-    setCompletionFromBackend: state.setCompletionFromBackend,
-  }));
+  } = useOnboardingStore(
+    useShallow((state) => ({
+      completedAt: state.completedAt,
+      completedForUserId: state.completedForUserId,
+      isOnboarded: state.isOnboarded,
+      resetOnboarding: state.resetOnboarding,
+      setCompletionFromBackend: state.setCompletionFromBackend,
+    })),
+  );
 
   const featureAccess = useFeatureAccess({
     enabled: isAuthCheckComplete && isAuthenticated,
