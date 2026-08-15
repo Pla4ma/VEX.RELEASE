@@ -9,7 +9,7 @@ export const BehaviorSignalSchema = z
     value: z.number(),
     confidence: z.number().min(0).max(1),
     timestamp: z.number().int().positive(),
-    metadata: z.record(z.unknown()),
+    metadata: z.record(z.string(), z.unknown()),
     expiresAt: z.number().int().positive(),
   })
   .strict();

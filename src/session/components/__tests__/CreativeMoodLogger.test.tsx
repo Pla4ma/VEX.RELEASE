@@ -79,8 +79,8 @@ describe('CreativeMoodLogger', () => {
     jest.useRealTimers();
   });
 
-  it('renders when isVisible is true', () => {
-    const { getByText } = render(
+  it('renders when isVisible is true', async () => {
+    const { getByText } = await render(
       <CreativeMoodLogger
         isVisible={true}
         onMoodSelected={mockOnMoodSelected}
@@ -92,8 +92,8 @@ describe('CreativeMoodLogger', () => {
     expect(getByText("How's the creative energy?")).toBeTruthy();
   });
 
-  it('does not render when isVisible is false', () => {
-    const { toJSON } = render(
+  it('does not render when isVisible is false', async () => {
+    const { toJSON } = await render(
       <CreativeMoodLogger
         isVisible={false}
         onMoodSelected={mockOnMoodSelected}
@@ -105,8 +105,8 @@ describe('CreativeMoodLogger', () => {
     expect(toJSON()).toBeNull();
   });
 
-  it('calls onMoodSelected with correct mood on emoji tap', () => {
-    const { getByLabelText } = render(
+  it('calls onMoodSelected with correct mood on emoji tap', async () => {
+    const { getByLabelText } = await render(
       <CreativeMoodLogger
         isVisible={true}
         onMoodSelected={mockOnMoodSelected}
@@ -116,7 +116,7 @@ describe('CreativeMoodLogger', () => {
 
     // Tap on the first mood (On fire)
     const onFireButton = getByLabelText('On fire mood');
-    fireEvent.press(onFireButton);
+    await fireEvent.press(onFireButton);
 
     // Wait for the setTimeout in the component
     jest.advanceTimersByTime(500);
@@ -125,8 +125,8 @@ describe('CreativeMoodLogger', () => {
     expect(mockOnMoodSelected).toHaveBeenCalled();
   });
 
-  it('calls onSkip when skip is tapped', () => {
-    const { getByLabelText } = render(
+  it('calls onSkip when skip is tapped', async () => {
+    const { getByLabelText } = await render(
       <CreativeMoodLogger
         isVisible={true}
         onMoodSelected={mockOnMoodSelected}
@@ -136,14 +136,14 @@ describe('CreativeMoodLogger', () => {
 
     // Tap the skip button
     const skipButton = getByLabelText('Skip mood logging');
-    fireEvent.press(skipButton);
+    await fireEvent.press(skipButton);
 
     // Verify onSkip was called
     expect(mockOnSkip).toHaveBeenCalled();
   });
 
-  it('shows selected mood with highlighted border', () => {
-    const { getByLabelText } = render(
+  it('shows selected mood with highlighted border', async () => {
+    const { getByLabelText } = await render(
       <CreativeMoodLogger
         isVisible={true}
         onMoodSelected={mockOnMoodSelected}
@@ -153,7 +153,7 @@ describe('CreativeMoodLogger', () => {
 
     // Tap on a mood to select it
     const calmButton = getByLabelText('Calm mood');
-    fireEvent.press(calmButton);
+    await fireEvent.press(calmButton);
 
     // The mood should be selected (visual state tested via snapshot or style)
     expect(calmButton).toBeTruthy();

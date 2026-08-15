@@ -8,15 +8,15 @@ import { render } from '@testing-library/react-native';
 import React from 'react';
 
 describe('RewardChest', () => {
-  it('renders the archived message', () => {
-    const { getByText } = render(React.createElement(RewardChest));
+  it('renders the archived message', async () => {
+    const { getByText } = await render(React.createElement(RewardChest));
     expect(
       getByText(/Chest and economy rewards have been moved/i),
     ).toBeTruthy();
   });
 
-  it('has accessibility label', () => {
-    const { getByLabelText } = render(React.createElement(RewardChest));
+  it('has accessibility label', async () => {
+    const { getByLabelText } = await render(React.createElement(RewardChest));
     expect(getByLabelText('Reward chest')).toBeTruthy();
   });
 });

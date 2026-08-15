@@ -40,8 +40,8 @@ jest.mock('react-native-purchases', () => ({
 }));
 
 describe('Test environment smoke', () => {
-  it('renders View with Text', () => {
-    const { getByText } = render(
+  it('renders View with Text', async () => {
+    const { getByText } = await render(
       <View testID="smoke-view">
         <Text>Smoke Test</Text>
       </View>,
@@ -49,13 +49,13 @@ describe('Test environment smoke', () => {
     expect(getByText('Smoke Test')).toBeTruthy();
   });
 
-  it('renders VEX primitive component (Badge)', () => {
+  it('renders VEX primitive component (Badge)', async () => {
     const { Badge } = require('@/components/Badge');
-    const { getByText } = render(<Badge variant="primary">VEX Smoke</Badge>);
+    const { getByText } = await render(<Badge variant="primary">VEX Smoke</Badge>);
     expect(getByText('VEX Smoke')).toBeTruthy();
   });
 
-  it('renders NavigationContainer with one screen', () => {
+  it('renders NavigationContainer with one screen', async () => {
     const { NavigationContainer } = require('@react-navigation/native');
     const {
       createNativeStackNavigator,
@@ -66,7 +66,7 @@ describe('Test environment smoke', () => {
         <Text>Navigation works</Text>
       </View>
     );
-    const { getByText } = render(
+    const { getByText } = await render(
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Test" component={TestScreen} />

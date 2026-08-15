@@ -45,7 +45,7 @@ export const generationRowSchema = z.object({
   key_concepts: z.array(z.string()).default([]),
   tasks: z.array(z.unknown()).default([]),
   quiz_items: z.array(z.unknown()).default([]),
-  session_plan: z.unknown(),
+  session_plan: z.unknown().optional(),
   user_rating: z.number().nullable().optional(),
   was_helpful: z.boolean().nullable().optional(),
   times_used: z.number().default(0),

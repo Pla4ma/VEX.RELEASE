@@ -23,7 +23,7 @@ jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
 
 describe('behavior-resolver-helpers', () => {
   const makeSignal = (type: string, surfaceKey = 'test_surface') => ({
-    userId: '00000000-0000-0000-0000-000000000001',
+    userId: '00000000-0000-4000-8000-000000000001',
     surfaceKey,
     signalType: type as unknown,
     source: 'home_hero' as unknown,

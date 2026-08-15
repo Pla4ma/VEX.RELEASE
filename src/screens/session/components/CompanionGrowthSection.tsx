@@ -8,10 +8,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import type { SessionSummary } from '../../../session/types';
 import type { Theme } from '../../../theme/types';
-import {
-  type CompanionGrowth,
-  loadCompanionGrowth,
-} from '../../../features/companion/session-storage';
+import { loadCompanionGrowth } from '../../../features/companion/session-storage';
 import {
   type LoadState,
   buildFallbackGrowth,

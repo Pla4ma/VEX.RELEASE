@@ -14,7 +14,6 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexFocusMark } from '../../../screens/auth/components/VexFocusMark';
 import { PathSelectionCard } from './PathSelectionCard';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { spacing } from '../../../theme/tokens/spacing';
 import type { OnboardingPath } from '../onboarding-paths';
 import { Text as VexText } from '../../../components/primitives/Text';

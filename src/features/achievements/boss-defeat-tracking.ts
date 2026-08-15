@@ -1,4 +1,3 @@
-import type { Achievement } from './types';
 import { ALL_ACHIEVEMENTS } from './definitions';
 import * as repository from './repository';
 

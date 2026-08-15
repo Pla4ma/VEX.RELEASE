@@ -4,8 +4,6 @@
  * Configuration for Jest testing environment.
  */
 
-import '@testing-library/jest-native/extend-expect';
-
 // Setup global test utilities
 global.__TEST__ = true;
 

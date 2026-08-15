@@ -54,11 +54,11 @@ import { validateXPBatch } from '../utils/validation/batch-validation';
 import { MAX_XP_PER_SESSION, MAX_STREAK_BONUS_MULTIPLIER, MAX_QUALITY_BONUS } from '../utils/validation/types';
 import type { XPTransaction, ValidationResult } from '../utils/validation/types';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 function makeTxn(overrides?: Partial<XPTransaction>): XPTransaction {
   return {
-    id: '00000000-0000-0000-0000-000000000001', userId: TEST_USER_ID,
+    id: '00000000-0000-4000-8000-000000000001', userId: TEST_USER_ID,
     amount: 100, source: 'SESSION_COMPLETE', timestamp: Date.now(), applied: false, ...overrides,
   };
 }
@@ -187,7 +187,7 @@ describe('XP Validation', () => {
 
     it('flags batch exceeding hourly limit', () => {
       const txns = Array.from({ length: 5 }, (_, i) =>
-        makeTxn({ amount: 9000, id: `00000000-0000-0000-0000-${String(i).padStart(12, '0')}`, timestamp: Date.now() }),
+        makeTxn({ amount: 9000, id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`, timestamp: Date.now() }),
       );
       const result = validateXPBatch(txns, emptyHistory);
       expect(result.violations.some((v) => v.type === 'RATE_LIMIT')).toBe(true);

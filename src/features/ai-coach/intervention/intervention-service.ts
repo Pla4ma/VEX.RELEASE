@@ -45,22 +45,3 @@ export {
 
 export { evaluateInterventions } from './evaluate-interventions';
 
-import {
-  detectBurnout,
-  detectPlateau,
-  detectStreakRescueNeeded,
-  detectBossStrategyOpportunity,
-} from './intervention-detectors-core';
-import {
-  detectStudyStuck,
-  detectDistraction,
-  detectOptimalBreak,
-} from './intervention-detectors-situational';
-import { evaluateInterventions } from './evaluate-interventions';
-import {
-  generateBurnoutMessage,
-  generatePlateauMessage,
-  generateStreakRescueMessage,
-  generateBossStrategyMessage,
-} from './intervention-messages';
-

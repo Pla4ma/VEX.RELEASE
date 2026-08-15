@@ -1,4 +1,3 @@
-import { captureSilentFailure } from '../utils/silent-failure';
 import type { StorageResult } from './StorageAdapter';
 import { createDebugger } from '../utils/debug';
 

@@ -37,15 +37,15 @@ describe('integration', () => {
       unsub();
     });
 
-    it('ignores social:activity with null event', () => {
+    it('ignores social:activity with null event', async () => {
       const unsub = initializeSocialFeedIntegration();
-      fireEvent('social:activity', null);
+      await fireEvent('social:activity', null);
       unsub();
     });
 
-    it('publishes social:activity for podium finishes (rank <= 3)', () => {
+    it('publishes social:activity for podium finishes (rank <= 3)', async () => {
       const unsub = initializeSocialFeedIntegration();
-      fireEvent('leaderboards:result', {
+      await fireEvent('leaderboards:result', {
         userId: 'u1',
         leaderboardId: 'lb-1',
         rank: 2,
@@ -68,9 +68,9 @@ describe('integration', () => {
       });
     });
 
-    it('publishes squads:leaderboard_update for squad leaderboards', () => {
+    it('publishes squads:leaderboard_update for squad leaderboards', async () => {
       const unsub = initializeSocialFeedIntegration();
-      fireEvent('leaderboards:result', {
+      await fireEvent('leaderboards:result', {
         userId: 'u1',
         leaderboardId: 'squad:alpha',
         rank: 5,
@@ -93,9 +93,9 @@ describe('integration', () => {
       });
     });
 
-    it('does NOT publish podium finish for rank > 3', () => {
+    it('does NOT publish podium finish for rank > 3', async () => {
       const unsub = initializeSocialFeedIntegration();
-      fireEvent('leaderboards:result', {
+      await fireEvent('leaderboards:result', {
         userId: 'u1',
         leaderboardId: 'lb-1',
         rank: 10,
@@ -118,9 +118,9 @@ describe('integration', () => {
       });
     });
 
-    it('ignores squads:challenge_update with null event', () => {
+    it('ignores squads:challenge_update with null event', async () => {
       const unsub = initializeSocialFeedIntegration();
-      fireEvent('squads:challenge_update', null);
+      await fireEvent('squads:challenge_update', null);
       unsub();
     });
   });

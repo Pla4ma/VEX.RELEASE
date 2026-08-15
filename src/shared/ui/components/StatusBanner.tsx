@@ -6,12 +6,7 @@ import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { triggerHaptic } from '../../../utils/haptics';
 import { useThemeObject } from '../../../theme/ThemeContext';
-import {
-  type AsyncStatus,
-  type StatusFeedbackProps,
-  STATUS_CONFIG,
-  getStatusColor,
-} from './StatusFeedback.types';
+import { type StatusFeedbackProps, STATUS_CONFIG, getStatusColor } from './StatusFeedback.types';
 
 export const StatusBanner: React.ComponentType<StatusFeedbackProps> = ({
   status,

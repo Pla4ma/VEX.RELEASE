@@ -1,5 +1,4 @@
 import { useTheme } from '../../../theme/ThemeContext';
-import { formatDuration } from '../../../utils/format-duration';
 
 export interface SessionListItem {
   id: string;

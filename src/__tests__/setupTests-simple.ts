@@ -4,8 +4,6 @@
  * For tests that don't need API mocking
  */
 
-import '@testing-library/jest-native/extend-expect';
-
 // Global test flag
 declare global {
   var __TEST__: boolean;

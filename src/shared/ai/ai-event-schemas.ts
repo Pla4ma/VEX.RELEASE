@@ -174,7 +174,7 @@ export const AIErrorLoggedEventSchema = z.object({
   errorMessage: z.string(),
   retryable: z.boolean(),
   sentryEventId: z.string().optional(),
-  context: z.record(z.unknown()).optional(),
+  context: z.record(z.string(), z.unknown()).optional(),
 });
 export type AIErrorLoggedEvent = z.infer<typeof AIErrorLoggedEventSchema>;
 

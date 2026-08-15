@@ -9,7 +9,7 @@ import {
 import type { CreateRewardLedgerInput } from '../types';
 
 const validInput: CreateRewardLedgerInput = {
-  userId: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+  userId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
   idempotencyKey: 'evt_session_complete_001',
   rewardType: 'session_bonus',
   amount: 50,
@@ -18,7 +18,7 @@ const validInput: CreateRewardLedgerInput = {
 };
 
 const mockDbRecord = {
-  id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+  id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
   user_id: validInput.userId,
   idempotency_key: validInput.idempotencyKey,
   reward_type: validInput.rewardType,
@@ -38,7 +38,7 @@ describe('reward-ledger repository', () => {
   });
 
   describe('updateRewardLedgerStatus', () => {
-    const ledgerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+    const ledgerId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
     it('transitions to delivered', async () => {
       const deliveredDb = {
@@ -118,12 +118,12 @@ describe('reward-ledger repository', () => {
   });
 
   describe('fetchPendingRewards', () => {
-    const userId = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+    const userId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 
     it('fetches pending rewards for user', async () => {
       const pendingRewards = [
         mockDbRecord,
-        { ...mockDbRecord, id: 'cccccccc-cccc-cccc-cccc-cccccccccccc' },
+        { ...mockDbRecord, id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc' },
       ];
       const eqStatus = jest
         .fn()

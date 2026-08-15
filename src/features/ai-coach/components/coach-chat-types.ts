@@ -6,7 +6,7 @@ export const CoachMessageInputSchema = z.object({
   sender: z.string().optional(),
   content: z.string(),
   createdAt: z.number(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export interface ChatMessage {

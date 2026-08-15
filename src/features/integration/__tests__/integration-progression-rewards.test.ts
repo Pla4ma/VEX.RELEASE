@@ -30,9 +30,9 @@ describe('integration', () => {
       unsub();
     });
 
-    it('creates reward on level up event with rewards', () => {
+    it('creates reward on level up event with rewards', async () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent('progression:level_up', {
+      await fireEvent('progression:level_up', {
         userId: 'u1',
         newLevel: 5,
         rewards: ['COINS'],
@@ -53,9 +53,9 @@ describe('integration', () => {
       });
     });
 
-    it('does NOT create reward when rewards array is empty', () => {
+    it('does NOT create reward when rewards array is empty', async () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent('progression:level_up', {
+      await fireEvent('progression:level_up', {
         userId: 'u1',
         newLevel: 3,
         rewards: [],
@@ -69,9 +69,9 @@ describe('integration', () => {
       });
     });
 
-    it('does NOT create reward when rewards is missing', () => {
+    it('does NOT create reward when rewards is missing', async () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent('progression:level_up', { userId: 'u1', newLevel: 3 });
+      await fireEvent('progression:level_up', { userId: 'u1', newLevel: 3 });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           expect(mockRewards.createReward).not.toHaveBeenCalled();
@@ -81,9 +81,9 @@ describe('integration', () => {
       });
     });
 
-    it('applies 2x multiplier for XP_BOOST reward type', () => {
+    it('applies 2x multiplier for XP_BOOST reward type', async () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent('progression:level_up', {
+      await fireEvent('progression:level_up', {
         userId: 'u1',
         newLevel: 4,
         rewards: ['XP_BOOST'],
@@ -99,9 +99,9 @@ describe('integration', () => {
       });
     });
 
-    it('applies base reward for GEMS type', () => {
+    it('applies base reward for GEMS type', async () => {
       const unsub = initializeProgressionRewardsIntegration();
-      fireEvent('progression:level_up', {
+      await fireEvent('progression:level_up', {
         userId: 'u1',
         newLevel: 3,
         rewards: ['GEMS'],

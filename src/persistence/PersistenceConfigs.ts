@@ -4,12 +4,12 @@ import type { PersistenceConfig, StorageKey } from './PersistenceService';
 export const PersistenceConfigs = {
   bossPhaseStates: {
     key: 'boss:phase_states' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
   },
   subscriptions: {
     key: 'premium:subscriptions' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
     encrypted: true,
   },
@@ -20,7 +20,7 @@ export const PersistenceConfigs = {
   },
   wallets: {
     key: 'shop:wallets' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
     encrypted: true,
   },
@@ -31,12 +31,12 @@ export const PersistenceConfigs = {
   },
   inventories: {
     key: 'shop:inventories' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
   },
   squads: {
     key: 'squads:data' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
   },
   notificationHistory: {
@@ -51,7 +51,7 @@ export const PersistenceConfigs = {
   },
   onboardingStates: {
     key: 'onboarding:states' as StorageKey,
-    schema: z.record(z.unknown()),
+    schema: z.record(z.string(), z.unknown()),
     version: 1,
   },
 } satisfies Record<string, PersistenceConfig<unknown>>;

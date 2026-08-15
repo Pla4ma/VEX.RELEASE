@@ -6,11 +6,7 @@ import {
   listStoredProjectThreads,
   upsertStoredProjectThread,
 } from './repository';
-import {
-  trackProjectThreadCreated,
-  trackProjectThreadUpdated,
-  trackProjectThreadRescued,
-} from './analytics';
+import { trackProjectThreadCreated, trackProjectThreadRescued } from './analytics';
 
 const STALE_AFTER_MS = 3 * 86_400_000;
 

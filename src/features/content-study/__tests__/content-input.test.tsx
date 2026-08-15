@@ -58,8 +58,8 @@ describe('useContentInput', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('should initialize with default state', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
+  it('should initialize with default state', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
     expect(result.current.state.activeTab).toBe('paste');
     expect(result.current.state.pastedText).toBe('');
     expect(result.current.state.youtubeUrl).toBe('');
@@ -67,53 +67,53 @@ describe('useContentInput', () => {
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.error).toBeNull();
   });
-  it('should update tab', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
-    act(() => {
+  it('should update tab', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
+    await act(() => {
       result.current.setTab('youtube');
     });
     expect(result.current.state.activeTab).toBe('youtube');
   });
-  it('should update pasted text', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
-    act(() => {
+  it('should update pasted text', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
+    await act(() => {
       result.current.setPastedText('Test content');
     });
     expect(result.current.state.pastedText).toBe('Test content');
   });
-  it('should update YouTube URL', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
-    act(() => {
+  it('should update YouTube URL', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
+    await act(() => {
       result.current.setYoutubeUrl('https://youtube.com/watch?v=123');
     });
     expect(result.current.state.youtubeUrl).toBe(
       'https://youtube.com/watch?v=123',
     );
   });
-  it('should update selected file', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
+  it('should update selected file', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
     const file = {
       uri: 'file:///test.pdf',
       name: 'test.pdf',
       size: 1000,
       type: 'application/pdf',
     };
-    act(() => {
+    await act(() => {
       result.current.setSelectedFile(file);
     });
     expect(result.current.state.selectedFile).toEqual(file);
   });
-  it('should clear error', () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
-    act(() => {
+  it('should clear error', async () => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
+    await act(() => {
       result.current.setPastedText('Test');
       result.current.clearError();
     });
     expect(result.current.error).toBeNull();
   });
   it('should validate pasted text before submit', async () => {
-    const { result } = renderHook(() => useContentInput(), { wrapper });
-    act(() => {
+    const { result } = await renderHook(() => useContentInput(), { wrapper });
+    await act(() => {
       result.current.setTab('paste');
       result.current.setPastedText('Short');
     });

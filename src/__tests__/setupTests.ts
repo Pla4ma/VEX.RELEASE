@@ -4,7 +4,6 @@
  * Entry point for setupFilesAfterEnv. Imports all mock registrations
  * and lifecycle helpers from extracted modules.
  */
-import '@testing-library/jest-native/extend-expect';
 import 'whatwg-fetch';
 import { TEST_CONSTANTS } from '../constants/test';
 

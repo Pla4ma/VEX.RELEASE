@@ -4,7 +4,6 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '../../../store';
 import { fetchStreakSummary } from '../repository/streak-repository';
 import { StreakSummarySchema } from '../schemas';
 

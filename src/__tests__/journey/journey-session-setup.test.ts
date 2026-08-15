@@ -154,7 +154,7 @@ describe('Phase 17 — Active session blocks second session', () => {
       recoveryStatus: 'none',
       isFirstSession: false,
       hasActiveSession: true,
-      userId: '00000000-0000-0000-0000-000000000001',
+      userId: '00000000-0000-4000-8000-000000000001',
     });
     expect(rec.isBlocked).toBe(true);
   });

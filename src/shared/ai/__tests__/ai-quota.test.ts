@@ -9,7 +9,7 @@ import type { AIRequestCategory } from '../ai-quota-types';
 import { DEFAULT_QUOTA_STRATEGIES } from '../ai-quota-strategies';
 import { useMonetizationStore } from '../../monetization/store';
 
-const TEST_USER = '00000000-0000-0000-0000-000000000001';
+const TEST_USER = '00000000-0000-4000-8000-000000000001';
 
 describe('AI Quota Service', () => {
   afterEach(() => {

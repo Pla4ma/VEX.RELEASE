@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import { AtRiskBanner } from '../../../features/home-spine/components/AtRiskBanner';
 import { StaggeredEnter } from '../../../shared/ui/components/EnterAnimation';

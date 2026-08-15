@@ -68,7 +68,7 @@ describe('Zod Schema Example Tests', () => {
       const result = TransactionSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toContain('greater than 0');
+        expect(result.error.issues[0].message).toContain('>0');
       }
     });
     it('should reject zero amounts', () => {

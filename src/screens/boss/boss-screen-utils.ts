@@ -1,7 +1,5 @@
-import type {
-  BossEncounterSummary,
-  BossTemplate,
-} from '../../features/boss/schemas';
+import type { BossEncounterStub } from '../../features/boss/hooks';
+import type { BossTemplate } from '../../features/boss/schemas';
 
 export const ATTACK_PRESETS = [
   { minutes: 15, label: '15m focused block' },
@@ -13,7 +11,7 @@ export type BossIntensity = 'subtle' | 'game-like' | 'intense';
 
 export type BossScreenSectionsProps = {
   bossIntensity?: BossIntensity;
-  encounter: BossEncounterSummary;
+  encounter: BossEncounterStub;
   onLaunchAttack: (minutes: number) => void;
   progressionLevel: number;
   streakMultiplier: number;

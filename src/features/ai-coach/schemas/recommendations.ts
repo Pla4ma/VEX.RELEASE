@@ -16,7 +16,7 @@ export const SessionRecommendationSchema = z
     description: z.string().max(500),
     priority: z.number().int().min(1).max(10),
     reason: z.string().max(500),
-    metadata: z.record(z.unknown()).default({}),
+    metadata: z.record(z.string(), z.unknown()).default({}),
     suggestedDuration: z.number().int().min(60).max(7200).optional(),
     suggestedDifficulty: z
       .enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH'])

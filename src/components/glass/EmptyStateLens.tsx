@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, Defs, RadialGradient, Stop, Ellipse, Path } from 'react-native-svg';
+import Svg, { Circle, Defs, RadialGradient, Stop, Path } from 'react-native-svg';
 
 interface EmptyStateLensProps {
   size?: number;

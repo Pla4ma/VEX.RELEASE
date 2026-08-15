@@ -63,6 +63,6 @@ export const SettingValueSchema = z.union([
   z.number(),
   z.boolean(),
   z.array(z.string()),
-  z.record(z.unknown()),
+  z.record(z.string(), z.unknown()),
   z.null(),
 ]);

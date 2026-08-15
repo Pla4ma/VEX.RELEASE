@@ -1,7 +1,6 @@
 import { Badge } from '../../../components/Badge';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export function getStatusBadge(
   status: UserChallengeSummary['status'],

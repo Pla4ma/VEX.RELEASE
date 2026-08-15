@@ -1,5 +1,4 @@
 import {
-  firstSentence,
   planId,
   makeBlock,
   buildStudySessionFromBlock,

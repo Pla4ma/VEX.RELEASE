@@ -6,14 +6,13 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { lightColors } from '@/theme/tokens/colors';
 
 /**
  * Animation helpers for VexAuroraCanvas
  * Extracted orbital animation setup and noise grain rendering
  */
 
-        
+
 export function useOrbitalAnimation(isReducedMotion: boolean) {
   const orbital = useSharedValue(0);
 

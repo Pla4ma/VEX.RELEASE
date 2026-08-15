@@ -54,14 +54,14 @@ describe('resolveUserBehaviorSignals', () => {
   it('detects boss engagement at medium level', () => {
     const signals = [
       {
-        userId: '00000000-0000-0000-0000-000000000001',
+        userId: '00000000-0000-4000-8000-000000000001',
         surfaceKey: 'boss_cta',
         signalType: 'boss_cta_clicked',
         source: 'boss_tab',
         timestamp: Date.now(),
       },
       {
-        userId: '00000000-0000-0000-0000-000000000001',
+        userId: '00000000-0000-4000-8000-000000000001',
         surfaceKey: 'boss_route',
         signalType: 'boss_route_opened',
         source: 'boss_tab',

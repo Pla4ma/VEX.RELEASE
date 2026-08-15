@@ -11,12 +11,17 @@ type VexAssetName =
   | 'orangeCoach'
   | 'orangeHumanCoach'
   | 'orangeAnalytics'
-  | 'orangeMastery';
+  | 'orangeMastery'
+  | 'orbFocus'
+  | 'orbStudy'
+  | 'orbSprint'
+  | 'orbRecovery';
 
 interface VexAssetImageProps {
   name: VexAssetName;
   size: number;
   opacity?: number;
+  resizeMode?: 'contain' | 'cover' | 'stretch' | 'center' | 'repeat';
 }
 
 // SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time.
@@ -31,6 +36,10 @@ const ASSETS: Record<VexAssetName, ImageSourcePropType> = {
   orangeHumanCoach: require('../../../assets/water/vex_orange_human_coach_v1.png'),
   orangeAnalytics: require('../../../assets/water/vex_orange_analytics_v1.png'),
   orangeMastery: require('../../../assets/water/vex_orange_mastery_v1.png'),
+  orbFocus: require('../../../assets/water/vex_orb_light_focus_v1.png'),
+  orbStudy: require('../../../assets/water/vex_orb_study_v1.png'),
+  orbSprint: require('../../../assets/water/vex_orb_sprint_orange_v1.png'),
+  orbRecovery: require('../../../assets/water/vex_orb_recovery_v1.png'),
 };
 
 const containerBaseStyle: ViewStyle = {
@@ -49,6 +58,7 @@ export function VexAssetImage({
   name,
   size,
   opacity = 1,
+  resizeMode = 'cover',
 }: VexAssetImageProps): React.ReactNode {
   const containerStyle: ViewStyle = {
     ...containerBaseStyle,
@@ -68,7 +78,7 @@ export function VexAssetImage({
     <View pointerEvents="none" style={containerStyle}>
       <Image
         accessibilityIgnoresInvertColors
-        resizeMode="cover"
+        resizeMode={resizeMode}
         source={ASSETS[name]}
         style={imageStyle}
       />

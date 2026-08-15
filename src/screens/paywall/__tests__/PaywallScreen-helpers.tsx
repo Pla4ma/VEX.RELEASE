@@ -76,9 +76,9 @@ export function mockPaywallState(
   });
 }
 
-export function renderPaywall(): ReactTestRenderer {
+export async function renderPaywall(): ReactTestRenderer {
   let output: ReactTestRenderer | null = null;
-  act(() => {
+  await act(() => {
     output = TestRenderer.create(<PaywallScreen />);
   });
   if (!output) {

@@ -29,7 +29,7 @@ describe('useCaptureMutation', () => {
     const wrapper = ({ children }: { children: React.ReactNode }) =>
       React.createElement(QueryClientProvider, { client: queryClient }, children);
 
-    const { result } = renderHook(() => useCaptureMutation('user-1'), { wrapper });
+    const { result } = await renderHook(() => useCaptureMutation('user-1'), { wrapper });
 
     await act(async () => {
       await result.current.mutateAsync({ type: 'braindump', content: 'test' });
@@ -41,7 +41,7 @@ describe('useCaptureMutation', () => {
   it('reports errors to Sentry', async () => {
     mockSubmitCapture.mockResolvedValue({ item: null, error: new Error('fail') });
 
-    const { result } = renderHook(() => useCaptureMutation('user-1'), { wrapper: createWrapper() });
+    const { result } = await renderHook(() => useCaptureMutation('user-1'), { wrapper: createWrapper() });
 
     await act(async () => {
       try { await result.current.mutateAsync({ type: 'braindump', content: 'test' }); } catch {}
@@ -61,7 +61,7 @@ describe('useCapturesQuery', () => {
     const items = [{ id: '1', content: 'hello' }];
     mockLoadCaptures.mockResolvedValue({ items, error: null });
 
-    const { result } = renderHook(() => useCapturesQuery('user-1'), { wrapper: createWrapper() });
+    const { result } = await renderHook(() => useCapturesQuery('user-1'), { wrapper: createWrapper() });
 
     // Wait for the query to resolve
     await act(async () => {
@@ -71,29 +71,29 @@ describe('useCapturesQuery', () => {
     expect(result.current.data).toEqual(items);
   });
 
-  it('does not fetch when userId is empty', () => {
+  it('does not fetch when userId is empty', async () => {
     mockLoadCaptures.mockResolvedValue({ items: [], error: null });
 
-    const { result } = renderHook(() => useCapturesQuery(''), { wrapper: createWrapper() });
+    const { result } = await renderHook(() => useCapturesQuery(''), { wrapper: createWrapper() });
     expect(result.current.fetchStatus).toBe('idle');
     expect(mockLoadCaptures).not.toHaveBeenCalled();
   });
 });
 
 describe('useCaptureForm', () => {
-  it('manages form state', () => {
-    const { result } = renderHook(() => useCaptureForm());
+  it('manages form state', async () => {
+    const { result } = await renderHook(() => useCaptureForm());
 
     expect(result.current.state.type).toBe('braindump');
     expect(result.current.state.content).toBe('');
 
-    act(() => result.current.setType('voice'));
+    await act(() => result.current.setType('voice'));
     expect(result.current.state.type).toBe('voice');
 
-    act(() => result.current.setContent('hello'));
+    await act(() => result.current.setContent('hello'));
     expect(result.current.state.content).toBe('hello');
 
-    act(() => result.current.clearError());
+    await act(() => result.current.clearError());
     expect(result.current.state.error).toBeNull();
   });
 });

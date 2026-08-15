@@ -1,10 +1,5 @@
 import type { SessionState, FocusQualityMetrics } from '../../types';
-import {
-  getSessionModeConfig,
-  getSprintChainMultiplier,
-  resolveSessionMode,
-  SessionMode,
-} from '../../modes';
+import { getSprintChainMultiplier, resolveSessionMode, SessionMode } from '../../modes';
 import { BonusCalculator } from '../scoring/BonusCalculator';
 
 export const QUALITY_THRESHOLDS = {

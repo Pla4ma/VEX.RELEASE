@@ -3,7 +3,6 @@
  * the onboarding journey. Continuous breath + parallax translate.
  */
 import React, { useEffect } from 'react';
-import type { ViewStyle } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -24,7 +23,7 @@ type HeroOrbProps = {
   anchorY?: number;
 };
 
-    
+
 const BREATH_DURATION_MS = 2600;
 const ROTATION_DURATION_MS = 30000;
 

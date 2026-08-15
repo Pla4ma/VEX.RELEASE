@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Pressable } from 'react-native';
-import Animated, {
+import {
   Easing,
   useSharedValue,
   useAnimatedStyle,

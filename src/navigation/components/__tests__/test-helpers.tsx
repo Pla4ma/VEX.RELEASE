@@ -18,10 +18,7 @@ export function resetFeatureMocks(): void {
   mockIsEnabled.mockReturnValue(false);
 }
 
-export function renderGuardedFeature(
-  feature: string,
-  fallback?: React.ReactNode,
-): void {
+export async function renderGuardedFeature(feature: string, fallback?: React.ReactNode): void {
   const defaultFallback = (
     <View testID="fallback-content">
       <Text>Feature not available</Text>
@@ -37,7 +34,7 @@ export function renderGuardedFeature(
       </View>
     </NavigationGuard>
   );
-  render(
+  await render(
     <NavigationContainer>
       <TestComponent />
     </NavigationContainer>,

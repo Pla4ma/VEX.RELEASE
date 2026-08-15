@@ -6,11 +6,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { CompanionMood } from '../../companion/types';
-import {
-  StreakIndicator,
-  LevelBadge,
-  getCompanionMoodSymbol,
-} from './GreetingHeaderBadges';
+import { getCompanionMoodSymbol } from './GreetingHeaderBadges';
 
 export { StreakIndicator, LevelBadge } from './GreetingHeaderBadges';
 

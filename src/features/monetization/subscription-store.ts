@@ -15,7 +15,7 @@ const UserSubscriptionSchema = z.object({
   platform: z.enum(['ios', 'android', 'web']),
 });
 
-const SubscriptionMapSchema = z.record(UserSubscriptionSchema);
+const SubscriptionMapSchema = z.record(z.string(), UserSubscriptionSchema);
 
 function loadAll(): Record<string, UserSubscription> {
   try {

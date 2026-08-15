@@ -3,15 +3,9 @@ import {
   ChallengeSchema,
   type Challenge,
   type ChallengeTemplate,
-  type UserChallenge,
   ChallengeTemplateSchema,
-  UserChallengeSchema,
 } from './schemas';
-import {
-  RepositoryError,
-  baseJoinedSelect,
-  mapJoinedChallenge,
-} from './repository-helpers';
+import { RepositoryError } from './repository-helpers';
 import type {} from './schemas';
 
 const supabase = getSupabaseClient();

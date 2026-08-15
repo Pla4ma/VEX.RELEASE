@@ -1,15 +1,4 @@
 import { z } from 'zod';
-import {
-  CreateFocusSessionInputSchema,
-  StartSessionInputSchema,
-  CompleteReflectionInputSchema,
-  StartRescueInputSchema,
-  ScheduleFocusWindowInputSchema,
-  CreateStudyBlockInputSchema,
-  UpdateProjectThreadInputSchema,
-  ReadMemorySummaryInputSchema,
-  UpdateLaneOverrideInputSchema,
-} from './action-input-schemas';
 
 export * from './action-input-schemas';
 
@@ -72,7 +61,7 @@ export const FocusSessionConfigOutputSchema = z
   .object({
     category: z.string().nullable(),
     duration: z.number().int().positive(),
-    metadata: z.record(z.unknown()),
+    metadata: z.record(z.string(), z.unknown()),
     mode: z.string().min(1),
   })
   .strict();

@@ -54,7 +54,7 @@ jest.mock('../../../progression/ProgressionService', () => ({
 import { addTowerBlock, getTowerDisplay, getTowerHeightComparison } from '../focus-tower';
 import type { FocusTower } from '../tower-constants';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 function makeTower(overrides?: Partial<FocusTower>): FocusTower {
   return {

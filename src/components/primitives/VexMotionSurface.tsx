@@ -8,7 +8,6 @@ import Animated, {
 import { useTheme } from '../../theme/ThemeContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { rgbaColors } from '../../theme/tokens/rgba-colors';
-import { lightColors } from '@/theme/tokens/colors';
 import { timingPresets } from '../../theme/tokens/motion';
 
 export interface VexMotionSurfaceProps extends ViewProps {

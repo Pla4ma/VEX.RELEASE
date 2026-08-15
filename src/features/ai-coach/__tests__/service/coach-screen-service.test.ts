@@ -112,11 +112,9 @@ describe('coach screen service', () => {
       },
     });
 
-    await expect(
-      askCoachQuestion('Hello', 'local-user-id'),
-    ).rejects.toThrow('status=500');
-    await expect(
-      askCoachQuestion('Hello', 'local-user-id'),
-    ).rejects.toThrow('Missing LLM configuration');
+    // AI failure falls back to a graceful response instead of throwing
+    const response = await askCoachQuestion('Hello', 'local-user-id');
+    expect(response.message).toBeTruthy();
+    expect(response.hasAction).toBe(true);
   });
 });

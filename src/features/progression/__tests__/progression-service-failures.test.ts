@@ -54,7 +54,7 @@ jest.mock('../../../progression/ProgressionService', () => ({
 import { configureProgressionService } from '../service-config';
 import { handleFetchFailure } from '../service-failures';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 describe('handleFetchFailure', () => {
   const breakdown = {

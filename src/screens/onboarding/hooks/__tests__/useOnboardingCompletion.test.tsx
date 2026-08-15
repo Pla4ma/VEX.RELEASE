@@ -61,7 +61,7 @@ describe('useOnboardingCompletion', () => {
   });
 
   it('completes onboarding even when the goal draft is missing', async () => {
-    const { result } = renderHook(() => useOnboardingCompletion('user-1'), { wrapper });
+    const { result } = await renderHook(() => useOnboardingCompletion('user-1'), { wrapper });
 
     await act(async () => {
       await result.current.finishOnboarding(undefined);

@@ -17,47 +17,41 @@ jest.mock('@sentry/react-native', () => ({
 }));
 
 jest.mock('react-native-mmkv', () => ({
-  MMKV: class MockMMKV {
-    private readonly store: Map<string, string>;
-
-    constructor(options?: { id?: string }) {
-      if (mockMmkvControls.throwOnNextConstructor) {
-        mockMmkvControls.throwOnNextConstructor = false;
-        throw new Error('React Native is not running on-device');
-      }
-      const id = options?.id ?? 'default';
-      const existing = mockStores.get(id);
-      this.store = existing ?? new Map<string, string>();
-      mockStores.set(id, this.store);
+  createMMKV: (options?: { id?: string }) => {
+    if (mockMmkvControls.throwOnNextConstructor) {
+      mockMmkvControls.throwOnNextConstructor = false;
+      throw new Error('React Native is not running on-device');
     }
-
-    getString(key: string): string | undefined {
-      return this.store.get(key);
-    }
-
-    set(key: string, value: string): void {
-      if (mockMmkvControls.throwOnNextSet) {
-        mockMmkvControls.throwOnNextSet = false;
-        throw new Error('MMKV write failed');
-      }
-      this.store.set(key, value);
-    }
-
-    delete(key: string): void {
-      this.store.delete(key);
-    }
-
-    contains(key: string): boolean {
-      return this.store.has(key);
-    }
-
-    getAllKeys(): string[] {
-      return Array.from(this.store.keys());
-    }
-
-    clearAll(): void {
-      this.store.clear();
-    }
+    const id = options?.id ?? 'default';
+    const store = mockStores.get(id) ?? new Map<string, string>();
+    mockStores.set(id, store);
+    return {
+      getString(key: string): string | undefined {
+        return store.get(key);
+      },
+      set(key: string, value: string): void {
+        if (mockMmkvControls.throwOnNextSet) {
+          mockMmkvControls.throwOnNextSet = false;
+          throw new Error('MMKV write failed');
+        }
+        store.set(key, value);
+      },
+      remove(key: string): void {
+        store.delete(key);
+      },
+      delete(key: string): void {
+        store.delete(key);
+      },
+      contains(key: string): boolean {
+        return store.has(key);
+      },
+      getAllKeys(): string[] {
+        return Array.from(store.keys());
+      },
+      clearAll(): void {
+        store.clear();
+      },
+    };
   },
 }));
 

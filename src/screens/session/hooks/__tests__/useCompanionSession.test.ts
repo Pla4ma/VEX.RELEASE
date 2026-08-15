@@ -51,7 +51,7 @@ describe('useCompanionSession milestone events', () => {
     jest.clearAllMocks();
   });
   it('fires milestone label at 25% with mode-specific text for DEEP_WORK', async () => {
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({
         ...baseInput,
         currentMode: SessionMode.DEEP_WORK,
@@ -59,13 +59,13 @@ describe('useCompanionSession milestone events', () => {
       }),
     );
     await waitFor(() => expect(result.current.isLoaded).toBe(true));
-    act(() => {
+    await act(() => {
       result.current.sessionProgress;
     });
     expect(result.current.sessionProgress).toBeDefined();
   });
   it('fires milestone label at 50% with mode-specific text for SPRINT', async () => {
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({
         ...baseInput,
         currentMode: SessionMode.SPRINT,
@@ -77,7 +77,7 @@ describe('useCompanionSession milestone events', () => {
   });
   it('fires milestone label at 75% with heavy haptic', async () => {
     const hapticSpy = jest.spyOn(haptics, 'triggerHaptic');
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({
         ...baseInput,
         currentMode: SessionMode.DEEP_WORK,
@@ -85,37 +85,37 @@ describe('useCompanionSession milestone events', () => {
       }),
     );
     await waitFor(() => expect(result.current.isLoaded).toBe(true));
-    act(() => {
+    await act(() => {
       haptics.triggerHaptic('impactHeavy');
     });
     expect(hapticSpy).toHaveBeenCalledWith('impactHeavy');
   });
   it('fires milestone only once — ref prevents re-firing', async () => {
-    const { result, rerender } = renderHook(() =>
+    const { result, rerender } = await renderHook(() =>
       useCompanionSession(baseInput),
     );
     await waitFor(() => expect(result.current.isLoaded).toBe(true));
     const initialProgress = result.current.sessionProgress;
-    rerender();
+    await rerender();
     expect(result.current.sessionProgress).toBe(initialProgress);
   });
   it('fires danger event when purity drops below 60', async () => {
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({ ...baseInput, purityScore: 50 }),
     );
     await waitFor(() => expect(result.current.isLoaded).toBe(true));
     expect(result.current.state).toBeDefined();
   });
   it('fires recovery event when purity recovers above 60 after danger', async () => {
-    const { result, rerender } = renderHook(() =>
+    const { result, rerender } = await renderHook(() =>
       useCompanionSession({ ...baseInput, purityScore: 50 }),
     );
     await waitFor(() => expect(result.current.isLoaded).toBe(true));
-    rerender({ ...baseInput, purityScore: 80 });
+    await rerender({ ...baseInput, purityScore: 80 });
     expect(result.current.state).toBeDefined();
   });
   it('fires On Fire event after 5 minutes of purity > 90', async () => {
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({
         ...baseInput,
         elapsedSeconds: 300,
@@ -166,7 +166,7 @@ describe('useCompanionSession milestone events', () => {
     });
   });
   it('handles undefined mode gracefully', async () => {
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useCompanionSession({
         ...baseInput,
         currentMode: undefined as unknown as SessionMode,

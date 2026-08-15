@@ -2,7 +2,6 @@ import {
   CircuitBreaker,
 } from '../../../shared/hardening/circuit-breaker';
 import { AnalyticsStorageError } from './storage-types';
-import { AnalyticsStorageError as CircuitStorageError } from '../../../shared/hardening/circuit-breaker';
 
 /** Re-export singleton from canonical source to avoid stale module-level references */
 export { supabase } from '../../../config/supabase';

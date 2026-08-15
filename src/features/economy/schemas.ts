@@ -26,7 +26,7 @@ export const SpendInputSchema = z.object({
   amount: z.number().int().positive(),
   sink: z.string().min(1),
   description: z.string().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type SpendInput = z.infer<typeof SpendInputSchema>;
@@ -39,7 +39,7 @@ export const CurrencyGrantSchema = z.object({
   sourceId: z.string().nullable().optional(),
   description: z.string().optional(),
   skipEvents: z.boolean().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type CurrencyGrant = z.infer<typeof CurrencyGrantSchema>;

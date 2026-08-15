@@ -55,7 +55,7 @@ import { MASTERY_TRACKS } from '../mastery-types';
 import { createInitialMasteryState } from '../mastery-service';
 import { checkUnlocks, MASTERY_UNLOCKS } from '../mastery-unlocks';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 describe('Mastery Unlocks', () => {
   it('returns empty for initial state', () => {

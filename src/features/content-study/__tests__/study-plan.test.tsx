@@ -54,32 +54,35 @@ describe('useContentReview', () => {
       extractedText: 'Extracted text',
     };
     (service.fetchContentById as jest.Mock).mockResolvedValue(mockContent);
-    const { result } = renderHook(() => useContentReview('content-123'), {
+    const { result } = await renderHook(() => useContentReview('content-123'), {
       wrapper,
     });
     await waitFor(() => {
       expect(result.current.content).toEqual(mockContent);
     });
   });
-  it('should track editing state', () => {
-    const { result } = renderHook(() => useContentReview('content-123'), {
+  it('should track editing state', async () => {
+    const { result } = await renderHook(() => useContentReview('content-123'), {
       wrapper,
     });
     expect(result.current.isEditing).toBe(false);
-    act(() => {
+    await act(() => {
       result.current.startEditing();
     });
     expect(result.current.isEditing).toBe(true);
-    act(() => {
+    await act(() => {
       result.current.cancelEditing();
     });
     expect(result.current.isEditing).toBe(false);
   });
-  it('should update edited text', () => {
-    const { result } = renderHook(() => useContentReview('content-123'), {
-      wrapper,
+  it('should update edited text', async () => {
+    (service.fetchContentById as jest.Mock).mockResolvedValue({
+      id: 'content-123', sourceType: 'PASTE', status: 'EXTRACTED',
+      extractedText: 'Extracted text',
     });
-    act(() => {
+    const { result } = await renderHook(() => useContentReview('content-123'), { wrapper });
+    await waitFor(() => { expect(result.current.content).not.toBeNull(); });
+    await act(() => {
       result.current.startEditing();
       result.current.setEditedText('New text');
     });
@@ -93,7 +96,7 @@ describe('useContentReview', () => {
       extractedText: 'Extracted text',
     };
     (service.fetchContentById as jest.Mock).mockResolvedValue(mockContent);
-    const { result } = renderHook(() => useContentReview('content-123'), {
+    const { result } = await renderHook(() => useContentReview('content-123'), {
       wrapper,
     });
     await waitFor(() => {
@@ -139,7 +142,7 @@ describe('useStudyPlan', () => {
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
-    const { result } = renderHook(() => useStudyPlan('gen-123'), { wrapper });
+    const { result } = await renderHook(() => useStudyPlan('gen-123'), { wrapper });
     await waitFor(() => {
       expect(result.current.generation).toEqual(mockGeneration);
     });
@@ -148,11 +151,11 @@ describe('useStudyPlan', () => {
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
-    const { result } = renderHook(() => useStudyPlan('gen-123'), { wrapper });
+    const { result } = await renderHook(() => useStudyPlan('gen-123'), { wrapper });
     await waitFor(() => {
       expect(result.current.generation).toEqual(mockGeneration);
     });
-    act(() => {
+    await act(() => {
       result.current.completeTask({ taskId: 'task-1' });
     });
     expect(result.current.isCompletingTask).toBeDefined();
@@ -161,7 +164,7 @@ describe('useStudyPlan', () => {
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       mockGeneration,
     );
-    const { result } = renderHook(() => useStudyPlan('gen-123'), { wrapper });
+    const { result } = await renderHook(() => useStudyPlan('gen-123'), { wrapper });
     await waitFor(() => {
       expect(result.current.generation).toEqual(mockGeneration);
     });
@@ -179,7 +182,7 @@ describe('useStudyPlan', () => {
     (service.fetchGenerationById as jest.Mock).mockResolvedValue(
       threeTaskGeneration,
     );
-    const { result } = renderHook(() => useStudyPlan('gen-123'), { wrapper });
+    const { result } = await renderHook(() => useStudyPlan('gen-123'), { wrapper });
     await waitFor(() => {
       expect(result.current.generation).toEqual(threeTaskGeneration);
     });

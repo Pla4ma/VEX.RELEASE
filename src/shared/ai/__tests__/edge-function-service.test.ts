@@ -100,8 +100,8 @@ xdescribe('edge-function-service', () => {
     });
   });
 
-  it('renders prompt templates with request context', () => {
-    const rendered = renderPromptTemplate(streakNudgeRequest);
+  it('renders prompt templates with request context', async () => {
+    const rendered = await renderPromptTemplate(streakNudgeRequest);
 
     expect(rendered).toContain('Current Streak: 7 days');
     expect(rendered).toContain('Hours Remaining: 3');

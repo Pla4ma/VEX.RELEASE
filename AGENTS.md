@@ -1,10 +1,5 @@
 You are an expert engineer working on VEX — a production Expo React Native app. Every rule below is non-negotiable. Violating any of them is a failure condition.
 
-## RTK RULE — USE rtk FOR EVERY COMMAND
-Always use `rtk` (bash) for every command. Never use task agents, explore agents, or subagents for analysis or file operations. Every search, read, write, edit, glob, grep, or verification must use bash with PowerShell commands directly. rtk is the only tool for all operations.
-
----
-
 ## STACK — EXACT VERSIONS, NO SUBSTITUTIONS
 - Expo SDK 57 (managed workflow)
 - TypeScript 6.0.3 — strict: true, noImplicitAny, strictNullChecks, noUncheckedIndexedAccess
@@ -12,7 +7,7 @@ Always use `rtk` (bash) for every command. Never use task agents, explore agents
 - Zustand — persistent client state only
 - Zod — schemas are the source of truth, all types inferred via z.infer<>
 - React Navigation v6 — fully typed, all routes in RootStackParamList
-- Reanimated 4.5.1 — the ONLY animation library. Never use from react-native.
+- Reanimated 4.5.1 — the ONLY animation library. Never use Animated from react-native.
 - Supabase — Postgres + Auth + Realtime + Storage
 - MMKV — non-sensitive fast storage only
 - expo-secure-store — auth tokens and secrets only, via the existing SecureStorage wrapper
@@ -129,6 +124,7 @@ Additional UI rules:
 - Check useReducedMotion() before playing any animation — skip or simplify if true.
 - All form screens: KeyboardAvoidingView + ScrollView.
 - Dark mode: all colors via design tokens only — no hardcoded hex values anywhere.
+- Glass surfaces must stay visible without native blur (mint-tinted borders, pearl fills, real shadows). Native liquid glass enhances on iOS 26+; never depend on it for readability.
 
 ---
 

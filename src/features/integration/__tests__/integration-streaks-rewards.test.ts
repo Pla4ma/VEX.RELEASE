@@ -38,30 +38,30 @@ describe('integration', () => {
       unsub();
     });
 
-    it('ignores streak_milestone with null event', () => {
+    it('ignores streak_milestone with null event', async () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent('social:streak_milestone', null);
+      await fireEvent('social:streak_milestone', null);
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('ignores streak_milestone with no streak field', () => {
+    it('ignores streak_milestone with no streak field', async () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent('social:streak_milestone', { userId: 'u1' });
+      await fireEvent('social:streak_milestone', { userId: 'u1' });
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('ignores streak_milestone with no userId', () => {
+    it('ignores streak_milestone with no userId', async () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent('social:streak_milestone', { streak: 5 });
+      await fireEvent('social:streak_milestone', { streak: 5 });
       expect(mockStreaks.checkMilestone).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('calls checkMilestone when streak and userId present', () => {
+    it('calls checkMilestone when streak and userId present', async () => {
       const unsub = initializeStreaksRewardsIntegration();
-      fireEvent('social:streak_milestone', { userId: 'u1', streak: 7 });
+      await fireEvent('social:streak_milestone', { userId: 'u1', streak: 7 });
       expect(mockStreaks.checkMilestone).toHaveBeenCalledWith(7);
       unsub();
     });

@@ -109,11 +109,9 @@ export const baseProgressRingProps = {
   withAlpha: (color: string, _alpha?: number) => color,
 };
 
-export function renderHero(
-  viewModel: ActiveSessionHeroViewModel,
-): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
+export async function renderHero(viewModel: ActiveSessionHeroViewModel): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
   let renderer: ReactTestRenderer | null = null;
-  TestRenderer.act(() => {
+  await TestRenderer.act(() => {
     renderer = TestRenderer.create(
       <ActiveSessionHero
         viewModel={viewModel}

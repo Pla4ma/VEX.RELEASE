@@ -5,7 +5,7 @@ const ValidGoals = ['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'] as const;
 const ValidDurations = [15, 25, 45, 60] as const;
 
 export const OnboardingGoalSchema = z.enum(ValidGoals, {
-  errorMap: () => ({ message: 'Please select a valid focus goal' }),
+  error: () => 'Please select a valid focus goal',
 });
 
 export const OnboardingDurationSchema = z

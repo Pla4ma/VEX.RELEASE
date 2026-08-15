@@ -9,11 +9,7 @@ import type { ExtendedRootStackParams } from '../../navigation/types';
 import { usePremiumStatus } from '../../shared/monetization/use-revenuecat';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
-import {
-  Skeleton,
-  SkeletonCard,
-  SkeletonList,
-} from '../../components/ui/Skeleton';
+import { Skeleton, SkeletonList } from '../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;

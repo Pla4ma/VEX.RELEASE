@@ -39,7 +39,7 @@ const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null
   email: null,
 };
 
-const DEV_BYPASS_USER_ID = '00000000-0000-0000-0000-000000000001';
+const DEV_BYPASS_USER_ID = '00000000-0000-4000-8000-000000000001';
 
 const createDevBypassUser = (): User => {
   const now = new Date().toISOString();

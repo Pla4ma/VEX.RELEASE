@@ -7,7 +7,7 @@ import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { spacing, borderRadius } from '../../../theme/tokens/spacing';
 import { triggerHaptic } from '../../../utils/haptics';
 import type { HomeUnlockPathItem } from '../services/home-unlock-path-schemas';
-import { MilestoneNode, type MilestoneState } from './MilestoneNode';
+import { type MilestoneState } from './MilestoneNode';
 import { MilestoneProgress } from './MilestoneProgress';
 
 function stateFor(item: HomeUnlockPathItem, isNext: boolean): MilestoneState {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Defs, LinearGradient, Stop, Path, Rect, G } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Stop, Path, Rect } from 'react-native-svg';
 
 interface GlassRibbonProps {
   width?: number;

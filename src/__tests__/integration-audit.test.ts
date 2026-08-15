@@ -95,7 +95,7 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       //   - weeklyStats.focusHours
       //   - vex.app/squad/${squadCode}
       // - Line 30 (useSquadShare.ts): URL is https://vex.app/squad/${squadCode}
-      const squadId = '12345678-1234-1234-1234-123456789abc';
+      const squadId = '12345678-1234-4234-8234-123456789abc';
       const squadCode = squadId.slice(0, 8);
       expect(squadCode).toBe('12345678');
       expect(squadCode.length).toBe(8);

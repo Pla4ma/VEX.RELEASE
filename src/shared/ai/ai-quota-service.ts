@@ -16,13 +16,7 @@ import {
   HOURLY_WINDOW_MS,
   DAILY_WINDOW_MS,
 } from './ai-quota-strategies';
-import {
-  getHourlyUsage,
-  getDailyUsage,
-  recordUsage,
-  syncQuotaToSupabase,
-  clearUsage,
-} from './ai-quota-repository';
+import { getHourlyUsage, getDailyUsage, recordUsage, syncQuotaToSupabase } from './ai-quota-repository';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { useMonetizationStore } from '../monetization/store';
 

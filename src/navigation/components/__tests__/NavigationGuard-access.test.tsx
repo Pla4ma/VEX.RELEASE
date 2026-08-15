@@ -14,49 +14,49 @@ describe('Navigation Guard - Access Control', () => {
   });
 
   describe('Feature Access Control', () => {
-    it('should allow navigation to enabled features', () => {
+    it('should allow navigation to enabled features', async () => {
       mockIsEnabled.mockImplementation((key: string) => key === 'sessions');
-      renderGuardedFeature('sessions');
+      await renderGuardedFeature('sessions');
       expect(screen.getByTestId('protected-content')).toBeTruthy();
     });
 
-    it('should block navigation to disabled features', () => {
+    it('should block navigation to disabled features', async () => {
       mockIsEnabled.mockReturnValue(false);
-      renderGuardedFeature('social-feed');
+      await renderGuardedFeature('social-feed');
       expect(screen.queryByTestId('protected-content')).toBeFalsy();
       expect(screen.getByTestId('fallback-content')).toBeTruthy();
     });
 
-    it('should show fallback for disabled features', () => {
+    it('should show fallback for disabled features', async () => {
       mockIsEnabled.mockReturnValue(false);
-      renderGuardedFeature('duels');
+      await renderGuardedFeature('duels');
       expect(screen.queryByTestId('protected-content')).toBeFalsy();
       expect(screen.getByText('Feature not available')).toBeTruthy();
     });
   });
 
   describe('Independent Feature Flags', () => {
-    it('should allow access when specific feature is enabled', () => {
+    it('should allow access when specific feature is enabled', async () => {
       mockIsEnabled.mockImplementation((key: string) => key === 'boss');
-      renderGuardedFeature('boss');
+      await renderGuardedFeature('boss');
       expect(screen.getByTestId('protected-content')).toBeTruthy();
     });
 
-    it('should block access when specific feature is disabled', () => {
+    it('should block access when specific feature is disabled', async () => {
       mockIsEnabled.mockImplementation((key: string) => key === 'boss');
-      renderGuardedFeature('challenges');
+      await renderGuardedFeature('challenges');
       expect(screen.queryByTestId('protected-content')).toBeFalsy();
       expect(screen.getByTestId('fallback-content')).toBeTruthy();
     });
 
-    it('should show custom fallback when provided', () => {
+    it('should show custom fallback when provided', async () => {
       mockIsEnabled.mockReturnValue(false);
       const customFallback = (
         <View testID="custom-fallback">
           <Text>Custom unavailable message</Text>
         </View>
       );
-      renderGuardedFeature('squads', customFallback);
+      await renderGuardedFeature('squads', customFallback);
       expect(screen.queryByTestId('protected-content')).toBeFalsy();
       expect(screen.getByTestId('custom-fallback')).toBeTruthy();
     });

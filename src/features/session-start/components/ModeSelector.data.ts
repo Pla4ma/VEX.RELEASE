@@ -1,4 +1,4 @@
-import { SessionMode, isSessionLessMode } from '../../../session/modes';
+import { SessionMode } from '../../../session/modes';
 import { isFeatureUnlocked, type UnlockableFeature } from '../../mastery/components/mastery-unlock-gate-data';
 import type { MasteryRank } from '../../mastery/types';
 

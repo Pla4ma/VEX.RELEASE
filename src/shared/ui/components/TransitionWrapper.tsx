@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 import Animated, {

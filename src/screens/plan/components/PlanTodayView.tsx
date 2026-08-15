@@ -10,7 +10,6 @@ import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import type { PlanItem } from '../../../features/plan/types';
 import { getPriorityColor } from '../../../features/plan/service';
-import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
 interface PlanTodayViewProps {
   items: PlanItem[];
@@ -22,7 +21,7 @@ interface PlanTodayViewProps {
   onStartSession: (itemId: string, title: string) => void;
 }
 
-            
+
 export function PlanTodayView({
   items,
   isLoading,

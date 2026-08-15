@@ -5,7 +5,6 @@ import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
 import { WaterBubble } from '../../../components/glass/WaterBubble';
 import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface FocusScoreCardProps {

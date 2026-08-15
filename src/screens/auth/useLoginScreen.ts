@@ -34,7 +34,7 @@ export function useLoginScreen(initialEmail: string) {
     });
     if (!result.success) {
       const fieldErrors: LoginErrors = {};
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const path = err.path[0];
         if (path === 'email' || path === 'password') {
           fieldErrors[path] = err.message;

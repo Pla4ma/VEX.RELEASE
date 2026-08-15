@@ -53,8 +53,8 @@ xdescribe('DifficultySelector', () => {
     mockOnChange.mockClear();
   });
 
-  it('renders three difficulty cards', () => {
-    renderWithTheme(
+  it('renders three difficulty cards', async () => {
+    await renderWithTheme(
       <DifficultySelector selected="FOCUSED" onChange={mockOnChange} />,
     );
 
@@ -63,8 +63,8 @@ xdescribe('DifficultySelector', () => {
     expect(screen.getByText('Deep Work')).toBeTruthy();
   });
 
-  it('shows correct stats for each difficulty', () => {
-    renderWithTheme(
+  it('shows correct stats for each difficulty', async () => {
+    await renderWithTheme(
       <DifficultySelector selected="FOCUSED" onChange={mockOnChange} />,
     );
 
@@ -84,22 +84,22 @@ xdescribe('DifficultySelector', () => {
     expect(screen.getByText('Maximum impact')).toBeTruthy();
   });
 
-  it('calls onChange with correct difficulty when card is pressed', () => {
-    renderWithTheme(
+  it('calls onChange with correct difficulty when card is pressed', async () => {
+    await renderWithTheme(
       <DifficultySelector selected="FOCUSED" onChange={mockOnChange} />,
     );
 
     // Press Casual card
-    fireEvent.press(screen.getByText('Casual'));
+    await fireEvent.press(screen.getByText('Casual'));
     expect(mockOnChange).toHaveBeenCalledWith('CASUAL');
 
     // Press Deep Work card
-    fireEvent.press(screen.getByText('Deep Work'));
+    await fireEvent.press(screen.getByText('Deep Work'));
     expect(mockOnChange).toHaveBeenCalledWith('DEEP_WORK');
   });
 
-  it('does not call onChange when disabled', () => {
-    renderWithTheme(
+  it('does not call onChange when disabled', async () => {
+    await renderWithTheme(
       <DifficultySelector
         selected="FOCUSED"
         onChange={mockOnChange}
@@ -107,12 +107,12 @@ xdescribe('DifficultySelector', () => {
       />,
     );
 
-    fireEvent.press(screen.getByText('Casual'));
+    await fireEvent.press(screen.getByText('Casual'));
     expect(mockOnChange).not.toHaveBeenCalled();
   });
 
-  it('marks selected card with accessibility state', () => {
-    renderWithTheme(
+  it('marks selected card with accessibility state', async () => {
+    await renderWithTheme(
       <DifficultySelector selected="DEEP_WORK" onChange={mockOnChange} />,
     );
 
@@ -127,8 +127,8 @@ xdescribe('DifficultySelector', () => {
     expect(deepWorkCard).toHaveAccessibilityState({ selected: true });
   });
 
-  it('has correct accessibility labels', () => {
-    renderWithTheme(
+  it('has correct accessibility labels', async () => {
+    await renderWithTheme(
       <DifficultySelector selected="FOCUSED" onChange={mockOnChange} />,
     );
 

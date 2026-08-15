@@ -28,8 +28,8 @@ describe('AI Fallback Tiers', () => {
   });
 
   describe('renderDeterministicMessage', () => {
-    it('replaces template variables from context', () => {
-      const result = renderDeterministicMessage('streak_nudge', 'medium', {
+    it('replaces template variables from context', async () => {
+      const result = await renderDeterministicMessage('streak_nudge', 'medium', {
         hoursRemaining: '3',
         streak: '15',
         duration: '15',
@@ -38,8 +38,8 @@ describe('AI Fallback Tiers', () => {
       expect(result).toContain('15-day');
     });
 
-    it('falls back to default subKey when specific one missing', () => {
-      const result = renderDeterministicMessage(
+    it('falls back to default subKey when specific one missing', async () => {
+      const result = await renderDeterministicMessage(
         'coach_message',
         'NONEXISTENT',
         {
@@ -50,8 +50,8 @@ describe('AI Fallback Tiers', () => {
       expect(result).toContain('7-day');
     });
 
-    it('handles missing context keys gracefully', () => {
-      const result = renderDeterministicMessage(
+    it('handles missing context keys gracefully', async () => {
+      const result = await renderDeterministicMessage(
         'coach_message',
         'STREAK_RISK',
         {},
@@ -60,8 +60,8 @@ describe('AI Fallback Tiers', () => {
       expect(result.length).toBeGreaterThan(0);
     });
 
-    it('renders coach_message with session progress data', () => {
-      const result = renderDeterministicMessage(
+    it('renders coach_message with session progress data', async () => {
+      const result = await renderDeterministicMessage(
         'coach_message',
         'PROGRESS_REMINDER',
         {
@@ -73,33 +73,33 @@ describe('AI Fallback Tiers', () => {
       expect(result).toContain('350');
     });
 
-    it('renders comeback_prompt for each day', () => {
-      const day1 = renderDeterministicMessage('comeback_prompt', 'day1', {
+    it('renders comeback_prompt for each day', async () => {
+      const day1 = await renderDeterministicMessage('comeback_prompt', 'day1', {
         sessionsCompleted: '1',
         streakProgress: '33',
       });
       expect(day1).toContain('Day 1');
 
-      const day2 = renderDeterministicMessage('comeback_prompt', 'day2', {
+      const day2 = await renderDeterministicMessage('comeback_prompt', 'day2', {
         sessionsCompleted: '2',
         streakProgress: '66',
       });
       expect(day2).toContain('Day 2');
 
-      const day3 = renderDeterministicMessage('comeback_prompt', 'day3', {
+      const day3 = await renderDeterministicMessage('comeback_prompt', 'day3', {
         sessionsCompleted: '3',
         streakProgress: '100',
       });
       expect(day3).toContain('Final comeback');
     });
 
-    it('renders streak_nudge for all risk levels', () => {
-      const low = renderDeterministicMessage('streak_nudge', 'low', {
+    it('renders streak_nudge for all risk levels', async () => {
+      const low = await renderDeterministicMessage('streak_nudge', 'low', {
         streak: '10',
       });
       expect(low).toContain('secure');
 
-      const critical = renderDeterministicMessage('streak_nudge', 'critical', {
+      const critical = await renderDeterministicMessage('streak_nudge', 'critical', {
         streak: '100',
         minutesRemaining: '5',
       });

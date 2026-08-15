@@ -31,14 +31,12 @@ export const NotificationSettingsSchema = z
           .strict(),
       })
       .strict(),
-    preferences: z.record(
-      z
-        .object({
-          enabled: z.boolean(),
-          channels: z.array(NotificationChannelSchema),
-        })
-        .strict(),
-    ),
+    preferences: z.record(z.string(), z
+      .object({
+        enabled: z.boolean(),
+        channels: z.array(NotificationChannelSchema),
+      })
+      .strict()),
     customRules: z.array(
       z
         .object({
@@ -48,7 +46,7 @@ export const NotificationSettingsSchema = z
           condition: z
             .object({
               type: z.enum(['time', 'location', 'activity', 'streak']),
-              params: z.record(z.unknown()),
+              params: z.record(z.string(), z.unknown()),
             })
             .strict(),
           action: z

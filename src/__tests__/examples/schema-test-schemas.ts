@@ -8,7 +8,7 @@ export const TransactionSchema = z.object({
   currency: CurrencySchema,
   amount: z.number().positive(),
   description: z.string().max(255).optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
   createdAt: z
     .number()
     .optional()
@@ -19,5 +19,5 @@ export const WalletSchema = z.object({
   userId: z.string().min(1),
   coins: z.number().int().min(0).default(0),
   gems: z.number().int().min(0).default(0),
-  seasonal: z.record(z.number().int().min(0)).default({}),
+  seasonal: z.record(z.string(), z.number().int().min(0)).default({}),
 });

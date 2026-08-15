@@ -5,7 +5,7 @@
  */
 
 import { useEffect } from 'react';
-import Animated, {
+import {
   Easing,
   cancelAnimation,
   useSharedValue,

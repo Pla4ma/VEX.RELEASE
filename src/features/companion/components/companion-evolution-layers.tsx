@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, type ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 import type { AnimatedStyle } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box'
@@ -11,7 +11,7 @@ import { PHASE_NAMES, PHASE_EMOJIS } from './companion-evolution-types';
 import type { EvolutionPhase, ElementThemeColors } from './companion-evolution-types';
 
 export const GlowLayer: React.ComponentType<{
-  glowStyle: AnimatedStyle;
+  glowStyle: AnimatedStyle<ViewStyle>;
   themeColors: ElementThemeColors;
   ceremonyPhase: EvolutionPhase;
 }> = ({ glowStyle, themeColors, ceremonyPhase }) => {
@@ -49,7 +49,7 @@ export const GlowLayer: React.ComponentType<{
   );
 };
 
-export const FlashLayer: React.ComponentType<{ flashStyle: AnimatedStyle }> = ({
+export const FlashLayer: React.ComponentType<{ flashStyle: AnimatedStyle<ViewStyle> }> = ({
   flashStyle,
 }) => (
   <Animated.View
@@ -70,7 +70,7 @@ export const FlashLayer: React.ComponentType<{ flashStyle: AnimatedStyle }> = ({
 );
 
 export const OldFormLayer: React.ComponentType<{
-  oldFormStyle: AnimatedStyle;
+  oldFormStyle: AnimatedStyle<ViewStyle>;
   themeColors: ElementThemeColors;
   previousPhase: CompanionPhase;
 }> = ({ oldFormStyle, themeColors, previousPhase }) => (
@@ -101,7 +101,7 @@ export const OldFormLayer: React.ComponentType<{
 );
 
 export const NewFormLayer: React.ComponentType<{
-  newFormStyle: AnimatedStyle;
+  newFormStyle: AnimatedStyle<ViewStyle>;
   themeColors: ElementThemeColors;
   newPhase: CompanionPhase;
 }> = ({ newFormStyle, themeColors, newPhase }) => (

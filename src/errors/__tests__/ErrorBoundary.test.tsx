@@ -19,24 +19,24 @@ xdescribe('ErrorBoundary', () => {
   });
 
   describe('Error Catching', () => {
-    it('should catch errors in children', () => {
-      const { getByText } = render(
+    it('should catch errors in children', async () => {
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
       );
       expect(getByText('Oops! Something went wrong')).toBeTruthy();
     });
-    it('should render children when no error', () => {
-      const { getByText } = render(
+    it('should render children when no error', async () => {
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowError shouldThrow={false} />
         </ErrorBoundary>,
       );
       expect(getByText('Normal render')).toBeTruthy();
     });
-    it('should categorize network errors', () => {
-      const { getByText } = render(
+    it('should categorize network errors', async () => {
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowNetworkError />
         </ErrorBoundary>,
@@ -45,16 +45,16 @@ xdescribe('ErrorBoundary', () => {
         getByText('Connection lost. Check your internet and try again.'),
       ).toBeTruthy();
     });
-    it('should categorize auth errors', () => {
-      const { getByText } = render(
+    it('should categorize auth errors', async () => {
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowAuthError />
         </ErrorBoundary>,
       );
       expect(getByText('Session expired. Please sign in again.')).toBeTruthy();
     });
-    it('should categorize client errors', () => {
-      const { getByText } = render(
+    it('should categorize client errors', async () => {
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowClientError />
         </ErrorBoundary>,
@@ -66,8 +66,8 @@ xdescribe('ErrorBoundary', () => {
   });
 
   describe('Analytics Integration', () => {
-    it('should track errors', () => {
-      render(
+    it('should track errors', async () => {
+      await render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
@@ -80,8 +80,8 @@ xdescribe('ErrorBoundary', () => {
         }),
       );
     });
-    it('should mark client errors as fatal', () => {
-      render(
+    it('should mark client errors as fatal', async () => {
+      await render(
         <ErrorBoundary>
           <ThrowClientError />
         </ErrorBoundary>,
@@ -94,9 +94,9 @@ xdescribe('ErrorBoundary', () => {
   });
 
   describe('Custom Fallback', () => {
-    it('should render custom fallback when provided', () => {
+    it('should render custom fallback when provided', async () => {
       const fallback = <div>Custom error UI</div>;
-      const { getByText } = render(
+      const { getByText } = await render(
         <ErrorBoundary fallback={fallback}>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
@@ -106,9 +106,9 @@ xdescribe('ErrorBoundary', () => {
   });
 
   describe('Error Handler Callback', () => {
-    it('should call onError with error details', () => {
+    it('should call onError with error details', async () => {
       const onError = jest.fn();
-      render(
+      await render(
         <ErrorBoundary onError={onError}>
           <ThrowNetworkError />
         </ErrorBoundary>,
@@ -122,37 +122,37 @@ xdescribe('ErrorBoundary', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should handle multiple errors', () => {
-      const { getByText, rerender } = render(
+    it('should handle multiple errors', async () => {
+      const { getByText, rerender } = await render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
       );
       expect(getByText('Oops! Something went wrong')).toBeTruthy();
-      rerender(
+      await rerender(
         <ErrorBoundary>
           <ThrowError shouldThrow={false} />
         </ErrorBoundary>,
       );
       expect(getByText('Normal render')).toBeTruthy();
     });
-    it('should cleanup timers on unmount', () => {
+    it('should cleanup timers on unmount', async () => {
       jest.useFakeTimers();
-      const { unmount } = render(
+      const { unmount } = await render(
         <ErrorBoundary retryDelay={5000}>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
-      unmount();
+      await unmount();
       jest.advanceTimersByTime(5000);
       jest.useRealTimers();
     });
-    it('should handle error with null message', () => {
+    it('should handle error with null message', async () => {
       const ThrowNullError = () => {
         const error = new Error('');
         throw error;
       };
-      const { getByText } = render(
+      const { getByText } = await render(
         <ErrorBoundary>
           <ThrowNullError />
         </ErrorBoundary>,

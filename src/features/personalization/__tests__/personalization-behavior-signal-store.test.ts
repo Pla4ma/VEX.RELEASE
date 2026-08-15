@@ -21,7 +21,7 @@ describe('behavior-signal-store', () => {
   it('recordBehaviorSignal does not throw', () => {
     expect(() =>
       recordBehaviorSignal(
-        '00000000-0000-0000-0000-000000000001',
+        '00000000-0000-4000-8000-000000000001',
         'surface_clicked',
         'test_surface',
         'home_hero',
@@ -29,12 +29,12 @@ describe('behavior-signal-store', () => {
     ).not.toThrow();
   });
   it('getBehaviorSignals returns array (may be empty with mock storage)', () => {
-    const signals = getBehaviorSignals('00000000-0000-0000-0000-000000000001');
+    const signals = getBehaviorSignals('00000000-0000-4000-8000-000000000001');
     expect(Array.isArray(signals)).toBe(true);
   });
   it('clearBehaviorSignals does not throw', () => {
     expect(() =>
-      clearBehaviorSignals('00000000-0000-0000-0000-000000000001'),
+      clearBehaviorSignals('00000000-0000-4000-8000-000000000001'),
     ).not.toThrow();
   });
 });

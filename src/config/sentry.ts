@@ -7,7 +7,6 @@
 import * as Sentry from '@sentry/react-native';
 import { ENVIRONMENT, IS_DEVELOPMENT, CURRENT_CONFIG } from '../constants/app';
 import { createDebugger } from '../utils/debug';
-import { hashUserId } from '../utils/sentry-privacy';
 
 
 const debug = createDebugger('config:sentry');

@@ -30,8 +30,8 @@ xdescribe('PaywallScreen', () => {
     });
   });
 
-  it('shows free boundaries and live plans to free users', () => {
-    const output = renderPaywall();
+  it('shows free boundaries and live plans to free users', async () => {
+    const output = await renderPaywall();
     expect(
       containsText(
         output,
@@ -50,32 +50,32 @@ xdescribe('PaywallScreen', () => {
     expect(mockedCapture).toHaveBeenCalled();
   });
 
-  it('shows active premium state for premium users', () => {
+  it('shows active premium state for premium users', async () => {
     mockedUsePremiumStatus.mockReturnValue({
       isPremium: true,
       isLoading: false,
       entitlements: [],
       refresh: mockRefresh,
     });
-    const output = renderPaywall();
+    const output = await renderPaywall();
     expect(containsText(output, 'Premium is active')).toBe(true);
     expect(containsText(output, 'Already Premium')).toBe(true);
   });
 
-  it('does not show fake fallback pricing when offerings are missing', () => {
+  it('does not show fake fallback pricing when offerings are missing', async () => {
     mockPaywallState({ offerings: null, packages: [], error: null });
-    const output = renderPaywall();
+    const output = await renderPaywall();
     expect(containsText(output, 'Live plans are not available yet')).toBe(true);
     expect(containsText(output, 'Live pricing unavailable')).toBe(false);
   });
 
-  it('handles offering load failures with retry', () => {
+  it('handles offering load failures with retry', async () => {
     mockPaywallState({
       offerings: null,
       packages: [],
       error: revenueCatError('NETWORK_ERROR', 'Network down'),
     });
-    const output = renderPaywall();
+    const output = await renderPaywall();
     const retryButton = output.root
       .findAllByProps({ accessibilityRole: 'button' })
       .find((node) => node.props.onPress === mockRetry);
@@ -93,7 +93,7 @@ xdescribe('PaywallScreen', () => {
   });
 
   it('refreshes entitlement and returns after purchase success', async () => {
-    const output = renderPaywall();
+    const output = await renderPaywall();
     await pressByLabel(output, 'Continue with Annual Premium');
 
     expect(mockPurchase).toHaveBeenCalled();
@@ -107,7 +107,7 @@ xdescribe('PaywallScreen', () => {
       errorCode: 'STORE_PROBLEM',
       success: false,
     });
-    const output = renderPaywall();
+    const output = await renderPaywall();
     await pressByLabel(output, 'Continue with Annual Premium');
 
     expect(mockGoBack).not.toHaveBeenCalled();
@@ -126,7 +126,7 @@ xdescribe('PaywallScreen', () => {
       errorCode: 'NETWORK_ERROR',
       success: false,
     });
-    const output = renderPaywall();
+    const output = await renderPaywall();
     await pressByLabel(output, 'Restore purchases');
 
     expect(mockRestore).toHaveBeenCalled();

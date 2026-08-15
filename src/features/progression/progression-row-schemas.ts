@@ -28,7 +28,7 @@ export const XpEntryRowSchema = z
     amount: z.number().positive(),
     source: XpSourceSchema,
     session_id: z.string().uuid().nullable(),
-    metadata: z.record(z.unknown()).nullable(),
+    metadata: z.record(z.string(), z.unknown()).nullable(),
     created_at: ProgressionTimestampSchema,
   })
   .passthrough();

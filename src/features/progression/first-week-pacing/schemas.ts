@@ -52,13 +52,13 @@ export const SessionUnlockSchema = z.object({
 export type SessionUnlock = z.infer<typeof SessionUnlockSchema>;
 
 export const FirstWeekConfigSchema = z.object({
-  sessionUnlocks: z.record(
+  sessionUnlocks: z.partialRecord(
     FirstWeekSessionSchema,
     z.array(SessionUnlockSchema),
   ),
-  xpRewards: z.record(FirstWeekSessionSchema, z.number()),
-  companionReactions: z.record(FirstWeekSessionSchema, z.string()),
-  tutorialSteps: z.record(FirstWeekSessionSchema, z.array(z.string())),
+  xpRewards: z.partialRecord(FirstWeekSessionSchema, z.number()),
+  companionReactions: z.partialRecord(FirstWeekSessionSchema, z.string()),
+  tutorialSteps: z.partialRecord(FirstWeekSessionSchema, z.array(z.string())),
 });
 
 export type FirstWeekConfig = z.infer<typeof FirstWeekConfigSchema>;

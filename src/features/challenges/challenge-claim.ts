@@ -2,13 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import { eventBus } from '../../events/EventBus';
 import { getRewardService } from '../../rewards/RewardService';
 import * as repository from './repository';
-import {
-  ClaimChallengeRewardInputSchema,
-  type ChallengeCompletionResult,
-  type ChallengeDetail,
-  type ChallengeReward,
-  type UserChallenge,
-} from './schemas';
+import { ClaimChallengeRewardInputSchema, type ChallengeReward } from './schemas';
 import { getCompletedChallenges } from './queries';
 import { createDebugger } from '../../utils/debug';
 

@@ -18,7 +18,6 @@ import {
   getFilteredChallenges,
   getChallengeStats,
 } from './challenge-hub-helpers';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeHubProps {
   userId: string;

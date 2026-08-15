@@ -30,9 +30,9 @@ describe('integration', () => {
       unsub();
     });
 
-    it('awards streak XP on streak:updated when streak > 0', () => {
+    it('awards streak XP on streak:updated when streak > 0', async () => {
       const unsub = initializeStreaksProgressionIntegration();
-      fireEvent('streak:updated', {
+      await fireEvent('streak:updated', {
         userId: 'u1',
         state: { currentStreak: 5 },
       });
@@ -49,9 +49,9 @@ describe('integration', () => {
       });
     });
 
-    it('does NOT award XP on streak:updated when streak is 0', () => {
+    it('does NOT award XP on streak:updated when streak is 0', async () => {
       const unsub = initializeStreaksProgressionIntegration();
-      fireEvent('streak:updated', {
+      await fireEvent('streak:updated', {
         userId: 'u1',
         state: { currentStreak: 0 },
       });
@@ -64,9 +64,9 @@ describe('integration', () => {
       });
     });
 
-    it('calls addXpEnhanced on streak_milestone with calculated XP', () => {
+    it('calls addXpEnhanced on streak_milestone with calculated XP', async () => {
       const unsub = initializeStreaksProgressionIntegration();
-      fireEvent('social:streak_milestone', { userId: 'u1', streak: 7 });
+      await fireEvent('social:streak_milestone', { userId: 'u1', streak: 7 });
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           expect(mockProgression.calculateXpBreakdown).toHaveBeenCalled();

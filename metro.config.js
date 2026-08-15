@@ -157,49 +157,87 @@ const SHIMS = {
 };
 
 // IMPORTANT:
-// Dev builds must not crash when opened in Expo Go or a remote debugger.
-// Production/native builds still resolve real native modules.
-// Shims must be enabled whenever we're NOT in a production native build.
-// In Expo Go / dev / remote-debug, NODE_ENV is either undefined or "development".
-const SHIMS_ENABLED =
-  typeof process.env.NODE_ENV !== 'string' ||
-  process.env.NODE_ENV !== 'production';
+// Web / force-shim still uses shims for crashy or missing native modules.
+// On ios/android device and simulator we keep REAL visual modules so liquid
+// glass, blur, gradients, SVG, and reanimated actually render.
+// Set VEX_FORCE_SHIMS=1 to restore the old always-on shim behavior.
+const FORCE_SHIMS = process.env.VEX_FORCE_SHIMS === '1';
 
-// Always-on shims: packages that will never have a working native module
-// in React Native (e.g. pure React DOM libraries pulled in transitively).
-// These must be shimmed in ALL environments, not just dev.
-const ALWAYS_SHIM = new Set(["vaul"]);
+// Packages that are safe/expected on real iOS+Android runtimes (Expo Go +
+// dev-client). Never shim these on native platforms or the UI becomes a
+// flat paper mock with no glass, no icons, no motion.
+const NATIVE_VISUAL_ALLOW = new Set([
+  'expo-blur',
+  'expo-linear-gradient',
+  'expo-glass-effect',
+  'expo-mesh-gradient',
+  'expo-haptics',
+  'expo-image',
+  'expo-font',
+  'expo-asset',
+  'expo-constants',
+  'expo-status-bar',
+  'expo-splash-screen',
+  'expo-system-ui',
+  'expo-keep-awake',
+  'react-native-svg',
+  'react-native-reanimated',
+  'react-native-worklets',
+  'react-native-gesture-handler',
+  'react-native-safe-area-context',
+  'react-native-screens',
+  'react-native-screens/native-stack',
+  '@callstack/liquid-glass',
+]);
+
+// Always-on shims: pure DOM packages that must never hit RN.
+const ALWAYS_SHIM = new Set(['vaul']);
 
 // Precompute shim keys once to avoid re-allocating on every module resolution
 const SHIM_PACKAGES = Object.keys(SHIMS);
 const originalResolveRequest = config.resolver.resolveRequest;
 
-config.resolver.resolveRequest = (context, moduleName, platform) => {
-  // 1. Native module shim: exact match
-  if (ALWAYS_SHIM.has(moduleName) || (SHIMS_ENABLED && SHIMS[moduleName])) {
-    const shimPath = SHIMS[moduleName];
-    if (shimPath) {
-      if (process.env.NODE_ENV !== 'production') console.log('[metro-resolve] SHIM:', moduleName, '->', shimPath);
-      return {
-        filePath: shimPath,
-        type: "sourceFile",
-      };
+function shouldShim(moduleName, platform) {
+  if (ALWAYS_SHIM.has(moduleName)) return true;
+  if (FORCE_SHIMS) return Boolean(SHIMS[moduleName]);
+  // Real device / simulator: keep visual natives live
+  if (platform === 'ios' || platform === 'android') {
+    if (NATIVE_VISUAL_ALLOW.has(moduleName)) return false;
+    // Subpath of an allowed package (expo-blur/src/...)
+    for (const allowed of NATIVE_VISUAL_ALLOW) {
+      if (moduleName === allowed || moduleName.startsWith(`${allowed}/`)) {
+        return false;
+      }
     }
+  }
+  // Web and unknown platforms still need shims for missing natives
+  return Boolean(SHIMS[moduleName]);
+}
+
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  // 1. Exact package shim
+  if (shouldShim(moduleName, platform) && SHIMS[moduleName]) {
+    const shimPath = SHIMS[moduleName];
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[metro-resolve] SHIM:', moduleName, '->', shimPath, 'platform=', platform);
+    }
+    return {
+      filePath: shimPath,
+      type: 'sourceFile',
+    };
   }
 
   // 2. Subpath match: e.g. 'expo-blur/src/BlurView' → 'expo-blur'
-  if (SHIMS_ENABLED) {
-    const shimmedPackage = SHIM_PACKAGES.find(
-      (pkg) => moduleName.startsWith(`${pkg}/`),
-    );
-    if (shimmedPackage) {
-      const shimPath = SHIMS[shimmedPackage];
-      if (shimPath) {
-        return {
-          filePath: shimPath,
-          type: "sourceFile",
-        };
-      }
+  const shimmedPackage = SHIM_PACKAGES.find(
+    (pkg) => moduleName.startsWith(`${pkg}/`),
+  );
+  if (shimmedPackage && shouldShim(shimmedPackage, platform)) {
+    const shimPath = SHIMS[shimmedPackage];
+    if (shimPath) {
+      return {
+        filePath: shimPath,
+        type: 'sourceFile',
+      };
     }
   }
 

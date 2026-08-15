@@ -14,8 +14,8 @@ describe('HomeScreen recommendations', () => {
   it('accepts a recommendation and routes into session setup', async () => {
     mockState.updateRecommendationStatus.mockResolvedValue(undefined);
 
-    render(<HomeScreen />);
-    fireEvent.press(screen.getByText('Accept suggestion'));
+    await render(<HomeScreen />);
+    await fireEvent.press(screen.getByText('Accept suggestion'));
 
     await waitFor(() => {
       expect(mockState.updateRecommendationStatus).toHaveBeenCalledWith({
@@ -37,8 +37,8 @@ describe('HomeScreen recommendations', () => {
   it('dismisses a recommendation as rejected', async () => {
     mockState.updateRecommendationStatus.mockResolvedValue(undefined);
 
-    render(<HomeScreen />);
-    fireEvent.press(screen.getByText('Dismiss suggestion'));
+    await render(<HomeScreen />);
+    await fireEvent.press(screen.getByText('Dismiss suggestion'));
 
     await waitFor(() => {
       expect(mockState.updateRecommendationStatus).toHaveBeenCalledWith({

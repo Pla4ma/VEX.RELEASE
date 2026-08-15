@@ -54,7 +54,7 @@ jest.mock('../../../progression/ProgressionService', () => ({
 import { MASTERY_TRACKS } from '../mastery-types';
 import { calculateMasteryXpFromSession, applyMasteryXp, createInitialMasteryState, migrateFromLegacyProgression } from '../mastery-service';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 describe('Mastery Service', () => {
   describe('createInitialMasteryState', () => {

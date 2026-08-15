@@ -63,19 +63,19 @@ describe('usePresence', () => {
   });
 
   it('cleans up presence channel before remounting', async () => {
-    const firstRender = renderHook(() => usePresence({ userId: 'user-1' }));
+    const firstRender = await renderHook(() => usePresence({ userId: 'user-1' }));
     await waitFor(() => expect(getActiveChannelCount()).toBe(1));
 
-    firstRender.unmount();
+    await firstRender.unmount();
     await waitFor(() => expect(getActiveChannelCount()).toBe(0));
 
-    const secondRender = renderHook(() => usePresence({ userId: 'user-1' }));
+    const secondRender = await renderHook(() => usePresence({ userId: 'user-1' }));
     await waitFor(() => expect(getActiveChannelCount()).toBe(1));
 
     expect(mockChannels.filter((channel) => !channel.unsubscribed)).toHaveLength(
       1,
     );
 
-    secondRender.unmount();
+    await secondRender.unmount();
   });
 });

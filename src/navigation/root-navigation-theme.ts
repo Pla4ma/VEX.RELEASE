@@ -1,4 +1,4 @@
-import type { Theme as NavigationTheme } from '@react-navigation/native';
+import { DefaultTheme, type Theme as NavigationTheme } from '@react-navigation/native';
 import type { Theme } from '../theme';
 
 export function createRootNavigationTheme(
@@ -15,5 +15,6 @@ export function createRootNavigationTheme(
       border: theme.colors.semantic.border,
       notification: theme.colors.error.DEFAULT,
     },
+    fonts: DefaultTheme.fonts,
   };
 }

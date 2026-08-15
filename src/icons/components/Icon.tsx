@@ -19,7 +19,6 @@ import {
   ICON_STROKE_WIDTH_VALUES,
   type IconSize,
   type IconStrokeWidth,
-  type IconVariant,
 } from '../types';
 
 /**

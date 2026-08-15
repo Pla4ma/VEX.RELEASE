@@ -72,7 +72,7 @@ describe('Streaks Service - Record Session', () => {
       gracePeriodUsed: false,
     });
     jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-    jest.mocked(repository.getAvailableShield).mockResolvedValue('c3d4e5f6-a7b8-9012-cdef-123456789012');
+    jest.mocked(repository.getAvailableShield).mockResolvedValue('c3d4e5f6-a7b8-4012-8def-123456789012');
     jest.mocked(repository.updateStreak).mockResolvedValue(streak);
     const result = await recordSession({
       userId: USER_ID,

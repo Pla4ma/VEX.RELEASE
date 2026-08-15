@@ -12,8 +12,8 @@ describe('HomeScreen command center', () => {
     resetCommandMocks();
   });
 
-  it('keeps the essentials in the first viewport', () => {
-    render(<HomeScreen />);
+  it('keeps the essentials in the first viewport', async () => {
+    await render(<HomeScreen />);
 
     expect(screen.getByText('Focus Score')).toBeTruthy();
     expect(screen.getByText('Daily Mission')).toBeTruthy();
@@ -21,12 +21,12 @@ describe('HomeScreen command center', () => {
     expect(screen.getByText('6 PM is your best focus window.')).toBeTruthy();
   });
 
-  it('shows study-plan progress without exposing disabled routes', () => {
+  it('shows study-plan progress without exposing disabled routes', async () => {
     mockState.homeData = createCommandHomeData({
       activeStudyPlanQuery: { data: { title: 'React Deep Dive' } },
     });
 
-    render(<HomeScreen />);
+    await render(<HomeScreen />);
 
     expect(screen.getByText('Deep Work Plan: "React Deep Dive"')).toBeTruthy();
     expect(screen.getByText('Start deep work')).toBeTruthy();
@@ -34,13 +34,13 @@ describe('HomeScreen command center', () => {
     expect(screen.queryByText('Emergency Gem')).toBeNull();
   });
 
-  it('renders loading and offline degraded states', () => {
+  it('renders loading and offline degraded states', async () => {
     mockState.homeData = createCommandHomeData({
       isLoading: true,
       isOnline: false,
     });
 
-    render(<HomeScreen />);
+    await render(<HomeScreen />);
 
     expect(screen.getByText('Loading home')).toBeTruthy();
     expect(screen.getByText('Offline mode')).toBeTruthy();

@@ -57,35 +57,35 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 describe('FocusScoreDashboard — advanced states', () => {
-  it('renders refetching indicator when refetching', () => {
+  it('renders refetching indicator when refetching', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
       score: mockScore,
       isRefetching: true,
     });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(getByText('Updating...')).toBeTruthy();
   });
 
-  it('renders empty history message when no history is available', () => {
+  it('renders empty history message when no history is available', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
       score: mockScore,
       history: [],
       isRefetching: false,
     });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(getByText('No history available yet.')).toBeTruthy();
   });
 
-  it('renders 30-day trend with history data', () => {
+  it('renders 30-day trend with history data', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
       score: mockScore,
       history: mockHistoryThreeDays,
       isRefetching: false,
     });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(getByText('4/1/2026: 700 (+0)')).toBeTruthy();
     expect(getByText('4/2/2026: 710 (+10)')).toBeTruthy();
     expect(getByText('4/3/2026: 705 (-5)')).toBeTruthy();

@@ -23,7 +23,7 @@ describe('Streaks Service - Protective Actions', () => {
         shieldsAvailable: 2,
       });
       jest.mocked(repository.fetchStreak).mockResolvedValue(streak);
-      jest.mocked(repository.getAvailableShield).mockResolvedValue('c3d4e5f6-a7b8-9012-cdef-123456789012');
+      jest.mocked(repository.getAvailableShield).mockResolvedValue('c3d4e5f6-a7b8-4012-8def-123456789012');
       const result = await useShield({ userId: USER_ID, reason: 'MANUAL' });
       expect(result).toBe(true);
     });

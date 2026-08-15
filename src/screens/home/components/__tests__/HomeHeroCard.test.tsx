@@ -51,8 +51,8 @@ jest.mock('../../../../components/primitives/Text', () => ({
 }));
 
 describe('HomeHeroCard', () => {
-  it('renders the selected priority copy with one primary CTA', () => {
-    render(
+  it('renders the selected priority copy with one primary CTA', async () => {
+    await render(
       <HomeHeroCard
         isLoading={false}
         onPressPrimary={jest.fn()}

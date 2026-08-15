@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export const CATEGORIES = [
   { id: 'all', label: 'All', icon: 'grid' },
   { id: 'sessions', label: 'Sessions', icon: 'play' },

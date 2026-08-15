@@ -13,8 +13,6 @@ import type { InteractiveCardProps, CardVariant, CardSize } from './InteractiveC
 import {
   fullWidth as fullWidthStyle,
   card,
-  selected,
-  errorCard as error,
   badge as badgeStyle,
   badgeText,
   iconContainer,

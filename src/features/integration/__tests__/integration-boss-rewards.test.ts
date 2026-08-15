@@ -26,9 +26,9 @@ describe('integration', () => {
       unsub();
     });
 
-    it('creates XP reward when boss defeated with xp > 0', () => {
+    it('creates XP reward when boss defeated with xp > 0', async () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent('boss:defeated', {
+      await fireEvent('boss:defeated', {
         userId: 'u1',
         bossId: 'boss-1',
         won: true,
@@ -51,9 +51,9 @@ describe('integration', () => {
       });
     });
 
-    it('skips reward when won is false', () => {
+    it('skips reward when won is false', async () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent('boss:defeated', {
+      await fireEvent('boss:defeated', {
         userId: 'u1',
         bossId: 'boss-1',
         won: false,
@@ -68,9 +68,9 @@ describe('integration', () => {
       });
     });
 
-    it('skips reward when xp is 0', () => {
+    it('skips reward when xp is 0', async () => {
       const unsub = initializeBossRewardsIntegration();
-      fireEvent('boss:defeated', {
+      await fireEvent('boss:defeated', {
         userId: 'u1',
         bossId: 'boss-1',
         won: true,

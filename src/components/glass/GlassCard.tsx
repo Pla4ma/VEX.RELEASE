@@ -22,6 +22,8 @@ export interface GlassCardProps {
   testID?: string;
   accessibilityLabel?: string;
   glowMint?: boolean;
+  glowFire?: boolean;
+  flush?: boolean;
 }
 
 /**

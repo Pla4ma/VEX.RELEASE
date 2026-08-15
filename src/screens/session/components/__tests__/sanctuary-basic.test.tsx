@@ -1,9 +1,9 @@
 import { buildViewModel, renderHero, hasText } from './helpers';
 
 describe('ActiveSessionHero sanctuary — basic rendering', () => {
-  it('calm active focus renders no game-like metrics', () => {
+  it('calm active focus renders no game-like metrics', async () => {
     const vm = buildViewModel();
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, 'Purity Score')).toBe(false);
     expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
@@ -13,68 +13,68 @@ describe('ActiveSessionHero sanctuary — basic rendering', () => {
     expect(hasText(hero, 'Timer Ring')).toBe(true);
   });
 
-  it('study active hero shows study target', () => {
+  it('study active hero shows study target', async () => {
     const vm = buildViewModel({
       studyTargetLabel: 'Study Session',
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, 'Study Session')).toBe(true);
     expect(hasText(hero, 'Challenge waiting')).toBe(false);
     expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
   });
 
-  it('game-like hero shows boss signal pill', () => {
+  it('game-like hero shows boss signal pill', async () => {
     const vm = buildViewModel({
       signalPill: { type: 'boss', label: 'Challenge waiting' },
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, 'Challenge waiting')).toBe(true);
     expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
   });
 
-  it('paused hero can show daily progress and momentum', () => {
+  it('paused hero can show daily progress and momentum', async () => {
     const vm = buildViewModel({
       heroDensity: 'standard',
       dailyProgress: 50,
       todayFocusSeconds: 3600,
       momentumScores: [75, 80, 85],
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(true);
     expect(hasText(hero, 'Elapsed')).toBe(true);
     expect(hasText(hero, 'Complete')).toBe(true);
   });
 
-  it('paused hero shows empty momentum calibrating when scores empty', () => {
+  it('paused hero shows empty momentum calibrating when scores empty', async () => {
     const vm = buildViewModel({
       heroDensity: 'standard',
       momentumScores: [],
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
     expect(hasText(hero, 'Calibrating momentum...')).toBe(true);
   });
 
-  it('minimal density hides session stats', () => {
+  it('minimal density hides session stats', async () => {
     const vm = buildViewModel({
       heroDensity: 'minimal',
       dailyProgress: null,
       todayFocusSeconds: null,
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(false);
     expect(hasText(hero, 'Elapsed')).toBe(false);
   });
 
-  it('completion effects stay hidden when purity HUD is disabled', () => {
+  it('completion effects stay hidden when purity HUD is disabled', async () => {
     const vm = buildViewModel({
       perfectFocusActive: false,
       showPurityScore: false,
     });
-    const hero = renderHero(vm);
+    const hero = await renderHero(vm);
 
     expect(hasText(hero, 'Completion Aura')).toBe(false);
     expect(hasText(hero, 'Timer Ring')).toBe(true);

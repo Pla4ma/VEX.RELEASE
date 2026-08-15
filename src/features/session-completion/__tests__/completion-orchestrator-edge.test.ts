@@ -113,7 +113,7 @@ describe('orchestrateSessionCompletion edge cases', () => {
         summary: createSessionSummary(),
         userId: USER_ID,
       }),
-    ).rejects.toThrow();
+    ).resolves.toBeNull();
 
     await expect(
       orchestrateSessionCompletion({
@@ -121,7 +121,7 @@ describe('orchestrateSessionCompletion edge cases', () => {
         summary: createSessionSummary(),
         userId: '',
       }),
-    ).rejects.toThrow();
+    ).resolves.toBeNull();
 
     await expect(
       orchestrateSessionCompletion({
@@ -129,7 +129,7 @@ describe('orchestrateSessionCompletion edge cases', () => {
         summary: { invalid: true },
         userId: USER_ID,
       }),
-    ).rejects.toThrow();
+    ).resolves.toBeNull();
   });
 
   it('subscribes to session:completed at most once', () => {

@@ -1,6 +1,5 @@
 import { useEffect, useCallback, useState } from 'react';
 import {
-  cleanupPresence,
   initializePresence,
   updatePresence,
   subscribeToSquadPresence,

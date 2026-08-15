@@ -186,6 +186,7 @@ export { usePremiumStatus, usePaywall } from './use-revenuecat-derived';
 
 // Re-export types for backward compatibility
 export type {
+  UseRevenueCatState,
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
   PurchaseResult,

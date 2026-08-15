@@ -64,7 +64,7 @@ describe('useContentHistory', () => {
       mockHistory,
     );
     const wrapper = createWrapper(queryClient);
-    const { result } = renderHook(() => useContentHistory(), { wrapper });
+    const { result } = await renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
         expect(result.current.content).toEqual(mockHistory);
@@ -80,7 +80,7 @@ describe('useContentHistory', () => {
       mockHistory,
     );
     const wrapper = createWrapper(queryClient);
-    const { result } = renderHook(() => useContentHistory(), { wrapper });
+    const { result } = await renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
         expect(result.current.content).toEqual(mockHistory);
@@ -115,7 +115,7 @@ describe('useRateLimit', () => {
     ];
     (service.fetchContentHistory as jest.Mock).mockResolvedValue(mockHistory);
     const wrapper = createWrapper(queryClient);
-    const { result } = renderHook(() => useRateLimit(), { wrapper });
+    const { result } = await renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       await result.current.checkLimit();
     });
@@ -128,7 +128,7 @@ describe('useRateLimit', () => {
       new Error('Rate limit check failed'),
     );
     const wrapper = createWrapper(queryClient);
-    const { result } = renderHook(() => useRateLimit(), { wrapper });
+    const { result } = await renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       try {
         await result.current.checkLimit();

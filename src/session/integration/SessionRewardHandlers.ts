@@ -3,11 +3,7 @@ import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 import type { SessionSummary } from '../types';
 import type { RewardIntegrationConfig } from './SessionRewardIntegration';
-import {
-  advanceRestoreQuest,
-  handleAbandonment,
-  handlePartialCompletion,
-} from './session-reward-recovery';
+import { advanceRestoreQuest } from './session-reward-recovery';
 export {
   handleAbandonment,
   handlePartialCompletion,

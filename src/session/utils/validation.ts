@@ -57,7 +57,7 @@ export type SessionValidationInput = z.infer<typeof SessionValidationSchema>;
 /** Safely traverse a nested object by path segments to retrieve a value. */
 function getPathValue(
   root: unknown,
-  path: Array<string | number>,
+  path: PropertyKey[],
 ): unknown {
   let current: unknown = root;
   for (const key of path) {
@@ -87,7 +87,7 @@ export function validateSessionConfig(
     debug.info('Session config validated successfully', { name: parsed.name });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      result.errors = error.errors.map((err) => ({
+      result.errors = error.issues.map((err) => ({
         field: err.path.join('.'),
         message: err.message,
         code: err.code,

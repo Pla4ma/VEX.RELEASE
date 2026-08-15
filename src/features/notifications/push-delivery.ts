@@ -20,7 +20,7 @@ export interface ScheduledNotification {
 export const PushNotificationPayloadSchema = z.object({
   title: z.string(),
   body: z.string(),
-  data: z.record(z.unknown()).optional(),
+  data: z.record(z.string(), z.unknown()).optional(),
   priority: z.enum(['low', 'normal', 'high', 'critical']).optional(),
   badge: z.number().optional(),
   sound: z.union([z.string(), z.boolean()]).optional(),

@@ -1,8 +1,5 @@
 import React from 'react';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text';
 import type {} from 'react-native-reanimated';

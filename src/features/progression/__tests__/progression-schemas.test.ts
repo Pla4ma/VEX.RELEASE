@@ -65,8 +65,8 @@ describe('Schemas', () => {
   it('ProgressionSchema validates valid object', () => {
     const { ProgressionSchema } = require('../schemas');
     const valid = {
-      id: '00000000-0000-0000-0000-000000000001',
-      userId: '00000000-0000-0000-0000-000000000002',
+      id: '00000000-0000-4000-8000-000000000001',
+      userId: '00000000-0000-4000-8000-000000000002',
       level: 5,
       xp: 50,
       totalXp: 500,
@@ -81,8 +81,8 @@ describe('Schemas', () => {
   it('ProgressionSchema rejects invalid level', () => {
     const { ProgressionSchema } = require('../schemas');
     const invalid = {
-      id: '00000000-0000-0000-0000-000000000001',
-      userId: '00000000-0000-0000-0000-000000000002',
+      id: '00000000-0000-4000-8000-000000000001',
+      userId: '00000000-0000-4000-8000-000000000002',
       level: 0,
       xp: 0,
       totalXp: 0,
@@ -97,7 +97,7 @@ describe('Schemas', () => {
   it('AddXpInputSchema validates valid input', () => {
     const { AddXpInputSchema } = require('../schemas');
     const valid = {
-      userId: '00000000-0000-0000-0000-000000000001',
+      userId: '00000000-0000-4000-8000-000000000001',
       amount: 50,
       source: 'SESSION_COMPLETE',
     };
@@ -107,7 +107,7 @@ describe('Schemas', () => {
   it('AddXpInputSchema rejects negative amount', () => {
     const { AddXpInputSchema } = require('../schemas');
     const invalid = {
-      userId: '00000000-0000-0000-0000-000000000001',
+      userId: '00000000-0000-4000-8000-000000000001',
       amount: -10,
       source: 'SESSION_COMPLETE',
     };

@@ -1,12 +1,5 @@
 import React from 'react';
-import Animated, {
-  FadeIn,
-  useAnimatedStyle,
-  withSpring,
-  withSequence,
-  withTiming,
-  useSharedValue,
-} from 'react-native-reanimated';
+import Animated, { FadeIn, useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';

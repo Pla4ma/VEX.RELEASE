@@ -6,7 +6,6 @@ import { Text } from '../../components/primitives/Text';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
 import { Icon } from '../../icons/components/Icon';
-import { Text as VexText } from '../../components/primitives/Text';
 
 interface SettingsProfileRowProps {
   displayName: string;

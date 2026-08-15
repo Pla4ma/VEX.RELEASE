@@ -35,7 +35,7 @@ export const CreateInsightInputSchema = z
     metric: AnalyticsMetricSchema,
     expiresInDays: z.number().int().min(1).max(365).default(30),
     actionType: z.string().optional(),
-    actionPayload: z.record(z.unknown()).optional(),
+    actionPayload: z.record(z.string(), z.unknown()).optional(),
     relatedMetrics: z.array(AnalyticsMetricSchema).default([]),
   })
   .strict();
@@ -71,7 +71,7 @@ export const UpdateDashboardWidgetInputSchema = z
           })
           .strict()
           .optional(),
-        config: z.record(z.unknown()).optional(),
+        config: z.record(z.string(), z.unknown()).optional(),
         isVisible: z.boolean().optional(),
       })
       .strict(),

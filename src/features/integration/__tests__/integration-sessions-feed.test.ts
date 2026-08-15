@@ -28,9 +28,9 @@ describe('integration', () => {
       unsub();
     });
 
-    it('processes session completion → recordSession + addXpEnhanced + breadcrumb', () => {
+    it('processes session completion → recordSession + addXpEnhanced + breadcrumb', async () => {
       const unsub = initializeSessionsFeedIntegration();
-      fireEvent('sessions:completed', {
+      await fireEvent('sessions:completed', {
         userId: 'u1',
         sessionId: 's1',
         duration: 1800,
@@ -57,30 +57,30 @@ describe('integration', () => {
       });
     });
 
-    it('ignores null event', () => {
+    it('ignores null event', async () => {
       const unsub = initializeSessionsFeedIntegration();
-      fireEvent('sessions:completed', null);
+      await fireEvent('sessions:completed', null);
       expect(mockStreaks.recordSession).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('ignores event with missing sessionId', () => {
+    it('ignores event with missing sessionId', async () => {
       const unsub = initializeSessionsFeedIntegration();
-      fireEvent('sessions:completed', { userId: 'u1' });
+      await fireEvent('sessions:completed', { userId: 'u1' });
       expect(mockStreaks.recordSession).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('ignores event with missing userId', () => {
+    it('ignores event with missing userId', async () => {
       const unsub = initializeSessionsFeedIntegration();
-      fireEvent('sessions:completed', { sessionId: 's1' });
+      await fireEvent('sessions:completed', { sessionId: 's1' });
       expect(mockStreaks.recordSession).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('defaults qualityScore and streakDays to 0 when omitted', () => {
+    it('defaults qualityScore and streakDays to 0 when omitted', async () => {
       const unsub = initializeSessionsFeedIntegration();
-      fireEvent('sessions:completed', {
+      await fireEvent('sessions:completed', {
         userId: 'u1',
         sessionId: 's1',
         duration: 1200,

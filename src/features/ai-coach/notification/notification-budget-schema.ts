@@ -40,7 +40,7 @@ export const NotificationRequestSchema = z.object({
   type: z.string(),
   content: z.string().max(500),
   scheduledFor: z.number().int().positive().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
   respectDailyLimit: z.boolean().default(false),
 });
 

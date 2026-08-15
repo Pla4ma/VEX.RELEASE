@@ -56,7 +56,7 @@ import type { UnifiedMasteryState, MasteryTrackState } from '../mastery-types';
 import { canPrestige, executePrestige, getNightmareConfig, createInitialPrestigeState, migrateToPrestigeSystem } from '../prestige-engine';
 import type { PrestigeState } from '../prestige-types';
 
-const TEST_USER_ID = '12345678-1234-1234-1234-123456789abc';
+const TEST_USER_ID = '12345678-1234-4234-8234-123456789abc';
 
 function makeMasteryState(overrides?: Partial<UnifiedMasteryState>): UnifiedMasteryState {
   const makeTrack = (level = 1): MasteryTrackState => ({

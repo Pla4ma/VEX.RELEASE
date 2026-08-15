@@ -23,7 +23,7 @@ export function aggregateDataPoints(
       .object({
         timestamp: z.number(),
         value: z.number(),
-        metadata: z.record(z.unknown()).optional(),
+        metadata: z.record(z.string(), z.unknown()).optional(),
       })
       .parse(point);
     const bucketKey = getBucketTimestamp(parsedPoint.timestamp, granularity);

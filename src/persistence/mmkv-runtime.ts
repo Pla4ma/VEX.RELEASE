@@ -20,12 +20,8 @@ export type RuntimeMMKV = {
   size?: number;
 };
 
-type NativeMMKVConstructor = new (
-  configuration: RuntimeMMKVConfiguration,
-) => RuntimeMMKV;
-
 declare const require: (name: string) => {
-  MMKV: NativeMMKVConstructor;
+  createMMKV: (configuration: RuntimeMMKVConfiguration) => unknown;
 };
 
 function canUseNativeMMKV(): boolean {
@@ -114,8 +110,38 @@ export function createRuntimeMMKV(
 
   try {
     // SAFETY: require() defers native MMKV access so unsupported runtimes can fall back cleanly.
-    const { MMKV } = require('react-native-mmkv');
-    return new MMKV(configuration);
+    // MMKV v4 exposes createMMKV() instead of the v3 `new MMKV()` class constructor.
+    const { createMMKV } = require('react-native-mmkv');
+    const native = createMMKV(configuration) as {
+      set(key: string, value: MMKVValue): void;
+      getBoolean?(key: string): boolean | undefined;
+      getString?(key: string): string | undefined;
+      getNumber?(key: string): number | undefined;
+      getBuffer?(key: string): Uint8Array | undefined;
+      contains?(key: string): boolean;
+      remove?(key: string): void;
+      delete?(key: string): void;
+      getAllKeys?(): string[];
+      clearAll?(): void;
+      recrypt?(key: string | undefined): void;
+      size?: number;
+    };
+    // v4 renamed .delete() to .remove(); re-expose .delete() to keep the RuntimeMMKV contract stable.
+    const deleteFn = native.remove ?? native.delete ?? (() => {});
+    const adapted: RuntimeMMKV = {
+      set: (key, value) => native.set(key, value),
+      getBoolean: (key) => native.getBoolean?.(key),
+      getString: (key) => native.getString?.(key),
+      getNumber: (key) => native.getNumber?.(key),
+      getBuffer: (key) => native.getBuffer?.(key),
+      contains: (key) => native.contains?.(key) ?? false,
+      delete: (key) => deleteFn(key),
+      getAllKeys: () => native.getAllKeys?.() ?? [],
+      clearAll: () => native.clearAll?.(),
+      recrypt: (key) => native.recrypt?.(key),
+      size: native.size,
+    };
+    return adapted;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (!message.includes('React Native is not running on-device')) {

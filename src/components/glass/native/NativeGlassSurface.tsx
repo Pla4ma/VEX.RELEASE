@@ -3,7 +3,6 @@ import { View, type StyleProp, type ViewProps, type ViewStyle } from 'react-nati
 import { glassMaterials, vexLightGlass } from '@/theme/tokens/vex-light-glass';
 import { canUseNativeGlass } from './glassAvailability';
 import { getBlurView, getGlassView, getLinearGradient } from './nativeModuleLoaders';
-import { getGlassContainer } from './nativeModuleLoaders';
 
 // ─── Types ───────────────────────────────────────────────────────────
 

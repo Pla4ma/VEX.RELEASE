@@ -92,7 +92,7 @@ export const SessionSyncMetaSchema = z.object({
   deviceId: z.string().optional(),
   appVersion: z.string().optional(),
   osVersion: z.string().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 export type SessionSyncMeta = z.infer<typeof SessionSyncMetaSchema>;
 
@@ -184,7 +184,7 @@ export const SessionEventSchema = z.object({
     'MODE_BONUS_EARNED',
   ]),
   timestamp: z.number(),
-  data: z.record(z.unknown()).optional(),
+  data: z.record(z.string(), z.unknown()).optional(),
 });
 export type SessionEvent = z.infer<typeof SessionEventSchema>;
 

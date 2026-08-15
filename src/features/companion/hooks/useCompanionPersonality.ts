@@ -7,11 +7,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
-import {
-  getCompanionPersonalityEngine,
-  CompanionPersonalityState,
-  PersonalityEventType,
-} from '../CompanionPersonalityEngine';
+import { getCompanionPersonalityEngine, CompanionPersonalityState } from '../CompanionPersonalityEngine';
 
 interface UseCompanionPersonalityReturn extends CompanionPersonalityState {
   clearResponse: () => void;

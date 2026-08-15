@@ -24,7 +24,7 @@ export type HomePriorityCTAAction = z.infer<typeof HomePriorityCTAActionSchema>;
 export const HomePriorityCTASchema = z
   .object({
     action: HomePriorityCTAActionSchema,
-    params: z.record(z.unknown()).optional(),
+    params: z.record(z.string(), z.unknown()).optional(),
     text: z.string(),
   })
   .strict();

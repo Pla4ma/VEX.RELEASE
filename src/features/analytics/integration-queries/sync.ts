@@ -1,7 +1,7 @@
 import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
 import { stateCache, DEFAULT_INTEGRATION_STATE } from '../integration-types';
-import { fetchAggregatedStats, fetchDetectedPatterns, deleteOldAnalyticsData } from '../repository/stats';
+import { fetchAggregatedStats, fetchDetectedPatterns } from '../repository/stats';
 import { fetchInsights } from '../repository/insights';
 import { hashUserId } from '../../../utils/sentry-privacy';
 

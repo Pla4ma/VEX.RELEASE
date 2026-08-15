@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { NavigationGuard } from '../NavigationGuard';
 import { FEATURE_FLAGS } from '../../../constants/features';
 import { useFeatureFlags } from '../../../hooks/useFeatureFlags';
@@ -26,7 +26,7 @@ describe('NavigationGuard', () => {
     });
   });
 
-  it('renders children when feature is enabled', () => {
+  it('renders children when feature is enabled', async () => {
     const mockIsEnabled = jest.fn().mockReturnValue(true);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -35,9 +35,11 @@ describe('NavigationGuard', () => {
       flags: new Map(),
     });
 
-    render(
+    await render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <View testID="protected-content">Protected Content</View>
+        <View testID="protected-content">
+          <Text>Protected Content</Text>
+        </View>
       </NavigationGuard>,
     );
 
@@ -45,7 +47,7 @@ describe('NavigationGuard', () => {
     expect(mockIsEnabled).toHaveBeenCalledWith(FEATURE_FLAGS.BASIC_SOLO_BOSS);
   });
 
-  it('renders fallback when feature is disabled', () => {
+  it('renders fallback when feature is disabled', async () => {
     const mockIsEnabled = jest.fn().mockReturnValue(false);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -54,9 +56,11 @@ describe('NavigationGuard', () => {
       flags: new Map(),
     });
 
-    render(
+    await render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
-        <View testID="protected-content">Protected Content</View>
+        <View testID="protected-content">
+          <Text>Protected Content</Text>
+        </View>
       </NavigationGuard>,
     );
 
@@ -64,7 +68,7 @@ describe('NavigationGuard', () => {
     expect(mockIsEnabled).toHaveBeenCalledWith(FEATURE_FLAGS.BASIC_SOLO_BOSS);
   });
 
-  it('renders custom fallback when provided', () => {
+  it('renders custom fallback when provided', async () => {
     const mockIsEnabled = jest.fn().mockReturnValue(false);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -73,12 +77,18 @@ describe('NavigationGuard', () => {
       flags: new Map(),
     });
 
-    render(
+    await render(
       <NavigationGuard
         featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}
-        fallback={<View testID="custom-fallback">Custom Fallback</View>}
+        fallback={
+          <View testID="custom-fallback">
+            <Text>Custom Fallback</Text>
+          </View>
+        }
       >
-        <View testID="protected-content">Protected Content</View>
+        <View testID="protected-content">
+          <Text>Protected Content</Text>
+        </View>
       </NavigationGuard>,
     );
 

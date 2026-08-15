@@ -9,8 +9,9 @@ import {
   withTiming,
   type AnimatedStyle,
 } from 'react-native-reanimated';
+import type { ViewStyle } from 'react-native';
 
-export function usePulseStyle(enabled = true): AnimatedStyle {
+export function usePulseStyle(enabled = true): AnimatedStyle<ViewStyle> {
   const opacity = useSharedValue(enabled ? 0.5 : 1);
   useEffect(() => {
     if (!enabled) {
@@ -29,7 +30,7 @@ export function usePulseStyle(enabled = true): AnimatedStyle {
   return useAnimatedStyle(() => ({ opacity: opacity.value }));
 }
 
-export function useFadeStyle(visible: boolean, duration = 300): AnimatedStyle {
+export function useFadeStyle(visible: boolean, duration = 300): AnimatedStyle<ViewStyle> {
   const opacity = useSharedValue(visible ? 1 : 0);
   useEffect(() => {
     opacity.value = withTiming(visible ? 1 : 0, { duration });
@@ -40,7 +41,7 @@ export function useFadeStyle(visible: boolean, duration = 300): AnimatedStyle {
 export function useScaleInStyle(
   initialScale: number,
   spring = true,
-): AnimatedStyle {
+): AnimatedStyle<ViewStyle> {
   const scale = useSharedValue(initialScale);
   useEffect(() => {
     scale.value = spring
@@ -50,7 +51,7 @@ export function useScaleInStyle(
   return useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 }
 
-export function useShakeStyle(): AnimatedStyle {
+export function useShakeStyle(): AnimatedStyle<ViewStyle> {
   const translateX = useSharedValue(0);
   useEffect(() => {
     translateX.value = withSequence(

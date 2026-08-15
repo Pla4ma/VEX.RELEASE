@@ -110,9 +110,9 @@ function textFromChildren(children: unknown): string {
 }
 
 describe('LauncherStep', () => {
-  it('does not let users finish onboarding before the starter session proves value', () => {
+  it('does not let users finish onboarding before the starter session proves value', async () => {
     let tree: renderer.ReactTestRenderer | null = null;
-    act(() => {
+    await act(() => {
       tree = renderer.create(
         <LauncherStep
           firstSessionXp={50}

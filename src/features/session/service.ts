@@ -1,5 +1,4 @@
 import { SessionMode } from '../../session/modes';
-import { formatDurationColon } from '../../utils/format-duration';
 import {
   ACTIVE_SESSION_CONFIG,
   canBackground,

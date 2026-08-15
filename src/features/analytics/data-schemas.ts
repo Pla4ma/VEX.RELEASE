@@ -40,7 +40,7 @@ export const AnalyticsDataPointSchema = z
     timestamp: z.number().int().positive(),
     value: z.number(),
     dimension: z.string().optional(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
 
@@ -95,7 +95,7 @@ export const InsightSchema = z
     isRead: z.boolean(),
     isActioned: z.boolean(),
     actionType: z.string().optional(),
-    actionPayload: z.record(z.unknown()).optional(),
+    actionPayload: z.record(z.string(), z.unknown()).optional(),
     relatedMetrics: z.array(AnalyticsMetricSchema),
   })
   .strict();
@@ -158,16 +158,14 @@ export const AggregatedStatsSchema = z
     userId: z.string().uuid(),
     period: TimeRangeSchema,
     generatedAt: z.number().int().positive(),
-    metrics: z.record(
-      z
-        .object({
-          value: z.number(),
-          previousValue: z.number(),
-          changePercent: z.number(),
-          trend: TrendDirectionSchema,
-        })
-        .strict(),
-    ),
+    metrics: z.record(z.string(), z
+      .object({
+        value: z.number(),
+        previousValue: z.number(),
+        changePercent: z.number(),
+        trend: TrendDirectionSchema,
+      })
+      .strict()),
     insights: z.array(InsightSchema),
     patterns: z.array(DetectedPatternSchema),
     topPerforming: z

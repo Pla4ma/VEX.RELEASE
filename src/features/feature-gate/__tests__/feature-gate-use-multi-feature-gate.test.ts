@@ -44,7 +44,7 @@ describe('useMultiFeatureGate', () => {
     );
   }
 
-  it('returns isAvailable true when all features available (requireAll=true)', () => {
+  it('returns isAvailable true when all features available (requireAll=true)', async () => {
     setupMultiGate(
       {
         challenges: makeFeatureAccess({ key: 'challenges', isUnlocked: true }),
@@ -56,7 +56,7 @@ describe('useMultiFeatureGate', () => {
       },
     );
 
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useMultiFeatureGate(['challenges', 'achievements']),
     );
     expect(result.current.isAvailable).toBe(true);
@@ -67,7 +67,7 @@ describe('useMultiFeatureGate', () => {
     expect(result.current.unavailableFeatures).toEqual([]);
   });
 
-  it('returns isAvailable false when one feature is locked (requireAll=true)', () => {
+  it('returns isAvailable false when one feature is locked (requireAll=true)', async () => {
     setupMultiGate(
       {
         challenges: makeFeatureAccess({ key: 'challenges', isUnlocked: true }),
@@ -79,7 +79,7 @@ describe('useMultiFeatureGate', () => {
       },
     );
 
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useMultiFeatureGate(['challenges', 'achievements']),
     );
     expect(result.current.isAvailable).toBe(false);
@@ -87,7 +87,7 @@ describe('useMultiFeatureGate', () => {
     expect(result.current.unavailableFeatures).toEqual(['achievements']);
   });
 
-  it('returns isAvailable true when any feature available (requireAll=false)', () => {
+  it('returns isAvailable true when any feature available (requireAll=false)', async () => {
     setupMultiGate(
       {
         challenges: makeFeatureAccess({ key: 'challenges', isUnlocked: false }),
@@ -99,7 +99,7 @@ describe('useMultiFeatureGate', () => {
       },
     );
 
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useMultiFeatureGate(['challenges', 'achievements'], {
         requireAll: false,
       }),
@@ -107,7 +107,7 @@ describe('useMultiFeatureGate', () => {
     expect(result.current.isAvailable).toBe(true);
   });
 
-  it('returns isAvailable false when no features available (requireAll=false)', () => {
+  it('returns isAvailable false when no features available (requireAll=false)', async () => {
     setupMultiGate(
       {
         challenges: makeFeatureAccess({ key: 'challenges', isUnlocked: false }),
@@ -119,7 +119,7 @@ describe('useMultiFeatureGate', () => {
       },
     );
 
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useMultiFeatureGate(['challenges', 'achievements'], {
         requireAll: false,
       }),
@@ -127,16 +127,16 @@ describe('useMultiFeatureGate', () => {
     expect(result.current.isAvailable).toBe(false);
   });
 
-  it('handles empty feature list', () => {
+  it('handles empty feature list', async () => {
     setupMultiGate({}, {});
 
-    const { result } = renderHook(() => useMultiFeatureGate([]));
+    const { result } = await renderHook(() => useMultiFeatureGate([]));
     // [].every(...) === true (vacuously true)
     expect(result.current.isAvailable).toBe(true);
     expect(result.current.featureStates).toEqual([]);
   });
 
-  it('correctly categorizes available and unavailable features', () => {
+  it('correctly categorizes available and unavailable features', async () => {
     setupMultiGate(
       {
         challenges: makeFeatureAccess({ key: 'challenges', isUnlocked: true }),
@@ -150,7 +150,7 @@ describe('useMultiFeatureGate', () => {
       },
     );
 
-    const { result } = renderHook(() =>
+    const { result } = await renderHook(() =>
       useMultiFeatureGate(['challenges', 'achievements', 'rankings']),
     );
     expect(result.current.availableFeatures).toEqual(['challenges', 'rankings']);

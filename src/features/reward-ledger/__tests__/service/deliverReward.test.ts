@@ -11,7 +11,7 @@ describe('reward-ledger service', () => {
   });
 
   describe('deliverReward', () => {
-    const ledgerId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+    const ledgerId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
     it('fetches ledger and updates status to delivered (currency disabled)', async () => {
       (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(

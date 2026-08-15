@@ -11,7 +11,6 @@ import { HomeContent } from '../components/HomeContent';
 import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
 import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
 import { GlassScreen } from '../../../components/glass/GlassScreen';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
 import { useInterventionVisibility } from '../hooks/useInterventionVisibility';

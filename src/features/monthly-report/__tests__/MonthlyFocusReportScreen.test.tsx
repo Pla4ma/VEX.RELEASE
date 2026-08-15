@@ -117,35 +117,35 @@ xdescribe('MonthlyFocusReportScreen', () => {
     jest.clearAllMocks();
   });
 
-  it('renders loading skeleton when pending', () => {
+  it('renders loading skeleton when pending', async () => {
     setupMocks({ isPending: true });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByTestId('report-skeleton')).toBeTruthy();
   });
 
-  it('renders error state with retry button', () => {
+  it('renders error state with retry button', async () => {
     setupMocks({ isError: true, error: new Error('Network error') });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText('Report Unavailable')).toBeTruthy();
     expect(screen.getByText('Try Again')).toBeTruthy();
   });
 
-  it('renders empty state when no report', () => {
+  it('renders empty state when no report', async () => {
     setupMocks({ report: null });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText('No Sessions Yet')).toBeTruthy();
     expect(screen.getByText('Start a session')).toBeTruthy();
   });
 
-  it('renders offline banner when offline', () => {
+  it('renders offline banner when offline', async () => {
     setupMocks({ isOffline: true });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText(/offline/i)).toBeTruthy();
   });
 
-  it('renders success state with report data', () => {
+  it('renders success state with report data', async () => {
     setupMocks({});
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText('Monthly Focus Report')).toBeTruthy();
     expect(screen.getByText('650')).toBeTruthy();
     expect(screen.getByText('+50 from month start')).toBeTruthy();
@@ -153,25 +153,25 @@ xdescribe('MonthlyFocusReportScreen', () => {
     expect(screen.getByText('A')).toBeTruthy();
   });
 
-  it('shows premium content for premium users', () => {
+  it('shows premium content for premium users', async () => {
     setupMocks({ isPremium: true });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText('Best Focus Window')).toBeTruthy();
     expect(screen.getByText('Morning (9:00 AM)')).toBeTruthy();
     expect(screen.getByText('Consistency')).toBeTruthy();
     expect(screen.getByText('Recency')).toBeTruthy();
   });
 
-  it('shows premium lock for free users', () => {
+  it('shows premium lock for free users', async () => {
     setupMocks({ isPremium: false });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(screen.getByText('Premium insight available')).toBeTruthy();
     expect(screen.getByText('Unlock with Premium')).toBeTruthy();
   });
 
-  it('free users see blurred premium sections', () => {
+  it('free users see blurred premium sections', async () => {
     setupMocks({ isPremium: false });
-    render(<MonthlyFocusReportScreen />);
+    await render(<MonthlyFocusReportScreen />);
     expect(
       screen.getByText('Unlock to see your optimal focus time'),
     ).toBeTruthy();

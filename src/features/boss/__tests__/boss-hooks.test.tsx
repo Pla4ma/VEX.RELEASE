@@ -23,7 +23,7 @@ function createWrapper() {
 
 describe('useActiveBoss', () => {
   it('returns null data (archived)', async () => {
-    const { result } = renderHook(() => useActiveBoss(), {
+    const { result } = await renderHook(() => useActiveBoss(), {
       wrapper: createWrapper(),
     });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));

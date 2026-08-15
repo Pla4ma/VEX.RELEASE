@@ -11,7 +11,7 @@ describe('reward-ledger service', () => {
   });
 
   describe('syncPendingRewards', () => {
-    const userId = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+    const userId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 
     it('syncs all pending rewards for a user', async () => {
       (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
@@ -33,7 +33,7 @@ describe('reward-ledger service', () => {
     it('continues syncing after individual delivery failure', async () => {
       const secondRecord = {
         ...mockRecord,
-        id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
+        id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
         idempotencyKey: 'evt_002',
       };
       (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
@@ -51,7 +51,7 @@ describe('reward-ledger service', () => {
       });
       const results = await syncPendingRewards(userId);
       expect(results).toHaveLength(1);
-      expect(results[0]!.id).toBe('cccccccc-cccc-cccc-cccc-cccccccccccc');
+      expect(results[0]!.id).toBe('cccccccc-cccc-4ccc-8ccc-cccccccccccc');
     });
 
     it('returns empty array when no pending rewards', async () => {

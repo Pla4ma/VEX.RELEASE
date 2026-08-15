@@ -110,7 +110,7 @@ describe('ai-quota-types', () => {
   describe('QuotaUsageRecordSchema', () => {
     it('accepts valid usage record', () => {
       const result = QuotaUsageRecordSchema.safeParse({
-        userId: '00000000-0000-0000-0000-000000000001',
+        userId: '00000000-0000-4000-8000-000000000001',
         category: 'coach_message',
         timestamp: Date.now(),
         tokenCount: 500,

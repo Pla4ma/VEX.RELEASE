@@ -4,8 +4,7 @@
  * Builds the view model for the session completion story screen.
  */
 
-import { CompletionLedgerSchema, type CompletionLedger, type SessionSummary } from './schemas';
-import { SessionMode } from '../../session/modes';
+import { type CompletionLedger, type SessionSummary } from './schemas';
 
 function toTitleCase(s: string): string {
   if (!s) return '';

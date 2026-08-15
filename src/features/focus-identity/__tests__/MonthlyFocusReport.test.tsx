@@ -60,9 +60,9 @@ describe('MonthlyFocusReport', () => {
     jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction' });
   });
 
-  it('renders loading skeleton while the report is pending', () => {
+  it('renders loading skeleton while the report is pending', async () => {
     mockReportState({ data: null, error: null, status: 'pending' });
-    const { toJSON } = render(
+    const { toJSON } = await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
@@ -70,7 +70,7 @@ describe('MonthlyFocusReport', () => {
     expect(screen.queryByText('No Report Available')).toBeNull();
   });
 
-  it('renders error state with retry button', () => {
+  it('renders error state with retry button', async () => {
     const mockRefresh = jest.fn();
     mockReportState({
       data: null,
@@ -79,20 +79,20 @@ describe('MonthlyFocusReport', () => {
       refetch: mockRefresh,
     });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
     expect(screen.getByText(/Report Unavailable/)).toBeTruthy();
     expect(screen.getByText('Network error')).toBeTruthy();
-    fireEvent.press(screen.getByText('Try Again'));
+    await fireEvent.press(screen.getByText('Try Again'));
     expect(mockRefresh).toHaveBeenCalled();
   });
 
-  it('renders empty state when no report is available', () => {
+  it('renders empty state when no report is available', async () => {
     mockReportState({ data: null, error: null, status: 'success' });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
@@ -104,10 +104,10 @@ describe('MonthlyFocusReport', () => {
     ).toBeTruthy();
   });
 
-  it('renders report data', () => {
+  it('renders report data', async () => {
     mockReportState({ data: mockReport, error: null, status: 'success' });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
@@ -123,7 +123,7 @@ describe('MonthlyFocusReport', () => {
   it('publishes view event when report loads', async () => {
     mockReportState({ data: mockReport, error: null, status: 'success' });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
@@ -137,14 +137,14 @@ describe('MonthlyFocusReport', () => {
     });
   });
 
-  it('publishes dismiss event when closed', () => {
+  it('publishes dismiss event when closed', async () => {
     mockReportState({ data: mockReport, error: null, status: 'success' });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
-    fireEvent.press(screen.getByText('Close'));
+    await fireEvent.press(screen.getByText('Close'));
     expect(mockPublishDismissed).toHaveBeenCalledWith('user-123', '2025-01');
     expect(mockOnClose).toHaveBeenCalled();
   });
@@ -152,11 +152,11 @@ describe('MonthlyFocusReport', () => {
   it('publishes share event when shared', async () => {
     mockReportState({ data: mockReport, error: null, status: 'success' });
 
-    render(
+    await render(
       <MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />,
     );
 
-    fireEvent.press(screen.getByText('Share Monthly Report'));
+    await fireEvent.press(screen.getByText('Share Monthly Report'));
     await waitFor(() => {
       expect(mockPublishShared).toHaveBeenCalledWith(
         'user-123',

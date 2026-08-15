@@ -98,8 +98,8 @@ describe('SessionGradeCard', () => {
     jest.useRealTimers();
   });
 
-  it('uses the shared haptic wrapper for grade reveal feedback', () => {
-    render(
+  it('uses the shared haptic wrapper for grade reveal feedback', async () => {
+    await render(
       <SessionGradeCard
         durationLabel="25:00 focused"
         gradeColor="white"
@@ -113,7 +113,7 @@ describe('SessionGradeCard', () => {
       />,
     );
 
-    act(() => {
+    await act(() => {
       jest.advanceTimersByTime(1000);
     });
 

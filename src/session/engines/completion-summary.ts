@@ -7,7 +7,6 @@ import type {
 import { resolveSessionMode } from '../modes';
 import type { ScoringEngine } from './ScoringEngine';
 import type { AbandonResult } from './completion-types';
-import { computeCompletionStats } from './completion-stats';
 
 function getBaseIntervalBonus(session: SessionState): number {
   if (session.intervalsCompleted >= 8) {

@@ -28,8 +28,8 @@ export {
 export type { CreateRewardLedgerInput, RewardLedgerRecord };
 
 export const mockRecord: RewardLedgerRecord = {
-  id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-  userId: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+  id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+  userId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
   idempotencyKey: 'evt_session_complete_001',
   rewardType: 'session_bonus',
   amount: 50,
@@ -43,7 +43,7 @@ export const mockRecord: RewardLedgerRecord = {
 };
 
 export const validInput: CreateRewardLedgerInput = {
-  userId: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+  userId: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
   idempotencyKey: 'evt_session_complete_001',
   rewardType: 'session_bonus',
   amount: 50,

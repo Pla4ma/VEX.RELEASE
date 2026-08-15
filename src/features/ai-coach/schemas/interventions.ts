@@ -51,7 +51,7 @@ export const UserResponseSchema = z
       'MUTED',
     ]),
     timestamp: z.number().int().positive(),
-    metadata: z.record(z.unknown()),
+    metadata: z.record(z.string(), z.unknown()),
   })
   .strict();
 
@@ -67,7 +67,7 @@ export const InterventionExecutionSchema = z
     messageId: z.string().uuid().nullable(),
     userResponse: UserResponseSchema.nullable(),
     effectiveness: z.number().min(0).max(1).nullable(),
-    result: z.record(z.unknown()).nullable().optional(),
+    result: z.record(z.string(), z.unknown()).nullable().optional(),
   })
   .strict();
 

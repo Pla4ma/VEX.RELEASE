@@ -7,8 +7,8 @@ jest.mock('../../../session/types', () => ({
   SessionSummarySchema: { parse: (v: unknown) => v },
 }));
 
-const UUID_1 = '00000000-0000-0000-0000-000000000001';
-const UUID_2 = '00000000-0000-0000-0000-000000000002';
+const UUID_1 = '00000000-0000-4000-8000-000000000001';
+const UUID_2 = '00000000-0000-4000-8000-000000000002';
 
 /** Minimal valid SessionSummary for navigation-param tests */
 const MINIMAL_SUMMARY = {

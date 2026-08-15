@@ -13,10 +13,6 @@ import {
   computeFeatureAccess,
   getStage,
   getProductTier,
-  getFeatureAvailability,
-  getFeatureAvailabilityFor,
-  isFeatureAvailableForNavigation,
-  isFeatureAvailableForQueries,
 } from './FeatureFlagService';
 import type {
   UserExperienceStage,

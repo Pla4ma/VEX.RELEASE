@@ -13,8 +13,6 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { springPresets, motionStagger } from '../../../theme/tokens/motion';
 
-import { lightColors } from '@/theme/tokens/colors';
-
 const EASE_CINEMATIC = Easing.bezier(0.16, 1, 0.3, 1);
 const EASE_EDITORIAL = Easing.bezier(0.22, 1, 0.36, 1);
 
@@ -94,4 +92,4 @@ export function VexLetter({
       </Text>
     </Animated.View>
   );
-}
+}

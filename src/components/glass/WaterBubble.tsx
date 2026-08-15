@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, Defs, RadialGradient, Stop, Ellipse, G } from 'react-native-svg';
+import Svg, { Circle, Defs, RadialGradient, Stop, Ellipse } from 'react-native-svg';
 
 interface WaterBubbleProps {
   size?: number;

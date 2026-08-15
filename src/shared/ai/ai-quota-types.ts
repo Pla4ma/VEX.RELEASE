@@ -40,7 +40,7 @@ export type QuotaLimit = z.infer<typeof QuotaLimitSchema>;
 
 export const TierQuotaConfigSchema = z.object({
   tier: UserTierSchema,
-  limits: z.record(AIRequestCategorySchema, QuotaLimitSchema),
+  limits: z.partialRecord(AIRequestCategorySchema, QuotaLimitSchema),
 });
 
 export type TierQuotaConfig = z.infer<typeof TierQuotaConfigSchema>;

@@ -12,9 +12,8 @@ import Animated, {
 import { Text } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { springPresets, timingPresets } from '../../../theme/tokens/motion';
-import { borderRadius } from '../../../theme/tokens/radius';
 
-      
+
 export function UnlockIconBurst({
   icon,
   color,

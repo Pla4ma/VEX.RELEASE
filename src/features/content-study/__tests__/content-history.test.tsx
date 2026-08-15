@@ -73,7 +73,7 @@ describe('useContentHistory', () => {
     const baseWrapper = createWrapper(queryClient);
     const wrapper = ({ children }: { children: React.ReactNode }) => 
       React.createElement(ToastProvider, null, baseWrapper({ children }));
-    const { result } = renderHook(() => useContentHistory(), { wrapper });
+    const { result } = await renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
         expect(result.current.content).toEqual(mockHistory);
@@ -91,7 +91,7 @@ describe('useContentHistory', () => {
     const baseWrapper = createWrapper(queryClient);
     const wrapper = ({ children }: { children: React.ReactNode }) => 
       React.createElement(ToastProvider, null, baseWrapper({ children }));
-    const { result } = renderHook(() => useContentHistory(), { wrapper });
+    const { result } = await renderHook(() => useContentHistory(), { wrapper });
     await waitFor(
       () => {
         expect(result.current.content).toEqual(mockHistory);
@@ -128,7 +128,7 @@ describe('useRateLimit', () => {
     const baseWrapper = createWrapper(queryClient);
     const wrapper = ({ children }: { children: React.ReactNode }) => 
       React.createElement(ToastProvider, null, baseWrapper({ children }));
-    const { result } = renderHook(() => useRateLimit(), { wrapper });
+    const { result } = await renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       await result.current.checkLimit();
     });
@@ -143,7 +143,7 @@ describe('useRateLimit', () => {
     const baseWrapper = createWrapper(queryClient);
     const wrapper = ({ children }: { children: React.ReactNode }) => 
       React.createElement(ToastProvider, null, baseWrapper({ children }));
-    const { result } = renderHook(() => useRateLimit(), { wrapper });
+    const { result } = await renderHook(() => useRateLimit(), { wrapper });
     await act(async () => {
       try {
         await result.current.checkLimit();

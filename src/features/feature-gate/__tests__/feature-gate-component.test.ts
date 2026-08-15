@@ -33,14 +33,14 @@ describe('FeatureGate component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders children when feature is available', () => {
+  it('renders children when feature is available', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: true }),
       { state: 'unlocked' },
     );
 
-    const { getByText } = render(
+    const { getByText } = await render(
       React.createElement(FeatureGate, { feature: 'challenges' },
         React.createElement(Text, null, 'Feature Content'),
       ),
@@ -48,14 +48,14 @@ describe('FeatureGate component', () => {
     expect(getByText('Feature Content')).toBeTruthy();
   });
 
-  it('renders fallback when feature is not available', () => {
+  it('renders fallback when feature is not available', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: false }),
       { state: 'locked', canRenderEntryPoint: false },
     );
 
-    const { getByText } = render(
+    const { getByText } = await render(
       React.createElement(FeatureGate, {
         feature: 'challenges',
         fallback: React.createElement(Text, null, 'Locked Message'),
@@ -64,27 +64,27 @@ describe('FeatureGate component', () => {
     expect(getByText('Locked Message')).toBeTruthy();
   });
 
-  it('renders null when feature not available and no fallback', () => {
+  it('renders null when feature not available and no fallback', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: false }),
       { state: 'locked' },
     );
 
-    const { toJSON } = render(
+    const { toJSON } = await render(
       React.createElement(FeatureGate, { feature: 'challenges' }),
     );
     expect(toJSON()).toBeNull();
   });
 
-  it('passes mode to useFeatureGate hook', () => {
+  it('passes mode to useFeatureGate hook', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: true }),
       { state: 'unlocked', canNavigate: true, canRegisterRoute: true },
     );
 
-    const { getByText } = render(
+    const { getByText } = await render(
       React.createElement(
         FeatureGate,
         { feature: 'challenges', mode: 'navigation' },
@@ -100,7 +100,7 @@ describe('withFeatureGate HOC', () => {
     jest.clearAllMocks();
   });
 
-  it('renders wrapped component when feature is available', () => {
+  it('renders wrapped component when feature is available', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: true }),
@@ -112,11 +112,11 @@ describe('withFeatureGate HOC', () => {
     }
     const Wrapped = withFeatureGate('challenges', TestComponent);
 
-    const { getByText } = render(React.createElement(Wrapped));
+    const { getByText } = await render(React.createElement(Wrapped));
     expect(getByText('Inner')).toBeTruthy();
   });
 
-  it('renders fallback component when feature is not available', () => {
+  it('renders fallback component when feature is not available', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: false }),
@@ -133,11 +133,11 @@ describe('withFeatureGate HOC', () => {
       fallback: FallbackComponent,
     });
 
-    const { getByText } = render(React.createElement(Wrapped));
+    const { getByText } = await render(React.createElement(Wrapped));
     expect(getByText('Fallback')).toBeTruthy();
   });
 
-  it('renders null when feature not available and no fallback HOC', () => {
+  it('renders null when feature not available and no fallback HOC', async () => {
     setupFeatureGate(
       'challenges',
       makeFeatureAccess({ isUnlocked: false }),
@@ -149,7 +149,7 @@ describe('withFeatureGate HOC', () => {
     }
     const Wrapped = withFeatureGate('challenges', TestComponent);
 
-    const { toJSON } = render(React.createElement(Wrapped));
+    const { toJSON } = await render(React.createElement(Wrapped));
     expect(toJSON()).toBeNull();
   });
 });

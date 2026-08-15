@@ -22,7 +22,7 @@ describe('reward-ledger service', () => {
         failed,
       );
       const result = await failReward(
-        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
         'inventory_full',
       );
       expect(result.status).toBe('failed');
@@ -34,7 +34,7 @@ describe('reward-ledger service', () => {
         new Error('db down'),
       );
       await expect(
-        failReward('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'reason'),
+        failReward('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'reason'),
       ).rejects.toThrow('RewardLedgerService failReward failed');
       expect(captureException).toHaveBeenCalled();
     });
@@ -46,7 +46,7 @@ describe('reward-ledger service', () => {
       (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(
         expired,
       );
-      const result = await expireReward('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+      const result = await expireReward('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
       expect(result.status).toBe('expired');
     });
 
@@ -55,7 +55,7 @@ describe('reward-ledger service', () => {
         new Error('db error'),
       );
       await expect(
-        expireReward('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
+        expireReward('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'),
       ).rejects.toThrow('RewardLedgerService expireReward failed');
       expect(captureException).toHaveBeenCalled();
     });

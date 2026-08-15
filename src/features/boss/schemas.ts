@@ -13,7 +13,7 @@ export const BossTemplateSchema = z
   })
   .partial();
 /** @deprecated */
-export const BossEncounterSummarySchema = z.object({}).partial();
+export const BossEncounterSummarySchema = z.record(z.string(), z.unknown());
 
 /** @deprecated */
 export type BossEncounterSummary = z.infer<

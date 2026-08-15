@@ -58,52 +58,52 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 describe('FocusScoreDashboard', () => {
-  it('renders loading state', () => {
+  it('renders loading state', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'pending',
     });
-    const { getByTestId } = render(<FocusScoreDashboard />);
+    const { getByTestId } = await render(<FocusScoreDashboard />);
     expect(getByTestId('focus-score-dashboard-skeleton')).toBeTruthy();
   });
 
-  it('renders error state', () => {
+  it('renders error state', async () => {
     const mockRefetch = jest.fn();
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'error',
       error: { message: 'Test Error' },
       refetch: mockRefetch,
     });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(getByText('Error: Test Error')).toBeTruthy();
     const retryButton = getByText('Retry');
     expect(retryButton).toBeTruthy();
-    fireEvent.press(retryButton);
+    await fireEvent.press(retryButton);
     expect(mockRefetch).toHaveBeenCalledTimes(1);
   });
 
-  it('renders empty state', () => {
+  it('renders empty state', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
       score: null,
     });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(
       getByText('Start your first session to see your Focus Score.'),
     ).toBeTruthy();
   });
 
-  it('renders offline banner when offline', () => {
+  it('renders offline banner when offline', async () => {
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
       score: null,
     });
     const mockUseNetInfo = jest.requireMock('../../../network/useNetInfo').useNetInfo as jest.Mock;
     mockUseNetInfo.mockReturnValue({ isOffline: true });
-    const { getByText } = render(<FocusScoreDashboard />);
+    const { getByText } = await render(<FocusScoreDashboard />);
     expect(getByText('You are offline. Data may be outdated.')).toBeTruthy();
   });
 
-  it('renders success state with all data', () => {
+  it('renders success state with all data', async () => {
     const mockNavigate = jest.fn();
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: 'success',
@@ -115,7 +115,7 @@ describe('FocusScoreDashboard', () => {
     mockUseNetInfo.mockReturnValue({ isOffline: false });
     (useNavigation as jest.Mock).mockReturnValue({ navigate: mockNavigate });
 
-    const { getByText, queryByText } = render(<FocusScoreDashboard />);
+    const { getByText, queryByText } = await render(<FocusScoreDashboard />);
     expect(getByText('750')).toBeTruthy();
     expect(getByText('Elite')).toBeTruthy();
     expect(getByText('+10 since last session')).toBeTruthy();
@@ -131,7 +131,7 @@ describe('FocusScoreDashboard', () => {
     expect(getByText('View Monthly Report')).toBeTruthy();
     expect(queryByText('Updating...')).toBeNull();
 
-    fireEvent.press(getByText('View Monthly Report'));
+    await fireEvent.press(getByText('View Monthly Report'));
     expect(mockNavigate).toHaveBeenCalledWith('Analytics', {
       month: new Date().toISOString().slice(0, 7),
     });

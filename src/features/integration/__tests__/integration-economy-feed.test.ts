@@ -33,16 +33,16 @@ describe('integration', () => {
       unsub();
     });
 
-    it('ignores economy:transaction with null event', () => {
+    it('ignores economy:transaction with null event', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', null);
+      await fireEvent('economy:transaction', null);
       expect(mockEventBus.eventBus.publish).not.toHaveBeenCalled();
       unsub();
     });
 
-    it('ignores economy:transaction with empty userId', () => {
+    it('ignores economy:transaction with empty userId', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: '',
         currency: 'COINS',
         type: 'earn',
@@ -53,9 +53,9 @@ describe('integration', () => {
       unsub();
     });
 
-    it('publishes challenge progress on positive transaction', () => {
+    it('publishes challenge progress on positive transaction', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: 'u1',
         currency: 'COINS',
         type: 'earn',
@@ -78,9 +78,9 @@ describe('integration', () => {
       });
     });
 
-    it('publishes social activity for large transactions (>= 1000)', () => {
+    it('publishes social activity for large transactions (>= 1000)', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: 'u1',
         currency: 'COINS',
         type: 'earn',
@@ -103,9 +103,9 @@ describe('integration', () => {
       });
     });
 
-    it('publishes BIG_SPEND for large negative transactions', () => {
+    it('publishes BIG_SPEND for large negative transactions', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: 'u1',
         currency: 'COINS',
         type: 'spend',
@@ -127,9 +127,9 @@ describe('integration', () => {
       });
     });
 
-    it('publishes progression:add_xp for positive XP transaction', () => {
+    it('publishes progression:add_xp for positive XP transaction', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: 'u1',
         currency: 'XP',
         type: 'earn',
@@ -148,9 +148,9 @@ describe('integration', () => {
       });
     });
 
-    it('does NOT publish progression:add_xp for non-XP currency', () => {
+    it('does NOT publish progression:add_xp for non-XP currency', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:transaction', {
+      await fireEvent('economy:transaction', {
         userId: 'u1',
         currency: 'COINS',
         type: 'earn',
@@ -169,9 +169,9 @@ describe('integration', () => {
       });
     });
 
-    it('ignores economy:purchase with null or missing userId', () => {
+    it('ignores economy:purchase with null or missing userId', async () => {
       const unsub = initializeEconomyFeedIntegration();
-      fireEvent('economy:purchase', null);
+      await fireEvent('economy:purchase', null);
       expect(mockEventBus.eventBus.publish).not.toHaveBeenCalled();
       unsub();
     });

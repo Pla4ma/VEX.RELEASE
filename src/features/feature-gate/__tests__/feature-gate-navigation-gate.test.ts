@@ -26,9 +26,14 @@ jest.mock('../../../components/primitives/Box', () => ({
 jest.mock('../../../components/primitives/Text', () => ({
   Text: 'Text',
 }));
-jest.mock('../../../components/primitives/Button', () => ({
-  Button: 'Button',
-}));
+jest.mock('../../../components/primitives/Button', () => {
+  const ReactRuntime = require('react');
+  const { Text } = require('react-native');
+  return {
+    Button: ({ children }: { children?: React.ReactNode }) =>
+      ReactRuntime.createElement(Text, null, children),
+  };
+});
 
 jest.mock('../../../theme/tokens/sizing', () => ({
   sizing: { width: { xl: 400 }, icon: { '2xl': 32 } },
@@ -43,8 +48,8 @@ import { NavigationGate } from '../NavigationGate';
 // ── NavigationGate ─────────────────────────────────────────────────
 
 describe('NavigationGate component', () => {
-  it('renders the feature not available message', () => {
-    const { getByText } = render(
+  it('renders the feature not available message', async () => {
+    const { getByText } = await render(
       React.createElement(NavigationGate, {
         featureName: 'Duels',
         featureReason: 'currently disabled',
@@ -54,8 +59,8 @@ describe('NavigationGate component', () => {
     expect(getByText(/Duels is currently disabled/)).toBeTruthy();
   });
 
-  it('renders default suggested action button', () => {
-    const tree = render(
+  it('renders default suggested action button', async () => {
+    const tree = await render(
       React.createElement(NavigationGate, {
         featureName: 'Duels',
         featureReason: 'archived',
@@ -67,8 +72,8 @@ describe('NavigationGate component', () => {
     expect(treeStr).toContain('Return to Home');
   });
 
-  it('renders custom suggested action', () => {
-    const tree = render(
+  it('renders custom suggested action', async () => {
+    const tree = await render(
       React.createElement(NavigationGate, {
         featureName: 'Duels',
         featureReason: 'archived',
