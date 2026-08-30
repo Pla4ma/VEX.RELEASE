@@ -5,8 +5,7 @@ import {
   type Lane,
   type LaneProfile,
   type ResolveInitialLaneInput,
-} from '../../../features/lane-engine/hooks';
-import type { MotivationStyle } from '../../../features/lane-engine/hooks';
+ MotivationStyle } from '../../../features/lane-engine/hooks';
 
 function normalizeGoal(goal: string): ResolveInitialLaneInput['primaryGoal'] {
   switch (goal) {

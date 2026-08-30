@@ -6,11 +6,10 @@ import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import type { HomeController } from '../hooks/home-controller-types';
 import {
   HomeExperiencePrelude,
-} from '../../../features/home-experience/components/HomeExperiencePrelude';
+ useHomeExperienceModel } from '../../../features/home-experience/components/HomeExperiencePrelude';
 import type { HomeSurfaceMap } from '../../../features/home-experience/components/HomeExperiencePrelude';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
-import { useHomeExperienceModel } from '../../../features/home-experience/components/HomeExperiencePrelude';
 import { type } from '../../reference-ui/referenceTokens';
 
 function cardPressStyle(pressed: boolean) {

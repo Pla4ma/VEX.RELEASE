@@ -2,24 +2,15 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
 import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
-import { ReferenceCard } from '../../reference-ui/ReferenceCard';
-import { ref, type } from '../../reference-ui/referenceTokens';
+import { VexSurface } from '../../../shared/ui/vex/VexSurface';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-function cardPressStyle(pressed: boolean) {
-  return {
-    opacity: pressed ? 0.9 : 1,
-    transform: [{ scale: pressed ? 0.985 : 1 }],
-  } as const;
-}
 
 interface HomeDailyCardsProps {
   controller: HomeController;
@@ -28,105 +19,29 @@ interface HomeDailyCardsProps {
   includeCoachCard?: boolean;
 }
 
-export function HomeDailyCards({
-  controller: _controller,
-  onStartSession,
-  includeDailyFocus = true,
-  includeCoachCard = true,
-}: HomeDailyCardsProps): React.ReactNode {
+export function HomeDailyCards({ onStartSession, includeDailyFocus = true, includeCoachCard = true }: HomeDailyCardsProps): React.JSX.Element {
   const navigation = useNavigation<Nav>();
+  const { theme } = useTheme();
   return (
     <>
       {includeDailyFocus ? (
-        <Pressable
-          accessibilityHint="Resume your project session"
-          accessibilityLabel="Daily focus card"
-          accessibilityRole="button"
-          onPress={onStartSession}
-          style={({ pressed }) => cardPressStyle(pressed)}
-        >
-          <ReferenceCard glow showAsset={false}>
-            <View style={{ zIndex: 2 }}>
-              <Text style={type.kicker}>DAILY FOCUS</Text>
-              <Text
-                style={[
-                  type.hero,
-                  {
-                    fontFamily: 'Urbanist_900Black',
-                    letterSpacing: 0,
-                    marginTop: 8,
-                    maxWidth: 260,
-                  },
-                ]}
-              >
-                Start one clean block.
-              </Text>
-              <Text style={[type.body, { marginTop: 6, maxWidth: 260 }]}>
-                VEX keeps the next move saved. No dashboard loop.
-              </Text>
-              <View style={{ flexDirection: 'row', gap: 8, marginTop: 10 }}>
-                <Text style={[type.body, { color: ref.mintDark }]}>
-                  Adaptive
-                </Text>
-                <Text style={[type.body, { color: ref.mintDark }]}>
-                  Project Work
-                </Text>
-              </View>
-              <View style={{ marginTop: 16 }}>
-                <Text style={type.title}>First contract</Text>
-                <Text style={[type.body, { marginTop: 4 }]}>
-                  30 minutes, one clean start.
-                </Text>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    gap: 12,
-                    marginTop: 12,
-                  }}
-                >
-                  <LiquidButton
-                    accessibilityHint="Resume your project session"
-                    accessibilityLabel="Resume project"
-                    label="Resume project"
-                    onPress={onStartSession}
-                    rightIcon={
-                      <Icon color={ref.white} name="arrowRight" size="sm" />
-                    }
-                    size="md"
-                    variant="fire"
-                  />
-                  <Text style={[type.body, { fontWeight: '800' }]}>
-                    ~30 min
-                  </Text>
-                </View>
-              </View>
+        <Pressable accessibilityHint="Resume your project session" accessibilityLabel="Daily focus card" accessibilityRole="button" onPress={onStartSession} style={({ pressed }) => ({ marginBottom: theme.spacing[4], opacity: pressed ? 0.84 : 1, transform: [{ scale: pressed ? 0.985 : 1 }] })}>
+          <VexSurface tone="hero" style={{ padding: theme.spacing[5] }}>
+            <Text color={theme.colors.primary[500]} variant="label">Daily focus</Text>
+            <Text variant="h2" style={{ marginTop: theme.spacing[3] }}>Start one clean block.</Text>
+            <Text color="text.secondary" variant="bodyLarge" style={{ marginTop: theme.spacing[2] }}>VEX keeps the next move saved. No dashboard loop.</Text>
+            <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[5] }}>
+              <View style={{ gap: theme.spacing[1] }}><Text color="text.tertiary" variant="caption">First contract</Text><Text variant="body">30 minutes, one clean start.</Text></View>
+              <LiquidButton accessibilityHint="Resume your project session" accessibilityLabel="Resume project" label="Resume" onPress={onStartSession} rightIcon={<Icon color={theme.colors.text.inverse} name="arrowRight" size="sm" />} size="sm" variant="primary" />
             </View>
-          </ReferenceCard>
+          </VexSurface>
         </Pressable>
       ) : null}
-
       {includeCoachCard ? (
-        <Pressable
-          accessibilityHint="Open the AI coach"
-          accessibilityLabel="AI Coach card"
-          accessibilityRole="button"
-          onPress={() => navigateToMainStackScreen(navigation, 'AICoach')}
-          style={({ pressed }) => cardPressStyle(pressed)}
-        >
-          <ReferenceCard accent="fire" showAsset={false}>
-            <View
-              style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={type.title}>AI Coach</Text>
-                <Text style={type.body}>
-                  You built real momentum. Protect this block.
-                </Text>
-              </View>
-              <Icon color={ref.muted} name="chevronRight" size="sm" />
-            </View>
-          </ReferenceCard>
+        <Pressable accessibilityHint="Open the AI coach" accessibilityLabel="AI Coach card" accessibilityRole="button" onPress={() => navigation.navigate('AICoach')} style={({ pressed }) => ({ opacity: pressed ? 0.84 : 1 })}>
+          <VexSurface tone="quiet" style={{ padding: theme.spacing[4] }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><View style={{ flex: 1, gap: theme.spacing[1] }}><Text variant="h4">AI Coach</Text><Text color="text.secondary" variant="bodySmall">You built real momentum. Protect this block.</Text></View><Text style={{ color: theme.colors.primary[500], fontSize: theme.typography.heading.h4.fontSize }}>→</Text></View>
+          </VexSurface>
         </Pressable>
       ) : null}
     </>

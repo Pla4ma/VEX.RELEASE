@@ -1,7 +1,7 @@
 import React, { Component, type ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import * as Sentry from '@sentry/react-native';
-
+import { createDebugger } from '../../utils/debug';
 interface CrashColors {
   background: string;
   border: string;
@@ -21,7 +21,7 @@ interface RootCrashBoundaryState {
   error: Error | null;
   resetKey: string;
 }
-
+const debug = createDebugger('navigation:root-crash');
 export class RootCrashBoundary extends Component<
   RootCrashBoundaryProps,
   RootCrashBoundaryState
@@ -48,6 +48,7 @@ export class RootCrashBoundary extends Component<
   }
 
   componentDidCatch(error: Error): void {
+    debug.error('Root navigation render failed', error);
     Sentry.captureException(error, {
       tags: { feature: 'navigation', operation: 'root-render' },
     });

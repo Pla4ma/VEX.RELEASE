@@ -1,178 +1,65 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { GlassScreen } from '../../components/glass/GlassScreen';
+import { Text } from '../../components/primitives/Text';
 import { useFocusScoreDashboardModel } from '../../features/focus-identity/hooks-focus-score';
 import { useAuthStore } from '../../store';
-import { useOnboardingStore } from '../../features/onboarding/store';
+import { useFeatureAccess } from '../../features/liveops-config';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { useFeatureAccess } from '../../features/liveops-config';
-import { resolveMonthlyReportAction } from './progress-actions';
 import { ProgressHeader } from './components/ProgressHeader';
-import { BaselineSignalCard } from './components/BaselineSignalCard';
-import { ProgressStatCards } from './components/ProgressStatCards';
 import { PlanWorkspace } from '../plan/components/PlanWorkspace';
-import { Text } from '../../components/primitives/Text';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
-import { navigateToRootScreen, navigateToMainStackScreen } from '../../navigation/navigation-helpers';
+import { ProgressOverview } from './components/ProgressOverview';
+import { useTheme } from '../../theme/ThemeContext';
+import { VexBackdrop } from '../../shared/ui/vex/VexBackdrop';
+
+const PROGRESS_BACKGROUND = require('../../../assets/vex/progress-background.png');
 
 type ProgressMode = 'overview' | 'plan';
 
-function ProgressScreen(): React.ReactNode {
+function ProgressScreen(): React.JSX.Element {
+  const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const disclosure = useFeatureAccess();
-  const motivationProfile = useOnboardingStore(
-    (state) => state.motivationProfile,
-  );
   const userId = useAuthStore((state) => state.user?.id ?? '');
-  const focusDashboardModel = useFocusScoreDashboardModel(userId || null, 30);
-  const canOpenStudy = disclosure.features.content_study.isUnlocked;
-  const completedSessions = disclosure.inputs.totalCompletedSessions;
-  const monthlyReportAction = resolveMonthlyReportAction(
-    disclosure.features.premium_paywall,
-  );
+  const focusModel = useFocusScoreDashboardModel(userId || null, 30);
   const [mode, setMode] = useState<ProgressMode>('overview');
-
-  const selectOverview = useCallback((): void => setMode('overview'), []);
-  const selectPlan = useCallback((): void => setMode('plan'), []);
-
-  const openSession = (): void => {
-    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} });
-  };
-
-  const openStudy = (): void => {
-    if (canOpenStudy) {
-      navigateToMainStackScreen(navigation, 'ContentStudy');
-      return;
-    }
-    openSession();
-  };
-
-  const openFocusScore = (): void => {
-    navigateToRootScreen(navigation, 'FocusScoreDashboard');
-  };
-
-  const openAchievements = (): void => {
-    navigateToMainStackScreen(navigation, 'Achievements');
-  };
-
-  const openMonthlyReport = (): void => {
-    if (monthlyReportAction === 'paywall') {
-      navigateToRootScreen(navigation, 'Paywall', {
-        gatedFeature: 'monthly_focus_report',
-        source: 'focus-monthly-report',
-      });
-      return;
-    }
-    openSession();
-  };
-
-  const score = focusDashboardModel.current?.currentScore ?? 82;
+  const completedSessions = disclosure.inputs.totalCompletedSessions;
 
   return (
-    <GlassScreen showAura variant="progress">
+    <GlassScreen showAura={false} variant="progress">
+      <VexBackdrop source={PROGRESS_BACKGROUND} />
       <ScrollView
-        contentContainerStyle={{
-          gap: 12,
-          paddingBottom: insets.bottom + 200,
-          paddingHorizontal: 12,
-          paddingTop: 8,
-        }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + theme.spacing[12], paddingHorizontal: theme.spacing[6], paddingTop: theme.spacing[4] }}
         showsVerticalScrollIndicator={false}
       >
-        <ProgressHeader
-          onOpenNotifications={() => navigateToMainStackScreen(navigation, 'Notifications')}
-        />
-
-        <View
-          style={{
-            backgroundColor: vexLightGlass.glass.fill,
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: 24,
-            borderWidth: 1,
-            flexDirection: 'row',
-            padding: 5,
-          }}
-        >
-          <Pressable
-            accessibilityHint="Show focus score and progression"
-            accessibilityLabel="Progress overview tab"
-            accessibilityRole="button"
-            accessibilityState={{ selected: mode === 'overview' }}
-            onPress={selectOverview}
-            style={({ pressed }) => ({
-              alignItems: 'center',
-              backgroundColor: mode === 'overview' ? vexLightGlass.mint[100] : vexLightGlass.background.transparent,
-              borderRadius: 19,
-              flex: 1,
-              minHeight: 44,
-              justifyContent: 'center',
-              opacity: pressed ? 0.86 : 1,
-            })}
-          >
-            <Text
-              style={{
-                color: mode === 'overview' ? vexLightGlass.mint[800] : vexLightGlass.text.tertiary,
-                fontSize: 13,
-                fontWeight: '800',
-              }}
-            >
-              Overview
-            </Text>
-          </Pressable>
-          <Pressable
-            accessibilityHint="Show today's plan, week, projects, and study"
-            accessibilityLabel="Plan tab"
-            accessibilityRole="button"
-            accessibilityState={{ selected: mode === 'plan' }}
-            onPress={selectPlan}
-            style={({ pressed }) => ({
-              alignItems: 'center',
-              backgroundColor: mode === 'plan' ? vexLightGlass.mint[100] : vexLightGlass.background.transparent,
-              borderRadius: 19,
-              flex: 1,
-              minHeight: 44,
-              justifyContent: 'center',
-              opacity: pressed ? 0.86 : 1,
-            })}
-          >
-            <Text
-              style={{
-                color: mode === 'plan' ? vexLightGlass.mint[800] : vexLightGlass.text.tertiary,
-                fontSize: 13,
-                fontWeight: '800',
-              }}
-            >
-              Plan
-            </Text>
-          </Pressable>
+        <ProgressHeader onOpenNotifications={() => navigation.navigate('Notifications')} />
+        <View style={{ borderBottomColor: theme.colors.primary[800], borderBottomWidth: 1, flexDirection: 'row', marginBottom: theme.spacing[5], paddingBottom: theme.spacing[1] }}>
+          {(['overview', 'plan'] as const).map((item) => {
+            const selected = mode === item;
+            return (
+              <Pressable
+                accessibilityHint={item === 'overview' ? 'Show your focus record' : 'Show your current plan'}
+                accessibilityLabel={`${item} tab`}
+                accessibilityRole="tab"
+                accessibilityState={{ selected }}
+                key={item}
+                onPress={() => setMode(item)}
+                style={({ pressed }) => ({ alignItems: 'center', backgroundColor: selected ? theme.colors.primary[100] : 'transparent', borderRadius: selected ? theme.borderRadius.md : 0, flex: 1, justifyContent: 'center', minHeight: 44, opacity: pressed ? 0.8 : 1 })}
+              >
+                <Text style={{ color: selected ? theme.colors.primary[700] : theme.colors.text.tertiary, fontWeight: theme.fontWeights.bold, textTransform: 'uppercase', letterSpacing: 1.4 }} variant="label">{item}</Text>
+              </Pressable>
+            );
+          })}
         </View>
-
         {mode === 'overview' ? (
-          <>
-            {completedSessions === 0 ? <BaselineSignalCard /> : null}
-
-            <ProgressStatCards
-              canOpenStudy={canOpenStudy}
-              completedSessions={completedSessions}
-              motivationProfile={motivationProfile}
-              onOpenAchievements={openAchievements}
-              onOpenFocusScore={openFocusScore}
-              onOpenMonthlyReport={openMonthlyReport}
-              onOpenSession={openSession}
-              onOpenStudy={openStudy}
-              score={score}
-            />
-          </>
-        ) : (
-          <PlanWorkspace />
-        )}
+          <ProgressOverview completedSessions={completedSessions} focusModel={focusModel} />
+        ) : <PlanWorkspace />}
       </ScrollView>
     </GlassScreen>
   );

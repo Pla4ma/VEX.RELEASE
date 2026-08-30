@@ -138,8 +138,8 @@ export function computeCoachInteractions(controller: HomeController): number {
   let count = 0;
   if (controller.primaryRecommendation) {count += 1;}
   const recsData = controller.recommendationsQuery?.data as
-    | { items?: Array<{ status?: string }> }
-    | Array<{ status?: string }>
+    | { items?: { status?: string }[] }
+    | { status?: string }[]
     | undefined;
   if (recsData) {
     const items = Array.isArray(recsData) ? recsData : (recsData.items ?? []);
@@ -169,7 +169,7 @@ export function computeComebackSessions(controller: HomeController): number {
     | undefined;
   if (!comebackData?.streakRestoreEligible) {return 0;}
   const history = (
-    controller.historyQuery as { history: Array<{ status: string }> }
+    controller.historyQuery as { history: { status: string }[] }
   ).history;
   return history?.filter((e) => e.status === 'COMPLETED').length ?? 0;
 }

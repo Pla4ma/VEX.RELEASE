@@ -1,148 +1,81 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { GlassCard } from '../../../components/glass/GlassCard';
-import { RealisticModeOrb } from '../../../components/glass/RealisticModeOrb';
-import { VexAssetImage } from '../../../components/glass/VexAssetImage';
-import { LiquidButton } from '../../../components/glass/LiquidButton';
-import { Icon } from '../../../icons/components/Icon';
 import type { FocusModeCard } from '../../../features/session-start/schemas';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-
-        
-function formatMinutes(seconds: number): string {
-  return `${Math.round(seconds / 60)} min`;
-}
-
-function getOrbMode(mode: string): 'sprint' | 'light' | 'study' | 'recovery' {
-  if (mode.startsWith('light-focus')) {
-    return 'light';
-  }
-  if (mode.startsWith('study')) {
-    return 'study';
-  }
-  if (mode.startsWith('recovery')) {
-    return 'recovery';
-  }
-  return 'sprint';
-}
+import { useTheme } from '../../../theme/ThemeContext';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
 interface FocusModeCardViewProps {
   card: FocusModeCard;
   onPress: () => void;
 }
 
+const SPRINT_ART: ImageSourcePropType = require('../../../../assets/vex/focus-sprint-icon.png');
+const MODE_ART: Record<string, ImageSourcePropType> = {
+  recovery: require('../../../../assets/vex/focus-recovery-icon.png'),
+  sprint: SPRINT_ART,
+  study: require('../../../../assets/vex/focus-study-icon.png'),
+  'light-focus': require('../../../../assets/vex/focus-light-icon.png'),
+};
+
+function getModeArt(cardId: string): ImageSourcePropType {
+  const mode = cardId.split('-')[0] ?? 'sprint';
+  return MODE_ART[mode] ?? SPRINT_ART;
+}
+
+function getModeDescription(card: FocusModeCard): string {
+  if (card.mode === 'SPRINT') return 'High intensity. Short duration.';
+  if (card.mode === 'LIGHT_FOCUS') return 'Sustained attention. Balanced pace.';
+  if (card.mode === 'STUDY') return 'Deep work. Longer blocks.';
+  return 'Restore clarity. Reset the system.';
+}
+
 export function FocusModeCardView({
   card,
   onPress,
-}: FocusModeCardViewProps): React.ReactNode {
-  const isPrimary = card.id === 'sprint-15';
-  const orbMode = getOrbMode(card.id);
+}: FocusModeCardViewProps): React.JSX.Element {
+  const { theme } = useTheme();
+  const isPrimary = card.mode === 'SPRINT';
+  const accentColor = card.mode === 'STUDY' ? theme.colors.semantic.secondary : theme.colors.semantic.primary;
 
   return (
-    <View style={{ marginBottom: 8 }}>
-      <GlassCard
-        glowMint={isPrimary}
-        padding={16}
-        radius={22}
-        variant={isPrimary ? 'premium' : 'default'}
-      >
-        {isPrimary ? (
-          <View
-            pointerEvents="none"
-            style={{
-              opacity: 0.34,
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              zIndex: 0,
-            }}
-          >
-            <VexAssetImage name="orangePrism" opacity={0.72} size={38} />
+    <Pressable
+      accessibilityHint={card.accessibilityHint}
+      accessibilityLabel={card.accessibilityLabel}
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => ({
+        marginBottom: theme.spacing[3],
+        opacity: pressed ? 0.82 : 1,
+        transform: [{ scale: pressed ? 0.985 : 1 }],
+        ...getMinTouchTargetStyle(),
+      })}
+    >
+      <View style={{ backgroundColor: theme.colors.background.overlay, borderColor: isPrimary ? theme.colors.semantic.primary : theme.colors.border.DEFAULT, borderRadius: theme.borderRadius.xl, borderWidth: 1, flexDirection: 'row', minHeight: theme.spacing[20], overflow: 'hidden' }}>
+        <View style={{ alignItems: 'center', borderRightColor: theme.colors.border.light, borderRightWidth: 1, justifyContent: 'center', paddingHorizontal: theme.spacing[3], width: theme.spacing[20] }}>
+          <Image accessibilityIgnoresInvertColors resizeMode="contain" source={getModeArt(card.id)} style={{ height: theme.spacing[16], width: theme.spacing[16] }} />
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: theme.spacing[4], paddingVertical: theme.spacing[3] }}>
+          <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ color: accentColor, fontFamily: theme.fonts.display ?? theme.fonts.primary, fontSize: theme.typography.heading.h5.fontSize, fontWeight: theme.fontWeights.regular, letterSpacing: 2.6, lineHeight: theme.typography.heading.h5.lineHeight }}>{card.title}</Text>
+            <Text style={{ color: accentColor, fontFamily: theme.fonts.display ?? theme.fonts.primary, fontSize: theme.typography.heading.h3.fontSize }}>›</Text>
           </View>
-        ) : null}
-        <View
-          pointerEvents="none"
-          style={{}}
-        />
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            flex: 1,
-            gap: 12,
-            zIndex: 2,
-          }}
-        >
-          <RealisticModeOrb
-            mode={orbMode}
-            size={isPrimary ? 66 : 58}
-          />
-          <View style={{ flex: 1, gap: 4 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[2] }}>
             <Text
               style={{
-                color: vexLightGlass.text.primary,
-                fontSize: 15,
-                fontWeight: '800',
-                letterSpacing: 0,
-                lineHeight: 20,
+                color: theme.colors.text.tertiary,
+                flex: 1,
+                fontSize: theme.typography.body.small.fontSize,
+                lineHeight: theme.typography.body.small.lineHeight,
               }}
+              numberOfLines={2}
             >
-              {card.title}
+              {getModeDescription(card)}
             </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.secondary,
-                fontSize: 12,
-                lineHeight: 16,
-                fontWeight: '400',
-              }}
-            >
-              {card.body}
-            </Text>
+            <Text color={accentColor} variant="label" style={{ marginLeft: theme.spacing[3], minWidth: theme.spacing[16], textAlign: 'right' }}>{Math.round(card.durationSeconds / 60)} min</Text>
           </View>
         </View>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 12,
-            paddingLeft: 66,
-            zIndex: 2,
-          }}
-        >
-          <Text
-            style={{
-              color: vexLightGlass.text.primary,
-              fontSize: 13,
-              fontWeight: '800',
-            }}
-          >
-            {formatMinutes(card.durationSeconds)}
-          </Text>
-          <LiquidButton
-            accessibilityHint={card.accessibilityHint}
-            accessibilityLabel={card.accessibilityLabel}
-            label={card.ctaLabel}
-            onPress={onPress}
-            rightIcon={
-              <Icon
-                color={
-                  isPrimary
-                    ? vexLightGlass.text.inverse
-                    : vexLightGlass.mint[600]
-                }
-                name="arrowRight"
-                size="sm"
-                variant="solid"
-              />
-            }
-            size={isPrimary ? 'md' : 'sm'}
-            variant={isPrimary ? 'fire' : 'outline'}
-          />
-        </View>
-      </GlassCard>
-    </View>
+      </View>
+    </Pressable>
   );
 }

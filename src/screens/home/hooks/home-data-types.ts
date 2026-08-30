@@ -18,7 +18,7 @@ export interface BaseHomeData {
   comebackSessionsCompleted: number;
   unreadNotificationCount: number;
   savedPreview: Record<string, unknown> | null;
-  squadMembersFocusing: number | Array<Record<string, unknown>>;
+  squadMembersFocusing: number | Record<string, unknown>[];
   todaysChallenges: ChallengeItem[];
 }
 

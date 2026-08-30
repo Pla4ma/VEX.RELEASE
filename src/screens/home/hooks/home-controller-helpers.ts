@@ -20,9 +20,7 @@ export function getNextUnlockFeature(
   >,
 ): FeatureKey | null {
   const match = (
-    Object.entries(features) as Array<
-      [FeatureKey, (typeof features)[FeatureKey]]
-    >
+    Object.entries(features) as [FeatureKey, (typeof features)[FeatureKey]][]
   )
     .sort((a, b) => (a[1].priority ?? 0) - (b[1].priority ?? 0))
     .find(([, value]) => !value.isUnlocked && value.isVisible);

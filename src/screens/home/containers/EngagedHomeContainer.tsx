@@ -8,9 +8,8 @@ import {
   useUpdateRecommendationStatus,
 } from '../../../features/ai-coach/hooks/useRecommendationMutations';
 import { useActiveCoachRecommendations } from '../../../features/ai-coach/hooks/useCoachRecommendations';
-import { useActiveStudyPlan } from '../../../features/content-study/runtime-barrel';
+import { useActiveStudyPlan , useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
 import { useComebackState } from '../../../features/streaks/streakQueries';
-import { useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
 import { getNextBestAction } from '../../../features/progression/next-best-action';
 import {
   getFeatureAvailability,

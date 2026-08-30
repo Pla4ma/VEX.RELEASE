@@ -1,13 +1,15 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
-import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Text } from '../../../components/primitives/Text';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { Icon } from '../../../icons/components/Icon';
 import type { PlanItem } from '../../../features/plan/types';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+import { PlanModeEmptyState } from './PlanModeEmptyState';
+
+const PLAN_WEEK_ASSET = require('../../../../assets/vex/plan-week-fire.png');
 
 const dateLabelFormatter = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
@@ -37,6 +39,8 @@ export function PlanWeekView({
   onAddItem,
   onStartSession,
 }: PlanWeekViewProps): React.ReactNode {
+  const { theme } = useTheme();
+
   if (isLoading) {
     return (
       <View style={{ gap: 10 }}>
@@ -61,10 +65,10 @@ export function PlanWeekView({
 
   if (items.length === 0) {
     return (
-      <EmptyState
+      <PlanModeEmptyState
         actionLabel="Add task"
+        asset={PLAN_WEEK_ASSET}
         body="Add one concrete block and VEX will keep the week grounded."
-        iconName="calendar"
         onAction={onAddItem}
         title="Your week has room."
       />
@@ -72,7 +76,7 @@ export function PlanWeekView({
   }
 
   return (
-    <View style={{ gap: 10 }}>
+    <View style={{ gap: theme.spacing[3] }}>
       {items.map((item) => (
         <Pressable
           accessibilityHint="Starts a focus session from this planned item"
@@ -82,37 +86,37 @@ export function PlanWeekView({
           onPress={() => onStartSession(item.id, item.title)}
           style={({ pressed }) => ({
             alignItems: 'center',
-            backgroundColor: pressed ? vexLightGlass.mint[50] : vexLightGlass.glass.fill,
-            borderColor: vexLightGlass.glass.border,
-            borderRadius: 22,
+            backgroundColor: pressed ? theme.colors.primary[900] : theme.colors.background.primary,
+            borderColor: theme.colors.primary[800],
+            borderRadius: theme.borderRadius.xl,
             borderWidth: 1,
             flexDirection: 'row',
-            gap: 12,
-            minHeight: 70,
-            padding: 14,
+            gap: theme.spacing[3],
+            minHeight: theme.spacing[16] + theme.spacing[1],
+            padding: theme.spacing[3],
           })}
         >
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: vexLightGlass.background.mintTrack,
-              borderRadius: 16,
-              height: 44,
+              backgroundColor: theme.colors.primary[950],
+              borderRadius: theme.borderRadius.lg,
+              height: theme.spacing[10],
               justifyContent: 'center',
-              width: 44,
+              width: theme.spacing[10],
             }}
           >
-            <Icon color={vexLightGlass.mint[700]} name="calendar" size="sm" />
+            <Icon color={theme.colors.semantic.primary} name="calendar" size="sm" />
           </View>
-          <View style={{ flex: 1, gap: 3 }}>
-            <Text style={{ color: vexLightGlass.text.primary, fontSize: 15, fontWeight: '800' }}>
+          <View style={{ flex: 1, gap: theme.spacing[1] }}>
+            <Text style={{ color: theme.colors.text.primary, fontWeight: theme.fontWeights.bold }} variant="bodySmall">
               {item.title}
             </Text>
-            <Text style={{ color: vexLightGlass.text.tertiary, fontSize: 12, fontWeight: '600' }}>
+            <Text color="text.tertiary" variant="caption">
               {formatDateLabel(item.dueDate)}
             </Text>
           </View>
-          <Icon color={vexLightGlass.text.tertiary} name="arrowRight" size="sm" />
+          <Icon color={theme.colors.primary[700]} name="arrowRight" size="sm" />
         </Pressable>
       ))}
     </View>

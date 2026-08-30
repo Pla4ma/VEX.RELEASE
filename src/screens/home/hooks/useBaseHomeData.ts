@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { HomeController } from './home-controller-types';
 import type {
-  ChallengeItem,
+
   SessionListItem,
 } from '../../../features/home-spine/components';
 import {
@@ -44,7 +44,7 @@ export function useBaseHomeData(controller: HomeController) {
 
   const recentSessions: SessionListItem[] = useMemo(() => {
     return (
-      controller.historyQuery.history as Array<{
+      controller.historyQuery.history as {
         sessionId: string;
         endedAt?: number;
         startedAt?: number;
@@ -54,7 +54,7 @@ export function useBaseHomeData(controller: HomeController) {
           xpEarned?: number;
           interruptions?: number;
         };
-      }>
+      }[]
     )
       .flatMap((entry) => {
         if (!entry.endedAt || !entry.startedAt) {return [];}
@@ -94,7 +94,7 @@ export function useBaseHomeData(controller: HomeController) {
   const comebackSessionsCompleted = useMemo(() => {
     if (!comebackData?.streakRestoreEligible) {return 0;}
     return (
-      controller.historyQuery.history as Array<{ status: string }>
+      controller.historyQuery.history as { status: string }[]
     ).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const completedSessions = controller.disclosure.inputs.totalCompletedSessions;

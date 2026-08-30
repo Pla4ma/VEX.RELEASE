@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Pressable } from 'react-native';
+import { Image, View, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import type { PlanItem } from '../../../features/plan/types';
 import { getPriorityColor } from '../../../features/plan/service';
+import { useTheme } from '../../../theme/ThemeContext';
+
+const EMPTY_STATE_EMBER = require('../../../../assets/vex/empty-state-ember-core.png');
 
 interface PlanTodayViewProps {
   items: PlanItem[];
@@ -19,6 +21,20 @@ interface PlanTodayViewProps {
   onAddItem: () => void;
   onCompleteItem: (itemId: string) => void;
   onStartSession: (itemId: string, title: string) => void;
+}
+
+function PlanEmptyState({ onAddItem }: { onAddItem: () => void }): React.JSX.Element {
+  const { theme } = useTheme();
+  return (
+    <View style={{ alignItems: 'center', gap: theme.spacing[3], paddingHorizontal: theme.spacing[4], paddingVertical: theme.spacing[10] }}>
+      <Image accessibilityLabel="Ember core" accessibilityIgnoresInvertColors source={EMPTY_STATE_EMBER} style={{ borderRadius: theme.borderRadius.full, height: theme.spacing[24], width: theme.spacing[24] }} />
+      <Text color="text.primary" textAlign="center" variant="h3">Nothing planned for today</Text>
+      <Text color="text.secondary" textAlign="center" variant="bodyLarge">Add a task or goal to get started</Text>
+      <Pressable accessibilityHint="Adds the first item to today’s plan" accessibilityLabel="Add first item" accessibilityRole="button" onPress={onAddItem} style={({ pressed }) => ({ alignItems: 'center', borderColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], opacity: pressed ? theme.opacity[80] : theme.opacity[100], paddingHorizontal: theme.spacing[6] })}>
+        <Text style={{ color: theme.colors.semantic.primary, fontWeight: theme.fontWeights.bold }} variant="button">Add first item</Text>
+      </Pressable>
+    </View>
+  );
 }
 
 
@@ -54,15 +70,7 @@ export function PlanTodayView({
   }
 
   if (items.length === 0) {
-    return (
-      <EmptyState
-        iconName="clipboard"
-        title="Nothing planned for today"
-        body="Add a task or goal to get started"
-        actionLabel="Add first item"
-        onAction={onAddItem}
-      />
-    );
+    return <PlanEmptyState onAddItem={onAddItem} />;
   }
 
   return (

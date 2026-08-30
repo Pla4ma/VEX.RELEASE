@@ -19,9 +19,7 @@ export function ComingSoonSection({
   stage: UserExperienceStage;
   onPress: (feature: FeatureKey) => void;
 }) {
-  const entries = Object.entries(features) as Array<
-    [FeatureKey, FeatureAccessMap[FeatureKey]]
-  >;
+  const entries = Object.entries(features) as [FeatureKey, FeatureAccessMap[FeatureKey]][];
   const teased = entries
     .filter(([, value]) => value.isTeased)
     .sort((a, b) => (a[1]?.priority ?? 0) - (b[1]?.priority ?? 0))

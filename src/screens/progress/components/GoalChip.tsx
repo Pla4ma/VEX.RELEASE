@@ -9,7 +9,8 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { buttonTap } from '../../../utils/haptics';
 import { springPresets } from '../../../theme/tokens/motion';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { useTheme } from '../../../theme/ThemeContext';
+
 
 interface GoalChipProps {
   icon: string;
@@ -26,6 +27,7 @@ export function GoalChip({
   isReducedMotion,
   onPress,
 }: GoalChipProps): React.ReactNode {
+  const { theme } = useTheme();
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -57,38 +59,24 @@ export function GoalChip({
         onPressOut={onPressOut}
         style={({ pressed }) => ({
           alignItems: 'center',
-          backgroundColor: isSelected
-            ? vexLightGlass.mint[500]
-            : vexLightGlass.glass.fill,
-          borderColor: isSelected
-            ? vexLightGlass.mint[400]
-            : vexLightGlass.glass.border,
-          borderRadius: 999,
+          backgroundColor: isSelected ? theme.colors.primary[500] : theme.colors.surface.input,
+          borderColor: isSelected ? theme.colors.primary[400] : theme.colors.border.DEFAULT,
+          borderRadius: theme.borderRadius.full,
           borderWidth: 1,
-          elevation: isSelected ? 3 : 1,
           flexDirection: 'row',
-          gap: 6,
+          gap: theme.spacing[2],
+          minHeight: 44,
           opacity: pressed ? 0.85 : 1,
-          paddingHorizontal: 14,
-          paddingVertical: 10,
-          shadowColor: vexLightGlass.glass.shadow,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: isSelected ? 0.22 : 0.1,
-          shadowRadius: isSelected ? 8 : 4,
+          paddingHorizontal: theme.spacing[4],
+          paddingVertical: theme.spacing[2],
         })}
       >
         <Icon
-          color={isSelected ? vexLightGlass.text.inverse : vexLightGlass.mint[700]}
+          color={isSelected ? theme.colors.text.inverse : theme.colors.primary[700]}
           name={icon}
           size="sm"
         />
-        <Text
-          style={{
-            color: isSelected ? vexLightGlass.text.inverse : vexLightGlass.text.primary,
-            fontSize: 13,
-            fontWeight: isSelected ? '800' : '700',
-          }}
-        >
+        <Text color={isSelected ? 'text.inverse' : 'text.primary'} variant="label">
           {label}
         </Text>
       </Pressable>

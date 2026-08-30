@@ -30,7 +30,6 @@ function useDeferredFeatureHealth(
       return undefined;
     }
 
-    let cancelled = false;
     let cleanup: (() => void) | null = null;
 
     try {
@@ -44,7 +43,6 @@ function useDeferredFeatureHealth(
     }
 
     return () => {
-      cancelled = true;
       cleanup?.();
     };
   }, [enabled, totalCompletedSessions]);

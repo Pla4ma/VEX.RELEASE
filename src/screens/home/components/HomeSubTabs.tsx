@@ -10,7 +10,7 @@ import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 export type HomeSubTab = 'overview' | 'coach' | 'progress';
 
-const tabs: ReadonlyArray<{ id: HomeSubTab; label: string; hint: string }> = [
+const tabs: readonly { id: HomeSubTab; label: string; hint: string }[] = [
   { id: 'overview', label: 'Home', hint: 'Show main daily actions' },
   { id: 'coach', label: 'AI Coach', hint: 'Show coach and agent guidance' },
   { id: 'progress', label: 'Progress', hint: 'Show metrics and unlocks' },

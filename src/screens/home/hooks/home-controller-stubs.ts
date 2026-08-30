@@ -3,7 +3,7 @@ import type { HomeReturnReason } from './useHomeReturnReason';
 import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 
-const stubRef = Symbol('stub-query');
+const _stubRef = Symbol('stub-query');
 
 export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
   const stub: UseQueryResult<TData> = {

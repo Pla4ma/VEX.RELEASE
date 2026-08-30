@@ -1,16 +1,8 @@
-import { useEffect, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
 import { z } from 'zod';
-import {
-  trackInterventionDisplayed,
-  trackInterventionActioned,
-} from '../../../features/ai-coach/analytics';
+import { trackInterventionDisplayed } from '../../../features/ai-coach/analytics';
 import { eventBus } from '../../../events/EventBus';
 import { getOrchestratorHandlesCompletion } from '../../../session/analytics/SessionAnalytics';
-import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks/useActiveIntervention';
 import type { ToastOptions } from '../../../shared/ui/components/Toast';
@@ -21,7 +13,6 @@ const completionToastSummarySchema = z.object({
   focusQuality: z.number().optional(),
 });
 
-type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 export interface InterventionBannerConfig {
   id: string;
@@ -36,25 +27,16 @@ export function useHomeScreenInnerEffects(params: {
   controller: HomeController;
   intervention: ActiveIntervention | null;
   interventionLoading: boolean;
-  dismissIntervention: (id: string) => void;
   showToast: (opts: ToastOptions) => string;
   displayedInterventionIdRef: React.MutableRefObject<string | null>;
   showIntervention: boolean;
   interventionType: string | undefined;
 }): {
   interventionBannerProps: InterventionBannerConfig | null;
-  handleInterventionAction: (active: {
-    id: string;
-    type: string;
-    actionLabel: string;
-    metadata?: Record<string, unknown>;
-  }) => void;
 } {
-  const navigation = useNavigation<Nav>();
   const {
     controller,
     intervention,
-    dismissIntervention,
     showToast,
     displayedInterventionIdRef,
     showIntervention,
@@ -104,37 +86,6 @@ export function useHomeScreenInnerEffects(params: {
     return unsubscribe;
   }, [controller.userId, showToast]);
 
-  const handleInterventionAction = useCallback(
-    (active: {
-      id: string;
-      type: string;
-      actionLabel: string;
-      metadata?: Record<string, unknown>;
-    }): void => {
-      if (!controller.userId) {return;}
-      const normalized: ActiveIntervention = {
-        ...active,
-        message: '',
-        priority: 0,
-        metadata: active.metadata ?? {},
-        type: ['BURNOUT', 'PLATEAU', 'STREAK_RISK', 'BOSS_FINISH'].includes(
-          active.type,
-        )
-          ? (active.type as ActiveIntervention['type'])
-          : 'STREAK_RISK',
-        hoursRemaining: 1,
-      };
-      dismissIntervention(normalized.id);
-      trackInterventionActioned(
-        controller.userId,
-        normalized.type,
-        normalized.actionLabel,
-      );
-      const buildParams = buildInterventionSessionParams(normalized);
-      navigateToSessionStackScreen(navigation, 'SessionSetup', buildParams);
-    },
-    [controller.userId, dismissIntervention, navigation],
-  );
 
   const interventionBannerProps: InterventionBannerConfig | null =
     showIntervention && intervention
@@ -157,5 +108,5 @@ export function useHomeScreenInnerEffects(params: {
         }
       : null;
 
-  return { interventionBannerProps, handleInterventionAction };
+  return { interventionBannerProps };
 }

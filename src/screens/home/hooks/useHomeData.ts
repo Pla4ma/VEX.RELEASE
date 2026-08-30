@@ -30,13 +30,13 @@ export function useHomeData(input: UseHomeDataInput) {
   );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing: Array<Record<string, unknown>> = [];
+  const squadMembersFocusing: Record<string, unknown>[] = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
     controller.runtime.canQueryNotifications ? controller.userId : undefined,
   );
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     const data = challengesQuery.data as
-      | Array<{
+      | {
           challenge: {
             type: string;
             title: string;
@@ -51,7 +51,7 @@ export function useHomeData(input: UseHomeDataInput) {
             status: string;
             expiresAt: number | null;
           };
-        }>
+        }[]
       | undefined;
     if (!data) {return [];}
     return data
@@ -109,7 +109,7 @@ export function useHomeData(input: UseHomeDataInput) {
   }, [hasActiveSession, controller.historyQuery.history]);
   const recentSessions: SessionListItem[] = useMemo(() => {
     return (
-      controller.historyQuery.history as Array<{
+      controller.historyQuery.history as {
         sessionId: string;
         endedAt?: number;
         startedAt?: number;
@@ -119,7 +119,7 @@ export function useHomeData(input: UseHomeDataInput) {
           xpEarned?: number;
           interruptions?: number;
         };
-      }>
+      }[]
     )
       .flatMap((entry) => {
         if (!entry.endedAt || !entry.startedAt) {return [];}
@@ -149,7 +149,7 @@ export function useHomeData(input: UseHomeDataInput) {
   const comebackSessionsCompleted = useMemo(() => {
     if (!comebackData?.streakRestoreEligible) {return 0;}
     return (
-      controller.historyQuery.history as Array<{ status: string }>
+      controller.historyQuery.history as { status: string }[]
     ).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const companionMood = useMemo(

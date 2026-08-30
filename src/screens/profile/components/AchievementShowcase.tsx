@@ -33,7 +33,7 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
   const [isEditMode, setIsEditMode] = useState(false);
   const [draggedIndex, _setDraggedIndex] = useState<number | null>(null);
   const slots = useMemo(() => {
-    const nextSlots: Array<FeaturedAchievement | null> = [...achievements];
+    const nextSlots: (FeaturedAchievement | null)[] = [...achievements];
     while (nextSlots.length < 3) {
       nextSlots.push(null);
     }

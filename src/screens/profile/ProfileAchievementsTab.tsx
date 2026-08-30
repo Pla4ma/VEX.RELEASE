@@ -1,17 +1,16 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
 import { GlassCard } from '../../components/glass/GlassCard';
-import { GlassIconOrb } from '../../components/glass/GlassIconOrb';
-import { GlassPill } from '../../components/glass/GlassPill';
 import { EmptyState } from '../../components/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
 import { EmptyStateLens } from '../../components/glass/EmptyStateLens';
-import { Icon } from '../../icons/components/Icon';
+import { VexSurface } from '../../shared/ui/vex/VexSurface';
 import type { Theme } from '../../theme/types';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+
+const MASTERY_MEDALLION = require('../../../assets/vex/profile-mastery-medallion.png');
 
 interface AchievementCard {
   id: string;
@@ -41,7 +40,6 @@ export const ProfileAchievementsTab: React.ComponentType<ProfileAchievementsTabP
   onOpenAchievements,
   onStartSession,
 }) => {
-  void theme;
   if (isLoading) {
     return (
       <GlassCard size="lg" variant="default" padding={18} radius={26}>
@@ -103,7 +101,7 @@ export const ProfileAchievementsTab: React.ComponentType<ProfileAchievementsTabP
   }
 
   return (
-    <Box gap={12}>
+    <Box gap={theme.spacing[3]}>
       {achievements.map((item) => (
         <Pressable
           key={item.id}
@@ -112,68 +110,21 @@ export const ProfileAchievementsTab: React.ComponentType<ProfileAchievementsTabP
           accessibilityRole="button"
           accessibilityHint="Opens the full achievement collection"
         >
-          <View
-            style={{
-              opacity: item.statusTone === 'success' ? 1 : 0.78,
-            }}
-          >
-            <GlassCard
-              size="md"
-              variant={item.statusTone === 'success' ? 'success' : 'subtle'}
-              padding={14}
-              radius={20}
-            >
-              <Box flexDirection="row" alignItems="center" gap={12}>
-                <GlassIconOrb
-                  size={44}
-                  variant={item.statusTone === 'success' ? 'mint' : 'pearl'}
-                >
-                  <Icon
-                    name={item.statusTone === 'success' ? 'check-circle' : 'award'}
-                    size="md"
-                    color={item.statusTone === 'success' ? vexLightGlass.mint[700] : vexLightGlass.text.secondary}
-                    variant="solid"
-                  />
-                </GlassIconOrb>
-                <Box flex={1}>
-                  <Text
-                    style={{
-                      color: vexLightGlass.text.primary,
-                      fontSize: 15,
-                      fontWeight: '800',
-                      letterSpacing: -0.2,
-                    }}
-                  >
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      color: vexLightGlass.text.secondary,
-                      fontSize: 12,
-                      lineHeight: 17,
-                    }}
-                  >
-                    {item.description}
-                  </Text>
-                  <Text
-                    style={{
-                      color: vexLightGlass.text.tertiary,
-                      fontSize: 12,
-                      fontWeight: '600',
-                      marginTop: 4,
-                    }}
-                  >
-                    {item.progressLabel}
-                  </Text>
-                </Box>
-                <GlassPill
-                  label={item.statusLabel}
-                  variant={item.statusTone === 'success' ? 'success' : 'neutral'}
-                  size="sm"
-                />
-              </Box>
-            </GlassCard>
-          </View>
+          <VexSurface tone="hero" style={{ backgroundColor: theme.colors.background.primary, borderColor: theme.colors.primary[800], opacity: item.statusTone === 'success' ? 1 : theme.opacity[80], padding: theme.spacing[4] }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[3] }}>
+              <View style={{ borderColor: theme.colors.border.DEFAULT, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[12], overflow: 'hidden', width: theme.spacing[12] }}>
+                <Image accessibilityLabel="Glass mastery medallion" source={MASTERY_MEDALLION} style={{ height: '100%', opacity: item.statusTone === 'success' ? theme.opacity[100] : theme.opacity[80], width: '100%' }} />
+              </View>
+              <View style={{ flex: 1, gap: theme.spacing[1] }}>
+                <Text color="text.primary" variant="bodyLarge">{item.title}</Text>
+                <Text color="text.secondary" variant="bodySmall">{item.description}</Text>
+                <Text color="text.tertiary" variant="caption">{item.progressLabel}</Text>
+              </View>
+              <View style={{ backgroundColor: item.statusTone === 'success' ? theme.colors.primary[100] : theme.colors.semantic.primarySoft, borderColor: theme.colors.primary[800], borderRadius: theme.borderRadius.full, borderWidth: 1, paddingHorizontal: theme.spacing[2], paddingVertical: theme.spacing[1] }}>
+                <Text color={item.statusTone === 'success' ? theme.colors.primary[700] : theme.colors.semantic.primary} variant="caption">{item.statusLabel}</Text>
+              </View>
+            </View>
+          </VexSurface>
         </Pressable>
       ))}
     </Box>

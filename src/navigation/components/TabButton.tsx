@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Animated, {
   useAnimatedStyle,
@@ -8,39 +8,23 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { Icon } from '../../icons/components/Icon';
 import { Text } from '../../components/primitives/Text';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { tabSwitch } from '../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
-import { ActiveTabPill } from './ActiveTabPill';
+import { useTheme } from '../../theme/ThemeContext';
 
-const ICONS = {
-  Home: 'home',
-  Focus: 'check-circle',
-  Progress: 'chart',
-  Profile: 'user',
-} as const;
-
-function getRouteIcon(routeName: string): string {
-  switch (routeName) {
-    case 'Focus':
-      return ICONS.Focus;
-    case 'Progress':
-      return ICONS.Progress;
-    case 'Profile':
-      return ICONS.Profile;
-    default:
-      return ICONS.Home;
-  }
-}
+const NAV_ICON_ASSETS: Record<string, number> = {
+  Home: require('../../../assets/vex/nav-home-fire.png'),
+  Focus: require('../../../assets/vex/nav-focus-fire.png'),
+  Progress: require('../../../assets/vex/nav-progress-fire.png'),
+  Profile: require('../../../assets/vex/nav-profile-fire.png'),
+};
 
 export interface TabButtonProps {
   route: BottomTabBarProps['state']['routes'][number];
   focused: boolean;
-  color: string;
   label: string;
   onPress: () => void;
   onLongPress: () => void;
@@ -52,33 +36,28 @@ export interface TabButtonProps {
 export function TabButton({
   route,
   focused,
-  color,
   label,
   onPress,
   onLongPress,
   isActiveTab,
   isPulsing = false,
   pulseStart = null,
-}: TabButtonProps) {
+}: TabButtonProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
+  const { theme } = useTheme();
   const bounce = useSharedValue(1);
-  const iconScale = useSharedValue(focused ? 1.08 : 1);
-  const pillProgress = useSharedValue(focused ? 1 : 0);
+  const iconScale = useSharedValue(focused ? 1.05 : 1);
   const pulseScale = useSharedValue(1);
-  const iconName = getRouteIcon(route.name);
-  const labelText = label;
+  const iconAsset = NAV_ICON_ASSETS[route.name] ?? NAV_ICON_ASSETS.Home;
 
-  // Pulse animation for streak at risk
   useEffect(() => {
     if (isPulsing && pulseStart !== null && !isReducedMotion) {
-      const elapsed = Date.now() - pulseStart;
-      // Pulse every 2 seconds
       const pulseInterval = setInterval(() => {
         pulseScale.value = withSequence(
-          withTiming(1.15, { duration: 300 }),
-          withTiming(1, { duration: 300 }),
+          withTiming(1.1, { duration: 240 }),
+          withTiming(1, { duration: 240 }),
         );
-      }, 2000);
+      }, 2400);
       return () => clearInterval(pulseInterval);
     }
     return undefined;
@@ -86,13 +65,11 @@ export function TabButton({
 
   useEffect(() => {
     if (isReducedMotion) {
-      iconScale.value = focused ? 1.08 : 1;
-      pillProgress.value = focused ? 1 : 0;
+      iconScale.value = focused ? 1.05 : 1;
       return;
     }
-    iconScale.value = withSpring(focused ? 1.08 : 1, springPresets.settle);
-    pillProgress.value = withSpring(focused ? 1 : 0, springPresets.precise);
-  }, [focused, isReducedMotion, iconScale, pillProgress]);
+    iconScale.value = withSpring(focused ? 1.05 : 1, springPresets.settle);
+  }, [focused, isReducedMotion, iconScale]);
 
   const iconStyle = useAnimatedStyle(() => ({
     transform: [
@@ -100,16 +77,12 @@ export function TabButton({
       { scale: pulseScale.value },
     ],
   }));
-  const pillStyle = useAnimatedStyle(() => ({
-    opacity: pillProgress.value,
-    transform: [{ scale: 0.9 + pillProgress.value * 0.1 }],
-  }));
 
   const handlePress = (): void => {
     tabSwitch();
     if (!isReducedMotion) {
       bounce.value = withSequence(
-        withTiming(0.88, { duration: timingPresets.microFade.duration }),
+        withTiming(0.92, { duration: timingPresets.microFade.duration }),
         withSpring(1, springPresets.tactile),
       );
     }
@@ -118,53 +91,59 @@ export function TabButton({
 
   return (
     <Pressable
-      accessibilityHint={`Navigate to ${labelText}`}
-      accessibilityLabel={`${labelText} tab`}
-      accessibilityRole="button"
+      accessibilityHint={`Navigate to ${label}`}
+      accessibilityLabel={`${label} tab`}
+      accessibilityRole="tab"
       accessibilityState={{ selected: focused }}
       onLongPress={onLongPress}
       onPress={handlePress}
-      style={{ flex: 1, ...getMinTouchTargetStyle() }}
+      style={({ pressed }) => [
+        { flex: 1, ...getMinTouchTargetStyle() },
+        pressed ? { opacity: 0.72 } : undefined,
+      ]}
     >
       <View
         style={{
           alignItems: 'center',
+          backgroundColor: 'transparent',
           flex: 1,
           justifyContent: 'center',
+          minHeight: 48,
+          paddingHorizontal: theme.spacing[2],
+          paddingVertical: theme.spacing[1],
+          rowGap: theme.spacing[1],
         }}
       >
-        <ActiveTabPill height={34} pillStyle={pillStyle} />
+        <Animated.View style={iconStyle}>
+          <Image
+            accessibilityIgnoresInvertColors
+            accessibilityLabel={`${label} icon`}
+            source={iconAsset}
+            style={{
+              height: focused ? theme.spacing[8] : theme.spacing[6],
+              opacity: focused ? theme.opacity[100] : theme.opacity[70],
+              width: focused ? theme.spacing[8] : theme.spacing[6],
+            }}
+          />
+        </Animated.View>
+        <Text
+          style={{
+            color: focused ? theme.colors.text.primary : theme.colors.text.tertiary,
+            fontSize: theme.typography.ui.caption.fontSize,
+            fontWeight: focused ? theme.fontWeights.bold : theme.fontWeights.medium,
+          }}
+      >
+        {label}
+      </Text>
         <View
           style={{
-            alignItems: 'center',
-            gap: 3,
-            justifyContent: 'center',
-            minWidth: 58,
-            paddingHorizontal: 10,
-            paddingVertical: 6,
-            zIndex: 1,
+            backgroundColor: focused ? theme.colors.semantic.primary : 'transparent',
+            borderRadius: theme.borderRadius.full,
+            height: theme.spacing[1],
+            marginTop: theme.spacing[1],
+            width: focused ? theme.spacing[1] : 0,
           }}
-        >
-          <Animated.View style={iconStyle}>
-            <Icon
-              color={color}
-              name={iconName}
-              size="md"
-              strokeWidth="thin"
-              variant={focused ? 'solid' : 'outline'}
-            />
-          </Animated.View>
-          <Text
-            style={{
-              color: focused ? vexLightGlass.mint[700] : vexLightGlass.text.disabled,
-              fontSize: 12,
-              fontWeight: focused ? '800' : '500',
-              letterSpacing: 0,
-            }}
-          >
-            {labelText}
-          </Text>
-        </View>
+        />
       </View>
     </Pressable>
   );

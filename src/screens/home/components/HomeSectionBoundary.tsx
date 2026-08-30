@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable } from 'react-native';
 
+import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Text } from '../../../components/primitives/Text';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
@@ -50,26 +51,12 @@ export function HomeSectionBoundary({
   children,
   sectionName,
 }: HomeSectionBoundaryProps): React.ReactNode {
-  const [hasError, setHasError] = React.useState(false);
-
-  if (hasError) {
-    return (
-      <SectionErrorFallback
-        sectionName={sectionName}
-        onRetry={() => setHasError(false)}
-      />
-    );
-  }
-
-  try {
-    return <>{children}</>;
-  } catch (error: unknown) {
-    setHasError(true);
-    return (
-      <SectionErrorFallback
-        sectionName={sectionName}
-        onRetry={() => setHasError(false)}
-      />
-    );
-  }
+  const [retryKey, setRetryKey] = useState(0);
+  const fallback = (
+    <SectionErrorFallback
+      sectionName={sectionName}
+      onRetry={() => setRetryKey((value) => value + 1)}
+    />
+  );
+  return <ErrorBoundary key={retryKey} fallback={fallback}>{children}</ErrorBoundary>;
 }

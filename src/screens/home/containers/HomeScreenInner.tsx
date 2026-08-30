@@ -6,7 +6,9 @@
  */
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HomeContent } from '../components/HomeContent';
 import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
 import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
@@ -17,11 +19,13 @@ import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { HomeData } from '../hooks/useHomeData';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 import type { HomeScreenInnerProps } from './HomeScreenInnerTypes';
 import { useHomeScreenInnerEffects } from './useHomeScreenInnerEffects';
 import { HomeTopBar } from './HomeTopBar';
 import { spacing } from '../../../theme/tokens/spacing';
+import { HomeAtmosphere } from '../components/HomeAtmosphere';
 
 export type { HomeDataProps, HomeScreenInnerProps } from './HomeScreenInnerTypes';
 
@@ -29,6 +33,10 @@ function HomeScreenInnerRaw({
   model,
   data,
 }: HomeScreenInnerProps): React.ReactNode {
+  const navigation = useNavigation<
+    NativeStackNavigationProp<ExtendedRootStackParams>
+  >();
+  const insets = useSafeAreaInsets();
   const controller = model.controller;
   const {
     intervention,
@@ -91,7 +99,6 @@ function HomeScreenInnerRaw({
     controller,
     intervention,
     interventionLoading,
-    dismissIntervention,
     showToast,
     displayedInterventionIdRef,
     showIntervention,
@@ -99,17 +106,22 @@ function HomeScreenInnerRaw({
   });
 
   return (
- <GlassScreen showAura={false} variant="home">
+    <GlassScreen showAura={false} variant="home">
         <View
           style={{
             flex: 1,
-            paddingHorizontal: spacing[4],
-            paddingTop: spacing[2],
+            paddingHorizontal: spacing[6],
+            paddingTop: spacing[1],
+            position: 'relative',
           }}
         >
+          <HomeAtmosphere />
           <HomeTopBar />
           <ScrollView
-            contentContainerStyle={{ paddingBottom: 112, paddingTop: spacing[5] }}
+            contentContainerStyle={{
+              paddingBottom: spacing[12] + insets.bottom + spacing[4],
+              paddingTop: spacing[6],
+            }}
             showsVerticalScrollIndicator={false}
           >
             {interventionBannerProps && (
@@ -117,7 +129,7 @@ function HomeScreenInnerRaw({
                 intervention={interventionBannerProps}
                 interventionLoading={interventionLoading}
                 dismissIntervention={dismissIntervention}
-                navigation={undefined}
+                navigation={navigation}
                 userId={controller.userId ?? ''}
               />
             )}

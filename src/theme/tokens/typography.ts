@@ -5,6 +5,7 @@ import { lightColors } from './primary-palette';
 export const fontFamilies: FontFamilies = {
   primary: 'Urbanist_400Regular',
   secondary: 'Urbanist_600SemiBold',
+  display: 'Georgia',
   mono: 'JetBrains Mono',
 };
 

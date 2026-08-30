@@ -54,7 +54,7 @@ export function usePlanScreenActions(): PlanScreenActions {
   }, [navigation]);
 
   const selectProject = useCallback(
-    (projectId: string) => {
+    (_projectId: string) => {
       navigation.navigate('SessionStack', {
         screen: 'SessionSetup',
         params: { goal: 'Project work block', source: 'plan' },

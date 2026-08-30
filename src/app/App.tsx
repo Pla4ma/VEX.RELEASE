@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   Urbanist_400Regular,
@@ -29,8 +29,46 @@ import { initializeDevContrastChecker } from '../shared/accessibility/contrast-c
 import { ThemeProvider } from '../theme/ThemeContext';
 import { bootstrapApp } from './bootstrap';
 import { markColdStart } from './cold-start-performance';
+import { lightColors } from '../theme/tokens/colors';
+import { spacing } from '../theme/tokens/spacing';
+import { bodyTypography, headingTypography } from '../theme/tokens/typography';
 
 const rootViewStyle: StyleProp<ViewStyle> = { flex: 1 };
+function StartupFallback({
+  runtimeReady,
+  fontsReady,
+}: {
+  runtimeReady: boolean;
+  fontsReady: boolean;
+}): React.JSX.Element {
+  const message = !runtimeReady
+    ? 'Preparing your focus space.'
+    : !fontsReady
+      ? 'Loading the VEX type system.'
+      : 'Opening your focus space.';
+
+  return (
+    <View
+      style={{
+        alignItems: 'center',
+        backgroundColor: lightColors.background.primary,
+        flex: 1,
+        justifyContent: 'center',
+        padding: spacing[6],
+      }}
+    >
+      <Text style={headingTypography.h3}>VEX is warming up</Text>
+      <Text
+        style={[
+          bodyTypography.medium,
+          { marginTop: spacing[3], textAlign: 'center' },
+        ]}
+      >
+        {message}
+      </Text>
+    </View>
+  );
+}
 
 function useAppRuntimeBootstrap(): boolean {
   const [ready, setReady] = useState(false);
@@ -78,7 +116,7 @@ if (Platform.OS !== 'web') {
     GestureHandlerRootView =
       gestureHandler.GestureHandlerRootView ||
       (({ children, style }) => <View style={style}>{children}</View>);
-  } catch (error: unknown) {
+  } catch {
     GestureHandlerRootView = ({ children, style }) => (
       <View style={style}>{children}</View>
     );
@@ -102,7 +140,7 @@ export function App() {
   if (!isReady || !isFontReady) {
     return (
       <GestureHandlerRootView style={rootViewStyle}>
-        <View style={rootViewStyle} />
+        <StartupFallback runtimeReady={isReady} fontsReady={isFontReady} />
       </GestureHandlerRootView>
     );
   }

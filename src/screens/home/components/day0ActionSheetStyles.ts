@@ -3,12 +3,11 @@
  * component under the 200-line limit).
  */
 
-import { StyleSheet } from 'react-native';
 import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
-export const sheetStyles = StyleSheet.create({
+export const sheetStyles = {
   backdrop: { flex: 1 },
   sheetContainer: {
     backgroundColor: vexLightGlass.glass.fillStrong,
@@ -75,4 +74,4 @@ export const sheetStyles = StyleSheet.create({
   previewBlock: { marginTop: spacing[4] },
   saveWrap: { marginTop: spacing[5] },
   bottomPad: { height: spacing[4] },
-});
+} as const;

@@ -1,5 +1,4 @@
-import type { SessionRecommendation } from '../../../features/ai-coach';
-import type { RecommendationStatus } from '../../../features/ai-coach';
+import type { SessionRecommendation , RecommendationStatus } from '../../../features/ai-coach';
 import type { NextBestAction } from '../../../features/progression';
 import type { HomeFeatureRuntime } from './home-feature-runtime';
 import type { HomeReturnReason } from './useHomeReturnReason';

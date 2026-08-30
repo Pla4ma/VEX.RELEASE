@@ -61,9 +61,7 @@ export function useHomeSurfaceMap(
   return useMemo(() => {
     const fa = featureAccess.features;
 
-    const degradedFeatures: Array<
-      'content_study' | 'ai_coach_advanced' | 'premium_paywall' | 'boss_tab'
-    > = [];
+    const degradedFeatures: ('content_study' | 'ai_coach_advanced' | 'premium_paywall' | 'boss_tab')[] = [];
     if (fa.content_study?.isDegraded) {degradedFeatures.push('content_study');}
     if (fa.ai_coach_advanced?.isDegraded)
       {degradedFeatures.push('ai_coach_advanced');}

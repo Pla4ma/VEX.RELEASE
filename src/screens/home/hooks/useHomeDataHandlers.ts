@@ -25,7 +25,7 @@ export function useHomeDataHandlers(
         { userId: controller.userId, challengeId },
         {
           onSuccess: (result: {
-            rewards: Array<{ amount: number; type: string }>;
+            rewards: { amount: number; type: string }[];
           }) => {
             const rewardText = result.rewards
               .map((reward) => `+${reward.amount} ${reward.type}`)

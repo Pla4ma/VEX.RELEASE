@@ -37,7 +37,7 @@ export function usePowerUserHomeData(
   );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing: Array<Record<string, unknown>> = [];
+  const squadMembersFocusing: Record<string, unknown>[] = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
     notifAvail.canQuery ? controller.userId : undefined,
   );
@@ -45,7 +45,7 @@ export function usePowerUserHomeData(
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     if (!challengeAvail.canQuery) {return [];}
     const data = challengesQuery.data as
-      | Array<{
+      | {
           challenge: {
             type: string;
             title: string;
@@ -60,7 +60,7 @@ export function usePowerUserHomeData(
             status: string;
             expiresAt: number | null;
           };
-        }>
+        }[]
       | undefined;
     if (!data) {return [];}
     return data
@@ -103,7 +103,7 @@ export function usePowerUserHomeData(
         { userId: controller.userId, challengeId },
         {
           onSuccess: (result: {
-            rewards: Array<{ amount: number; type: string }>;
+            rewards: { amount: number; type: string }[];
           }) => {
             const rewardText = result.rewards
               .map((reward) => `+${reward.amount} ${reward.type}`)

@@ -17,7 +17,7 @@ export function HomeMemoryInsight({
     (surfaceMap as Record<string, string>).memory_insight !== 'hidden' &&
     (surfaceMap as Record<string, string>).memory_insight !== 'blocked';
 
-  const { data, isPending, hideMemory, acceptMemory } = useMemoryPanel(userId);
+  const { data, isPending, hideMemory: _hideMemory, acceptMemory: _acceptMemory } = useMemoryPanel(userId);
 
   if (!isVisible) {return null;}
   if (isPending) {return <SkeletonItem height={80} borderRadius={12} style={{ margin: 16 }} />;}
@@ -25,7 +25,7 @@ export function HomeMemoryInsight({
 
   return (
     <View style={{ padding: 16 }}>
-      {data.items.map((item: { id: string }, i: number) => (
+      {data.items.map((item: { id: string }, _i: number) => (
         <View key={item.id} style={{ padding: 8, borderBottomWidth: 1, borderColor: '#eee' }}>
           {String(item)}
         </View>

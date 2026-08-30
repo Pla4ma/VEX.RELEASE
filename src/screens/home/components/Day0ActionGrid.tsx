@@ -2,119 +2,68 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { type } from '../../reference-ui/referenceTokens';
+import { VexIcon } from '../../../shared/ui/vex/VexIcon';
+import { useTheme } from '../../../theme/ThemeContext';
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { Day0Mode } from '../services/day0-agent-schemas';
-import { DAY0_ACTIONS, type Day0Action } from './day0ActionData';
 
 interface Day0ActionGridProps {
   onSelect: (mode: Day0Mode) => void;
   onOpenCoach: () => void;
 }
 
-type NavItem = Day0Action | {
-  id: 'coach';
+interface RitualAction {
+  id: Day0Mode;
+  icon: string;
+  subtitle: string;
   title: string;
-  eyebrow: string;
-  body: string;
-};
-
-export function Day0ActionGrid({
-  onOpenCoach,
-  onSelect,
-}: Day0ActionGridProps): React.ReactNode {
-  const items: NavItem[] = [
-    ...DAY0_ACTIONS.filter((action) => action.id !== 'focus'),
-    {
-      id: 'coach',
-      title: 'Coach',
-      eyebrow: 'AI guide',
-      body: 'Open the AI coach.',
-    },
-  ];
-
-  return (
-    <View style={{ gap: spacing[3], marginBottom: spacing[5] }}>
-      <View
-        style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Text style={type.kicker}>Navigation</Text>
-        <Text style={[type.body, { color: vexLightGlass.text.tertiary }]}>
-          choose next
-        </Text>
-      </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
-        {items.map((item) => (
-          <NavTextButton
-            item={item}
-            key={item.id}
-            onOpenCoach={onOpenCoach}
-            onSelect={onSelect}
-          />
-        ))}
-      </View>
-    </View>
-  );
 }
 
-function NavTextButton({
-  item,
-  onOpenCoach,
+const ACTIONS: RitualAction[] = [
+  { id: 'focus', icon: 'flame', subtitle: '25 minutes', title: 'Quick focus' },
+  { id: 'study', icon: 'book', subtitle: 'Your practice', title: 'Rituals' },
+  { id: 'create', icon: 'sparkles', subtitle: 'Capture insight', title: 'Reflect' },
+];
+
+export function Day0ActionGrid({
+  onOpenCoach: _onOpenCoach,
   onSelect,
-}: {
-  item: NavItem;
-  onOpenCoach: () => void;
-  onSelect: (mode: Day0Mode) => void;
-}): React.ReactNode {
-  const handlePress = (): void => {
-    if (item.id === 'coach') {
-      onOpenCoach();
-      return;
-    }
-    onSelect(item.id);
-  };
+}: Day0ActionGridProps): React.ReactNode {
+  const { theme } = useTheme();
+
   return (
-    <Pressable
-      accessibilityHint={item.body}
-      accessibilityLabel={`Open ${item.title}`}
-      accessibilityRole="button"
-      onPress={handlePress}
-      style={({ pressed }) => ({
-        minHeight: 44,
-        opacity: pressed ? 0.64 : 1,
-        transform: [{ translateY: pressed ? 1 : 0 }],
-      })}
-    >
-      <Text
-        style={[
-          type.title,
-          {
-            color: vexLightGlass.text.primary,
-            fontFamily: 'Urbanist_800ExtraBold',
-            fontSize: 22,
-            letterSpacing: 0,
-          },
-        ]}
-      >
-        {item.title}
-      </Text>
-      <Text
-        style={[
-          type.body,
-          {
-            color: vexLightGlass.text.tertiary,
-            fontFamily: 'Urbanist_600SemiBold',
-            fontSize: 13,
-          },
-        ]}
-      >
-        {item.eyebrow}
-      </Text>
-    </Pressable>
+    <View style={{ flexDirection: 'row', gap: theme.spacing[2], marginBottom: theme.spacing[6], zIndex: 1 }}>
+      {ACTIONS.map((item) => (
+        <Pressable
+          accessibilityHint={`Opens ${item.title}`}
+          accessibilityLabel={item.title}
+          accessibilityRole="button"
+          key={item.id}
+          onPress={() => onSelect(item.id)}
+          style={({ pressed }) => ({
+            alignItems: 'center',
+            backgroundColor: pressed ? theme.colors.surface.pressed : theme.colors.background.secondary,
+            borderColor: theme.colors.border.light,
+            borderRadius: theme.borderRadius.md,
+            borderWidth: 1,
+            flex: 1,
+            minHeight: theme.spacing[24] + theme.spacing[16],
+            paddingHorizontal: theme.spacing[2],
+            paddingVertical: theme.spacing[3],
+            ...getMinTouchTargetStyle(),
+          })}
+        >
+          <View style={{ alignItems: 'center', borderColor: theme.colors.semantic.primary, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[10], justifyContent: 'center', width: theme.spacing[10] }}>
+            <VexIcon color={theme.colors.semantic.primary} name={item.icon} size="sm" variant="outline" />
+          </View>
+          <Text color={theme.colors.text.secondary} variant="h5" style={{ fontFamily: theme.fonts.display ?? theme.fonts.primary, fontWeight: theme.fontWeights.regular, letterSpacing: 1.5, marginTop: theme.spacing[2], textAlign: 'center', textTransform: 'uppercase' }}>
+            {item.title}
+          </Text>
+          <Text color={theme.colors.text.tertiary} variant="caption" style={{ marginTop: theme.spacing[1], textAlign: 'center', textTransform: 'uppercase' }}>
+            {item.subtitle}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
   );
 }

@@ -29,7 +29,7 @@ export interface HomeDataProps {
   hasActiveSession: boolean;
   resumeTimeSeconds: number | null;
   savedPreview: Record<string, unknown> | null;
-  squadMembersFocusing: number | Array<Record<string, unknown>>;
+  squadMembersFocusing: number | Record<string, unknown>[];
   handleClaimReward: (id: string) => void;
   handleFreezeStreak: () => void;
   challengesQuery: {

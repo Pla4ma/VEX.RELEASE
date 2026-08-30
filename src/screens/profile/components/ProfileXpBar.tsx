@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { LiquidProgressBar } from '../../../components/glass/LiquidProgressBar';
 import { Text } from '../../../components/primitives/Text';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { useTheme } from '../../../theme/ThemeContext';
 
 interface ProfileXpBarProps {
   level: number;
@@ -17,36 +16,25 @@ export function ProfileXpBar({
   nextLevelThreshold,
   xpPercent,
 }: ProfileXpBarProps): React.ReactNode {
+  const { theme } = useTheme();
   return (
-    <View style={{ marginTop: 12, zIndex: 2 }}>
+    <View style={{ marginTop: theme.spacing[3] }}>
       <View
         style={{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: 6,
+          marginBottom: theme.spacing[2],
         }}
       >
-        <Text
-          style={{
-            color: vexLightGlass.text.primary,
-            fontSize: 12,
-            fontWeight: '800',
-          }}
-        >
+        <Text variant="label">
           {`Level ${level} | ${xp.toLocaleString()}/${nextLevelThreshold.toLocaleString()} XP`}
         </Text>
-        <Text
-          style={{
-            color: vexLightGlass.text.tertiary,
-            fontSize: 12,
-            fontWeight: '700',
-          }}
-        >
-          {`${Math.round(xpPercent)}%`}
-        </Text>
+        <Text color="text.secondary" variant="label">{`${Math.round(xpPercent)}%`}</Text>
       </View>
-      <LiquidProgressBar height={8} progress={xpPercent / 100} />
+      <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, height: 8, overflow: 'hidden' }}>
+        <View style={{ backgroundColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, height: 8, width: `${Math.max(0, Math.min(100, xpPercent))}%` }} />
+      </View>
     </View>
   );
 }

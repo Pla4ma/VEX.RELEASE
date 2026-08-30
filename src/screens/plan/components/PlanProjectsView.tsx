@@ -4,11 +4,13 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import type { PlanProject } from '../../../features/plan/types';
+import { useTheme } from '../../../theme/ThemeContext';
+import { PlanModeEmptyState } from './PlanModeEmptyState';
+
+const PLAN_PROJECTS_ASSET = require('../../../../assets/vex/plan-projects-fire.png');
 
 interface PlanProjectsViewProps {
   projects: PlanProject[];
@@ -27,6 +29,8 @@ export function PlanProjectsView({
   onAddProject,
   onSelectProject,
 }: PlanProjectsViewProps): React.ReactNode {
+  const { theme } = useTheme();
+
   if (isLoading) {
     return (
       <View style={{ padding: 20, gap: 12 }}>
@@ -50,18 +54,18 @@ export function PlanProjectsView({
 
   if (projects.length === 0) {
     return (
-      <EmptyState
-        iconName="folder"
-        title="No projects yet"
+      <PlanModeEmptyState
         body="Create a project to organize your tasks and goals"
         actionLabel="Create project"
+        asset={PLAN_PROJECTS_ASSET}
         onAction={onAddProject}
+        title="No projects yet"
       />
     );
   }
 
   return (
-    <View style={{ padding: 20, gap: 10 }}>
+    <View style={{ gap: theme.spacing[3], padding: theme.spacing[4] }}>
       {projects.map((project, index) => (
         <Animated.View
           key={project.id}
@@ -73,31 +77,29 @@ export function PlanProjectsView({
             accessibilityHint="Opens the project details view"
             onPress={() => onSelectProject(project.id)}
             style={({ pressed }) => ({
-              backgroundColor: pressed
-                ? vexLightGlass.mint[50]
-                : vexLightGlass.background.pageMid,
-              borderRadius: 14,
+              backgroundColor: pressed ? theme.colors.primary[900] : theme.colors.background.primary,
+              borderRadius: theme.borderRadius.lg,
               borderWidth: 1,
-              borderColor: vexLightGlass.glass.borderSubtle,
-              padding: 16,
+              borderColor: theme.colors.primary[800],
+              padding: theme.spacing[4],
               flexDirection: 'row',
               alignItems: 'center',
-              gap: 12,
+              gap: theme.spacing[3],
             })}
           >
             <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: project.color ?? vexLightGlass.mint[100],
+                width: theme.spacing[10],
+                height: theme.spacing[10],
+                borderRadius: theme.borderRadius.lg,
+                backgroundColor: theme.colors.primary[950],
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
               <Icon
-                color={project.color ?? vexLightGlass.mint[600]}
-                name={project.icon ?? 'folder'}
+                color={theme.colors.semantic.primary}
+                name="folder"
                 size="md"
                 variant="solid"
               />
@@ -106,48 +108,48 @@ export function PlanProjectsView({
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  color: vexLightGlass.text.primary,
-                  fontSize: 15,
-                  fontWeight: '600',
+                  color: theme.colors.text.primary,
+                  fontWeight: theme.fontWeights.bold,
                 }}
+                variant="bodySmall"
               >
                 {project.name}
               </Text>
               {project.description && (
                 <Text
                   style={{
-                    color: vexLightGlass.text.secondary,
-                    fontSize: 13,
-                    marginTop: 2,
+                    color: theme.colors.text.secondary,
+                    marginTop: theme.spacing[1],
                   }}
+                  variant="caption"
                 >
                   {project.description}
                 </Text>
               )}
-              <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
+              <View style={{ flexDirection: 'row', gap: theme.spacing[2], marginTop: theme.spacing[2] }}>
                 <Text
                   style={{
-                    color: vexLightGlass.text.tertiary,
-                    fontSize: 12,
+                    color: theme.colors.text.tertiary,
                   }}
+                  variant="caption"
                 >
                   {project.completedItemCount}/{project.itemCount} done
                 </Text>
                 <View
                   style={{
                     flex: 1,
-                    height: 4,
-                    backgroundColor: vexLightGlass.glass.borderSubtle,
-                    borderRadius: 2,
-                    marginTop: 6,
+                    height: theme.spacing[1],
+                    backgroundColor: theme.colors.primary[950],
+                    borderRadius: theme.borderRadius.full,
+                    marginTop: theme.spacing[2],
                   }}
                 >
                   <View
                     style={{
                       width: `${project.progress}%`,
-                      height: 4,
-                      backgroundColor: vexLightGlass.mint[500],
-                      borderRadius: 2,
+                      height: theme.spacing[1],
+                      backgroundColor: theme.colors.semantic.primary,
+                      borderRadius: theme.borderRadius.full,
                     }}
                   />
                 </View>
@@ -155,7 +157,7 @@ export function PlanProjectsView({
             </View>
 
             <Icon
-              color={vexLightGlass.text.tertiary}
+              color={theme.colors.primary[700]}
               name="chevron-right"
               size="sm"
               variant="solid"

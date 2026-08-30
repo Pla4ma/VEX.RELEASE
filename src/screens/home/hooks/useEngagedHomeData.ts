@@ -36,7 +36,7 @@ export function useEngagedHomeData(
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     if (!challengeAvail.canQuery) {return [];}
     const data = challengesQuery.data as
-      | Array<{
+      | {
           challenge: {
             type: string;
             title: string;
@@ -51,7 +51,7 @@ export function useEngagedHomeData(
             status: string;
             expiresAt: number | null;
           };
-        }>
+        }[]
       | undefined;
     if (!data) {return [];}
     return data
@@ -94,7 +94,7 @@ export function useEngagedHomeData(
         { userId: controller.userId, challengeId },
         {
           onSuccess: (result: {
-            rewards: Array<{ amount: number; type: string }>;
+            rewards: { amount: number; type: string }[];
           }) => {
             const rewardText = result.rewards
               .map((reward) => `+${reward.amount} ${reward.type}`)

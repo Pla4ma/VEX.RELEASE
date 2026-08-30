@@ -5,7 +5,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useAuthStore } from '../../../store';
 import { useProjects, useStudyPlans, useTodayItems, useWeekItems } from '../../../features/plan/hooks';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { useTheme } from '../../../theme/ThemeContext';
 import { PlanProjectsView } from './PlanProjectsView';
 import { PlanStudyView } from './PlanStudyView';
 import { PlanTodayView } from './PlanTodayView';
@@ -16,6 +16,7 @@ const PLAN_SECTIONS = ['today', 'week', 'projects', 'study'] as const;
 type PlanSection = typeof PLAN_SECTIONS[number];
 
 export function PlanWorkspace(): React.ReactNode {
+  const { theme } = useTheme();
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const [activeSection, setActiveSection] = useState<PlanSection>('today');
   const todayQuery = useTodayItems(userId);
@@ -29,39 +30,18 @@ export function PlanWorkspace(): React.ReactNode {
   }, []);
 
   return (
-    <View style={{ gap: 12 }}>
-      <View style={{ gap: 4, paddingHorizontal: 4 }}>
-        <Text
-          style={{
-            color: vexLightGlass.mint[700],
-            fontSize: 12,
-            fontWeight: '800',
-            letterSpacing: 1,
-            textTransform: 'uppercase',
-          }}
-        >
-          Plan
-        </Text>
-        <Text
-          style={{
-            color: vexLightGlass.text.primary,
-            fontSize: 22,
-            fontWeight: '800',
-            letterSpacing: -0.4,
-          }}
-        >
-          Today, week, projects, study.
-        </Text>
+    <View style={{ gap: theme.spacing[3] }}>
+      <View style={{ gap: theme.spacing[1], paddingHorizontal: theme.spacing[1] }}>
+        <Text color={theme.colors.semantic.primary} variant="label">Plan</Text>
+        <Text variant="h2">Today, week, projects, study.</Text>
       </View>
 
       <View
         style={{
-          backgroundColor: vexLightGlass.glass.fill,
-          borderColor: vexLightGlass.glass.border,
-          borderRadius: 22,
-          borderWidth: 1,
+          borderBottomColor: theme.colors.primary[800],
+          borderBottomWidth: 1,
           flexDirection: 'row',
-          padding: 4,
+          padding: theme.spacing[1],
         }}
       >
         {PLAN_SECTIONS.map((section) => {
@@ -70,14 +50,14 @@ export function PlanWorkspace(): React.ReactNode {
             <Pressable
               accessibilityHint={`Show ${section} planning`}
               accessibilityLabel={`${section} planning tab`}
-              accessibilityRole="button"
+              accessibilityRole="tab"
               accessibilityState={{ selected }}
               key={section}
               onPress={() => selectSection(section)}
               style={({ pressed }) => ({
                 alignItems: 'center',
-                backgroundColor: selected ? vexLightGlass.mint[100] : vexLightGlass.background.transparent,
-                borderRadius: 18,
+                backgroundColor: selected ? theme.colors.primary[100] : 'transparent',
+                borderRadius: selected ? theme.borderRadius.md : 0,
                 flex: 1,
                 minHeight: 44,
                 justifyContent: 'center',
@@ -85,12 +65,9 @@ export function PlanWorkspace(): React.ReactNode {
               })}
             >
               <Text
-                style={{
-                  color: selected ? vexLightGlass.mint[800] : vexLightGlass.text.tertiary,
-                  fontSize: 12,
-                  fontWeight: selected ? '800' : '600',
-                  textTransform: 'capitalize',
-                }}
+                color={selected ? theme.colors.semantic.primary : 'text.tertiary'}
+                style={{ textTransform: 'capitalize' }}
+                variant="label"
               >
                 {section}
               </Text>

@@ -1,12 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
-import { GlassPill } from '../../../components/glass/GlassPill';
 import { CrystalAvatar } from '../../../components/glass/CrystalAvatar';
 import { Icon } from '../../../icons/components/Icon';
 import type { User } from '../../../types/models';
 import { useTheme } from '../../../theme/ThemeContext';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+
 
 interface ProfileIdentityBlockProps {
   user: User | null;
@@ -23,61 +22,19 @@ export const ProfileIdentityBlock: React.ComponentType<ProfileIdentityBlockProps
   const displayName = user?.displayName ?? user?.firstName ?? 'Player';
 
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 14,
-        marginBottom: 14,
-        zIndex: 2,
-      }}
-    >
-      <View style={{ width: 96, height: 96 }}>
-        <CrystalAvatar active={streakDays > 0} size={96} />
-      </View>
-      <View style={{ flex: 1, gap: 4 }}>
-        <Text
-          style={{
-            color: theme.colors.text.primary,
-            fontSize: 20,
-            fontWeight: '800',
-            letterSpacing: -0.4,
-            lineHeight: 26,
-          }}
-        >
-          {displayName}
-        </Text>
-        <Text
-          style={{
-            color: theme.colors.text.secondary,
-            fontSize: 12,
-            fontWeight: '400',
-          }}
-        >
-          Level {level} focus player
-        </Text>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: 8,
-            marginTop: 4,
-          }}
-        >
-          <GlassPill
-            label={`${streakDays} streak`}
-            leftIcon={
-              <Icon
-                color={vexLightGlass.semantic.fire}
-                name="flame"
-                size="xs"
-                variant="solid"
-              />
-            }
-            size="sm"
-            variant="fire"
-          />
-          <GlassPill label="2.0x" size="sm" variant="mint" />
+    <View style={{ alignItems: 'center', flexDirection: 'row', gap: 14, marginBottom: 14 }}>
+      <CrystalAvatar active={streakDays > 0} size={72} />
+      <View style={{ flex: 1, gap: theme.spacing[1] }}>
+        <Text variant="h3">{displayName}</Text>
+        <Text color="text.secondary" variant="bodySmall">Level {level} focus player</Text>
+        <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[2], marginTop: theme.spacing[1] }}>
+          <View style={{ alignItems: 'center', backgroundColor: theme.colors.primary[100], borderRadius: theme.borderRadius.full, flexDirection: 'row', gap: theme.spacing[1], minHeight: 32, paddingHorizontal: theme.spacing[3] }}>
+            <Icon color={theme.colors.primary[700]} name="flame" size="xs" variant="solid" />
+            <Text color="primary.700" variant="label">{streakDays} streak</Text>
+          </View>
+          <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, minHeight: 32, justifyContent: 'center', paddingHorizontal: theme.spacing[3] }}>
+            <Text style={{ color: theme.colors.accent.purple, fontWeight: '800' }} variant="label">2.0x</Text>
+          </View>
         </View>
       </View>
     </View>

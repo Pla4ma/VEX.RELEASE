@@ -34,7 +34,7 @@ export function focusNarrative(
     : 'No focus yet today. One short block is enough to start.';
 }
 
-const WHITE_SOFT = rgbaColors.rgb_255_255_255_0_18;
+const _WHITE_SOFT = rgbaColors.rgb_255_255_255_0_18;
 
 export function HeroLoadingState({
   isUltraNarrow,

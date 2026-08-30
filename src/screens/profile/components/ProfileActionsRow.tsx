@@ -1,9 +1,8 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { GlassBlurLayer } from '../../../components/glass/GlassBlurLayer';
-import { FloatingDroplets } from '../../../components/glass/FloatingDroplets';
-import { Icon } from '../../../icons/components/Icon';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme/ThemeContext';
+
 
 interface ProfileActionsRowProps {
   onSettingsPress: () => void;
@@ -16,23 +15,31 @@ function GlassIconButton({
   onPress,
   label,
   hint,
-  iconName,
 }: {
   onPress: () => void;
   label: string;
   hint: string;
-  iconName: string;
 }): React.ReactNode {
+  const { theme } = useTheme();
   return (
     <Pressable
       accessibilityHint={hint}
       accessibilityLabel={label}
       accessibilityRole="button"
       onPress={onPress}
-      style={{}}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        backgroundColor: theme.colors.surface.card,
+        borderColor: theme.colors.border.DEFAULT,
+        borderRadius: theme.borderRadius.lg,
+        borderWidth: 1,
+        justifyContent: 'center',
+        minHeight: 44,
+        opacity: pressed ? 0.78 : 1,
+        paddingHorizontal: theme.spacing[3],
+      })}
     >
-      <GlassBlurLayer intensity={72} radius={999} />
-      <Icon color={vexLightGlass.text.primary} name={iconName} size="md" />
+      <Text color="text.secondary" variant="caption">{label}</Text>
     </Pressable>
   );
 }
@@ -51,35 +58,20 @@ export function ProfileActionsRow({
         marginBottom: 16,
       }}
     >
-      <View
-        pointerEvents="none"
-        style={{
-          opacity: 0.85,
-          position: 'absolute',
-          right: 20,
-          top: -8,
-          zIndex: 0,
-        }}
-      >
-        <FloatingDroplets count={3} opacity={0.65} size={32} />
-      </View>
       <GlassIconButton
         hint="Opens account and app settings"
-        iconName="setting"
-        label="Open settings"
+        label="Settings"
         onPress={onSettingsPress}
       />
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: 8 }}>
         <GlassIconButton
           hint="Shows your VEX notifications"
-          iconName="notification"
-          label="Open notifications"
+          label="Alerts"
           onPress={onNotificationsPress}
         />
         <GlassIconButton
           hint="Signs out of this VEX account"
-          iconName="logout"
-          label="Log out"
+          label="Sign out"
           onPress={onLogout}
         />
       </View>
