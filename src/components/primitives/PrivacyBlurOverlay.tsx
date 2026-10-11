@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppState, StyleSheet, View } from 'react-native';
 
 let _BlurView: React.ComponentType<Record<string, unknown>> | null = null;

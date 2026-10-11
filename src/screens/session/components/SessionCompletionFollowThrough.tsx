@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useMemo, useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -51,20 +52,20 @@ function FollowThroughCard({
   delay: number;
   title: string;
 }): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Animated.View entering={FadeInUp.delay(delay).duration(360)}>
       <Box
         p={18}
         style={{
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.light,
+          backgroundColor: vexFire.panel,
+          borderColor: vexFire.border,
           borderWidth: 1,
           ...getPremiumCardStyle('medium'),
         }}
       >
-        <Text variant="label" color={theme.colors.primary[400]}>
+        <Text variant="label" color={vexFire.ember}>
           {title}
         </Text>
         {children}
@@ -76,7 +77,7 @@ function FollowThroughCard({
 export function SessionCompletionFollowThrough({
   summary,
 }: SessionCompletionFollowThroughProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [challengesExpanded, setChallengesExpanded] = useState(false);
   const challengeLines = useMemo(() => buildChallengeLines(summary), [summary]);
   const bossDamage = summary.damage?.totalDamage ?? 0;
@@ -102,14 +103,14 @@ export function SessionCompletionFollowThrough({
           >
             <Text
               variant="body"
-              color={theme.colors.text.primary}
+              color={vexFire.cream}
               fontWeight="700"
             >
               {challengeLines.length > 0
                 ? `${challengeLines.length} updates ready`
                 : 'No challenge changes from this run'}
             </Text>
-            <Text variant="caption" color={theme.colors.text.secondary}>
+            <Text variant="caption" color={vexFire.textSecondary}>
               {challengesExpanded ? 'Collapse' : 'Review'}
             </Text>
           </Box>
@@ -124,12 +125,12 @@ export function SessionCompletionFollowThrough({
                   justifyContent="space-between"
                   key={line.id}
                 >
-                  <Text variant="bodySmall" color={theme.colors.text.secondary}>
+                  <Text variant="bodySmall" color={vexFire.textSecondary}>
                     {line.label}
                   </Text>
                   <Text
                     variant="bodySmall"
-                    color={theme.colors.text.primary}
+                    color={vexFire.cream}
                     fontWeight="800"
                   >
                     {line.value}
@@ -137,7 +138,7 @@ export function SessionCompletionFollowThrough({
                 </Box>
               ))
             ) : (
-              <Text variant="bodySmall" color={theme.colors.text.secondary}>
+              <Text variant="bodySmall" color={vexFire.textSecondary}>
                 Finish another focused run to push active challenges forward.
               </Text>
             )}
@@ -153,10 +154,10 @@ export function SessionCompletionFollowThrough({
             alignItems="center"
             mt={3}
           >
-            <Text variant="body" color={theme.colors.text.secondary}>
+            <Text variant="body" color={vexFire.textSecondary}>
               Pressure applied
             </Text>
-            <Text variant="h3" color={theme.colors.error.DEFAULT}>
+            <Text variant="h3" color={vexFire.danger}>
               {bossDamage}
             </Text>
           </Box>
@@ -164,10 +165,10 @@ export function SessionCompletionFollowThrough({
       ) : null}
 
       <FollowThroughCard delay={320} title="TOMORROW PREVIEW">
-        <Text variant="h4" color={theme.colors.text.primary} mt={3}>
+        <Text variant="h4" color={vexFire.cream} mt={3}>
           Bank one {tomorrowFocusMinutes}-minute run.
         </Text>
-        <Text variant="body" color={theme.colors.text.secondary} mt={2}>
+        <Text variant="body" color={vexFire.textSecondary} mt={2}>
           Your streak momentum is warm. Tomorrow's first win should be short,
           clean, and early.
         </Text>

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 
@@ -32,13 +33,13 @@ export function RivalImpactCard({
         width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: gainedGround
-          ? `${theme.colors.success[500]}15`
-          : `${theme.colors.error[500]}15`,
+          ? `${vexFire.success}15`
+          : `${vexFire.danger}15`,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
         borderColor: gainedGround
-          ? theme.colors.success[500]
-          : theme.colors.error[500],
+          ? vexFire.success
+          : vexFire.danger,
         marginRight: theme.spacing[3],
       }}
     >
@@ -51,14 +52,14 @@ export function RivalImpactCard({
         }}
       >
         <SessionGlyph name={nowAhead ? 'sprint' : 'stake'} size={36} />
-        <Text variant="body" fontWeight="700" color="text.primary">
+        <Text variant="body" fontWeight="700" color={vexFire.cream}>
           {rivalName}
         </Text>
       </View>
 
       <Text
         variant="body"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{ marginBottom: theme.spacing[2] }}
       >
         {nowAhead
@@ -74,12 +75,12 @@ export function RivalImpactCard({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: theme.spacing[3],
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
           borderRadius: theme.borderRadius.lg,
         }}
       >
         <View>
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             BEFORE
           </Text>
           <Text
@@ -95,7 +96,7 @@ export function RivalImpactCard({
         </View>
         <Text fontSize={20}>{gainedGround ? '→' : '←'}</Text>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             NOW
           </Text>
           <Text

@@ -4,7 +4,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { buttonTap } from '../utils/haptics';
 
 import { SIZE_MAP, FONT_SIZE_MAP } from './Avatar.types';
-import type { AvatarProps, AvatarShape } from './Avatar.types';
+import type { AvatarProps,  } from './Avatar.types';
 import { avatarStyles } from './Avatar.styles';
 
 import { AvatarContentComponent } from './AvatarContent';

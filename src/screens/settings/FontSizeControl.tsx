@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
@@ -5,7 +6,7 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text'
 import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export type FontSize = 'small' | 'medium' | 'large';
@@ -31,13 +32,13 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
   fontSize,
   onFontSizeChange,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -71,8 +72,8 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
                 style={{
                   backgroundColor:
                     fontSize === option.id
-                      ? theme.colors.primary[50]
-                      : theme.colors.background.secondary,
+                      ? vexFire.ember
+                      : vexFire.panel,
                 }}
               >
                 <Text
@@ -81,8 +82,8 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
                     fontWeight: '600',
                     color:
                       fontSize === option.id
-                        ? theme.colors.primary[500]
-                        : theme.colors.text.tertiary,
+                        ? vexFire.ember
+                        : vexFire.textMuted,
                   }}
                 >
                   A
@@ -94,7 +95,7 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
                   style={{
                     fontSize: option.sampleSize,
                     fontWeight: fontSize === option.id ? '600' : '400',
-                    color: theme.colors.text.primary,
+                    color: vexFire.cream,
                   }}
                 >
                   {option.label}
@@ -107,12 +108,12 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
                   borderRadius={12}
                   justifyContent="center"
                   alignItems="center"
-                  style={{ backgroundColor: theme.colors.primary[500] }}
+                  style={{ backgroundColor: vexFire.ember }}
                 >
                   <Icon
                     name="check"
                     size={14}
-                    color={lightColors.text.inverse}
+                    color={vexFire.cream}
                   />
                 </Box>
               )}
@@ -121,7 +122,7 @@ export const FontSizeControl: React.ComponentType<FontSizeControlProps> = ({
               <Box
                 height={1}
                 ml={68}
-                style={{ backgroundColor: theme.colors.border.light }}
+                style={{ backgroundColor: vexFire.border }}
               />
             )}
           </React.Fragment>

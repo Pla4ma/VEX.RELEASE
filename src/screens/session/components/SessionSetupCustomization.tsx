@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
@@ -39,7 +40,7 @@ export function SessionSetupCustomization({
   themeQueryRetry,
   themes,
 }: SessionSetupCustomizationProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const tabs = PRESET_CATEGORIES.map((category) => ({
     id: category.key,
     label: category.label,
@@ -64,12 +65,12 @@ export function SessionSetupCustomization({
             p="md"
             bg="background.secondary"
             borderRadius="lg"
-            style={{ borderWidth: 1, borderColor: theme.colors.primary[500] }}
+            style={{ borderWidth: 1, borderColor: vexFire.ember }}
           >
-            <Text variant="label" color="primary.500" mb="xs">
+            <Text variant="label" color={vexFire.ember} mb="xs">
               Suggested by your coach
             </Text>
-            <Text variant="body" color="text.secondary">
+            <Text variant="body" color={vexFire.textSecondary}>
               {`Difficulty target: ${routeSuggestedDifficulty}`}
             </Text>
           </Box>
@@ -117,11 +118,11 @@ export function SessionSetupCustomization({
                 <Icon
                   name={preset.icon}
                   size="md"
-                  color={theme.colors.primary[500]}
+                  color={vexFire.ember}
                 />
                 <Box flex={1}>
                   <Text variant="label">{preset.name}</Text>
-                  <Text variant="caption" color="text.secondary">
+                  <Text variant="caption" color={vexFire.textSecondary}>
                     {`${Math.round(preset.duration / 60)} min - ${preset.intervals} interval${preset.intervals !== 1 ? 's' : ''}`}
                   </Text>
                 </Box>
@@ -129,7 +130,7 @@ export function SessionSetupCustomization({
                   <Icon
                     name="check"
                     size="sm"
-                    color={theme.colors.primary[500]}
+                    color={vexFire.ember}
                   />
                 ) : null}
               </Box>

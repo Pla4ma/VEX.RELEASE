@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, TextInput } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
@@ -27,7 +28,7 @@ export function SessionReflectionSheet({
   setReflection,
   setSelectedMood,
 }: SessionReflectionSheetProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -47,13 +48,13 @@ export function SessionReflectionSheet({
         borderTopRightRadius: 20,
         overflow: 'hidden',
       }}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.text.tertiary }}
+      handleIndicatorStyle={{ backgroundColor: vexFire.textMuted }}
     >
       <Box flex={1} px={24} py={12}>
-        <Text variant="h3" color={theme.colors.text.primary}>
+        <Text variant="h3" color={vexFire.cream}>
           How did that session feel?
         </Text>
-        <Text variant="body" color={theme.colors.text.secondary} mt={8}>
+        <Text variant="body" color={vexFire.textSecondary} mt={8}>
           Optional reflection before you head out.
         </Text>
         <Box flexDirection="row" justifyContent="space-between" mt={20}>
@@ -70,12 +71,12 @@ export function SessionReflectionSheet({
                 borderWidth: 1,
                 backgroundColor:
                   selectedMood === mood.key
-                    ? theme.colors.primary[500]
-                    : theme.colors.background.primary,
+                    ? vexFire.ember
+                    : vexFire.background,
                 borderColor:
                   selectedMood === mood.key
-                    ? theme.colors.primary[500]
-                    : theme.colors.border.light,
+                    ? vexFire.ember
+                    : vexFire.border,
               }}
               accessibilityLabel="Session reflection"
               accessibilityRole="button"
@@ -93,14 +94,14 @@ export function SessionReflectionSheet({
               borderWidth: 1,
               padding: 16,
               textAlignVertical: 'top',
-              backgroundColor: theme.colors.background.primary,
-              borderColor: theme.colors.border.light,
-              color: theme.colors.text.primary,
+              backgroundColor: vexFire.background,
+              borderColor: vexFire.border,
+              color: vexFire.cream,
             }}
             multiline
             numberOfLines={4}
             placeholder="What did you accomplish? Any notes for next time?"
-            placeholderTextColor={theme.colors.text.tertiary}
+            placeholderTextColor={vexFire.textMuted}
             value={reflection}
             onChangeText={setReflection}
           />

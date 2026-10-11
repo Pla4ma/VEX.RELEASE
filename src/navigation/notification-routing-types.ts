@@ -5,9 +5,8 @@
  * Route mapping happens only after FeatureAvailability checks.
  */
 import type { SessionStackParams } from './types';
-import type { ExtendedRootStackParams, RootStackParams } from './param-types';
+import type { ExtendedRootStackParams } from './param-types';
 import { navigateToRootScreen } from './navigation-helpers';
-import type { NavigationProp } from '@react-navigation/native';
 
 export type NotificationSafeIntent =
   | 'OPEN_HOME'
@@ -105,7 +104,7 @@ export function navigateToSessionSetup(
     presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
     source: payload?.source === 'content-study' ? 'content-study' : undefined,
   };
-  navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
+  navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params });
   return { success: true, screen: 'SessionSetup' };
 }
 
@@ -121,7 +120,7 @@ export function navigateToRescueSession(
       payload?.suggestedDurationSeconds,
     ),
   };
-  navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'SessionStack', { screen: 'SessionSetup', params } as RootStackParams['SessionStack']);
+  navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params });
   return { success: true, screen: 'SessionSetup' };
 }
 

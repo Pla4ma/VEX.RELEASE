@@ -10,7 +10,7 @@ describe('tier-config', () => {
     });
 
     it('each tier has required fields', () => {
-      for (const [tier, config] of Object.entries(TIER_CONFIG)) {
+      for (const [_tier, config] of Object.entries(TIER_CONFIG)) {
         expect(config.colors).toBeDefined();
         expect(config.colors.length).toBeGreaterThan(0);
         expect(config.emoji).toBeDefined();

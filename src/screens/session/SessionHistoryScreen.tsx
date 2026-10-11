@@ -20,8 +20,6 @@ import {
 import { useSessionHistoryRecords } from '../../features/session-history/hooks';
 import type { SessionHistoryItem } from '../../features/session-history/types';
 import type { SessionStackParams } from '../../navigation/types';
-import type { NavigationProp } from '@react-navigation/native';
-import type { RootStackParams } from '../../navigation/types';
 import { navigateToSessionStackScreen } from '../../navigation/navigation-helpers';
 import { useNetInfo } from '../../network/useNetInfo';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
@@ -61,7 +59,7 @@ function SessionHistoryScreen(): React.ReactNode {
   const handleItemPress = useCallback(
     (entry: SessionHistoryItem) => {
       if (entry.summary) {
-        navigateToSessionStackScreen(navigation as NavigationProp<RootStackParams>, 'SessionComplete', {
+        navigateToSessionStackScreen(navigation, 'SessionComplete', {
           sessionId: entry.sessionId,
           summary: entry.summary,
         });

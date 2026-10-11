@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, ViewStyle } from 'react-native';
 import Animated, {
@@ -46,7 +47,7 @@ export const CosmeticEquippingSheet: React.ComponentType<CosmeticEquippingSheetP
   currentEquippedId,
   style,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { showToast } = useUIStore();
   const [selectedId, setSelectedId] = useState<string | null>(currentEquippedId ?? null);
   const [isEquipping, setIsEquipping] = useState(false);
@@ -147,7 +148,7 @@ export const CosmeticEquippingSheet: React.ComponentType<CosmeticEquippingSheetP
                 width={40}
                 height={4}
                 borderRadius={2}
-                style={{ backgroundColor: theme.colors.border.DEFAULT }}
+                style={{ backgroundColor: vexFire.border }}
               />
             </Box>
 

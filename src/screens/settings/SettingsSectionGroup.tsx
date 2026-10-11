@@ -3,8 +3,8 @@ import { Pressable, Switch } from 'react-native';
 import type { Theme } from '../../theme';
 import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
-import { Icon } from '../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+import { VexIcon } from '../../shared/ui/vex/VexIcon';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 
 export type SettingItemType = 'toggle' | 'link' | 'button' | 'select' | 'value';
@@ -39,8 +39,8 @@ export function SettingsSectionGroup({
     <Box key={group.title} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
         style={{
+          color: vexFire.textSecondary,
           marginLeft: 12,
           marginBottom: 8,
           fontWeight: '600',
@@ -53,7 +53,9 @@ export function SettingsSectionGroup({
         borderRadius={12}
         style={{
           overflow: 'hidden',
-          backgroundColor: theme.colors.surface.card,
+          backgroundColor: vexFire.panel,
+          borderColor: vexFire.border,
+          borderWidth: 1,
         }}
       >
         {group.items.map((item, index) => (
@@ -63,7 +65,7 @@ export function SettingsSectionGroup({
               <Box
                 height={1}
                 ml={64}
-                style={{ backgroundColor: theme.colors.border.light }}
+                style={{ backgroundColor: vexFire.line }}
               />
             )}
           </React.Fragment>
@@ -73,10 +75,10 @@ export function SettingsSectionGroup({
   );
 }
 
-function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
+function SettingRow({ item, theme: _theme }: { item: SettingItem; theme: Theme }) {
   const iconColor = item.danger
-    ? theme.colors.error.DEFAULT
-    : theme.colors.semantic.vexCyan;
+    ? vexFire.danger
+    : vexFire.ember;
   return (
     <Pressable
       style={({ pressed }) => ({
@@ -84,7 +86,7 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
         alignItems: 'center',
         paddingVertical: 12,
         paddingHorizontal: 16,
-        backgroundColor: pressed ? theme.colors.background.tertiary : 'transparent',
+        backgroundColor: pressed ? vexFire.backgroundSoft : 'transparent',
       })}
       onPress={item.type === 'toggle' ? undefined : item.onPress}
       disabled={item.type === 'toggle'}
@@ -98,9 +100,9 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
         borderRadius={10}
         justifyContent="center"
         alignItems="center"
-        style={{ backgroundColor: theme.colors.background.secondary }}
+        style={{ backgroundColor: vexFire.backgroundSoft }}
       >
-        <Icon name={item.icon} size={20} color={iconColor} />
+        <VexIcon name={item.icon} size="md" color={iconColor} variant="solid" />
       </Box>
       <Box flex={1} ml={12}>
         <Text
@@ -108,8 +110,8 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
           style={{
             fontWeight: '500',
             color: item.danger
-              ? theme.colors.error.DEFAULT
-              : theme.colors.text.primary,
+              ? vexFire.danger
+              : vexFire.cream,
           }}
         >
           {item.title}
@@ -117,8 +119,7 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
         {item.subtitle && (
           <Text
             variant="caption"
-            color="text.secondary"
-            style={{ marginTop: 2 }}
+            style={{ color: vexFire.textSecondary, marginTop: 2 }}
           >
             {item.subtitle}
           </Text>
@@ -127,39 +128,36 @@ function SettingRow({ item, theme }: { item: SettingItem; theme: Theme }) {
       <Box flexDirection="row" alignItems="center">
         {item.type === 'toggle' && (
           <Switch
-            value={item.value as boolean}
+            value={Boolean(item.value)}
             onValueChange={item.onToggle}
             trackColor={{
-              false: theme.colors.background.tertiary,
-              true: theme.colors.semantic.vexCyanSoft,
+              false: vexFire.backgroundSoft,
+              true: vexFire.ember,
             }}
-            thumbColor={
-              item.value ? theme.colors.semantic.vexCyan : lightColors.text.inverse
-            }
+            thumbColor={item.value ? vexFire.ember : vexFire.cream}
           />
         )}
         {item.type === 'link' && (
-          <Icon
+          <VexIcon
             name="arrow-right"
-            size={20}
-            color={theme.colors.text.tertiary}
+            size="md"
+            color={vexFire.textMuted}
           />
         )}
         {item.type === 'select' && (
           <Box flexDirection="row" alignItems="center">
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" color={vexFire.textSecondary}>
               {item.value}
             </Text>
-            <Icon
+            <VexIcon
               name="arrow-right"
-              size={16}
-              color={theme.colors.text.tertiary}
-              style={{ marginLeft: 4 }}
+              size="sm"
+              color={vexFire.textMuted}
             />
           </Box>
         )}
         {item.type === 'value' && (
-          <Text variant="caption" color="text.secondary">
+          <Text variant="caption" color={vexFire.textSecondary}>
             {item.value}
           </Text>
         )}

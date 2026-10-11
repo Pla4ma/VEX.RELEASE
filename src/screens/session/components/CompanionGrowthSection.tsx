@@ -1,10 +1,11 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import type { SessionSummary } from '../../../session/types';
 import type { Theme } from '../../../theme/types';
@@ -13,7 +14,6 @@ import {
   type LoadState,
   buildFallbackGrowth,
 } from './CompanionGrowthSection.helpers';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type CompanionGrowthSectionProps = {
   sessionId: string;
@@ -68,20 +68,20 @@ export function CompanionGrowthSection({
         mt={6}
         p={4}
         borderRadius="lg"
-        bg={theme.colors.background.secondary}
+        bg={vexFire.panel}
       >
         <Box
           width={160}
           height={16}
           borderRadius="sm"
-          bg={theme.colors.background.tertiary}
+          bg={vexFire.backgroundSoft}
         />
         <Box
           mt={3}
           width="100%"
           height={10}
           borderRadius="full"
-          bg={theme.colors.background.tertiary}
+          bg={vexFire.backgroundSoft}
         />
       </Box>
     );
@@ -93,12 +93,12 @@ export function CompanionGrowthSection({
         mt={6}
         p={4}
         borderRadius="lg"
-        bg={theme.colors.background.secondary}
+        bg={vexFire.panel}
       >
-        <Text variant="label" color={theme.colors.error.DEFAULT}>
+        <Text variant="label" color={vexFire.danger}>
           Companion sync stumbled.
         </Text>
-        <Text variant="caption" color={theme.colors.text.secondary} mt={1}>
+        <Text variant="caption" color={vexFire.textSecondary} mt={1}>
           Your session is safe. Retry the companion growth sync.
         </Text>
         <Button variant="secondary"
@@ -120,9 +120,9 @@ export function CompanionGrowthSection({
         mt={6}
         p={4}
         borderRadius="lg"
-        bg={theme.colors.background.secondary}
+        bg={vexFire.panel}
       >
-        <Text variant="label" color={theme.colors.text.primary}>
+        <Text variant="label" color={vexFire.cream}>
           Companion is waiting for a profile.
         </Text>
       </Box>
@@ -140,7 +140,7 @@ export function CompanionGrowthSection({
         mt={6}
         p={4}
         borderRadius="lg"
-        bg={theme.colors.background.secondary}
+        bg={vexFire.panel}
       >
         <Box
           flexDirection="row"
@@ -148,14 +148,14 @@ export function CompanionGrowthSection({
           justifyContent="space-between"
         >
           <Box>
-            <Text variant="label" color={theme.colors.primary[400]}>
+            <Text variant="label" color={vexFire.ember}>
               Companion grew with you
             </Text>
-            <Text variant="h4" color={theme.colors.text.primary} mt={1}>
+            <Text variant="h4" color={vexFire.cream} mt={1}>
               {growth.mood}
             </Text>
           </Box>
-          <Text variant="caption" color={theme.colors.text.secondary}>
+          <Text variant="caption" color={vexFire.textSecondary}>
             {growth.phase} - LVL {growth.level}
           </Text>
         </Box>
@@ -163,25 +163,25 @@ export function CompanionGrowthSection({
           mt={4}
           height={10}
           borderRadius="full"
-          bg={theme.colors.background.tertiary}
+          bg={vexFire.backgroundSoft}
         >
           <View
             style={{
-              backgroundColor: theme.colors.primary[500],
+              backgroundColor: vexFire.ember,
               borderRadius: theme.spacing[2],
               height: theme.spacing[2],
               width: `${progressPercent}%`,
             }}
           />
         </Box>
-        <Text variant="caption" color={theme.colors.text.secondary} mt={2}>
+        <Text variant="caption" color={vexFire.textSecondary} mt={2}>
           {progressPercent}% toward the next evolution.
         </Text>
         {growth.leveledUp ? (
           <Animated.View
             entering={isReducedMotion ? undefined : ZoomIn.duration(300)}
           >
-            <Text variant="label" color={theme.colors.success.DEFAULT} mt={3}>
+            <Text variant="label" color={vexFire.success} mt={3}>
               {growth.evolved
                 ? 'Evolution burst unlocked.'
                 : 'Companion level up.'}

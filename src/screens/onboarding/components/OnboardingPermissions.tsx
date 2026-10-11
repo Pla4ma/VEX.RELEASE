@@ -6,7 +6,7 @@ import Animated, {
 import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import {
   BENEFITS,
@@ -14,7 +14,6 @@ import {
   SuccessAnimation,
   type PermissionBenefit,
 } from './OnboardingPermissions.helpers';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export type { PermissionBenefit };
 
@@ -39,7 +38,7 @@ export function OnboardingPermissions({
     try {
       const granted = await onRequestPermission();
       setStatus(granted ? 'granted' : 'denied');
-    } catch (err) {
+    } catch {
       setStatus('denied');
       setError('Could not request permission');
     }

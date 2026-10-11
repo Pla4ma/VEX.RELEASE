@@ -1,4 +1,4 @@
-import type { NavigationProp } from '@react-navigation/native';
+import { CommonActions, type NavigationProp } from '@react-navigation/native';
 import type { ExtendedRootStackParams } from './param-types';
 import { createDebugger } from '../utils/debug';
 import { captureException } from '../config/sentry';
@@ -103,24 +103,30 @@ export function navigateWithValidation<T extends keyof ExtendedRootStackParams>(
     );
     if (validation.fallbackRoute) {
       try {
-        navigation.navigate(
-          validation.fallbackRoute as string,
-          undefined,
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: validation.fallbackRoute,
+          }),
         );
         return { success: true, usedFallback: true };
       } catch (error) {
-        captureException(error instanceof Error ? error : new Error(String(error)), {
-          tags: { feature: 'navigation', operation: 'fallbackNavigation' },
-        });
+        captureException(
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            tags: { feature: 'navigation', operation: 'fallbackNavigation' },
+          },
+        );
         return { success: false, error: 'Fallback navigation failed' };
       }
     }
     return { success: false, error: validation.error };
   }
   try {
-    navigation.navigate(
-      route as string,
-      validation.sanitizedParams,
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: route,
+        params: validation.sanitizedParams,
+      }),
     );
     return { success: true };
   } catch (error) {

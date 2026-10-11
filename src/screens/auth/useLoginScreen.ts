@@ -2,11 +2,13 @@ import { useCallback, useState } from 'react';
 import { FadeInDown } from 'react-native-reanimated';
 import { useToast } from '../../shared/ui/components/Toast';
 import { useAuthStore } from '../../store/index';
+import { useOnboardingStore, hydrateOnboardingForUser } from '../../features/onboarding/store';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { buttonTap } from '../../utils/haptics';
-import { loginSchema } from './schemas';
 import type { AuthOAuthProvider } from '../../features/auth/types';
-
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { skipLogin } from './dev-bypass';
+import { loginSchema } from './schemas';
 type LoginErrors = { email?: string; password?: string };
 
 export function useLoginScreen(initialEmail: string) {
@@ -81,7 +83,24 @@ export function useLoginScreen(initialEmail: string) {
       });
     }
   }, [error, loginWithOAuth, showToast]);
-
+  const handleSkipLogin = useCallback((): void => {
+    void skipLogin(
+      useAuthStore.getState().login,
+      hydrateOnboardingForUser,
+      useOnboardingStore.getState().completeOnboarding,
+    ).catch((caught: unknown) => {
+      captureSilentFailure(caught, {
+        feature: 'auth',
+        operation: 'development-skip-login',
+        type: 'ui',
+      });
+      showToast({
+        message: 'Could not open local testing. Tap Skip login to try again.',
+        title: 'Try again',
+        type: 'error',
+      });
+    });
+  }, [showToast]);
   return {
     actionEntering,
     bodyEntering,
@@ -89,6 +108,7 @@ export function useLoginScreen(initialEmail: string) {
     errors,
     handleLogin,
     handleOAuthLogin,
+    handleSkipLogin,
     introEntering,
     isLoading,
     isReducedMotion,

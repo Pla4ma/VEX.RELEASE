@@ -45,15 +45,15 @@ export function HomeUnlockPath({
             width: 54,
           }}
         >
-          <Icon color={vexLightGlass.mint[800]} name="lock" size="sm" />
+          <Icon color={vexLightGlass.mint[800]} name="sparkles" size="sm" />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={type.kicker}>NEXT UNLOCK</Text>
+          <Text style={type.kicker}>RHYTHM MAP</Text>
           <Text style={[type.title, { marginTop: spacing[1] }]}>
             {next.title}
           </Text>
           <Text style={[type.body, { marginTop: spacing[1] }]}>
-            {actionCopy} · {model.progressLabel}
+            {model.progressLabel} · {actionCopy}
           </Text>
         </View>
       </View>
@@ -79,10 +79,10 @@ export function HomeUnlockPath({
 
       <View style={{ marginTop: spacing[4] }}>
         <LiquidButton
-          accessibilityHint="Start a session to unlock the next VEX layer"
-          accessibilityLabel="Start session and unlock next VEX path layer"
+          accessibilityHint="Start another session and deepen your VEX world"
+          accessibilityLabel="Start another focus session"
           fullWidth
-          label="Start focus session"
+          label="Deepen the signal"
           onPress={onStartSession}
           rightIcon={<Icon color={ref.white} name="arrowRight" size="sm" />}
           size="sm"
@@ -92,4 +92,3 @@ export function HomeUnlockPath({
     </ReferenceCard>
   );
 }
-

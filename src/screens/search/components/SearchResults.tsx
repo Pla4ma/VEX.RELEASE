@@ -78,7 +78,7 @@ function ResultItem({ item, theme }: { item: SearchResult; theme: ReturnType<typ
   );
 }
 
-function EmptySearchState({ query, theme }: { query: string; theme: ReturnType<typeof useTheme>['theme'] }): React.JSX.Element {
+function EmptySearchState({ query: _query, theme }: { query: string; theme: ReturnType<typeof useTheme>['theme'] }): React.JSX.Element {
   return (
     <Box flex={1} alignItems="center" justifyContent="center" p={32}>
       <Icon name="search" size={48} color={theme.colors.text.tertiary} />

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
@@ -44,7 +44,7 @@ const LANE_DESCRIPTIONS: Record<Lane, string> = {
 
 export const LaneModeSettingsScreen = withScreenErrorBoundary(
   function LaneModeSettingsScreen({ navigation }: Props): React.ReactNode {
-    const { theme } = useTheme();
+    const { theme: _theme } = useTheme();
 
     const insets = useSafeAreaInsets();
     const chosenLane = useOnboardingStore(
@@ -95,14 +95,14 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                       variant="body"
                       style={{
                         fontWeight: '600',
-                        color: theme.colors.text.primary,
+                        color: vexFire.cream,
                       }}
                     >
                       {LANE_LABELS[lane]}
                     </Text>
                     <Text
                       variant="caption"
-                      color="text.secondary"
+                      color={vexFire.textSecondary}
                       style={{ marginTop: 4, lineHeight: 18 }}
                     >
                       {LANE_DESCRIPTIONS[lane]}
@@ -115,9 +115,9 @@ export const LaneModeSettingsScreen = withScreenErrorBoundary(
                       borderRadius={12}
                       justifyContent="center"
                       alignItems="center"
-                      style={{ backgroundColor: theme.colors.primary[500] }}
+                      style={{ backgroundColor: vexFire.ember }}
                     >
-                      <Text style={{ color: lightColors.text.inverse, fontSize: 14 }}>
+                      <Text style={{ color: vexFire.background, fontSize: 14 }}>
                         {'\u2713'}
                       </Text>
                     </Box>

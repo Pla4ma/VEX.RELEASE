@@ -7,11 +7,10 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../../components/primitives/Text';
-import { VexActivationButton } from '../VexPrimaryButton';
-import { VexGlassInput } from '../VexGlassInput';
-import { GlassSurface } from './GlassSurface';
+import { Button } from '../../../../components/primitives/Button';
+import { useTheme } from '../../../../theme/ThemeContext';
+import { FormField } from '../../../../shared/ui/components/FormField';
 import { getMinTouchTargetStyle } from '../../../../utils/touchTarget';
-import { etherealText } from '@/theme/tokens/ethereal-sky';
 
 type LoginEmailFormProps = {
   email: string;
@@ -36,10 +35,16 @@ export function LoginEmailForm({
   onSubmit,
   onForgotPassword,
 }: LoginEmailFormProps): React.JSX.Element {
+  const { theme } = useTheme();
   return (
-    <GlassSurface borderRadius={32} style={{ padding: 22, gap: 12, backgroundColor: 'rgba(255,255,255,0.88)' }}>
-      <View style={{ gap: 10 }}>
-        <VexGlassInput
+    <View style={{ padding: theme.spacing[4], gap: theme.spacing[3],
+      borderRadius: theme.borderRadius.xl, backgroundColor: theme.colors.surface.card }}>
+
+      <View style={{ gap: theme.spacing[3] }}>
+        <FormField
+          accessibilityLabel="Email"
+          accessibilityHint="Enter the email for your VEX account"
+          autoCapitalize="none"
           autoComplete="email"
           error={emailError}
           keyboardType="email-address"
@@ -49,7 +54,9 @@ export function LoginEmailForm({
           returnKeyType="next"
           value={email}
         />
-        <VexGlassInput
+        <FormField
+          accessibilityLabel="Password"
+          accessibilityHint="Enter your VEX account password"
           autoComplete="current-password"
           error={passwordError}
           label="Password"
@@ -66,26 +73,16 @@ export function LoginEmailForm({
           accessibilityHint="Opens password recovery"
           accessibilityLabel="Forgot password"
           accessibilityRole="link"
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           onPress={onForgotPassword}
           style={getMinTouchTargetStyle()}
         >
-          <Text
-            color={etherealText.heading}
-            fontSize={13}
-            fontWeight="600"
-            style={{ color: etherealText.subtitle }}
-          >
-            Forgot password?
-          </Text>
+          <Text color="text.secondary" variant="bodySmall">Forgot password?</Text>
         </Pressable>
       </View>
-      <VexActivationButton
-        isLoading={isLoading}
-        label="Enter VEX"
-        loadingLabel="Opening"
-        onPress={onSubmit}
-      />
-    </GlassSurface>
+      <Button accessibilityLabel="Enter VEX" accessibilityHint="Signs in to your VEX account"
+        accessibilityRole="button" fullWidth isLoading={isLoading} onPress={onSubmit}>
+        {isLoading ? 'Opening' : 'Enter VEX'}
+      </Button>
+    </View>
   );
 }

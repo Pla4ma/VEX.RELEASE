@@ -14,7 +14,8 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 
 export const SessionCompleteScreen = withScreenErrorBoundary(
   function SessionCompleteScreen(): React.JSX.Element {
-    const { navigation, parsedRoute } = useSessionCompletionRouteState();
+    const { navigation, parsedRoute, rootNavigation } =
+      useSessionCompletionRouteState();
     const recoveredCompletion = useRecoveredSessionCompletion(
       parsedRoute.recoverySessionId,
     );
@@ -34,7 +35,13 @@ export const SessionCompleteScreen = withScreenErrorBoundary(
               ? 'VEX is rebuilding this win from your saved completion record.'
               : (parsedRoute.warningMessage ?? undefined)
           }
-          onDone={() => navigation.navigate({ name: 'Main', params: {} })}
+          onDone={() => {
+            if (rootNavigation) {
+              rootNavigation.navigate('Main', { screen: 'Home' });
+              return;
+            }
+            navigation.goBack();
+          }}
           onRetry={
             parsedRoute.recoverySessionId && recoveredCompletion.isError
               ? () => {

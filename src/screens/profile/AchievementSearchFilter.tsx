@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -5,7 +6,7 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import type { AchievementCategory } from '@/features/achievements/types';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export type FilterType = 'ALL' | 'UNLOCKED' | 'LOCKED';
@@ -30,7 +31,7 @@ export const CategoryTabs: React.ComponentType<{
   selected: AchievementCategory | 'ALL';
   onSelect: (category: AchievementCategory | 'ALL') => void;
 }> = ({ selected, onSelect }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Box py={2}>
       <FlashList
@@ -55,8 +56,8 @@ export const CategoryTabs: React.ComponentType<{
                 borderRadius={20}
                 bg={
                   isSelected
-                    ? theme.colors.primary[500]
-                    : theme.colors.background.tertiary
+                    ? vexFire.ember
+                    : vexFire.backgroundSoft
                 }
                 style={{ opacity: isSelected ? 1 : 0.7 }}
               >
@@ -66,8 +67,8 @@ export const CategoryTabs: React.ComponentType<{
                     variant="body"
                     color={
                       isSelected
-                        ? lightColors.text.inverse
-                        : theme.colors.text.secondary
+                        ? vexFire.cream
+                        : vexFire.textSecondary
                     }
                     fontWeight={isSelected ? 'semibold' : 'normal'}
                   >
@@ -89,7 +90,7 @@ export const FilterSortBar: React.ComponentType<{
   sort: SortType;
   onSortChange: (sort: SortType) => void;
 }> = ({ filter, onFilterChange, sort, onSortChange }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Box
       flexDirection="row"
@@ -99,7 +100,7 @@ export const FilterSortBar: React.ComponentType<{
       py={2}
       style={{
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.border.light,
+        borderBottomColor: vexFire.border,
       }}
     >
       <Box flexDirection="row" gap={2}>
@@ -115,21 +116,21 @@ export const FilterSortBar: React.ComponentType<{
               px={3}
               py={1}
               borderRadius={12}
-              bg={filter === f ? theme.colors.accent.purple : 'transparent'}
+              bg={filter === f ? vexFire.ember : 'transparent'}
               style={{
                 borderWidth: 1,
                 borderColor:
                   filter === f
-                    ? theme.colors.primary[500]
-                    : theme.colors.border.DEFAULT,
+                    ? vexFire.ember
+                    : vexFire.border,
               }}
             >
               <Text
                 variant="caption"
                 color={
                   filter === f
-                    ? lightColors.text.inverse
-                    : theme.colors.text.secondary
+                    ? vexFire.cream
+                    : vexFire.textSecondary
                 }
               >
                 {f === 'ALL' ? 'All' : f === 'UNLOCKED' ? 'Unlocked' : 'Locked'}
@@ -140,7 +141,7 @@ export const FilterSortBar: React.ComponentType<{
       </Box>
 
       <Box flexDirection="row" alignItems="center" gap={2}>
-        <Text variant="caption" color={theme.colors.text.tertiary}>
+        <Text variant="caption" color={vexFire.textMuted}>
           Sort:
         </Text>
         <Pressable
@@ -156,7 +157,7 @@ export const FilterSortBar: React.ComponentType<{
           accessibilityHint="Double tap to activate"
         >
           <Box flexDirection="row" alignItems="center" gap={1}>
-            <Text variant="caption" color={theme.colors.primary[500]}>
+            <Text variant="caption" color={vexFire.ember}>
               {sort === 'RARITY'
                 ? 'Rarity'
                 : sort === 'RECENT'

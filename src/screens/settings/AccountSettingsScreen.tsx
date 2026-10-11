@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-native';
@@ -20,7 +21,7 @@ import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScree
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;
 
 const AccountSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuthStore();
 
@@ -52,7 +53,7 @@ const AccountSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
               <Icon
                 name="arrow-left"
                 size={24}
-                color={theme.colors.text.primary}
+                color={vexFire.cream}
               />
             </Pressable>
             <LiquidGlassHeader

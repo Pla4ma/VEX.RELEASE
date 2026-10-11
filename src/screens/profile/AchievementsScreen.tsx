@@ -1,29 +1,29 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback, useMemo } from 'react';
-import { Pressable } from 'react-native';
+import { Image, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text';
 import { Skeleton } from '@/shared/ui/primitives';
-import { useTheme } from '@/theme';
 import { useAchievements, achievementKeys } from '@/features/achievements/hooks';
 import { useAchievementStats } from '@/features/achievements/hooks-computed';
 import type { AchievementCategory, AchievementRarity } from '@/features/achievements/types';
 import { useAuthStore } from '../../store/authStore';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ExtendedRootStackParams } from '@/navigation/types';
-import { navigateToRootScreen } from '../../navigation/navigation-helpers';
+import { navigateToMainTab } from '../../navigation/navigation-helpers';
 import { AchievementsHeader } from './AchievementProgressBar';
 import { CategoryTabs, FilterSortBar, type FilterType, type SortType } from './AchievementSearchFilter';
 import { AchievementCard, AchievementSkeletonCard, EmptyState, type AchievementWithStatus } from './AchievementCategorySection';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { RouteBackButton } from '../../shared/ui/vex/RouteBackButton';
 
 const RARITY_ORDER: AchievementRarity[] = ['LEGENDARY', 'EPIC', 'RARE', 'UNCOMMON', 'COMMON'];
 const CATEGORY_ORDER: AchievementCategory[] = ['SESSION', 'STREAK', 'BOSS', 'SOCIAL', 'PROGRESSION', 'ECONOMY'];
 
 const AchievementsScreen = React.memo(() => {
-  const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
@@ -36,7 +36,7 @@ const AchievementsScreen = React.memo(() => {
   const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStatus | null>(null);
 
   const handleStartSession = useCallback(() => {
-    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} });
+    navigateToMainTab(navigation, 'Focus');
   }, [navigation]);
 
   const filteredAchievements = useMemo(() => {
@@ -69,7 +69,7 @@ const AchievementsScreen = React.memo(() => {
 
   if (isLoading) {
     return (
-      <Box flex={1} bg={theme.colors.background.primary}>
+      <Box flex={1} style={{ backgroundColor: vexFire.background }}>
         <Box p={4}>
           <Skeleton width={200} height={32} />
           <Skeleton width={150} height={20} />
@@ -86,7 +86,7 @@ const AchievementsScreen = React.memo(() => {
 
   if (!filteredAchievements.length) {
     return (
-      <Box flex={1} bg={theme.colors.background.primary}>
+      <Box flex={1} style={{ backgroundColor: vexFire.background }}>
         <CategoryTabs selected={selectedCategory} onSelect={setSelectedCategory} />
         <FilterSortBar filter={filter} onFilterChange={setFilter} sort={sort} onSortChange={setSort} />
         <EmptyState onStartSession={handleStartSession} />
@@ -95,7 +95,16 @@ const AchievementsScreen = React.memo(() => {
   }
 
   return (
-    <Box flex={1} bg={theme.colors.background.primary}>
+    <Box flex={1} style={{ backgroundColor: vexFire.background }}>
+      <Box px={4} pt={4}>
+        <RouteBackButton onPress={() => navigation.goBack()} />
+      </Box>
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../assets/vex/utility/mastery-crown.png')}
+        resizeMode="contain"
+        style={{ height: 170, opacity: 0.14, position: 'absolute', right: -46, top: 10, width: 170 }}
+      />
       {stats && (
         <AchievementsHeader
           total={stats.total}
@@ -107,13 +116,13 @@ const AchievementsScreen = React.memo(() => {
       <CategoryTabs selected={selectedCategory} onSelect={setSelectedCategory} />
       <FilterSortBar filter={filter} onFilterChange={setFilter} sort={sort} onSortChange={setSort} />
       {selectedAchievement && (
-        <Box p={4} bg={theme.colors.background.secondary} mb={4}>
+        <Box p={4} mb={4} style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1 }}>
           <Box flexDirection="row" justifyContent="space-between" alignItems="center">
             <Box flex={1}>
-              <Text variant="h3" color={theme.colors.text.primary}>
+              <Text variant="h3" style={{ color: vexFire.cream }}>
                 {selectedAchievement.title}
               </Text>
-              <Text variant="body" color={theme.colors.text.secondary} mt={1}>
+              <Text variant="body" style={{ color: vexFire.textSecondary }} mt={1}>
                 {selectedAchievement.description}
               </Text>
             </Box>
@@ -124,7 +133,7 @@ const AchievementsScreen = React.memo(() => {
               accessibilityRole="button"
               accessibilityHint="Closes the achievement details"
             >
-              <Text variant="body" color={theme.colors.text.secondary}>Close</Text>
+              <Text variant="body" style={{ color: vexFire.amber }}>Close</Text>
             </Pressable>
           </Box>
         </Box>

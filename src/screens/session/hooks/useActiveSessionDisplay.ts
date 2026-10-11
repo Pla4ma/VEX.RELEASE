@@ -3,8 +3,7 @@ import { resolveSessionMode } from '../../../session/modes';
 import {
   getLanePresentationPolicy,
   useInitialLane,
-} from '../../../features/lane-engine/presentation';
-import { useReducedMotion } from '../../../features/lane-engine/presentation';
+ useReducedMotion } from '../../../features/lane-engine/presentation';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import {
   getActiveSessionTargetLabel,
@@ -34,6 +33,7 @@ export type UseActiveSessionDisplayInput = {
   isPaused: boolean;
   showInterruption: boolean;
   sessionConfigSessionMode: unknown;
+  plannedQuizBreakOptedIn: boolean;
 };
 
 export type UseActiveSessionDisplayResult = {
@@ -73,7 +73,7 @@ export function useActiveSessionDisplay(
       focusStage,
       laneProfile,
       motivationStyle: normalizeActiveSessionMotivationStyle(motivationStyle),
-      plannedQuizBreakOptedIn: false,
+      plannedQuizBreakOptedIn: input.plannedQuizBreakOptedIn,
       primaryGoal: normalizeActiveSessionGoal(primaryGoal),
       sessionMode: currentMode,
       studyLayerLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),

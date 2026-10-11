@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 
 import type { ReflectionStatus } from '../../../features/focus-contract/types';
 import { ModeCompletionSurface } from '../../../features/mode-native/components/ModeCompletionSurface';
-import type { CompletionSurface } from '../../../features/session-completion/completion-experience-policy';
+import type { CompletionSurface , resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
 
 import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
 import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
@@ -14,7 +14,6 @@ import type { SessionCompleteContentProps } from './SessionCompleteContent.types
 import type { useSessionCompleteController } from '../../../features/session-completion/hooks';
 import type { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
 import type { useContractForSession } from '../../../features/focus-contract/hooks';
-import type { resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
 import type { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface SessionCompleteScrollViewProps {
@@ -79,7 +78,7 @@ export function SessionCompleteScrollView({
         project={contract?.taskDescription}
         action={contract?.taskDescription}
         onPrimaryAction={() => {
-          controller.navigation.navigate({ name: 'Home', params: {} });
+          controller.finishSession();
         }}
       />
 

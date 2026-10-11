@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Image, Pressable } from 'react-native';
 
@@ -37,10 +38,10 @@ export function SessionSmartPickCard({
           />
         </Box>
         <Box flex={1}>
-          <Text variant="label" color="text.primary">
+          <Text variant="label" color={vexFire.cream}>
             Smart Pick
           </Text>
-          <Text variant="body" color="text.secondary" mt="xs">
+          <Text variant="body" color={vexFire.textSecondary} mt="xs">
             {description}
           </Text>
         </Box>
@@ -49,7 +50,7 @@ export function SessionSmartPickCard({
         onPress={onSelect}
         style={{
           alignItems: 'center',
-          backgroundColor: theme.colors.semantic.primary,
+          backgroundColor: vexFire.ember,
           borderRadius: 999,
           marginTop: theme.spacing[4],
           minHeight: 48,
@@ -59,7 +60,7 @@ export function SessionSmartPickCard({
         accessibilityRole="button"
         accessibilityHint="Applies the recommended session preset"
       >
-        <Text variant="button" color="text.inverse">
+        <Text variant="button" color={vexFire.cream}>
           Use this
         </Text>
       </Pressable>

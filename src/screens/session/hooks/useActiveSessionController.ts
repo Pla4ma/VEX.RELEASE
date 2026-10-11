@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { AppState, BackHandler } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AppState, BackHandler, Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import {
   useNavigation,
@@ -19,6 +19,7 @@ import {
 import { resolveSessionMode } from '../../../session/modes';
 import { useAuthStore } from '../../../store';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
 import { useActiveSessionMetrics } from './useActiveSessionMetrics';
 import { useCompanionSession } from './useCompanionSession';
@@ -98,8 +99,8 @@ export function useActiveSessionController() {
   }, [isExiting]);
 
   useEffect(() => {
+    if (Platform.OS === 'web') {return undefined;}
     const subscription = AppState.addEventListener('change', (nextState) => {
-      if (!sessionQuery.session?.id || !sessionQuery.isActive) {return;}
       const action =
         nextState === 'background' || nextState === 'inactive'
           ? sessionQuery.backgroundSession
@@ -120,19 +121,22 @@ export function useActiveSessionController() {
     return () => subscription.remove();
   }, [sessionQuery]);
 
+  const backgroundOnUnmountRef = useRef(sessionQuery.backgroundSession);
+  backgroundOnUnmountRef.current = sessionQuery.backgroundSession;
+  const sessionIdentityRef = useRef({ id: sessionQuery.session?.id, isActive: sessionQuery.isActive });
+  sessionIdentityRef.current = { id: sessionQuery.session?.id, isActive: sessionQuery.isActive };
+
   useEffect(() => {
-    let cancelled = false;
     return () => {
-      if (!sessionQuery.session?.id || !sessionQuery.isActive) {return;}
-      sessionQuery.backgroundSession().catch((caught) => {
-        if (cancelled) {return;}
+      const { id, isActive } = sessionIdentityRef.current;
+      if (!id || !isActive) {return;}
+      backgroundOnUnmountRef.current().catch((caught: unknown) => {
         Sentry.captureException(caught, {
           tags: { feature: 'session-background-unmount' },
         });
       });
-      cancelled = true;
     };
-  }, [sessionQuery]);
+  }, []);
 
   const handlers = useActiveSessionHandlers({
     sessionQuery,
@@ -172,10 +176,7 @@ export function useActiveSessionController() {
     showMultiplierInfo,
     streak,
     theme,
-    themeBackgroundColor:
-      sessionTheme.backgroundTint === 'transparent'
-        ? theme.colors.background.primary
-        : sessionTheme.backgroundTint,
+    themeBackgroundColor: vexFire.background,
     userId,
   };
 }

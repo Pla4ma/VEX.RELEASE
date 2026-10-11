@@ -5,6 +5,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import type { useTheme } from '../../../theme';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type ActiveSessionHeaderProps = {
   isPaused: boolean;
@@ -39,19 +40,19 @@ export function ActiveSessionHeader({
             minHeight: 44,
             borderRadius: theme.borderRadius.full,
             borderWidth: 1,
-            borderColor: theme.colors.semantic.borderStrong,
+            borderColor: vexFire.borderStrong,
             paddingHorizontal: theme.spacing[3],
-            backgroundColor: theme.colors.semantic.surfaceGlass,
+            backgroundColor: vexFire.panelSoft,
           }}
         >
           <Icon
             name="chevron-left"
             size="lg"
-            color={theme.colors.text.primary}
+            color={vexFire.cream}
           />
           <Text
             variant="label"
-            color="text.primary"
+            color={vexFire.cream}
             style={{ marginLeft: theme.spacing[1] }}
           >
             Quit
@@ -65,7 +66,7 @@ export function ActiveSessionHeader({
           borderRadius="full"
           bg={isPaused ? 'warning.DEFAULT' : 'success.DEFAULT'}
         />
-        <Text variant="caption" color="text.secondary">
+        <Text variant="caption" color={vexFire.textSecondary}>
           {isPaused ? 'Paused' : 'In Session'}
         </Text>
       </Box>

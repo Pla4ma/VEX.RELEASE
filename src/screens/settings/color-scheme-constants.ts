@@ -1,4 +1,5 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from "@/theme/tokens/vex-fire";
+
 
 
 export type AccentColor =
@@ -25,14 +26,14 @@ interface TimerFormatOption {
 }
 
 export const ACCENT_COLORS: AccentColorOption[] = [
-  { id: 'indigo', hex: lightColors.semantic.primary },
-  { id: 'purple', hex: lightColors.accent.purple },
-  { id: 'blue', hex: lightColors.accent.blue },
-  { id: 'green', hex: lightColors.accent.green },
-  { id: 'orange', hex: lightColors.accent.orange },
-  { id: 'pink', hex: lightColors.accent.pink },
-  { id: 'red', hex: lightColors.semantic.danger },
-  { id: 'teal', hex: lightColors.accent.teal },
+  { id: 'indigo', hex: vexFire.ember },
+  { id: 'purple', hex: vexFire.copper },
+  { id: 'blue', hex: vexFire.amber },
+  { id: 'green', hex: vexFire.success },
+  { id: 'orange', hex: vexFire.ember },
+  { id: 'pink', hex: vexFire.copper },
+  { id: 'red', hex: vexFire.danger },
+  { id: 'teal', hex: vexFire.amber },
 ];
 
 export const TIMER_FORMAT_OPTIONS: TimerFormatOption[] = [

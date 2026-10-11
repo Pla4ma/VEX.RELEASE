@@ -18,3 +18,4 @@ export * from './elevation';
 export * from './brand';
 export * from './decorative';
 export * from './ethereal-sky';
+export * from './vex-fire';

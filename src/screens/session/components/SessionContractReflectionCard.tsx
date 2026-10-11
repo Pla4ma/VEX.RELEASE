@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
@@ -16,11 +17,11 @@ type SessionContractReflectionCardProps = {
   isPending: boolean;
 };
 
-const options: Array<{
+const options: {
   status: ReflectionStatus;
   label: string;
   hint: string;
-}> = [
+}[] = [
   {
     status: 'done',
     label: 'Done',
@@ -70,7 +71,7 @@ export function SessionContractReflectionCard({
         Did you do it?
       </Text>
       <Box borderLeftWidth={2} borderLeftColor="primary.500" pl="md" mb="md">
-        <Text variant="body" color="text.secondary">
+        <Text variant="body" color={vexFire.textSecondary}>
           {contract.taskDescription}
         </Text>
       </Box>
@@ -91,7 +92,7 @@ export function SessionContractReflectionCard({
         ))}
       </Box>
       {reflectedStatus ? (
-        <Text variant="caption" color="text.secondary" mt="md">
+        <Text variant="caption" color={vexFire.textSecondary} mt="md">
           {getReflectionCopy(reflectedStatus)}
         </Text>
       ) : null}

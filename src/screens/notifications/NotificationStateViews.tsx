@@ -5,6 +5,7 @@ import { Skeleton, SkeletonList } from '../../shared/ui/primitives/Skeleton';
 import { ErrorState } from '../../components/states/ErrorState';
 import { EmptyNotifications } from '../../shared/ui/primitives/EmptyState.variants';
 import { FILTER_LABELS } from './NotificationScreenConfig';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export function NotificationLoadingState({
   insetsTop,
@@ -47,7 +48,7 @@ export function NotificationErrorState({
   return (
     <Box flex={1} style={{ backgroundColor }}>
       <Box px={20} pb={12} pt={insetsTop + 16}>
-        <Text variant="h1">Notifications</Text>
+        <Text variant="h1" color={vexFire.cream}>Notifications</Text>
       </Box>
       <ErrorState
         title="Failed to load notifications"
@@ -89,10 +90,10 @@ export function NotificationFilteredEmptyState({
     <Box flex={1} style={{ backgroundColor }}>
       {headerElement}
       <Box flex={1} alignItems="center" justifyContent="center" px={24}>
-        <Text fontSize={48} color="text.tertiary">
+        <Text fontSize={48} color={vexFire.ember}>
           {'\u{2315}'}
         </Text>
-        <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
+        <Text variant="h4" color={vexFire.cream} style={{ marginTop: 16, textAlign: 'center' }}>
           No{' '}
           {activeFilter === 'all'
             ? ''
@@ -101,7 +102,7 @@ export function NotificationFilteredEmptyState({
         </Text>
         <Text
           variant="body"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{ marginTop: 8, textAlign: 'center' }}
         >
           Try selecting a different filter

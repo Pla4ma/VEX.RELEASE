@@ -7,7 +7,7 @@ function isAuthCallbackUrl(url: string): boolean {
     const parsed = new URL(url);
     return parsed.protocol === 'vex:' && parsed.hostname === 'auth'
       && parsed.pathname === '/callback';
-  } catch (error: unknown) {
+  } catch {
     return false;
   }
 }

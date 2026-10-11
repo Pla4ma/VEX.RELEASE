@@ -9,7 +9,7 @@ import { LiquidButton } from '../../../components/glass/LiquidButton';
 import { Text } from '../../../components/primitives/Text';
 import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface FocusControlsProps {
   isPaused: boolean;
@@ -42,7 +42,7 @@ export function FocusControls({
         label={isPaused ? 'Resume' : 'Pause'}
         leftIcon={
           <Icon
-            color={vexLightGlass.text.inverse}
+            color={vexFire.background}
             name={isPaused ? 'play' : 'pause'}
             size={18}
           />
@@ -58,10 +58,8 @@ export function FocusControls({
         onPress={onEnd}
         style={({ pressed }) => ({
           alignItems: 'center',
-          backgroundColor: pressed
-            ? 'rgba(255,255,255,0.18)'
-            : 'rgba(255,255,255,0.08)',
-          borderColor: 'rgba(255,255,255,0.28)',
+            backgroundColor: pressed ? vexFire.panel : vexFire.panelSoft,
+          borderColor: vexFire.borderStrong,
           borderRadius: borderRadius.full,
           borderWidth: 1,
           paddingVertical: 14,
@@ -69,7 +67,7 @@ export function FocusControls({
       >
         <Text
           style={{
-            color: vexLightGlass.text.secondary,
+            color: vexFire.textSecondary,
             fontSize: 14,
             fontWeight: '700',
             letterSpacing: 0.6,

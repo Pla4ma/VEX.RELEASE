@@ -6,7 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from '../../theme/ThemeContext';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { navigateToSettingsStackScreen } from '../../navigation/navigation-helpers';
 import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../navigation/types';
@@ -23,9 +24,9 @@ import {
 } from './NotificationComponents';
 import { useNotificationsData } from './useNotificationsData';
 import type { NotificationListItem } from './NotificationScreenConfig';
+import { RouteBackButton } from '../../shared/ui/vex/RouteBackButton';
 
 const NotificationsScreen = React.memo(() => {
-  const { theme } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const insets = useSafeAreaInsets();
   const {
@@ -46,10 +47,10 @@ const NotificationsScreen = React.memo(() => {
   } = useNotificationsData();
 
   const handleOpenNotificationSettings = useCallback(() => {
-    navigation.navigate('Settings', { screen: 'NotificationSettings' });
+    navigateToSettingsStackScreen(navigation, 'NotificationSettings');
   }, [navigation]);
 
-  const bg = theme.colors.background.primary;
+  const bg = vexFire.background;
   const inset = insets.top;
 
   if (isLoading)
@@ -66,6 +67,7 @@ const NotificationsScreen = React.memo(() => {
 
   const header = (
     <Box px={20} pb={12} pt={inset + 16}>
+      <RouteBackButton onPress={() => navigation.goBack()} />
       <Box
         flexDirection="row"
         justifyContent="space-between"
@@ -82,7 +84,7 @@ const NotificationsScreen = React.memo(() => {
           >
             <Text
               variant="caption"
-              style={{ color: theme.colors.primary[500] }}
+              style={{ color: vexFire.amber }}
             >
               Mark all read
             </Text>
@@ -93,9 +95,9 @@ const NotificationsScreen = React.memo(() => {
         availableFilterTypes={availableFilterTypes}
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
-        primaryColor={theme.colors.primary[500]}
-        secondaryBg={theme.colors.background.secondary}
-        textSecondary={theme.colors.text.secondary}
+        primaryColor={vexFire.ember}
+        secondaryBg={vexFire.panel}
+        textSecondary={vexFire.textSecondary}
       />
     </Box>
   );
@@ -138,7 +140,7 @@ const NotificationsScreen = React.memo(() => {
               item={item.data!} // ponytail: notification type always has data
               onPress={handleNotificationPress}
               formatTime={formatTime}
-              primaryColor={theme.colors.primary[500]}
+              primaryColor={vexFire.ember}
             />
           );
         }}
@@ -146,7 +148,7 @@ const NotificationsScreen = React.memo(() => {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            tintColor={theme.colors.primary[500]}
+            tintColor={vexFire.ember}
           />
         }
       />

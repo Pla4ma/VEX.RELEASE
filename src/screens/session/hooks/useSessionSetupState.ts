@@ -12,9 +12,8 @@ import {
   restoreSessionDraft,
   saveSessionDraft,
 } from './session-setup-hydration';
-
+import { useSessionSetupRouteSync } from './useSessionSetupRouteSync';
 type SessionSetupParams = SessionStackParams['SessionSetup'];
-
 // Lazy-initialized state defaults to avoid recomputing on every render
 function resolveInitialPreset(params: SessionSetupParams | undefined): PresetWithIcon {
   if (params?.presetId) {
@@ -24,13 +23,11 @@ function resolveInitialPreset(params: SessionSetupParams | undefined): PresetWit
   }
   return PRESETS[1]!;
 }
-
 function resolveInitialDuration(params: SessionSetupParams | undefined): number {
   return params?.presetDuration
     ? Math.max(1, Math.round(params.presetDuration / 60))
     : 30;
 }
-
 function resolveInitialSessionMode(params: SessionSetupParams | undefined): SessionMode {
   return params?.presetMode
     ? resolveSessionMode(params.presetMode)
@@ -38,7 +35,6 @@ function resolveInitialSessionMode(params: SessionSetupParams | undefined): Sess
       ? SessionMode.STUDY
       : SessionMode.LIGHT_FOCUS;
 }
-
 export function useSessionSetupState(
   userId: string,
   params: SessionSetupParams | undefined,
@@ -47,7 +43,7 @@ export function useSessionSetupState(
   const storage = useMemo(() => getDefaultStorageAdapter(), []);
   const sessionDraftKey = `session_draft_${userId}`;
   const masteryStateKey = `mastery_state_${userId}`;
-  const initialPreset = useMemo(() => resolveInitialPreset(params), [params?.presetId]);
+  const initialPreset = useMemo(() => resolveInitialPreset(params), [params]);
   const [selectedPreset, setSelectedPreset] = useState<PresetWithIcon>(
     initialPreset!, // ponytail: initialPreset always set by useMemo
   );
@@ -75,39 +71,15 @@ export function useSessionSetupState(
   const [masteryState, setMasteryState] = useState<MasteryState | null>(null);
   const [smartSuggestion, setSmartSuggestion] =
     useState<SmartSuggestion | null>(null);
-
-  // SAFETY: params changes require synchronizing derived UI selections;
-  // this effect is the single source of truth for parameter-drive state.
-  useEffect(() => {
-    if (params?.presetId) {
-      const matchedPreset = PRESETS.find(
-        (preset) => preset.id === params.presetId,
-      );
-      if (matchedPreset) {
-        setSelectedPreset(matchedPreset);
-        setSelectedCategory(matchedPreset.category ?? 'standard');
-      }
-    }
-    if (params?.selectedThemeId) {
-      setSelectedThemeId(params.selectedThemeId);
-    }
-    if (params?.goal) {
-      setDraftGoal(params.goal);
-    }
-    const routedDurationSeconds =
-      params?.presetDuration ?? params?.suggestedDurationSeconds;
-    if (routedDurationSeconds) {
-      setSelectedPreset(PRESETS[5]!);
-      setSelectedCategory('custom');
-      setCustomDuration(Math.max(1, Math.round(routedDurationSeconds / 60)));
-    }
-    if (params?.presetMode) {
-      setSelectedSessionMode(resolveSessionMode(params.presetMode));
-    }
-  }, [params?.goal, params?.presetDuration, params?.presetId, params?.presetMode, params?.selectedThemeId, params?.suggestedDurationSeconds]);
-
-  // SAFETY: restoreSessionDraft performs async I/O (storage reads + master state fetch);
-  // must run as effect triggered by user/session identity changes.
+  useSessionSetupRouteSync(
+    params,
+    setCustomDuration,
+    setDraftGoal,
+    setSelectedCategory,
+    setSelectedPreset,
+    setSelectedSessionMode,
+    setSelectedThemeId,
+  );
   useEffect(() => {
     let isCancelled = false;
     const run = async () => {
@@ -153,16 +125,18 @@ export function useSessionSetupState(
     storage,
     userId,
   ]);
-
   const prevAutoApplyKeyRef = useRef(
     `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`,
   );
   const currentAutoApplyKey = `${hasAutoAppliedSuggestion}-${hasHydratedDraft}-${JSON.stringify(params)}-${smartSuggestion?.preset.id ?? ''}`;
-  if (
-    !hasAutoAppliedSuggestion &&
-    hasHydratedDraft &&
-    currentAutoApplyKey !== prevAutoApplyKeyRef.current
-  ) {
+  useEffect(() => {
+    if (
+      hasAutoAppliedSuggestion ||
+      !hasHydratedDraft ||
+      currentAutoApplyKey === prevAutoApplyKeyRef.current
+    ) {
+      return;
+    }
     prevAutoApplyKeyRef.current = currentAutoApplyKey;
     if (
       shouldAutoApplySmartSuggestion({
@@ -176,10 +150,14 @@ export function useSessionSetupState(
       setSelectedCategory(smartSuggestion.preset.category ?? 'standard');
       setHasAutoAppliedSuggestion(true);
     }
-  }
-
-  // SAFETY: saveSessionDraft is an async side-effect that persists UI state to storage;
-  // must run as an effect triggered by changes to draftable fields.
+  }, [
+    currentAutoApplyKey,
+    hasAutoAppliedSuggestion,
+    hasHydratedDraft,
+    hasSavedDraft,
+    params,
+    smartSuggestion,
+  ]);
   useEffect(() => {
     if (!userId || !hasHydratedDraft) {return;}
     saveSessionDraft(storage, sessionDraftKey, {
@@ -202,7 +180,6 @@ export function useSessionSetupState(
     storage,
     userId,
   ]);
-
   return {
     customDuration, draftGoal, masteryState, selectedCategory,
     selectedPreset, selectedSessionMode, selectedThemeId,

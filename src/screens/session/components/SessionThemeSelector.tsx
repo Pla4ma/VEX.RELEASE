@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -5,12 +6,11 @@ import { FlashList } from '@shopify/flash-list';
 import { FocusRing } from '../../../components/FocusRing';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionTheme } from '../../../features/themes/session-themes';
 import { getSessionThemeById } from '../../../features/themes/session-themes';
 import { buildPreviewGradient } from '../utils/session-setup';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type SessionThemeSelectorProps = {
   onPressTheme: (theme: SessionTheme) => void;
@@ -52,11 +52,11 @@ export function SessionThemeSelector({
             p="md"
             borderRadius={20}
             style={{
-              backgroundColor: theme.colors.background.secondary,
+              backgroundColor: vexFire.panel,
               borderWidth: 1,
               borderColor: isSelected
                 ? item.previewColor
-                : theme.colors.border.light,
+                : vexFire.border,
             }}
           >
             <Box alignItems="center" mb="sm">
@@ -68,14 +68,14 @@ export function SessionThemeSelector({
               />
             </Box>
             <Text variant="label">{item.name}</Text>
-            <Text variant="caption" color="text.secondary" mt="xs">
+            <Text variant="caption" color={vexFire.textSecondary} mt="xs">
               {isOwned ? 'Owned' : `${item.coinCost} coins`}
             </Text>
           </Box>
         </Pressable>
       );
     },
-    [selectedThemeId, onPressTheme, theme],
+    [selectedThemeId, onPressTheme],
   );
 
   return (
@@ -83,7 +83,7 @@ export function SessionThemeSelector({
       <Text variant="label" mb="sm">
         Theme
       </Text>
-      <Text variant="caption" color="text.secondary" mb="md">
+      <Text variant="caption" color={vexFire.textSecondary} mb="md">
         Visual environments that make each session feel more personal.
       </Text>
 
@@ -92,9 +92,9 @@ export function SessionThemeSelector({
           p="md"
           bg="background.secondary"
           borderRadius="lg"
-          style={{ borderWidth: 1, borderColor: theme.colors.border.light }}
+          style={{ borderWidth: 1, borderColor: vexFire.border }}
         >
-          <Text variant="body" color="text.secondary">
+          <Text variant="body" color={vexFire.textSecondary}>
             Loading your themes...
           </Text>
         </Box>
@@ -103,9 +103,9 @@ export function SessionThemeSelector({
           p="md"
           bg="background.secondary"
           borderRadius="lg"
-          style={{ borderWidth: 1, borderColor: theme.colors.error.DEFAULT }}
+          style={{ borderWidth: 1, borderColor: vexFire.danger }}
         >
-          <Text variant="body" color="text.secondary" mb="sm">
+          <Text variant="body" color={vexFire.textSecondary} mb="sm">
             We could not load your themes right now.
           </Text>
           <Button variant="outline"
@@ -138,20 +138,20 @@ export function SessionThemeSelector({
         style={{
           backgroundColor:
             selectedTheme.backgroundTint === 'transparent'
-              ? theme.colors.background.secondary
+              ? vexFire.panel
               : selectedTheme.backgroundTint,
           borderWidth: 1,
-          borderColor: theme.colors.border.light,
+          borderColor: vexFire.border,
         }}
       >
         <Text variant="label">{selectedTheme.name}</Text>
-        <Text variant="caption" color="text.secondary" mt="xs">
+        <Text variant="caption" color={vexFire.textSecondary} mt="xs">
           {selectedTheme.description}
         </Text>
       </Box>
 
       <Box mt="md">
-        <Text variant="caption" color="text.tertiary" mb="sm">
+        <Text variant="caption" color={vexFire.textMuted} mb="sm">
           Preview
         </Text>
         <Box
@@ -159,9 +159,9 @@ export function SessionThemeSelector({
           borderRadius="lg"
           alignItems="center"
           style={{
-            backgroundColor: theme.colors.background.secondary,
+            backgroundColor: vexFire.panel,
             borderWidth: 1,
-            borderColor: theme.colors.border.light,
+            borderColor: vexFire.border,
           }}
         >
           <FocusRing

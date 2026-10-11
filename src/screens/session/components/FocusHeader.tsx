@@ -6,7 +6,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface FocusHeaderProps {
   endTime: string | null;
@@ -40,7 +40,7 @@ export function FocusHeader({
       >
         <Text
           style={{
-            color: vexLightGlass.text.tertiary,
+            color: vexFire.textMuted,
             fontSize: 14,
             fontWeight: '700',
             letterSpacing: 0.5,
@@ -52,7 +52,7 @@ export function FocusHeader({
       <View style={{ alignItems: 'center' }}>
         <Text
           style={{
-            color: vexLightGlass.text.tertiary,
+            color: vexFire.textMuted,
             fontSize: 11,
             fontWeight: '800',
             letterSpacing: 2,
@@ -64,7 +64,7 @@ export function FocusHeader({
         {endTime ? (
           <Text
             style={{
-              color: vexLightGlass.text.secondary,
+              color: vexFire.textSecondary,
               fontSize: 13,
               fontWeight: '700',
               marginTop: 4,

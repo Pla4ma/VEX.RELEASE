@@ -5,11 +5,12 @@ import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import { paywallStyles as styles } from './paywall-styles';
 
 export function HeroShell({
   children,
-  theme,
+  theme: _theme,
 }: {
   children: React.ReactNode;
   theme: Theme;
@@ -20,7 +21,7 @@ export function HeroShell({
         style={[
           styles.heroCard,
           {
-            backgroundColor: theme.colors.semantic.obsidian,
+            backgroundColor: vexFire.backgroundRaised,
             borderRadius: 24,
           },
         ]}
@@ -44,13 +45,13 @@ export function StudyLaneHero({
     <HeroShell theme={theme}>
       <View style={{ flexDirection: 'row', gap: 16, alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: 6 }}>
-          <Text style={[styles.eyebrow, { color: theme.colors.accent.editorial }]}>
+          <Text style={[styles.eyebrow, { color: vexFire.ember }]}>
             Study Lane
           </Text>
-          <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
+          <Text style={[styles.heroTitle, { color: vexFire.cream }]}>
             {headline}
           </Text>
-          <Text style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
+          <Text style={[styles.heroCopy, { color: vexFire.cream }]}>
             {body}
           </Text>
         </View>
@@ -59,14 +60,14 @@ export function StudyLaneHero({
             width: 56,
             height: 56,
             borderRadius: 16,
-            backgroundColor: theme.colors.accent.editorial,
+            backgroundColor: vexFire.ember,
             alignItems: 'center',
             justifyContent: 'center',
           }}
           accessibilityElementsHidden
           importantForAccessibility="no"
         >
-          <Icon name="book" size={28} color={theme.colors.semantic.obsidian} />
+          <Icon name="book" size={28} color={vexFire.backgroundRaised} />
         </View>
       </View>
     </HeroShell>
@@ -86,13 +87,13 @@ export function RunLaneHero({
     <HeroShell theme={theme}>
       <View style={{ gap: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Icon name="flame" size={20} color={theme.colors.accent.rescue} />
-          <Text style={[styles.eyebrow, { color: theme.colors.accent.rescue }]}>
+          <Icon name="flame" size={20} color={vexFire.copper} />
+          <Text style={[styles.eyebrow, { color: vexFire.copper }]}>
             Run Lane
           </Text>
         </View>
         <Text
-          style={[styles.heroTitle, { color: theme.colors.text.inverse, fontSize: 28 }]}
+          style={[styles.heroTitle, { color: vexFire.cream, fontSize: 28 }]}
         >
           {headline}
         </Text>
@@ -107,12 +108,12 @@ export function RunLaneHero({
                 paddingVertical: 6,
                 borderRadius: 999,
                 borderWidth: 1,
-                borderColor: theme.colors.text.inverse,
+                borderColor: vexFire.cream,
               }}
             >
               <Text
                 style={{
-                  color: theme.colors.text.inverse,
+                  color: vexFire.cream,
                   fontSize: 12,
                   fontWeight: '700',
                 }}
@@ -125,7 +126,7 @@ export function RunLaneHero({
         <Text
           style={[
             styles.heroCopy,
-            { color: theme.colors.text.inverse, marginTop: 4 },
+            { color: vexFire.cream, marginTop: 4 },
           ]}
         >
           {body}

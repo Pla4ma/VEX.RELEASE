@@ -50,16 +50,14 @@ export interface SessionSetupParams {
   rescueTaskDescription?: string;
 }
 
-export interface SessionStackParams {
-  [key: string]: object | undefined;
+export type SessionStackParams = {
   SessionSetup: SessionSetupParams;
   ActiveSession: { selectedThemeId?: string; sessionId: string };
   SessionComplete: { sessionId: string; summary: SessionSummary };
   SessionHistory: undefined;
 }
 
-export interface RootStackParams {
-  [key: string]: object | undefined;
+export type RootStackParams = {
   Auth: NavigatorScreenParams<AuthStackParams>;
   Main: NavigatorScreenParams<MainTabParams>;
   Onboarding: { step?: number };
@@ -67,19 +65,25 @@ export interface RootStackParams {
   VipPaywall: { source?: string };
   Settings: NavigatorScreenParams<SettingsStackParams>;
   SessionStack: NavigatorScreenParams<SessionStackParams>;
+  Guide: undefined;
   CompanionDetail: undefined;
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
   MemoryConsole: undefined;
-  Search: undefined;
-  Vault: undefined;
-}
+  Boss: undefined;
+  Notifications: undefined;
+  ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
+  AICoach: undefined;
+  Challenges: undefined;
+  Mastery: undefined;
+  Achievements: undefined;
+  Analytics: undefined;
+};
+export type RootStackParamList = RootStackParams;
+export type ExtendedRootStackParams = RootStackParams;
 
-export type ExtendedRootStackParams = RootStackParams & MainStackParams;
-
-export interface AuthStackParams {
-  [key: string]: object | undefined;
+export type AuthStackParams = {
   Login: { email?: string; returnTo?: string };
   Register: undefined;
   ForgotPassword: undefined;
@@ -87,33 +91,23 @@ export interface AuthStackParams {
   VerifyEmail: { email: string };
 }
 
-export interface MainTabParams {
-  [key: string]: object | undefined;
+export type MainTabParams = {
   Home: undefined;
   Focus: undefined;
   Progress: undefined;
-  Profile: {
-    tab?: 'stats' | 'achievements' | 'activity' | 'social';
-    userId?: string;
-  };
-}
+  Profile:
+    | {
+        tab?: 'stats' | 'achievements' | 'activity' | 'social';
+        userId?: string;
+      }
+    | undefined;
+};
 
-export interface MainStackParams {
-  [key: string]: object | undefined;
-  Boss: undefined;
-  Notifications: undefined;
-  ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
-  AICoach: undefined;
-  Challenges: undefined;
-  Mastery: undefined;
-  CompanionDetail: undefined;
-  MemoryConsole: undefined;
-  Achievements: undefined;
-  Analytics: undefined;
-}
+// Feature routes are registered on the root stack, so both aliases must
+// describe the same navigator contract.
+export type MainStackParams = RootStackParams;
 
-export interface SettingsStackParams {
-  [key: string]: object | undefined;
+export type SettingsStackParams = {
   SettingsMain: undefined;
   AccountSettings: undefined;
   NotificationSettings: undefined;

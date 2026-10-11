@@ -16,6 +16,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { Particle } from './ComebackParticles';
 import { capture } from '../shared/analytics/analytics-service';
 import { ComebackCard } from './ComebackCard';
+import { vexFire } from '../theme/tokens/vex-fire';
 
 type ComebackNavigationProp = NativeStackNavigationProp<
   ExtendedRootStackParams,
@@ -79,17 +80,17 @@ function ComebackScreen(): React.ReactNode {
   };
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <Box flex={1} style={{ backgroundColor: vexFire.background }}>
       <Box
         style={{
           ...StyleSheet.absoluteFill,
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
         }}
       >
         {particles.map((particle) => (
           <Particle
             key={particle.index}
-            color={theme.colors.primary[300]}
+            color={vexFire.ember}
             {...particle}
           />
         ))}

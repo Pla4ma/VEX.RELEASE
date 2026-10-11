@@ -4,11 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { markColdStart } from '../../../app/cold-start-performance';
-import { AppScreen } from '../../../components/primitives/AppScreen';
+import { GlassScreen } from '../../../components/glass/GlassScreen';
 import { Button } from '../../../components/primitives/Button';
 import { Text , Text as VexText } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import { useTheme } from '../../../theme/ThemeContext';
+import { VexBackdrop } from '../../../shared/ui/vex/VexBackdrop';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+
+const HOME_BACKGROUND = require('../../../../assets/vex/home-background.png');
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -28,16 +33,14 @@ export function HomeColdStartFallback({
   }, []);
 
   const startFirstSession = useCallback((): void => {
-    navigation.navigate('SessionStack', {
-      screen: 'SessionSetup',
-      params: { source: 'onboarding_first_session' },
-    });
+    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { source: 'onboarding_first_session' } });
   }, [navigation]);
 
   return (
-    <AppScreen scroll={false} padded>
+    <GlassScreen showAura={false} variant="home">
+      <VexBackdrop source={HOME_BACKGROUND} overlayColor={vexFire.background} overlayOpacity={0.8} />
       <View
-        style={{ flex: 1, justifyContent: 'center', gap: theme.spacing[6] }}
+        style={{ flex: 1, justifyContent: 'center', gap: theme.spacing[6], paddingHorizontal: theme.spacing[4] }}
       >
         <View style={{ gap: theme.spacing[3] }}>
           <Text variant="caption" color="text.secondary">
@@ -54,8 +57,8 @@ export function HomeColdStartFallback({
 
         <View
           style={{
-            backgroundColor: theme.colors.semantic.surface,
-            borderColor: theme.colors.semantic.border,
+            backgroundColor: vexFire.panel,
+            borderColor: vexFire.border,
             borderRadius: theme.borderRadius.lg,
             borderWidth: 1,
             gap: theme.spacing[3],
@@ -64,7 +67,7 @@ export function HomeColdStartFallback({
         >
           <View
             style={{
-              backgroundColor: theme.colors.semantic.primarySoft,
+              backgroundColor: vexFire.copper,
               borderRadius: theme.borderRadius.md,
               height: theme.spacing[3],
               width: '52%',
@@ -72,7 +75,7 @@ export function HomeColdStartFallback({
           />
           <View
             style={{
-              backgroundColor: theme.colors.semantic.surfaceElevated,
+              backgroundColor: vexFire.backgroundSoft,
               borderRadius: theme.borderRadius.md,
               height: theme.spacing[10],
             }}
@@ -96,6 +99,6 @@ export function HomeColdStartFallback({
           <VexText>Start first session</VexText>
         </Button>
       </View>
-    </AppScreen>
+    </GlassScreen>
   );
 }

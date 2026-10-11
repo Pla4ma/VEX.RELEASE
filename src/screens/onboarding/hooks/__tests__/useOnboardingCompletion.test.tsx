@@ -45,7 +45,7 @@ function wrapper({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: { retry: false, gcTime: 0 },
-      mutations: { retry: false },
+      mutations: { retry: false, gcTime: 0 },
     },
   });
   return (
@@ -70,5 +70,18 @@ describe('useOnboardingCompletion', () => {
     expect(mockCompleteOnboarding).toHaveBeenCalledWith('user-1');
     expect(mockTrackOnboardingCompleted).toHaveBeenCalledWith('user-1');
     expect(mockShowHomeHighlight).toHaveBeenCalled();
+  });
+
+  it('ignores duplicate completion requests after the first attempt', async () => {
+    const { result } = await renderHook(() => useOnboardingCompletion('user-1'), { wrapper });
+
+    await act(async () => {
+      await Promise.all([
+        result.current.finishOnboarding(undefined),
+        result.current.finishOnboarding(undefined),
+      ]);
+    });
+
+    expect(mockCompleteOnboarding).toHaveBeenCalledTimes(1);
   });
 });

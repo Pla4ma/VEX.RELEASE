@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../theme/ThemeContext';
 import { glassHaptics } from '../../shared/feedback/GlassHaptics';
 import { TabButton } from './TabButton';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export function VexTabBar({ state, descriptors, navigation }: BottomTabBarProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
@@ -24,8 +25,8 @@ export function VexTabBar({ state, descriptors, navigation }: BottomTabBarProps)
       <View
         style={{
           alignItems: 'center',
-          backgroundColor: theme.colors.background.primary,
-          borderTopColor: theme.colors.primary[800],
+          backgroundColor: vexFire.background,
+          borderTopColor: vexFire.border,
           borderTopWidth: 1,
           flexDirection: 'row',
           minHeight: theme.spacing[16],

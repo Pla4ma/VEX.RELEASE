@@ -8,7 +8,7 @@ import { Text } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons/components/Icon';
 import { formatMultiplier, withAlpha } from '../utils/active-session';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type ActiveSessionControlDockProps = {
   completionPercentage: number;
@@ -26,7 +26,6 @@ type ActiveSessionControlDockProps = {
     success: string;
   };
   onComplete: () => void;
-  onEnd: () => void;
   onPauseResume: () => void;
   onToggleMultiplierInfo: () => void;
 };
@@ -38,12 +37,11 @@ export const ActiveSessionControlDock: React.ComponentType<
   completionPercentage,
   isPaused,
   multiplierDays,
-  phaseAccent,
+  phaseAccent: _phaseAccent,
   showMultiplierInfo,
   streakMultiplier,
   themeColors,
   onComplete,
-  onEnd,
   onPauseResume,
   onToggleMultiplierInfo,
 }) => (
@@ -67,12 +65,12 @@ export const ActiveSessionControlDock: React.ComponentType<
             borderRadius="full"
             alignItems="center"
             style={{
-              backgroundColor: 'rgba(0,229,255,0.12)',
+              backgroundColor: vexFire.panelSoft,
               borderWidth: 1,
-              borderColor: 'rgba(0,229,255,0.25)',
+              borderColor: vexFire.borderStrong,
             }}
           >
-            <Text variant="label" style={{ color: lightColors.semantic.vexCyan }}>
+            <Text variant="label" style={{ color: vexFire.ember }}>
               {completionPercentage >= 100
                 ? 'Complete Session'
                 : 'Finish Early'}
@@ -80,12 +78,12 @@ export const ActiveSessionControlDock: React.ComponentType<
           </Box>
         </Pressable>
       ) : null}
-      <Box
+              <Box
         style={{
           ...getPremiumCardStyle('large'),
-          flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: 'row',
+          justifyContent: 'center',
           borderWidth: 1,
           paddingHorizontal: 14,
           paddingVertical: 12,
@@ -93,30 +91,6 @@ export const ActiveSessionControlDock: React.ComponentType<
           borderColor: withAlpha(themeColors.border, 0.7),
         }}
       >
-        <Pressable
-          onPress={onEnd}
-          accessibilityLabel="Quit focus session"
-          accessibilityRole="button"
-          accessibilityHint="Opens the confirmation to quit this focus session"
-        >
-          <Box
-            style={{
-              minWidth: 104,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 18,
-              borderWidth: 1,
-              paddingHorizontal: 18,
-              paddingVertical: 14,
-              backgroundColor: withAlpha(themeColors.error, 0.14),
-              borderColor: withAlpha(themeColors.error, 0.32),
-            }}
-          >
-            <Text variant="label" style={{ color: themeColors.error }}>
-              Quit
-            </Text>
-          </Box>
-        </Pressable>
         <Pressable
           onPress={onPauseResume}
           accessibilityLabel={
@@ -136,17 +110,17 @@ export const ActiveSessionControlDock: React.ComponentType<
               borderRadius: 32,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: lightColors.semantic.vexCyan,
+              backgroundColor: vexFire.ember,
             }}
           >
             <Icon
               name={isPaused ? 'play' : 'minus'}
               size="lg"
-              color={themeColors.inverse}
+              color={vexFire.background}
             />
           </Box>
         </Pressable>
-        <Box style={{ position: 'relative' }}>
+        <Box style={{ position: 'absolute', right: 14 }}>
           {showMultiplierInfo ? (
             <Animated.View
               entering={FadeIn.duration(180)}
@@ -163,7 +137,7 @@ export const ActiveSessionControlDock: React.ComponentType<
                 borderColor: withAlpha(themeColors.border, 0.9),
               }}
             >
-              <Text variant="caption" color="text.primary">
+              <Text variant="caption" color={vexFire.cream}>
                 {`Your ${formatMultiplier(streakMultiplier)}x multiplier comes from your current ${multiplierDays}-day streak and applies to session rewards.`}
               </Text>
             </Animated.View>
@@ -177,7 +151,7 @@ export const ActiveSessionControlDock: React.ComponentType<
             <Box
               style={{}}
            >
-             <Text variant="label" style={{ color: lightColors.semantic.vexCyan }}>
+              <Text variant="label" style={{ color: vexFire.ember }}>
                 {`${formatMultiplier(streakMultiplier)}x`}
               </Text>
             </Box>

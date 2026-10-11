@@ -5,6 +5,7 @@ import { Text } from '../../components/primitives/Text';
 import { trackBossCTAClicked } from '../../features/boss/analytics';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { useTheme } from '../../theme/ThemeContext';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import {
   ATTACK_PRESETS,
   estimateDamage,
@@ -15,8 +16,8 @@ import {
 
 function cardStyle(theme: ReturnType<typeof useTheme>['theme']) {
   return {
-    backgroundColor: theme.colors.background.secondary,
-    borderColor: theme.colors.border.light,
+    backgroundColor: vexFire.panel,
+    borderColor: vexFire.border,
     borderRadius: theme.borderRadius['2xl'],
     borderWidth: 1,
     gap: theme.spacing[3],
@@ -63,51 +64,51 @@ function BossScreenSectionsRaw({
   return (
     <>
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>
+        <Text variant="h4" color={vexFire.cream}>
           {copy.title}
         </Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>
+        <Text variant="bodySmall" color={vexFire.textSecondary}>
           {copy.intro}
         </Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
-            <Text variant="caption" color={theme.colors.text.secondary}>
+            <Text variant="caption" color={vexFire.textMuted}>
               {copy.metricLabel}
             </Text>
-            <Text variant="h3" color={theme.colors.text.primary}>
+            <Text variant="h3" color={vexFire.cream}>
               {userDamage.toLocaleString()}
             </Text>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
-            <Text variant="caption" color={theme.colors.text.secondary}>
+            <Text variant="caption" color={vexFire.textMuted}>
               Focus multiplier
             </Text>
             <Text
               variant="h3"
-              color={theme.colors.primary[500]}
+              color={vexFire.ember}
             >{`x${streakMultiplier.toFixed(2)}`}</Text>
           </View>
         </View>
       </View>
 
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>
+        <Text variant="h4" color={vexFire.cream}>
           {copy.historyTitle}
         </Text>
         {historyQuery.isLoading ? (
-          <Text variant="bodySmall" color={theme.colors.text.secondary}>
+          <Text variant="bodySmall" color={vexFire.textSecondary}>
             Loading recent sessions...
           </Text>
         ) : null}
         {historyQuery.error ? (
-          <Text variant="bodySmall" color={theme.colors.error.DEFAULT}>
+          <Text variant="bodySmall" color={vexFire.danger}>
             Recent session proof is unavailable right now.
           </Text>
         ) : null}
         {!historyQuery.isLoading &&
         !historyQuery.error &&
         recentSessions.length === 0 ? (
-          <Text variant="bodySmall" color={theme.colors.text.secondary}>
+          <Text variant="bodySmall" color={vexFire.textSecondary}>
             Complete a focus session to move this forward.
           </Text>
         ) : null}
@@ -116,19 +117,19 @@ function BossScreenSectionsRaw({
             key={`${entry.endedAt}-${entry.duration}`}
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
-            <Text variant="body" color={theme.colors.text.primary}>
+            <Text variant="body" color={vexFire.cream}>
               {formatDuration(entry.duration)}
             </Text>
             <Text
               variant="bodySmall"
-              color={theme.colors.text.secondary}
+              color={vexFire.textSecondary}
             >{`Purity ${entry.quality}`}</Text>
           </View>
         ))}
       </View>
 
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>
+        <Text variant="h4" color={vexFire.cream}>
           {copy.actionLabel}
         </Text>
         {ATTACK_PRESETS.map((preset) => {
@@ -146,8 +147,8 @@ function BossScreenSectionsRaw({
               accessibilityHint="Starts a focus session with this duration."
               style={{
                 backgroundColor: selected
-                  ? theme.colors.primary[500]
-                  : theme.colors.background.primary,
+                  ? vexFire.ember
+                  : vexFire.backgroundRaised,
                 borderRadius: theme.borderRadius.xl,
                 minHeight: 44,
                 padding: theme.spacing[4],
@@ -157,8 +158,8 @@ function BossScreenSectionsRaw({
                 variant="body"
                 color={
                   selected
-                    ? theme.colors.text.inverse
-                    : theme.colors.text.primary
+                    ? vexFire.background
+                    : vexFire.cream
                 }
               >
                 {preset.label}
@@ -167,8 +168,8 @@ function BossScreenSectionsRaw({
                 variant="bodySmall"
                 color={
                   selected
-                    ? theme.colors.text.inverse
-                    : theme.colors.text.secondary
+                    ? vexFire.background
+                    : vexFire.textSecondary
                 }
               >
                 {`${estimateDamage(preset.minutes, streakMultiplier)} ${bossIntensity === 'subtle' ? 'momentum' : 'damage'}`}

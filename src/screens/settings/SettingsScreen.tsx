@@ -11,8 +11,6 @@ import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
 import { useAuthStore } from '../../store';
 import type { SettingsStackParams } from '../../navigation';
-import type { NavigationProp } from '@react-navigation/native';
-import type { RootStackParams } from '../../navigation';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
 import { useSettingsStore } from '../../features/settings/store';
@@ -25,6 +23,8 @@ import {
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
 import { navigateToRootScreen, navigateToSettingsStackScreen } from '../../navigation/navigation-helpers';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { RouteBackButton } from '../../shared/ui/vex/RouteBackButton';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
@@ -65,13 +65,13 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
-    navigateToCoach: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'CoachSettings'),
-    navigateToNotifications: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'NotificationSettings'),
-    navigateToAppearance: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'AppearanceSettings'),
-    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'PrivacySettings'),
-    navigateToAccount: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'AccountSettings'),
-    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'LaneMode'),
-    navigateToDataExport: () => navigateToSettingsStackScreen(navigation as NavigationProp<RootStackParams>, 'DataExport'),
+    navigateToCoach: () => navigateToSettingsStackScreen(navigation, 'CoachSettings'),
+    navigateToNotifications: () => navigateToSettingsStackScreen(navigation, 'NotificationSettings'),
+    navigateToAppearance: () => navigateToSettingsStackScreen(navigation, 'AppearanceSettings'),
+    navigateToPrivacy: () => navigateToSettingsStackScreen(navigation, 'PrivacySettings'),
+    navigateToAccount: () => navigateToSettingsStackScreen(navigation, 'AccountSettings'),
+    navigateToLaneMode: () => navigateToSettingsStackScreen(navigation, 'LaneMode'),
+    navigateToDataExport: () => navigateToSettingsStackScreen(navigation, 'DataExport'),
   });
 
   const filteredGroups = settingGroups
@@ -103,6 +103,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           pb={16}
           pt={insets.top + liquidGlassSpacing.screenTop}
         >
+          <RouteBackButton onPress={() => navigation.goBack()} />
           <LiquidGlassHeader
             eyebrow="Control room"
             title="Settings"
@@ -114,7 +115,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           displayName={user?.displayName || 'User'}
           userId={user?.id || ''}
           theme={theme}
-          onPress={() => navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Profile' })}
+          onPress={() => navigateToRootScreen(navigation, 'Main', { screen: 'Profile' })}
         />
 
         <Box px={16}>
@@ -128,7 +129,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
         </Box>
 
         <Box alignItems="center" mt={8} mb={24}>
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             Made with care by the VEX Team
           </Text>
         </Box>
@@ -139,7 +140,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
             paddingVertical: 16,
             alignItems: 'center',
             borderRadius: 12,
-            backgroundColor: theme.colors.error.light,
+            backgroundColor: vexFire.backgroundSoft,
             marginBottom: 16,
           }}
           onPress={logout}
@@ -148,7 +149,7 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
           accessibilityHint="Signs out of your VEX account"
         >
           <Text
-            style={{ color: theme.colors.error.DEFAULT, fontWeight: '600' }}
+            style={{ color: vexFire.danger, fontWeight: '600' }}
           >
             Log Out
           </Text>

@@ -7,6 +7,7 @@ import { Icon } from '../../../icons/components/Icon';
 import { Text } from '../../../components/primitives/Text';
 import { VexSurface } from '../../../shared/ui/vex/VexSurface';
 import { useTheme } from '../../../theme/ThemeContext';
+import { navigateToMainStackScreen } from '../../../navigation/navigation-helpers';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 
@@ -38,7 +39,7 @@ export function HomeDailyCards({ onStartSession, includeDailyFocus = true, inclu
         </Pressable>
       ) : null}
       {includeCoachCard ? (
-        <Pressable accessibilityHint="Open the AI coach" accessibilityLabel="AI Coach card" accessibilityRole="button" onPress={() => navigation.navigate('AICoach')} style={({ pressed }) => ({ opacity: pressed ? 0.84 : 1 })}>
+        <Pressable accessibilityHint="Open the AI coach" accessibilityLabel="AI Coach card" accessibilityRole="button" onPress={() => navigateToMainStackScreen(navigation, 'AICoach')} style={({ pressed }) => ({ opacity: pressed ? 0.84 : 1 })}>
           <VexSurface tone="quiet" style={{ padding: theme.spacing[4] }}>
             <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><View style={{ flex: 1, gap: theme.spacing[1] }}><Text variant="h4">AI Coach</Text><Text color="text.secondary" variant="bodySmall">You built real momentum. Protect this block.</Text></View><Text style={{ color: theme.colors.primary[500], fontSize: theme.typography.heading.h4.fontSize }}>→</Text></View>
           </VexSurface>

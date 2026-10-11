@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
@@ -5,7 +6,7 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text'
 import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 export type CoachLanguage = 'en';
 
@@ -28,13 +29,13 @@ export const CoachToneSelector: React.ComponentType<CoachToneSelectorProps> = ({
   language,
   onLanguageChange,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -68,8 +69,8 @@ export const CoachToneSelector: React.ComponentType<CoachToneSelectorProps> = ({
                 style={{
                   backgroundColor:
                     language === option.id
-                      ? theme.colors.primary[50]
-                      : theme.colors.background.secondary,
+                      ? vexFire.ember
+                      : vexFire.panel,
                 }}
               >
                 <Text style={{ fontSize: 20 }}>{option.flag}</Text>
@@ -79,7 +80,7 @@ export const CoachToneSelector: React.ComponentType<CoachToneSelectorProps> = ({
                   variant="body"
                   style={{
                     fontWeight: language === option.id ? '600' : '500',
-                    color: theme.colors.text.primary,
+                    color: vexFire.cream,
                   }}
                 >
                   {option.label}
@@ -92,12 +93,12 @@ export const CoachToneSelector: React.ComponentType<CoachToneSelectorProps> = ({
                   borderRadius={12}
                   justifyContent="center"
                   alignItems="center"
-                  style={{ backgroundColor: theme.colors.primary[500] }}
+                  style={{ backgroundColor: vexFire.ember }}
                 >
                   <Icon
                     name="check"
                     size={14}
-                    color={lightColors.text.inverse}
+                    color={vexFire.cream}
                   />
                 </Box>
               )}

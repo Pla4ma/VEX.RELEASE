@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
@@ -11,7 +12,7 @@ import { Box } from '../../../components/primitives/Box'
 import { Card } from '../../../components/primitives'
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export type CosmeticType = 'avatar-frame' | 'badge' | 'background' | 'title';
@@ -30,11 +31,11 @@ export interface CosmeticItem {
 }
 
 export const RARITY_COLORS: Record<string, string> = {
-  common: lightColors.text.disabled,
-  uncommon: lightColors.semantic.success,
-  rare: lightColors.accent.blue,
-  epic: lightColors.accent.purple,
-  legendary: lightColors.semantic.warning,
+  common: vexFire.textMuted,
+  uncommon: vexFire.success,
+  rare: vexFire.amber,
+  epic: vexFire.copper,
+  legendary: vexFire.amber,
 };
 
 export const RARITY_ORDER = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
@@ -45,7 +46,7 @@ export const CosmeticPreviewCard: React.ComponentType<{
   isEquipped: boolean;
   onPress: () => void;
 }> = ({ item, isSelected, isEquipped, onPress }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const rarityColor = RARITY_COLORS[item.rarity];
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
@@ -78,15 +79,15 @@ export const CosmeticPreviewCard: React.ComponentType<{
             justifyContent: 'center',
             borderWidth: isSelected ? 3 : isEquipped ? 2 : 1,
             borderColor: isSelected
-              ? theme.colors.primary[500]
+              ? vexFire.ember
               : isEquipped
                 ? rarityColor
-                : theme.colors.border.light,
+                : vexFire.border,
             backgroundColor: isSelected
-              ? theme.colors.primary[50]
+              ? vexFire.ember
               : isEquipped
                 ? rarityColor + '08'
-                : theme.colors.background.secondary,
+                : vexFire.panel,
           }}
         >
           {}
@@ -102,7 +103,7 @@ export const CosmeticPreviewCard: React.ComponentType<{
               alignItems="center"
               style={{ backgroundColor: rarityColor, zIndex: 10 }}
             >
-              <Icon name="check" size={14} color={lightColors.text.inverse} />
+              <Icon name="check" size={14} color={vexFire.cream} />
             </Box>
           )}
 
@@ -140,7 +141,7 @@ export const CosmeticPreviewCard: React.ComponentType<{
             style={{
               fontWeight: isEquipped ? '700' : '600',
               textAlign: 'center',
-              color: isEquipped ? rarityColor : theme.colors.text.primary,
+              color: isEquipped ? rarityColor : vexFire.cream,
               fontSize: 12,
             }}
             numberOfLines={1}

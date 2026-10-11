@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { resolveSessionMode } from '../../session/modes';
-import { SessionMode } from '../../session/modes';
+import { resolveSessionMode , SessionMode } from '../../session/modes';
 import { useContractForSession } from '../../features/focus-contract/hooks';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { ActiveSessionGuardStates } from './components/ActiveSessionGuardStates';
@@ -27,9 +26,9 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       navigation,
       sessionQuery,
       showInterruption,
-      streak,
-      theme,
-      themeBackgroundColor,
+      streak: _streak,
+      theme: _theme,
+      themeBackgroundColor: _themeBackgroundColor,
       userId,
     } = controller;
     const { contract } = useContractForSession(
@@ -42,6 +41,9 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       () => SESSION_MODE_TO_LANE[currentMode] ?? 'minimal_normal',
       [currentMode],
     );
+    const plannedQuizBreakOptedIn =
+      currentMode === SessionMode.STUDY &&
+      Boolean(sessionQuery.session?.config.studyPlanId);
     const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
       dailyProgress: metrics.dailyProgress,
       elapsedSeconds: sessionQuery.elapsedSeconds,
@@ -59,10 +61,10 @@ export const ActiveSessionScreen = withScreenErrorBoundary(
       isPaused: sessionQuery.isPaused,
       showInterruption,
       sessionConfigSessionMode: sessionQuery.session?.config.sessionMode,
+      plannedQuizBreakOptedIn,
     });
     const outerStrokeDashoffset =
       2 * Math.PI * (metrics.RADIUS + 16) * (1 - metrics.dailyProgress / 100);
-    const plannedQuizBreakOptedIn = false;
     const focusStage = showInterruption
       ? 'interruption'
       : sessionQuery.isPaused

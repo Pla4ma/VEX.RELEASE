@@ -17,7 +17,7 @@ import { PrivacySettingsScreen } from '../screens/settings/PrivacySettingsScreen
 import { AccountSettingsScreen } from '../screens/settings/AccountSettingsScreen';
 import { DataExportScreen } from '../screens/settings/DataExportScreen';
 import type { SettingsStackParams } from './types';
-import { lightColors } from '../theme/tokens/colors';
+import { vexFire } from '../theme/tokens/vex-fire';
 
 const Stack = createNativeStackNavigator<SettingsStackParams>();
 
@@ -28,7 +28,7 @@ export const SettingsNavigator: React.ComponentType = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        contentStyle: { backgroundColor: lightColors.background.primary },
+        contentStyle: { backgroundColor: vexFire.background },
         headerShown: false,
       }}
     >

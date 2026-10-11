@@ -4,7 +4,7 @@ import { Box } from '../../components/primitives/Box'
 import { Button, Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Avatar } from '../../components/Avatar';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 import type {
   Notification,
@@ -50,7 +50,7 @@ export function NotificationFilterBar({
             style={{
               fontWeight: '600',
               color:
-                activeFilter === filter ? lightColors.text.inverse : textSecondary,
+                activeFilter === filter ? vexFire.background : textSecondary,
             }}
           >
             {FILTER_LABELS[filter] ?? filter}
@@ -78,7 +78,7 @@ export function NotificationCard({
       interactive
       style={{
         opacity: item.read ? 0.8 : 1,
-        backgroundColor: item.read ? undefined : lightColors.surface.selected + '20',
+        backgroundColor: item.read ? vexFire.panel : vexFire.backgroundSoft,
       }}
       size="md"
       onPress={() => onPress(item)}

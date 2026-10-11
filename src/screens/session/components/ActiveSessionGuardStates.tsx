@@ -1,13 +1,13 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { SessionDegradedState } from '../../../session/components/states/SessionDegradedState';
 import { SessionEmptyState } from '../../../session/components/states/SessionEmptyState';
 import { SessionErrorState } from '../../../session/components/states/SessionErrorState';
 import { SessionLoadingState } from '../../../session/components/states/SessionLoadingState';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type GuardSession = {
   canRecover?: boolean;
@@ -48,12 +48,12 @@ export function ActiveSessionGuardStates({
     return (
       <Box
         flex={1}
-        bg="background.primary"
+        style={{ backgroundColor: vexFire.background, flex: 1 }}
         justifyContent="center"
         alignItems="center"
         p="lg"
       >
-        <Text variant="h4" color="error.DEFAULT" mb="md">
+        <Text variant="h4" color={vexFire.danger} mb="md">
           Not authenticated
         </Text>
         <Button variant="primary"

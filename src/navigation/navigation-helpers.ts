@@ -1,4 +1,4 @@
-import type { NavigationProp, RouteProp } from '@react-navigation/native';
+import type { RouteProp } from '@react-navigation/native';
 import { createDebugger } from '../utils/debug';
 import { validateRouteParams } from './route-param-schemas';
 import type {
@@ -15,7 +15,21 @@ import type {
   SettingsStackParams,
   SettingsStackRoute,
 } from './types';
+type NavigationLike = {
+  navigate: (...args: never[]) => void;
+  getParent?: () => NavigationLike | undefined;
+};
 const debug = createDebugger('navigation:helpers');
+
+function resolveRootNavigation(navigation: NavigationLike): NavigationLike {
+  let current = navigation;
+  let parent = current.getParent?.();
+  while (parent) {
+    current = parent;
+    parent = current.getParent?.();
+  }
+  return current;
+}
 
 export {
   isNavigationReady,
@@ -37,15 +51,16 @@ export type { DeepLinkValidationResult } from './navigation-deep-links';
  * we call the single-argument overload; otherwise the two-argument one.
  */
 export function navigateToRootScreen<Route extends RootStackRoute>(
-  navigation: NavigationProp<RootStackParams>,
+  navigation: NavigationLike,
   route: Route,
   params?: RootStackParams[Route],
 ): void {
   debug.info('Navigating to root screen: %s', route);
+  const rootNavigation = resolveRootNavigation(navigation);
   if (params !== undefined) {
-    (navigation.navigate as (name: Route, params: RootStackParams[Route]) => void)(route, params);
+    (rootNavigation.navigate as (name: Route, params: RootStackParams[Route]) => void)(route, params);
   } else {
-    (navigation.navigate as (name: Route) => void)(route);
+    (rootNavigation.navigate as (name: Route) => void)(route);
   }
 }
 
@@ -55,7 +70,7 @@ export function navigateToRootScreen<Route extends RootStackRoute>(
  * so we use it directly instead of `as string`.
  */
 export function navigateToAuthScreen<Route extends AuthStackRoute>(
-  navigation: NavigationProp<RootStackParams>,
+  navigation: NavigationLike,
   route: Route,
   params?: AuthStackParams[Route],
 ): void {
@@ -69,7 +84,7 @@ export function navigateToAuthScreen<Route extends AuthStackRoute>(
  * so we use it directly instead of `as string`.
  */
 export function navigateToMainTab<Route extends MainTabRoute>(
-  navigation: NavigationProp<RootStackParams>,
+  navigation: NavigationLike,
   route: Route,
   params?: MainTabParams[Route],
 ): void {
@@ -82,19 +97,20 @@ export function navigateToMainTab<Route extends MainTabRoute>(
  * Uses the same conditional-call pattern as navigateToRootScreen.
  */
 export function navigateToMainStackScreen<Route extends MainStackRoute>(
-  navigation: NavigationProp<MainStackParams>,
+  navigation: NavigationLike,
   route: Route,
   params?: MainStackParams[Route],
 ): void {
   debug.info('Navigating to main stack screen: %s', route);
+  const rootNavigation = resolveRootNavigation(navigation);
   if (params !== undefined) {
-    (navigation.navigate as (name: Route, params: MainStackParams[Route]) => void)(route, params);
+    (rootNavigation.navigate as (name: Route, params: MainStackParams[Route]) => void)(route, params);
   } else {
-    (navigation.navigate as (name: Route) => void)(route);
+    (rootNavigation.navigate as (name: Route) => void)(route);
   }
 }
 export function navigateToSessionStackScreen(
-  navigation: NavigationProp<RootStackParams>,
+  navigation: NavigationLike,
   route: SessionStackRoute,
   params?: SessionStackParams[SessionStackRoute],
 ): void {
@@ -102,7 +118,7 @@ export function navigateToSessionStackScreen(
   navigateToRootScreen(navigation, 'SessionStack', { screen: route, params } as RootStackParams['SessionStack']);
 }
 export function navigateToSettingsStackScreen(
-  navigation: NavigationProp<RootStackParams>,
+  navigation: NavigationLike,
   route: SettingsStackRoute,
   params?: SettingsStackParams[SettingsStackRoute],
 ): void {

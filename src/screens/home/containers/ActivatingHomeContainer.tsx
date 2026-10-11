@@ -59,6 +59,9 @@ export function useActivatingContainerModel(
   const openCoach = useCallback(() => {
     navigateToMainStackScreen(navigation, 'AICoach');
   }, [navigation]);
+  const openContentStudy = useCallback(() => {
+    navigateToMainStackScreen(navigation, 'ContentStudy');
+  }, [navigation]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(
       disclosure.stage,
@@ -153,6 +156,7 @@ export function useActivatingContainerModel(
     openProgress,
     openPlan,
     openCoach,
+    openContentStudy,
   });
 
   return {

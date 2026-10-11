@@ -8,14 +8,14 @@ import { EmptyState } from '../../components/EmptyState';
 import type { MasteryChallenge } from '../../features/mastery/types';
 import { Icon } from '../../icons/components/Icon';
 import { useTheme } from '../../theme/ThemeContext';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 const DIFFICULTY_COLORS = {
-  EASY: lightColors.accent.green,
-  MEDIUM: lightColors.accent.blue,
-  HARD: lightColors.semantic.warning,
-  ELITE: lightColors.accent.purple,
+  EASY: vexFire.success,
+  MEDIUM: vexFire.copper,
+  HARD: vexFire.amber,
+  ELITE: vexFire.ember,
 };
 
 function ChallengeCard({
@@ -34,7 +34,7 @@ function ChallengeCard({
   return (
     <Card
       size="md"
-      style={{ backgroundColor: theme.colors.background.secondary }}
+      style={{ backgroundColor: vexFire.panel }}
     >
       <View style={{ gap: theme.spacing[3] }}>
         <View
@@ -45,10 +45,10 @@ function ChallengeCard({
           }}
         >
           <View style={{ flex: 1, gap: theme.spacing[1] }}>
-            <Text variant="h4" color="text.primary">
+            <Text variant="h4" color={vexFire.cream}>
               {challenge.title}
             </Text>
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" color={vexFire.textSecondary}>
               {challenge.description}
             </Text>
           </View>
@@ -71,7 +71,7 @@ function ChallengeCard({
               height: 8,
               borderRadius: 4,
               overflow: 'hidden',
-              backgroundColor: theme.colors.background.tertiary,
+              backgroundColor: vexFire.backgroundSoft,
             }}
           >
             <View
@@ -90,10 +90,10 @@ function ChallengeCard({
               alignItems: 'center',
             }}
           >
-            <Text variant="caption" color="text.tertiary">
+            <Text variant="caption" color={vexFire.textMuted}>
               {challenge.current}/{challenge.target} {challenge.unit}
             </Text>
-            <Text variant="caption" color="success.DEFAULT">
+            <Text variant="caption" color={vexFire.success}>
               +{challenge.masteryPoints} MP
             </Text>
           </View>
@@ -132,7 +132,7 @@ export function MasteryChallengesList({
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text variant="h4" color="text.primary">
+        <Text variant="h4" color={vexFire.cream}>
           Active Challenges
         </Text>
         <Button
@@ -146,14 +146,14 @@ export function MasteryChallengesList({
           <Icon
             name="refresh"
             size={16}
-            color={theme.colors.primary[500]}
+            color={vexFire.ember}
           />
         </Button>
       </Box>
       {challenges.length === 0 ? (
         <Card
           size="md"
-          style={{ backgroundColor: theme.colors.background.secondary }}
+          style={{ backgroundColor: vexFire.panel }}
         >
           <EmptyState
             iconName="target"

@@ -10,6 +10,7 @@ import { Icon } from '../../../icons/components/Icon';
 import { buttonTap } from '../../../utils/haptics';
 import { springPresets } from '../../../theme/tokens/motion';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 
 interface GoalChipProps {
@@ -59,8 +60,8 @@ export function GoalChip({
         onPressOut={onPressOut}
         style={({ pressed }) => ({
           alignItems: 'center',
-          backgroundColor: isSelected ? theme.colors.primary[500] : theme.colors.surface.input,
-          borderColor: isSelected ? theme.colors.primary[400] : theme.colors.border.DEFAULT,
+          backgroundColor: isSelected ? vexFire.ember : vexFire.panelSoft,
+          borderColor: isSelected ? vexFire.ember : vexFire.border,
           borderRadius: theme.borderRadius.full,
           borderWidth: 1,
           flexDirection: 'row',
@@ -72,7 +73,7 @@ export function GoalChip({
         })}
       >
         <Icon
-          color={isSelected ? theme.colors.text.inverse : theme.colors.primary[700]}
+          color={isSelected ? vexFire.background : vexFire.amber}
           name={icon}
           size="sm"
         />

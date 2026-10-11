@@ -77,6 +77,24 @@ export const Card = forwardRef<View, CardProps>(
     const { theme } = useTheme();
     const reducedMotion = useReducedMotion();
     const pressed = useSharedValue(0);
+    const themedVariantStyle: ViewStyle = {
+      ...variantStyles[variant],
+      backgroundColor:
+        variant === 'outlined' || variant === 'ghost'
+          ? 'transparent'
+          : variant === 'lightSelected'
+            ? theme.colors.surface.selected
+            : variant === 'elevated' || variant === 'premium' || variant === 'lightHero'
+              ? theme.colors.surface.card
+              : theme.colors.surface.card,
+      borderColor:
+        variant === 'outlined'
+          ? theme.colors.border.DEFAULT
+          : variant === 'premium' || variant === 'lightSelected'
+            ? theme.colors.border.strong
+            : theme.colors.border.light,
+      shadowColor: theme.colors.semantic.shadow,
+    };
 
     const animatedStyle = useAnimatedStyle(() => ({
       opacity:
@@ -90,7 +108,7 @@ export const Card = forwardRef<View, CardProps>(
 
     const combined = [
       { overflow: 'hidden' as const },
-      variantStyles[variant],
+      themedVariantStyle,
       sizeStyles[size],
       stateStyles[state],
       style,

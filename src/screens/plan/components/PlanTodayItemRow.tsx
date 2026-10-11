@@ -5,7 +5,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { GlassCard } from '../../../components/glass/GlassCard';
 import { Icon } from '../../../icons/components/Icon';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import type { PlanItem } from '../../../features/plan/types';
 import { getPriorityColor } from '../../../features/plan/service';
 
@@ -50,7 +50,7 @@ export function PlanTodayItemRow({
                 <View
                   style={{
                     alignItems: 'center',
-                    backgroundColor: vexLightGlass.mint[500],
+                    backgroundColor: vexFire.ember,
                     borderRadius: 999,
                     height: 26,
                     justifyContent: 'center',
@@ -58,7 +58,7 @@ export function PlanTodayItemRow({
                   }}
                 >
                   <Icon
-                    color={vexLightGlass.text.inverse}
+                    color={vexFire.background}
                     name="check"
                     size="sm"
                     variant="solid"
@@ -83,7 +83,7 @@ export function PlanTodayItemRow({
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  color: vexLightGlass.text.primary,
+                  color: vexFire.cream,
                   fontSize: 16,
                   fontWeight: '700',
                   letterSpacing: -0.2,
@@ -96,7 +96,7 @@ export function PlanTodayItemRow({
               {item.description ? (
                 <Text
                   style={{
-                    color: vexLightGlass.text.secondary,
+                    color: vexFire.textSecondary,
                     fontSize: 13,
                     marginTop: 2,
                   }}
@@ -127,7 +127,7 @@ export function PlanTodayItemRow({
                 {item.estimatedMinutes ? (
                   <Text
                     style={{
-                      color: vexLightGlass.text.tertiary,
+                      color: vexFire.textMuted,
                       fontSize: 12,
                       fontWeight: '600',
                       letterSpacing: 0.3,
@@ -140,7 +140,7 @@ export function PlanTodayItemRow({
             </View>
 
             <Icon
-              color={vexLightGlass.mint[600]}
+              color={vexFire.ember}
               name="play-circle"
               size="lg"
               variant="solid"

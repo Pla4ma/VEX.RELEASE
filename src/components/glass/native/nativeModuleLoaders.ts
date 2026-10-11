@@ -22,7 +22,7 @@ export function getBlurView(): NativeComponent {
 export function getGlassView(): NativeComponent {
   if (glassView) return glassView;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     glassView = (
       require('expo-glass-effect') as { GlassView: NativeComponent }
     ).GlassView;
@@ -35,7 +35,7 @@ export function getGlassView(): NativeComponent {
 export function getCallstackGlassView(): NativeComponent {
   if (callstackGlassView) return callstackGlassView;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     callstackGlassView = (
       require('@callstack/liquid-glass') as { LiquidGlassView: NativeComponent }
     ).LiquidGlassView;
@@ -48,7 +48,7 @@ export function getCallstackGlassView(): NativeComponent {
 export function getGlassContainer(): NativeComponent {
   if (glassContainer) return glassContainer;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     glassContainer = (
       require('expo-glass-effect') as { GlassContainer: NativeComponent }
     ).GlassContainer;
@@ -61,7 +61,7 @@ export function getGlassContainer(): NativeComponent {
 export function getLinearGradient(): NativeComponent {
   if (linearGradient) return linearGradient;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     linearGradient = (
       require('expo-linear-gradient') as { LinearGradient: NativeComponent }
     ).LinearGradient;

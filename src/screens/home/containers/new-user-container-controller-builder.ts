@@ -37,6 +37,7 @@ export interface ContainerControllerInput {
   openSocial: () => void;
   openPlan?: () => void;
   openCoach?: () => void;
+  openContentStudy?: () => void;
 }
 
 export function buildContainerController(
@@ -78,8 +79,8 @@ export function buildContainerController(
     openSocial: input.openSocial,
     openPlan: input.openPlan ?? input.openProgress,
     openCoach: input.openCoach ?? input.openSetup as () => void,
-    openContentStudy: input.openSetup as () => void,
-    continueStudyPlan: input.openSetup as () => void,
+    openContentStudy: input.openContentStudy ?? input.openProgress,
+    continueStudyPlan: input.openContentStudy ?? input.openProgress,
     createRecommendation: stubCoachMutations()
       .createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: stubCoachMutations()

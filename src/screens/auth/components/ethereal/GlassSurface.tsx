@@ -56,8 +56,8 @@ export function GlassSurface({
       accessibilityRole={accessibilityRole}
       style={[containerStyle, style]}
     >
-      <SafeBlurView intensity={selected ? 50 : 30} tint="light" style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>{children}</View>
+      <SafeBlurView intensity={selected ? 50 : 30} tint="light">
+        <View>{children}</View>
       </SafeBlurView>
     </View>
   );

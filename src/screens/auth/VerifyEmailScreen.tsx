@@ -5,14 +5,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
 import { Input } from '../../components/Input';
 import { Icon } from '../../icons/components/Icon';
-import type { AuthStackParams, RootStackParams } from '../../navigation';
-import type { NavigationProp } from '@react-navigation/native';
+import type { AuthStackParams } from '../../navigation';
 import { navigateToAuthScreen } from '../../navigation/navigation-helpers';
-import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'VerifyEmail'>;
 
@@ -62,7 +60,7 @@ const VerifyEmailScreen: React.ComponentType<Props> = ({ navigation, route }) =>
   }, []);
 
   const handleContinue = useCallback(() => {
-    navigateToAuthScreen(navigation as NavigationProp<RootStackParams>, 'Login', { email });
+    navigateToAuthScreen(navigation, 'Login', { email });
   }, [navigation, email]);
 
   return (

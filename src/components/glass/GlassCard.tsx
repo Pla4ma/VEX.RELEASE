@@ -1,14 +1,13 @@
 import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 
+import { useTheme } from '../../theme/ThemeContext';
 import {
-  resolveVariant,
   SIZE_PADDING,
   SIZE_RADIUS,
   type GlassCardSize,
   type GlassCardVariant,
 } from './GlassCard.tokens';
-import { NativeLiquidGlass } from './native/NativeLiquidGlass';
 
 export type { GlassCardSize, GlassCardVariant };
 
@@ -26,63 +25,89 @@ export interface GlassCardProps {
   flush?: boolean;
 }
 
-/**
- * Glass card primitive. Routes to native liquid glass (iOS 26+) with real-time
- * refraction, or falls back to expo-glass-effect / BlurView on other platforms.
- *
- * No opaque backgrounds, no gradient overlays, no CSS fake glass.
- * The native glass provides its own highlights, refraction, and depth.
- */
+function getCardSurface(
+  variant: GlassCardVariant,
+  colors: ReturnType<typeof useTheme>['theme']['colors'],
+): string {
+  switch (variant) {
+    case 'subtle':
+      return colors.background.secondary;
+    case 'strong':
+      return colors.surface.selected;
+    case 'hero':
+    case 'premium':
+      return colors.background.secondary;
+    case 'selected':
+      return colors.surface.selected;
+    case 'success':
+      return colors.background.secondary;
+    case 'warning':
+      return colors.background.secondary;
+    default:
+      return colors.surface.card;
+  }
+}
+
 export const GlassCard: React.ComponentType<GlassCardProps> = React.memo(
   function GlassCard({
     children,
     variant = 'default',
-    size,
+    size = 'md',
     padding,
     radius,
     style,
     testID,
     accessibilityLabel,
     glowMint = false,
+    glowFire = false,
   }: GlassCardProps): React.ReactNode {
-    const v = resolveVariant(variant);
-    const resolvedPadding = padding ?? (size ? SIZE_PADDING[size] : 18);
-    const resolvedRadius = radius ?? (size ? SIZE_RADIUS[size] : 24);
-    const showTopBar =
-      variant === 'hero' || variant === 'premium' || variant === 'selected';
+    const { theme } = useTheme();
+    const resolvedPadding = padding ?? SIZE_PADDING[size];
+    const resolvedRadius = radius ?? SIZE_RADIUS[size];
+    const topAccent =
+      glowFire || variant === 'warning'
+        ? theme.colors.semantic.primary
+        : glowMint || variant === 'hero' || variant === 'premium'
+          ? theme.colors.semantic.secondary
+          : undefined;
 
     return (
-      <NativeLiquidGlass
-        accessibilityLabel={accessibilityLabel}
+      <View
         accessible={accessibilityLabel ? true : undefined}
-        interactive={variant === 'premium' || variant === 'selected'}
-        radius={resolvedRadius}
-        tintColor={glowMint ? 'rgba(95,230,197,0.08)' : 'transparent'}
-        testID={testID}
+        accessibilityLabel={accessibilityLabel}
         style={[
           {
-            borderColor: v.borderColor,
-            borderWidth: 0.5,
+            backgroundColor: getCardSurface(variant, theme.colors),
+            borderColor:
+              variant === 'hero' || variant === 'premium'
+                ? theme.colors.border.DEFAULT
+                : theme.colors.border.light,
+            borderRadius: resolvedRadius,
+            borderWidth: 1,
+            elevation: variant === 'hero' || variant === 'premium' ? 4 : 2,
+            shadowColor: theme.colors.semantic.shadow,
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.16,
+            shadowRadius: 12,
           },
           style,
         ]}
+        testID={testID}
       >
-        {showTopBar && v.accentTopBar ? (
+        {topAccent ? (
           <View
             pointerEvents="none"
             style={{
-              backgroundColor: v.accentTopBar,
-              height: 2.5,
+              backgroundColor: topAccent,
               borderTopLeftRadius: resolvedRadius,
               borderTopRightRadius: resolvedRadius,
-              opacity: 0.7,
+              height: 3,
+              opacity: 0.9,
             }}
           />
         ) : null}
-        <View style={{ padding: resolvedPadding }}>
-          {children}
-        </View>
-      </NativeLiquidGlass>
+        <View style={{ padding: resolvedPadding }}>{children}</View>
+      </View>
     );
   },
 );

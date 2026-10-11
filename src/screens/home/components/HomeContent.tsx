@@ -11,19 +11,14 @@ import { staggeredEnterStyle } from './homeContentHelpers';
 import { buildHomeUnlockPathModel } from '../services/home-unlock-path-service';
 import { HomeDayZeroLaunchpad } from './HomeDayZeroLaunchpad';
 import { HomeUnlockPath } from './HomeUnlockPath';
-import { HomeDailyCards } from './HomeDailyCards';
-import { HomeMetricsRow } from './HomeMetricsRow';
-import { HomeContinueCard } from './HomeContinueCard';
-import { InvisibleAgentCard } from '../../../features/invisible-agent/components/InvisibleAgentCard';
-import type { CoachAgentDecision } from '../../../features/invisible-agent';
+import { HomeCinematicHero } from './HomeCinematicHero';
+import { HomeIntelligenceCard } from './HomeIntelligenceCard';
+
 import type { useHomeData } from '../hooks/useHomeData';
 import type { UseQueryResult } from '@tanstack/react-query';
-import { HomeActionDock, type HomeSheet } from './HomeActionDock';
-import { HomeQuickSheet } from './HomeQuickSheet';
-
-type HomeData = ReturnType<typeof useHomeData> & {
-  invisibleAgentQuery?: UseQueryResult<CoachAgentDecision>;
-};
+import type { CoachAgentDecision } from '../../../features/invisible-agent';
+import { HomeAgentSignalCard } from './HomeAgentSignalCard';
+type HomeData = ReturnType<typeof useHomeData>;
 
 interface HomeContentProps {
   controller: HomeController;
@@ -35,21 +30,25 @@ interface HomeContentProps {
   surfaceMap?: HomeSurfaceMap;
   resolvedExperience?: VexExperience;
   firstWeekExperience?: FirstWeekExperience;
+  agentQuery?: UseQueryResult<CoachAgentDecision>;
+  onAgentConfirm?: (decision: CoachAgentDecision) => void;
+  onOpenCoach?: () => void;
 }
 
 export const HomeContent: React.ComponentType<HomeContentProps> = ({
   controller,
-  data,
+  data: _data,
   handleClaimReward: _handleClaimReward,
   streakHoursRemaining,
   features: _features,
   comebackSessionsCompleted: _comebackSessionsCompleted,
-  surfaceMap,
-  resolvedExperience,
-  firstWeekExperience,
+  surfaceMap: _surfaceMap,
+  resolvedExperience: _resolvedExperience,
+  firstWeekExperience: _firstWeekExperience,
+  agentQuery,
+  onAgentConfirm,
+  onOpenCoach,
 }) => {
-const [activeSheet, setActiveSheet] = React.useState<HomeSheet | null>(null);
-const { showToast } = data;
   const completedSessions = controller.disclosure.inputs.totalCompletedSessions;
   const showUnlockPath = completedSessions < 2;
   const isDayZero = completedSessions === 0;
@@ -61,34 +60,6 @@ const { showToast } = data;
 
   const showAtRiskBanner =
     streakHoursRemaining !== null && streakHoursRemaining <= 4;
-  const focusScore = completedSessions > 2 ? 82 : 0;
-
-  const handlePeekLocked = (item: {
-    reward: string;
-    current: number;
-    requirement: number;
-  }): void => {
-    const remaining = Math.max(0, item.requirement - item.current);
-    showToast({
-      type: 'info',
-      title: `${item.reward} is locked`,
-      message:
-        remaining === 1
-          ? `Finish 1 more session to unlock ${item.reward}.`
-          : `Finish ${remaining} more sessions to unlock ${item.reward}.`,
-    });
-  };
-  const handleAgentConfirm = (decision: CoachAgentDecision): void => {
-    if (decision.type === 'CONTINUE_STUDY_PLAN') {
-      controller.continueStudyPlan();
-      return;
-    }
-    if (decision.type === 'REVIEW_PROGRESS' || decision.type === 'NO_ACTION') {
-      controller.openProgress();
-      return;
-    }
-    controller.openSetup(decision.actionPayload);
-  };
 
 return (
 <StaggeredEnter
@@ -113,65 +84,20 @@ return (
         />
       ) : null}
 
-      {!isDayZero ? (
-        <>
-          <HomeDailyCards
-            controller={controller}
-            includeCoachCard={false}
-            onStartSession={() => controller.openSetup()}
-          />
-          <HomeActionDock
-            showUnlocks={showUnlockPath}
-            onOpen={setActiveSheet}
-          />
-        </>
+      <HomeCinematicHero
+        controller={controller}
+        onOpenStudy={controller.openContentStudy}
+        onOpenProgress={controller.openProgress}
+        onStartSession={() => controller.openSetup()}
+      />
+      {agentQuery && onAgentConfirm && onOpenCoach ? <HomeAgentSignalCard onConfirm={onAgentConfirm} onOpenCoach={onOpenCoach} query={agentQuery} /> : null}
+      <HomeIntelligenceCard controller={controller} />
+      {showUnlockPath ? (
+        <HomeUnlockPath
+          model={unlockPathModel}
+          onStartSession={() => controller.openSetup()}
+        />
       ) : null}
-
-      <HomeQuickSheet
-        sheet={activeSheet}
-        onClose={() => setActiveSheet(null)}
-      >
-        {activeSheet === 'coach' ? (
-          <>
-          <HomeDailyCards
-            controller={controller}
-            includeDailyFocus={false}
-            onStartSession={() => controller.openSetup()}
-          />
-          {data.invisibleAgentQuery ? (
-            <InvisibleAgentCard
-              decision={data.invisibleAgentQuery.data ?? null}
-              isPending={data.invisibleAgentQuery.isPending}
-              isError={data.invisibleAgentQuery.isError}
-              onConfirm={handleAgentConfirm}
-              onRetry={() => { void data.invisibleAgentQuery?.refetch(); }}
-            />
-          ) : null}
-          </>
-        ) : null}
-        {activeSheet === 'progress' ? (
-          <>
-            <HomeMetricsRow
-              controller={controller}
-              focusScore={focusScore}
-            />
-            <HomeContinueCard
-              controller={controller}
-              completedSessions={completedSessions}
-              surfaceMap={surfaceMap}
-              resolvedExperience={resolvedExperience}
-              firstWeekExperience={firstWeekExperience}
-            />
-          </>
-        ) : null}
-        {activeSheet === 'unlocks' && showUnlockPath ? (
-            <HomeUnlockPath
-              model={unlockPathModel}
-              onStartSession={() => controller.openSetup()}
-              onPeekLocked={handlePeekLocked}
-            />
-        ) : null}
-      </HomeQuickSheet>
 
       {showAtRiskBanner && (
         <AtRiskBanner

@@ -7,6 +7,8 @@ import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { useTheme } from '../../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -28,7 +30,7 @@ export function HomeTopBar(): React.ReactNode {
       <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[2] }}>
         <View
           style={{
-            backgroundColor: theme.colors.semantic.primary,
+            backgroundColor: vexFire.ember,
             borderRadius: theme.borderRadius.full,
             height: 7,
             width: 7,
@@ -36,7 +38,7 @@ export function HomeTopBar(): React.ReactNode {
         />
         <Text
           style={{
-            color: theme.colors.semantic.primary,
+            color: vexFire.ember,
             fontFamily: theme.fonts.display ?? theme.fonts.primary,
             fontSize: theme.typography.heading.h2.fontSize,
             fontWeight: theme.fontWeights.regular,
@@ -50,18 +52,18 @@ export function HomeTopBar(): React.ReactNode {
         accessibilityHint="Shows your VEX notifications"
         accessibilityLabel="Open VEX ritual guide"
         accessibilityRole="button"
-        onPress={() => navigation.navigate('Notifications')}
+        onPress={() => navigateToRootScreen(navigation, 'Guide')}
         style={({ pressed }) => ({
           alignItems: 'center',
-          backgroundColor: pressed ? theme.colors.surface.pressed : 'transparent',
-          borderColor: theme.colors.semantic.primary,
+          backgroundColor: pressed ? vexFire.backgroundSoft : 'transparent',
+          borderColor: vexFire.borderStrong,
           borderRadius: theme.borderRadius.full,
           borderWidth: 1,
           justifyContent: 'center',
           ...getMinTouchTargetStyle(),
         })}
       >
-        <VexIcon color={theme.colors.semantic.primary} name="sparkles" size="sm" variant="outline" />
+        <VexIcon color={vexFire.ember} name="sparkles" size="sm" variant="outline" />
       </Pressable>
     </View>
   );

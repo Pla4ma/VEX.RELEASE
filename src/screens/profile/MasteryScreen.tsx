@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect } from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { type NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import { MasteryHeader, RankUnlocks } from './MasteryHeader';
 import { MasteryTechniqueGrid } from './MasteryTechniqueGrid';
 import { MasteryChallengesList } from './MasteryChallengesList';
 import { useMasteryState } from './useMasteryState';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 function MasteryScreen(): React.ReactNode {
   const navigation =
@@ -52,7 +53,7 @@ function MasteryScreen(): React.ReactNode {
     return (
       <Box
         flex={1}
-        style={{ backgroundColor: theme.colors.background.primary }}
+        style={{ backgroundColor: vexFire.background }}
       >
         <Box
           style={{
@@ -72,7 +73,7 @@ function MasteryScreen(): React.ReactNode {
     return (
       <Box
         flex={1}
-        style={{ backgroundColor: theme.colors.background.primary }}
+        style={{ backgroundColor: vexFire.background }}
       >
         <View
           style={{
@@ -90,7 +91,13 @@ function MasteryScreen(): React.ReactNode {
     );
   }
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <Box flex={1} style={{ backgroundColor: vexFire.background }}>
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../assets/vex/utility/mastery-crown.png')}
+        resizeMode="contain"
+        style={{ height: 200, opacity: 0.14, position: 'absolute', right: -54, top: insets.top + 8, width: 200 }}
+      />
       <View
         style={{
           paddingTop: insets.top + theme.spacing[5],
@@ -107,10 +114,10 @@ function MasteryScreen(): React.ReactNode {
             }}
           >
             <View>
-              <Text variant="label" color="text.secondary">
+              <Text variant="label" style={{ color: vexFire.textSecondary }}>
                 MASTERY
               </Text>
-              <Text variant="h2" color="text.primary">
+              <Text variant="h2" style={{ color: vexFire.cream }}>
                 Skill Progression
               </Text>
             </View>
@@ -124,7 +131,7 @@ function MasteryScreen(): React.ReactNode {
               <Icon
                 name="close"
                 size={24}
-                color={theme.colors.text.secondary}
+                color={vexFire.textSecondary}
               />
             </Pressable>
           </View>
@@ -138,7 +145,7 @@ function MasteryScreen(): React.ReactNode {
           />
         </Animated.View>
         <Animated.View entering={FadeInUp.duration(400).delay(200)}>
-          <Text variant="h4" color="text.primary">
+          <Text variant="h4" style={{ color: vexFire.cream }}>
             Technique Mastery
           </Text>
           <MasteryTechniqueGrid state={state} />

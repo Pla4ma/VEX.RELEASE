@@ -11,7 +11,7 @@ function isAuthCallbackUrl(url: string): boolean {
     const parsed = new URL(url);
     return parsed.protocol === 'vex:' && parsed.hostname === 'auth'
       && parsed.pathname === '/callback';
-  } catch (error: unknown) {
+  } catch {
     return false;
   }
 }
@@ -81,6 +81,7 @@ const SCREEN_CONFIG = {
   CompanionDetail: 'companion-detail',
   Achievements: 'achievements',
   Analytics: 'analytics',
+  Guide: 'guide',
   Mastery: 'mastery',
   Notifications: 'notifications',
 } as PathConfigMap<ExtendedRootStackParams>;

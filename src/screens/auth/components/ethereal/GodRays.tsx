@@ -7,6 +7,7 @@ import React, { useMemo } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { Blur, Canvas, Group, RoundedRect } from '@shopify/react-native-skia';
 
+import { glassSvgColors } from '../../../../components/glass/glassSvgColors';
 const RAY_COUNT = 6;
 
 type RaySpec = {
@@ -46,7 +47,7 @@ function RayBeam({
   return (
     <Group opacity={opacity} transform={[{ translateX: centerX }, { translateY: 0 }]}>
       <RoundedRect
-        color="theme.glassColors.vexWarmWhite"
+        color={glassSvgColors.vexWarmWhite}
         height={height}
         r={xWidth}
         width={xWidth}
@@ -61,7 +62,7 @@ function RayBeam({
 
 export function GodRays(): React.JSX.Element {
   const { width, height } = useWindowDimensions();
-  const rays = useMemo(buildRays, []);
+  const rays = useMemo(() => buildRays(), []);
 
   return (
     <View
@@ -75,7 +76,7 @@ export function GodRays(): React.JSX.Element {
       }}
     >
       <Canvas style={{ width, height }}>
-        {rays.map((ray, i) => (
+        {rays.map((ray) => (
           <RayBeam
             key={`ray-${ray.xOffset}`}
             height={height * 0.9}

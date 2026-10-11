@@ -10,8 +10,6 @@ import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
-import { lightColors } from '@/theme/tokens/colors';
-
 import { NotificationCategoryToggle } from './NotificationCategoryToggle';
 import { NotificationScheduleSection } from './NotificationScheduleSection';
 import { notificationGroups } from './notification-groups';
@@ -20,6 +18,7 @@ import {
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 type Props = NativeStackScreenProps<
   SettingsStackParams,
@@ -29,7 +28,7 @@ type Props = NativeStackScreenProps<
 const NotificationSettingsScreen: React.ComponentType<Props> = ({
   navigation,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { showToast: _showToast } = useUIStore();
   const [toggles, setToggles] = useState<Record<string, boolean>>({
@@ -76,7 +75,7 @@ const NotificationSettingsScreen: React.ComponentType<Props> = ({
             <Icon
               name="arrow-left"
               size={24}
-              color={theme.colors.text.primary}
+              color={vexFire.cream}
             />
           </Pressable>
           <LiquidGlassHeader
@@ -92,7 +91,7 @@ const NotificationSettingsScreen: React.ComponentType<Props> = ({
           <Box key={group.title} px={16} mb={24}>
             <Text
               variant="caption"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{
                 marginLeft: 12,
                 marginBottom: 8,
@@ -114,7 +113,7 @@ const NotificationSettingsScreen: React.ComponentType<Props> = ({
                     <Box
                       height={1}
                       ml={68}
-                      style={{ backgroundColor: theme.colors.border.light }}
+                      style={{ backgroundColor: vexFire.line }}
                     />
                   )}
                 </React.Fragment>
@@ -127,7 +126,7 @@ const NotificationSettingsScreen: React.ComponentType<Props> = ({
           <Pressable
             onPress={handleSendTestNotification}
             style={{
-              backgroundColor: theme.colors.primary[500],
+              backgroundColor: vexFire.ember,
               paddingVertical: 16,
               borderRadius: 12,
               alignItems: 'center',
@@ -137,10 +136,10 @@ const NotificationSettingsScreen: React.ComponentType<Props> = ({
             accessibilityHint="Double tap to change setting"
           >
             <Box flexDirection="row" alignItems="center">
-              <Icon name="bell" size={18} color={lightColors.text.inverse} />
+              <Icon name="bell" size={18} color={vexFire.background} />
               <Text
                 style={{
-                  color: lightColors.text.inverse,
+                  color: vexFire.background,
                   fontWeight: '600',
                   fontSize: 16,
                   marginLeft: 8,

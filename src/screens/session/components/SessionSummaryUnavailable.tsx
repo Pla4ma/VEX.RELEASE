@@ -2,9 +2,8 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type SessionSummaryUnavailableProps = {
   message?: string;
@@ -17,22 +16,20 @@ export function SessionSummaryUnavailable({
   onDone,
   onRetry,
 }: SessionSummaryUnavailableProps) {
-  const { theme } = useTheme();
-
   return (
     <Box
       flex={1}
       justifyContent="center"
       alignItems="center"
       px={24}
-      style={{ backgroundColor: theme.colors.background.primary }}
+      style={{ backgroundColor: vexFire.background }}
     >
-      <Text variant="h3" color={theme.colors.text.primary} textAlign="center">
+      <Text variant="h3" style={{ color: vexFire.cream }} textAlign="center">
         Session summary unavailable
       </Text>
       <Text
         variant="body"
-        color={theme.colors.text.secondary}
+        style={{ color: vexFire.textSecondary }}
         textAlign="center"
         mt={12}
       >

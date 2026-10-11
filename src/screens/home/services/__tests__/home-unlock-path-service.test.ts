@@ -10,7 +10,7 @@ describe('buildHomeUnlockPathModel', () => {
 
     expect(model.nextItem.reward).toBe('Session recap');
     expect(model.nextItem.current).toBe(0);
-    expect(model.progressLabel).toBe('Complete 1 session to wake the app.');
+    expect(model.progressLabel).toBe('Complete 1 session to give the system its first signal.');
   });
 
   it('advances to pattern read after the first session', () => {

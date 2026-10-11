@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import Animated, {
@@ -46,13 +47,13 @@ export function BossImpactCard({
         width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: wasDefeated
-          ? `${theme.colors.success[500]}15`
-          : theme.colors.background.secondary,
+          ? `${vexFire.success}15`
+          : vexFire.panel,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
         borderColor: wasDefeated
-          ? theme.colors.success[500]
-          : theme.colors.border.DEFAULT,
+          ? vexFire.success
+          : vexFire.border,
         marginRight: theme.spacing[3],
       }}
     >
@@ -65,7 +66,7 @@ export function BossImpactCard({
         }}
       >
         <Text fontSize={24}>{wasDefeated ? '\u{1F3C6}' : '\u{1F432}'}</Text>
-        <Text variant="body" fontWeight="700" color="text.primary">
+        <Text variant="body" fontWeight="700" color={vexFire.cream}>
           {wasDefeated ? 'BOSS DEFEATED!' : bossName}
         </Text>
       </View>
@@ -73,7 +74,7 @@ export function BossImpactCard({
       <View
         style={{
           height: 12,
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
           borderRadius: theme.borderRadius.full,
           overflow: 'hidden',
           marginBottom: theme.spacing[2],
@@ -84,10 +85,10 @@ export function BossImpactCard({
             {
               height: '100%',
               backgroundColor: wasDefeated
-                ? theme.colors.success[500]
+                ? vexFire.success
                 : healthAfter <= 15
-                  ? theme.colors.error[500]
-                  : theme.colors.primary[500],
+                  ? vexFire.danger
+                  : vexFire.ember,
               borderRadius: theme.borderRadius.full,
             },
             healthBarStyle,
@@ -95,7 +96,7 @@ export function BossImpactCard({
         />
       </View>
 
-      <Text variant="caption" color="text.secondary">
+      <Text variant="caption" color={vexFire.textSecondary}>
         {wasDefeated
           ? `You dealt ${damageDealt} damage and defeated the boss!`
           : `${healthAfter.toFixed(0)}% health remaining \u2022 ${damageDealt} damage dealt`}
@@ -109,12 +110,12 @@ export function BossImpactCard({
             gap: theme.spacing[1],
             marginTop: theme.spacing[2],
             padding: theme.spacing[2],
-            backgroundColor: `${theme.colors.warning[500]}20`,
+            backgroundColor: `${vexFire.amber}20`,
             borderRadius: theme.borderRadius.md,
           }}
         >
           <Text fontSize={16}>{'\u26A1'}</Text>
-          <Text variant="caption" color="warning.DEFAULT" fontWeight="600">
+          <Text variant="caption" color={vexFire.amber} fontWeight="600">
             Critical Hit!
           </Text>
         </View>

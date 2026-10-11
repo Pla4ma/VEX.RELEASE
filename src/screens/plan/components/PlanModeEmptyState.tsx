@@ -3,6 +3,7 @@ import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface PlanModeEmptyStateProps {
   asset: ImageSourcePropType;
@@ -50,7 +51,7 @@ export function PlanModeEmptyState({
         onPress={onAction}
         style={({ pressed }) => ({
           alignItems: 'center',
-          borderColor: theme.colors.primary[500],
+          borderColor: vexFire.ember,
           borderRadius: theme.borderRadius.full,
           borderWidth: 1,
           justifyContent: 'center',
@@ -59,7 +60,7 @@ export function PlanModeEmptyState({
           paddingHorizontal: theme.spacing[6],
         })}
       >
-        <Text color={theme.colors.semantic.primary} variant="button">
+        <Text color={vexFire.ember} variant="button">
           {actionLabel}
         </Text>
       </Pressable>

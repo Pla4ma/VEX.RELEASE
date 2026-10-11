@@ -11,7 +11,7 @@ export function VexFocusMark({ size = 120 }: VexFocusMarkProps): React.ReactNode
   const s = size;
   const cx = s / 2;
   const cy = s / 2;
-  const isWeb = Platform.OS === 'web';
+  const _isWeb = Platform.OS === 'web';
 
   const MarkSvg = (
     <Svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}>

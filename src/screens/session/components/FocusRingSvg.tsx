@@ -5,7 +5,7 @@ import React from 'react';
 import Animated, { useAnimatedProps } from 'react-native-reanimated';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export const RING_SIZE = 280;
 export const STROKE_WIDTH = 14;
@@ -31,16 +31,16 @@ export function FocusRingSvg({
           x2="100%"
           y2="100%"
         >
-          <Stop offset="0%" stopColor={vexLightGlass.mint[400]} />
-          <Stop offset="60%" stopColor={vexLightGlass.mint[600]} />
-          <Stop offset="100%" stopColor={vexLightGlass.mint[800]} />
+          <Stop offset="0%" stopColor={vexFire.amber} />
+          <Stop offset="60%" stopColor={vexFire.ember} />
+          <Stop offset="100%" stopColor={vexFire.copper} />
         </LinearGradient>
       </Defs>
       <Circle
         cx={(RING_SIZE + 36) / 2}
         cy={(RING_SIZE + 36) / 2}
         r={RADIUS + 8}
-        stroke="rgba(255,255,255,0.18)"
+        stroke={vexFire.borderStrong}
         strokeWidth={1.5}
         fill="none"
       />
@@ -48,7 +48,7 @@ export function FocusRingSvg({
         cx={(RING_SIZE + 36) / 2}
         cy={(RING_SIZE + 36) / 2}
         r={RADIUS}
-        stroke="rgba(255,255,255,0.08)"
+        stroke={vexFire.line}
         strokeWidth={STROKE_WIDTH}
         fill="none"
       />

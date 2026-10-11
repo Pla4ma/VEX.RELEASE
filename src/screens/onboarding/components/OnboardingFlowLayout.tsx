@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SmartCoachHint } from '../../../components/coach/SmartCoachHint';
 import { PremiumSurface } from '../../../components/premium/PremiumSurface';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from '../styles';
 import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from './onboarding-flow-data';
@@ -14,7 +14,6 @@ import {
   getProgressPhaseIndex,
   OnboardingProgressIndicator,
 } from './OnboardingProgressIndicator';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type OnboardingFlowLayoutProps = {
   children: ReactNode;

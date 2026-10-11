@@ -8,12 +8,9 @@ import { loadCompanionState } from '../../../features/companion/session-storage'
 import type { UseCompanionSessionInput, UseCompanionSessionResult } from './useCompanionSessionTypes';
 import { MILESTONES, getMilestoneLabel, getMilestoneHaptic } from './milestoneHelpers';
 import { completeCompanionSessionImpl } from './completionHelper';
-
-// Empty ref function factory — avoids re-creating the Set on every render
 function createEmptySet(): Set<number> {
   return new Set();
 }
-
 export type { UseCompanionSessionInput, UseCompanionSessionResult };
 export function useCompanionSession(
   input: UseCompanionSessionInput,
@@ -57,9 +54,6 @@ export function useCompanionSession(
       setIsLoaded(false);
     }
   }
-
-  // SAFETY: loadCompanionState is async I/O (reads from storage); must live in an effect
-  // because it's a side effect triggered by userId changes, not a computation.
   useEffect(() => {
     if (!userId) {
       return;
@@ -107,9 +101,6 @@ export function useCompanionSession(
         : current,
     );
   }
-  // SAFETY: tick() mutates companion service state and reads multiple reactive inputs
-  // (elapsedSeconds, purityScore, isPaused); must run as an effect to stay in sync.
-  // State updates from tick results are batched into a single setState call.
   useEffect(() => {
     const service = serviceRef.current;
     if (!service || !hasCompanionState) {
@@ -117,7 +108,6 @@ export function useCompanionSession(
     }
     service.tick(elapsedSeconds, totalSeconds, purityScore, isPaused);
     const nextState = service.getState();
-    // Batch all state mutations from this tick cycle into one update
     let updatedState: CompanionState | null = null;
     if (nextState) {
       updatedState = { ...nextState, sessionProgress };
@@ -171,7 +161,6 @@ export function useCompanionSession(
       pureFocusStartedAtRef.current = null;
       pureBurstTriggeredRef.current = false;
     }
-    // Single setState call batches all mutations from this tick cycle
     if (updatedState) {
       setState(updatedState);
     }

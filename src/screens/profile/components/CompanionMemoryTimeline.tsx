@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import NetInfo from '@react-native-community/netinfo';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import React, { useCallback } from 'react';
@@ -29,7 +30,7 @@ export function CompanionMemoryTimeline({
 
   return (
     <Box gap="md">
-      <Text variant="h3" color="text.primary">
+      <Text variant="h3" color={vexFire.cream}>
         Your Story
       </Text>
       {netInfo.isConnected === false ? <OfflineBanner /> : null}
@@ -99,10 +100,10 @@ function EmptyTimeline(): React.ReactNode {
   return (
     <Card size="md" accessibilityLabel="No companion memories yet">
       <Box gap="sm">
-        <Text variant="h4" color="text.primary">
+        <Text variant="h4" color={vexFire.cream}>
           Your companion is watching for milestones.
         </Text>
-        <Text variant="bodySmall" color="text.secondary">
+        <Text variant="bodySmall" color={vexFire.textSecondary}>
           Complete your first session. Your story starts with proof, not
           pressure.
         </Text>
@@ -118,7 +119,7 @@ function OfflineBanner(): React.ReactNode {
       variant="outlined"
       accessibilityLabel="Memory timeline offline"
     >
-      <Text variant="bodySmall" color="text.secondary">
+      <Text variant="bodySmall" color={vexFire.textSecondary}>
         Offline right now. Saved memories stay here, and new ones sync when you
         reconnect.
       </Text>

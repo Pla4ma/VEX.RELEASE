@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Box } from '../../../components/primitives/Box'
 import { Card } from '../../../components/primitives'
@@ -30,21 +31,21 @@ export function CompanionMemoryCard({
           alignItems="center"
           gap="sm"
         >
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             {formatMemoryDate(memory.sessionDate)}
           </Text>
           {memory.grade ? (
             <Box px="sm" py="xs" borderRadius="full" bg="background.tertiary">
-              <Text variant="caption" color="text.primary" fontWeight="700">
+              <Text variant="caption" color={vexFire.cream} fontWeight="700">
                 {memory.grade}
               </Text>
             </Box>
           ) : null}
         </Box>
-        <Text variant="body" color="text.primary" fontWeight="700">
+        <Text variant="body" color={vexFire.cream} fontWeight="700">
           {memory.title}
         </Text>
-        <Text variant="bodySmall" color="text.secondary" numberOfLines={3}>
+        <Text variant="bodySmall" color={vexFire.textSecondary} numberOfLines={3}>
           {memory.body}
         </Text>
       </Box>

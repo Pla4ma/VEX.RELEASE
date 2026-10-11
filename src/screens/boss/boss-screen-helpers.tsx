@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
-import { useTheme } from '../../theme/ThemeContext';
+import { Image, Pressable, ScrollView, View } from 'react-native';
+import { Text } from '../../components/primitives/Text';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export type BossIntensity = 'subtle' | 'game-like' | 'intense';
 
@@ -65,21 +66,36 @@ export const BossFallback: React.ComponentType<{
   stage: string;
   resetLabel: string;
 }> = ({ intensity, onStartSession, unlockReason, stage, resetLabel }) => {
-  useTheme();
   const copy = getBossCopy(intensity);
   const isSubtle = intensity === 'subtle';
   return (
-    <LockedFeatureScreen
-      ctaLabel="Start a focus session"
-      description={copy.description}
-      feature="boss_tab"
-      icon={isSubtle ? '\u{1F4CA}' : '\u{1F409}'}
-      onPress={onStartSession}
-      progressLabel={resetLabel}
-      stage={stage as 'NEW_USER' | 'ACTIVATING' | 'ENGAGED' | 'POWER_USER'}
-      title={copy.title}
-      unlockLabel={unlockReason}
-      whyItMatters="Boss progress moves only when you complete focus sessions. No shop items, no premium boosts — just real focus time."
-    />
+    <View style={{ backgroundColor: vexFire.background, flex: 1 }}>
+      <ScrollView contentContainerStyle={{ gap: 18, padding: 24 }}>
+        <Image
+          accessibilityIgnoresInvertColors
+          source={require('../../../assets/vex/utility/challenge-badge.png')}
+          resizeMode="contain"
+          style={{ alignSelf: 'center', height: 180, width: 180 }}
+        />
+        <Text variant="label" color={vexFire.amber}>Momentum encounter</Text>
+        <Text variant="h1" color={vexFire.cream}>{copy.title}</Text>
+        <Text variant="body" color={vexFire.textSecondary}>{copy.description}</Text>
+        <View style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border, borderRadius: 18, borderWidth: 1, gap: 8, padding: 18 }}>
+          <Text variant="caption" color={vexFire.textMuted}>Unlock signal</Text>
+          <Text variant="body" color={vexFire.cream}>{unlockReason}</Text>
+          <Text variant="caption" color={vexFire.textSecondary}>{`Next reset in ${resetLabel} · ${stage}`}</Text>
+        </View>
+        <Pressable
+          accessibilityHint="Starts a focus session to build momentum."
+          accessibilityLabel="Start a focus session"
+          accessibilityRole="button"
+          onPress={onStartSession}
+          style={{ alignItems: 'center', backgroundColor: vexFire.ember, borderRadius: 16, minHeight: 52, justifyContent: 'center', paddingHorizontal: 18 }}
+        >
+          <Text variant="label" color={vexFire.background}>Start a focus session</Text>
+        </Pressable>
+        <Text variant="caption" color={vexFire.textMuted}>{isSubtle ? 'Quiet progress, visible proof.' : 'Every minute focused counts.'}</Text>
+      </ScrollView>
+    </View>
   );
 };

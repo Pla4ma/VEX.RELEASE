@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -5,13 +6,13 @@ import { Box } from '../../components/primitives/Box'
 import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 import { PasswordField } from './PasswordField';
 import { usePasswordChange } from './usePasswordChange';
 
 export const PasswordChangeSection: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const {
     currentPassword,
     setCurrentPassword,
@@ -29,7 +30,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -59,12 +60,12 @@ export const PasswordChangeSection: React.ComponentType = () => {
               borderRadius={10}
               justifyContent="center"
               alignItems="center"
-              style={{ backgroundColor: theme.colors.background.secondary }}
+              style={{ backgroundColor: vexFire.panel }}
             >
               <Icon
                 name="lock"
                 size={20}
-                color={theme.colors.text.tertiary}
+                color={vexFire.textMuted}
               />
             </Box>
 
@@ -73,14 +74,14 @@ export const PasswordChangeSection: React.ComponentType = () => {
                 variant="body"
                 style={{
                   fontWeight: '500',
-                  color: theme.colors.text.primary,
+                  color: vexFire.cream,
                 }}
               >
                 Change Password
               </Text>
               <Text
                 variant="caption"
-                color="text.secondary"
+                color={vexFire.textSecondary}
                 style={{ marginTop: 2 }}
               >
                 Update your account password
@@ -90,7 +91,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
             <Icon
               name="arrow-right"
               size={20}
-              color={theme.colors.text.tertiary}
+              color={vexFire.textMuted}
             />
           </Pressable>
         ) : (
@@ -100,7 +101,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
               style={{
                 fontWeight: '600',
                 marginBottom: 16,
-                color: theme.colors.text.primary,
+                color: vexFire.cream,
               }}
             >
               Change Password
@@ -131,13 +132,13 @@ export const PasswordChangeSection: React.ComponentType = () => {
                 onPress={() => setShowPasswordFields(false)}
                 style={{
                   flex: 1,
-                  backgroundColor: theme.colors.background.secondary,
+                  backgroundColor: vexFire.panel,
                   paddingVertical: 12,
                   borderRadius: 8,
                   alignItems: 'center',
                   marginRight: 8,
                   borderWidth: 1,
-                  borderColor: theme.colors.border.light,
+                  borderColor: vexFire.border,
                 }}
                 accessibilityLabel="Cancel password change"
                 accessibilityRole="button"
@@ -145,7 +146,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
               >
                 <Text
                   style={{
-                    color: theme.colors.text.primary,
+                    color: vexFire.cream,
                     fontWeight: '600',
                   }}
                 >
@@ -157,7 +158,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
                 disabled={isChangingPassword}
                 style={{
                   flex: 1,
-                  backgroundColor: theme.colors.primary[500],
+                  backgroundColor: vexFire.ember,
                   paddingVertical: 12,
                   borderRadius: 8,
                   alignItems: 'center',
@@ -169,7 +170,7 @@ export const PasswordChangeSection: React.ComponentType = () => {
                 accessibilityHint="Double tap to change setting"
               >
                 <Text
-                  style={{ color: lightColors.text.inverse, fontWeight: '600' }}
+                  style={{ color: vexFire.cream, fontWeight: '600' }}
                 >
                   {isChangingPassword ? 'Changing...' : 'Change'}
                 </Text>

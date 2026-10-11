@@ -2,13 +2,13 @@ import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { useTheme } from '../../../theme/ThemeContext';
 import { MetricRow, isProgressMetric } from './MetricRow';
 import { StudyProgressPanel } from './StudyProgressPanel';
 import type { SessionProgressionCardProps } from './SessionProgressionCard.types';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export type { SessionProgressionCardProps };
 
@@ -23,7 +23,7 @@ export function SessionProgressionCard({
   onRetryRewards,
   onStartNewSession: _onStartNewSession,
 }: SessionProgressionCardProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const metrics = [levelMetric].filter(isProgressMetric);
   const rewardStatusMessage =
     rewardCreditStatus === 'crediting'
@@ -37,18 +37,18 @@ export function SessionProgressionCard({
             : null;
   const rewardStatusColor =
     rewardCreditStatus === 'success'
-      ? theme.colors.success.DEFAULT
+      ? vexFire.success
       : rewardCreditStatus === 'failed'
-        ? theme.colors.warning.DEFAULT
-        : theme.colors.text.secondary;
+        ? vexFire.amber
+        : vexFire.textSecondary;
 
   return (
     <Box gap={16}>
       <Animated.View entering={FadeInUp.springify()}>
-        <Text variant="label" color={theme.colors.primary[400]}>
+        <Text variant="label" style={{ color: vexFire.ember }}>
           SESSION SUMMARY
         </Text>
-        <Text variant="h2" color={theme.colors.text.primary} mt={8}>
+        <Text variant="h2" style={{ color: vexFire.cream }} mt={8}>
           The run paid off.
         </Text>
         {rewardStatusMessage ? (
@@ -66,13 +66,13 @@ export function SessionProgressionCard({
           <Box
             p={18}
             style={{
-              backgroundColor: theme.colors.background.secondary,
+              backgroundColor: vexFire.panel,
               borderWidth: 1,
-              borderColor: theme.colors.border.light,
+              borderColor: vexFire.border,
               ...getPremiumCardStyle('medium'),
             }}
           >
-            <Text variant="body" color={theme.colors.text.secondary}>
+            <Text variant="body" style={{ color: vexFire.textSecondary }}>
               Progression data is syncing. Your progress is still safe.
             </Text>
           </Box>
@@ -82,9 +82,9 @@ export function SessionProgressionCard({
         <Box
           p={18}
           style={{
-            backgroundColor: theme.colors.background.secondary,
+            backgroundColor: vexFire.panel,
             borderWidth: 1,
-            borderColor: theme.colors.border.light,
+            borderColor: vexFire.border,
             ...getPremiumCardStyle('medium'),
           }}
         >
@@ -93,7 +93,7 @@ export function SessionProgressionCard({
             alignItems="center"
             justifyContent="space-between"
           >
-            <Text variant="h4" color={theme.colors.text.primary}>
+            <Text variant="h4" style={{ color: vexFire.cream }}>
               Consistency {streakLabel}
             </Text>
             {streakIncreased ? (
@@ -101,9 +101,9 @@ export function SessionProgressionCard({
                 px={10}
                 py={4}
                 borderRadius={999}
-                style={{ backgroundColor: theme.colors.warning.DEFAULT }}
+                style={{ backgroundColor: vexFire.amber }}
               >
-                <Text variant="caption" color={theme.colors.text.inverse}>
+                <Text variant="caption" style={{ color: vexFire.background }}>
                   +1
                 </Text>
               </Box>
@@ -116,12 +116,12 @@ export function SessionProgressionCard({
         <Animated.View entering={FadeInUp.delay(750).springify()}>
           <Box alignItems="center" gap={8}>
             {isRewardSyncing ? (
-              <Text variant="caption" color={theme.colors.text.secondary}>
+              <Text variant="caption" style={{ color: vexFire.textSecondary }}>
                 Applying progress...
               </Text>
             ) : null}
             {rewardError ? (
-              <Text variant="caption" color={theme.colors.error.DEFAULT}>
+              <Text variant="caption" style={{ color: vexFire.danger }}>
                 {rewardError}
               </Text>
             ) : null}

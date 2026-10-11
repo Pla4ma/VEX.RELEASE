@@ -14,7 +14,7 @@ export function useOnboardingCompletion(userId: string) {
     (state) => state.showHomeHighlight,
   );
   const disclosureAnalytics = useDisclosureAnalytics();
-  const { syncFromStore, isSyncing } = useSyncOnboardingProgress(userId);
+  const { syncFromStore, isSyncing: _isSyncing } = useSyncOnboardingProgress(userId);
   const [isFinishing, setIsFinishing] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
   const completedRef = useRef(false);
@@ -24,7 +24,7 @@ export function useOnboardingCompletion(userId: string) {
       goal: string | undefined,
       message?: string,
     ): Promise<void> => {
-      if (!userId) {return;}
+      if (!userId || completedRef.current) {return;}
       setIsFinishing(true);
       setFinishError(null);
       completedRef.current = true;

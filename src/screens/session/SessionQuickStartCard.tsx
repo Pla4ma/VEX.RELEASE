@@ -6,7 +6,9 @@ import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';
-import { LiquidGlassCard } from '../../shared/ui/liquid-glass/LiquidGlassCard';
+import { VexSurface } from '../../shared/ui/vex/VexSurface';
+import { spacing } from '../../theme/tokens/spacing';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 type SmartSuggestion = {
   description: string;
@@ -52,50 +54,45 @@ export function SessionQuickStartCard({
 
   return (
     <Box px="lg" mb="lg">
-      <LiquidGlassCard
-        emphasized
-        style={{
-          gap: theme.spacing[4],
-        }}
-      >
+      <VexSurface tone="hero" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong, gap: theme.spacing[4] }}>
         <Box flexDirection="row" gap="md" alignItems="center">
           <Box flex={1} gap="xs">
-            <Text variant="label" color="primary.500">
+            <Text variant="label" color={vexFire.ember}>
               {heroEyebrow}
             </Text>
-            <Text variant="h4" color="text.primary">
+            <Text variant="h4" color={vexFire.cream}>
               {heroTitle}
             </Text>
-            <Text variant="body" color="text.secondary">
+            <Text variant="body" color={vexFire.textSecondary}>
               {heroBody}
             </Text>
         </Box>
-        {/* SAFETY: require() needed for Metro asset bundling. Assets are resolved at build time. */}
         <Image
-          source={require('../../assets/generated/session/focus-artifact.png')}
+          source={require('../../../assets/vex/session/focus-core.png')}
             resizeMode="contain"
-            style={{ height: 108, width: 108 }}
-            accessibilityLabel="Liquid glass focus artifact"
+            style={{ height: spacing[24] + spacing[2], width: spacing[24] + spacing[2] }}
+            accessibilityLabel="Ember focus core"
           />
         </Box>
 
         <Box
           p="md"
           bg="semantic.surfaceGlass"
-          borderRadius={24}
+          borderRadius={theme.borderRadius.xl}
           style={{
+            backgroundColor: vexFire.backgroundRaised,
             borderWidth: 1,
-            borderColor: theme.colors.semantic.liquidGlassBorder,
+            borderColor: vexFire.border,
             gap: theme.spacing[2],
           }}
         >
-          <Text variant="caption" color="text.tertiary">
+            <Text variant="caption" color={vexFire.textMuted}>
             Selected session
           </Text>
-          <Text variant="label" color="text.primary">
+          <Text variant="label" color={vexFire.cream}>
             {presetName}
           </Text>
-          <Text variant="caption" color="text.secondary">
+          <Text variant="caption" color={vexFire.textSecondary}>
             {subtitle}
           </Text>
         </Box>
@@ -110,7 +107,7 @@ export function SessionQuickStartCard({
 
         {contractInput}
 
-        <Button
+          <Button
           variant="primary"
           size="lg"
           onPress={onStart}
@@ -119,8 +116,9 @@ export function SessionQuickStartCard({
           accessibilityLabel={`Start ${durationMinutes} minute session with ${currentThemeName}`}
           accessibilityRole="button"
           accessibilityHint="Starts the selected focus session now"
+          style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.lg }}
         >
-          {ctaLabel}
+          <Text color={vexFire.background}>{ctaLabel}</Text>
         </Button>
         <Button
           variant={hasCustomizations ? 'outline' : 'ghost'}
@@ -132,10 +130,11 @@ export function SessionQuickStartCard({
           }
           accessibilityRole="button"
           accessibilityHint="Opens duration, mode, theme, and advanced session options"
+          style={{ borderColor: vexFire.border, borderRadius: theme.borderRadius.lg }}
         >
-          {customizationLabel}
+          <Text color={vexFire.textSecondary}>{customizationLabel}</Text>
         </Button>
-      </LiquidGlassCard>
+      </VexSurface>
     </Box>
   );
 }

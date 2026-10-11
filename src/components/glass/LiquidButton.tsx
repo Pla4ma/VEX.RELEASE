@@ -1,6 +1,5 @@
 import React from 'react';
 import { Pressable } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,16 +8,10 @@ import Animated, {
 
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { springPresets } from '../../theme/tokens/motion';
+import { useTheme } from '../../theme/ThemeContext';
 import { buttonTap, triggerHaptic } from '../../utils/haptics';
 import { Text } from '../primitives/Text';
-import {
-  LIQUID_SIZE,
-  resolveLiquidVariant,
-  type LiquidButtonSize,
-  type LiquidButtonVariant,
-} from './LiquidButton.tokens';
-import { LiquidButtonGlassEffects } from './LiquidButton.effects';
-import { NativeLiquidGlass } from './native/NativeLiquidGlass';
+import { LIQUID_SIZE, type LiquidButtonSize, type LiquidButtonVariant } from './LiquidButton.tokens';
 
 export type { LiquidButtonSize, LiquidButtonVariant };
 
@@ -37,6 +30,10 @@ interface LiquidButtonProps {
   testID?: string;
 }
 
+function isFilledVariant(variant: LiquidButtonVariant): boolean {
+  return variant === 'primary' || variant === 'fire' || variant === 'ocean' || variant === 'secondary';
+}
+
 export function LiquidButton({
   label,
   onPress,
@@ -52,20 +49,30 @@ export function LiquidButton({
   testID,
 }: LiquidButtonProps): React.ReactNode {
   const { isReducedMotion } = useReducedMotion();
+  const { theme } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
-  const s = LIQUID_SIZE[size];
-  const v = resolveLiquidVariant(variant, false);
-  const isPrimary =
-    variant === 'primary' || variant === 'fire' || variant === 'ocean';
+  const sizeToken = LIQUID_SIZE[size];
+  const filled = isFilledVariant(variant);
+  const backgroundColor =
+    variant === 'ocean' || variant === 'secondary'
+      ? theme.colors.semantic.secondary
+      : variant === 'outline' || variant === 'ghost'
+        ? 'transparent'
+        : theme.colors.semantic.primary;
+  const foregroundColor = filled
+    ? theme.colors.semantic.liquidButtonText
+    : variant === 'ghost'
+      ? theme.colors.text.secondary
+      : theme.colors.semantic.secondary;
 
   const onPressIn = (): void => {
-    if (!isReducedMotion) {
-      scale.value = withSpring(0.97, springPresets.tactile);
-    }
     buttonTap();
+    if (!isReducedMotion) {
+      scale.value = withSpring(0.98, springPresets.tactile);
+    }
   };
   const onPressOut = (): void => {
     if (!isReducedMotion) {
@@ -81,10 +88,7 @@ export function LiquidButton({
 
   return (
     <Animated.View
-      style={[
-        { borderRadius: 999, width: fullWidth ? '100%' : undefined },
-        animatedStyle,
-      ]}
+      style={[{ width: fullWidth ? '100%' : undefined }, animatedStyle]}
     >
       <Pressable
         accessibilityHint={accessibilityHint ?? `Activates ${label}`}
@@ -96,66 +100,38 @@ export function LiquidButton({
         onPressIn={onPressIn}
         onPressOut={onPressOut}
         testID={testID}
-        style={({ pressed }) => {
-          const liveV = resolveLiquidVariant(variant, pressed);
-          return [
-            {
-              alignItems: 'center',
-              alignSelf: fullWidth ? 'stretch' : 'flex-start',
-              backgroundColor: liveV.background ?? 'transparent',
-              borderColor: liveV.borderColor ?? 'transparent',
-              borderRadius: 999,
-              borderWidth: liveV.borderColor ? 1.2 : 0,
-              elevation: isPrimary ? 4 : 2,
-              flexDirection: 'row',
-              gap: 8,
-              justifyContent: 'center',
-              minHeight: s.minHeight,
-              opacity: disabled ? 0.55 : 1,
-              overflow: 'hidden',
-              paddingHorizontal: s.paddingH,
-              paddingVertical: s.paddingV,
-              shadowColor: liveV.shadowColor,
-              shadowOffset: { width: 0, height: isPrimary ? 8 : 3 },
-              shadowOpacity: isPrimary ? 0.28 : 0.14,
-              shadowRadius: isPrimary ? 12 : 6,
-            },
-          ];
-        }}
+        style={({ pressed }) => ({
+          alignItems: 'center',
+          backgroundColor: pressed && !disabled ? theme.colors.surface.pressed : backgroundColor,
+          borderColor:
+            variant === 'outline'
+              ? theme.colors.semantic.secondary
+              : filled
+                ? backgroundColor
+                : theme.colors.border.DEFAULT,
+          borderRadius: theme.borderRadius.lg,
+          borderWidth: 1,
+          flexDirection: 'row',
+          gap: theme.spacing[2],
+          justifyContent: 'center',
+          minHeight: Math.max(sizeToken.minHeight, 44),
+          opacity: disabled ? 0.5 : 1,
+          paddingHorizontal: sizeToken.paddingH,
+          paddingVertical: sizeToken.paddingV,
+        })}
       >
-        <LinearGradient
-          colors={v.gradientColors as readonly [string, string, ...string[]]}
-          end={{ x: 1, y: 1 }}
-          start={{ x: 0, y: 0 }}
-          style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }}
-        />
-        <NativeLiquidGlass
-          interactive={!disabled}
-          radius={999}
-          tintColor={
-            isPrimary
-              ? 'rgba(24, 184, 148, 0.22)'
-              : 'rgba(255, 255, 255, 0.28)'
-          }
-          style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }}
-        />
-        <LiquidButtonGlassEffects variant={variant} isPrimary={isPrimary} />
         {leftIcon}
         <Text
           style={{
-            color: v.textColor,
-            fontSize: s.fontSize,
-            fontWeight: '800',
-            letterSpacing: 0,
-            textShadowColor: isPrimary ? 'rgba(6, 67, 56, 0.18)' : undefined,
-            textShadowOffset: isPrimary ? { width: 0, height: 1 } : undefined,
-            textShadowRadius: isPrimary ? 2 : undefined,
+            color: foregroundColor,
+            fontSize: sizeToken.fontSize,
+            fontWeight: theme.fontWeights.bold,
           }}
         >
           {label}
         </Text>
         {subLabel ? (
-          <Text style={{ color: v.textColor, fontSize: 12, opacity: 0.78 }}>
+          <Text style={{ color: foregroundColor, fontSize: theme.typography.ui.caption.fontSize, opacity: 0.78 }}>
             {subLabel}
           </Text>
         ) : null}

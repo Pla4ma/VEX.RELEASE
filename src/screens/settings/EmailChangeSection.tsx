@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback } from 'react';
 import { Alert, Pressable } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -5,7 +6,7 @@ import { Box } from '../../components/primitives/Box'
 import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { useUIStore } from '../../store/index';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 interface EmailChangeSectionProps {
@@ -15,7 +16,7 @@ interface EmailChangeSectionProps {
 export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = ({
   email,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { showToast } = useUIStore();
 
   const handleChangeEmail = useCallback(() => {
@@ -42,7 +43,7 @@ export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = 
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -56,7 +57,7 @@ export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = 
         <Box p={16}>
           <Text
             variant="body"
-            color="text.secondary"
+            color={vexFire.textSecondary}
             style={{ marginBottom: 4 }}
           >
             Current Email
@@ -70,7 +71,7 @@ export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = 
           <Pressable
             onPress={handleChangeEmail}
             style={{
-              backgroundColor: theme.colors.primary[500],
+              backgroundColor: vexFire.ember,
               paddingVertical: 12,
               paddingHorizontal: 16,
               borderRadius: 8,
@@ -81,7 +82,7 @@ export const EmailChangeSection: React.ComponentType<EmailChangeSectionProps> = 
             accessibilityHint="Double tap to change setting"
           >
             <Text
-              style={{ color: lightColors.text.inverse, fontWeight: '600' }}
+              style={{ color: vexFire.cream, fontWeight: '600' }}
             >
               Change Email
             </Text>

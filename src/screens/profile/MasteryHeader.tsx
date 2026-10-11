@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
@@ -29,7 +30,7 @@ export function RankUnlocks({
   const { theme } = useTheme();
   return (
     <View style={{ gap: theme.spacing[3] }}>
-      <Text variant="h4" color="text.primary">
+      <Text variant="h4" color={vexFire.cream}>
         Rank Unlocks
       </Text>
       {ranks.map((rank) => {
@@ -47,7 +48,7 @@ export function RankUnlocks({
               borderRadius: 12,
               backgroundColor: isCurrent
                 ? `${rankDisplay.color}15`
-                : theme.colors.background.secondary,
+                : vexFire.panel,
               borderWidth: isCurrent ? 1 : 0,
               borderColor: isCurrent ? rankDisplay.color : undefined,
               opacity: isUnlocked ? 1 : 0.5,
@@ -57,19 +58,19 @@ export function RankUnlocks({
             <View style={{ flex: 1 }}>
               <Text
                 variant="body"
-                color="text.primary"
+                color={vexFire.cream}
                 fontWeight={isCurrent ? '700' : '500'}
                 style={{
                   color: isUnlocked
                     ? rankDisplay.color
-                    : theme.colors.text.secondary,
+                    : vexFire.textSecondary,
                 }}
               >
                 {rankDisplay.title}
                 {isCurrent && ' (Current)'}
                 {!isUnlocked && ' (Locked)'}
               </Text>
-              <Text variant="caption" color="text.tertiary">
+              <Text variant="caption" color={vexFire.textMuted}>
                 {RANK_UNLOCKS[rank].join(' • ')}
               </Text>
             </View>
@@ -77,7 +78,7 @@ export function RankUnlocks({
               <Icon
                 name="checkmark-circle"
                 size={20}
-                color={theme.colors.success.DEFAULT}
+                color={vexFire.success}
               />
             )}
           </View>
@@ -111,7 +112,7 @@ export function MasteryHeader({
   return (
     <Card
       size="lg"
-      style={{ backgroundColor: theme.colors.background.secondary }}
+      style={{ backgroundColor: vexFire.panel }}
     >
       <Box alignItems="center" gap="md">
         <MasteryRankBadge
@@ -128,10 +129,10 @@ export function MasteryHeader({
                 alignItems: 'center',
               }}
             >
-              <Text variant="caption" color="text.secondary">
+              <Text variant="caption" color={vexFire.textSecondary}>
                 Progress to {nextRankName}
               </Text>
-              <Text variant="caption" color="text.tertiary">
+              <Text variant="caption" color={vexFire.textMuted}>
                 {pointsToNext} MP needed
               </Text>
             </View>
@@ -140,7 +141,7 @@ export function MasteryHeader({
                 height: 8,
                 borderRadius: 4,
                 overflow: 'hidden',
-                backgroundColor: theme.colors.background.tertiary,
+                backgroundColor: vexFire.backgroundSoft,
               }}
             >
               <Animated.View
@@ -157,7 +158,7 @@ export function MasteryHeader({
           </View>
         )}
         {pointsToNext === 0 && (
-          <Text variant="body" color="success.DEFAULT" fontWeight="600">
+          <Text variant="body" color={vexFire.success} fontWeight="600">
             Maximum Rank Achieved!
           </Text>
         )}

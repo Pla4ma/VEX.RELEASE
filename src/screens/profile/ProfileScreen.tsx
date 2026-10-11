@@ -25,8 +25,9 @@ import { ProfileMasterySheet } from './ProfileMasterySheet';
 import { useProfileData } from './useProfileData';
 import { ProfileGlassTabs, type ProfileTab } from './components/ProfileGlassTabs';
 import type { ExtendedRootStackParams, MainTabParams } from '../../navigation/types';
-import { navigateToRootScreen, navigateToMainStackScreen } from '../../navigation/navigation-helpers';
+import { navigateToRootScreen, navigateToMainStackScreen, navigateToMainTab } from '../../navigation/navigation-helpers';
 import { VexBackdrop } from '../../shared/ui/vex/VexBackdrop';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 const PROFILE_BACKGROUND = require('../../../assets/vex/profile-background.png');
 
@@ -75,7 +76,7 @@ const ProfileScreen: React.ComponentType = () => {
 
   return (
     <GlassScreen showAura={false} variant="profile">
-      <VexBackdrop source={PROFILE_BACKGROUND} />
+      <VexBackdrop source={PROFILE_BACKGROUND} overlayColor={vexFire.background} overlayOpacity={0.76} />
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + theme.spacing[12] }}
         showsVerticalScrollIndicator={false}
@@ -101,15 +102,16 @@ const ProfileScreen: React.ComponentType = () => {
               hasError={hasStatsError} mastery={mastery} masteryLoading={masteryLoading}
               rankDisplay={rankDisplay}
               focusScore={focusScoreModel.current?.currentScore ?? null}
+              focusScoreHistory={focusScoreModel.history}
               xp={progressionQuery.data?.xp ?? 0}
               nextLevelThreshold={progressionQuery.data?.nextLevelThreshold ?? 100}
               xpPercent={xpPercent}
               techniques={[
-                { key: 'durationMastery', label: 'Duration', color: theme.colors.primary[500] },
-                { key: 'purityMastery', label: 'Purity', color: theme.colors.semantic.success },
-                { key: 'consistencyMastery', label: 'Consistency', color: theme.colors.semantic.warning },
-                { key: 'comebackMastery', label: 'Comeback', color: theme.colors.semantic.primary },
-                { key: 'bossMastery', label: 'Boss', color: theme.colors.semantic.info },
+                { key: 'durationMastery', label: 'Duration', color: vexFire.ember },
+                { key: 'purityMastery', label: 'Purity', color: vexFire.success },
+                { key: 'consistencyMastery', label: 'Consistency', color: vexFire.amber },
+                { key: 'comebackMastery', label: 'Comeback', color: vexFire.copper },
+                { key: 'bossMastery', label: 'Boss', color: vexFire.cream },
               ]}
               onMasteryPress={() => {
                 if (isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.achievements)))
@@ -121,13 +123,13 @@ const ProfileScreen: React.ComponentType = () => {
               theme={theme} isLoading={achievementsQuery.isLoading}
               isError={!!achievementsQuery.isError} achievements={achievements}
               onOpenAchievements={() => navigateToMainStackScreen(navigation, 'Achievements')}
-              onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} })}
+              onStartSession={() => navigateToMainTab(navigation, 'Focus')}
             />
           ) : (
             <ProfileActivityTab
               theme={theme} isLoading={historyQuery.isLoading}
               isError={!!historyQuery.error} history={historyQuery.history}
-              onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} })}
+              onStartSession={() => navigateToMainTab(navigation, 'Focus')}
             />
           )}
         </View>
@@ -142,7 +144,7 @@ const ProfileScreen: React.ComponentType = () => {
           backdropComponent={ProfileBottomSheetBackdrop}
           backgroundComponent={GlassSheetBackground}
           backgroundStyle={{ borderTopLeftRadius: 24, borderTopRightRadius: 24, overflow: 'hidden' }}
-          handleIndicatorStyle={{ backgroundColor: theme.colors.text.disabled }}
+          handleIndicatorStyle={{ backgroundColor: vexFire.textMuted }}
         >
           <ProfileMasterySheet
             theme={theme}

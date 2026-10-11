@@ -53,8 +53,8 @@ export const EtherealSkyBackground = React.memo(function EtherealSkyBackground()
           position: 'absolute',
           top: -44,
           left: 0,
-          right: 0,
-          bottom: 0,
+          width: '100%',
+          height: '100%',
         }}
       />
       <Animated.View

@@ -13,7 +13,7 @@ interface LiquidProgressBarProps {
   fillColor?: string;
 }
 
-  
+
 export const LiquidProgressBar: React.ComponentType<LiquidProgressBarProps> = ({
   progress,
   width = 200,
@@ -43,7 +43,7 @@ export const LiquidProgressBar: React.ComponentType<LiquidProgressBarProps> = ({
         height: '100%',
         borderRadius: height / 2,
         backgroundColor: fillColor,
-        boxShadow: '0px 0px 6px fillColor / 0.85',
+        boxShadow: `0px 0px 6px ${fillColor}`,
       }}
     >
       <View

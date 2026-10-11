@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, Switch } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -5,7 +6,7 @@ import { Box } from '../../components/primitives/Box';
 import { Card } from '../../components/primitives';
 import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 interface QuietHours {
   enabled: boolean;
@@ -13,13 +14,12 @@ interface QuietHours {
   end: string;
 }
 export const NotificationScheduleSection: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [quietHours, setQuietHours] = useState<QuietHours>({
     enabled: false,
     start: '22:00',
     end: '08:00',
   });
-
   const handleQuietHoursToggle = useCallback(() => {
     setQuietHours((prev) => ({ ...prev, enabled: !prev.enabled }));
   }, []);
@@ -46,7 +46,7 @@ export const NotificationScheduleSection: React.ComponentType = () => {
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -77,8 +77,8 @@ export const NotificationScheduleSection: React.ComponentType = () => {
             alignItems="center"
             style={{
               backgroundColor: quietHours.enabled
-                ? theme.colors.primary[50]
-                : theme.colors.background.secondary,
+                ? vexFire.ember
+                : vexFire.panel,
             }}
           >
             <Icon
@@ -86,8 +86,8 @@ export const NotificationScheduleSection: React.ComponentType = () => {
               size={20}
               color={
                 quietHours.enabled
-                  ? theme.colors.primary[500]
-                  : theme.colors.text.tertiary
+                  ? vexFire.ember
+                  : vexFire.textMuted
               }
             />
           </Box>
@@ -96,14 +96,14 @@ export const NotificationScheduleSection: React.ComponentType = () => {
               variant="body"
               style={{
                 fontWeight: '500',
-                color: theme.colors.text.primary,
+                color: vexFire.cream,
               }}
             >
               Quiet Hours
             </Text>
             <Text
               variant="caption"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{ marginTop: 2 }}
             >
               No notifications during this time
@@ -113,13 +113,13 @@ export const NotificationScheduleSection: React.ComponentType = () => {
             value={quietHours.enabled}
             onValueChange={handleQuietHoursToggle}
             trackColor={{
-              false: theme.colors.background.tertiary,
-              true: theme.colors.primary[500] + '80',
+              false: vexFire.backgroundSoft,
+              true: vexFire.ember + '80',
             }}
             thumbColor={
               quietHours.enabled
-                ? theme.colors.primary[500]
-                : lightColors.text.inverse
+                ? vexFire.ember
+                : vexFire.cream
             }
           />
         </Pressable>
@@ -127,7 +127,7 @@ export const NotificationScheduleSection: React.ComponentType = () => {
           <>
             <Box
               height={1}
-              style={{ backgroundColor: theme.colors.border.light }}
+              style={{ backgroundColor: vexFire.border }}
             />
             <Box flexDirection="row" px={16} py={12}>
               <Pressable
@@ -141,12 +141,12 @@ export const NotificationScheduleSection: React.ComponentType = () => {
                   p={12}
                   borderRadius={8}
                   style={{
-                    backgroundColor: theme.colors.background.secondary,
+                    backgroundColor: vexFire.panel,
                     borderWidth: 1,
-                    borderColor: theme.colors.border.light,
+                    borderColor: vexFire.border,
                   }}
                 >
-                  <Text variant="caption" color="text.secondary">
+                  <Text variant="caption" color={vexFire.textSecondary}>
                     Start
                   </Text>
                   <Text
@@ -161,7 +161,7 @@ export const NotificationScheduleSection: React.ComponentType = () => {
                 <Icon
                   name="arrow-right"
                   size={16}
-                  color={theme.colors.text.tertiary}
+                  color={vexFire.textMuted}
                 />
               </Box>
               <Pressable
@@ -175,12 +175,12 @@ export const NotificationScheduleSection: React.ComponentType = () => {
                   p={12}
                   borderRadius={8}
                   style={{
-                    backgroundColor: theme.colors.background.secondary,
+                    backgroundColor: vexFire.panel,
                     borderWidth: 1,
-                    borderColor: theme.colors.border.light,
+                    borderColor: vexFire.border,
                   }}
                 >
-                  <Text variant="caption" color="text.secondary">
+                  <Text variant="caption" color={vexFire.textSecondary}>
                     End
                   </Text>
                   <Text

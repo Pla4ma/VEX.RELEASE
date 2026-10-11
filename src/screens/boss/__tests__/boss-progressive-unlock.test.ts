@@ -2,9 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 
 import { buildFeatureAccess } from '../../../features/liveops-config/feature-access';
 import type { FeatureKey } from '../../../features/liveops-config/feature-access';
-import { getFeatureAvailability } from '../../../features/liveops-config/FeatureFlagService';
+import { getFeatureAvailability , isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
 import { getBossScreenCopy } from '../BossScreenSections';
-import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
 
 function resolveBossIntensity(style: string | null): string {
   switch (style) {
@@ -19,13 +18,13 @@ function resolveBossIntensity(style: string | null): string {
 }
 
 describe('BossScreen progressive unlock', () => {
-  it('locked boss cannot query or navigate', () => {
+  it('day-one boss can query and navigate at a shallow depth', () => {
     const features = buildFeatureAccess({ totalCompletedSessions: 0 });
     const availability = getFeatureAvailability(features.features.boss_tab);
 
-    expect(availability.canQuery).toBe(false);
-    expect(availability.canUseBackend).toBe(false);
-    expect(availability.canNavigate).toBe(false);
+    expect(availability.canQuery).toBe(true);
+    expect(availability.canUseBackend).toBe(true);
+    expect(availability.canNavigate).toBe(true);
   });
 
   it('degraded boss reports degraded availability', () => {
@@ -110,14 +109,14 @@ describe('Boss intensity based on user motivation and behavior', () => {
     expect(copy.title).toBe('Boss Focus');
   });
 
-  it('degraded boss with ignored feature lowers availability', () => {
+  it('degraded boss stays reachable while backend access is disabled', () => {
     const features = buildFeatureAccess({
       degradedFeatures: new Set<FeatureKey>(['boss_tab']),
       totalCompletedSessions: 15,
     });
     const availability = getFeatureAvailability(features.features.boss_tab);
 
-    expect(availability.canNavigate).toBe(false);
+    expect(availability.canNavigate).toBe(true);
     expect(availability.canQuery).toBe(false);
   });
 

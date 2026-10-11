@@ -34,7 +34,7 @@ export const RecentSearches: React.ComponentType<RecentSearchesProps> = ({ onSel
           </Text>
         </Pressable>
       </Box>
-      {RECENT_SEARCHES.map((search, index) => (
+      {RECENT_SEARCHES.map((search, _index) => (
         <Pressable
           key={`search-${search}`}
           style={{

@@ -56,12 +56,14 @@ export function deepLinkToNavigationParams(
       };
     case 'settings':
       return { screen: 'Settings', params: { screen: 'SettingsMain' } };
+    case 'guide':
+      return { screen: 'Guide' };
     case 'study':
       return {
-        screen: 'SessionStack',
+        screen: 'ContentStudy',
         params: {
-          screen: 'SessionSetup',
-          params: { presetMode: 'STUDY', source: 'content-study' },
+          screen: 'ContentHistory',
+          params: {},
         },
       };
     case 'rescue':

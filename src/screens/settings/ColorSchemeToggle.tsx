@@ -1,11 +1,12 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
 import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text'
 import { Card } from '@/components/primitives/Card';
-import { Icon } from '@/icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+import { VexIcon } from '@/shared/ui/vex/VexIcon';
+
 
 import {
   ACCENT_COLORS,
@@ -30,7 +31,7 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
   timerFormat,
   onTimerFormatChange,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   
 
@@ -39,7 +40,7 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
       <Box px={16} mb={24}>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{
             marginLeft: 12,
             marginBottom: 8,
@@ -68,14 +69,14 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
   alignItems: 'center',
   backgroundColor: color.hex,
   borderWidth: accentColor === color.id ? 3 : 0,
-  borderColor: theme.colors.text.primary,
+  borderColor: vexFire.cream,
 }}
                 accessibilityLabel="Color scheme option"
                 accessibilityRole="button"
                 accessibilityHint="Double tap to change setting"
               >
                 {accentColor === color.id && (
-                  <Icon name="check" size={24} color={lightColors.text.inverse} />
+                  <VexIcon name="check" size="md" color={vexFire.cream} variant="solid" />
                 )}
               </Pressable>
             ))}
@@ -86,7 +87,7 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
       <Box px={16} mb={24}>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{
             marginLeft: 12,
             marginBottom: 8,
@@ -120,8 +121,8 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
                   style={{
                     backgroundColor:
                       timerFormat === option.id
-                        ? theme.colors.primary[50]
-                        : theme.colors.background.secondary,
+                        ? vexFire.ember
+                        : vexFire.panel,
                   }}
                 >
                   <Text
@@ -130,8 +131,8 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
                       fontWeight: '600',
                       color:
                         timerFormat === option.id
-                          ? theme.colors.primary[500]
-                          : theme.colors.text.tertiary,
+                          ? vexFire.ember
+                          : vexFire.textMuted,
                     }}
                   >
                     {option.preview}
@@ -142,7 +143,7 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
                     variant="body"
                     style={{
                       fontWeight: timerFormat === option.id ? '600' : '500',
-                      color: theme.colors.text.primary,
+                      color: vexFire.cream,
                     }}
                   >
                     {option.label}
@@ -155,12 +156,12 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
                     borderRadius={12}
                     justifyContent="center"
                     alignItems="center"
-                    style={{ backgroundColor: theme.colors.primary[500] }}
+                    style={{ backgroundColor: vexFire.ember }}
                   >
-                    <Icon
+                    <VexIcon
                       name="check"
-                      size={14}
-                      color={lightColors.text.inverse}
+                      size="sm"
+                      color={vexFire.cream}
                     />
                   </Box>
                 )}
@@ -169,7 +170,7 @@ export const ColorSchemeToggle: React.ComponentType<ColorSchemeToggleProps> = ({
                 <Box
                   height={1}
                   ml={68}
-                  style={{ backgroundColor: theme.colors.border.light }}
+                  style={{ backgroundColor: vexFire.border }}
                 />
               )}
             </React.Fragment>

@@ -4,6 +4,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../components/primitives/Text';
 import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import type { PaywallPlanSelection } from './paywall-copy';
 import { paywallStyles as styles } from './paywall-styles';
 export { PaywallFooterActions } from './PaywallFooterActions';
@@ -49,11 +50,11 @@ function PaywallPlanCard({
       style={[
         styles.planCard,
         {
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
           borderColor:
             plan.id === 'annual'
-              ? theme.colors.primary[500]
-              : theme.colors.border.DEFAULT,
+              ? vexFire.ember
+              : vexFire.border,
           borderWidth: plan.id === 'annual' ? 2 : 1,
         },
       ]}
@@ -64,14 +65,14 @@ function PaywallPlanCard({
       <View style={styles.planHeader}>
         <View>
           <Text
-            style={[styles.planTitle, { color: theme.colors.text.primary }]}
+            style={[styles.planTitle, { color: vexFire.cream }]}
           >
             {plan.title}
           </Text>
           <Text
             style={[
               styles.planSubtitle,
-              { color: theme.colors.text.secondary },
+              { color: vexFire.textSecondary },
             ]}
           >
             {plan.subtitle}
@@ -85,8 +86,8 @@ function PaywallPlanCard({
               {
                 backgroundColor:
                   plan.id === 'annual'
-                    ? theme.colors.primary[500]
-                    : theme.colors.background.tertiary,
+                    ? vexFire.ember
+                    : vexFire.backgroundSoft,
               },
             ]}
           >
@@ -96,8 +97,8 @@ function PaywallPlanCard({
                 {
                   color:
                     plan.id === 'annual'
-                      ? theme.colors.text.inverse
-                      : theme.colors.text.secondary,
+                      ? vexFire.cream
+                      : vexFire.textSecondary,
                 },
               ]}
             >
@@ -106,11 +107,11 @@ function PaywallPlanCard({
           </View>
         </View>
       </View>
-      <Text style={[styles.planPrice, { color: theme.colors.text.primary }]}>
+      <Text style={[styles.planPrice, { color: vexFire.cream }]}>
         {plan.displayPrice}
       </Text>
       {hasTrial && plan.packageInfo?.product.introPrice ? (
-        <Text style={[styles.trialText, { color: theme.colors.success[500] }]}>
+        <Text style={[styles.trialText, { color: vexFire.success }]}>
           {plan.packageInfo.product.introPrice.periodNumberOfUnits}{' '}
           {plan.packageInfo.product.introPrice.periodUnit?.toLowerCase()} free,
           then {plan.displayPrice.toLowerCase()}
@@ -120,16 +121,16 @@ function PaywallPlanCard({
   );
 }
 
-function TrialBadge({ theme }: { theme: Theme }): React.ReactNode {
+function TrialBadge({ theme: _theme }: { theme: Theme }): React.ReactNode {
   return (
     <View
       style={[
         styles.trialBadge,
-        { backgroundColor: theme.colors.success[500] },
+        { backgroundColor: vexFire.success },
       ]}
     >
       <Text
-        style={[styles.trialBadgeText, { color: theme.colors.text.inverse }]}
+        style={[styles.trialBadgeText, { color: vexFire.cream }]}
       >
         Free trial
       </Text>

@@ -21,6 +21,7 @@ import {
   liquidGlassSpacing,
 } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AppearanceSettings'>;
 
@@ -83,7 +84,7 @@ const AppearanceSettingsScreen: React.ComponentType<Props> = ({ navigation }) =>
             <Icon
               name="arrow-left"
               size={24}
-              color={theme.colors.text.primary}
+              color={vexFire.cream}
             />
           </Pressable>
           <LiquidGlassHeader
@@ -127,12 +128,12 @@ const AppearanceSettingsScreen: React.ComponentType<Props> = ({ navigation }) =>
               setTimerFormat('countdown');
             }}
             style={{
-              backgroundColor: theme.colors.background.secondary,
+              backgroundColor: vexFire.panel,
               paddingVertical: 16,
               borderRadius: 12,
               alignItems: 'center',
               borderWidth: 1,
-              borderColor: theme.colors.border.light,
+              borderColor: vexFire.border,
             }}
             accessibilityLabel="Reset appearance to defaults"
             accessibilityRole="button"
@@ -140,7 +141,7 @@ const AppearanceSettingsScreen: React.ComponentType<Props> = ({ navigation }) =>
           >
             <Text
               style={{
-                color: theme.colors.text.primary,
+                color: vexFire.cream,
                 fontWeight: '600',
                 fontSize: 16,
               }}

@@ -15,7 +15,7 @@ type MascotGuideProps = {
 export function MascotGuide({
   title,
   body,
-  stepLabel,
+  stepLabel: _stepLabel,
   onBack,
   onReplay,
   onSkip,

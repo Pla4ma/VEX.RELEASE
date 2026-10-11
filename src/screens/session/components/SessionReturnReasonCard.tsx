@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 
 import { Box } from '../../../components/primitives/Box'
@@ -12,7 +13,7 @@ type SessionReturnReasonCardProps = {
 
 export function SessionReturnReasonCard({
   body,
-  theme,
+  theme: _theme,
   title,
 }: SessionReturnReasonCardProps) {
   return (
@@ -21,18 +22,18 @@ export function SessionReturnReasonCard({
       p={5}
       borderRadius="xl"
       style={{
-        backgroundColor: theme.colors.background.secondary,
-        borderColor: theme.colors.border.light,
+        backgroundColor: vexFire.panel,
+        borderColor: vexFire.border,
         borderWidth: 1,
       }}
     >
-      <Text variant="label" color={theme.colors.primary[400]}>
+      <Text variant="label" color={vexFire.ember}>
         Return Reason
       </Text>
-      <Text variant="h4" color={theme.colors.text.primary} mt={2}>
+      <Text variant="h4" color={vexFire.cream} mt={2}>
         {title}
       </Text>
-      <Text variant="body" color={theme.colors.text.secondary} mt={2}>
+      <Text variant="body" color={vexFire.textSecondary} mt={2}>
         {body}
       </Text>
     </Box>

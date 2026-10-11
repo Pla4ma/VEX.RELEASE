@@ -21,6 +21,7 @@ import {
 } from './ActiveSessionContent.types';
 import { useSessionControlHandlers } from './useSessionControlHandlers';
 import { SessionNotices } from './SessionNotices';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export type { ActiveSessionContentProps };
 
@@ -46,7 +47,6 @@ function ActiveSessionContentRaw({
     showMultiplierInfo,
     streak,
     theme,
-    themeBackgroundColor,
     userId,
   } = controller;
   const { isOffline } = useNetInfo();
@@ -62,7 +62,7 @@ function ActiveSessionContentRaw({
     <Box
       flex={1}
       bg="background.primary"
-      style={{ backgroundColor: themeBackgroundColor }}
+      style={{ backgroundColor: vexFire.background }}
     >
       <ActiveSessionBackground
         accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)}
@@ -98,8 +98,8 @@ function ActiveSessionContentRaw({
       ) : null}
       <ActiveSessionHeader
         isPaused={sessionQuery.isPaused}
-        theme={theme}
         onInterrupt={() => actions.setShowInterruption(true)}
+        theme={theme}
       />
       <ModeActiveIndicatorBar
         lane={lane}
@@ -159,11 +159,11 @@ function ActiveSessionContentRaw({
             withAlpha: metrics.withAlpha,
           }}
           themeColors={{
-            error: theme.colors.error.DEFAULT,
-            inverse: theme.colors.text.inverse,
-            primary300: theme.colors.primary[300],
-            success: theme.colors.success.DEFAULT,
-            warning: theme.colors.warning.light,
+            error: vexFire.danger,
+            inverse: vexFire.background,
+            primary300: vexFire.amber,
+            success: vexFire.success,
+            warning: vexFire.amber,
           }}
           isReducedMotion={heroViewModel.isReducedMotion}
         />
@@ -179,11 +179,9 @@ function ActiveSessionContentRaw({
         streakMultiplier={metrics.streakMultiplier}
         showInterruption={showInterruption}
         elapsedSeconds={sessionQuery.elapsedSeconds}
-        theme={theme}
         onClearControlFailure={handlers.onClearControlFailure}
         onRetryControlFailure={handlers.onRetryControlFailure}
         onComplete={handlers.onComplete}
-        onEnd={handlers.onEnd}
         onPauseResume={handlers.onPauseResume}
         onToggleMultiplierInfo={handlers.onToggleMultiplierInfo}
         onResume={handlers.onResume}
@@ -194,4 +192,3 @@ function ActiveSessionContentRaw({
 }
 
 export const ActiveSessionContent = React.memo(ActiveSessionContentRaw);
-

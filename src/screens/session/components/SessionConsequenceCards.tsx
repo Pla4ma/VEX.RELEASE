@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 /**
  * Session Consequence Cards
  *
@@ -72,7 +73,7 @@ export function SessionConsequenceCards({
           }}
         >
           <Text fontSize={16} />
-          <Text variant="label" color="text.tertiary">
+          <Text variant="label" color={vexFire.textMuted}>
             ALSO HAPPENED
           </Text>
         </View>

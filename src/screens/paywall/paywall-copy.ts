@@ -1,5 +1,5 @@
 import type { PurchasesPackageDisplayInfo } from '../../shared/monetization';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export const VALUE_PROPOSITION =
@@ -60,42 +60,42 @@ export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
     benefit:
       'VEX remembers patterns, comeback style, best focus windows, and preferred push intensity across all sessions.',
     iconName: 'brain',
-    gradient: [lightColors.semantic.primary, lightColors.accent.purple],
+    gradient: [vexFire.ember, vexFire.copper],
   },
   progress_intelligence: {
     title: 'Weekly Focus Intelligence',
     benefit:
       'See your best rhythm, focus risk, recovery plan, consistency forecast, and calendar-aware planning.',
     iconName: 'bar-chart-3',
-    gradient: [lightColors.accent.teal, lightColors.accent.teal],
+    gradient: [vexFire.amber, vexFire.amber],
   },
   advanced_study_os: {
     title: 'Advanced Study & Deep Work',
     benefit:
       'Advanced import, review intelligence, deadline risk, weak-topic plan, and smart next actions from your material.',
     iconName: 'book-open',
-    gradient: [lightColors.semantic.warning, lightColors.semantic.warning],
+    gradient: [vexFire.amber, vexFire.amber],
   },
   recovery_planning: {
     title: 'Recovery & Continuity',
     benefit:
       'Build a recovery plan without shame. Long project memory and context restoration keep flow alive across sessions.',
     iconName: 'shield',
-    gradient: [lightColors.semantic.success, lightColors.accent.green],
+    gradient: [vexFire.success, vexFire.success],
   },
   premium_session_modes: {
     title: 'Advanced Friction Modes',
     benefit:
       'Custom modifiers, personal blocker depth, advanced run recap — no currency, no gimmicks.',
     iconName: 'zap',
-    gradient: [lightColors.semantic.primary, lightColors.accent.purple],
+    gradient: [vexFire.ember, vexFire.copper],
   },
   visual_identity: {
     title: 'Memory Console & Identity',
     benefit:
       'Editable long memory with source, confidence, and expiry. Shape companion forms and focus worlds.',
     iconName: 'award',
-    gradient: [lightColors.accent.teal, lightColors.accent.teal],
+    gradient: [vexFire.amber, vexFire.amber],
   },
 };
 

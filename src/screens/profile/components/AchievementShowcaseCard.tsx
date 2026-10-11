@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
@@ -11,7 +12,7 @@ import { Box } from '../../../components/primitives/Box'
 import { Card } from '../../../components/primitives'
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export interface FeaturedAchievement {
@@ -25,10 +26,10 @@ export interface FeaturedAchievement {
 }
 
 export const RARITY_COLORS = {
-  common: lightColors.text.disabled,
-  rare: lightColors.accent.blue,
-  epic: lightColors.accent.purple,
-  legendary: lightColors.semantic.warning,
+  common: vexFire.textMuted,
+  rare: vexFire.amber,
+  epic: vexFire.copper,
+  legendary: vexFire.amber,
 };
 
 export const LockedSlot: React.ComponentType<{
@@ -36,7 +37,7 @@ export const LockedSlot: React.ComponentType<{
   onPress?: () => void;
   isEditable?: boolean;
 }> = ({ slotIndex, onPress, isEditable }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Pressable
       onPress={onPress}
@@ -52,10 +53,10 @@ export const LockedSlot: React.ComponentType<{
         alignItems="center"
         style={{
           aspectRatio: 1,
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
           borderWidth: 2,
           borderStyle: 'dashed',
-          borderColor: theme.colors.border.light,
+          borderColor: vexFire.border,
           opacity: isEditable ? 0.7 : 0.5,
         }}
       >
@@ -63,7 +64,7 @@ export const LockedSlot: React.ComponentType<{
         {isEditable && (
           <Text
             variant="caption"
-            color="text.tertiary"
+            color={vexFire.textMuted}
             style={{ marginTop: 8, fontSize: 12 }}
           >
             Tap to add
@@ -81,7 +82,7 @@ export const AchievementSlot: React.ComponentType<{
   onPress?: () => void;
   isEditable?: boolean;
 }> = ({ achievement, isDragging, onPress, isEditable }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -157,9 +158,9 @@ export const AchievementSlot: React.ComponentType<{
               borderRadius={10}
               justifyContent="center"
               alignItems="center"
-              style={{ backgroundColor: theme.colors.background.tertiary }}
+              style={{ backgroundColor: vexFire.backgroundSoft }}
             >
-              <Icon name="move" size={10} color={theme.colors.text.tertiary} />
+              <Icon name="move" size={10} color={vexFire.textMuted} />
             </Box>
           )}
         </Card>

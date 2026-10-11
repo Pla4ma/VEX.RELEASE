@@ -5,12 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '../../components/primitives/Text';
 import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import { paywallStyles as styles } from './paywall-styles';
 
 export function ProjectLaneHero({
   body,
   headline,
-  theme,
+  theme: _theme,
 }: {
   body: string;
   headline: string;
@@ -22,7 +23,7 @@ export function ProjectLaneHero({
         style={[
           styles.heroCard,
           {
-            backgroundColor: theme.colors.semantic.obsidian,
+            backgroundColor: vexFire.backgroundRaised,
             borderRadius: 24,
           },
         ]}
@@ -32,16 +33,16 @@ export function ProjectLaneHero({
             style={{
               width: 4,
               borderRadius: 4,
-              backgroundColor: theme.colors.accent.premium,
+              backgroundColor: vexFire.ember,
             }}
             accessibilityElementsHidden
             importantForAccessibility="no"
           />
           <View style={{ flex: 1, gap: 8 }}>
-            <Text style={[styles.eyebrow, { color: theme.colors.accent.premium }]}>
+            <Text style={[styles.eyebrow, { color: vexFire.ember }]}>
               Project Lane
             </Text>
-            <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
+            <Text style={[styles.heroTitle, { color: vexFire.cream }]}>
               {headline}
             </Text>
             <View
@@ -50,7 +51,7 @@ export function ProjectLaneHero({
               <View style={{ flex: 1, minWidth: 140, gap: 4 }}>
                 <Text
                   style={{
-                    color: theme.colors.text.inverse,
+                    color: vexFire.cream,
                     fontSize: 13,
                     fontWeight: '700',
                   }}
@@ -59,7 +60,7 @@ export function ProjectLaneHero({
                 </Text>
                 <Text
                   style={{
-                    color: theme.colors.text.inverse,
+                    color: vexFire.cream,
                     fontSize: 12,
                     opacity: 0.85,
                   }}
@@ -70,7 +71,7 @@ export function ProjectLaneHero({
               <View style={{ flex: 1, minWidth: 140, gap: 4 }}>
                 <Text
                   style={{
-                    color: theme.colors.text.inverse,
+                    color: vexFire.cream,
                     fontSize: 13,
                     fontWeight: '700',
                   }}
@@ -79,7 +80,7 @@ export function ProjectLaneHero({
                 </Text>
                 <Text
                   style={{
-                    color: theme.colors.text.inverse,
+                    color: vexFire.cream,
                     fontSize: 12,
                     opacity: 0.85,
                   }}
@@ -91,7 +92,7 @@ export function ProjectLaneHero({
             <Text
               style={[
                 styles.heroCopy,
-                { color: theme.colors.text.inverse, marginTop: 4 },
+                { color: vexFire.cream, marginTop: 4 },
               ]}
             >
               {body}
@@ -106,7 +107,7 @@ export function ProjectLaneHero({
 export function CleanLaneHero({
   body,
   headline,
-  theme,
+  theme: _theme,
 }: {
   body: string;
   headline: string;
@@ -118,7 +119,7 @@ export function CleanLaneHero({
         style={[
           styles.heroCard,
           {
-            backgroundColor: theme.colors.semantic.obsidian,
+            backgroundColor: vexFire.backgroundRaised,
             borderRadius: 24,
           },
         ]}
@@ -129,19 +130,19 @@ export function CleanLaneHero({
               width: 8,
               height: 8,
               borderRadius: 4,
-              backgroundColor: theme.colors.accent.settled,
+              backgroundColor: vexFire.success,
               marginBottom: 2,
             }}
             accessibilityElementsHidden
             importantForAccessibility="no"
           />
-          <Text style={[styles.eyebrow, { color: theme.colors.accent.settled }]}>
+          <Text style={[styles.eyebrow, { color: vexFire.success }]}>
             Clean Lane
           </Text>
           <Text
             style={[
               styles.heroTitle,
-              { color: theme.colors.text.inverse, fontSize: 22, lineHeight: 30 },
+              { color: vexFire.cream, fontSize: 22, lineHeight: 30 },
             ]}
           >
             {headline}
@@ -150,7 +151,7 @@ export function CleanLaneHero({
             style={[
               styles.heroCopy,
               {
-                color: theme.colors.text.inverse,
+                color: vexFire.cream,
                 opacity: 0.85,
                 fontSize: 14,
               },
@@ -167,7 +168,7 @@ export function CleanLaneHero({
 export function DefaultHero({
   body,
   headline,
-  theme,
+  theme: _theme,
 }: {
   body: string;
   headline: string;
@@ -176,13 +177,13 @@ export function DefaultHero({
   return (
     <CardEnterAnimation>
       <LinearGradient
-        colors={[theme.colors.semantic.obsidian, theme.colors.accent.editorial]}
+        colors={[vexFire.backgroundRaised, vexFire.ember]}
         style={styles.heroCard}
       >
-        <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
+        <Text style={[styles.heroTitle, { color: vexFire.cream }]}>
           {headline}
         </Text>
-        <Text style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
+        <Text style={[styles.heroCopy, { color: vexFire.cream }]}>
           {body}
         </Text>
       </LinearGradient>

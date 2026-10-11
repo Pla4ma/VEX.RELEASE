@@ -6,6 +6,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { FlashList } from '@shopify/flash-list';
 import type { Theme } from '../../theme/types';
 import type { SessionHistoryEntry } from '../../session/types';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 const EMPTY_STATE_EMBER = require('../../../assets/vex/empty-state-ember-core.png');
 
@@ -26,7 +27,7 @@ function formatDuration(entry: SessionHistoryEntry): string {
 }
 
 function FirePanel({ children, theme, minHeight, padding = 0 }: { children: React.ReactNode; theme: Theme; minHeight?: number; padding?: number }): React.JSX.Element {
-  return <View style={{ backgroundColor: theme.colors.background.primary, borderColor: theme.colors.primary[800], borderRadius: theme.borderRadius['2xl'], borderWidth: 1, minHeight, padding }}>{children}</View>;
+  return <View style={{ backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong, borderRadius: theme.borderRadius['2xl'], borderWidth: 1, minHeight, padding }}>{children}</View>;
 }
 
 const renderSessionCard =
@@ -38,7 +39,7 @@ const renderSessionCard =
           <Box flex={1}>
             <Text
               style={{
-                color: theme.colors.text.primary,
+                color: vexFire.cream,
                 fontSize: 15,
                 fontWeight: '800',
                 letterSpacing: -0.2,
@@ -48,7 +49,7 @@ const renderSessionCard =
             </Text>
             <Text
               style={{
-                color: theme.colors.text.secondary,
+                color: vexFire.textSecondary,
                 fontSize: 12,
                 marginTop: 2,
               }}
@@ -57,10 +58,10 @@ const renderSessionCard =
             </Text>
           </Box>
           <View style={{ alignItems: 'flex-end', gap: 4 }}>
-            <View style={{ backgroundColor: theme.colors.semantic.primarySoft, borderColor: theme.colors.primary[800], borderRadius: theme.borderRadius.full, borderWidth: 1, paddingHorizontal: theme.spacing[2], paddingVertical: theme.spacing[1] }}><Text color={theme.colors.semantic.primary} variant="caption">{item.status}</Text></View>
+            <View style={{ backgroundColor: vexFire.backgroundSoft, borderColor: vexFire.border, borderRadius: theme.borderRadius.full, borderWidth: 1, paddingHorizontal: theme.spacing[2], paddingVertical: theme.spacing[1] }}><Text color={vexFire.amber} variant="caption">{item.status}</Text></View>
             <Text
               style={{
-                color: theme.colors.text.tertiary,
+                color: vexFire.textMuted,
                 fontSize: 12,
                 fontWeight: '600',
               }}
@@ -92,9 +93,9 @@ export const ProfileActivityTab = React.memo(({
     return (
       <FirePanel minHeight={theme.spacing[24] * 2} padding={theme.spacing[5]} theme={theme}>
         <View style={{ alignItems: 'center', gap: theme.spacing[3], justifyContent: 'center', minHeight: theme.spacing[24] + theme.spacing[8] }}>
-          <Text color={theme.colors.warning.DEFAULT} variant="label">Activity interrupted</Text>
-          <Text color="text.secondary" textAlign="center" variant="bodySmall">VEX couldn’t read your recent sessions.</Text>
-          <Pressable accessibilityHint="Starts a focus session" accessibilityLabel="Start session" accessibilityRole="button" onPress={onStartSession} style={{ alignItems: 'center', borderColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], paddingHorizontal: theme.spacing[5] }}><Text color={theme.colors.semantic.primary} variant="button">Start session</Text></Pressable>
+          <Text color={vexFire.amber} variant="label">Activity interrupted</Text>
+          <Text color={vexFire.textSecondary} textAlign="center" variant="bodySmall">VEX couldn’t read your recent sessions.</Text>
+          <Pressable accessibilityHint="Starts a focus session" accessibilityLabel="Start session" accessibilityRole="button" onPress={onStartSession} style={{ alignItems: 'center', borderColor: vexFire.ember, borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], paddingHorizontal: theme.spacing[5] }}><Text color={vexFire.ember} variant="button">Start session</Text></Pressable>
         </View>
       </FirePanel>
     );
@@ -105,9 +106,9 @@ export const ProfileActivityTab = React.memo(({
       <FirePanel minHeight={theme.spacing[24] * 3} padding={theme.spacing[5]} theme={theme}>
         <View style={{ alignItems: 'center', gap: theme.spacing[3], justifyContent: 'center', minHeight: theme.spacing[24] * 2 }}>
           <Image accessibilityLabel="Ember core" accessibilityIgnoresInvertColors source={EMPTY_STATE_EMBER} style={{ borderRadius: theme.borderRadius.full, height: theme.spacing[24], width: theme.spacing[24] }} />
-          <Text color="text.primary" textAlign="center" variant="h3">No recent activity</Text>
-          <Text color="text.secondary" textAlign="center" variant="bodyLarge">Start a session to turn your profile into a live record of wins, streaks, and progression.</Text>
-          <Pressable accessibilityHint="Starts a focus session" accessibilityLabel="Start session" accessibilityRole="button" onPress={onStartSession} style={{ alignItems: 'center', borderColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], paddingHorizontal: theme.spacing[5] }}><Text color={theme.colors.semantic.primary} variant="button">Start session</Text></Pressable>
+          <Text color={vexFire.cream} textAlign="center" variant="h3">No recent activity</Text>
+          <Text color={vexFire.textSecondary} textAlign="center" variant="bodyLarge">Start a session to turn your profile into a live record of wins, streaks, and progression.</Text>
+          <Pressable accessibilityHint="Starts a focus session" accessibilityLabel="Start session" accessibilityRole="button" onPress={onStartSession} style={{ alignItems: 'center', borderColor: vexFire.ember, borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], paddingHorizontal: theme.spacing[5] }}><Text color={vexFire.ember} variant="button">Start session</Text></Pressable>
         </View>
       </FirePanel>
     );

@@ -3,6 +3,7 @@ import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Skeleton, SkeletonCard } from '../../../components/ui/Skeleton';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export function SessionCompleteSkeleton(): React.ReactNode {
   const { theme } = useTheme();
@@ -12,7 +13,7 @@ export function SessionCompleteSkeleton(): React.ReactNode {
       flex={1}
       px="xl"
       py="2xl"
-      style={{ backgroundColor: theme.colors.background.primary }}
+      style={{ backgroundColor: vexFire.background }}
     >
       <Skeleton width="35%" height={theme.spacing[3]} />
       <Box mt="md">

@@ -5,7 +5,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import type { AnimatedMascotProps } from './AnimatedMascot';
-import { FALLBACK_MASCOT, MOOD_ASSET_MAP } from './VexMascotGuide.tokens';
+
 import { resolveMoodAsset } from './PngMascotRenderer.helpers';
 import { useMascotAnimations } from './usePngMascotAnimations';
 import { useMascotAnimatedStyles } from './PngMascotStyles';
@@ -15,7 +15,7 @@ export const PngMascotRenderer = React.memo(function PngMascotRenderer({
   size,
   reducedMotion,
   isCelebrating = false,
-  reactionKey,
+  reactionKey: _reactionKey,
   onReady,
 }: AnimatedMascotProps): React.JSX.Element {
   const asset = useMemo(() => resolveMoodAsset(mood), [mood]);

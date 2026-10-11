@@ -29,8 +29,8 @@ const ROTATION_DURATION_MS = 30000;
 
 export function HeroOrb({
   size = 96,
-  anchorX = 0.5,
-  anchorY = 0.18,
+  anchorX: _anchorX = 0.5,
+  anchorY: _anchorY = 0.18,
 }: HeroOrbProps): React.JSX.Element {
   const { isReducedMotion } = useReducedMotion();
   const breath = useSharedValue(0.5);

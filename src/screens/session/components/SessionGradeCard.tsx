@@ -23,6 +23,7 @@ import {
   type SessionGradeCardProps,
 } from './SessionGradeCard.types';
 import { SessionGradePurityProof } from './SessionGradePurityProof';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 export type { SessionGradeCardProps };
 
 export function SessionGradeCard({
@@ -36,7 +37,7 @@ export function SessionGradeCard({
   width,
   xpEarned,
 }: SessionGradeCardProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const ringProgress = useSharedValue(0);
   const size = Math.min(width - 72, 280);
   const strokeWidth = 14;
@@ -75,8 +76,8 @@ export function SessionGradeCard({
         entering={FadeIn.duration(220)}
         style={{ ...{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } }}
       >
-        <View
-          style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+          <View
+          style={{ flex: 1, backgroundColor: vexFire.background }}
         />
       </Animated.View>
       <Animated.View
@@ -86,9 +87,9 @@ export function SessionGradeCard({
           px={16}
           py={10}
           borderRadius={999}
-          style={{ backgroundColor: withAlpha(theme.colors.primary[500], 0.9) }}
+          style={{ backgroundColor: withAlpha(vexFire.ember, 0.9) }}
         >
-          <Text variant="label" color={theme.colors.text.inverse}>
+          <Text variant="label" style={{ color: vexFire.background }}>
             +{xpEarned} XP
           </Text>
         </Box>
@@ -129,7 +130,7 @@ export function SessionGradeCard({
                 cx={size / 2}
                 cy={size / 2}
                 r={radius}
-                stroke={withAlpha(theme.colors.text.inverse, 0.08)}
+                stroke={withAlpha(vexFire.cream, 0.08)}
                 strokeWidth={strokeWidth}
                 fill="none"
               />
@@ -166,7 +167,7 @@ export function SessionGradeCard({
               <Animated.View entering={FadeInUp.delay(320).springify()}>
                 <Text
                   variant="body"
-                  color={theme.colors.text.secondary}
+                  style={{ color: vexFire.textSecondary }}
                   textAlign="center"
                 >
                   {gradeLabel}

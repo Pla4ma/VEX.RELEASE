@@ -33,7 +33,7 @@ export function SessionCompleteNextSteps({
           <TomorrowPreviewSession
             preview={tomorrowPreview}
             onPress={() => {
-              controller.navigation.navigate({ name: 'Home', params: {} });
+              controller.finishSession();
             }}
           />
         </Box>

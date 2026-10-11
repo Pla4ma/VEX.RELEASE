@@ -60,7 +60,7 @@ export function NextBestActionCard({
           onPress={onPress}
           variant="primary"
           fullWidth
-          accessibilityLabel="Perform action"
+          accessibilityLabel={action.ctaLabel}
           accessibilityHint="Double tap to activate"
         />
       </View>

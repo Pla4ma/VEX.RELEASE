@@ -6,7 +6,6 @@ interface SessionControlHandlers {
   onClearControlFailure: () => void;
   onRetryControlFailure: () => void;
   onComplete: () => void;
-  onEnd: () => void;
   onPauseResume: () => void;
   onToggleMultiplierInfo: () => void;
   onResume: () => void;
@@ -30,7 +29,6 @@ export function useSessionControlHandlers(
         Sentry.captureException(error, { tags: { feature: 'session-controls' } });
       });
     },
-    onEnd: () => actions.setShowInterruption(true),
     onPauseResume: () => {
       actions.handlePauseResume().catch((error: unknown) => {
         Sentry.captureException(error, { tags: { feature: 'session-controls' } });

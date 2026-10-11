@@ -5,9 +5,10 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text';
 import { Skeleton } from '@/shared/ui/primitives';
 import { useTheme } from '@/theme';
-import { getRarityColor, getAchievementDisplayInfo } from '@/features/achievements/definitions';
+import { getAchievementDisplayInfo } from '@/features/achievements/definitions';
 import type { Achievement } from '@/features/achievements/types';
 import { EmptyAchievements } from '@/shared/ui/primitives/EmptyState.variants';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 export interface AchievementWithStatus extends Achievement {
   progress: number;
@@ -20,9 +21,9 @@ export const AchievementCard: React.ComponentType<{
   achievement: AchievementWithStatus;
   onPress: () => void;
 }> = ({ achievement, onPress }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const display = getAchievementDisplayInfo(achievement, achievement.isUnlocked);
-  const rarityColor = getRarityColor(achievement.rarity);
+  const rarityColor = achievement.isUnlocked ? vexFire.ember : vexFire.textMuted;
   return (
     <Pressable
       onPress={onPress}
@@ -34,22 +35,22 @@ export const AchievementCard: React.ComponentType<{
       <Animated.View entering={FadeInUp.duration(200)}>
         <Box
           p={4} mx={4} my={2} borderRadius={16}
-          bg={theme.colors.background.secondary}
           style={{
+            backgroundColor: vexFire.panel,
             borderWidth: 2,
-            borderColor: achievement.isUnlocked ? rarityColor : theme.colors.border.DEFAULT,
+            borderColor: achievement.isUnlocked ? rarityColor : vexFire.border,
             opacity: achievement.isUnlocked ? 1 : 0.7,
           }}
         >
           <Box flexDirection="row" alignItems="center" gap={3}>
             <Box
               width={56} height={56} borderRadius={28}
-              bg={achievement.isUnlocked ? `${rarityColor}20` : theme.colors.background.tertiary}
-              alignItems="center" justifyContent="center"
               style={{
+                backgroundColor: achievement.isUnlocked ? `${rarityColor}20` : vexFire.backgroundSoft,
+                borderColor: achievement.isUnlocked ? rarityColor : vexFire.border,
                 borderWidth: 2,
-                borderColor: achievement.isUnlocked ? rarityColor : theme.colors.border.DEFAULT,
               }}
+              alignItems="center" justifyContent="center"
             >
               <Text style={{ fontSize: 28, opacity: achievement.isUnlocked ? 1 : 0.5 }}>
                 {display.icon}
@@ -59,7 +60,7 @@ export const AchievementCard: React.ComponentType<{
               <Box flexDirection="row" alignItems="center" gap={2} mb={1}>
                 <Text
                   variant="h4"
-                  color={achievement.isUnlocked ? theme.colors.text.primary : theme.colors.text.tertiary}
+                  style={{ color: achievement.isUnlocked ? vexFire.cream : vexFire.textMuted }}
                   numberOfLines={1}
                 >
                   {display.title}
@@ -72,33 +73,33 @@ export const AchievementCard: React.ComponentType<{
               </Box>
               <Text
                 variant="bodySmall"
-                color={achievement.isUnlocked ? theme.colors.text.secondary : theme.colors.text.tertiary}
+                style={{ color: achievement.isUnlocked ? vexFire.textSecondary : vexFire.textMuted }}
                 numberOfLines={2}
               >
                 {display.description}
               </Text>
               {!achievement.isUnlocked && achievement.progress > 0 && (
                 <Box mt={2}>
-                  <Box height={4} borderRadius={2} bg={theme.colors.background.tertiary} style={{ overflow: 'hidden' }}>
+                  <Box height={4} borderRadius={2} style={{ backgroundColor: vexFire.backgroundSoft, overflow: 'hidden' }}>
                     <Box
-                      height="100%" borderRadius={2} bg={rarityColor}
-                      style={{ width: `${achievement.completionPercentage}%` }}
+                      height="100%" borderRadius={2}
+                      style={{ backgroundColor: rarityColor, width: `${achievement.completionPercentage}%` }}
                     />
                   </Box>
-                  <Text variant="caption" color={theme.colors.text.tertiary} mt={1}>
+                  <Text variant="caption" color={vexFire.textMuted} mt={1}>
                     {achievement.progress} / {achievement.progressMax}
                   </Text>
                 </Box>
               )}
               {achievement.isUnlocked && achievement.unlockedAt && (
-                <Text variant="caption" color={theme.colors.success.DEFAULT} mt={1}>
+                <Text variant="caption" color={vexFire.success} mt={1}>
                   Unlocked {new Date(achievement.unlockedAt).toLocaleDateString()}
                 </Text>
               )}
             </Box>
             <Box alignItems="center">
               <Text variant="h4" color={rarityColor}>{achievement.pointValue}</Text>
-              <Text variant="caption" color={theme.colors.text.tertiary}>pts</Text>
+              <Text variant="caption" color={vexFire.textMuted}>pts</Text>
             </Box>
           </Box>
         </Box>
@@ -108,9 +109,9 @@ export const AchievementCard: React.ComponentType<{
 };
 
 export const AchievementSkeletonCard: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
-    <Box p={4} mx={4} my={2} borderRadius={16} bg={theme.colors.background.secondary}>
+    <Box p={4} mx={4} my={2} borderRadius={16} bg={vexFire.panel}>
       <Box flexDirection="row" alignItems="center" gap={3}>
         <Skeleton width={56} height={56} />
         <Box flex={1} gap={2}>
@@ -126,7 +127,7 @@ export const AchievementSkeletonCard: React.ComponentType = () => {
 export const EmptyState: React.ComponentType<{
   onStartSession?: () => void;
 }> = ({ onStartSession }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (onStartSession) {
     return <EmptyAchievements onStartSession={onStartSession} />;
@@ -135,10 +136,10 @@ export const EmptyState: React.ComponentType<{
   return (
     <Box flex={1} alignItems="center" justifyContent="center" p={8}>
       <Text style={{ fontSize: 64 }}>🏆</Text>
-      <Text variant="h3" color={theme.colors.text.secondary} textAlign="center" mt={4}>
+      <Text variant="h3" color={vexFire.textSecondary} textAlign="center" mt={4}>
         No achievements yet
       </Text>
-      <Text variant="body" color={theme.colors.text.tertiary} textAlign="center" mt={2}>
+      <Text variant="body" color={vexFire.textMuted} textAlign="center" mt={2}>
         Start your first focus session to begin collecting achievements!
       </Text>
     </Box>

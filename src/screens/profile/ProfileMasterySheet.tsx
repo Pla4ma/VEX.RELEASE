@@ -1,9 +1,9 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from '../../components/primitives/Text';
-import { GlassCard } from '../../components/glass/GlassCard';
-import { GlassProgressBar } from '../../components/glass/GlassProgressBar';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+import { VexSurface } from '../../shared/ui/vex/VexSurface';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import type { Theme } from '../../theme/types';
 
 interface Challenge {
   id: string;
@@ -16,27 +16,28 @@ interface Challenge {
 }
 
 interface ProfileMasterySheetProps {
-  theme: unknown;
+  theme: Theme;
   rankDisplay: { icon: string; title: string };
   totalMasteryPoints: number;
   challenges: Challenge[];
 }
 
 export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> = ({
+  theme,
   rankDisplay,
   totalMasteryPoints,
   challenges,
 }) => (
   <ScrollView
     contentContainerStyle={{
-      paddingHorizontal: 20,
-      paddingVertical: 16,
-      gap: 16,
+      paddingHorizontal: theme.spacing[5],
+      paddingVertical: theme.spacing[4],
+      gap: theme.spacing[4],
     }}
   >
     <Text
       style={{
-        color: vexLightGlass.text.primary,
+        color: vexFire.cream,
         fontSize: 20,
         fontWeight: '800',
         letterSpacing: -0.3,
@@ -46,7 +47,7 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
     </Text>
     <Text
       style={{
-        color: vexLightGlass.text.secondary,
+        color: vexFire.textSecondary,
         fontSize: 14,
       }}
     >
@@ -54,11 +55,11 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
     </Text>
     {challenges.length > 0 ? (
       challenges.slice(0, 3).map((challenge) => (
-        <GlassCard key={challenge.id} variant="default" padding={16} radius={22}>
+        <VexSurface key={challenge.id} tone="base" style={{ padding: theme.spacing[4], backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong }}>
           <View style={{ gap: 4 }}>
             <Text
               style={{
-                color: vexLightGlass.text.primary,
+                color: vexFire.cream,
                 fontSize: 16,
                 fontWeight: '800',
                 letterSpacing: -0.2,
@@ -68,7 +69,7 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
             </Text>
             <Text
               style={{
-                color: vexLightGlass.text.secondary,
+                color: vexFire.textSecondary,
                 fontSize: 12,
                 marginTop: 4,
               }}
@@ -76,12 +77,7 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
               {challenge.description}
             </Text>
             <View style={{ marginTop: 12 }}>
-              <GlassProgressBar
-                value={challenge.current}
-                max={challenge.target}
-                height={8}
-                variant="mint"
-              />
+              <View style={{ backgroundColor: vexFire.backgroundSoft, borderRadius: theme.borderRadius.full, height: theme.spacing[2], overflow: 'hidden' }}><View style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.full, height: '100%', width: `${Math.min(100, Math.max(0, (challenge.current / Math.max(1, challenge.target)) * 100))}%` }} /></View>
             </View>
             <View
               style={{
@@ -92,7 +88,7 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
             >
               <Text
                 style={{
-                  color: vexLightGlass.text.tertiary,
+                  color: vexFire.textMuted,
                   fontSize: 12,
                 }}
               >
@@ -100,7 +96,7 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
               </Text>
               <Text
                 style={{
-                  color: vexLightGlass.mint[700],
+                  color: vexFire.amber,
                   fontSize: 12,
                   fontWeight: '700',
                 }}
@@ -109,19 +105,19 @@ export const ProfileMasterySheet: React.ComponentType<ProfileMasterySheetProps> 
               </Text>
             </View>
           </View>
-        </GlassCard>
+        </VexSurface>
       ))
     ) : (
-      <GlassCard variant="default" padding={16} radius={22}>
+      <VexSurface tone="base" style={{ padding: theme.spacing[4], backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong }}>
         <Text
           style={{
-            color: vexLightGlass.text.secondary,
+            color: vexFire.textSecondary,
             fontSize: 14,
           }}
         >
           Complete sessions to unlock mastery challenges
         </Text>
-      </GlassCard>
+      </VexSurface>
     )}
   </ScrollView>
 );

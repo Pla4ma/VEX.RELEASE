@@ -30,7 +30,6 @@ export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
     isRefetching: false,
     isStale: false,
     isSuccess: true,
-    promise: Promise.resolve() as Promise<TData>,
     refetch: async () => stub,
     status: 'success',
   };

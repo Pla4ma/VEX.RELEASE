@@ -1,4 +1,3 @@
-import { lightColors } from '@/theme/tokens/colors';
 import React from 'react';
 import Svg, {
   Circle,
@@ -14,6 +13,7 @@ import { AnimatedCircle } from '../hooks/useSessionAnimations';
 import { formatTime, PERFECT_PARTICLE_COUNT } from '../utils/active-session';
 
 import { PerfectFocusBurstParticle } from './PerfectFocusBurstParticle';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import {
   USE_SAFE_PROGRESS_RING,
   type ActiveSessionProgressRingProps,
@@ -130,10 +130,10 @@ export const ActiveSessionProgressRing: React.ComponentType<
                   x2="100%"
                   y2="100%"
                 >
-                  <Stop offset="0%" stopColor={lightColors.warning.light} />
-                  <Stop offset="35%" stopColor={lightColors.semantic.warning} />
-                  <Stop offset="68%" stopColor={lightColors.accent.pink} />
-                  <Stop offset="100%" stopColor={lightColors.accent.blue} />
+                  <Stop offset="0%" stopColor={vexFire.cream} />
+                  <Stop offset="35%" stopColor={vexFire.amber} />
+                  <Stop offset="68%" stopColor={vexFire.ember} />
+                  <Stop offset="100%" stopColor={vexFire.copper} />
                 </SvgLinearGradient>
               </Defs>
               <Circle
@@ -156,12 +156,12 @@ export const ActiveSessionProgressRing: React.ComponentType<
           justifyContent="center"
           alignItems="center"
         >
-          <Text variant="hero" color="text.primary" textAlign="center">
+          <Text variant="hero" color={vexFire.cream} textAlign="center">
             {formatTime(remainingSeconds)}
           </Text>
           <Text
             variant="caption"
-            color="text.secondary"
+            color={vexFire.textSecondary}
             textAlign="center"
             mt="xs"
           >

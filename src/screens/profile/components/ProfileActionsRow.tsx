@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -29,8 +30,8 @@ function GlassIconButton({
       onPress={onPress}
       style={({ pressed }) => ({
         alignItems: 'center',
-        backgroundColor: theme.colors.surface.card,
-        borderColor: theme.colors.border.DEFAULT,
+        backgroundColor: vexFire.panel,
+        borderColor: vexFire.border,
         borderRadius: theme.borderRadius.lg,
         borderWidth: 1,
         justifyContent: 'center',
@@ -39,7 +40,7 @@ function GlassIconButton({
         paddingHorizontal: theme.spacing[3],
       })}
     >
-      <Text color="text.secondary" variant="caption">{label}</Text>
+      <Text color={vexFire.textSecondary} variant="caption">{label}</Text>
     </Pressable>
   );
 }

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -42,7 +43,7 @@ export function MomentumDots({
           />
         ))
       ) : (
-        <Text variant="caption" color="text.secondary">
+        <Text variant="caption" color={vexFire.textSecondary}>
           Calibrating momentum...
         </Text>
       )}
@@ -62,7 +63,7 @@ export function DailyProgress({
     return null;
   }
   return (
-    <Text variant="caption" color="text.secondary" textAlign="center" mt="sm">
+    <Text variant="caption" color={vexFire.textSecondary} textAlign="center" mt="sm">
       {`${formatTime(viewModel.todayFocusSeconds)} today - ${Math.round(viewModel.dailyProgress)}% of 2h goal`}
     </Text>
   );
@@ -104,7 +105,7 @@ function Stat(props: {
       >
         {props.value}
       </Text>
-      <Text variant="caption" color="text.secondary">
+      <Text variant="caption" color={vexFire.textSecondary}>
         {props.label}
       </Text>
     </Box>

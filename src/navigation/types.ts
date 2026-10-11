@@ -17,6 +17,7 @@ export type {
   ExtendedRootStackParams,
   MainStackParams,
   MainTabParams,
+  RootStackParamList,
   RootStackParams,
   RouteParams,
   ScreenOptionsFactory,

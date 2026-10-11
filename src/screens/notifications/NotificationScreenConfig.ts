@@ -3,14 +3,13 @@ import type {
   NotificationActionType,
 } from '../../navigation/notification-routing-types';
 
-import { isFeatureHidden } from '../../features/liveops-config/FeatureFlagService';
-import {
+import { isFeatureHidden ,
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
 } from '../../features/liveops-config/FeatureFlagService';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import type { NotificationCenterItem } from '../../features/notifications/service';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export type NotificationType =
   | 'ACHIEVEMENT'
@@ -44,43 +43,43 @@ export const NOTIFICATION_CONFIG: Record<
 > = {
   ACHIEVEMENT: {
     icon: '\u{1F3C6}',
-    color: lightColors.semantic.warning,
-    bgColor: lightColors.warning[50],
+    color: vexFire.amber,
+    bgColor: vexFire.backgroundSoft,
   },
   STREAK_RISK: {
     icon: '\u{1F525}',
-    color: lightColors.semantic.danger,
-    bgColor: lightColors.error[50],
+    color: vexFire.danger,
+    bgColor: vexFire.backgroundSoft,
   },
   BOSS: {
     icon: '\u{1F480}',
-    color: lightColors.accent.purple,
-    bgColor: lightColors.primary[50],
+    color: vexFire.ember,
+    bgColor: vexFire.backgroundSoft,
   },
   SQUAD: {
     icon: '\u{1F6E1}',
-    color: lightColors.accent.blue,
-    bgColor: lightColors.info[50],
+    color: vexFire.copper,
+    bgColor: vexFire.backgroundSoft,
   },
   RIVAL: {
     icon: '\u{2694}',
-    color: lightColors.semantic.danger,
-    bgColor: lightColors.error[50],
+    color: vexFire.danger,
+    bgColor: vexFire.backgroundSoft,
   },
   COACH: {
     icon: '\u{1F4AC}',
-    color: lightColors.semantic.success,
-    bgColor: lightColors.success[50],
+    color: vexFire.success,
+    bgColor: vexFire.backgroundSoft,
   },
   REWARD: {
     icon: '\u{1F381}',
-    color: lightColors.semantic.warning,
-    bgColor: lightColors.warning[50],
+    color: vexFire.amber,
+    bgColor: vexFire.backgroundSoft,
   },
   LEVEL_UP: {
     icon: '\u{2B50}',
-    color: lightColors.accent.purple,
-    bgColor: lightColors.primary[50],
+    color: vexFire.ember,
+    bgColor: vexFire.backgroundSoft,
   },
 };
 

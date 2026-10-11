@@ -7,9 +7,8 @@ import { View } from 'react-native';
 
 import { vexLightGlass } from '../../../../theme/tokens/vex-light-glass';
 
-import { Text } from '../../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
-import { Text as VexText } from '../../../../components/primitives/Text';
 
 type OnboardingErrorBannerProps = {
   message: string;

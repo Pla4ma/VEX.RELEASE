@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, type ViewStyle } from 'react-native';
 import Svg from 'react-native-svg';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 import { buildGlassDefs } from './LiquidGlassObject.defs';
 import { OrbVariant } from './LiquidGlassObject.orb';
@@ -28,7 +29,7 @@ export function LiquidGlassObjectRaw({
       style={[
         {
           height: size,
-          boxShadow: `0px size * 0.06px size * 0.08px rgba(10, 94, 77, 0.12100000000000001)`,
+          boxShadow: `0px ${size * 0.06}px ${size * 0.08}px ${vexLightGlass.glass.shadow}`,
           width: size,
         },
         style,

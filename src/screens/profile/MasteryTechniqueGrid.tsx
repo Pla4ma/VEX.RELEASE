@@ -5,38 +5,38 @@ import { Text } from '../../components/primitives/Text';
 import { TechniqueBar } from '../../features/mastery/components/TechniqueBar';
 import type { MasteryState } from '../../features/mastery/types';
 import { useTheme } from '../../theme/ThemeContext';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export const TECHNIQUES = [
   {
     key: 'durationMastery' as const,
     label: 'Duration Focus',
-    color: lightColors.semantic.primary,
+    color: vexFire.ember,
     description: 'Long sessions without interruption',
   },
   {
     key: 'purityMastery' as const,
     label: 'Purity',
-    color: lightColors.accent.teal,
+    color: vexFire.amber,
     description: 'Sustained high focus scores',
   },
   {
     key: 'consistencyMastery' as const,
     label: 'Consistency',
-    color: lightColors.accent.orange,
+    color: vexFire.ember,
     description: 'Daily streaks maintained',
   },
   {
     key: 'comebackMastery' as const,
     label: 'Comeback',
-    color: lightColors.accent.pink,
+    color: vexFire.danger,
     description: 'Recovering from broken streaks',
   },
   {
     key: 'bossMastery' as const,
     label: 'Boss',
-    color: lightColors.semantic.warning,
+    color: vexFire.amber,
     description: 'Boss defeat efficiency',
   },
 ] as const;
@@ -50,7 +50,7 @@ export function MasteryTechniqueGrid({
   return (
     <Card
       size="md"
-      style={{ backgroundColor: theme.colors.background.secondary }}
+      style={{ backgroundColor: vexFire.panel }}
     >
       <View style={{ gap: theme.spacing[4] }}>
         {TECHNIQUES.map((tech) => (
@@ -63,7 +63,7 @@ export function MasteryTechniqueGrid({
             />
             <Text
               variant="caption"
-              color="text.tertiary"
+              color={vexFire.textMuted}
               style={{ marginTop: theme.spacing[1] }}
             >
               {tech.description}

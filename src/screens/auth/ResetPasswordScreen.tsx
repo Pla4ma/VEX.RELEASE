@@ -12,13 +12,12 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
 import { Input } from '../../components/Input';
 import { Icon } from '../../icons/components/Icon';
 import { resetPasswordSchema } from './schemas';
 import type { AuthStackParams } from '../../navigation';
-import { Text as VexText } from '../../components/primitives/Text';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ResetPassword'>;
 

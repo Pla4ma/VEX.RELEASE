@@ -65,6 +65,9 @@ export function canNavigateToRegisteredRoute(
   route: keyof ExtendedRootStackParams | string,
 ): boolean {
   const routeName = String(route);
+  if (!isNotArchivedRoute(routeName)) {
+    return false;
+  }
   const feature = getFeatureForRoute(routeName);
   if (!feature) {
     return !MAIN_STACK_FEATURE_ROUTES.some((name) => name === routeName);

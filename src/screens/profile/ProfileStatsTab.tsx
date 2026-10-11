@@ -5,6 +5,8 @@ import { Text } from '../../components/primitives/Text';
 import { VexIcon } from '../../shared/ui/vex/VexIcon';
 import { VexSurface } from '../../shared/ui/vex/VexSurface';
 import { useTheme } from '../../theme/ThemeContext';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import type { FocusScoreHistoryPoint } from '../../features/focus-identity/types';
 import type { ProfileStatItem } from './components/ProfileStatTile';
 
 const PROFILE_COMPASS = require('../../../assets/vex/profile-compass.png');
@@ -23,6 +25,7 @@ interface ProfileStatsTabProps {
   rankDisplay: { icon: string; title: string };
   techniques: TechniqueItem[];
   focusScore: number | null;
+  focusScoreHistory: FocusScoreHistoryPoint[];
   xp: number;
   nextLevelThreshold: number;
   xpPercent: number;
@@ -37,9 +40,9 @@ function ProfileSkeleton(): React.JSX.Element {
   const { theme } = useTheme();
   return (
     <VexSurface tone="quiet" style={{ gap: theme.spacing[4], minHeight: theme.spacing[24], padding: theme.spacing[5] }}>
-      <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.md, height: theme.spacing[4], width: '38%' }} />
-      <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.md, height: theme.spacing[16], width: '58%' }} />
-      <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, height: theme.spacing[2], width: '100%' }} />
+      <View style={{ backgroundColor: vexFire.backgroundSoft, borderRadius: theme.borderRadius.md, height: theme.spacing[4], width: '38%' }} />
+      <View style={{ backgroundColor: vexFire.backgroundSoft, borderRadius: theme.borderRadius.md, height: theme.spacing[16], width: '58%' }} />
+      <View style={{ backgroundColor: vexFire.line, borderRadius: theme.borderRadius.full, height: theme.spacing[2], width: '100%' }} />
     </VexSurface>
   );
 }
@@ -47,71 +50,74 @@ function ProfileSkeleton(): React.JSX.Element {
 function BestRow({ icon, title, value, detail }: { icon: number; title: string; value: string; detail: string }): React.JSX.Element {
   const { theme } = useTheme();
   return (
-    <View style={{ alignItems: 'center', borderTopColor: theme.colors.border.light, borderTopWidth: 1, flexDirection: 'row', gap: theme.spacing[3], minHeight: theme.spacing[16], paddingVertical: theme.spacing[2] }}>
+    <View style={{ alignItems: 'center', borderTopColor: vexFire.border, borderTopWidth: 1, flexDirection: 'row', gap: theme.spacing[3], minHeight: theme.spacing[16], paddingVertical: theme.spacing[2] }}>
       <Image accessibilityIgnoresInvertColors resizeMode="contain" source={icon} style={{ height: theme.spacing[10], width: theme.spacing[10] }} />
       <View style={{ flex: 1 }}>
-        <Text color="text.primary" variant="bodyLarge">{title}</Text>
-        <Text color="text.tertiary" variant="caption">{detail}</Text>
+        <Text color={vexFire.cream} variant="bodyLarge">{title}</Text>
+        <Text color={vexFire.textMuted} variant="caption">{detail}</Text>
       </View>
       <View style={{ alignItems: 'flex-end' }}>
-        <Text color="text.primary" variant="bodyLarge">{value}</Text>
-        <VexIcon color={theme.colors.semantic.primary} name="sparkles" size="xs" variant="outline" />
+        <Text color={vexFire.cream} variant="bodyLarge">{value}</Text>
+        <VexIcon color={vexFire.ember} name="sparkles" size="xs" variant="outline" />
       </View>
     </View>
   );
 }
 
-export function ProfileStatsTab({ stats, statsLoading, hasError, mastery, masteryLoading, rankDisplay, techniques, focusScore, onMasteryPress }: ProfileStatsTabProps): React.JSX.Element {
+export function ProfileStatsTab({ stats, statsLoading, hasError, mastery, masteryLoading, rankDisplay, techniques, focusScore, focusScoreHistory, onMasteryPress }: ProfileStatsTabProps): React.JSX.Element {
   const { theme } = useTheme();
   if (statsLoading || masteryLoading) return <ProfileSkeleton />;
 
-  const score = focusScore ?? 82;
+  const scoreLabel = focusScore === null ? '—' : String(focusScore);
+  const scoreDetail = focusScore === null
+    ? 'Complete a session to reveal your rhythm'
+    : 'Stable rhythm · last 7 days';
   const longest = statValue(stats, 'Longest Streak', '0 days');
   const sessions = statValue(stats, 'Total Sessions', '0');
   const focusHours = statValue(stats, 'Focus Hours', '0h');
-  const bars = [
-    { color: theme.colors.primary[700], height: theme.spacing[5] },
-    { color: theme.colors.primary[700], height: theme.spacing[8] },
-    { color: theme.colors.primary[700], height: theme.spacing[6] },
-    { color: theme.colors.primary[600], height: theme.spacing[8] + theme.spacing[1] },
-    { color: theme.colors.primary[600], height: theme.spacing[8] - theme.spacing[1] },
-    { color: theme.colors.semantic.primary, height: theme.spacing[10] },
-    { color: theme.colors.semantic.primary, height: theme.spacing[8] },
-  ];
+  const recentScores = focusScoreHistory.slice(-7);
+  const scoreMin = recentScores.length > 0 ? Math.min(...recentScores.map((point) => point.score)) : 0;
+  const scoreMax = recentScores.length > 0 ? Math.max(...recentScores.map((point) => point.score)) : 1;
+  const scoreRange = Math.max(1, scoreMax - scoreMin);
 
   return (
     <View style={{ gap: theme.spacing[5] }}>
-      {hasError ? <VexSurface tone="quiet" style={{ padding: theme.spacing[3] }}><Text color={theme.colors.warning.DEFAULT} variant="bodySmall">Some profile signals are taking a breath. Pull to refresh when you are ready.</Text></VexSurface> : null}
-      <VexSurface tone="hero" style={{ backgroundColor: theme.colors.background.primary, borderColor: theme.colors.primary[800], padding: theme.spacing[5] }}>
-        <Text color={theme.colors.semantic.primary} variant="label" style={{ letterSpacing: 2.5 }}>Focus score</Text>
+      {hasError ? <VexSurface tone="quiet" style={{ padding: theme.spacing[3] }}><Text color={vexFire.amber} variant="bodySmall">Some profile signals are taking a breath. Pull to refresh when you are ready.</Text></VexSurface> : null}
+      <VexSurface tone="base" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong, padding: theme.spacing[5] }}>
+        <Text color={vexFire.ember} variant="label" style={{ letterSpacing: 2.5 }}>Focus score</Text>
         <View style={{ alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[2] }}>
           <View>
-            <Text style={{ color: theme.colors.text.primary, fontFamily: theme.fonts.display ?? theme.fonts.primary, fontSize: theme.typography.display.large.fontSize, lineHeight: theme.typography.display.large.lineHeight }}>{score}</Text>
-            <Text color="text.secondary" variant="bodyLarge" style={{ marginTop: theme.spacing[1] }}>Stable rhythm · last 7 days</Text>
+            <Text style={{ color: vexFire.cream, fontFamily: theme.fonts.display ?? theme.fonts.primary, fontSize: theme.typography.display.large.fontSize, lineHeight: theme.typography.display.large.lineHeight }}>{scoreLabel}</Text>
+            <Text color={vexFire.textSecondary} variant="bodyLarge" style={{ marginTop: theme.spacing[1] }}>{scoreDetail}</Text>
           </View>
           <Image accessibilityLabel="Focus score chart emblem" accessibilityIgnoresInvertColors resizeMode="contain" source={PROFILE_FOCUS_EMBLEM} style={{ borderRadius: theme.borderRadius.full, height: theme.spacing[20], width: theme.spacing[20] }} />
         </View>
-        <View style={{ alignItems: 'flex-end', flexDirection: 'row', gap: theme.spacing[2], height: theme.spacing[16], marginTop: theme.spacing[6] }}>
-          {bars.map(({ color, height }, index) => <View key={`profile-score-bar-${index}`} style={{ backgroundColor: color, borderRadius: theme.borderRadius.full, flex: 1, height }} />)}
-        </View>
+        {recentScores.length > 0 ? (
+          <View style={{ alignItems: 'flex-end', flexDirection: 'row', gap: theme.spacing[2], height: theme.spacing[16], marginTop: theme.spacing[6] }}>
+            {recentScores.map((point) => {
+              const ratio = (point.score - scoreMin) / scoreRange;
+              return <View key={`profile-score-bar-${point.timestamp}`} style={{ backgroundColor: ratio > 0.66 ? vexFire.ember : ratio > 0.33 ? vexFire.amber : vexFire.copper, borderRadius: theme.borderRadius.full, flex: 1, height: theme.spacing[4] + Math.round(ratio * theme.spacing[12]) }} />;
+            })}
+          </View>
+        ) : <Text color={vexFire.textMuted} variant="caption" style={{ marginTop: theme.spacing[5] }}>Your seven-day trace appears after the first completed session.</Text>}
       </VexSurface>
 
-      <VexSurface tone="hero" style={{ backgroundColor: theme.colors.background.primary, borderColor: theme.colors.primary[800], padding: theme.spacing[5] }}>
+      <VexSurface tone="base" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong, padding: theme.spacing[5] }}>
         <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing[3] }}>
-          <View><Text variant="h3">Personal bests</Text><Text color="text.tertiary" variant="bodySmall" style={{ marginTop: theme.spacing[1] }}>Proof that compounds quietly.</Text></View>
-          <VexIcon color={theme.colors.semantic.primary} name="sparkles" size="lg" variant="outline" />
+          <View><Text variant="h3">Personal bests</Text><Text color={vexFire.textMuted} variant="bodySmall" style={{ marginTop: theme.spacing[1] }}>Proof that compounds quietly.</Text></View>
+          <VexIcon color={vexFire.ember} name="sparkles" size="lg" variant="outline" />
         </View>
         <BestRow detail="All time" icon={PROFILE_TROPHY} title="Longest streak" value={longest} />
-        <BestRow detail="Current signal" icon={PROFILE_COMPASS} title="Highest focus score" value={`${score}`} />
+        <BestRow detail="Current signal" icon={PROFILE_COMPASS} title="Highest focus score" value={scoreLabel} />
         <BestRow detail={`${sessions} sessions`} icon={PROFILE_COMPASS} title="Focus hours" value={focusHours} />
         <BestRow detail={rankDisplay.title} icon={PROFILE_TARGET} title="Deep focus sessions" value={sessions} />
       </VexSurface>
 
-      <View style={{ borderTopColor: theme.colors.semantic.primary, borderTopWidth: theme.spacing[1], paddingTop: theme.spacing[4] }}>
-        <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><Text variant="h4">Mastery</Text><Text color={theme.colors.semantic.primary} variant="label">{mastery.totalMasteryPoints} pts</Text></View>
-        <Text color="text.secondary" variant="bodySmall" style={{ marginTop: theme.spacing[1] }}>{rankDisplay.title}</Text>
-        <View style={{ gap: theme.spacing[3], marginTop: theme.spacing[5] }}>{techniques.slice(0, 4).map((item) => { const value = mastery.techniques[item.key] ?? 0; return <View key={item.key} style={{ gap: theme.spacing[1] }}><View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><Text color="text.secondary" variant="bodySmall">{item.label}</Text><Text style={{ color: item.color, fontWeight: theme.fontWeights.bold }} variant="bodySmall">{value} / 25</Text></View><View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, height: theme.spacing[1], overflow: 'hidden' }}><View style={{ backgroundColor: item.color, borderRadius: theme.borderRadius.full, height: '100%', width: `${Math.max(4, Math.min(100, (value / 25) * 100))}%` }} /></View></View>; })}</View>
-        <Pressable accessibilityHint="Open detailed mastery" accessibilityLabel="Open mastery" accessibilityRole="button" onPress={onMasteryPress} style={{ justifyContent: 'center', marginTop: theme.spacing[3], minHeight: theme.spacing[12] }}><Text color={theme.colors.semantic.primary} variant="button">Open mastery →</Text></Pressable>
+      <View style={{ borderTopColor: vexFire.ember, borderTopWidth: theme.spacing[1], paddingTop: theme.spacing[4] }}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><Text variant="h4">Mastery</Text><Text color={vexFire.ember} variant="label">{mastery.totalMasteryPoints} pts</Text></View>
+        <Text color={vexFire.textSecondary} variant="bodySmall" style={{ marginTop: theme.spacing[1] }}>{rankDisplay.title}</Text>
+        <View style={{ gap: theme.spacing[3], marginTop: theme.spacing[5] }}>{techniques.slice(0, 4).map((item) => { const value = mastery.techniques[item.key] ?? 0; return <View key={item.key} style={{ gap: theme.spacing[1] }}><View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}><Text color={vexFire.textSecondary} variant="bodySmall">{item.label}</Text><Text style={{ color: item.color, fontWeight: theme.fontWeights.bold }} variant="bodySmall">{value} / 25</Text></View><View style={{ backgroundColor: vexFire.backgroundSoft, borderRadius: theme.borderRadius.full, height: theme.spacing[1], overflow: 'hidden' }}><View style={{ backgroundColor: item.color, borderRadius: theme.borderRadius.full, height: '100%', width: `${Math.max(4, Math.min(100, (value / 25) * 100))}%` }} /></View></View>; })}</View>
+        <Pressable accessibilityHint="Open detailed mastery" accessibilityLabel="Open mastery" accessibilityRole="button" onPress={onMasteryPress} style={{ justifyContent: 'center', marginTop: theme.spacing[3], minHeight: theme.spacing[12] }}><Text color={vexFire.ember} variant="button">Open mastery →</Text></Pressable>
       </View>
     </View>
   );

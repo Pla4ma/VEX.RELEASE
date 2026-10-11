@@ -1,35 +1,17 @@
-/**
- * LoginScreen — June 2026 Ethereal Sky visual layer.
- *
- * Business logic (validation, OAuth, navigation) lives in
- * useLoginScreen. This file is presentation only.
- */
 import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 import { AppScreen } from '../../components/primitives/AppScreen';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import type { AuthStackParams } from '../../navigation';
-import { useOnboardingStore } from '../../features/onboarding/store';
-import { useAuthStore } from '../../store';
 import { useLoginScreen } from './useLoginScreen';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { etherealText } from '@/theme/tokens/ethereal-sky';
-import type { User } from '../../types/models/user';
-
-import {
-  EtherealAuthButtons,
-} from './components/ethereal/EtherealAuthButtons';
-import { EtherealSkyBackground } from './components/ethereal/EtherealSkyBackground';
 import type { EtherealAuthProvider } from './components/ethereal';
-import { LoginHero } from './components/ethereal/LoginHero';
 import { LoginEmailForm } from './components/ethereal/LoginEmailForm';
-import { LoginPrivacyStrip } from './components/ethereal/LoginPrivacyStrip';
-import { BackgroundScrim } from '../onboarding/components/ethereal/BackgroundScrim';
+import { canSkipLogin } from '../../config/dev-identity';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
@@ -39,63 +21,46 @@ const OAUTH_PROVIDER_MAP: Record<EtherealAuthProvider, 'apple' | 'google' | null
   email: null,
 };
 
-const DEV_BYPASS_USER_ID = '00000000-0000-4000-8000-000000000001';
-
-const createDevBypassUser = (): User => {
-  const now = new Date().toISOString();
-
-  return {
-    id: DEV_BYPASS_USER_ID,
-    createdAt: now,
-    updatedAt: now,
-    username: 'localdev',
-    email: 'local-dev@vex.app',
-    firstName: 'Local',
-    lastName: 'Dev',
-    displayName: 'Local Dev',
-    verified: true,
-    role: 'user',
-    status: 'active',
-    onboardingCompletedAt: now,
-    preferences: {
-      theme: 'system',
-      language: 'en',
-      notifications: {
-        push: false,
-        email: false,
-        sms: false,
-        inApp: true,
-        digestFrequency: 'never',
-        quietHours: {
-          enabled: false,
-          start: '22:00',
-          end: '07:00',
-          timezone: 'America/New_York',
+function AuthOption({
+  label,
+  onPress,
+  primary = false,
+  disabled = false,
+}: {
+  label: string;
+  onPress: () => void;
+  primary?: boolean;
+  disabled?: boolean;
+}): React.ReactNode {
+  const { theme } = useTheme();
+  return (
+    <Pressable
+      accessibilityHint={`${label} for your VEX account`}
+      accessibilityLabel={label}
+      accessibilityRole="button"
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        getMinTouchTargetStyle(),
+        {
+          alignItems: 'center',
+          backgroundColor: primary ? theme.colors.primary[500] : theme.colors.surface.card,
+          borderColor: primary ? theme.colors.primary[500] : theme.colors.border.DEFAULT,
+          borderRadius: theme.borderRadius.lg,
+          borderWidth: 1,
+          justifyContent: 'center',
+          opacity: disabled ? 0.55 : pressed ? 0.78 : 1,
+          paddingHorizontal: theme.spacing[4],
+          paddingVertical: theme.spacing[3],
         },
-      },
-      privacy: {
-        profileVisibility: 'private',
-        activityStatus: false,
-        readReceipts: false,
-        allowTagging: false,
-        allowMentions: false,
-        dataSharing: false,
-      },
-      accessibility: {
-        reduceMotion: false,
-        highContrast: false,
-        largeText: false,
-        screenReaderOptimized: false,
-      },
-    },
-    metadata: {
-      lastLoginAt: now,
-      loginCount: 1,
-      signupSource: 'dev-bypass',
-      deviceHistory: [],
-    },
-  };
-};
+      ]}
+    >
+      <Text color={primary ? 'text.inverse' : 'text.primary'} variant="button">
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
 
 const LoginScreen: React.ComponentType<Props> = ({ navigation, route }) => {
   const { theme } = useTheme();
@@ -103,92 +68,69 @@ const LoginScreen: React.ComponentType<Props> = ({ navigation, route }) => {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const {
     email, setEmail, password, setPassword,
-    errors, setErrors, isLoading, handleLogin, handleOAuthLogin,
+    errors, setErrors, isLoading, handleLogin, handleOAuthLogin, handleSkipLogin,
   } = useLoginScreen(route.params?.email ?? '');
 
-  const hem = useCallback((v: string) => {
-    setEmail(v);
-    if (errors.email) {
-      setErrors((c) => ({ ...c, email: undefined }));
-    }
+  const hem = useCallback((value: string) => {
+    setEmail(value);
+    if (errors.email) setErrors((current) => ({ ...current, email: undefined }));
   }, [errors.email, setEmail, setErrors]);
 
-  const hpm = useCallback((v: string) => {
-    setPassword(v);
-    if (errors.password) {
-      setErrors((c) => ({ ...c, password: undefined }));
-    }
+  const hpm = useCallback((value: string) => {
+    setPassword(value);
+    if (errors.password) setErrors((current) => ({ ...current, password: undefined }));
   }, [errors.password, setPassword, setErrors]);
 
-  const onProviderPress = useCallback(
-    (provider: EtherealAuthProvider) => {
-      const mapped = OAUTH_PROVIDER_MAP[provider];
-      if (provider === 'email') {
-        setShowEmailForm(true);
-        return;
-      }
-      if (mapped) {
-        handleOAuthLogin(mapped).catch(() => undefined);
-      }
-    },
-    [handleOAuthLogin],
-  );
-
-  const onForgotPassword = useCallback(() => {
-    navigation.navigate({ name: 'ForgotPassword', params: undefined });
-  }, [navigation]);
-
-  const onCreateAccount = useCallback(() => {
-    navigation.navigate({ name: 'Register', params: undefined });
-  }, [navigation]);
-
-  const onSkipLogin = useCallback(() => {
-    useAuthStore.getState().login(createDevBypassUser());
-    useOnboardingStore.getState().completeOnboarding(DEV_BYPASS_USER_ID);
-  }, []);
+  const onProviderPress = useCallback((provider: EtherealAuthProvider): void => {
+    const mapped = OAUTH_PROVIDER_MAP[provider];
+    if (provider === 'email') {
+      setShowEmailForm(true);
+      return;
+    }
+    if (mapped) {
+      handleOAuthLogin(mapped).catch(() => undefined);
+    }
+  }, [handleOAuthLogin]);
 
   return (
-    <AppScreen
-      bottomInset={false}
-      contentStyle={{ flex: 1 }}
-      keyboardAvoiding
-      padded={false}
-      scroll={false}
-    >
-      <EtherealSkyBackground />
-      <BackgroundScrim intensity="login" />
-
+    <AppScreen bottomInset={false} contentStyle={{ flexGrow: 1 }} keyboardAvoiding padded={false} scroll>
       <View
         style={{
-          flex: 1,
-          paddingTop: insets.top + 16,
-          paddingBottom: insets.bottom + 12,
+          flexGrow: 1,
+          paddingBottom: insets.bottom + theme.spacing[4],
           paddingHorizontal: theme.spacing[5],
+          paddingTop: insets.top + theme.spacing[6],
         }}
       >
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
-          <View style={{ alignItems: 'center', marginTop: 16 }}>
-            <LoginHero startDelayMs={120} />
+        <View style={{ flexGrow: 1, gap: theme.spacing[6], justifyContent: 'space-between' }}>
+          <View style={{ gap: theme.spacing[3] }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[2] }}>
+              <View style={{ backgroundColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, height: 10, width: 10 }} />
+              <Text variant="h2">VEX</Text>
+            </View>
+            <Text color="primary.500" variant="label">Focus adapts to you</Text>
+            <Text variant="h1">Make the next block easier to start.</Text>
+            <Text color="text.secondary" variant="body">
+              VEX learns from real sessions, then gives you one useful next move.
+            </Text>
           </View>
 
-          <View style={{ width: '100%', maxWidth: 320, alignSelf: 'center', gap: 16 }}>
-            <EtherealAuthButtons
-              disabled={isLoading}
-              onProviderPress={onProviderPress}
-              startDelayMs={900}
-            />
-
-            {__DEV__ ? (
+          <View style={{ alignSelf: 'center', gap: theme.spacing[3], maxWidth: 320, width: '100%' }}>
+            <AuthOption disabled={isLoading} label="Continue with Google" onPress={() => onProviderPress('google')} primary />
+            <AuthOption disabled={isLoading} label="Continue with Apple" onPress={() => onProviderPress('apple')} />
+            <AuthOption disabled={isLoading} label="Continue with Email" onPress={() => onProviderPress('email')} />
+            {canSkipLogin(__DEV__, process.env.EXPO_PUBLIC_ENVIRONMENT, process.env.EXPO_PUBLIC_ENABLE_SKIP_LOGIN) ? (
               <Pressable
-                accessibilityHint="Opens the app with a local development account"
+                accessibilityHint="Opens VEX for local testing without an account"
                 accessibilityLabel="Skip login and onboarding"
                 accessibilityRole="button"
-                onPress={onSkipLogin}
+                disabled={isLoading}
+                onPress={handleSkipLogin}
                 style={({ pressed }) => [
                   getMinTouchTargetStyle(),
                   {
                     alignItems: 'center',
-                    borderColor: etherealText.subtitle,
+                    borderColor: theme.colors.border.DEFAULT,
                     borderRadius: theme.borderRadius.lg,
                     borderWidth: 1,
                     justifyContent: 'center',
@@ -198,17 +140,9 @@ const LoginScreen: React.ComponentType<Props> = ({ navigation, route }) => {
                   },
                 ]}
               >
-                <Text
-                  color={etherealText.heading}
-                  fontSize={14}
-                  fontWeight="700"
-                  textAlign="center"
-                >
-                  Skip login
-                </Text>
+                <Text color="text.secondary" variant="button">Skip login</Text>
               </Pressable>
             ) : null}
-
             {showEmailForm ? (
               <LoginEmailForm
                 email={email}
@@ -216,44 +150,32 @@ const LoginScreen: React.ComponentType<Props> = ({ navigation, route }) => {
                 isLoading={isLoading}
                 onChangeEmail={hem}
                 onChangePassword={hpm}
-                onForgotPassword={onForgotPassword}
+                onForgotPassword={() => navigation.navigate('ForgotPassword')}
                 onSubmit={handleLogin}
                 password={password}
                 passwordError={errors.password}
               />
             ) : null}
-
             {showEmailForm ? (
-              <View style={{ alignItems: 'center' }}>
-                <Pressable
-                  accessibilityHint="Creates a new VEX account"
-                  accessibilityLabel="Create a VEX account"
-                  accessibilityRole="link"
-                  hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
-                  onPress={onCreateAccount}
-                  style={getMinTouchTargetStyle()}
-                >
-                  <Text
-                    color={etherealText.heading}
-                    fontSize={14}
-                    style={{ color: etherealText.subtitle }}
-                    textAlign="center"
-                  >
-                    New here?{' '}
-                    <Text
-                      fontSize={14}
-                      fontWeight="700"
-                      style={{ color: etherealText.heading, textDecorationLine: 'underline' }}
-                    >
-                      Create your focus system
-                    </Text>
-                  </Text>
-                </Pressable>
-              </View>
+              <Pressable
+                accessibilityHint="Creates a new VEX account"
+                accessibilityLabel="Create a VEX account"
+                accessibilityRole="link"
+                onPress={() => navigation.navigate('Register')}
+                style={getMinTouchTargetStyle()}
+              >
+                <Text color="text.secondary" textAlign="center" variant="bodySmall">
+                  New here? <Text style={{ color: theme.colors.primary[500], fontWeight: '800' }} variant="bodySmall">Create your focus system</Text>
+                </Text>
+              </Pressable>
             ) : null}
-
-            {!showEmailForm ? <LoginPrivacyStrip /> : null}
           </View>
+
+          {!showEmailForm ? (
+            <Text color="text.tertiary" textAlign="center" variant="caption">
+              Your focus stays yours. Private by design.
+            </Text>
+          ) : null}
         </View>
       </View>
     </AppScreen>

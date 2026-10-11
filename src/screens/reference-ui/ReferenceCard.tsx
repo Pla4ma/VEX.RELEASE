@@ -23,7 +23,7 @@ export function ReferenceCard({
   style,
 }: ReferenceCardProps): React.ReactNode {
   const assetName = asset ?? (glow ? 'progressBars' : 'coachStar');
-  const railColor =
+  const _railColor =
     accent === 'fire' || (accent === undefined && glow)
       ? vexLightGlass.semantic.warning
       : vexLightGlass.glass.innerHighlight;

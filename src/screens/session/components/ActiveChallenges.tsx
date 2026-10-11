@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
@@ -13,7 +14,7 @@ export function ActiveChallenges({
 }: {
   challenges: Challenge[];
 }): JSX.Element | null {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (challenges.length === 0) {return null;}
 
@@ -31,16 +32,16 @@ export function ActiveChallenges({
             borderRadius="lg"
             style={{
               borderWidth: 1,
-              borderColor: theme.colors.border.light,
+              borderColor: vexFire.border,
             }}
           >
-            <Text variant="body" color="text.primary">
+            <Text variant="body" color={vexFire.cream}>
               {challenge.title}
             </Text>
-            <Text variant="caption" color="text.secondary" mt="xs">
+            <Text variant="caption" color={vexFire.textSecondary} mt="xs">
               Complete this session to progress
             </Text>
-            <Text variant="label" color="primary.500" mt="sm">
+            <Text variant="label" color={vexFire.ember} mt="sm">
               {`+${challenge.masteryPoints} XP`}
             </Text>
           </Box>

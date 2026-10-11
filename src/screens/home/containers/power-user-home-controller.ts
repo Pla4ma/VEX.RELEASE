@@ -39,6 +39,7 @@ export function buildController(params: {
   updateRecommendationStatus: HomeController['updateRecommendationStatus'];
   openSetup: (params?: SessionStackParams['SessionSetup']) => void;
   openProgress: () => void;
+  openCoach: () => void;
   openSocial: () => void;
   openContentStudy: () => void;
   continueStudyPlan: () => void;
@@ -72,6 +73,7 @@ export function buildController(params: {
     updateRecommendationStatus,
     openSetup,
     openProgress,
+    openCoach,
     openSocial,
     openContentStudy,
     continueStudyPlan,
@@ -111,8 +113,8 @@ export function buildController(params: {
     openSetup,
     openProgress,
     openSocial,
-    openPlan: () => {},
-    openCoach: () => {},
+    openPlan: openProgress,
+    openCoach,
     openContentStudy,
     continueStudyPlan,
     createRecommendation,

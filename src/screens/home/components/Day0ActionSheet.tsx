@@ -14,13 +14,12 @@ import { Text } from '../../../components/primitives/Text';
 import { captureException } from '../../../config/sentry';
 import { useCaptureMutation } from '../../../features/capture/hooks';
 import { useAddPlanItem } from '../../../features/plan/hooks';
-import { Icon } from '../../../icons/components/Icon';
+import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { borderRadius } from '../../../theme/tokens/radius';
 import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { triggerHaptic } from '../../../utils/haptics';
 import { StandardHitSlops } from '../../../utils/touchTarget';
-import { type } from '../../reference-ui/referenceTokens';
 import type { ToastOptions } from '../../../shared/ui/components/Toast.types';
 import { buildDay0AgentPlan } from '../services/day0-agent-service';
 import type { Day0Mode } from '../services/day0-agent-schemas';
@@ -116,8 +115,8 @@ export function Day0ActionSheet({
         />
         <View
           style={{
-            backgroundColor: vexLightGlass.glass.fillStrong,
-            borderColor: vexLightGlass.glass.border,
+            backgroundColor: vexFire.panel,
+            borderColor: vexFire.borderStrong,
             borderTopLeftRadius: borderRadius['2xl'],
             borderTopRightRadius: borderRadius['2xl'],
             borderWidth: 1,
@@ -126,8 +125,8 @@ export function Day0ActionSheet({
         >
           <View style={{ alignItems: 'center', flexDirection: 'row' }}>
             <View style={{ flex: 1 }}>
-              <Text style={type.kicker}>VEX AGENT</Text>
-              <Text style={[type.hero, { marginTop: spacing[1] }]}>
+              <Text style={{ color: vexFire.ember, fontSize: 12, fontWeight: '900', letterSpacing: 1.6 }}>VEX AGENT</Text>
+              <Text style={{ color: vexFire.cream, fontSize: 28, fontWeight: '900', marginTop: spacing[1] }}>
                 {activeCopy?.title ?? 'Signal'}
               </Text>
             </View>
@@ -138,12 +137,12 @@ export function Day0ActionSheet({
               hitSlop={StandardHitSlops.ICON}
               onPress={onClose}
             >
-              <Icon color={vexLightGlass.text.secondary} name="x" size="sm" />
+              <VexIcon color={vexFire.textSecondary} name="x" size="sm" variant="solid" />
             </Pressable>
           </View>
 
           <ScrollView keyboardShouldPersistTaps="handled">
-            <Text style={[type.body, { marginTop: spacing[3] }]}>
+            <Text style={{ color: vexFire.textSecondary, fontSize: 15, marginTop: spacing[3] }}>
               {activeCopy?.prompt}
             </Text>
             <TextInput
@@ -152,12 +151,12 @@ export function Day0ActionSheet({
               multiline
               onChangeText={setText}
               placeholder="Example: I need to start my biology notes without spiraling."
-              placeholderTextColor={vexLightGlass.text.disabled}
-              style={{}}
+              placeholderTextColor={vexFire.textMuted}
+              style={{ backgroundColor: vexFire.backgroundRaised, borderColor: vexFire.border, borderRadius: borderRadius.lg, borderWidth: 1, color: vexFire.cream, fontSize: 16, minHeight: 112, padding: spacing[4], textAlignVertical: 'top' }}
               value={text}
             />
             {mode !== 'create' && plan ? (
-              <Text style={[type.body, { marginTop: spacing[3] }]}>
+              <Text style={{ color: vexFire.textSecondary, fontSize: 15, marginTop: spacing[3] }}>
                 {plan.summary}
               </Text>
             ) : null}
@@ -170,8 +169,11 @@ export function Day0ActionSheet({
               mt="md"
               onPress={handleSave}
               size="lg"
+              style={{ backgroundColor: vexFire.ember, borderRadius: borderRadius.lg }}
             >
-              {mode === 'create' ? 'Save brain dump' : 'Save tiny plan'}
+              <Text style={{ color: vexFire.background, fontSize: 16, fontWeight: '900' }}>
+                {mode === 'create' ? 'Save brain dump' : 'Save tiny plan'}
+              </Text>
             </Button>
           </ScrollView>
         </View>

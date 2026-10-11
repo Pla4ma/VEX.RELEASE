@@ -6,17 +6,17 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { AnalyticsDashboard } from '../../features/analytics/components/AnalyticsDashboard';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { usePremiumStatus } from '../../shared/monetization/use-revenuecat';
+import { usePremiumStatus } from '../../shared/monetization/use-revenuecat-derived';
 import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme/ThemeContext';
 import { Skeleton, SkeletonList } from '../../components/ui/Skeleton';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { VexRouteShell } from '../../shared/ui/vex/VexRouteShell';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 function AnalyticsScreen(): React.ReactNode {
   const navigation = useNavigation<NavigationProp>();
-  const { theme } = useTheme();
   const { user } = useAuthStore();
   const { isPremium, isLoading } = usePremiumStatus();
   const hasRedirectedRef = useRef(false);
@@ -35,12 +35,13 @@ function AnalyticsScreen(): React.ReactNode {
 
   if (!user || isLoading || !isPremium) {
     return (
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme.colors.background.primary },
-        ]}
+      <VexRouteShell
+        atmosphere="analytics"
+        eyebrow="Focus intelligence"
+        title="Analytics"
+        subtitle="VEX is reading the patterns behind your practice."
       >
+        <View style={[styles.container, { backgroundColor: vexFire.transparent }]}>
         {/* Header Skeleton */}
         <View style={styles.header}>
           <Skeleton width={180} height={28} />
@@ -61,7 +62,8 @@ function AnalyticsScreen(): React.ReactNode {
 
         {/* List Skeleton */}
         <SkeletonList count={4} itemHeight={60} />
-      </View>
+        </View>
+      </VexRouteShell>
     );
   }
 

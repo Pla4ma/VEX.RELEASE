@@ -9,6 +9,7 @@ import { Skeleton } from '../../../components/ui/Skeleton';
 import type { PlanStudyPlan } from '../../../features/plan/types';
 import { useTheme } from '../../../theme/ThemeContext';
 import { PlanModeEmptyState } from './PlanModeEmptyState';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 const PLAN_STUDY_ASSET = require('../../../../assets/vex/plan-study-fire.png');
 
@@ -77,10 +78,10 @@ export function PlanStudyView({
             accessibilityHint="Opens the study plan detail view"
             onPress={() => onSelectStudyPlan(plan.id)}
             style={({ pressed }) => ({
-              backgroundColor: pressed ? theme.colors.primary[900] : theme.colors.background.primary,
+              backgroundColor: pressed ? vexFire.backgroundSoft : vexFire.panel,
               borderRadius: theme.borderRadius.lg,
               borderWidth: 1,
-              borderColor: theme.colors.primary[800],
+              borderColor: vexFire.border,
               padding: theme.spacing[4],
               flexDirection: 'row',
               alignItems: 'center',
@@ -92,13 +93,13 @@ export function PlanStudyView({
                 width: theme.spacing[10],
                 height: theme.spacing[10],
                 borderRadius: theme.borderRadius.lg,
-                backgroundColor: theme.colors.primary[950],
+                backgroundColor: vexFire.backgroundRaised,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
               <Icon
-                color={theme.colors.semantic.primary}
+                color={vexFire.ember}
                 name="book-open"
                 size="md"
                 variant="solid"
@@ -137,7 +138,7 @@ export function PlanStudyView({
                   style={{
                     flex: 1,
                     height: theme.spacing[1],
-                    backgroundColor: theme.colors.primary[950],
+                    backgroundColor: vexFire.backgroundRaised,
                     borderRadius: theme.borderRadius.full,
                     marginTop: theme.spacing[2],
                   }}
@@ -146,7 +147,7 @@ export function PlanStudyView({
                     style={{
                       width: `${plan.progress}%`,
                       height: theme.spacing[1],
-                      backgroundColor: theme.colors.semantic.primary,
+                      backgroundColor: vexFire.ember,
                       borderRadius: theme.borderRadius.full,
                     }}
                   />
@@ -155,7 +156,7 @@ export function PlanStudyView({
             </View>
 
             <Icon
-              color={theme.colors.primary[700]}
+              color={vexFire.amber}
               name="chevron-right"
               size="sm"
               variant="solid"

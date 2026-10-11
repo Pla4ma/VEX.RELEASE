@@ -1,40 +1,23 @@
 import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import {
-  type CompositeNavigationProp,
-  type RouteProp,
-} from '@react-navigation/native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import type { CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Box } from '../../../components/primitives/Box';
+import { GlassScreen } from '../../../components/glass/GlassScreen';
 import { SessionStartStatusCard } from '../../../features/session-start/components/SessionStartStatusCard';
 import type { SessionDifficulty } from '../../../features/session-start/components/DifficultySelector';
 import { useSessionStartController } from '../../../features/session-start/hooks';
-import { SessionMode } from '../../../session/modes';
-import type {
-  ExtendedRootStackParams,
-  SessionStackParams,
-} from '../../../navigation/types';
+import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import type { ActiveStudyPlan } from '../../../features/content-study/hooks';
-import { SessionQuickStartCard } from '../SessionQuickStartCard';
-import { SessionContractInput } from './SessionContractInput';
-import { SessionSetupCustomizationSection } from './SessionSetupCustomizationSection';
-import { SessionSetupDifficultyCard } from './SessionSetupDifficultyCard';
-import { SessionSetupFooter } from './SessionSetupFooter';
-import { SessionSetupHeader } from './SessionSetupHeader';
-import { SessionSetupStakesCard } from './SessionSetupStakesCard';
-import { SessionSetupStudyPlanCard } from './SessionSetupStudyPlanCard';
-import { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
 import { buildLearningSessionParams } from '../../../features/learning-execution/service';
-import { isFeatureHidden } from '../../../features/liveops-config/FeatureFlagService';
-import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { SessionMode } from '../../../session/modes';
+import { SessionComposerView } from './SessionComposerView';
+import { SessionSetupAtmosphere } from './SessionSetupAtmosphere';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
   NativeStackNavigationProp<ExtendedRootStackParams>
 >;
-type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
-
 type ReturningUserViewProps = {
   controller: ReturnType<typeof useSessionStartController>;
   contractText: string;
@@ -42,7 +25,7 @@ type ReturningUserViewProps = {
   selectedDifficulty: SessionDifficulty;
   setSelectedDifficulty: (value: SessionDifficulty) => void;
   navigation: SessionNavigationProp;
-  route: SessionSetupRouteProp;
+  onStartSession?: () => void;
 };
 
 export function ReturningUserView({
@@ -52,122 +35,43 @@ export function ReturningUserView({
   selectedDifficulty,
   setSelectedDifficulty,
   navigation,
-  route,
-}: ReturningUserViewProps): React.ReactNode {
-  const stakes = useSessionSetupStakes({
-    currentStreakDays: controller.streak?.currentDays ?? null,
-    selectedDurationSeconds: controller.selectedDurationSeconds,
-    userId: controller.userId || '',
-  });
-  const showStakes =
-    !isFeatureHidden('boss_tab') || !isFeatureHidden('challenges');
-
-  const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan) => {
+  onStartSession,
+}: ReturningUserViewProps): React.JSX.Element {
+  const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan): void => {
     const target = controller.learningExecutionLayer.target;
     if (target) {
       navigation.setParams(buildLearningSessionParams(target));
     }
-    controller.setupState.setSelectedSessionMode(
-      target?.persona === 'creative'
-        ? SessionMode.CREATIVE
-        : target?.persona === 'student' || target?.persona === 'learning'
-          ? SessionMode.STUDY
-          : SessionMode.DEEP_WORK,
-    );
+    controller.setupState.setSelectedSessionMode(target?.persona === 'creative'
+      ? SessionMode.CREATIVE
+      : target?.persona === 'student' || target?.persona === 'learning'
+        ? SessionMode.STUDY
+        : SessionMode.DEEP_WORK);
     controller.setupState.setCustomDuration(studyPlan.remainingMinutes);
     controller.setupState.setShowCustomization(true);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-      <LiquidGlassScreen>
-        <SessionSetupHeader
-          durationSeconds={controller.selectedDurationSeconds}
-          mode={controller.setupState.selectedSessionMode}
-          onBack={() => navigation.goBack()}
-          userId={controller.userId}
-        />
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ paddingBottom: 140 }}
-        >
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+      <GlassScreen showAura={false} variant="focus">
+        <SessionSetupAtmosphere />
         <SessionStartStatusCard
           offlineMessage={controller.offlineMessage}
           routeWarningMessage={controller.parsedRoute.warningMessage}
           startErrorMessage={controller.startError}
           onDismissStartError={controller.clearStartError}
         />
-
-        <SessionSetupStudyPlanCard
-          copy={controller.learningExecutionLayer.copy}
-          studyPlan={controller.activeStudyPlan.data ?? null}
-          onSelect={handleStudyPlanSelect}
-        />
-
-        <SessionQuickStartCard
-          ctaLabel={controller.sessionSummary.ctaLabel}
-          customizationLabel={controller.sessionSummary.customizationLabel}
-          currentThemeName={controller.selectedTheme.name}
-          durationMinutes={Math.round(controller.selectedDurationSeconds / 60)}
-          heroBody={controller.sessionHero.body}
-          heroEyebrow={controller.sessionHero.eyebrow}
-          heroTitle={controller.sessionHero.title}
-          hasCustomizations={controller.setupState.showCustomization}
-          isStarting={controller.isStarting}
-          onCustomize={() =>
-            controller.setupState.setShowCustomization((current) => !current)
-          }
-          onStart={() => controller.handleStartSession()}
-          presetName={controller.setupState.selectedPreset.name}
-          smartSuggestion={controller.setupState.smartSuggestion}
-          subtitle={controller.sessionSummary.subtitle}
-          contractInput={
-            <SessionContractInput
-              disabled={controller.isStarting}
-              onChangeText={setContractText}
-              value={contractText}
-            />
-          }
-        />
-
-        {showStakes ? <SessionSetupStakesCard stakes={stakes} /> : null}
-
-        <SessionSetupDifficultyCard
-          disabled={controller.isStarting}
-          selected={selectedDifficulty}
-          selectedDurationSeconds={controller.selectedDurationSeconds}
-          onChange={setSelectedDifficulty}
-        />
-
-        <SessionSetupCustomizationSection
+        <SessionComposerView
           controller={controller}
-          routeParams={route.params}
+          contractText={contractText}
+          onBack={() => navigation.goBack()}
+          onContractChange={setContractText}
+          onDifficultyChange={setSelectedDifficulty}
+          onStudyPlanSelect={handleStudyPlanSelect}
+          onStart={onStartSession}
+          selectedDifficulty={selectedDifficulty}
         />
-
-        <Box height={120} />
-      </ScrollView>
-
-      {controller.setupState.showCustomization ? (
-        <SessionSetupFooter
-          breakDurationSeconds={
-            controller.setupState.selectedPreset.breakDuration
-          }
-          durationMinutes={Math.round(controller.selectedDurationSeconds / 60)}
-          intervalCount={controller.setupState.selectedPreset.intervals}
-          isStarting={controller.isStarting}
-          onStart={() => controller.handleStartSession()}
-          selectedSessionMode={controller.setupState.selectedSessionMode}
-          selectedThemeLabel={
-            controller.selectedThemeOwned ? controller.selectedTheme.name : null
-          }
-        />
-      ) : null}
-      </LiquidGlassScreen>
+      </GlassScreen>
     </KeyboardAvoidingView>
   );
 }

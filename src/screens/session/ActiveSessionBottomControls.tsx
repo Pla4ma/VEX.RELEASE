@@ -3,6 +3,7 @@ import { InterruptionWarning } from '../../session/components/InterruptionWarnin
 import { ActiveSessionControlDock } from './components/ActiveSessionControlDock';
 import { ActiveSessionControlRecovery } from './components/ActiveSessionControlRecovery';
 import type { ActiveSessionControlFailure } from './utils/active-session-control-failure';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 interface ActiveSessionBottomControlsProps {
   controlFailure: ActiveSessionControlFailure | null;
@@ -14,20 +15,9 @@ interface ActiveSessionBottomControlsProps {
   streakMultiplier: number;
   showInterruption: boolean;
   elapsedSeconds: number;
-  theme: {
-    colors: {
-      background: { elevated: string };
-      border: { light: string };
-      error: { DEFAULT: string };
-      info: { DEFAULT: string };
-      text: { inverse: string };
-      success: { DEFAULT: string };
-    };
-  };
   onClearControlFailure: () => void;
   onRetryControlFailure: () => void;
   onComplete: () => void;
-  onEnd: () => void;
   onPauseResume: () => void;
   onToggleMultiplierInfo: () => void;
   onResume: () => void;
@@ -44,11 +34,9 @@ export function ActiveSessionBottomControls({
   streakMultiplier,
   showInterruption,
   elapsedSeconds,
-  theme,
   onClearControlFailure,
   onRetryControlFailure,
   onComplete,
-  onEnd,
   onPauseResume,
   onToggleMultiplierInfo,
   onResume,
@@ -74,15 +62,14 @@ export function ActiveSessionBottomControls({
         showMultiplierInfo={showMultiplierInfo}
         streakMultiplier={streakMultiplier}
         themeColors={{
-          backgroundElevated: theme.colors.background.elevated,
-          border: theme.colors.border.light,
-          error: theme.colors.error.DEFAULT,
-          info: theme.colors.info.DEFAULT,
-          inverse: theme.colors.text.inverse,
-          success: theme.colors.success.DEFAULT,
+          backgroundElevated: vexFire.panel,
+          border: vexFire.border,
+          error: vexFire.danger,
+          info: vexFire.amber,
+          inverse: vexFire.background,
+          success: vexFire.success,
         }}
         onComplete={onComplete}
-        onEnd={onEnd}
         onPauseResume={onPauseResume}
         onToggleMultiplierInfo={onToggleMultiplierInfo}
       />

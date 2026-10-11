@@ -10,6 +10,7 @@ import { ReferenceMetric } from '../../reference-ui/ReferenceMetric';
 import { ref, type } from '../../reference-ui/referenceTokens';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
+import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -56,7 +57,7 @@ export function HomeMetricsRow({
         accessibilityHint="Open focus score dashboard"
         accessibilityLabel="Focus score card"
         accessibilityRole="button"
-        onPress={() => navigation.navigate('FocusScoreDashboard')}
+        onPress={() => navigateToRootScreen(navigation, 'FocusScoreDashboard')}
         style={({ pressed }) => [{ flex: 1 }, cardPressStyle(pressed)]}
       >
         <ReferenceCard accent="fire" showAsset={false}>

@@ -46,7 +46,7 @@ const bottomSecondaryEdgeStyle: ViewStyle = {
   zIndex: 11,
 };
 
-export function GlassCardTopEdge({ resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
+export function GlassCardTopEdge({ resolvedRadius: _resolvedRadius }: GlassCardHighlightProps): React.ReactNode {
   return <View pointerEvents="none" style={topEdgeStyle} />;
 }
 

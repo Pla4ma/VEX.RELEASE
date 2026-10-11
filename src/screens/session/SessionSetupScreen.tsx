@@ -9,7 +9,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 
 import { SESSION_SETUP_SOURCE_ONBOARDING } from '../../features/session-start/schemas';
 import type { SessionDifficulty } from '../../features/session-start/components/DifficultySelector';
@@ -18,10 +18,10 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from '../../navigation/types';
-import { FirstSessionView } from './components/SessionSetupFirstSessionView';
 import { ReturningUserView } from './components/SessionSetupReturningUserView';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { Text as VexText } from '../../components/primitives/Text';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { useOnboardingStore } from '../../features/onboarding/store';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -36,6 +36,9 @@ function SessionSetupScreenContent(): React.JSX.Element {
     const [contractText, setContractText] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] =
       useState<SessionDifficulty>('FOCUSED');
+    const markFirstSessionStarted = useOnboardingStore(
+      (state) => state.markFirstSessionStarted,
+    );
 
     const controller = useSessionStartController({
       navigation,
@@ -46,20 +49,11 @@ function SessionSetupScreenContent(): React.JSX.Element {
     const isFirstSessionSetup =
       route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
 
-    if (isFirstSessionSetup) {
-      return (
-        <FirstSessionView
-          navigation={navigation}
-          onBack={() => navigation.goBack()}
-        />
-      );
-    }
-
     if (!controller.userId) {
       return (
         <Box
           flex={1}
-          bg="background.primary"
+          style={{ backgroundColor: vexFire.background, flex: 1 }}
           justifyContent="center"
           alignItems="center"
           p="lg"
@@ -79,6 +73,13 @@ function SessionSetupScreenContent(): React.JSX.Element {
       );
     }
 
+    const handleStartSession = isFirstSessionSetup
+      ? () => {
+          markFirstSessionStarted();
+          void controller.handleStartSession();
+        }
+      : undefined;
+
     return (
       <ReturningUserView
         controller={controller}
@@ -87,7 +88,7 @@ function SessionSetupScreenContent(): React.JSX.Element {
         selectedDifficulty={selectedDifficulty}
         setSelectedDifficulty={setSelectedDifficulty}
         navigation={navigation}
-        route={route}
+        onStartSession={handleStartSession}
       />
     );
 }

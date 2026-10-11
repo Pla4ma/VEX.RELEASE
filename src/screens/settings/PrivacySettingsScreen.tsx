@@ -9,7 +9,7 @@ import { Text } from '../../components/primitives/Text';
 import type { SettingsStackParams } from '../../navigation';
 import { useDeleteAccount } from '../../features/account-deletion/hooks';
 import { useAuthStore, useUIStore } from '../../store/index';
-import { usePaywall } from '../../shared/monetization/use-revenuecat';
+import { usePaywall } from '../../shared/monetization/use-revenuecat-derived';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
@@ -18,6 +18,7 @@ import type { ToggleKey } from './privacy-toggle-data';
 import { LiquidGlassCard } from '../../shared/ui/liquid-glass/LiquidGlassCard';
 import { LiquidGlassHeader, liquidGlassSpacing } from '../../shared/ui/liquid-glass/LiquidGlassHeader';
 import { LiquidGlassScreen } from '../../shared/ui/liquid-glass/LiquidGlassScreen';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
 
@@ -129,12 +130,12 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
           size="md"
           style={{ marginBottom: theme.spacing[4] }}
         >
-          <Text variant="body" color="text.primary">
+          <Text variant="body" color={vexFire.cream}>
             Data Export
           </Text>
           <Text
             variant="caption"
-            color="text.secondary"
+            color={vexFire.textSecondary}
             style={{ marginTop: theme.spacing[1] }}
           >
             Export is disabled until the verified export pipeline is live. No
@@ -149,7 +150,7 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
           onPress={restorePurchases}
           style={{
             alignItems: 'center',
-            borderColor: theme.colors.border.DEFAULT,
+            borderColor: vexFire.border,
             borderRadius: theme.borderRadius.lg,
             borderWidth: 1,
             marginBottom: theme.spacing[3],
@@ -157,7 +158,7 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
             justifyContent: 'center',
           }}
         >
-          <Text variant="button" color="text.primary">
+          <Text variant="button" color={vexFire.cream}>
             Restore Purchases
           </Text>
         </Pressable>
@@ -170,7 +171,7 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
           onPress={confirmDelete}
           style={{
             alignItems: 'center',
-            backgroundColor: theme.colors.error.DEFAULT,
+            backgroundColor: vexFire.danger,
             borderRadius: theme.borderRadius.lg,
             minHeight: 56,
             justifyContent: 'center',
@@ -179,7 +180,7 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
               : theme.opacity[100],
           }}
         >
-          <Text variant="button" color="text.inverse">
+          <Text variant="button" color={vexFire.cream}>
             {deleteAccountMutation.isPending
               ? 'Deleting Account...'
               : 'Delete Account'}

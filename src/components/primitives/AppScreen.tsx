@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../theme/ThemeContext';
 import { OfflineBanner } from '../../shared/ui/components/OfflineBanner';
-import { GlassScreen } from '../glass/GlassScreen';
+import { GlassScreen, type GlassScreenAtmosphereVariant } from '../glass/GlassScreen';
 
 interface AppScreenProps {
   children: ReactNode;
@@ -21,6 +21,7 @@ interface AppScreenProps {
   contentStyle?: ViewStyle;
   style?: ViewStyle;
   bottomInset?: boolean;
+  variant?: GlassScreenAtmosphereVariant;
 }
 
 export function AppScreen({
@@ -31,12 +32,13 @@ export function AppScreen({
   contentStyle,
   style,
   bottomInset = true,
+  variant,
 }: AppScreenProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const content = {
     paddingBottom: bottomInset
-      ? insets.bottom + 112
+      ? insets.bottom + theme.spacing[16] + theme.spacing[2]
       : theme.spacing[8],
     paddingHorizontal: padded ? theme.spacing[4] : 0,
     paddingTop: theme.spacing[3],
@@ -55,8 +57,8 @@ export function AppScreen({
   );
 
   const screen = (
-    <GlassScreen contentStyle={{ backgroundColor: 'transparent' }} showAura>
-      <StatusBar style="dark" />
+    <GlassScreen contentStyle={{ backgroundColor: 'transparent' }} showAura variant={variant}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <View style={[{ backgroundColor: 'transparent', flex: 1 }, style]}>
         {body}
         <OfflineBanner />

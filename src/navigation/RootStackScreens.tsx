@@ -5,9 +5,9 @@ import { AuthNavigator } from './AuthNavigator';
 
 import type { ExtendedRootStackParams } from './types';
 import { RootStackAuthenticatedRoutes } from './root-stack-authenticated-routes';
-import { RouteLoadingFallback } from './RouteLoadingFallback';
 import type { FeatureAccessMap } from '../features/liveops-config';
-import { lightColors } from '../theme/tokens/colors';
+import { vexFire } from '../theme/tokens/vex-fire';
+import { SessionNavigator } from './SessionNavigator';
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;
@@ -16,7 +16,6 @@ interface RootStackScreensProps {
 }
 
 const Stack = createNativeStackNavigator<ExtendedRootStackParams>();
-const SessionNavigator = React.lazy(() => import('./SessionNavigator'));
 
 export const RootStackScreens: React.ComponentType<RootStackScreensProps> = ({
   hasCompletedOnboarding,
@@ -36,7 +35,7 @@ export const RootStackScreens: React.ComponentType<RootStackScreensProps> = ({
       key={navigatorKey}
       screenOptions={{
         animation: 'none',
-        contentStyle: { backgroundColor: lightColors.background.primary },
+        contentStyle: { backgroundColor: vexFire.background },
         headerShown: false,
       }}
     >
@@ -50,19 +49,12 @@ export const RootStackScreens: React.ComponentType<RootStackScreensProps> = ({
 
           <Stack.Screen
             name="SessionStack"
+            component={SessionNavigator}
             options={{
               animation: 'slide_from_bottom',
               presentation: 'fullScreenModal',
             }}
-          >
-            {() => (
-              <React.Suspense
-                fallback={<RouteLoadingFallback label="Session" />}
-              >
-                <SessionNavigator />
-              </React.Suspense>
-            )}
-          </Stack.Screen>
+          />
         </>
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />

@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Icon } from '../../icons/components/Icon';
 import { Text } from '../../components/primitives/Text';
-import { GlassPill } from '../../components/glass/GlassPill';
-import { ref, type } from './referenceTokens';
+import { useTheme } from '../../theme/ThemeContext';
+
 
 interface ReferenceHeaderProps {
   eyebrow?: string;
@@ -21,35 +21,56 @@ export function ReferenceHeader({
   mode,
   onAction,
 }: ReferenceHeaderProps): React.ReactNode {
+  const { theme } = useTheme();
   return (
-    <View style={{ marginBottom: 12, paddingTop: 2 }}>
+    <View style={{ marginBottom: theme.spacing[4], paddingTop: theme.spacing[1] }}>
       <View
         style={{
           alignItems: 'center',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: 14,
+          marginBottom: theme.spacing[4],
         }}
       >
-        <Text style={{ color: ref.ink, fontSize: 24, fontWeight: '300', letterSpacing: 6 }}>
-          VEX
-        </Text>
-        {mode ? <GlassPill label={mode} size="sm" variant="mint" /> : null}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2] }}>
+          <View
+            style={{
+              width: theme.spacing[2],
+              height: theme.spacing[2],
+              borderRadius: theme.borderRadius.full,
+              backgroundColor: theme.colors.primary[500],
+            }}
+          />
+          <Text variant="h3">VEX</Text>
+        </View>
+        {mode ? (
+          <Text variant="label" color="text.secondary">
+            {mode}
+          </Text>
+        ) : null}
         {onAction ? (
           <Pressable
             accessibilityHint="Opens screen action"
             accessibilityLabel="Open action"
             accessibilityRole="button"
             onPress={onAction}
-            style={{}}
+            style={{ minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}
           >
-            <Icon color={ref.ink} name="notification" size="sm" />
+            <Icon color={theme.colors.text.primary} name="notification" size="sm" />
           </Pressable>
         ) : null}
       </View>
-      {eyebrow ? <Text style={[type.kicker, { marginBottom: 6 }]}>{eyebrow}</Text> : null}
-      <Text style={type.hero}>{title}</Text>
-      {body ? <Text style={[type.body, { marginTop: 6 }]}>{body}</Text> : null}
+      {eyebrow ? (
+        <Text variant="label" color="primary.500" style={{ marginBottom: theme.spacing[2] }}>
+          {eyebrow}
+        </Text>
+      ) : null}
+      <Text variant="h1">{title}</Text>
+      {body ? (
+        <Text variant="body" color="text.secondary" style={{ marginTop: theme.spacing[2] }}>
+          {body}
+        </Text>
+      ) : null}
     </View>
   );
 }

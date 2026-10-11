@@ -13,17 +13,16 @@ import { Box, Text } from '../../components/primitives';
 import { Button } from '../../components/primitives/Button';
 import { useAuthStore } from '../../store';
 import { getStreakService } from '../../streaks/StreakService';
-import { useTheme } from '../../theme/ThemeContext';
 import { useToast } from '../../shared/ui/components/Toast';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { StreakFuneralFlame } from './StreakFuneralFlame';
 import { Text as VexText } from '../../components/primitives/Text';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 type StreakFuneralRoute = RouteProp<ExtendedRootStackParams, 'StreakFuneral'>;
 type StreakFuneralNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 const StreakFuneralScreen: React.ComponentType = () => {
-  const { theme } = useTheme();
   const { show: showToast } = useToast();
   const { user } = useAuthStore();
   const navigation = useNavigation<StreakFuneralNavigation>();
@@ -64,7 +63,7 @@ const StreakFuneralScreen: React.ComponentType = () => {
     completeFuneral();
   }, [completeFuneral]);
   return (
-    <Box flex={1} bg="background.primary" px="lg" pt="xl">
+    <Box flex={1} style={{ backgroundColor: vexFire.background }} px="lg" pt="xl">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
@@ -76,10 +75,10 @@ const StreakFuneralScreen: React.ComponentType = () => {
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(400)}>
           <Box alignItems="center" mb="xl">
-            <Text variant="h2" color="text.primary" textAlign="center" mb="md">
+              <Text variant="h2" style={{ color: vexFire.cream }} textAlign="center" mb="md">
               {previousStreak}-day rhythm paused
             </Text>
-            <Text variant="body" color="text.secondary" textAlign="center">
+            <Text variant="body" style={{ color: vexFire.textSecondary }} textAlign="center">
               {daysSinceDeath > 0
                 ? `${daysSinceDeath} day${daysSinceDeath !== 1 ? 's' : ''} ago`
                 : `${hoursSinceDeath} hour${hoursSinceDeath !== 1 ? 's' : ''} ago`}
@@ -88,7 +87,7 @@ const StreakFuneralScreen: React.ComponentType = () => {
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(500)}>
           <Box alignItems="center" mb="xl">
-            <Text variant="body" color="text.secondary" textAlign="center">
+            <Text variant="body" color={vexFire.textSecondary} textAlign="center">
               {previousStreak} days of focus. Every day built your rhythm, and
               that rhythm starts again today.
             </Text>
@@ -96,24 +95,22 @@ const StreakFuneralScreen: React.ComponentType = () => {
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(600)}>
           <Box
-            bg="background.secondary"
+            style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1 }}
             p="xl"
             borderRadius="lg"
             alignItems="center"
             mb="2xl"
-            style={{ borderWidth: 1, borderColor: theme.colors.border.light }}
           >
-            <Text variant="caption" color="text.secondary" mb="sm">
+            <Text variant="caption" color={vexFire.textSecondary} mb="sm">
               YOUR RHYTHM
             </Text>
             <Text
               variant="hero"
-              color="primary.500"
-              style={{ fontSize: 72, fontWeight: '800' }}
+              style={{ color: vexFire.ember, fontSize: 72, fontWeight: '800' }}
             >
               {previousStreak}
             </Text>
-            <Text variant="h4" color="text.primary">
+            <Text variant="h4" style={{ color: vexFire.cream }}>
               {previousStreak === 1 ? 'day' : 'days'}
             </Text>
           </Box>
@@ -122,13 +119,13 @@ const StreakFuneralScreen: React.ComponentType = () => {
           <Box mb="2xl">
             <Text
               variant="body"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               textAlign="center"
               mb="md"
             >
               "Every comeback is proof of real consistency.
             </Text>
-            <Text variant="body" color="text.secondary" textAlign="center">
+            <Text variant="body" color={vexFire.textSecondary} textAlign="center">
               Starting fresh is not failure. It is commitment."
             </Text>
           </Box>

@@ -18,7 +18,7 @@ import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { VexAssetImage } from '../../../components/glass/VexAssetImage';
 import { Text } from '../../../components/primitives/Text';
 import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 import {
   FocusRingSvg,
@@ -130,7 +130,7 @@ export function FocusRing({
           />
           <Text
             style={{
-              color: vexLightGlass.text.primary,
+              color: vexFire.cream,
               fontSize: 72,
               fontWeight: '900',
               fontVariant: ['tabular-nums'],
@@ -142,8 +142,8 @@ export function FocusRing({
             <Text
               style={{
                 color: isPaused
-                  ? vexLightGlass.semantic.fireDeep
-                  : vexLightGlass.text.secondary,
+                  ? vexFire.ember
+                  : vexFire.textSecondary,
                 fontSize: 56,
                 fontWeight: '700',
                 letterSpacing: -1,
@@ -155,8 +155,8 @@ export function FocusRing({
           <Text
             style={{
               color: isPaused
-                ? vexLightGlass.semantic.fireDeep
-                : vexLightGlass.text.tertiary,
+                ? vexFire.ember
+                : vexFire.textMuted,
               fontSize: 12,
               fontWeight: '800',
               letterSpacing: 2.4,

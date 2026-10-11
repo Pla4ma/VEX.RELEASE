@@ -58,6 +58,10 @@ export function usePowerUserNavigation(params: {
     navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
+  const openCoach = useCallback((): void => {
+    navigateToMainStackScreen(navigation, 'AICoach');
+  }, [navigation]);
+
   const openSocial = useCallback(() => {
     navigateToMainTab(navigation, 'Profile');
   }, [navigation]);
@@ -94,6 +98,7 @@ export function usePowerUserNavigation(params: {
   return {
     openSetup,
     openProgress,
+    openCoach,
     openSocial,
     openContentStudy,
     continueStudyPlan,

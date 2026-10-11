@@ -8,6 +8,7 @@ import Svg, {
 } from 'react-native-svg';
 
 import { COLOR_CONFIGS, type GlassSphereColorConfig } from './LiquidGlassSphere.tokens';
+import { glassSvgColors } from './glassSvgColors';
 import { SphereDefs } from './LiquidGlassSphere.defs';
 
 interface LiquidGlassSphereProps {
@@ -38,7 +39,7 @@ export function LiquidGlassSphereRaw({
         {
           height: size,
           width: size,
-          boxShadow: `0px size * 0.06px size * 0.12px rgba(10, 94, 77, NaN)`,
+          boxShadow: `0px ${size * 0.06}px ${size * 0.12}px ${glassSvgColors.vexDeepTeal}`,
         },
         style,
       ]}
@@ -116,7 +117,7 @@ export function LiquidGlassSphereRaw({
           <Circle
             cx={center - r * 0.32}
             cy={center - r * 0.38}
-            fill="theme.glassColors.vexWhite"
+            fill={glassSvgColors.vexWhite}
             opacity={0.95}
             r={r * 0.06}
           />
@@ -124,7 +125,7 @@ export function LiquidGlassSphereRaw({
             d={`M ${center - r * 0.55} ${center - r * 0.68} Q ${center} ${center - r * 0.88} ${center + r * 0.45} ${center - r * 0.72}`}
             fill="none"
             opacity={0.78}
-            stroke="theme.glassColors.vexWhite"
+            stroke={glassSvgColors.vexWhite}
             strokeLinecap="round"
             strokeWidth={size * 0.015}
           />
@@ -135,7 +136,7 @@ export function LiquidGlassSphereRaw({
             opacity={0.65}
             rx={r * 0.55}
             ry={r * 0.42}
-            stroke="theme.glassColors.vexWhite"
+            stroke={glassSvgColors.vexWhite}
             strokeWidth={size * 0.008}
             transform={`rotate(-20, ${center - r * 0.08}, ${center - r * 0.12})`}
           />

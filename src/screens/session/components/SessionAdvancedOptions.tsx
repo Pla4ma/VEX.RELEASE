@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -21,7 +22,7 @@ export function SessionAdvancedOptions({
   selectedPreset,
   showAdvanced,
 }: SessionAdvancedOptionsProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Box px="lg" mt="lg">
@@ -32,14 +33,14 @@ export function SessionAdvancedOptions({
         accessibilityHint="Double tap to activate"
       >
         <Box flexDirection="row" alignItems="center" py="md">
-          <Text variant="label" color="text.secondary">
+          <Text variant="label" color={vexFire.textSecondary}>
             Advanced options
           </Text>
           <Box ml="sm">
             <Icon
               name={showAdvanced ? 'chevron-up' : 'chevron-down'}
               size="sm"
-              color={theme.colors.text.secondary}
+              color={vexFire.textSecondary}
             />
           </Box>
         </Box>

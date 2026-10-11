@@ -11,6 +11,7 @@ import { useUIStore } from '../../../store';
 import { buttonTap } from '../../../utils/haptics';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { GoalChip } from './GoalChip';
 
 
@@ -46,14 +47,14 @@ export function BaselineSignalCard(): React.ReactNode {
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: theme.colors.primary[100],
+              backgroundColor: vexFire.backgroundSoft,
               borderRadius: theme.borderRadius.full,
               height: 28,
               justifyContent: 'center',
               width: 28,
             }}
           >
-            <Icon color={theme.colors.primary[700]} name="target" size="sm" />
+            <Icon color={vexFire.ember} name="target" size="sm" />
           </View>
           <Text color="primary.500" variant="label">Day 0 signal</Text>
         </View>
@@ -75,7 +76,7 @@ export function BaselineSignalCard(): React.ReactNode {
         </View>
         {goal ? (
           <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[2] }}>
-            <Icon color={theme.colors.primary[700]} name="check-circle" size="sm" />
+            <Icon color={vexFire.ember} name="check-circle" size="sm" />
             <Text color="primary.700" variant="bodySmall">
               {GOAL_OPTIONS.find((g) => g.key === goal)?.description}
             </Text>

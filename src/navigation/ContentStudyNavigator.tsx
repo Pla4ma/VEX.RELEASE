@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator<ContentStudyStackParamList>();
 
 export function ContentStudyNavigator(): React.ReactNode {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="ContentHistory" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ContentInput" component={ContentInputScreen} />
       <Stack.Screen name="ContentReview" component={ContentReviewScreen} />
       <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />

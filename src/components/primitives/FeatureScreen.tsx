@@ -6,18 +6,18 @@
  */
 
 import React from 'react';
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, Pressable } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Pressable } from 'react-native';
-
 import { Box } from './Box';
 import { Text } from './Text';
 import { Icon } from '../../icons/components/Icon';
 import { useTheme } from '../../theme/ThemeContext';
 import { ErrorState } from '../../shared/ui/state-components/error-state';
 import { Skeleton } from '../../shared/ui/primitives/Skeleton';
+import { getMinTouchTargetStyle } from '../../utils/touchTarget';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 interface FeatureScreenProps {
   title: string;
@@ -50,76 +50,70 @@ export const FeatureScreen: React.ComponentType<FeatureScreenProps> = ({
 }) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const Container = scrollable ? ScrollView : Box;
   const containerProps = scrollable
     ? {
         showsVerticalScrollIndicator: false,
-        contentContainerStyle: { flexGrow: 1 },
+        contentContainerStyle: {
+          flexGrow: 1,
+          paddingBottom: insets.bottom + theme.spacing[8],
+        },
       }
     : { flex: 1 };
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+      style={{ flex: 1, backgroundColor: vexFire.background }}
       edges={['top']}
     >
       {/* Standard Header */}
       <Box
-        flexDirection="row"
         alignItems="center"
+        flexDirection="row"
         px="lg"
         pt="md"
         pb="sm"
         style={{
+          borderBottomColor: vexFire.border,
           borderBottomWidth: 1,
-          borderBottomColor: theme.colors.border.DEFAULT,
         }}
       >
-        {showBackButton && (
+        {showBackButton ? (
           <Pressable
             onPress={() => navigation.goBack()}
             accessibilityRole="button"
             accessibilityLabel="Go back"
-            style={{ padding: 8, marginLeft: -8, marginRight: 8 }}
+            style={getMinTouchTargetStyle()}
             accessibilityHint="Double tap to activate"
           >
-            <Icon name="back" size="md" color={theme.colors.text.primary} />
+            <Icon name="back" size="md" color={vexFire.cream} />
           </Pressable>
-        )}
-
-        <Box flex={1}>
-          <Text variant="h3" numberOfLines={1}>
-            {title}
-          </Text>
-          {subtitle && (
+        ) : null}
+        <Box flex={1} ml={showBackButton ? 'sm' : undefined}>
+          <Text variant="h3" numberOfLines={1}>{title}</Text>
+          {subtitle ? (
             <Text variant="caption" color="text.secondary" numberOfLines={1}>
               {subtitle}
             </Text>
-          )}
+          ) : null}
         </Box>
-
-        {rightAction && (
+        {rightAction ? (
           <Pressable
             onPress={rightAction.onPress}
             accessibilityRole="button"
             accessibilityLabel={rightAction.label}
-            style={{ padding: 8 }}
+            style={getMinTouchTargetStyle()}
             accessibilityHint="Double tap to activate"
           >
-            <Icon
-              name={rightAction.icon}
-              size="md"
-              color={theme.colors.primary[500]}
-            />
+            <Icon name={rightAction.icon} size="md" color={vexFire.amber} />
           </Pressable>
-        )}
+        ) : null}
       </Box>
-
-      {/* Content */}
       <Container {...containerProps}>
         <Animated.View
           entering={FadeIn.duration(300)}
-          style={padded ? { paddingHorizontal: 16 } : undefined}
+          style={padded ? { paddingHorizontal: theme.spacing[4] } : undefined}
         >
           {isLoading ? (
             <Box pt="lg">
@@ -128,7 +122,7 @@ export const FeatureScreen: React.ComponentType<FeatureScreenProps> = ({
                   key={`item-${i}`}
                   variant="rounded"
                   height={80}
-                  style={{ marginBottom: 12 }}
+                  style={{ marginBottom: theme.spacing[3] }}
                 />
               ))}
             </Box>

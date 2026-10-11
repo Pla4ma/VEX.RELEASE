@@ -4,7 +4,7 @@
  * Accepts stage-specific data via a minimal common interface.
  * Wires controller + data to the existing HomeContent component.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -26,6 +26,8 @@ import { useHomeScreenInnerEffects } from './useHomeScreenInnerEffects';
 import { HomeTopBar } from './HomeTopBar';
 import { spacing } from '../../../theme/tokens/spacing';
 import { HomeAtmosphere } from '../components/HomeAtmosphere';
+import type { CoachAgentDecision } from '../../../features/invisible-agent';
+import { resolveHomeAgentIntent } from '../services/home-agent-action';
 
 export type { HomeDataProps, HomeScreenInnerProps } from './HomeScreenInnerTypes';
 
@@ -58,6 +60,18 @@ function HomeScreenInnerRaw({
     (controller.disclosure?.features as FeatureAccessMap | undefined) ??
     ({} as FeatureAccessMap);
   const safeStreakHours = streakHoursRemaining ?? 0;
+  const handleAgentConfirm = useCallback((decision: CoachAgentDecision): void => {
+    const intent = resolveHomeAgentIntent(decision);
+    if (intent === 'continue-study') {
+      controller.continueStudyPlan();
+      return;
+    }
+    if (intent === 'review-progress') {
+      controller.openProgress();
+      return;
+    }
+    controller.openSetup();
+  }, [controller]);
 
   const {
     resolvedExperience,
@@ -143,6 +157,9 @@ function HomeScreenInnerRaw({
               surfaceMap={surfaceMap}
               resolvedExperience={resolvedExperience}
               firstWeekExperience={firstWeekExperience}
+              agentQuery={data.invisibleAgentQuery}
+              onAgentConfirm={handleAgentConfirm}
+              onOpenCoach={controller.openCoach}
             />
           </ScrollView>
         </View>

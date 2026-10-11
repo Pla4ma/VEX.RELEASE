@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -19,13 +20,13 @@ export const PasswordField: React.ComponentType<PasswordFieldProps> = ({
   placeholder,
   marginBottom = 12,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Box mb={marginBottom}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{ marginBottom: 4 }}
       >
         {label}
@@ -37,14 +38,14 @@ export const PasswordField: React.ComponentType<PasswordFieldProps> = ({
         secureTextEntry
         maxLength={128}
         style={{
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
           padding: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          color: theme.colors.text.primary,
+          borderColor: vexFire.border,
+          color: vexFire.cream,
         }}
-        placeholderTextColor={theme.colors.text.tertiary}
+        placeholderTextColor={vexFire.textMuted}
       />
     </Box>
   );

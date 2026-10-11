@@ -11,7 +11,7 @@ import type { HeadlineReward } from '../../../features/session-completion/headli
 import { triggerHaptic } from '../../../utils/haptics';
 
 const RETRY_DELAYS_MS = [500, 1000, 2000] as const;
-const MAX_RETRY_ATTEMPTS = 3;
+const _MAX_RETRY_ATTEMPTS = 3;
 
 type RewardCreditStatus =
   | 'idle'

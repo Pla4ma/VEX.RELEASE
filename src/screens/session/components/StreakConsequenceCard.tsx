@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 
@@ -29,13 +30,13 @@ export function StreakConsequenceCard({
         width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: streakSaved
-          ? `${theme.colors.error[500]}15`
-          : `${theme.colors.accent.orange}15`,
+          ? `${vexFire.danger}15`
+          : `${vexFire.ember}15`,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
         borderColor: streakSaved
-          ? theme.colors.error[500]
-          : theme.colors.accent.orange,
+          ? vexFire.danger
+          : vexFire.ember,
         marginRight: theme.spacing[3],
       }}
     >
@@ -48,14 +49,14 @@ export function StreakConsequenceCard({
         }}
       >
         <Text fontSize={24} />
-        <Text variant="body" fontWeight="700" color="text.primary">
+        <Text variant="body" fontWeight="700" color={vexFire.cream}>
           {streakSaved ? 'Streak Saved!' : `Day ${currentDays} Complete`}
         </Text>
       </View>
 
       <Text
         variant="body"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{ marginBottom: theme.spacing[2] }}
       >
         {streakSaved
@@ -66,14 +67,14 @@ export function StreakConsequenceCard({
       <View
         style={{
           padding: theme.spacing[3],
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
           borderRadius: theme.borderRadius.lg,
         }}
       >
-        <Text variant="caption" color="text.tertiary">
+        <Text variant="caption" color={vexFire.textMuted}>
           NEXT MILESTONE
         </Text>
-        <Text variant="body" fontWeight="600" color="text.primary">
+        <Text variant="body" fontWeight="600" color={vexFire.cream}>
           Day {nextMilestone} in {daysUntilMilestone} days
         </Text>
       </View>

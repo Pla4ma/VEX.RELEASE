@@ -11,6 +11,7 @@ import { PlanStudyView } from './PlanStudyView';
 import { PlanTodayView } from './PlanTodayView';
 import { PlanWeekView } from './PlanWeekView';
 import { usePlanScreenActions } from '../usePlanScreenActions';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 const PLAN_SECTIONS = ['today', 'week', 'projects', 'study'] as const;
 type PlanSection = typeof PLAN_SECTIONS[number];
@@ -32,13 +33,13 @@ export function PlanWorkspace(): React.ReactNode {
   return (
     <View style={{ gap: theme.spacing[3] }}>
       <View style={{ gap: theme.spacing[1], paddingHorizontal: theme.spacing[1] }}>
-        <Text color={theme.colors.semantic.primary} variant="label">Plan</Text>
+        <Text color={vexFire.ember} variant="label">Plan</Text>
         <Text variant="h2">Today, week, projects, study.</Text>
       </View>
 
       <View
         style={{
-          borderBottomColor: theme.colors.primary[800],
+          borderBottomColor: vexFire.line,
           borderBottomWidth: 1,
           flexDirection: 'row',
           padding: theme.spacing[1],
@@ -56,7 +57,7 @@ export function PlanWorkspace(): React.ReactNode {
               onPress={() => selectSection(section)}
               style={({ pressed }) => ({
                 alignItems: 'center',
-                backgroundColor: selected ? theme.colors.primary[100] : 'transparent',
+                backgroundColor: selected ? vexFire.ember : 'transparent',
                 borderRadius: selected ? theme.borderRadius.md : 0,
                 flex: 1,
                 minHeight: 44,
@@ -65,7 +66,7 @@ export function PlanWorkspace(): React.ReactNode {
               })}
             >
               <Text
-                color={selected ? theme.colors.semantic.primary : 'text.tertiary'}
+                color={selected ? vexFire.background : vexFire.textMuted}
                 style={{ textTransform: 'capitalize' }}
                 variant="label"
               >

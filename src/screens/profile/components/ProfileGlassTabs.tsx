@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { glassHaptics } from '../../../shared/feedback/GlassHaptics';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 
 export type ProfileTab = 'stats' | 'mastery' | 'activity';
@@ -27,7 +28,7 @@ export const ProfileGlassTabs: React.ComponentType<ProfileGlassTabsProps> = ({
   return (
     <View
       style={{
-        borderBottomColor: theme.colors.primary[800],
+        borderBottomColor: vexFire.line,
         borderBottomWidth: 1,
         flexDirection: 'row',
         height: 48,
@@ -51,7 +52,7 @@ export const ProfileGlassTabs: React.ComponentType<ProfileGlassTabsProps> = ({
             }}
             style={{
               alignItems: 'center',
-              backgroundColor: isActive ? theme.colors.primary[100] : 'transparent',
+              backgroundColor: isActive ? vexFire.ember : 'transparent',
               borderRadius: isActive ? theme.borderRadius.md : 0,
               flex: 1,
               margin: theme.spacing[1],
@@ -61,7 +62,7 @@ export const ProfileGlassTabs: React.ComponentType<ProfileGlassTabsProps> = ({
           >
             <Text
               style={{
-                color: isActive ? theme.colors.semantic.primary : theme.colors.text.secondary,
+                color: isActive ? vexFire.background : vexFire.textSecondary,
                 fontWeight: isActive ? '800' : '700',
               }}
               variant="label"

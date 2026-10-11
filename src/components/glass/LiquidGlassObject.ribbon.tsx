@@ -1,5 +1,6 @@
 import React from 'react';
 import { G, Path } from 'react-native-svg';
+import { glassSvgColors } from './glassSvgColors';
 
 interface VariantProps {
   size: number;
@@ -27,7 +28,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx + size * 0.28} ${cy + size * 0.22} ${cx + size * 0.22} ${cy + size * 0.18}`}
         fill="none"
         opacity={0.22}
-        stroke="theme.glassColors.vexDeepTeal"
+        stroke={glassSvgColors.vexDeepTeal}
         strokeLinecap="round"
         strokeWidth={size * 0.02}
       />
@@ -50,7 +51,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx - size * 0.08} ${cy - size * 0.28} ${cx + size * 0.08} ${cy - size * 0.15}`}
         fill="none"
         opacity={0.78}
-        stroke="theme.glassColors.vexWhite"
+        stroke={glassSvgColors.vexWhite}
         strokeLinecap="round"
         strokeWidth={size * 0.015}
       />
@@ -59,7 +60,7 @@ export function RibbonVariant({ size }: VariantProps): React.ReactNode {
             Q ${cx + size * 0.22} ${cy + size * 0.22} ${cx + size * 0.18} ${cy + size * 0.08}`}
         fill="none"
         opacity={0.45}
-        stroke="theme.glassColors.vexWhite"
+        stroke={glassSvgColors.vexWhite}
         strokeLinecap="round"
         strokeWidth={size * 0.01}
       />

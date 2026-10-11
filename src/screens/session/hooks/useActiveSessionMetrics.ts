@@ -9,7 +9,7 @@ import {
 import { getStreakMultiplier } from '../../../features/streaks/service';
 import type { SessionTheme } from '../../../features/themes/session-themes';
 import type { SessionHistoryEntry } from '../../../session/types';
-import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { useSessionAnimations } from './useSessionAnimations';
 import { useSessionPurity } from './useSessionPurity';
 import {
@@ -46,11 +46,10 @@ export function useActiveSessionMetrics({
   isPaused,
   phase,
   sessionId,
-  sessionTheme,
+  sessionTheme: _sessionTheme,
   streakDays,
   heroDensity,
 }: UseActiveSessionMetricsParams) {
-  const { theme } = useTheme();
   const streakMultiplier = getStreakMultiplier(streakDays);
 
   const {
@@ -71,20 +70,20 @@ export function useActiveSessionMetrics({
 
   const phaseAccent =
     phase === 'SHORT_BREAK' || phase === 'LONG_BREAK'
-      ? theme.colors.success.DEFAULT
+      ? vexFire.success
       : purityLabel === 'Distracted' || purityLabel === 'Okay'
-        ? theme.colors.warning.DEFAULT
+        ? vexFire.amber
         : purityLabel === 'Good'
-          ? theme.colors.success.DEFAULT
-          : sessionTheme.previewColor;
+          ? vexFire.success
+          : vexFire.ember;
   const labelColor =
     purityLabel === 'Elite'
-      ? theme.colors.primary[500]
+      ? vexFire.ember
       : purityLabel === 'Good'
-        ? theme.colors.success.DEFAULT
+        ? vexFire.success
         : purityLabel === 'Okay'
-          ? theme.colors.warning.DEFAULT
-          : theme.colors.error.DEFAULT;
+          ? vexFire.amber
+          : vexFire.danger;
   const glowStyle = useMemo(
     () => ({
       shadowColor: phaseAccent,
@@ -114,9 +113,9 @@ export function useActiveSessionMetrics({
   });
 
   const [gradientState, setGradientState] = useState<GradientState>({
-    top: theme.colors.background.primary,
-    middle: theme.colors.background.secondary,
-    bottom: theme.colors.background.primary,
+    top: vexFire.background,
+    middle: vexFire.backgroundRaised,
+    bottom: vexFire.background,
   });
   const visualState = useSharedValue(2);
 

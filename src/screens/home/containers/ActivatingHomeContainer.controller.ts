@@ -28,12 +28,13 @@ export function buildActivatingController(params: {
   openProgress: () => void;
   openPlan: () => void;
   openCoach: () => void;
+  openContentStudy: () => void;
 }): HomeController {
   const {
     userId, isOnline, isLoading, isFirstRun, currentStreak, currentXp,
     todayFocusMinutes, progressPercent, latestSession, homeSpine, returnReason,
     disclosure, runtime, streakQuery, progressionQuery, historyQuery,
-    openSetup, openProgress, openPlan, openCoach,
+    openSetup, openProgress, openPlan, openCoach, openContentStudy,
   } = params;
 
   const homeHighlight = useSessionUIStore.getState().homeHighlight;
@@ -77,8 +78,8 @@ export function buildActivatingController(params: {
     openSocial: stubActions.openSocial,
     openPlan,
     openCoach,
-    openContentStudy: openSetup as () => void,
-    continueStudyPlan: openSetup as () => void,
+    openContentStudy,
+    continueStudyPlan: openContentStudy,
     createRecommendation: stubCoachMutations().createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: stubCoachMutations().updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: disclosure.refetchAll,

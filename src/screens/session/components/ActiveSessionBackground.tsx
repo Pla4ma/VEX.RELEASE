@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import { Image, useWindowDimensions, View } from 'react-native';
 import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient';
 import Animated, {
   FadeIn,
@@ -10,7 +10,9 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+
+const SANCTUARY_BACKGROUND = require('../../../../assets/vex/session/sanctuary-background.png');
 
 type ActiveSessionBackgroundProps = {
   accentOverlay: string;
@@ -20,7 +22,7 @@ type ActiveSessionBackgroundProps = {
 
 export function ActiveSessionBackground({
   accentOverlay,
-  colors,
+  colors: _colors,
   accentColor,
 }: ActiveSessionBackgroundProps): React.ReactNode {
   const { width, height } = useWindowDimensions();
@@ -52,11 +54,18 @@ export function ActiveSessionBackground({
       entering={FadeIn.duration(300)}
       style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
     >
+      <Image
+        accessibilityIgnoresInvertColors
+        source={SANCTUARY_BACKGROUND}
+        resizeMode="cover"
+        style={{ bottom: 0, height: '100%', left: 0, opacity: 0.9, position: 'absolute', right: 0, top: 0, width: '100%' }}
+      />
       <ExpoLinearGradient
-        colors={colors}
-        start={{ x: 0.15, y: 0 }}
-        end={{ x: 0.85, y: 1 }}
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+        colors={[vexFire.background, vexFire.transparent, vexFire.background]}
+        locations={[0, 0.52, 1]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }}
       />
       {accentColor ? (
         <Animated.View
@@ -66,7 +75,7 @@ export function ActiveSessionBackground({
               width: width * 0.8,
               height: width * 0.8,
               borderRadius: (width * 0.8) / 2,
-              backgroundColor: `${accentColor || lightColors.semantic.vexCyan}10`,
+              backgroundColor: `${accentColor || vexFire.ember}10`,
               top: height * 0.15,
               left: width * 0.1,
             },

@@ -1,11 +1,12 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme, type ThemeMode } from '@/theme';
 import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text'
 import { Card } from '@/components/primitives/Card';
-import { Icon } from '@/icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+import { VexIcon } from '@/shared/ui/vex/VexIcon';
+
 
 
 interface ThemeOption {
@@ -29,13 +30,13 @@ export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
   selectedTheme,
   onThemeChange,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -69,17 +70,17 @@ export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
                 style={{
                   backgroundColor:
                     selectedTheme === option.id
-                      ? theme.colors.primary[50]
-                      : theme.colors.background.secondary,
+                      ? vexFire.ember
+                      : vexFire.panel,
                 }}
               >
-                <Icon
+                <VexIcon
                   name={option.icon}
-                  size={20}
+                  size="md"
                   color={
                     selectedTheme === option.id
-                      ? theme.colors.primary[500]
-                      : theme.colors.text.tertiary
+                      ? vexFire.ember
+                      : vexFire.textMuted
                   }
                 />
               </Box>
@@ -88,7 +89,7 @@ export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
                   variant="body"
                   style={{
                     fontWeight: selectedTheme === option.id ? '600' : '500',
-                    color: theme.colors.text.primary,
+                    color: vexFire.cream,
                   }}
                 >
                   {option.label}
@@ -101,12 +102,12 @@ export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
                   borderRadius={12}
                   justifyContent="center"
                   alignItems="center"
-                  style={{ backgroundColor: theme.colors.primary[500] }}
+                  style={{ backgroundColor: vexFire.ember }}
                 >
-                  <Icon
+                  <VexIcon
                     name="check"
-                    size={14}
-                    color={lightColors.text.inverse}
+                    size="sm"
+                    color={vexFire.cream}
                   />
                 </Box>
               )}
@@ -115,7 +116,7 @@ export const ThemePicker: React.ComponentType<ThemePickerProps> = ({
               <Box
                 height={1}
                 ml={68}
-                style={{ backgroundColor: theme.colors.border.light }}
+                style={{ backgroundColor: vexFire.border }}
               />
             )}
           </React.Fragment>

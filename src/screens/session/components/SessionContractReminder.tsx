@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
@@ -56,7 +57,7 @@ export function SessionContractReminder({
       >
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           numberOfLines={2}
           flex={1}
         >
@@ -72,7 +73,7 @@ export function SessionContractReminder({
           style={getMinTouchTargetStyle()}
         >
           <Box flex={1} alignItems="center" justifyContent="center">
-            <Icon name="x" size="sm" color={theme.colors.text.secondary} />
+            <Icon name="x" size="sm" color={vexFire.textSecondary} />
           </Box>
         </Pressable>
       </Box>

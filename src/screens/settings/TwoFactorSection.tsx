@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useState } from 'react';
 import { Pressable, Switch, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -6,11 +7,11 @@ import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import { useUIStore } from '../../store/index';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export const TwoFactorSection: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { showToast } = useUIStore();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
@@ -62,7 +63,7 @@ export const TwoFactorSection: React.ComponentType = () => {
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -93,8 +94,8 @@ export const TwoFactorSection: React.ComponentType = () => {
             alignItems="center"
             style={{
               backgroundColor: twoFactorEnabled
-                ? theme.colors.success[50] || lightColors.success[50]
-                : theme.colors.background.secondary,
+                ? vexFire.panelSoft || vexFire.panelSoft
+                : vexFire.panel,
             }}
           >
             <Icon
@@ -102,8 +103,8 @@ export const TwoFactorSection: React.ComponentType = () => {
               size={20}
               color={
                 twoFactorEnabled
-                  ? theme.colors.success.DEFAULT
-                  : theme.colors.text.tertiary
+                  ? vexFire.success
+                  : vexFire.textMuted
               }
             />
           </Box>
@@ -113,14 +114,14 @@ export const TwoFactorSection: React.ComponentType = () => {
               variant="body"
               style={{
                 fontWeight: '500',
-                color: theme.colors.text.primary,
+                color: vexFire.cream,
               }}
             >
               Two-Factor Authentication
             </Text>
             <Text
               variant="caption"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{ marginTop: 2 }}
             >
               {twoFactorEnabled ? 'Enabled' : 'Add extra security'}
@@ -131,13 +132,13 @@ export const TwoFactorSection: React.ComponentType = () => {
             value={twoFactorEnabled}
             onValueChange={handleTwoFactorToggle}
             trackColor={{
-              false: theme.colors.background.tertiary,
-              true: theme.colors.success.DEFAULT + '80',
+              false: vexFire.backgroundSoft,
+              true: vexFire.success + '80',
             }}
             thumbColor={
               twoFactorEnabled
-                ? theme.colors.success.DEFAULT
-                : lightColors.text.inverse
+                ? vexFire.success
+                : vexFire.cream
             }
           />
         </Pressable>

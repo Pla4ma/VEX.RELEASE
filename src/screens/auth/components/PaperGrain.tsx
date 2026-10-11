@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { lightColors } from '@/theme/tokens/colors';
 
         
-const PALETTE_CREAM = lightColors.text.secondary;
+const _PALETTE_CREAM = lightColors.text.secondary;
 
 /**
  * PaperGrain — a View-based noise veil. Cheaper than a Skia noise pass
@@ -25,7 +25,7 @@ export function PaperGrain({ width, height }: { width: number; height: number })
   }, []);
   return (
     <View pointerEvents="none" style={{ position: 'absolute', width, height }}>
-      {dots.map((d, i) => (
+      {dots.map((d, _i) => (
         <View
           key={`dot-${d.left.toFixed(2)}-${d.top.toFixed(2)}`}
           style={{}}

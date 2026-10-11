@@ -1,4 +1,5 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from "@/theme/tokens/vex-fire";
+
 export type CoachPersona = 'cheerleader' | 'mentor' | 'drill-sergeant';
 
 export interface PersonaOption {
@@ -20,7 +21,7 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       "You're absolutely crushing it.",
       'That focus session was outstanding.',
     ],
-    color: lightColors.accent.pink,
+    color: vexFire.copper,
   },
   {
     id: 'mentor',
@@ -31,7 +32,7 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       'Your consistency is building momentum.',
       'Consider a longer session tomorrow for deeper focus.',
     ],
-    color: lightColors.accent.blue,
+    color: vexFire.amber,
   },
   {
     id: 'drill-sergeant',
@@ -42,6 +43,6 @@ export const PERSONA_OPTIONS: PersonaOption[] = [
       'Excuses are for losers. FOCUS!',
       'Your enemy is winning while you hesitate.',
     ],
-    color: lightColors.semantic.danger,
+    color: vexFire.danger,
   },
 ];

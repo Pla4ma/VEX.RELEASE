@@ -11,6 +11,7 @@ import {
 import { ModeIndicatorBadge } from '../../../session/components/ModeIndicatorBadge';
 import { SessionMode } from '../../../session/modes';
 import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type ActiveSessionModeOverlaysProps = {
   allowStudyQuizBreak: boolean;
@@ -99,7 +100,7 @@ function SprintOverlay({
             width={10}
             height={10}
             borderRadius="full"
-            bg={item <= chainCount ? 'primary.500' : 'background.tertiary'}
+            style={{ backgroundColor: item <= chainCount ? vexFire.ember : vexFire.line }}
           />
         ))}
       </Box>
@@ -108,7 +109,7 @@ function SprintOverlay({
           entering={ZoomIn.duration(200)}
           style={{ marginLeft: 8 }}
         >
-          <Text variant="caption" weight="semibold" color="primary.500">
+          <Text variant="caption" weight="semibold" color={vexFire.ember}>
             {`${(1 + (chainCount - 1) * 0.05).toFixed(2)}x chain bonus`}
           </Text>
         </Animated.View>
@@ -130,7 +131,7 @@ function StudyOverlay({
       right={16}
       style={{ zIndex: 20 }}
     >
-      <Text variant="caption" color="text.secondary">
+      <Text variant="caption" color={vexFire.textSecondary}>
         {completionPercentage < 50
           ? 'Planned quiz break at 50%'
           : 'Final planned quiz check at 90%'}

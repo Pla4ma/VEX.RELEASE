@@ -1,9 +1,10 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, Switch } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
-import { Icon } from '../../icons/components/Icon';
+import { VexIcon } from '../../shared/ui/vex/VexIcon';
 
 type ToggleKey = 'activitySharing' | 'squadFeed' | 'analytics';
 
@@ -41,7 +42,7 @@ export const PrivacyToggleRow: React.ComponentType<PrivacyToggleRowProps> = ({
         paddingVertical: theme.spacing[2],
       }}
     >
-      <Icon name={row.icon} size={20} color={theme.colors.primary[500]} />
+      <VexIcon name={row.icon} size="md" color={vexFire.ember} variant="solid" />
       <Box
         flex={1}
         style={{
@@ -49,10 +50,10 @@ export const PrivacyToggleRow: React.ComponentType<PrivacyToggleRowProps> = ({
           marginRight: theme.spacing[3],
         }}
       >
-        <Text variant="body" color="text.primary">
+        <Text variant="body" color={vexFire.cream}>
           {row.title}
         </Text>
-        <Text variant="caption" color="text.secondary">
+        <Text variant="caption" color={vexFire.textSecondary}>
           {row.description}
         </Text>
       </Box>

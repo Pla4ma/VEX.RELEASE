@@ -65,12 +65,11 @@ export function buildHomeFeatureRuntime(
 ): HomeFeatureRuntime {
   const resolved = resolveRuntimeInput(input, productTier);
   const { features } = resolved;
-  const isDayZero = resolved.totalSessions <= 0;
   const battlePass = getFeatureAvailability(features.battle_pass);
   const boss = getFeatureAvailability(features.boss_tab);
   const challenges = getFeatureAvailability(features.challenges);
   const study = getFeatureAvailability(features.content_study);
-  const coach = getFeatureAvailability(features.ai_coach_advanced);
+  const coach = getFeatureAvailability(features.ai_coach_basic);
   const comeback = getFeatureAvailability(features.companion_detail);
   const economy = getFeatureAvailability(features.economy_basic);
   const seasonal = getFeatureAvailability(features.seasonal_features);
@@ -79,16 +78,16 @@ export function buildHomeFeatureRuntime(
   const canShowStudyDepth = study.canRenderEntryPoint;
 
   return {
-    canQueryBattlePass: !isDayZero && battlePass.canQuery,
-    canQueryBoss: !isDayZero && boss.canQuery,
-    canQueryChallenges: !isDayZero && challenges.canQuery,
-    canQueryCoach: !isDayZero && coach.canQuery,
-    canQueryComeback: !isDayZero && comeback.canQuery,
-    canQueryEconomy: !isDayZero && economy.canQuery,
-    canQueryNotifications: !isDayZero && notifications.canQuery,
-    canQuerySeasons: !isDayZero && seasonal.canQuery,
-    canQuerySquads: !isDayZero && squads.canQuery,
-    canQueryStudy: !isDayZero && study.canQuery,
+    canQueryBattlePass: battlePass.canQuery,
+    canQueryBoss: boss.canQuery,
+    canQueryChallenges: challenges.canQuery,
+    canQueryCoach: coach.canQuery,
+    canQueryComeback: comeback.canQuery,
+    canQueryEconomy: economy.canQuery,
+    canQueryNotifications: notifications.canQuery,
+    canQuerySeasons: seasonal.canQuery,
+    canQuerySquads: squads.canQuery,
+    canQueryStudy: study.canQuery,
     shouldShowExpansionSystems: canShowStudyDepth,
     shouldShowSecondarySystems:
       challenges.canRenderEntryPoint ||

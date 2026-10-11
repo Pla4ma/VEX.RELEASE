@@ -39,6 +39,7 @@ interface BuildControllerInput {
   actions: {
     openSetup: (params?: Record<string, unknown>) => void;
     openProgress: () => void;
+    openCoach: () => void;
     openSocial: () => void;
     openContentStudy: () => void;
     continueStudyPlan: () => void;
@@ -109,8 +110,8 @@ export function buildHomeController(input: BuildControllerInput): HomeController
     openSetup: actions.openSetup,
     openProgress: actions.openProgress,
     openSocial: actions.openSocial,
-    openPlan: () => {},
-    openCoach: () => {},
+    openPlan: actions.openProgress,
+    openCoach: actions.openCoach,
     openContentStudy: actions.openContentStudy,
     continueStudyPlan: actions.continueStudyPlan,
     createRecommendation:

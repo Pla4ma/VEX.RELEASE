@@ -65,7 +65,7 @@ export function usePowerUserContainerModel(
   const { primaryRecommendation, isPending: recommendationsPending } =
     useActiveCoachRecommendations(userId, runtime.canQueryCoach && !disclosure.isPending);
 
-  const { openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan, openNextAction } =
+  const { openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan, openNextAction, openCoach } =
     usePowerUserNavigation({
       navigation, userId, disclosure, analytics,
       learningExecutionTarget: learningExecutionLayer.target,
@@ -129,7 +129,7 @@ export function usePowerUserContainerModel(
       isPending: updateRecommendationStatus.isPending,
       reset: updateRecommendationStatus.reset,
     },
-    openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan,
+    openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan, openCoach,
   });
 
   return {

@@ -64,7 +64,9 @@ export function VexMotionSurface({
       return {};
     }
     return {
-      boxShadow: '0px 0px theme.spacing[3]px lightColors.semantic.vexCyan / glowIntensity.value',
+      shadowColor: theme.colors.semantic.vexCyan,
+      shadowRadius: theme.spacing[3],
+      shadowOpacity: glowIntensity.value,
     };
   }, [variant, isReducedMotion, animated]);
 
@@ -82,8 +84,11 @@ export function VexMotionSurface({
       style={[
         {
           borderRadius,
-          overflow: 'hidden',
-          boxShadow: `0px ${theme.spacing[2]}px ${theme.spacing[6]}px ${theme.colors.semantic.shadow} / ${variant === 'elevated' ? theme.opacity[20] : theme.opacity[10]}`,
+          shadowColor: theme.colors.semantic.shadow,
+          shadowOffset: { width: 0, height: theme.spacing[2] },
+          shadowRadius: theme.spacing[6],
+          shadowOpacity: variant === 'elevated' ? theme.opacity[20] : theme.opacity[10],
+          elevation: variant === 'elevated' ? theme.spacing[2] : theme.spacing[1],
           ...base,
         },
         animatedStyle,

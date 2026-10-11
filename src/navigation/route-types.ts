@@ -7,14 +7,14 @@ export type RootStackRoute =
   | 'Paywall'
   | 'Settings'
   | 'SessionStack'
+  | 'Guide'
   | 'CompanionDetail'
   | 'Comeback'
   | 'StreakFuneral'
   | 'FocusScoreDashboard'
   | 'VipPaywall'
   | 'MemoryConsole'
-  | 'Search'
-  | 'Vault';
+  | MainStackRoute;
 
 export type AuthStackRoute =
   | 'Login'

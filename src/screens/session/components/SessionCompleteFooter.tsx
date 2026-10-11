@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -15,7 +16,7 @@ export function SessionCompleteFooter({
   onStartNextSession,
   onShare,
   showCtas,
-  theme,
+  theme: _theme,
 }: {
   bottomInset: number;
   homeCtaLabel: string;
@@ -41,8 +42,8 @@ export function SessionCompleteFooter({
         pt={4}
         pb={bottomInset}
         style={{
-          backgroundColor: `${theme.colors.background.primary}F2`,
-          borderTopColor: theme.colors.border.light,
+          backgroundColor: `${vexFire.background}F2`,
+          borderTopColor: vexFire.border,
           borderTopWidth: 1,
         }}
       >

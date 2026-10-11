@@ -37,7 +37,7 @@ export class ThemeService {
         id: 'vex-theme-storage',
       });
       this.initialized = true;
-    } catch (error) {
+    } catch {
       throw new StorageError('MMKV not available - theme persistence disabled');
     }
   }

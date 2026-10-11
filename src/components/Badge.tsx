@@ -131,7 +131,7 @@ export function Badge({
   disabled = false,
   fullWidth = false,
   style,
-  textStyle,
+  textStyle: _textStyle,
 }: BadgeProps) {
   const { theme } = useTheme();
   const sizeConfig = sizeMap[size as SizeKey];

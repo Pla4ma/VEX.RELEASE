@@ -1,9 +1,10 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Box } from '../../components/primitives/Box'
 import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
-import { Icon } from '../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+import { VexIcon } from '../../shared/ui/vex/VexIcon';
+
 
 import type { AccentColor, TimerFormat } from './ColorSchemeToggle';
 import { ACCENT_COLORS, TIMER_FORMAT_OPTIONS } from './ColorSchemeToggle';
@@ -17,7 +18,7 @@ type AppearancePreviewCardProps = {
 };
 
 export function AppearancePreviewCard({
-  theme,
+  theme: _theme,
   accentColor,
   timerFormat,
   fontSizeMultiplier,
@@ -26,7 +27,7 @@ export function AppearancePreviewCard({
     <Box px={16} mb={24}>
       <Text
         variant="caption"
-        color="text.secondary"
+        color={vexFire.textSecondary}
         style={{
           marginLeft: 12,
           marginBottom: 8,
@@ -39,7 +40,7 @@ export function AppearancePreviewCard({
       <Card
         size="md"
         style={{
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
           alignItems: 'center',
           justifyContent: 'center',
           paddingVertical: 32,
@@ -55,17 +56,17 @@ export function AppearancePreviewCard({
           style={{
             backgroundColor:
               ACCENT_COLORS.find((c) => c.id === accentColor)?.hex ||
-              theme.colors.primary[500],
+              vexFire.ember,
           }}
         >
-          <Icon name="timer" size={28} color={lightColors.text.inverse} />
+          <VexIcon name="timer" size="lg" color={vexFire.cream} variant="solid" />
         </Box>
         <Text
           variant="h3"
           style={{
             fontSize: 36 * fontSizeMultiplier,
             fontWeight: '700',
-            color: theme.colors.text.primary,
+            color: vexFire.cream,
           }}
         >
           {TIMER_FORMAT_OPTIONS.find((f) => f.id === timerFormat)
@@ -73,7 +74,7 @@ export function AppearancePreviewCard({
         </Text>
         <Text
           variant="body"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{ marginTop: 8, fontSize: 16 * fontSizeMultiplier }}
         >
           Focus Session

@@ -4,8 +4,7 @@ import { useMemo, useState } from 'react';
 import {
   useActiveStudyPlan,
   useCompleteStudyPlanTask,
-} from '../../../features/content-study/runtime-barrel';
-import { useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
+ useLearningExecutionLayer } from '../../../features/content-study/runtime-barrel';
 
 type ContentStudySessionMeta = {
   generationId: string | null;

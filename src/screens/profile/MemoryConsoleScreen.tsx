@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
@@ -16,9 +17,9 @@ import { Text } from '../../components/primitives/Text';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { EmptyState } from '../../components/EmptyState';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { RouteBackButton } from '../../shared/ui/vex/RouteBackButton';
 type Props = NativeStackScreenProps<ExtendedRootStackParams, 'MemoryConsole'>;
-
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleDateString('en-US', {
     month: 'short',
@@ -28,6 +29,7 @@ function formatDate(ts: number): string {
 }
 
 const MemoryConsoleScreen: React.ComponentType<Props> = () => {
+  const navigation = useNavigation<NativeStackScreenProps<ExtendedRootStackParams, 'MemoryConsole'>['navigation']>();
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { user } = useAuthStore();
@@ -35,7 +37,6 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
   const { isVisible } = useMemoryConsoleVisibility(userId);
   const { data: memories, refetch } = useActiveFocusMemories(userId);
   const [deleting, setDeleting] = useState<string | null>(null);
-
   const handleDelete = useCallback(
     (memory: FocusMemory) => {
       Alert.alert(
@@ -64,10 +65,9 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
   );
 
   const confidenceLabel = (c: number): { label: string; color: string } => {
-    const colors = theme.colors.semantic;
-    if (c >= 0.8) {return { label: 'High', color: colors.success };}
-    if (c >= 0.5) {return { label: 'Medium', color: colors.warning };}
-    return { label: 'Low', color: colors.danger };
+    if (c >= 0.8) {return { label: 'High', color: vexFire.success };}
+    if (c >= 0.5) {return { label: 'Medium', color: vexFire.amber };}
+    return { label: 'Low', color: vexFire.danger };
   };
 
   if (!isVisible) {
@@ -75,10 +75,11 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
       <Box
         flex={1}
         style={{
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
           paddingTop: insets.top,
         }}
       >
+        <RouteBackButton onPress={() => navigation.goBack()} />
         <EmptyState
           iconName="clock"
           title="Memory Console"
@@ -89,7 +90,7 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
   }
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+    <Box flex={1} style={{ backgroundColor: vexFire.background }}>
       <ScrollView
         contentContainerStyle={{
           paddingTop: insets.top + theme.spacing[4],
@@ -97,13 +98,13 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
           paddingBottom: insets.bottom + theme.spacing[4],
         }}
       >
+        <RouteBackButton onPress={() => navigation.goBack()} />
         <Text variant="h2" style={{ fontWeight: '800', marginBottom: 4 }}>
           Memory Console
         </Text>
         <Text
           variant="body"
-          color="text.secondary"
-          style={{ marginBottom: theme.spacing[4] }}
+          style={{ color: vexFire.textSecondary, marginBottom: theme.spacing[4] }}
         >
           {memories.length} memory {memories.length === 1 ? 'entry' : 'entries'}{' '}
           · inspect, edit, or delete
@@ -124,7 +125,9 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
                 key={memory.id}
                 size="md"
                 style={{
-                  backgroundColor: theme.colors.background.secondary,
+                  backgroundColor: vexFire.panel,
+                  borderColor: vexFire.border,
+                  borderWidth: 1,
                   marginBottom: theme.spacing[3],
                   opacity: isDeleting ? 0.5 : 1,
                 }}
@@ -137,8 +140,7 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
                 >
                   <Text
                     variant="caption"
-                    color="text.tertiary"
-                    style={{ textTransform: 'uppercase' }}
+                    style={{ color: vexFire.textMuted, textTransform: 'uppercase' }}
                   >
                     {memory.type}
                   </Text>
@@ -161,12 +163,12 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
                   alignItems="center"
                   mt={2}
                 >
-                  <Text variant="caption" color="text.tertiary">
+                  <Text variant="caption" style={{ color: vexFire.textMuted }}>
                     {memory.source} · {formatDate(memory.createdAt)}
                   </Text>
                   <Box flexDirection="row" gap={8}>
                     {memory.evidenceHash && (
-                      <Text variant="caption" color="text.tertiary">
+                      <Text variant="caption" color={vexFire.textMuted}>
                         ev:{memory.evidenceHash.slice(0, 8)}
                       </Text>
                     )}
@@ -178,7 +180,7 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
                       accessibilityHint="Permanently removes this memory entry"
                       style={{ padding: 4 }}
                     >
-                      <Text variant="caption" color="error.DEFAULT">
+                      <Text variant="caption" style={{ color: vexFire.danger }}>
                         Delete
                       </Text>
                     </Pressable>
@@ -195,5 +197,4 @@ const MemoryConsoleScreen: React.ComponentType<Props> = () => {
 
 const MemoryConsoleScreenWithBoundary = withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
 export { MemoryConsoleScreenWithBoundary as MemoryConsoleScreen };
-
 export { MemoryConsoleScreen as default };

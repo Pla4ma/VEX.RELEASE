@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -30,10 +31,10 @@ export function ProfileXpBar({
         <Text variant="label">
           {`Level ${level} | ${xp.toLocaleString()}/${nextLevelThreshold.toLocaleString()} XP`}
         </Text>
-        <Text color="text.secondary" variant="label">{`${Math.round(xpPercent)}%`}</Text>
+        <Text color={vexFire.textSecondary} variant="label">{`${Math.round(xpPercent)}%`}</Text>
       </View>
-      <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, height: 8, overflow: 'hidden' }}>
-        <View style={{ backgroundColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, height: 8, width: `${Math.max(0, Math.min(100, xpPercent))}%` }} />
+      <View style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.full, height: 8, overflow: 'hidden' }}>
+        <View style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.full, height: 8, width: `${Math.max(0, Math.min(100, xpPercent))}%` }} />
       </View>
     </View>
   );

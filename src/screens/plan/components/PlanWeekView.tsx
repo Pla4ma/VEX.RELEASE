@@ -8,6 +8,7 @@ import { Icon } from '../../../icons/components/Icon';
 import type { PlanItem } from '../../../features/plan/types';
 import { useTheme } from '../../../theme/ThemeContext';
 import { PlanModeEmptyState } from './PlanModeEmptyState';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 const PLAN_WEEK_ASSET = require('../../../../assets/vex/plan-week-fire.png');
 
@@ -86,8 +87,8 @@ export function PlanWeekView({
           onPress={() => onStartSession(item.id, item.title)}
           style={({ pressed }) => ({
             alignItems: 'center',
-            backgroundColor: pressed ? theme.colors.primary[900] : theme.colors.background.primary,
-            borderColor: theme.colors.primary[800],
+            backgroundColor: pressed ? vexFire.backgroundSoft : vexFire.panel,
+            borderColor: vexFire.border,
             borderRadius: theme.borderRadius.xl,
             borderWidth: 1,
             flexDirection: 'row',
@@ -99,14 +100,14 @@ export function PlanWeekView({
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: theme.colors.primary[950],
+              backgroundColor: vexFire.backgroundRaised,
               borderRadius: theme.borderRadius.lg,
               height: theme.spacing[10],
               justifyContent: 'center',
               width: theme.spacing[10],
             }}
           >
-            <Icon color={theme.colors.semantic.primary} name="calendar" size="sm" />
+            <Icon color={vexFire.ember} name="calendar" size="sm" />
           </View>
           <View style={{ flex: 1, gap: theme.spacing[1] }}>
             <Text style={{ color: theme.colors.text.primary, fontWeight: theme.fontWeights.bold }} variant="bodySmall">
@@ -116,7 +117,7 @@ export function PlanWeekView({
               {formatDateLabel(item.dueDate)}
             </Text>
           </View>
-          <Icon color={theme.colors.primary[700]} name="arrowRight" size="sm" />
+          <Icon color={vexFire.amber} name="arrowRight" size="sm" />
         </Pressable>
       ))}
     </View>

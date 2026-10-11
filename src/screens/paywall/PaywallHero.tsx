@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import {
   VALUE_PROPOSITION,
   type PaywallFeatureHighlight,
@@ -18,7 +19,6 @@ import {
 } from './PaywallHero.defaults';
 import { FeatureHighlightHero } from './PaywallHero.featureHighlight';
 import { RunLaneHero, StudyLaneHero } from './PaywallHero.lanes';
-import { Text as VexText } from '../../components/primitives/Text';
 
 type PaywallHeroProps = {
   contextBody?: string;
@@ -67,10 +67,10 @@ export function PaywallHero({
     <>
       <View style={styles.headerRow}>
         <View style={styles.headerCopy}>
-          <Text style={[styles.eyebrow, { color: theme.colors.primary[500] }]}>
+          <Text style={[styles.eyebrow, { color: vexFire.ember }]}>
             VEX Premium
           </Text>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.title, { color: vexFire.cream }]}>
             {isPremium ? 'Premium is active' : VALUE_PROPOSITION}
           </Text>
         </View>

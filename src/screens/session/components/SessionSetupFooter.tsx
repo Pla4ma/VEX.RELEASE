@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { SessionMode } from '../../../session/modes';
 import { useTheme } from '../../../theme/ThemeContext';
 import { glassEdge } from '../../../theme/tokens/elevation';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type SessionSetupFooterProps = {
   breakDurationSeconds: number;
@@ -42,12 +42,13 @@ export function SessionSetupFooter({
       style={[
         {
           borderTopWidth: 1,
-          borderTopColor: theme.colors.border.light,
+          borderTopColor: vexFire.border,
+          backgroundColor: vexFire.background,
         },
         glassEdge,
       ]}
     >
-      <Text variant="caption" color="text.secondary" textAlign="center" mb="sm">
+      <Text variant="caption" color={vexFire.textSecondary} textAlign="center" mb="sm">
         {`${durationMinutes} min focus`}
         {breakDurationSeconds > 0
           ? ` · ${Math.round(breakDurationSeconds / 60)} min break`
@@ -67,8 +68,9 @@ export function SessionSetupFooter({
         accessibilityLabel={`Start ${durationMinutes} minute session`}
         accessibilityRole="button"
         accessibilityHint="Starts this customized focus session"
+        style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.lg }}
       >
-        <VexText>Start Session</VexText>
+        <VexText color={vexFire.background}>Start Session</VexText>
       </Button>
     </Box>
   );

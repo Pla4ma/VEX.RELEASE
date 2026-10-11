@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box'
@@ -41,7 +42,7 @@ export function CompanionStatsBar({
     <>
       <Animated.View entering={fadeUp(200)}>
         <Box px="lg" py="xl" gap="lg">
-          <Text variant="h3" color="text.primary">
+          <Text variant="h3" color={vexFire.cream}>
             Companion Stats
           </Text>
           <Box flexDirection="row" gap="md">
@@ -62,13 +63,13 @@ export function CompanionStatsBar({
       </Animated.View>
       <Animated.View entering={fadeUp(300)}>
         <Box px="lg" pb="xl" gap="md">
-          <Text variant="h3" color="text.primary">
+          <Text variant="h3" color={vexFire.cream}>
             Evolution Progress
           </Text>
           <Card size="md">
             <Box gap="md">
               <PhaseProgressBar currentPhase={companion.phase} />
-              <Text variant="body" color="text.secondary">
+              <Text variant="body" color={vexFire.textSecondary}>
                 Level {companion.level}/100
               </Text>
               <ProgressToNext companion={companion} />
@@ -78,20 +79,20 @@ export function CompanionStatsBar({
       </Animated.View>
       <Animated.View entering={fadeUp(400)}>
         <Box px="lg" pb="xl" gap="md">
-          <Text variant="h3" color="text.primary">
+          <Text variant="h3" color={vexFire.cream}>
             Element Affinity
           </Text>
           <Card
             size="md"
             style={{ borderColor: themeColors.primary, borderWidth: 1 }}
           >
-            <Text variant="h4" color="text.primary" fontWeight="600">
+            <Text variant="h4" color={vexFire.cream} fontWeight="600">
               {companion.element}
             </Text>
-            <Text variant="caption" color="text.tertiary">
+            <Text variant="caption" color={vexFire.textMuted}>
               Affinity: {companion.elementAffinity}%
             </Text>
-            <Text variant="bodySmall" color="text.secondary">
+            <Text variant="bodySmall" color={vexFire.textSecondary}>
               {ELEMENT_LORE[companion.element]}
             </Text>
           </Card>
@@ -99,12 +100,12 @@ export function CompanionStatsBar({
       </Animated.View>
       <Animated.View entering={fadeUp(500)}>
         <Box px="lg" pb="xl" gap="md">
-          <Text variant="h3" color="text.primary">
+          <Text variant="h3" color={vexFire.cream}>
             Session History
           </Text>
           <Card size="md">
             <Box gap="md">
-              <Text variant="bodySmall" color="text.secondary">
+              <Text variant="bodySmall" color={vexFire.textSecondary}>
                 Last {moodHistory.length} session
                 {moodHistory.length === 1 ? '' : 's'}
               </Text>
@@ -114,7 +115,7 @@ export function CompanionStatsBar({
                     <MoodDot key={entry.sessionId} mood={entry.mood} />
                   ))
                 ) : (
-                  <Text variant="caption" color="text.tertiary">
+                  <Text variant="caption" color={vexFire.textMuted}>
                     No recent sessions recorded
                   </Text>
                 )}

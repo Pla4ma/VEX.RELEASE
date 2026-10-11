@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -56,13 +57,13 @@ export function StatCard({
       <Box alignItems="center" gap="xs">
         <Text
           variant="h4"
-          color="text.primary"
+          color={vexFire.cream}
           fontWeight="700"
           textAlign="center"
         >
           {value}
         </Text>
-        <Text variant="caption" color="text.tertiary" textAlign="center">
+        <Text variant="caption" color={vexFire.textMuted} textAlign="center">
           {label}
         </Text>
       </Box>
@@ -88,7 +89,7 @@ export function PhaseProgressBar({
           />
           <Text
             variant="caption"
-            color="text.tertiary"
+            color={vexFire.textMuted}
             mt="xs"
             textAlign="center"
           >
@@ -107,13 +108,13 @@ export function ProgressToNext({
 }): React.ReactNode {
   if (companion.phase === 'TRANSCENDENT') {
     return (
-      <Text variant="bodySmall" color="text.secondary">
+      <Text variant="bodySmall" color={vexFire.textSecondary}>
         Maximum evolution reached.
       </Text>
     );
   }
   return (
-    <Text variant="bodySmall" color="text.secondary">
+    <Text variant="bodySmall" color={vexFire.textSecondary}>
       {Math.floor(getEvolutionProgress(companion) * 100)}% to{' '}
       {PHASE_NAMES[getNextPhase(companion.phase)]}
     </Text>

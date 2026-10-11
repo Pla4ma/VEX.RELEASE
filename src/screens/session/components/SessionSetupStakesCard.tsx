@@ -16,9 +16,6 @@ import type {
   ExtendedRootStackParams,
   SessionStackParams,
 } from '../../../navigation/types';
-import type { NavigationProp } from '@react-navigation/native';
-import type { RootStackParams } from '../../../navigation/types';
-import type { MainStackParams } from '../../../navigation/types';
 import { navigateToMainStackScreen, navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import type { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
 
@@ -51,10 +48,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.boss_tab),
             )
           ) {
-            navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Boss');
+            navigateToMainStackScreen(navigation, 'Boss');
           }
           if (stakeId === 'streak') {
-            navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Progress' });
+            navigateToRootScreen(navigation, 'Main', { screen: 'Progress' });
           }
           if (
             stakeId === 'challenge' &&
@@ -62,10 +59,10 @@ export function SessionSetupStakesCard({
               getFeatureAvailability(disclosure.features.challenges),
             )
           ) {
-            navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Challenges');
+            navigateToMainStackScreen(navigation, 'Challenges');
           }
           if (stakeId === 'rival') {
-            navigateToRootScreen(navigation as NavigationProp<RootStackParams>, 'Main', { screen: 'Home' });
+            navigateToRootScreen(navigation, 'Main', { screen: 'Home' });
           }
         }}
       />

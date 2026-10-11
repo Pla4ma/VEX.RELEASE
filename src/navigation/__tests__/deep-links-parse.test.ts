@@ -123,7 +123,15 @@ describe('Deep Links – parsing and navigation', () => {
         params: {},
         query: {},
       });
-      expect(result?.screen).toBe('SessionStack');
+      expect(result?.screen).toBe('ContentStudy');
+    });
+    it('converts guide link', () => {
+      const result = deepLinkToNavigationParams({
+        path: 'guide',
+        params: {},
+        query: {},
+      });
+      expect(result?.screen).toBe('Guide');
     });
   });
 });

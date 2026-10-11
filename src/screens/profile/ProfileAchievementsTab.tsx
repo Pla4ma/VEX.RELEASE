@@ -9,6 +9,7 @@ import { FloatingDroplets } from '../../components/glass/FloatingDroplets';
 import { EmptyStateLens } from '../../components/glass/EmptyStateLens';
 import { VexSurface } from '../../shared/ui/vex/VexSurface';
 import type { Theme } from '../../theme/types';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 const MASTERY_MEDALLION = require('../../../assets/vex/profile-mastery-medallion.png');
 
@@ -110,18 +111,18 @@ export const ProfileAchievementsTab: React.ComponentType<ProfileAchievementsTabP
           accessibilityRole="button"
           accessibilityHint="Opens the full achievement collection"
         >
-          <VexSurface tone="hero" style={{ backgroundColor: theme.colors.background.primary, borderColor: theme.colors.primary[800], opacity: item.statusTone === 'success' ? 1 : theme.opacity[80], padding: theme.spacing[4] }}>
+          <VexSurface tone="base" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.borderStrong, opacity: item.statusTone === 'success' ? 1 : theme.opacity[80], padding: theme.spacing[4] }}>
             <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[3] }}>
-              <View style={{ borderColor: theme.colors.border.DEFAULT, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[12], overflow: 'hidden', width: theme.spacing[12] }}>
+              <View style={{ borderColor: vexFire.border, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[12], overflow: 'hidden', width: theme.spacing[12] }}>
                 <Image accessibilityLabel="Glass mastery medallion" source={MASTERY_MEDALLION} style={{ height: '100%', opacity: item.statusTone === 'success' ? theme.opacity[100] : theme.opacity[80], width: '100%' }} />
               </View>
               <View style={{ flex: 1, gap: theme.spacing[1] }}>
-                <Text color="text.primary" variant="bodyLarge">{item.title}</Text>
-                <Text color="text.secondary" variant="bodySmall">{item.description}</Text>
-                <Text color="text.tertiary" variant="caption">{item.progressLabel}</Text>
+                <Text color={vexFire.cream} variant="bodyLarge">{item.title}</Text>
+                <Text color={vexFire.textSecondary} variant="bodySmall">{item.description}</Text>
+                <Text color={vexFire.textMuted} variant="caption">{item.progressLabel}</Text>
               </View>
-              <View style={{ backgroundColor: item.statusTone === 'success' ? theme.colors.primary[100] : theme.colors.semantic.primarySoft, borderColor: theme.colors.primary[800], borderRadius: theme.borderRadius.full, borderWidth: 1, paddingHorizontal: theme.spacing[2], paddingVertical: theme.spacing[1] }}>
-                <Text color={item.statusTone === 'success' ? theme.colors.primary[700] : theme.colors.semantic.primary} variant="caption">{item.statusLabel}</Text>
+              <View style={{ backgroundColor: item.statusTone === 'success' ? vexFire.copper : vexFire.backgroundSoft, borderColor: vexFire.border, borderRadius: theme.borderRadius.full, borderWidth: 1, paddingHorizontal: theme.spacing[2], paddingVertical: theme.spacing[1] }}>
+                <Text color={item.statusTone === 'success' ? vexFire.cream : vexFire.amber} variant="caption">{item.statusLabel}</Text>
               </View>
             </View>
           </VexSurface>

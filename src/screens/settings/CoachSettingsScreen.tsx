@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import { ScrollView, Pressable, Alert } from 'react-native';
@@ -19,7 +20,7 @@ import {
   type MessageFrequency,
 } from './CoachFrequencySelector';
 import { CoachToneSelector, type CoachLanguage } from './CoachToneSelector';
-import { lightColors } from '@/theme/tokens/colors';
+
 import {
   LiquidGlassHeader,
   liquidGlassSpacing,
@@ -30,7 +31,7 @@ type Props = NativeStackScreenProps<SettingsStackParams, 'CoachSettings'>;
 
           
 const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   
   const insets = useSafeAreaInsets();
@@ -93,7 +94,7 @@ const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
             <Icon
               name="arrow-left"
               size={24}
-              color={theme.colors.text.primary}
+              color={vexFire.cream}
             />
           </Pressable>
           <LiquidGlassHeader
@@ -122,7 +123,7 @@ const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
         <Box px={16} mb={24}>
           <Text
             variant="caption"
-            color="text.secondary"
+            color={vexFire.textSecondary}
             style={{
               marginLeft: 12,
               marginBottom: 8,
@@ -136,14 +137,14 @@ const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
             onPress={handleResetMemory}
             style={{
   backgroundColor:
-  theme.colors.error[50] || lightColors.error[50],
+  vexFire.panelSoft || vexFire.panelSoft,
   paddingVertical: 16,
   paddingHorizontal: 16,
   borderRadius: 12,
   flexDirection: 'row',
   alignItems: 'center',
   borderWidth: 1,
-  borderColor: theme.colors.error.DEFAULT + '30',
+  borderColor: vexFire.danger + '30',
 }}
             accessibilityLabel="Coach setting"
             accessibilityRole="button"
@@ -155,24 +156,24 @@ const CoachSettingsScreen: React.ComponentType<Props> = ({ navigation }) => {
               borderRadius={10}
               justifyContent="center"
               alignItems="center"
-              style={{ backgroundColor: theme.colors.error.DEFAULT + '20' }}
+              style={{ backgroundColor: vexFire.danger + '20' }}
             >
               <Icon
                 name="refresh-cw"
                 size={20}
-                color={theme.colors.error.DEFAULT}
+                color={vexFire.danger}
               />
             </Box>
             <Box flex={1} ml={12}>
               <Text
                 variant="body"
-                style={{ fontWeight: '600', color: theme.colors.error.DEFAULT }}
+                style={{ fontWeight: '600', color: vexFire.danger }}
               >
                 Reset Coach Memory
               </Text>
               <Text
                 variant="caption"
-                color="text.secondary"
+                color={vexFire.textSecondary}
                 style={{ marginTop: 2 }}
               >
                 Clear all conversation history

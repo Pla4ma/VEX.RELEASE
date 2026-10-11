@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import Animated, {
@@ -45,13 +46,13 @@ export function ChallengeImpactCard({
         width: cardWidth,
         padding: theme.spacing[4],
         backgroundColor: wasCompleted
-          ? `${theme.colors.success[500]}15`
-          : theme.colors.background.secondary,
+          ? `${vexFire.success}15`
+          : vexFire.panel,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
         borderColor: wasCompleted
-          ? theme.colors.success[500]
-          : theme.colors.border.DEFAULT,
+          ? vexFire.success
+          : vexFire.border,
         marginRight: theme.spacing[3],
       }}
     >
@@ -67,7 +68,7 @@ export function ChallengeImpactCard({
         <Text
           variant="body"
           fontWeight="700"
-          color="text.primary"
+          color={vexFire.cream}
           numberOfLines={1}
         >
           {wasCompleted ? 'Challenge Complete!' : challengeName}
@@ -77,7 +78,7 @@ export function ChallengeImpactCard({
       <View
         style={{
           height: 8,
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: vexFire.background,
           borderRadius: theme.borderRadius.full,
           overflow: 'hidden',
           marginBottom: theme.spacing[2],
@@ -88,8 +89,8 @@ export function ChallengeImpactCard({
             {
               height: '100%',
               backgroundColor: wasCompleted
-                ? theme.colors.success[500]
-                : theme.colors.primary[500],
+                ? vexFire.success
+                : vexFire.ember,
               borderRadius: theme.borderRadius.full,
             },
             progressBarStyle,
@@ -97,7 +98,7 @@ export function ChallengeImpactCard({
         />
       </View>
 
-      <Text variant="caption" color="text.secondary">
+      <Text variant="caption" color={vexFire.textSecondary}>
         {wasCompleted
           ? `Completed! ${progressBefore} → ${progressAfter}/${target}`
           : `Progress: ${progressBefore} → ${progressAfter}/${target}`}

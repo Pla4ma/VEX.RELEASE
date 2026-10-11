@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { useTheme } from '../../../theme/ThemeContext';
 import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import type { Day0Mode } from '../services/day0-agent-schemas';
 
 interface Day0ActionGridProps {
@@ -25,8 +26,10 @@ const ACTIONS: RitualAction[] = [
   { id: 'create', icon: 'sparkles', subtitle: 'Capture insight', title: 'Reflect' },
 ];
 
+const COACH_ARTIFACT = require('../../../../assets/vex/coach/coach-artifact.png');
+
 export function Day0ActionGrid({
-  onOpenCoach: _onOpenCoach,
+  onOpenCoach,
   onSelect,
 }: Day0ActionGridProps): React.ReactNode {
   const { theme } = useTheme();
@@ -42,8 +45,8 @@ export function Day0ActionGrid({
           onPress={() => onSelect(item.id)}
           style={({ pressed }) => ({
             alignItems: 'center',
-            backgroundColor: pressed ? theme.colors.surface.pressed : theme.colors.background.secondary,
-            borderColor: theme.colors.border.light,
+            backgroundColor: pressed ? vexFire.backgroundSoft : vexFire.panelSoft,
+            borderColor: vexFire.border,
             borderRadius: theme.borderRadius.md,
             borderWidth: 1,
             flex: 1,
@@ -53,17 +56,49 @@ export function Day0ActionGrid({
             ...getMinTouchTargetStyle(),
           })}
         >
-          <View style={{ alignItems: 'center', borderColor: theme.colors.semantic.primary, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[10], justifyContent: 'center', width: theme.spacing[10] }}>
-            <VexIcon color={theme.colors.semantic.primary} name={item.icon} size="sm" variant="outline" />
+          <View style={{ alignItems: 'center', borderColor: vexFire.borderStrong, borderRadius: theme.borderRadius.full, borderWidth: 1, height: theme.spacing[10], justifyContent: 'center', width: theme.spacing[10] }}>
+            <VexIcon color={vexFire.ember} name={item.icon} size="sm" variant="outline" />
           </View>
-          <Text color={theme.colors.text.secondary} variant="h5" style={{ fontFamily: theme.fonts.display ?? theme.fonts.primary, fontWeight: theme.fontWeights.regular, letterSpacing: 1.5, marginTop: theme.spacing[2], textAlign: 'center', textTransform: 'uppercase' }}>
+          <Text color={vexFire.textSecondary} variant="h5" style={{ fontFamily: theme.fonts.display ?? theme.fonts.primary, fontWeight: theme.fontWeights.regular, letterSpacing: 1.5, marginTop: theme.spacing[2], textAlign: 'center', textTransform: 'uppercase' }}>
             {item.title}
           </Text>
-          <Text color={theme.colors.text.tertiary} variant="caption" style={{ marginTop: theme.spacing[1], textAlign: 'center', textTransform: 'uppercase' }}>
+          <Text color={vexFire.textMuted} variant="caption" style={{ marginTop: theme.spacing[1], textAlign: 'center', textTransform: 'uppercase' }}>
             {item.subtitle}
           </Text>
         </Pressable>
       ))}
+      <Pressable
+        accessibilityHint="Opens a conversation with VEX Coach"
+        accessibilityLabel="Ask VEX Coach"
+        accessibilityRole="button"
+        onPress={onOpenCoach}
+        style={({ pressed }) => ({
+          alignItems: 'center',
+          backgroundColor: pressed ? vexFire.backgroundSoft : vexFire.panel,
+          borderColor: vexFire.borderStrong,
+          borderRadius: theme.borderRadius.md,
+          borderWidth: 1,
+          flex: 1,
+          minHeight: theme.spacing[24] + theme.spacing[16],
+          paddingHorizontal: theme.spacing[2],
+          paddingVertical: theme.spacing[3],
+          ...getMinTouchTargetStyle(),
+        })}
+      >
+        <Image
+          accessibilityIgnoresInvertColors
+          accessibilityLabel="Coach compass artifact"
+          source={COACH_ARTIFACT}
+          resizeMode="contain"
+          style={{ height: theme.spacing[10], width: theme.spacing[10] }}
+        />
+        <Text color={vexFire.cream} variant="h5" style={{ fontFamily: theme.fonts.display ?? theme.fonts.primary, fontWeight: theme.fontWeights.regular, letterSpacing: 1.5, marginTop: theme.spacing[2], textAlign: 'center', textTransform: 'uppercase' }}>
+          Ask Coach
+        </Text>
+        <Text color={vexFire.textMuted} variant="caption" style={{ marginTop: theme.spacing[1], textAlign: 'center', textTransform: 'uppercase' }}>
+          Find your next move
+        </Text>
+      </Pressable>
     </View>
   );
 }

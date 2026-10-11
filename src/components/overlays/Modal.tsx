@@ -36,10 +36,6 @@ const backdropOverlayStyle: ViewStyle = {
   backgroundColor: rgbaColors.rgb_0_0_0_0_5,
 };
 
-const contentOverlayStyle: ViewStyle = {
-  backgroundColor: '',
-  borderRadius: 0,
-};
 
 export const Modal: React.ComponentType<ModalProps> = ({
   visible,

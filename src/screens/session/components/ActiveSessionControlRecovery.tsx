@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 
@@ -22,21 +23,21 @@ export function ActiveSessionControlRecovery({
     <Box px="lg" pb="md">
       <Card size="md">
         <Box flexDirection="row" alignItems="flex-start" gap={12}>
-          <Icon name="alert-circle" size={20} color="warning.DEFAULT" />
+          <Icon name="alert-circle" size={20} color={vexFire.amber} />
           <Box flex={1}>
-            <Text variant="h4" color="text.primary">
+            <Text variant="h4" color={vexFire.cream}>
               {failure.title}
             </Text>
             <Text
               variant="caption"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{ marginTop: 6 }}
             >
               {failure.message}
             </Text>
             <Text
               variant="caption"
-              color="text.tertiary"
+              color={vexFire.textMuted}
               style={{ marginTop: 6 }}
             >
               {failure.supportHint}
@@ -49,7 +50,7 @@ export function ActiveSessionControlRecovery({
                 accessibilityHint="Attempts the failed session control again"
               >
                 <Box px={14} py={10} borderRadius="lg" bg="primary.500">
-                  <Text variant="label" color="text.inverse">
+                  <Text variant="label" color={vexFire.cream}>
                     Retry
                   </Text>
                 </Box>
@@ -61,7 +62,7 @@ export function ActiveSessionControlRecovery({
                 accessibilityHint="Keeps the session open and hides this recovery message"
               >
                 <Box px={14} py={10} borderRadius="lg" bg="background.tertiary">
-                  <Text variant="label" color="text.secondary">
+                  <Text variant="label" color={vexFire.textSecondary}>
                     Keep focusing
                   </Text>
                 </Box>

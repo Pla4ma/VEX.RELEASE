@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -26,14 +27,14 @@ export const ProfileIdentityBlock: React.ComponentType<ProfileIdentityBlockProps
       <CrystalAvatar active={streakDays > 0} size={72} />
       <View style={{ flex: 1, gap: theme.spacing[1] }}>
         <Text variant="h3">{displayName}</Text>
-        <Text color="text.secondary" variant="bodySmall">Level {level} focus player</Text>
+        <Text color={vexFire.textSecondary} variant="bodySmall">Level {level} focus player</Text>
         <View style={{ alignItems: 'center', flexDirection: 'row', gap: theme.spacing[2], marginTop: theme.spacing[1] }}>
-          <View style={{ alignItems: 'center', backgroundColor: theme.colors.primary[100], borderRadius: theme.borderRadius.full, flexDirection: 'row', gap: theme.spacing[1], minHeight: 32, paddingHorizontal: theme.spacing[3] }}>
-            <Icon color={theme.colors.primary[700]} name="flame" size="xs" variant="solid" />
-            <Text color="primary.700" variant="label">{streakDays} streak</Text>
+          <View style={{ alignItems: 'center', backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.full, flexDirection: 'row', gap: theme.spacing[1], minHeight: 32, paddingHorizontal: theme.spacing[3] }}>
+            <Icon color={vexFire.ember} name="flame" size="xs" variant="solid" />
+            <Text color={vexFire.ember} variant="label">{streakDays} streak</Text>
           </View>
-          <View style={{ backgroundColor: theme.colors.surface.selected, borderRadius: theme.borderRadius.full, minHeight: 32, justifyContent: 'center', paddingHorizontal: theme.spacing[3] }}>
-            <Text style={{ color: theme.colors.accent.purple, fontWeight: '800' }} variant="label">2.0x</Text>
+          <View style={{ backgroundColor: vexFire.ember, borderRadius: theme.borderRadius.full, minHeight: 32, justifyContent: 'center', paddingHorizontal: theme.spacing[3] }}>
+            <Text style={{ color: vexFire.ember, fontWeight: '800' }} variant="label">2.0x</Text>
           </View>
         </View>
       </View>

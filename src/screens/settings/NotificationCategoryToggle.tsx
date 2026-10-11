@@ -1,10 +1,11 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, Switch } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { Box } from '../../components/primitives/Box'
 import { Text } from '../../components/primitives/Text';
-import { Icon } from '../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+import { VexIcon } from '../../shared/ui/vex/VexIcon';
+
 
 
 interface NotificationItem {
@@ -23,10 +24,10 @@ interface NotificationCategoryToggleProps {
 export const NotificationCategoryToggle: React.ComponentType<
   NotificationCategoryToggleProps
 > = ({ item, value, onToggle }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const iconColor = value
-    ? theme.colors.primary[500]
-    : theme.colors.text.tertiary;
+    ? vexFire.ember
+    : vexFire.textMuted;
 
   return (
     <Pressable
@@ -49,22 +50,22 @@ export const NotificationCategoryToggle: React.ComponentType<
         alignItems="center"
         style={{
           backgroundColor: value
-            ? theme.colors.primary[50]
-            : theme.colors.background.secondary,
+            ? vexFire.ember
+            : vexFire.panel,
         }}
       >
-        <Icon name={item.icon} size={20} color={iconColor} />
+        <VexIcon name={item.icon} size="md" color={iconColor} variant="solid" />
       </Box>
       <Box flex={1} ml={12}>
         <Text
           variant="body"
-          style={{ fontWeight: '500', color: theme.colors.text.primary }}
+          style={{ fontWeight: '500', color: vexFire.cream }}
         >
           {item.title}
         </Text>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{ marginTop: 2 }}
         >
           {item.description}
@@ -74,10 +75,10 @@ export const NotificationCategoryToggle: React.ComponentType<
         value={value}
         onValueChange={() => onToggle(item.id)}
         trackColor={{
-          false: theme.colors.background.tertiary,
-          true: theme.colors.primary[500] + '80',
+          false: vexFire.backgroundSoft,
+          true: vexFire.ember + '80',
         }}
-        thumbColor={value ? theme.colors.primary[500] : lightColors.text.inverse}
+        thumbColor={value ? vexFire.ember : vexFire.cream}
         accessibilityLabel={`${item.title} notification toggle`}
       />
     </Pressable>

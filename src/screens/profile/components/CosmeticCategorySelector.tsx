@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -5,7 +6,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Box } from '../../../components/primitives/Box'
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 import type { CosmeticType } from './CosmeticPreviewCard';
 
@@ -21,7 +22,7 @@ export const CosmeticCategoryHeader: React.ComponentType<{
   ownedCount: number;
   onClose: () => void;
 }> = ({ type, ownedCount, onClose }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const config = TYPE_CONFIG[type];
   return (
     <Box flexDirection="row" alignItems="center" mb={16}>
@@ -31,17 +32,17 @@ export const CosmeticCategoryHeader: React.ComponentType<{
         borderRadius={12}
         justifyContent="center"
         alignItems="center"
-        style={{ backgroundColor: theme.colors.primary[50] }}
+        style={{ backgroundColor: vexFire.ember }}
       >
         <Icon
           name={config.icon}
           size={22}
-          color={theme.colors.primary[500]}
+          color={vexFire.ember}
         />
       </Box>
       <Box ml={12} flex={1}>
         <Text variant="h3">{config.label}</Text>
-        <Text variant="caption" color="text.secondary">
+        <Text variant="caption" color={vexFire.textSecondary}>
           {ownedCount} owned
         </Text>
       </Box>
@@ -57,9 +58,9 @@ export const CosmeticCategoryHeader: React.ComponentType<{
           borderRadius={18}
           justifyContent="center"
           alignItems="center"
-          style={{ backgroundColor: theme.colors.background.secondary }}
+          style={{ backgroundColor: vexFire.panel }}
         >
-          <Icon name="x" size={20} color={theme.colors.text.tertiary} />
+          <Icon name="x" size={20} color={vexFire.textMuted} />
         </Box>
       </Pressable>
     </Box>
@@ -72,7 +73,7 @@ export const CosmeticEquipBar: React.ComponentType<{
   isEquipping: boolean;
   onEquip: () => void;
 }> = ({ selectedId, currentEquippedId, isEquipping, onEquip }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Box
       position="absolute"
@@ -81,9 +82,9 @@ export const CosmeticEquipBar: React.ComponentType<{
       right={0}
       p={16}
       style={{
-        backgroundColor: theme.colors.background.primary,
+        backgroundColor: vexFire.background,
         borderTopWidth: 1,
-        borderTopColor: theme.colors.border.light,
+        borderTopColor: vexFire.border,
       }}
     >
       <Pressable
@@ -94,8 +95,8 @@ export const CosmeticEquipBar: React.ComponentType<{
         style={{
           backgroundColor:
             selectedId && selectedId !== currentEquippedId
-              ? theme.colors.primary[500]
-              : theme.colors.background.tertiary,
+              ? vexFire.ember
+              : vexFire.backgroundSoft,
           paddingVertical: 16,
           borderRadius: 12,
           alignItems: 'center',
@@ -119,16 +120,16 @@ export const CosmeticEquipBar: React.ComponentType<{
               height: 20,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: lightColors.text.inverse,
+              borderColor: vexFire.cream,
               borderTopColor: 'transparent',
             }}
           />
         ) : (
-          <Icon name="check" size={20} color={lightColors.text.inverse} />
+          <Icon name="check" size={20} color={vexFire.cream} />
         )}
         <Text
           style={{
-            color: lightColors.text.inverse,
+            color: vexFire.cream,
             fontWeight: '700',
             fontSize: 16,
             marginLeft: 8,

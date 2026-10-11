@@ -1,5 +1,6 @@
 import React from 'react';
 import { G, Circle, Ellipse, Path } from 'react-native-svg';
+import { glassSvgColors } from './glassSvgColors';
 
 interface VariantProps {
   size: number;
@@ -23,7 +24,7 @@ export function LensVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - r * 0.78} ${cy + r * 0.42} Q ${cx} ${cy + r * 0.92} ${cx + r * 0.78} ${cy + r * 0.42}`}
         fill="none"
         opacity={0.38}
-        stroke="theme.glassColors.vexDeepTeal"
+        stroke={glassSvgColors.vexDeepTeal}
         strokeLinecap="round"
         strokeWidth={size * 0.015}
       />

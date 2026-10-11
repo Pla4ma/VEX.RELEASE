@@ -1,9 +1,12 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
+import { Image } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { ActiveSessionProgressRing } from './ActiveSessionProgressRing';
+import { spacing } from '../../../theme/tokens/spacing';
 import {
   MomentumDots,
   DailyProgress,
@@ -11,6 +14,7 @@ import {
 } from './ActiveSessionHeroSecondary';
 import type { ActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
 
+const FOCUS_CORE = require('../../../../assets/vex/session/focus-core.png');
 type ProgressRingProps = Pick<
   React.ComponentProps<typeof ActiveSessionProgressRing>,
   | 'CIRCUMFERENCE'
@@ -48,7 +52,7 @@ export const ActiveSessionHero: React.ComponentType<ActiveSessionHeroProps> = ({
   isReducedMotion,
 }) => (
   <Box flex={1} justifyContent="center" alignItems="center" px="lg">
-    <Box alignItems="center">
+    <Box alignItems="center" style={{ position: 'relative', width: '100%' }}>
       <SessionTargetBadge
         phaseIcon={viewModel.phaseIcon}
         phaseLabel={viewModel.phaseLabel}
@@ -62,6 +66,13 @@ export const ActiveSessionHero: React.ComponentType<ActiveSessionHeroProps> = ({
         themeColors={themeColors}
         isReducedMotion={isReducedMotion}
         withAlpha={progressRingProps.withAlpha}
+      />
+      <Image
+        accessibilityIgnoresInvertColors
+        accessibilityLabel="Ember focus core"
+        source={FOCUS_CORE}
+        resizeMode="contain"
+        style={{ height: spacing[24] + spacing[16], opacity: 0.16, position: 'absolute', top: spacing[16] + spacing[2], width: spacing[24] + spacing[1] }}
       />
       <ActiveSessionProgressRing
         CIRCUMFERENCE={progressRingProps.CIRCUMFERENCE}
@@ -130,14 +141,14 @@ function SessionTargetBadge(props: {
       </Box>
       {props.studyTargetLabel ? (
         props.isReducedMotion ? (
-          <Text variant="body" color="text.primary" textAlign="center" mb="md">
+          <Text variant="body" color={vexFire.cream} textAlign="center" mb="md">
             {props.studyTargetLabel}
           </Text>
         ) : (
           <Animated.View entering={FadeIn.duration(200)}>
             <Text
               variant="body"
-              color="text.primary"
+              color={vexFire.cream}
               textAlign="center"
               mb="md"
             >
@@ -149,7 +160,6 @@ function SessionTargetBadge(props: {
     </>
   );
 }
-
 function FocusSignalPill(props: {
   signalPill: { type: 'boss' | 'focus'; label: string } | null;
   themeColors: { error: string; warning: string };

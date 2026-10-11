@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import type { CompositeNavigationProp } from '@react-navigation/native';
@@ -5,7 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { SessionStartStatusCard } from '../../../features/session-start/components/SessionStartStatusCard';
 import { SessionMode } from '../../../session/modes';
 import type {
@@ -18,8 +19,8 @@ import { useFirstSessionStart } from '../hooks/useFirstSessionStart';
 import { useAuthStore } from '../../../store';
 import { useOnboardingStore } from '../../../features/onboarding/store';
 import type { Lane } from '../../../features/lane-engine/types';
-import { LiquidGlassScreen } from '../../../shared/ui/liquid-glass/LiquidGlassScreen';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { GlassScreen } from '../../../components/glass/GlassScreen';
+import { SessionSetupAtmosphere } from './SessionSetupAtmosphere';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -99,12 +100,12 @@ export function FirstSessionView({
     return (
       <Box
         flex={1}
-        bg="background.primary"
+        style={{ backgroundColor: vexFire.background, flex: 1 }}
         justifyContent="center"
         alignItems="center"
         p="lg"
       >
-        <Text variant="h4" color="error.DEFAULT" mb="md">
+        <Text variant="h4" color={vexFire.danger} mb="md">
           Not authenticated
         </Text>
         <Button variant="primary"
@@ -124,7 +125,8 @@ export function FirstSessionView({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <LiquidGlassScreen>
+      <GlassScreen showAura={false} variant="focus">
+        <SessionSetupAtmosphere />
         <SessionStartStatusCard
           offlineMessage={offlineMessage}
           routeWarningMessage={null}
@@ -137,7 +139,7 @@ export function FirstSessionView({
           onStart={handleContractAnswers}
           onBack={onBack}
         />
-      </LiquidGlassScreen>
+      </GlassScreen>
     </KeyboardAvoidingView>
   );
 }

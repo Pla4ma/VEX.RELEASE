@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
+import type { NavigationContainerRefWithCurrent, NavigationProp } from '@react-navigation/native';
 
 import { eventBus } from '../../events/EventBus';
 import { createRuntimeMMKV } from '../../persistence/mmkv-runtime';
 import { getStreakService } from '../../streaks/StreakService';
-
-import type { ExtendedRootStackParams } from '../types';
-import type { RootStackParams } from '../types';
-import type { NavigationProp } from '@react-navigation/native';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import type { ExtendedRootStackParams , RootStackParams } from '../types';
 import { navigateToRootScreen } from '../navigation-helpers';
 
 interface StreakFuneralData {
@@ -128,7 +126,13 @@ export function useStreakFuneralNavigation({
 
   useEffect(() => {
     if (isAuthenticated && isReady && hasCompletedOnboarding) {
-      void checkStreakFuneral();
+      void checkStreakFuneral().catch((error: unknown) => {
+        captureSilentFailure(error, {
+          feature: 'streaks',
+          operation: 'check-streak-funeral',
+          type: 'data',
+        });
+      });
     }
   }, [checkStreakFuneral, hasCompletedOnboarding, isAuthenticated, isReady]);
 

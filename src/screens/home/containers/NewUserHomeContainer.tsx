@@ -25,7 +25,6 @@ import {
 import { buildContainerController } from './new-user-container-controller-builder';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
 interface StreakQueryData {
   currentDays?: number;
   isAtRisk?: boolean;
@@ -34,7 +33,6 @@ interface ProgressionQueryData {
   xp?: number;
   level?: number;
 }
-
 export interface NewUserContainerInput {
   analytics: ReturnType<
     typeof import('../../../features/liveops-config').useDisclosureAnalytics
@@ -51,7 +49,6 @@ export interface NewUserContainerInput {
   streakQuery: UseQueryResult;
   userId: string;
 }
-
 export function useNewUserContainerModel(
   input: NewUserContainerInput,
 ): HomeViewModel & {
@@ -67,14 +64,12 @@ export function useNewUserContainerModel(
     streakQuery,
     userId,
   } = input;
-
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
   const completionSync = useSessionUIStore((state) => state.completionSync);
   const clearHomeHighlight = useSessionUIStore(
     (state) => state.clearHomeHighlight,
   );
-
   const streakData = streakQuery.data as StreakQueryData | undefined;
   const progData = progressionQuery.data as ProgressionQueryData | undefined;
   const currentStreak = streakData?.currentDays ?? 0;
@@ -92,7 +87,6 @@ export function useNewUserContainerModel(
     disclosure.inputs.totalCompletedSessions === 0 &&
     currentStreak === 0 &&
     currentXp === 0;
-
   const stubActions = useMemo(() => stubNavigationActions(), []);
 
   const openSetup = useCallback(
@@ -114,7 +108,11 @@ export function useNewUserContainerModel(
   }, [navigation]);
 
   const openCoach = useCallback((): void => {
-    navigateToMainStackScreen(navigation as never, 'AICoach');
+    navigateToMainStackScreen(navigation, 'AICoach');
+  }, [navigation]);
+
+  const openContentStudy = useCallback((): void => {
+    navigateToMainStackScreen(navigation, 'ContentStudy');
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(
@@ -176,6 +174,7 @@ export function useNewUserContainerModel(
     openSocial: stubActions.openSocial,
     openPlan,
     openCoach,
+    openContentStudy,
   });
 
   return {

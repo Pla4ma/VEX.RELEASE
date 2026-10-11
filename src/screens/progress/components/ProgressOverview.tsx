@@ -6,6 +6,7 @@ import { VexSignalPath } from '../../../shared/ui/vex/VexSignalPath';
 import { VexSurface } from '../../../shared/ui/vex/VexSurface';
 import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import type { FocusScoreDashboardModel } from '../../../features/focus-identity/types';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface ProgressOverviewProps {
   completedSessions: number;
@@ -26,10 +27,10 @@ function ProgressError({ onRetry }: { onRetry: () => void }): React.JSX.Element 
   const { theme } = useTheme();
   return (
     <VexSurface tone="quiet" style={{ marginBottom: theme.spacing[4], padding: theme.spacing[4] }}>
-      <Text color={theme.colors.warning.DEFAULT} variant="label">Signal interrupted</Text>
+      <Text color={vexFire.amber} variant="label">Signal interrupted</Text>
       <Text variant="body" style={{ marginTop: theme.spacing[1] }}>VEX couldn’t refresh your latest rhythm.</Text>
       <Pressable accessibilityHint="Try loading your focus rhythm again" accessibilityLabel="Retry progress" accessibilityRole="button" onPress={onRetry} style={{ minHeight: 44, justifyContent: 'center', marginTop: theme.spacing[2] }}>
-        <Text color={theme.colors.primary[500]} variant="button">Try again</Text>
+        <Text color={vexFire.ember} variant="button">Try again</Text>
       </Pressable>
     </VexSurface>
   );
@@ -49,7 +50,7 @@ export function ProgressOverview({
     <View style={{ gap: theme.spacing[4] }}>
       {focusModel.isOffline ? (
         <VexSurface tone="quiet" style={{ padding: theme.spacing[3] }}>
-          <Text color={theme.colors.warning.DEFAULT} variant="caption">Offline · cached rhythm shown</Text>
+          <Text color={vexFire.amber} variant="caption">Offline · cached rhythm shown</Text>
         </VexSurface>
       ) : null}
       <View style={{ paddingHorizontal: theme.spacing[2] }}>
@@ -58,7 +59,7 @@ export function ProgressOverview({
             <Text variant="h4">The signal path</Text>
             <Text color="text.tertiary" variant="bodySmall">Every return makes the next one easier.</Text>
           </View>
-          <VexIcon color={theme.colors.primary[500]} name="sparkles" size="md" variant="outline" />
+          <VexIcon color={vexFire.ember} name="sparkles" size="md" variant="outline" />
         </View>
         <VexSignalPath currentIndex={currentIndex} fireThread items={SIGNALS} />
       </View>

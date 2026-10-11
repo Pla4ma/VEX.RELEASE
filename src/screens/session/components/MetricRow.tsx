@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box'
@@ -20,15 +21,15 @@ export function MetricRow({
   metric: ProgressMetric;
   delay: number;
 }) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Animated.View entering={FadeInUp.delay(delay).springify()}>
       <Box
         p={18}
         style={{
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
           borderWidth: 1,
-          borderColor: theme.colors.border.light,
+          borderColor: vexFire.border,
           ...getPremiumCardStyle('medium'),
         }}
       >
@@ -42,13 +43,13 @@ export function MetricRow({
             {metric.icon ? (
               <Icon name={metric.icon} size={18} color={metric.accent} />
             ) : null}
-            <Text variant="label" color={theme.colors.text.secondary}>
+            <Text variant="label" color={vexFire.textSecondary}>
               {metric.label}
             </Text>
           </Box>
           <Text
             variant="body"
-            color={theme.colors.text.primary}
+            color={vexFire.cream}
             fontWeight="700"
           >
             {metric.value}
@@ -58,7 +59,7 @@ export function MetricRow({
           height={10}
           borderRadius={999}
           overflow="hidden"
-          style={{ backgroundColor: theme.colors.background.primary }}
+          style={{ backgroundColor: vexFire.background }}
         >
           <Box
             height="100%"
@@ -74,7 +75,7 @@ export function MetricRow({
             justifyContent="space-between"
             mt={10}
           >
-            <Text variant="caption" color={theme.colors.text.secondary}>
+            <Text variant="caption" color={vexFire.textSecondary}>
               {metric.reward}
             </Text>
             {metric.showPlusBadge ? (
@@ -82,9 +83,9 @@ export function MetricRow({
                 px={10}
                 py={4}
                 borderRadius={999}
-                style={{ backgroundColor: theme.colors.primary[500] }}
+                style={{ backgroundColor: vexFire.ember }}
               >
-                <Text variant="caption" color={theme.colors.text.inverse}>
+                <Text variant="caption" color={vexFire.cream}>
                   +1
                 </Text>
               </Box>

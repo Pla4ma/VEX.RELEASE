@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useMemo } from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
@@ -26,7 +27,7 @@ export function SessionAdaptivePayoffCard({
   studyProgress,
   summary,
 }: SessionAdaptivePayoffCardProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const payoff = useMemo(
     () =>
       buildCompletionAdaptivePayoff({
@@ -60,22 +61,22 @@ export function SessionAdaptivePayoffCard({
         mt={5}
         p={18}
         style={{
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.primary[500],
+          backgroundColor: vexFire.panel,
+          borderColor: vexFire.ember,
           borderWidth: 1,
           ...getPremiumCardStyle('medium'),
         }}
       >
-        <Text variant="label" color={theme.colors.primary[400]}>
+        <Text variant="label" color={vexFire.ember}>
           {payoff.label}
         </Text>
-        <Text variant="h3" color={theme.colors.text.primary} mt={2}>
+        <Text variant="h3" color={vexFire.cream} mt={2}>
           {payoff.title}
         </Text>
-        <Text variant="h4" color={theme.colors.primary[500]} mt={3}>
+        <Text variant="h4" color={vexFire.ember} mt={3}>
           {payoff.value}
         </Text>
-        <Text variant="body" color={theme.colors.text.secondary} mt={2}>
+        <Text variant="body" color={vexFire.textSecondary} mt={2}>
           {payoff.body}
         </Text>
       </Box>

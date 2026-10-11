@@ -14,6 +14,7 @@ import { tabSwitch } from '../../utils/haptics';
 import { getMinTouchTargetStyle } from '../../utils/touchTarget';
 import { springPresets, timingPresets } from '../../theme/tokens/motion';
 import { useTheme } from '../../theme/ThemeContext';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 const NAV_ICON_ASSETS: Record<string, number> = {
   Home: require('../../../assets/vex/nav-home-fire.png'),
@@ -128,7 +129,7 @@ export function TabButton({
         </Animated.View>
         <Text
           style={{
-            color: focused ? theme.colors.text.primary : theme.colors.text.tertiary,
+            color: focused ? vexFire.cream : vexFire.textMuted,
             fontSize: theme.typography.ui.caption.fontSize,
             fontWeight: focused ? theme.fontWeights.bold : theme.fontWeights.medium,
           }}
@@ -137,7 +138,7 @@ export function TabButton({
       </Text>
         <View
           style={{
-            backgroundColor: focused ? theme.colors.semantic.primary : 'transparent',
+            backgroundColor: focused ? vexFire.ember : 'transparent',
             borderRadius: theme.borderRadius.full,
             height: theme.spacing[1],
             marginTop: theme.spacing[1],

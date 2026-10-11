@@ -1,8 +1,7 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native';
+import { useRoute , useIsFocused } from '@react-navigation/native';
 
 import { useOnboardingFlow } from './hooks/useOnboardingFlow';
 import type { OnboardingRouteProp } from './hooks/useOnboardingFlow';
@@ -29,24 +28,32 @@ function OnboardingFlowScreen(): React.ReactNode {
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [hasSeenCinematicIntro, setHasSeenCinematicIntro] = useState(false);
 
+  const handleAcceptLaneAndAdvance = flow.handleAcceptLaneAndAdvance;
+  const startFirstSession = flow.startFirstSession;
+  const handleFinish = flow.handleFinish;
   const handleAccept = useCallback((lane: Lane) => {
     setIsCelebrating(true);
     (window).__ONBOARDING_LANE_CHOSEN__ = true;
     setTimeout(() => {
-      flow.handleAcceptLaneAndAdvance(lane);
+      handleAcceptLaneAndAdvance(lane);
     }, 900);
-  }, [flow]);
+  }, [handleAcceptLaneAndAdvance]);
 
   const handleStartFirstSession = useCallback(() => {
-    flow.startFirstSession();
-  }, [flow]);
+    startFirstSession();
+  }, [startFirstSession]);
 
   useEffect(() => {
     if (!isFocused) return;
     if (flow.step === 3 && flow.hasCompletedFirstSession) {
-      flow.handleFinish('First session complete — VEX is ready.');
+      handleFinish('First session complete — VEX is ready.');
     }
-  }, [isFocused, flow.step, flow.hasCompletedFirstSession, flow.handleFinish]);
+  }, [
+    flow.hasCompletedFirstSession,
+    flow.step,
+    handleFinish,
+    isFocused,
+  ]);
 
   if (!flow.userId) {
     return <SignedOutOnboardingState />;

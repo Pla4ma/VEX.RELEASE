@@ -9,6 +9,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import type { SessionMode } from '../../../session/modes';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type SessionSetupHeaderProps = {
   durationSeconds: number;
@@ -51,18 +52,18 @@ export function SessionSetupHeader({
             minWidth: 44,
           }}
         >
-          <Icon name="arrow-left" size="lg" color={theme.colors.text.primary} />
+          <Icon name="arrow-left" size="lg" color={vexFire.cream} />
         </Pressable>
-        <Text variant="h4">New Session</Text>
+        <Text variant="h4" color={vexFire.cream}>New Session</Text>
         <Box width={40} />
       </Box>
 
       <Animated.View entering={FadeInUp.delay(100)}>
         <Box p="lg" pt="sm">
-          <Text variant="h2" color="primary.500" mb="sm">
+          <Text variant="h2" color={vexFire.ember} mb="sm">
             Start fast, customize only if needed
           </Text>
-          <Text variant="body" color="text.secondary">
+          <Text variant="body" color={vexFire.textSecondary}>
             The default path is one tap. Open customization only when you want
             to tune the session.
           </Text>
@@ -75,7 +76,7 @@ export function SessionSetupHeader({
               />
             </Box>
           ) : preview.isError ? null : (
-            <Text variant="caption" color="text.tertiary" mt="md">
+            <Text variant="caption" color={vexFire.textMuted} mt="md">
               {previewCopy}
             </Text>
           )}

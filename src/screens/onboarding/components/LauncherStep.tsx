@@ -4,12 +4,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import { getHeroGradientColors } from '../../home/HomeScreenVisuals';
 import { styles } from '../styles';
 import type { StarterPreset } from './onboarding-flow-data';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type LauncherStepProps = {
   firstSessionXp: number;
@@ -22,7 +21,7 @@ type LauncherStepProps = {
 };
 
 export function LauncherStep({
-  firstSessionXp,
+  firstSessionXp: _firstSessionXp,
   hasSeenFirstWin,
   isFinishing,
   isLaunchingSession,

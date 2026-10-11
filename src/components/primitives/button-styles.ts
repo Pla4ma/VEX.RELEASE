@@ -2,7 +2,7 @@ import type { ViewStyle } from 'react-native';
 
 import type { Theme } from '../../theme/themeCoreTypes';
 import type { ButtonProps } from './Button';
-import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+
 
 interface ButtonSizeConfig {
   py: number;
@@ -48,11 +48,11 @@ export function getButtonVariantStyle(
   sizes: ButtonSizeConfig,
   pressed: boolean,
   fullWidth: boolean,
-  _theme: Theme,
+  theme: Theme,
 ): ViewStyle {
   const base: ViewStyle = {
     alignItems: 'center',
-    borderRadius: 999,
+    borderRadius: theme.borderRadius.full,
     flexDirection: 'row',
     justifyContent: 'center',
     minHeight: sizes.minHeight,
@@ -63,74 +63,63 @@ export function getButtonVariantStyle(
   if (variant === 'primary') {
     return {
       ...base,
-      backgroundColor: pressed ? vexLightGlass.mint[600] : vexLightGlass.mint[500],
-      borderColor: 'rgba(255, 255, 255, 0.55)',
+      backgroundColor: pressed ? theme.colors.primary[600] : theme.colors.primary[500],
+      borderColor: theme.colors.primary[400],
       borderWidth: 1,
-      shadowColor: vexLightGlass.mint[600],
-      shadowOffset: { width: 0, height: 12 },
-      shadowOpacity: 0.30,
-      shadowRadius: 20,
-      elevation: 8,
     };
   }
   if (variant === 'danger') {
     return {
       ...base,
-      backgroundColor: vexLightGlass.semantic.danger,
-      borderColor: 'rgba(255, 255, 255, 0.55)',
+      backgroundColor: pressed ? theme.colors.error.dark : theme.colors.error.DEFAULT,
+      borderColor: theme.colors.error.light,
       borderWidth: 1,
-      shadowColor: vexLightGlass.semantic.danger,
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.32,
-      shadowRadius: 18,
-      elevation: 6,
     };
   }
   if (variant === 'outline') {
     return {
       ...base,
-      backgroundColor: pressed
-        ? 'rgba(66, 207, 174, 0.18)'
-        : 'rgba(255, 255, 255, 0.62)',
-      borderColor: 'rgba(66, 207, 174, 0.55)',
+      backgroundColor: pressed ? theme.colors.surface.pressed : 'transparent',
+      borderColor: theme.colors.border.strong,
       borderWidth: 1,
     };
   }
   if (variant === 'ghost') {
     return {
       ...base,
-      backgroundColor: pressed ? 'rgba(255, 255, 255, 0.42)' : 'transparent',
-      borderColor: 'rgba(255, 255, 255, 0.6)',
+      backgroundColor: pressed ? theme.colors.surface.hover : 'transparent',
+      borderColor: theme.colors.border.light,
+      borderWidth: 1,
+    };
+  }
+  if (variant === 'premium') {
+    return {
+      ...base,
+      backgroundColor: theme.colors.accent.purple,
+      borderColor: theme.colors.accent.purple,
       borderWidth: 1,
     };
   }
   return {
     ...base,
-    backgroundColor: pressed
-      ? 'rgba(255, 255, 255, 0.78)'
-      : 'rgba(255, 255, 255, 0.62)',
-    borderColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: pressed ? theme.colors.surface.pressed : theme.colors.surface.button,
+    borderColor: theme.colors.border.DEFAULT,
     borderWidth: 1,
-    shadowColor: 'rgba(13, 76, 65, 0.20)',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.20,
-    shadowRadius: 14,
-    elevation: 3,
   };
 }
 
 export function getButtonTextColor(
   variant: NonNullable<ButtonProps['variant']>,
-  _theme: Theme,
+  theme: Theme,
 ): string {
   if (variant === 'primary' || variant === 'danger') {
-    return vexLightGlass.text.inverse;
+    return theme.colors.text.inverse;
   }
   if (variant === 'premium') {
-    return '#1A1300';
+    return theme.colors.text.inverse;
   }
   if (variant === 'outline') {
-    return vexLightGlass.mint[700];
+    return theme.colors.accent.purple;
   }
-  return vexLightGlass.text.primary;
+  return theme.colors.text.primary;
 }

@@ -6,7 +6,7 @@ import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { spacing } from '../../../theme/tokens/spacing';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface FocusStatsProps {
   elapsedSeconds: number;
@@ -25,7 +25,7 @@ function StatPill({
     <View style={{ alignItems: 'center', minWidth: 56 }}>
       <Text
         style={{
-          color: vexLightGlass.text.primary,
+          color: vexFire.cream,
           fontSize: 18,
           fontWeight: '800',
           fontVariant: ['tabular-nums'],
@@ -36,7 +36,7 @@ function StatPill({
       </Text>
       <Text
         style={{
-          color: vexLightGlass.text.tertiary,
+          color: vexFire.textMuted,
           fontSize: 10,
           fontWeight: '800',
           letterSpacing: 1.6,
@@ -54,7 +54,7 @@ function Divider(): React.JSX.Element {
   return (
     <View
       style={{
-        backgroundColor: 'rgba(255,255,255,0.18)',
+        backgroundColor: vexFire.line,
         height: 24,
         width: 1,
       }}

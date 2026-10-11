@@ -13,8 +13,7 @@
 import { describe, it, expect } from '@jest/globals';
 import { resolveNotificationAction } from '../notification-resolver';
 import { getCoachPresenceMessage } from '../../features/coach-presence/copy-service';
-import { isNotArchivedRoute } from '../feature-route-registry';
-import { getFeatureForRoute } from '../feature-route-registry';
+import { isNotArchivedRoute , getFeatureForRoute } from '../feature-route-registry';
 
 const ARCHIVED_ROUTES = [
   'Guild',

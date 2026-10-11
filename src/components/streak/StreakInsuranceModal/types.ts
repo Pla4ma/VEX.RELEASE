@@ -1,6 +1,6 @@
 import type {} from 'react-native';
 import type { useTheme } from '@/theme';
-import type { StreakRiskAssessment } from '@/features/streaks/streak-insurance';
+import type { StreakRiskAssessment } from '@/features/streaks/streak-risk-assessment';
 
 export type { StreakRiskAssessment };
 export type Theme = ReturnType<typeof useTheme>['theme'];

@@ -83,7 +83,7 @@ export function SkiaParticles(): React.JSX.Element {
       style={{ position: 'absolute', width, height, opacity: 0.85 }}
     >
       <Group>
-        {particles.map((p, i) => (
+        {particles.map((p, _i) => (
           <ParticleNode
             key={`particle-${p.baseX}-${p.baseY}`}
             baseX={p.baseX}

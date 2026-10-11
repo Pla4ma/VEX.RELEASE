@@ -1,29 +1,29 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { StudyProgress } from './SessionProgressionCard.types';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export function StudyProgressPanel({
   studyProgress,
 }: {
   studyProgress: StudyProgress;
 }) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <Animated.View entering={FadeInUp.delay(600).springify()}>
       <Box
         p={18}
         style={{
-          backgroundColor: `${theme.colors.primary[500]}08`,
+          backgroundColor: `${vexFire.ember}08`,
           borderWidth: 1,
-          borderColor: theme.colors.primary[500],
+          borderColor: vexFire.ember,
           ...getPremiumCardStyle('medium'),
         }}
       >
@@ -35,18 +35,18 @@ export function StudyProgressPanel({
           mb={12}
         >
           <Box flexDirection="row" alignItems="center" gap={10}>
-            <Icon name="book" size={20} color={theme.colors.primary[500]} />
-            <Text variant="label" color="primary.500">
+            <Icon name="book" size={20} color={vexFire.ember} />
+            <Text variant="label" color={vexFire.ember}>
               STUDY PROGRESS
             </Text>
           </Box>
-          <Text variant="caption" color="text.secondary">
+          <Text variant="caption" color={vexFire.textSecondary}>
             {studyProgress.progressLabel}
           </Text>
         </Box>
 
         {/* Plan Title */}
-        <Text variant="h4" color="text.primary" mb={12}>
+        <Text variant="h4" color={vexFire.cream} mb={12}>
           {studyProgress.planTitle}
         </Text>
 
@@ -55,14 +55,14 @@ export function StudyProgressPanel({
           height={10}
           borderRadius={999}
           overflow="hidden"
-          style={{ backgroundColor: theme.colors.background.primary }}
+          style={{ backgroundColor: vexFire.background }}
           mb={12}
         >
           <Box
             height="100%"
             width={`${Math.max(0, Math.min(1, studyProgress.progress)) * 100}%`}
             borderRadius={999}
-            style={{ backgroundColor: theme.colors.primary[500] }}
+            style={{ backgroundColor: vexFire.ember }}
           />
         </Box>
 
@@ -72,12 +72,12 @@ export function StudyProgressPanel({
             flex={1}
             p={12}
             borderRadius={8}
-            style={{ backgroundColor: theme.colors.background.tertiary }}
+            style={{ backgroundColor: vexFire.backgroundSoft }}
           >
-            <Text variant="caption" color="text.tertiary">
+            <Text variant="caption" color={vexFire.textMuted}>
               Chapters
             </Text>
-            <Text variant="body" color="text.primary" fontWeight="600">
+            <Text variant="body" color={vexFire.cream} fontWeight="600">
               {studyProgress.chaptersCompleted}/
               {studyProgress.totalChapters}
             </Text>
@@ -87,12 +87,12 @@ export function StudyProgressPanel({
               flex={1}
               p={12}
               borderRadius={8}
-              style={{ backgroundColor: theme.colors.background.tertiary }}
+              style={{ backgroundColor: vexFire.backgroundSoft }}
             >
-              <Text variant="caption" color="text.tertiary">
+              <Text variant="caption" color={vexFire.textMuted}>
                 Quiz Accuracy
               </Text>
-              <Text variant="body" color="success.DEFAULT" fontWeight="600">
+              <Text variant="body" color={vexFire.success} fontWeight="600">
                 {studyProgress.quizAccuracy}%
               </Text>
             </Box>
@@ -101,22 +101,22 @@ export function StudyProgressPanel({
             flex={1}
             p={12}
             borderRadius={8}
-            style={{ backgroundColor: theme.colors.background.tertiary }}
+            style={{ backgroundColor: vexFire.backgroundSoft }}
           >
-            <Text variant="caption" color="text.tertiary">
+            <Text variant="caption" color={vexFire.textMuted}>
               Study Time
             </Text>
-            <Text variant="body" color="text.primary" fontWeight="600">
+            <Text variant="body" color={vexFire.cream} fontWeight="600">
               {studyProgress.totalStudyTimeMinutes}m
             </Text>
           </Box>
         </Box>
 
         {/* Current Task */}
-        <Text variant="body" color="text.primary">
+        <Text variant="body" color={vexFire.cream}>
           {studyProgress.taskLabel}
         </Text>
-        <Text variant="bodySmall" color="text.secondary" mt={4} mb={12}>
+        <Text variant="bodySmall" color={vexFire.textSecondary} mt={4} mb={12}>
           {studyProgress.taskTitle}
         </Text>
 
@@ -127,18 +127,18 @@ export function StudyProgressPanel({
             borderRadius={8}
             mb={14}
             style={{
-              backgroundColor: `${theme.colors.info.DEFAULT}15`,
+              backgroundColor: `${vexFire.amber}15`,
               borderLeftWidth: 3,
-              borderLeftColor: theme.colors.info.DEFAULT,
+              borderLeftColor: vexFire.amber,
             }}
           >
             <Text variant="caption" color="info.DEFAULT" fontWeight="600">
               Next Session Goal
             </Text>
-            <Text variant="bodySmall" color="text.primary" mt={4}>
+            <Text variant="bodySmall" color={vexFire.cream} mt={4}>
               {studyProgress.nextSessionGoal.topic}
             </Text>
-            <Text variant="caption" color="text.tertiary" mt={4}>
+            <Text variant="caption" color={vexFire.textMuted} mt={4}>
               Suggested:{' '}
               {studyProgress.nextSessionGoal.suggestedDurationMinutes} min
             </Text>
@@ -148,7 +148,7 @@ export function StudyProgressPanel({
         {studyProgress.error ? (
           <Text
             variant="caption"
-            color={theme.colors.error.DEFAULT}
+            color={vexFire.danger}
             mt={10}
           >
             {studyProgress.error}

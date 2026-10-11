@@ -1,5 +1,6 @@
 import React from 'react';
 import { G, Circle, Ellipse, Path } from 'react-native-svg';
+import { glassSvgColors } from './glassSvgColors';
 
 interface VariantProps {
   size: number;
@@ -34,7 +35,7 @@ export function GemVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - r * 0.5} ${cy - r * 0.72} Q ${cx} ${cy - r * 0.95} ${cx + r * 0.5} ${cy - r * 0.72}`}
         fill="none"
         opacity={0.88}
-        stroke="theme.glassColors.vexWhite"
+        stroke={glassSvgColors.vexWhite}
         strokeLinecap="round"
         strokeWidth={size * 0.018}
       />
@@ -42,7 +43,7 @@ export function GemVariant({ size }: VariantProps): React.ReactNode {
         d={`M ${cx - r * 0.72} ${cy + r * 0.42} Q ${cx} ${cy + r * 0.88} ${cx + r * 0.72} ${cy + r * 0.42}`}
         fill="none"
         opacity={0.42}
-        stroke="theme.glassColors.vexDeepTeal"
+        stroke={glassSvgColors.vexDeepTeal}
         strokeLinecap="round"
         strokeWidth={size * 0.012}
       />

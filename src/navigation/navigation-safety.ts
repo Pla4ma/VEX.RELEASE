@@ -1,4 +1,4 @@
-import type { NavigationProp } from '@react-navigation/native';
+import { CommonActions, type NavigationProp } from '@react-navigation/native';
 import type { ExtendedRootStackParams } from './param-types';
 import { createDebugger } from '../utils/debug';
 
@@ -30,9 +30,11 @@ export function safeNavigate<T extends keyof ExtendedRootStackParams>(
     return false;
   }
   try {
-    navigation.navigate(
-      screen as string,
-      params,
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: screen,
+        params,
+      }),
     );
     return true;
   } catch (error) {
@@ -51,7 +53,7 @@ export function isCurrentRoute(
 
 export function getCurrentRouteName(
   navigationState:
-    | { routes: Array<{ name: string }>; index: number }
+    | { routes: { name: string }[]; index: number }
     | undefined,
 ): string | undefined {
   if (!navigationState) {

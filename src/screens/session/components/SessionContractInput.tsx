@@ -1,8 +1,9 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, TextInput } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
+import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { useTheme } from '../../../theme/ThemeContext';
 import {
   getMinTouchTargetStyle,
@@ -32,13 +33,13 @@ export function SessionContractInput({
   return (
     <Box mt="md">
       <Box
-        bg="background.elevated"
-        borderColor="border.light"
         borderRadius={theme.borderRadius.lg}
-        borderWidth={1}
         p="md"
         style={{
-          boxShadow: `0px 2px 8px ${theme.colors.semantic.shadow} / 0.08`,
+          backgroundColor: vexFire.backgroundRaised,
+          borderColor: vexFire.border,
+          borderWidth: 1,
+          boxShadow: `0px 2px 8px ${vexFire.shadow} / 0.08`,
         }}
       >
         <Box flexDirection="row" alignItems="center">
@@ -49,10 +50,10 @@ export function SessionContractInput({
             maxLength={80}
             onChangeText={handleChange}
             placeholder="What will you focus on? (optional)"
-            placeholderTextColor={theme.colors.text.tertiary}
+            placeholderTextColor={vexFire.textMuted}
             returnKeyType="done"
             style={{
-              color: theme.colors.text.primary,
+              color: vexFire.cream,
               flex: 1,
               minHeight: 44,
               padding: 0,
@@ -70,20 +71,20 @@ export function SessionContractInput({
               style={getMinTouchTargetStyle()}
             >
               <Box flex={1} alignItems="center" justifyContent="center">
-                <Icon name="x" size="sm" color={theme.colors.text.secondary} />
+                <VexIcon name="x" size="sm" color={vexFire.textSecondary} variant="solid" />
               </Box>
             </Pressable>
           ) : null}
         </Box>
         {showGuidance ? (
-          <Text variant="caption" color="text.secondary" mt="xs">
+          <Text variant="caption" color={vexFire.textSecondary} mt="xs">
             Add a little more detail, or start without a contract.
           </Text>
         ) : null}
         {showCounter ? (
           <Text
             variant="caption"
-            color="text.tertiary"
+            color={vexFire.textMuted}
             mt="xs"
             textAlign="right"
           >

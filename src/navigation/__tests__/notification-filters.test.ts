@@ -30,10 +30,10 @@ describe('getAvailableNotificationFilters', () => {
     }
   });
 
-  it('boss filter not included when boss unavailable', () => {
+  it('boss filter included from day one', () => {
     const features = makeFeatureAccess(0).features;
     const filters = getAvailableNotificationFilters(features);
-    expect(filters).not.toContain('view_boss');
+    expect(filters).toContain('view_boss');
   });
 
   it('coach filter included when ai_coach_advanced available', () => {

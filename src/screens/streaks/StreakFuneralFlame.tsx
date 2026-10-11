@@ -6,13 +6,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { View } from 'react-native';
-import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme/ThemeContext';
+import { Image } from 'react-native';
 import { SkeletonItem } from '../../shared/ui/components/EnhancedSkeleton';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): React.JSX.Element {
-  const { theme } = useTheme();
-  const semantic = theme.colors.semantic;
   const flameScale = useSharedValue(1);
   const flameOpacity = useSharedValue(1);
 
@@ -47,14 +45,17 @@ export function StreakFuneralFlame({ isPending }: { isPending?: boolean }): Reac
           width: 96,
           height: 96,
           borderRadius: 48,
-          backgroundColor: `${semantic.danger}18`,
+          backgroundColor: `${vexFire.danger}18`,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Text fontSize={40} color="error.DEFAULT" fontWeight="700">
-          V
-        </Text>
+        <Image
+          accessibilityIgnoresInvertColors
+          source={require('../../../assets/vex/recovery/comeback-phoenix.png')}
+          resizeMode="contain"
+          style={{ height: 76, width: 76 }}
+        />
       </View>
     </Animated.View>
   );

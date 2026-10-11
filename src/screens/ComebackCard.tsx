@@ -1,11 +1,12 @@
 import React from 'react';
+import { Image } from 'react-native';
 
 import { Box } from '../components/primitives/Box';
 import { Button } from '../components/primitives/Button';
-import { Text } from '../components/primitives/Text';
+import { Text , Text as VexText } from '../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../navigation/types';
 import { useTheme } from '../theme/ThemeContext';
-import { Text as VexText } from '../components/primitives/Text';
+import { vexFire } from '../theme/tokens/vex-fire';
 
 type ComebackState = ExtendedRootStackParams['Comeback']['comebackState'];
 
@@ -26,37 +27,43 @@ export function ComebackCard({
     <Box
       p="xl"
       style={{
-        backgroundColor: theme.colors.background.secondary,
+        backgroundColor: vexFire.panel,
         borderRadius: theme.borderRadius['3xl'],
         borderWidth: 1,
-        borderColor: theme.colors.border.light,
+        borderColor: vexFire.borderStrong,
         gap: theme.spacing[4],
       }}
     >
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../assets/vex/recovery/comeback-phoenix.png')}
+        resizeMode="contain"
+        style={{ alignSelf: 'center', height: 156, marginTop: -theme.spacing[5], opacity: 0.92, width: 156 }}
+      />
       <Text
         variant="label"
-        color={theme.colors.primary[500]}
+        color={vexFire.ember}
         textTransform="uppercase"
       >
         Comeback Mode
       </Text>
-      <Text variant="h2" color={theme.colors.text.primary}>
+      <Text variant="h2" color={vexFire.cream}>
         {comebackState.message}
       </Text>
-      <Text variant="body" color={theme.colors.text.secondary}>
+      <Text variant="body" color={vexFire.textSecondary}>
         You were away {comebackState.daysAbsent} days
       </Text>
 
       <Box
         p="md"
         style={{
-          backgroundColor: theme.colors.surface.selected,
+          backgroundColor: vexFire.backgroundSoft,
           borderRadius: theme.borderRadius.xl,
           borderWidth: 1,
-          borderColor: theme.colors.primary[200],
+          borderColor: vexFire.border,
         }}
       >
-        <Text variant="body" color={theme.colors.text.primary}>
+        <Text variant="body" color={vexFire.cream}>
           {`⚡ ${comebackState.rewardMultiplier}x XP on your first session back`}
         </Text>
       </Box>
@@ -65,14 +72,14 @@ export function ComebackCard({
         <Box
           p="md"
           style={{
-            backgroundColor: theme.colors.warning[50],
+            backgroundColor: vexFire.backgroundSoft,
             borderRadius: theme.borderRadius.xl,
             borderWidth: 1,
-            borderColor: theme.colors.warning[500],
+            borderColor: vexFire.amber,
             gap: theme.spacing[2],
           }}
         >
-          <Text variant="body" color={theme.colors.text.primary}>
+          <Text variant="body" color={vexFire.cream}>
             {`🔥 Your ${comebackState.streakBefore}-day streak can be restored! Complete 3 sessions this week.`}
           </Text>
           <Box flexDirection="row" gap="sm">
@@ -84,15 +91,15 @@ export function ComebackCard({
                 style={{
                   backgroundColor:
                     step === 0
-                      ? theme.colors.warning[500]
-                      : theme.colors.background.tertiary,
+                      ? vexFire.amber
+                      : vexFire.line,
                   borderRadius: theme.borderRadius.full,
                   opacity: step === 0 ? 0.35 : 1,
                 }}
               />
             ))}
           </Box>
-          <Text variant="caption" color={theme.colors.text.secondary}>
+          <Text variant="caption" color={vexFire.textSecondary}>
             0 / 3 sessions completed
           </Text>
         </Box>

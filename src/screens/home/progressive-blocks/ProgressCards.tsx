@@ -56,7 +56,7 @@ export function ProgressPreviewCard({
           label={ctaLabel}
           onPress={onPress}
           variant="outline"
-          accessibilityLabel="Perform action"
+          accessibilityLabel={ctaLabel}
           accessibilityHint="Double tap to activate"
         />
       </View>
@@ -132,7 +132,7 @@ export function ReturnReasonCard({
             label={ctaLabel}
             onPress={onPress}
             variant="primary"
-            accessibilityLabel="Perform action"
+            accessibilityLabel={ctaLabel}
             accessibilityHint="Double tap to activate"
           />
           {onDismiss ? (

@@ -1,11 +1,12 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
+import { View } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import {
   DifficultySelector,
   type SessionDifficulty,
 } from '../../../features/session-start/components/DifficultySelector';
-import { LiquidGlassCard } from '../../../shared/ui/liquid-glass/LiquidGlassCard';
 
 type SessionSetupDifficultyCardProps = {
   disabled: boolean;
@@ -42,12 +43,12 @@ export function SessionSetupDifficultyCard({
 }: SessionSetupDifficultyCardProps): React.JSX.Element {
   return (
     <Box px="lg" mt="md" mb="md">
-      <LiquidGlassCard compact>
+      <View style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border, borderRadius: 18, borderWidth: 1, padding: 16 }}>
         <Box mb="md">
-          <Text variant="label" color="text.secondary">
+          <Text variant="label" color={vexFire.textSecondary}>
             Intensity
           </Text>
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             Estimated XP:{' '}
             {Math.round((selectedDurationSeconds / 60) * getMultiplier(selected))}{' '}
             {getBonusLabel(selected)}
@@ -58,7 +59,7 @@ export function SessionSetupDifficultyCard({
           onChange={onChange}
           disabled={disabled}
         />
-      </LiquidGlassCard>
+      </View>
     </Box>
   );
 }

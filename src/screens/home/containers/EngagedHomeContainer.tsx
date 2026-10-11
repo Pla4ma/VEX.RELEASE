@@ -17,7 +17,7 @@ import {
 } from '../../../features/liveops-config';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
-import { navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
+import { navigateToMainStackScreen, navigateToSessionStackScreen } from '../../../navigation/navigation-helpers';
 import type { SessionStackParams } from '../../../navigation/types';
 import {
   getFocusedMinutesForToday,
@@ -82,6 +82,9 @@ export function useEngagedContainerModel(
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
+  const openCoach = useCallback((): void => {
+    navigateToMainStackScreen(navigation, 'AICoach');
+  }, [navigation]);
 
   const actions = useEngagedActions({
     analytics, canNavigateContentStudy, canNavigateSocial,
@@ -139,6 +142,7 @@ export function useEngagedContainerModel(
     }, userId,
     actions: {
       openSetup, openProgress: actions.openProgress,
+      openCoach,
       openSocial: actions.openSocial, openContentStudy: actions.openContentStudy,
       continueStudyPlan: actions.continueStudyPlan,
     },

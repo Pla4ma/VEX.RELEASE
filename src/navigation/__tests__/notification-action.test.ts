@@ -10,15 +10,15 @@ describe('resolveNotificationAction', () => {
     expect(result.intent).toBe('START_SESSION');
   });
 
-  it('view_boss with unavailable boss → fallback to OPEN_HOME', () => {
+  it('view_boss with day-one boss → OPEN_BOSS', () => {
     const features = makeFeatureAccess(0).features;
     const result = resolveNotificationAction(
       { type: 'view_boss' },
       features,
       'calm',
     );
-    expect(result.intent).toBe('OPEN_HOME');
-    expect(result.fallbackReason).toContain('not available');
+    expect(result.intent).toBe('OPEN_BOSS');
+    expect(result.params).toEqual({ subtle: true });
   });
 
   it('view_boss with enabled boss → OPEN_BOSS', () => {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDisclosureAnalytics } from '../../../features/liveops-config';
 import type { OnboardingStackParams } from '../../../navigation/OnboardingNavigator';
 import type { RouteProp } from '@react-navigation/native';
@@ -8,9 +8,8 @@ export type OnboardingRouteProp = RouteProp<
 >;
 import {
   useOnboardingStore,
-} from '../../../features/onboarding/store';
+ useAuthStore } from '../../../features/onboarding/store';
 import type { OnboardingGoal } from '../../../features/onboarding/schemas';
-import { useAuthStore } from '../../../features/onboarding/store';
 import { useOnboardingLane } from './useOnboardingLane';
 import { clampStep, buildDraftPayload } from '../onboarding-flow-steps';
 import { useOnboardingCompletion } from './useOnboardingCompletion';
@@ -24,8 +23,10 @@ export function useOnboardingFlow(routeStep?: number) {
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const draft = useOnboardingStore((state) =>
-    userId ? state.getDraft(userId) : undefined,
+  const getDraft = useOnboardingStore((state) => state.getDraft);
+  const draft = useMemo(
+    () => (userId ? getDraft(userId) : undefined),
+    [getDraft, userId],
   );
   const saveDraft = useOnboardingStore((state) => state.saveDraft);
   const setChosenLane = useOnboardingStore((state) => state.setChosenLane);
@@ -74,17 +75,29 @@ export function useOnboardingFlow(routeStep?: number) {
   useEffect(() => { persistDraft(); }, [persistDraft]);
   useEffect(() => { if (step === 2 && motivationStyle) {computeLaneConfirmation();} }, [step, motivationStyle, computeLaneConfirmation]);
 
-  const handlers = buildOnboardingHandlers({
-    userId,
-    goal,
-    setGoal,
-    setMotivationStyle,
-    setExplicitMotivationStyle,
-    disclosureAnalytics,
-    handleAcceptLane,
-    setChosenLane,
-    finishOnboarding,
-  });
+  const handlers = useMemo(
+    () =>
+      buildOnboardingHandlers({
+        userId,
+        goal,
+        setGoal,
+        setMotivationStyle,
+        setExplicitMotivationStyle,
+        disclosureAnalytics,
+        handleAcceptLane,
+        setChosenLane,
+        finishOnboarding,
+      }),
+    [
+      disclosureAnalytics,
+      finishOnboarding,
+      goal,
+      handleAcceptLane,
+      setChosenLane,
+      setExplicitMotivationStyle,
+      userId,
+    ],
+  );
 
   const startFirstSession = useCallback(() => {
     if (!userId || !chosenLane) return;

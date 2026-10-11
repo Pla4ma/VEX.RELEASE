@@ -1,4 +1,4 @@
-﻿import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
+import { vexLightGlass } from '../../theme/tokens/vex-light-glass';
 
 export type LiquidButtonVariant =
   | 'primary'

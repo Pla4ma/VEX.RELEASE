@@ -6,12 +6,13 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Text } from '../../components/primitives/Text';
 import { Icon } from '../../icons/components/Icon';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import type { PaywallFeatureHighlight } from './paywall-copy';
 import { paywallStyles as styles } from './paywall-styles';
 
 export function FeatureHighlightHero({
   featureHighlight,
-  theme,
+  theme: _theme,
 }: {
   featureHighlight: PaywallFeatureHighlight;
   theme: Theme;
@@ -25,20 +26,20 @@ export function FeatureHighlightHero({
         <View
           style={[
             styles.featureIconBadge,
-            { backgroundColor: theme.colors.background.primary },
+            { backgroundColor: vexFire.background },
           ]}
         >
           <Icon
             name={featureHighlight.iconName}
             size={20}
-            color={theme.colors.primary[500]}
+            color={vexFire.ember}
           />
         </View>
-        <Text style={[styles.featureTitle, { color: theme.colors.text.inverse }]}>
+        <Text style={[styles.featureTitle, { color: vexFire.cream }]}>
           {featureHighlight.title}
         </Text>
         <Text
-          style={[styles.featureBenefit, { color: theme.colors.text.inverse }]}
+          style={[styles.featureBenefit, { color: vexFire.cream }]}
         >
           {featureHighlight.benefit}
         </Text>

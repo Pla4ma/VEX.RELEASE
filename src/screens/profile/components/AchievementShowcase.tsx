@@ -1,4 +1,5 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from "@/theme/tokens/vex-fire";
+
 import React, { useState, useCallback, useMemo } from 'react';
 import { Pressable, ViewStyle } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -29,7 +30,7 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
   style,
   isEditable = false,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [isEditMode, setIsEditMode] = useState(false);
   const [draggedIndex, _setDraggedIndex] = useState<number | null>(null);
   const slots = useMemo(() => {
@@ -78,7 +79,7 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
           <Text variant="h4" style={{ marginBottom: 4 }}>
             Featured Achievements
           </Text>
-          <Text variant="caption" color="text.secondary">
+          <Text variant="caption" color={vexFire.textSecondary}>
             {unlockedCount} of {totalSlots} unlocked
           </Text>
         </Box>
@@ -100,12 +101,12 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
               borderRadius={8}
               style={{
                 backgroundColor: isEditMode
-                  ? theme.colors.success[50] || lightColors.success[50]
-                  : theme.colors.background.secondary,
+                  ? vexFire.panelSoft || vexFire.panelSoft
+                  : vexFire.panel,
                 borderWidth: 1,
                 borderColor: isEditMode
-                  ? theme.colors.success.DEFAULT
-                  : theme.colors.border.light,
+                  ? vexFire.success
+                  : vexFire.border,
               }}
             >
               <Box flexDirection="row" alignItems="center">
@@ -114,8 +115,8 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
                   size={14}
                   color={
                     isEditMode
-                      ? theme.colors.success.DEFAULT
-                      : theme.colors.text.tertiary
+                      ? vexFire.success
+                      : vexFire.textMuted
                   }
                 />
                 <Text
@@ -124,8 +125,8 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
                     marginLeft: 6,
                     fontWeight: '600',
                     color: isEditMode
-                      ? theme.colors.success.DEFAULT
-                      : theme.colors.text.secondary,
+                      ? vexFire.success
+                      : vexFire.textSecondary,
                   }}
                 >
                   {isEditMode ? 'Done' : 'Edit'}
@@ -168,18 +169,18 @@ export const AchievementShowcase: React.ComponentType<AchievementShowcaseProps> 
           p={12}
           borderRadius={10}
           style={{
-            backgroundColor: theme.colors.primary[50],
+            backgroundColor: vexFire.ember,
             borderWidth: 1,
-            borderColor: theme.colors.primary[500] + '30',
+            borderColor: vexFire.ember + '30',
           }}
         >
           <Box flexDirection="row" alignItems="center">
-            <Icon name="info" size={16} color={theme.colors.primary[500]} />
+            <Icon name="info" size={16} color={vexFire.ember} />
             <Text
               variant="caption"
               style={{
                 marginLeft: 8,
-                color: theme.colors.primary[600],
+                color: vexFire.ember,
                 fontWeight: '500',
               }}
             >

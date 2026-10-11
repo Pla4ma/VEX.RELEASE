@@ -15,7 +15,7 @@ export function Day0VexOsCard({
   onStartSession,
 }: Day0VexOsCardProps): React.ReactNode {
   const { theme } = useTheme();
-  const ritualProgress = Math.min(5, Math.max(2, completedActions + 2));
+  const ritualProgress = Math.min(5, Math.max(0, completedActions));
 
   return (
     <View style={{ marginBottom: theme.spacing[6], paddingTop: theme.spacing[12], zIndex: 1 }}>

@@ -10,9 +10,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface VexProofRingProps {
   grade: 'S' | 'A' | 'B' | 'C' | 'D' | string;
@@ -22,11 +21,11 @@ interface VexProofRingProps {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  S: lightColors.semantic.vexGold,
-  A: lightColors.semantic.vexCyan,
-  B: lightColors.surface.button,
-  C: lightColors.surface.button,
-  D: lightColors.semantic.gradeMuted,
+  S: vexFire.amber,
+  A: vexFire.ember,
+  B: vexFire.copper,
+  C: vexFire.textSecondary,
+  D: vexFire.textMuted,
 };
 
 const _AnimatedSvg = Animated.createAnimatedComponent(Svg);
@@ -38,7 +37,6 @@ export function VexProofRing({
   delay = 400,
   testID,
 }: VexProofRingProps): React.ReactNode {
-  const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
   const ringProgress = useSharedValue(0);
   const gradeScale = useSharedValue(0);
@@ -50,7 +48,7 @@ export function VexProofRing({
   const cx = s / 2;
   const cy = s / 2;
 
-  const gradeColor = GRADE_COLORS[grade] ?? theme.colors.semantic.textPrimary;
+  const gradeColor = GRADE_COLORS[grade] ?? vexFire.cream;
 
   useEffect(() => {
     if (isReducedMotion) {

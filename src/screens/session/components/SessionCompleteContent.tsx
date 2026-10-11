@@ -17,7 +17,7 @@ import type { ReflectionStatus } from '../../../features/focus-contract/types';
 import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
 import { useFeatureAccess } from '../../../features/liveops-config';
 import { useOnboardingStore } from '../../../features/onboarding/store';
-import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat';
+import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat-derived';
 import { FeatureUnlockCelebration } from '../../../features/session-completion/components/FeatureUnlockCelebration';
 
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';
@@ -26,6 +26,7 @@ import {
   SESSION_MODE_TO_LANE,
   type SessionCompleteContentProps,
 } from './SessionCompleteContent.types';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export function SessionCompleteContent({
   sessionId,
@@ -128,7 +129,7 @@ export function SessionCompleteContent({
     <Animated.View
       entering={FadeIn.duration(250)}
       style={{
-        backgroundColor: controller.theme.colors.background.primary,
+        backgroundColor: vexFire.background,
         flex: 1,
       }}
     >

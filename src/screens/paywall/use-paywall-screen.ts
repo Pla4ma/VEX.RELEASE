@@ -4,11 +4,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { capture } from '../../shared/analytics/analytics-service';
-import {
-  usePaywall,
-  usePremiumStatus,
-  type PurchasesPackageDisplayInfo,
-} from '../../shared/monetization/use-revenuecat';
+import { usePaywall, usePremiumStatus } from '../../shared/monetization/use-revenuecat-derived';
+import type { PurchasesPackageDisplayInfo } from '../../shared/monetization/revenuecat-types';
 import {
   PurchaseEvents,
   createPaywallProperties,

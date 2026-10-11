@@ -29,5 +29,6 @@ describe('isDeepLinkDisabled', () => {
     expect(isDeepLinkDisabled('study', ALL_FALSE)).toBe(false);
     expect(isDeepLinkDisabled('coach', ALL_FALSE)).toBe(false);
     expect(isDeepLinkDisabled('shop', ALL_FALSE)).toBe(false);
+    expect(isDeepLinkDisabled('guide', ALL_FALSE)).toBe(false);
   });
 });

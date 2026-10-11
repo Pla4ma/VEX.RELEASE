@@ -2,12 +2,12 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 import { Skeleton, SkeletonCard } from '../../components/ui/Skeleton';
 import { StatusBanner } from '../../shared/ui/components/StatusFeedback';
 import type { Theme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import { paywallStyles as styles } from './paywall-styles';
-import { Text as VexText } from '../../components/primitives/Text';
 
 export type PaywallStatusMessage = {
   tone: 'info' | 'warning' | 'celebration';
@@ -65,7 +65,7 @@ type PaywallErrorStateProps = {
 };
 
 export function PaywallErrorState({
-  theme,
+  theme: _theme,
   onRestore,
   onRetry,
 }: PaywallErrorStateProps): React.ReactNode {
@@ -80,7 +80,7 @@ export function PaywallErrorState({
       <View style={styles.supportSection}>
         <Text
           variant="bodySmall"
-          color={theme.colors.text.tertiary}
+          color={vexFire.textMuted}
           style={styles.supportText}
         >
           Having trouble? Try again or contact support

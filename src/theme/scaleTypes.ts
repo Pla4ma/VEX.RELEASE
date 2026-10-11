@@ -22,6 +22,7 @@ export interface TypographyScale {
 export interface FontFamilies {
   primary: string;
   secondary?: string;
+  display?: string;
   mono?: string;
 }
 

@@ -4,9 +4,8 @@ import { Pressable, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { ReferenceCard } from '../../reference-ui/ReferenceCard';
 import type { HomeController } from '../hooks/home-controller-types';
-import {
-  HomeExperiencePrelude,
- useHomeExperienceModel } from '../../../features/home-experience/components/HomeExperiencePrelude';
+import { HomeExperiencePrelude } from '../../../features/home-experience/components/HomeExperiencePrelude';
+import { useHomeExperienceModel } from '../../../features/home-experience/hooks';
 import type { HomeSurfaceMap } from '../../../features/home-experience/components/HomeExperiencePrelude';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
@@ -51,7 +50,7 @@ export function HomeContinueCard({
       <ReferenceCard accent="fire" showAsset={false}>
         <Text style={type.title}>Continue where you left off</Text>
         <Text style={[type.body, { marginTop: 6 }]}>
-          Project Atlas opened 2h ago.
+          Your next focused block is ready when you are.
         </Text>
         <View style={{ marginTop: 10 }}>
           <HomeExperiencePrelude

@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { useUpdatePlanItemStatus } from '../../features/plan/hooks';
+import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 
 interface PlanScreenActions {
   openAddItemSheet: () => void;
@@ -19,10 +20,7 @@ export function usePlanScreenActions(): PlanScreenActions {
   const updateStatus = useUpdatePlanItemStatus();
 
   const openAddItemSheet = useCallback(() => {
-    navigation.navigate('SessionStack', {
-      screen: 'SessionSetup',
-      params: { source: 'plan' },
-    });
+    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { source: 'plan' } });
   }, [navigation]);
 
   const completeItem = useCallback(
@@ -34,41 +32,29 @@ export function usePlanScreenActions(): PlanScreenActions {
 
   const startSessionFromItem = useCallback(
     (itemId: string, title: string) => {
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: { goal: title, source: 'plan' },
-      });
+      navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { goal: title, source: 'plan' } });
     },
     [navigation],
   );
 
   const openAddProjectSheet = useCallback(() => {
-    navigation.navigate('SessionStack', {
-      screen: 'SessionSetup',
-      params: { goal: 'Move one project forward', source: 'plan' },
-    });
+    navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { goal: 'Move one project forward', source: 'plan' } });
   }, [navigation]);
 
   const openAddStudyPlanSheet = useCallback(() => {
-    navigation.navigate('ContentStudy');
+    navigateToRootScreen(navigation, 'ContentStudy');
   }, [navigation]);
 
   const selectProject = useCallback(
     (_projectId: string) => {
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: { goal: 'Project work block', source: 'plan' },
-      });
+      navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { goal: 'Project work block', source: 'plan' } });
     },
     [navigation],
   );
 
   const selectStudyPlan = useCallback(
     (studyPlanId: string) => {
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: { goal: 'Study plan block', source: 'plan', studyPlanId },
-      });
+      navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: { goal: 'Study plan block', source: 'plan', studyPlanId } });
     },
     [navigation],
   );

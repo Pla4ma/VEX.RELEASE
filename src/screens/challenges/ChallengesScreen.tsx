@@ -7,9 +7,14 @@ import { Text } from '../../components/primitives/Text';
 import { ChallengeHub } from '../../features/challenges/components/ChallengeHub';
 import { useClaimChallengeReward } from '../../features/challenges/hooks/challengeMutations';
 import { useAuthStore } from '../../store';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import { useToast } from '../../shared/ui/components/Toast';
+import { vexFire } from '../../theme/tokens/vex-fire';
 
 function ChallengesScreen(): React.ReactNode {
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const userId = useAuthStore((state) => state.user?.id);
   const claimReward = useClaimChallengeReward();
   const { show: showToast } = useToast();
@@ -60,7 +65,7 @@ function ChallengesScreen(): React.ReactNode {
 
   if (!userId) {
     return (
-      <Box flex={1} alignItems="center" justifyContent="center" p="lg">
+      <Box flex={1} alignItems="center" justifyContent="center" p="lg" style={{ backgroundColor: vexFire.background }}>
         <Text variant="h3" color="text.primary" textAlign="center">
           Sign in to view challenges
         </Text>
@@ -71,7 +76,7 @@ function ChallengesScreen(): React.ReactNode {
     );
   }
 
-  return <ChallengeHub userId={userId} onClaimReward={handleClaimReward} />;
+  return <ChallengeHub userId={userId} onClaimReward={handleClaimReward} onBack={() => navigation.goBack()} />;
 }
 
 const ChallengesScreenWithBoundary = withScreenErrorBoundary(ChallengesScreen, 'Challenges');

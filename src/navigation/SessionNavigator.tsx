@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { initializeSessionRuntime } from '../app/bootstrap';
 import type { SessionStackParams } from './types';
-import { lightColors } from '../theme/tokens/colors';
+import { vexFire } from '../theme/tokens/vex-fire';
 
 const Stack = createNativeStackNavigator<SessionStackParams>();
 
@@ -27,7 +27,7 @@ export const SessionNavigator: React.ComponentType = () => {
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
-        contentStyle: { backgroundColor: lightColors.background.primary },
+        contentStyle: { backgroundColor: vexFire.background },
       }}
     >
       <Stack.Screen

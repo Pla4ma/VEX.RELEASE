@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import type { PlanItem } from '../../../features/plan/types';
@@ -30,8 +30,8 @@ function PlanEmptyState({ onAddItem }: { onAddItem: () => void }): React.JSX.Ele
       <Image accessibilityLabel="Ember core" accessibilityIgnoresInvertColors source={EMPTY_STATE_EMBER} style={{ borderRadius: theme.borderRadius.full, height: theme.spacing[24], width: theme.spacing[24] }} />
       <Text color="text.primary" textAlign="center" variant="h3">Nothing planned for today</Text>
       <Text color="text.secondary" textAlign="center" variant="bodyLarge">Add a task or goal to get started</Text>
-      <Pressable accessibilityHint="Adds the first item to today’s plan" accessibilityLabel="Add first item" accessibilityRole="button" onPress={onAddItem} style={({ pressed }) => ({ alignItems: 'center', borderColor: theme.colors.primary[500], borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], opacity: pressed ? theme.opacity[80] : theme.opacity[100], paddingHorizontal: theme.spacing[6] })}>
-        <Text style={{ color: theme.colors.semantic.primary, fontWeight: theme.fontWeights.bold }} variant="button">Add first item</Text>
+      <Pressable accessibilityHint="Adds the first item to today’s plan" accessibilityLabel="Add first item" accessibilityRole="button" onPress={onAddItem} style={({ pressed }) => ({ alignItems: 'center', borderColor: vexFire.ember, borderRadius: theme.borderRadius.full, borderWidth: 1, justifyContent: 'center', minHeight: theme.spacing[12], opacity: pressed ? theme.opacity[80] : theme.opacity[100], paddingHorizontal: theme.spacing[6] })}>
+        <Text style={{ color: vexFire.ember, fontWeight: theme.fontWeights.bold }} variant="button">Add first item</Text>
       </Pressable>
     </View>
   );
@@ -86,12 +86,10 @@ export function PlanTodayView({
             accessibilityRole="button"
             onPress={() => onStartSession(item.id, item.title)}
             style={({ pressed }) => ({
-              backgroundColor: pressed
-                ? vexLightGlass.mint[50]
-                : vexLightGlass.glass.fill,
+              backgroundColor: pressed ? vexFire.backgroundSoft : vexFire.panel,
               borderRadius: 22,
               borderWidth: 1,
-              borderColor: vexLightGlass.glass.border,
+              borderColor: vexFire.border,
               padding: 16,
               flexDirection: 'row',
               alignItems: 'center',
@@ -108,7 +106,7 @@ export function PlanTodayView({
             >
               {item.status === 'done' && (
                 <Icon
-                  color={vexLightGlass.text.inverse}
+                  color={vexFire.background}
                   name="check"
                   size="sm"
                   variant="solid"
@@ -119,7 +117,7 @@ export function PlanTodayView({
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  color: vexLightGlass.text.primary,
+                  color: vexFire.cream,
                   fontSize: 15,
                   fontWeight: '600',
                   textDecorationLine: item.status === 'done' ? 'line-through' : 'none',
@@ -131,7 +129,7 @@ export function PlanTodayView({
               {item.description && (
                 <Text
                   style={{
-                    color: vexLightGlass.text.secondary,
+                    color: vexFire.textSecondary,
                     fontSize: 13,
                     marginTop: 2,
                   }}
@@ -161,7 +159,7 @@ export function PlanTodayView({
                 {item.estimatedMinutes && (
                   <Text
                     style={{
-                      color: vexLightGlass.text.tertiary,
+                      color: vexFire.textMuted,
                       fontSize: 12,
                     }}
                   >
@@ -172,7 +170,7 @@ export function PlanTodayView({
             </View>
 
             <Icon
-              color={vexLightGlass.mint[500]}
+              color={vexFire.ember}
               name="play-circle"
               size="lg"
               variant="solid"

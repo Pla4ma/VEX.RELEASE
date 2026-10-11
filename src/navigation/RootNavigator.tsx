@@ -17,11 +17,11 @@ import { useAuthStore } from '../store';
 import { useTheme } from '../theme/ThemeContext';
 import { useOnboardingStore } from '../onboarding';
 import { useFeatureAccess } from '../features/liveops-config';
-
 import { RootCrashBoundary } from './components/RootCrashBoundary';
 import { useNotificationNavigation } from './hooks/useNotificationNavigation';
 import { useOAuthCallbackListener } from './hooks/useOAuthCallbackListener';
 import { useStreakFuneralNavigation } from './hooks/useStreakFuneralNavigation';
+import { useOnboardingUserHydration } from './hooks/useOnboardingUserHydration';
 import { RootStackScreens } from './RootStackScreens';
 import { markColdStart } from '../app/cold-start-performance';
 import { createLinkingConfig } from './linking-config';
@@ -67,6 +67,7 @@ export const RootNavigator: React.ComponentType = () => {
     })),
   );
 
+  const isOnboardingHydrated = useOnboardingUserHydration(user?.id ?? null);
   const featureAccess = useFeatureAccess({
     enabled: isAuthCheckComplete && isAuthenticated,
   });
@@ -82,6 +83,7 @@ export const RootNavigator: React.ComponentType = () => {
 
   const hasStaleOnboardingState = Boolean(
     user?.id &&
+    isOnboardingHydrated &&
     isOnboarded &&
     (!completedAt || !completedForUserId || completedForUserId !== user.id),
   );

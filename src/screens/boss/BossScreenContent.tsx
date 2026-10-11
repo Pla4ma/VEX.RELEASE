@@ -1,6 +1,5 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Text } from '../../components/primitives/Text';
@@ -12,6 +11,8 @@ import { useStreakMultiplier } from '../../features/streaks/hooks';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { navigateToRootScreen } from '../../navigation/navigation-helpers';
 import type { useTheme } from '../../theme';
+import { vexFire } from '../../theme/tokens/vex-fire';
+import { VexRouteShell } from '../../shared/ui/vex/VexRouteShell';
 import { BossScreenSections } from './BossScreenSections';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -42,19 +43,17 @@ export function BossScreenContent({
 
   if (bossQuery.isPending || (canQueryBoss && templatesQuery.isPending)) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      >
-        <ScrollView
-          contentContainerStyle={{
-            padding: theme.spacing[5],
+      <VexRouteShell title="Focus momentum" eyebrow="Live encounter" atmosphere="utility">
+        <View
+          style={{
             gap: theme.spacing[4],
+            padding: theme.spacing[5],
           }}
         >
           <Skeleton height={320} variant="rounded" />
           <Skeleton height={150} variant="rounded" />
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+      </VexRouteShell>
     );
   }
 
@@ -74,29 +73,24 @@ export function BossScreenContent({
 
   if (!encounter) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      >
-        <ScrollView contentContainerStyle={{ padding: theme.spacing[5] }}>
-          <Text variant="h3" color={theme.colors.text.primary}>
+      <VexRouteShell title="Focus momentum" eyebrow="Next signal" atmosphere="utility">
+        <View style={{ padding: theme.spacing[5] }}>
+          <Text variant="h3" color={vexFire.cream}>
             {`Next momentum marker opens in ${resetLabel}.`}
           </Text>
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+      </VexRouteShell>
     );
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-    >
-      <ScrollView
-        contentContainerStyle={{
+    <VexRouteShell title={encounter.bossName} eyebrow="Focus momentum" atmosphere="utility">
+      <View
+        style={{
           padding: theme.spacing[5],
           gap: theme.spacing[4],
           paddingBottom: theme.spacing[10],
         }}
-        showsVerticalScrollIndicator={false}
       >
         <BossBattleHUD />
         <BossScreenSections
@@ -129,7 +123,7 @@ export function BossScreenContent({
           userDamage={userDamage}
           userId={userId ?? ''}
         />
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </VexRouteShell>
   );
 }

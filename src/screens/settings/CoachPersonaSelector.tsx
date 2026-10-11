@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { useTheme } from '@/theme';
@@ -5,7 +6,7 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text'
 import { Card } from '@/components/primitives/Card';
 import { Icon } from '@/icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 import {
   PERSONA_OPTIONS,
@@ -24,7 +25,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
   selectedPersona,
   onSelectPersona,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const selectedData = PERSONA_OPTIONS.find((p) => p.id === selectedPersona);
 
   return (
@@ -32,7 +33,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
       <Box px={16} mb={24}>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{
             marginLeft: 12,
             marginBottom: 8,
@@ -46,7 +47,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
           size="md"
           style={{
             overflow: 'hidden',
-            backgroundColor: theme.colors.background.secondary,
+            backgroundColor: vexFire.panel,
           }}
         >
           <Box p={20} alignItems="center">
@@ -59,7 +60,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
               mb={16}
               style={{
                 backgroundColor:
-                  selectedData?.color || theme.colors.primary[500],
+                  selectedData?.color || vexFire.ember,
               }}
             >
               <Text style={{ fontSize: 40 }}>{selectedData?.emoji}</Text>
@@ -69,27 +70,27 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
             </Text>
             <Text
               variant="body"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{ marginBottom: 16 }}
             >
               {selectedData?.description}
             </Text>
             <Box width="100%">
-              {selectedData?.exampleMessages.map((message, index) => (
+              {selectedData?.exampleMessages.map((message, _index) => (
                 <Box
                   key={`message-${message}`}
                   p={12}
                   borderRadius={12}
                   mb={8}
                   style={{
-                    backgroundColor: theme.colors.background.primary,
+                    backgroundColor: vexFire.background,
                     borderLeftWidth: 3,
                     borderLeftColor: selectedData?.color,
                   }}
                 >
                   <Text
                     variant="body"
-                    color="text.secondary"
+                    color={vexFire.textSecondary}
                     style={{ fontStyle: 'italic' }}
                   >
                     "{message}"
@@ -104,7 +105,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
       <Box px={16} mb={24}>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           style={{
             marginLeft: 12,
             marginBottom: 8,
@@ -149,14 +150,14 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
                     style={{
                       fontWeight:
                         selectedPersona === option.id ? '600' : '500',
-                      color: theme.colors.text.primary,
+                      color: vexFire.cream,
                     }}
                   >
                     {option.label}
                   </Text>
                   <Text
                     variant="caption"
-                    color="text.secondary"
+                    color={vexFire.textSecondary}
                     style={{ marginTop: 2 }}
                   >
                     {option.description}
@@ -174,7 +175,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
                     <Icon
                       name="check"
                       size={14}
-                      color={lightColors.text.inverse}
+                      color={vexFire.cream}
                     />
                   </Box>
                 )}
@@ -183,7 +184,7 @@ export const CoachPersonaSelector: React.ComponentType<CoachPersonaSelectorProps
                 <Box
                   height={1}
                   ml={76}
-                  style={{ backgroundColor: theme.colors.border.light }}
+                  style={{ backgroundColor: vexFire.border }}
                 />
               )}
             </React.Fragment>

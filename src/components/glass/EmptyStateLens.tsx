@@ -20,7 +20,7 @@ export const EmptyStateLens: React.ComponentType<EmptyStateLensProps> = ({
   bottom,
   opacity = 0.55,
   dotCount = 5,
-  sessionsNeeded,
+  sessionsNeeded: _sessionsNeeded,
 }) => {
   const s = size;
   const cx = s / 2;
