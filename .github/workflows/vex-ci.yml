@@ -15,10 +15,14 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npx tsc --noEmit
+      - run: npm run check:native-config
+      - run: npm run check:dependency-patches
+      - run: node --test scripts/__tests__/native-bundle-secrets.test.js
+      - run: node --test scripts/__tests__/metro-shim-policy.test.js
 
   lint:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm run lint
@@ -37,10 +41,19 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm test -- --silent
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
+        with:
+          node-version: '24.18.0'
+      - run: npm run check:secrets
 
   banned-patterns:
     runs-on: ubuntu-latest
@@ -48,7 +61,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm run check:banned-patterns
@@ -60,7 +73,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm run check:line-limit
@@ -71,7 +84,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm run check:select-star
@@ -82,7 +95,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci
       - run: npm run check:debt-freeze
@@ -93,10 +106,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx tsc --noEmit src/types/supabase.ts --skipLibCheck
+      - run: npx tsc --noEmit --ignoreConfig src/types/supabase.ts --skipLibCheck
       - name: Check Supabase types are current
         run: |
           npm run types:supabase
@@ -113,7 +126,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: '24.18.0'
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run ci:check-rls
@@ -125,4 +138,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - run: bash scripts/check-eas-placeholders.sh
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
+        with:
+          node-version: '24.18.0'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check:eas-production-secrets
+
+  edge-functions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: 2.9.6
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
+        with:
+          node-version: '24.18.0'
+      - run: npm run check:edge-functions

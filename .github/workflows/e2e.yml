@@ -2,19 +2,15 @@ name: VEX E2E
 
 on:
   workflow_dispatch:
-    inputs:
-      ios-only:
-        description: 'Run only iOS E2E (skip Android)'
-        type: boolean
-        default: true
   pull_request:
-    branches: ['main']
+    branches: ["main"]
     paths:
-      - 'src/**'
-      - 'e2e/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'app.json'
+      - "src/**"
+      - "e2e/**"
+      - "package.json"
+      - "package-lock.json"
+      - "app.json"
+      - ".github/workflows/e2e.yml"
 
 permissions:
   contents: read
@@ -27,19 +23,18 @@ jobs:
 
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.3.0
         with:
-          node-version: 20
+          node-version: "24.18.0"
           cache: npm
 
       - run: npm ci
 
-      - name: Install Detox CLI and prerequisites
+      - name: Install iOS test prerequisites
         run: |
-          npm install -g detox-cli
           brew tap wix/brew
           brew install applesimutils
 
-      - name: Install Expo CLI and EAS CLI
-        run: npm install -g eas-cli
+      - name: Install pinned EAS CLI
+        run: npm install --global eas-cli@24.3.0
 
       - name: Get latest EAS simulator build
         run: |
@@ -52,16 +47,20 @@ jobs:
             --non-interactive)
           BUILD_URL=$(echo "$BUILD_JSON" | node -e "const d=require('fs').readFileSync('/dev/stdin','utf8');const b=JSON.parse(d);console.log(b[0]?.artifacts?.applicationArchiveUrl || '')")
           if [ -z "$BUILD_URL" ]; then
-            echo "No finished simulator build found. Trigger an EAS build first."
-            exit 0
+            echo "No finished simulator build found. Trigger an EAS build before running Detox." >&2
+            exit 1
           fi
           echo "Downloading build from EAS..."
           curl -fsSL -o app.tar.gz "$BUILD_URL"
-          echo "Verifying download integrity..."
-          BUILD_SHA256=$(sha256sum app.tar.gz | cut -d' ' -f1)
+          echo "Recording downloaded archive SHA-256..."
+          BUILD_SHA256=$(shasum -a 256 app.tar.gz | awk '{print $1}')
           echo "Downloaded archive SHA256: $BUILD_SHA256"
           mkdir -p ios/build/Build/Products/Debug-iphonesimulator
           tar -xzf app.tar.gz -C ios/build/Build/Products/Debug-iphonesimulator
+          if [ ! -d ios/build/Build/Products/Debug-iphonesimulator/VEX.app ]; then
+            echo "Downloaded archive does not contain the expected VEX.app simulator bundle." >&2
+            exit 1
+          fi
           echo "Build downloaded and extracted."
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

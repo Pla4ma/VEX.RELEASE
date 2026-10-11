@@ -38,10 +38,12 @@ data/__tmp_prettier_input.tsx
 data/jest-results.json
 
 # AI/config noise
+.bug-hunter/
 .trae/
 .replit
 .agents/
 .codebase-memory/
+.rsm/
 .opencode/
 .omx/
 .od-skills/

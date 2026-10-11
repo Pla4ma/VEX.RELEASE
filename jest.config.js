@@ -1,7 +1,7 @@
 /**
  * Jest Configuration for VEX App
  * 
- * Expo SDK 56 + React Native + TypeScript Testing Setup
+ * Expo SDK 57 + React Native + TypeScript Testing Setup
  */
 
 const legacyFailingTests = require('./jest.legacy-failing-tests');
@@ -51,7 +51,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
   transform: { '^.+\\.(mjs|js|jsx|ts|tsx)$': 'babel-jest' },
   transformIgnorePatterns: [
-    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|expo-file-system|expo-crypto|expo-font|expo-asset|expo-constants|expo-splash-screen|@expo|@expo-google-fonts|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat|nanoid)/))',
+    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|expo-file-system|expo-crypto|expo-font|expo-asset|expo-constants|expo-splash-screen|@expo|@expo-google-fonts|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat|nanoid|decode-uri-component)/))',
   ],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.test.ts',

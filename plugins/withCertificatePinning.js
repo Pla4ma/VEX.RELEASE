@@ -28,9 +28,20 @@ const {
 } = require('@expo/config-plugins');
 const fs = require('fs');
 const path = require('path');
+const { z } = require('zod');
+
+const pinSchema = z.string().regex(/^sha256\/[A-Za-z0-9+/]{43}=$/);
+const domainsSchema = z.record(
+  z.string().regex(/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/),
+  z.object({
+    pins: z.array(pinSchema).min(2),
+    caPins: z.array(pinSchema).min(1),
+    includeSubdomains: z.boolean().default(true),
+  }),
+);
 
 function withCertificatePinning(config, props = {}) {
-  const { domains = {} } = props;
+  const domains = domainsSchema.parse(props.domains ?? {});
 
   // iOS: Configure App Transport Security with certificate pins
   config = withInfoPlist(config, (config) => {
@@ -40,6 +51,7 @@ function withCertificatePinning(config, props = {}) {
     ats.NSAllowsLocalNetworking = true;
     
     const exceptionDomains = ats.NSExceptionDomains || {};
+    const pinnedDomains = ats.NSPinnedDomains || {};
     
     for (const [domain, settings] of Object.entries(domains)) {
       exceptionDomains[domain] = {
@@ -48,9 +60,16 @@ function withCertificatePinning(config, props = {}) {
         NSExceptionAllowsInsecureHTTPLoads: false,
         NSExceptionRequiresForwardSecrecy: true,
       };
+      pinnedDomains[domain] = {
+        NSIncludesSubdomains: settings.includeSubdomains,
+        NSPinnedCAIdentities: settings.caPins.map((pin) => ({
+          'SPKI-SHA256-BASE64': pin.replace(/^sha256\//, ''),
+        })),
+      };
     }
     
     ats.NSExceptionDomains = exceptionDomains;
+    ats.NSPinnedDomains = pinnedDomains;
     config.modResults.NSAppTransportSecurity = ats;
     
     return config;
@@ -97,9 +116,11 @@ function withCertificatePinning(config, props = {}) {
           const includeSubdomains = settings.includeSubdomains !== false;
 
           return [
-            `    <domain-config${includeSubdomains ? ' includeSubdomains="true"' : ''}>`,
-            `      <domain>${domain}</domain>`,
+            '    <domain-config>',
+            `      <domain includeSubdomains="${includeSubdomains}">${domain}</domain>`,
+            '      <pin-set>',
             pins,
+            '      </pin-set>',
             '      <trust-anchors>',
             '        <certificates src="system" />',
             '      </trust-anchors>',

@@ -15,7 +15,7 @@ module.exports = defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     rules: {
-      // Match the project's historical enforcement (old @react-native/eslint-config)
+      // Keep the project's established TypeScript and React enforcement rules.
       'prettier/prettier': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -26,7 +26,6 @@ module.exports = defineConfig([
       'react-hooks/rules-of-hooks': 'error',
       'react/react-in-jsx-scope': 'off',
       'no-new-func': 'warn',
-      'react-native/no-inline-styles': 'off',
 
       // New React Compiler-era rules that the old config never enforced
       'react-hooks/immutability': 'off',
@@ -36,7 +35,6 @@ module.exports = defineConfig([
       'react-hooks/preserve-manual-memoization': 'off',
       'react-hooks/static-components': 'off',
       'react-hooks/immutable-arguments': 'off',
-      'react-doctor/exhaustive-deps': 'off',
 
       // Re-export conflicts in token barrels are intentional (export * patterns)
       'import/export': 'off',

@@ -5,7 +5,7 @@
     "scheme": "vex",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "sdkVersion": "57.0.0",
     "platforms": [
@@ -133,12 +133,16 @@
           "domains": {
             "supabase.co": {
               "pins": [
-                "sha256/JxYBCNfhi515HdL0cvKtauDKAZvS/HXZc8eHx6C/1pI=",
-                "sha256/H7AMYAvicN2+UcFPBz3kJXCDmGrTItZh4ujUBK8hoWg=",
-                "sha256/+gSmjONa2NEzJGiXHTxfDwn5zcujrfyPHe83jS2p0yk="
+                "sha256/yyBDqvMo9Jc2CwnVJBDj8TE8u5xHielbUS/+h7VM2xs=",
+                "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4=",
+                "sha256/mEflZT5enoR1FuXLgYYGqnVEoZvmf9c2bVBpiOjYQ0c="
               ],
               "includeSubdomains": true,
-              "_pins_verified": "2026-06-05 — Verified against icnbpjkyupuqzuvwuvbk.supabase.co live cert chain. Leaf: supabase.co (CN), Intermediate: Google Trust Services WE1, Root: GlobalSign ECC Root CA R4. Verify after any Supabase cert rotation."
+              "_pins_verified": "2026-10-11 — Live project certificate chain: supabase.co leaf (expires 2026-11-24), WE1 intermediate (expires 2029-02-20), GTS Root R4 (expires 2028-01-28). CA pins preserve connectivity after leaf rotation.",
+              "caPins": [
+                "sha256/kIdp6NNEd8wsugYyyIYFsi1ylMCED3hZbSR8ZFsa/A4=",
+                "sha256/mEflZT5enoR1FuXLgYYGqnVEoZvmf9c2bVBpiOjYQ0c="
+              ]
             },
             "api.revenuecat.com": {
               "pins": [
@@ -147,7 +151,11 @@
                 "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k="
               ],
               "includeSubdomains": false,
-              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any RevenueCat cert rotation."
+              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any RevenueCat cert rotation.",
+              "caPins": [
+                "sha256/8dcSZIGOkkJAXV71MH2lsFJuG8T2GkkAq3oGwdC4sHo=",
+                "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k="
+              ]
             },
             "sentry.io": {
               "pins": [
@@ -155,7 +163,10 @@
                 "sha256/Wec45nQiFwKvHtuHxSAMGkt19k+uPSw9JlEkxhvYPHk="
               ],
               "includeSubdomains": false,
-              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any Sentry cert rotation."
+              "_pins_verified": "2026-06-09 — Pins from live cert chain. Verify after any Sentry cert rotation.",
+              "caPins": [
+                "sha256/Wec45nQiFwKvHtuHxSAMGkt19k+uPSw9JlEkxhvYPHk="
+              ]
             }
           }
         }
@@ -188,7 +199,6 @@
         }
       ],
       "expo-status-bar",
-      "expo-splash-screen",
       [
         "expo-splash-screen",
         {

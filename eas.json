@@ -8,13 +8,18 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
-      "ios": { "resourceClass": "m-medium" },
-      "android": { "resourceClass": "medium" },
-        "env": {
-          "APP_ENV": "development",
-          "EXPO_PUBLIC_ENVIRONMENT": "development",
-          "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
-          "EAS_SKIP_AUTO_FINGERPRINT": "1"
+      "node": "24.18.0",
+      "ios": {
+        "resourceClass": "m-medium"
+      },
+      "android": {
+        "resourceClass": "medium"
+      },
+      "env": {
+        "APP_ENV": "development",
+        "EXPO_PUBLIC_ENVIRONMENT": "development",
+        "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
+        "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     },
     "development-device": {
@@ -27,38 +32,56 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
+      "node": "24.18.0",
       "ios": {
         "resourceClass": "m-medium",
         "simulator": true
       },
-        "env": {
-          "APP_ENV": "development",
-          "EXPO_PUBLIC_ENVIRONMENT": "development",
-          "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
-          "EAS_SKIP_AUTO_FINGERPRINT": "1"
+      "env": {
+        "APP_ENV": "development",
+        "EXPO_PUBLIC_ENVIRONMENT": "development",
+        "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "1",
+        "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     },
     "preview": {
       "distribution": "internal",
       "channel": "preview",
-      "ios": { "resourceClass": "m-medium" },
-      "android": { "resourceClass": "medium" },
-        "env": {
-          "APP_ENV": "preview",
-          "EXPO_PUBLIC_ENVIRONMENT": "staging",
-          "EAS_SKIP_AUTO_FINGERPRINT": "1"
-      }
+      "node": "24.18.0",
+      "ios": {
+        "resourceClass": "m-medium"
+      },
+      "android": {
+        "resourceClass": "medium",
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease -PreactNativeArchitectures=arm64-v8a"
+      },
+      "env": {
+        "APP_ENV": "preview",
+        "EXPO_PUBLIC_ENVIRONMENT": "staging",
+        "EXPO_PUBLIC_ENABLE_SKIP_LOGIN": "1",
+        "EAS_SKIP_AUTO_FINGERPRINT": "1",
+        "EXPO_PUBLIC_ENABLE_EXPO_GO_SHIMS": "0",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+      },
+      "environment": "preview"
     },
     "production": {
       "autoIncrement": true,
       "channel": "production",
       "environment": "production",
-      "ios": { "resourceClass": "m-large" },
-      "android": { "resourceClass": "large" },
-        "env": {
-          "APP_ENV": "production",
-          "EXPO_PUBLIC_ENVIRONMENT": "production",
-          "EAS_SKIP_AUTO_FINGERPRINT": "1"
+      "node": "24.18.0",
+      "ios": {
+        "resourceClass": "m-large"
+      },
+      "android": {
+        "resourceClass": "large"
+      },
+      "env": {
+        "APP_ENV": "production",
+        "EXPO_PUBLIC_ENVIRONMENT": "production",
+        "EXPO_PUBLIC_ENABLE_SKIP_LOGIN": "0",
+        "EAS_SKIP_AUTO_FINGERPRINT": "1"
       }
     }
   },

@@ -76,18 +76,25 @@ function assertSubmitRefs(easConfig) {
 }
 
 function listRemoteSecrets() {
-  try {
-    const output = execSync('eas secret:list --scope project', {
-      cwd: repoRoot,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-      shell: process.platform === 'win32',
-    });
-    return new Set(requiredSecrets.filter((name) => output.includes(name)));
-  } catch {
-    fail('could not run "eas secret:list --scope project"; log in to EAS or install eas-cli.');
-    return null;
+  const commands = [
+    'eas secret:list --scope project',
+    'npx --yes eas-cli secret:list --scope project',
+  ];
+  for (const command of commands) {
+    try {
+      const output = execSync(command, {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        shell: process.platform === 'win32',
+      });
+      return new Set(requiredSecrets.filter((name) => output.includes(name)));
+    } catch {
+      continue;
+    }
   }
+  fail('could not run EAS secret:list; log in to EAS or install eas-cli.');
+  return null;
 }
 
 function assertRemoteSecretsPresent() {
