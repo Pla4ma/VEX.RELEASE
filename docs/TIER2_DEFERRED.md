@@ -7,6 +7,12 @@
 > (Reanimated 4.5, Worklets 0.10, Immer 11) plus 14 patch/minor bumps shipped
 > in this release.
 
+> **Current-state note (2026-09-13):** This is a historical snapshot, not a
+> current dependency inventory. The app now targets Expo SDK 57, uses the Expo
+> flat ESLint config with ESLint 9, and pins CI/EAS builds to Node 24.18.0.
+> Recheck `package.json`, `package-lock.json`, and the active workflow files
+> before using the deferred versions below as upgrade instructions.
+
 ## What shipped in this release (Tier 2 SAFE subset)
 
 - **Reanimated 4.3.1 → 4.5.1** + `AnimatedStyle<ViewStyle>` generic-arg
