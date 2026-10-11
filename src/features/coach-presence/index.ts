@@ -18,11 +18,8 @@ export {
   type CoachPresenceContext,
   type CoachPresenceMessageOutput,
 } from './copy-service';
-export {
-  buildCoachPresence,
-  buildCompletionCoachPresence,
-  resolveCoachActionIntent,
-} from './service';
+export { buildCoachPresence, resolveCoachActionIntent } from './service';
+export { buildCompletionCoachPresence } from './completion-presence';
 export type {
   CoachActionIntent,
   CoachPresence,

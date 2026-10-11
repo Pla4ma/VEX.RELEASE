@@ -11,7 +11,7 @@ function laneFor(input: InputParsed) {
 
 export function buildFreeVsProMatrix(
   input: InputParsed,
-): Array<{ free: string; pro: string }> {
+): { free: string; pro: string }[] {
   const lane = laneFor(input);
   if (
     lane === 'student' ||

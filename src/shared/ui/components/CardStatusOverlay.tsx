@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet, type ViewStyle } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { AsyncStatus } from './StatusFeedback.types';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export const CardStatusOverlay: React.ComponentType<{
   status: AsyncStatus;

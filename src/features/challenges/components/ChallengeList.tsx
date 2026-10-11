@@ -7,14 +7,13 @@
 import React from 'react';
 import { View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Card } from '../../../components/primitives/Card';
 import { Button } from '../../../components/primitives/Button';
 import { sanitizeErrorMessage } from '../../../utils/error-sanitizer';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';
 import { challengeListStyles as styles } from './challenge-list.styles';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];

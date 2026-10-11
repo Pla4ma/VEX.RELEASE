@@ -29,7 +29,7 @@ const DEFAULT_CONFIG: IntegrationConfig = {
   enableFocusIdentity: true,
 };
 
-let unsubscribers: Array<() => void> = [];
+let unsubscribers: (() => void)[] = [];
 
 /**
  * Initialize all feature integrations

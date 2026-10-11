@@ -22,8 +22,18 @@ export {
 } from './realtimeShared';
 export { broadcastActivity, subscribeToActivity, subscribeToFeedChanges, subscribeToSquadChanges, subscribeToGuildQuests } from './realtimeSubscriptions';
 import { cancelPendingBroadcastCleanups } from './realtimeSubscriptions';
+import { normalizePresenceEntry } from './realtime-presence';
 const debug = createDebugger('realtime');
 export async function initializePresence(userId: string): Promise<void> {
+  const previousUserId = getCurrentUserId();
+  if (previousUserId && previousUserId !== userId) {
+    const previousKey = `presence:${previousUserId}`;
+    const previousChannel = activeChannels.get(previousKey);
+    if (previousChannel) {
+      await previousChannel.unsubscribe();
+      activeChannels.delete(previousKey);
+    }
+  }
   setCurrentUserId(userId);
   const presenceKey = `presence:${userId}`;
   const existingChannel = activeChannels.get(presenceKey);
@@ -139,34 +149,6 @@ function handlePresenceSync(state: Record<string, unknown[]>): void {
   presenceCallbacks.forEach((cb) => cb(presences));
 }
 
-function normalizePresenceEntry(
-  fallbackUserId: string,
-  entry: unknown,
-): UserPresence | null {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-  const status = Reflect.get(entry, 'status');
-  if (!isPresenceStatus(status)) {
-    return null;
-  }
-  const userId = Reflect.get(entry, 'userId');
-  const lastSeen = Reflect.get(entry, 'lastSeen');
-  return {
-    userId: typeof userId === 'string' ? userId : fallbackUserId,
-    status,
-    lastSeen: typeof lastSeen === 'number' ? lastSeen : Date.now(),
-  };
-}
-
-function isPresenceStatus(status: unknown): status is PresenceStatus {
-  return (
-    status === 'online' ||
-    status === 'away' ||
-    status === 'offline' ||
-    status === 'in_session'
-  );
-}
 
 export function onPresenceChange(
   callback: (presence: UserPresence[]) => void,

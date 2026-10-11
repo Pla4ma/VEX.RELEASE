@@ -37,7 +37,7 @@ describe('learning execution service', () => {
     expect(joined.toLowerCase()).not.toMatch(/study|quiz|homework/);
   });
 
-  it('keeps healthy student content upload out of Day 0', () => {
+  it('allows healthy student content upload on Day 0', () => {
     expect(
       buildContentStudyGate({
         aiConfigured: true,
@@ -48,13 +48,10 @@ describe('learning execution service', () => {
         storageConfigured: true,
         totalCompletedSessions: 0,
       }),
-    ).toEqual({
-      fallback: 'Start with a study target and one focused block.',
-      showUploadEntry: false,
-    });
+    ).toEqual({ fallback: null, showUploadEntry: true });
   });
 
-  it('does not show upload study wording to non-students on day zero', () => {
+  it('allows content capture for non-students on day zero', () => {
     const gate = buildContentStudyGate({
       aiConfigured: true,
       featureHealth: 'healthy',
@@ -65,8 +62,8 @@ describe('learning execution service', () => {
       totalCompletedSessions: 0,
     });
 
-    expect(gate.showUploadEntry).toBe(false);
-    expect(gate.fallback).toBe('Attach a goal to your session');
+    expect(gate.showUploadEntry).toBe(true);
+    expect(gate.fallback).toBeNull();
   });
 
   it('unlocks content upload after Study Path is established', () => {

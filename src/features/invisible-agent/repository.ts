@@ -1,4 +1,5 @@
 import { getSupabaseClient } from '../../config/supabase';
+import { isDevUser } from '../../utils/supabase-resilience';
 import type { AgentContextSnapshot } from './schemas';
 
 type AgentDecisionResponse = {
@@ -7,8 +8,14 @@ type AgentDecisionResponse = {
 
 export async function invokeCoachAgentDecision(
   context: AgentContextSnapshot,
-): Promise<unknown> {
-  const { data, error } = await getSupabaseClient().functions.invoke<
+): Promise<unknown | null> {
+  const supabase = getSupabaseClient();
+  const session = await supabase.auth.getSession();
+  if (__DEV__ && !process.env.JEST_WORKER_ID && !session.data.session && isDevUser()) {
+    return null;
+  }
+
+  const { data, error } = await supabase.functions.invoke<
     AgentDecisionResponse
   >('ai-coach', {
     body: {

@@ -31,6 +31,22 @@ describe('useReducedMotion', () => {
     expect(result.current.springConfig.overshootClamping).toBe(true);
   });
 });
+  it('does not leak native reduced-motion rejections', async () => {
+    const unhandled = jest.fn();
+    const onUnhandledRejection = (reason: unknown): void => {
+      unhandled(reason);
+    };
+    process.once('unhandledRejection', onUnhandledRejection);
+    (
+      AccessibilityInfo.isReduceMotionEnabled as jest.Mock
+    ).mockRejectedValueOnce(new TypeError('native accessibility unavailable'));
+
+    renderHook(() => useReducedMotion());
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    process.removeListener('unhandledRejection', onUnhandledRejection);
+
+    expect(unhandled).not.toHaveBeenCalled();
+  });
 
 describe('useShouldAnimate', () => {
   it('returns false when reduced motion is enabled', async () => {

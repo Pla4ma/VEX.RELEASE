@@ -1,8 +1,7 @@
 import { decideHomeSurfaces } from '../home-surface-decision';
 import { buildHomeExperienceModel } from '../service';
-import type { HomeSurfaceMap } from '../surface-decision-schemas';
+import type { HomeSurfaceMap , SurfaceDecisionInputSchema } from '../surface-decision-schemas';
 import type { z } from 'zod';
-import type { SurfaceDecisionInputSchema } from '../surface-decision-schemas';
 
 type MotivationStyle = z.infer<
   typeof SurfaceDecisionInputSchema

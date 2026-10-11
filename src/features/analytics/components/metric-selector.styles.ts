@@ -1,5 +1,5 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export const styles = createSheet({
@@ -7,7 +7,7 @@ export const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -17,9 +17,9 @@ export const styles = createSheet({
     justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.panel,
     borderWidth: 1,
-    borderColor: lightColors.border.light,
+    borderColor: vexFire.border,
   },
   selectorDisabled: { opacity: 0.5 },
   selectedContainer: {
@@ -29,25 +29,25 @@ export const styles = createSheet({
     gap: 6,
   },
   selectedChip: {
-    backgroundColor: lightColors.primary[50],
+    backgroundColor: vexFire.backgroundSoft,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   selectedChipText: {
     fontSize: 12,
-    color: lightColors.semantic.primaryPressed,
+    color: vexFire.copper,
     fontWeight: '500',
   },
-  placeholder: { color: lightColors.text.muted, fontSize: 14 },
-  chevron: { fontSize: 12, color: lightColors.text.muted, marginLeft: 8 },
+  placeholder: { color: vexFire.textMuted, fontSize: 14 },
+  chevron: { fontSize: 12, color: vexFire.textMuted, marginLeft: 8 },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.background,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -58,16 +58,16 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border.light,
+    borderBottomColor: vexFire.border,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
   closeButton: {
     fontSize: 16,
-    color: lightColors.semantic.primary,
+    color: vexFire.ember,
     fontWeight: '500',
   },
   modalScroll: { padding: 16 },
@@ -75,7 +75,7 @@ export const styles = createSheet({
   categoryTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -87,28 +87,28 @@ export const styles = createSheet({
     paddingHorizontal: 8,
     borderRadius: 6,
   },
-  metricOptionSelected: { backgroundColor: lightColors.surface.button },
+  metricOptionSelected: { backgroundColor: vexFire.panel },
   metricOptionDisabled: { opacity: 0.4 },
   checkbox: {
     width: 20,
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: lightColors.border.light,
+    borderColor: vexFire.border,
     marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: lightColors.semantic.primary,
-    borderColor: lightColors.semantic.primary,
+    backgroundColor: vexFire.ember,
+    borderColor: vexFire.ember,
   },
   checkmark: {
-    color: lightColors.text.inverse,
+    color: vexFire.background,
     fontSize: 12,
     fontWeight: '700',
   },
-  metricLabel: { fontSize: 14, color: lightColors.text.muted },
-  metricLabelSelected: { color: lightColors.semantic.backgroundMuted, fontWeight: '500' },
-  metricLabelDisabled: { color: lightColors.text.muted },
+  metricLabel: { fontSize: 14, color: vexFire.textMuted },
+  metricLabelSelected: { color: vexFire.cream, fontWeight: '500' },
+  metricLabelDisabled: { color: vexFire.textMuted },
 });

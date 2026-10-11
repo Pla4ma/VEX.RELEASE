@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { PurchasesOffering } from 'react-native-purchases';
 import { revenueCatService } from './revenuecat-service';
 import type {
-  EntitlementInfo,
+
   PurchaseResult,
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
@@ -17,7 +17,7 @@ import {
   executeRestore,
   executeRetry,
 } from './revenuecat-mutation-ops';
-
+import { captureSilentFailure } from '../../utils/silent-failure';
 export function useRevenueCat(): UseRevenueCatState {
   const [status, setStatus] =
     useState<UseRevenueCatState['status']>('uninitialized');
@@ -82,21 +82,34 @@ export function useRevenueCat(): UseRevenueCatState {
 
   useEffect(() => {
     let isMounted = true;
-    const initialize = async () => {
+    const initialize = async (): Promise<void> => {
       setStatus('initializing');
-      const result = await revenueCatService.initialize();
-      if (!isMounted) {
-        return;
-      }
-      setIsInitialized(true);
-      setStatus(result.status);
-      const ready = result.status === 'ready' && revenueCatService.isReady();
-      setIsReady(ready);
-      if (ready) {
-        await Promise.all([doRefreshOfferings(), doRefreshCustomer()]);
+      try {
+        const result = await revenueCatService.initialize();
+        if (!isMounted) {
+          return;
+        }
+        setIsInitialized(true);
+        setStatus(result.status);
+        const ready = result.status === 'ready' && revenueCatService.isReady();
+        setIsReady(ready);
+        if (ready) {
+          await Promise.all([doRefreshOfferings(), doRefreshCustomer()]);
+        }
+      } catch (error: unknown) {
+        if (isMounted) {
+          setIsInitialized(true);
+          setIsReady(false);
+          setStatus('error');
+        }
+        captureSilentFailure(error, {
+          feature: 'monetization',
+          operation: 'initialize-revenuecat',
+          type: 'ui',
+        });
       }
     };
-    initialize();
+    void initialize();
     return () => {
       isMounted = false;
     };
@@ -180,19 +193,4 @@ export function useRevenueCat(): UseRevenueCatState {
     retry,
   };
 }
-
-// Re-export derived hooks for backward compatibility
-export { usePremiumStatus, usePaywall } from './use-revenuecat-derived';
-
-// Re-export types for backward compatibility
-export type {
-  UseRevenueCatState,
-  PurchasesOfferingDisplayInfo,
-  PurchasesPackageDisplayInfo,
-  PurchaseResult,
-};
-
-export const PurchaseEvents = { PURCHASE_COMPLETED: 'purchase:completed' as const, RESTORE_COMPLETED: 'purchase:restored' as const };
-export function createPaywallProperties() { return {}; }
-
 

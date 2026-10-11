@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -31,7 +32,7 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
   onSelect,
   formatDuration,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const priorityConfig = TASK_PRIORITY_CONFIG[task.priority];
   return (
     <Pressable
@@ -39,13 +40,13 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
         styles.taskCard,
         {
           backgroundColor: isCompleted
-            ? theme.colors.success[50]
+            ? vexFire.panelSoft
             : isActive
-              ? theme.colors.primary[50]
-              : theme.colors.background.secondary,
+              ? vexFire.ember
+              : vexFire.panel,
           borderColor: isActive
-            ? theme.colors.primary[500]
-            : theme.colors.border.DEFAULT,
+            ? vexFire.ember
+            : vexFire.border,
           opacity: isLocked ? 0.5 : pressed ? 0.8 : 1,
         },
       ]}
@@ -62,10 +63,10 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
           styles.checkbox,
           {
             borderColor: isCompleted
-              ? theme.colors.success[500]
-              : theme.colors.border.DEFAULT,
+              ? vexFire.success
+              : vexFire.border,
             backgroundColor: isCompleted
-              ? theme.colors.success[500]
+              ? vexFire.success
               : 'transparent',
             opacity: pressed && !isLocked && !readOnly ? 0.8 : 1,
           },
@@ -80,7 +81,7 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
           <Icon
             name="check"
             size="xs"
-            color={theme.colors.background.primary}
+            color={vexFire.background}
           />
         )}
       </Pressable>
@@ -91,7 +92,7 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
           style={[
             styles.taskText,
             {
-              color: theme.colors.text.primary,
+              color: vexFire.cream,
               textDecorationLine: isCompleted ? 'line-through' : 'none',
             },
           ]}
@@ -122,12 +123,12 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
             <Icon
               name="clock"
               size="xs"
-              color={theme.colors.text.muted}
+              color={vexFire.textMuted}
             />
             <Text
               style={[
                 styles.durationText,
-                { color: theme.colors.text.muted },
+                { color: vexFire.textMuted },
               ]}
             >
               {formatDuration(task.estimatedMinutes)}
@@ -142,12 +143,12 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
                 <Icon
                   name="link"
                   size="xs"
-                  color={theme.colors.text.muted}
+                  color={vexFire.textMuted}
                 />
                 <Text
                   style={[
                     styles.dependencyText,
-                    { color: theme.colors.text.muted },
+                    { color: vexFire.textMuted },
                   ]}
                 >
                   {task.dependsOn.length} prerequisite
@@ -160,7 +161,7 @@ export const TaskCard: React.ComponentType<TaskCardProps> = ({
 
       {}
       {isLocked && (
-        <Icon name="lock" size="sm" color={theme.colors.text.muted} />
+        <Icon name="lock" size="sm" color={vexFire.textMuted} />
       )}
     </Pressable>
   );

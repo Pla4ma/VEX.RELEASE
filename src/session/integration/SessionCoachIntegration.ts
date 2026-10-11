@@ -17,7 +17,7 @@ export type { CoachIntegrationConfig } from './coach-config';
 
 export class SessionCoachIntegration {
   private readonly config: CoachIntegrationConfig;
-  private readonly unsubscribers: Array<() => void> = [];
+  private readonly unsubscribers: (() => void)[] = [];
   private readonly handlerState: CoachHandlerState;
 
   constructor(config: Partial<CoachIntegrationConfig> = {}) {

@@ -1,10 +1,11 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 /**
  * Session Suggestion Card — type config and styles
  */
 
 import type { RecommendationType } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export const TYPE_CONFIG: Record<
@@ -14,54 +15,54 @@ export const TYPE_CONFIG: Record<
   OPTIMAL_TIME: {
     icon: '🎯',
     title: 'Perfect Timing',
-    color: lightColors.accent.teal,
+    color: vexFire.amber,
   },
   STREAK_PROTECTION: {
     icon: '🔥',
     title: 'Save Your Streak',
-    color: lightColors.error.light,
+    color: vexFire.danger,
   },
   COMEBACK_BUILDER: {
     icon: '💪',
     title: 'Comeback Time',
-    color: lightColors.semantic.success,
+    color: vexFire.success,
   },
   DIFFICULTY_ADJUST: {
     icon: '⚙️',
     title: 'Smart Adjustment',
-    color: lightColors.text.disabled,
+    color: vexFire.textMuted,
   },
   CHALLENGE_SYNC: {
     icon: '🎮',
     title: 'Challenge Ready',
-    color: lightColors.semantic.warning,
+    color: vexFire.amber,
   },
   BOSS_PREP: {
     icon: '⚔️',
     title: 'Boss Battle Prep',
-    color: lightColors.accent.purple,
+    color: vexFire.copper,
   },
   HABIT_BUILDER: {
     icon: '📅',
     title: 'Build The Habit',
-    color: lightColors.accent.blue,
+    color: vexFire.amber,
   },
   ENERGY_BASED: {
     icon: '⚡',
     title: 'Energy Match',
-    color: lightColors.semantic.warning,
+    color: vexFire.amber,
   },
 };
 
 export const styles = createSheet({
   container: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.cream,
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 2,
-    shadowColor: lightColors.text.primary,
+    shadowColor: vexFire.cream,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -85,12 +86,12 @@ export const styles = createSheet({
   },
   confidence: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
   reasoning: {
     fontSize: 15,
     lineHeight: 22,
-    color: lightColors.text.secondary,
+    color: vexFire.textSecondary,
     marginBottom: 16,
   },
   details: {
@@ -99,20 +100,20 @@ export const styles = createSheet({
     marginBottom: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: lightColors.surface.button,
+    borderTopColor: vexFire.ember,
   },
   detailItem: {
     flex: 1,
   },
   detailLabel: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.text.secondary,
+    color: vexFire.textSecondary,
   },
   actions: {
     flexDirection: 'row',
@@ -127,7 +128,7 @@ export const styles = createSheet({
     justifyContent: 'center',
   },
   acceptButtonText: {
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -140,7 +141,7 @@ export const styles = createSheet({
     justifyContent: 'center',
   },
   dismissButtonText: {
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     fontSize: 16,
     fontWeight: '500',
   },

@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-
-import { countCompletedSessions } from '../session-history/repository';
-
-const MEMORY_CONSOLE_MIN_SESSIONS = 3;
+import { canShowMemoryConsole } from './service';
 
 export function useMemoryConsoleVisibility(
   userId: string | null,
@@ -10,35 +7,25 @@ export function useMemoryConsoleVisibility(
   | { isVisible: false; isLoading: true; error: null }
   | { isVisible: false; isLoading: false; error: Error }
   | { isVisible: boolean; isLoading: false; error: null } {
-  const { isPending, isError, error, data } = useQuery({
+  const { isPending, isError, error, data } = useQuery<boolean, Error>({
     queryKey: ['memory-console-visible', userId],
-    queryFn: async () => {
-    if (!userId) {return false;}
-    const count = await countCompletedSessions(userId);
-    return count >= MEMORY_CONSOLE_MIN_SESSIONS;
-    },
+    queryFn: () => canShowMemoryConsole(userId),
     enabled: Boolean(userId),
     staleTime: 5 * 60 * 1000,
-    });
+  });
 
-
-
-
-
-
-
-
-
-
+  if (!userId) {
+    return { isVisible: false, isLoading: false, error: null };
+  }
   if (isPending) {
     return { isVisible: false, isLoading: true, error: null };
   }
   if (isError) {
-    return { isVisible: false, isLoading: false, error: error as Error };
+    return {
+      isVisible: false,
+      isLoading: false,
+      error: error ?? new Error('Could not check memory availability.'),
+    };
   }
-  return {
-    isVisible: data ?? false,
-    isLoading: false,
-    error: null,
-  };
+  return { isVisible: data ?? false, isLoading: false, error: null };
 }

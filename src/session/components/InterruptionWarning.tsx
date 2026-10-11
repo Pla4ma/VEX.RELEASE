@@ -80,7 +80,7 @@ export const InterruptionWarning: React.ComponentType<InterruptionWarningProps> 
       visible={isVisible}
       transparent
       animationType="fade"
-      onRequestClose={() => {}}
+      onRequestClose={onResume}
     >
       <View style={styles.overlay}>
         <Animated.View style={[styles.container, pulseStyle]}>

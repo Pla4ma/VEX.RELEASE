@@ -18,3 +18,4 @@ export { useContentReview } from './useContentReview';
 export { useStudyPlan } from './useStudyPlan';
 export { useContentHistory } from './useContentHistory';
 export { useRateLimit } from './useRateLimit';
+export { useContentStudyEligibility } from './useContentStudyEligibility';

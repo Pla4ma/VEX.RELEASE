@@ -30,7 +30,7 @@ export function getSignals(userId: string): NudgeSignalRecord[] {
   if (!raw) {return [];}
   try {
     return JSON.parse(raw) as NudgeSignalRecord[];
-  } catch (error: unknown) {
+  } catch {
     return [];
   }
 }

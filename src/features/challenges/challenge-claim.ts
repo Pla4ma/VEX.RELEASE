@@ -1,12 +1,11 @@
 import * as Sentry from '@sentry/react-native';
 import { eventBus } from '../../events/EventBus';
+import { getProgressionService } from '../../progression/ProgressionService';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { getRewardService } from '../../rewards/RewardService';
 import * as repository from './repository';
 import { ClaimChallengeRewardInputSchema, type ChallengeReward } from './schemas';
 import { getCompletedChallenges } from './queries';
-import { createDebugger } from '../../utils/debug';
-
-const debug = createDebugger('challenges');
 
 export async function claimChallengeReward(input: {
   userId: string;
@@ -30,11 +29,15 @@ export async function claimChallengeReward(input: {
     const rewardService = getRewardService(validated.userId);
     const rewards: ChallengeReward[] = [];
     if (detail.xpReward > 0) {
+      const idempotencyKey = `challenge:${validated.userId}:${validated.challengeId}`;
+      await getProgressionService(validated.userId).addXP(detail.xpReward, 'CHALLENGE_BONUS',
+        { idempotencyKey: `${idempotencyKey}:xp`, metadata: { challengeId: validated.challengeId } });
       await rewardService.grantReward(
         'XP',
         'CHALLENGE_COMPLETE',
         { baseAmount: 1 },
-        { exactAmount: detail.xpReward, challengeId: validated.challengeId },
+        { exactAmount: detail.xpReward, challengeId: validated.challengeId,
+          idempotencyKey: `${idempotencyKey}:receipt` },
       );
       rewards.push({
         type: 'XP',
@@ -44,19 +47,16 @@ export async function claimChallengeReward(input: {
         deliveredAt: Date.now(),
       });
     }
-    if (detail.coinReward > 0) {
-      try {
+    if (detail.coinReward > 0 && getAvailabilityFor('economy_basic').canUseBackend) {
         const { grantCurrencyRpc } = await import('../economy/repository');
-        await grantCurrencyRpc({
+        const result = await grantCurrencyRpc({
           userId: validated.userId,
           currency: 'COINS',
           amount: detail.coinReward,
           source: 'CHALLENGE_COMPLETE',
           sourceId: validated.challengeId,
         });
-      } catch (error) { debug.error('Error claiming challenge reward', error);
-        // ARCH-04: Economy disabled — coin reward silently skipped
-      }
+      if (!result.success) { throw new Error(result.error ?? 'Challenge currency grant failed'); }
       rewards.push({
         type: 'COINS',
         amount: detail.coinReward,
@@ -66,7 +66,7 @@ export async function claimChallengeReward(input: {
       });
     }
     await repository.updateUserChallenge(
-      validated.userId,
+      detail.userChallenge.userId,
       validated.challengeId,
       { status: 'CLAIMED', claimedAt: Date.now() },
     );

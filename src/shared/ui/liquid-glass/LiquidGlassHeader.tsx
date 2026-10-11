@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
 import { FocusCrystalAsset } from './FocusCrystalAsset';
 import { liquidGlassSpacing } from './liquidGlassTokens';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 export { liquidGlassSpacing };
 type LiquidGlassHeaderProps = {
   eyebrow: string;
@@ -19,7 +19,6 @@ export function LiquidGlassHeader({
   body,
   tone = 'teal',
 }: LiquidGlassHeaderProps): React.JSX.Element {
-  const { theme } = useTheme();
 
   return (
     <View
@@ -32,7 +31,7 @@ export function LiquidGlassHeader({
         <Text
           variant="caption"
           style={{
-            color: theme.colors.semantic.primary,
+            color: tone === 'amber' ? vexFire.amber : vexFire.ember,
             fontWeight: '800',
             letterSpacing: 5,
             marginBottom: liquidGlassSpacing.hairlineInset,
@@ -43,7 +42,7 @@ export function LiquidGlassHeader({
         </Text>
         <Text
           variant="h1"
-          style={{ color: theme.colors.semantic.textPrimary }}
+          style={{ color: vexFire.cream }}
         >
           {title}
         </Text>
@@ -51,7 +50,7 @@ export function LiquidGlassHeader({
           <Text
             variant="body"
             style={{
-              color: theme.colors.semantic.textSecondary,
+              color: vexFire.textSecondary,
               marginTop: liquidGlassSpacing.hairlineInset,
             }}
           >
@@ -63,4 +62,3 @@ export function LiquidGlassHeader({
     </View>
   );
 }
-

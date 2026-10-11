@@ -16,7 +16,7 @@ const expectedCategories = [
   'Notification Tokens',
 ];
 
-const storageModes: ReadonlyArray<DataCategory['storage']> = [
+const storageModes: readonly DataCategory['storage'][] = [
   'none',
   'device',
   'server',

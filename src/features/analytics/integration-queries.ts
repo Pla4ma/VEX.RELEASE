@@ -15,12 +15,12 @@ export interface RealtimeAnalytics {
     focusTime: number;
   };
   streak: number;
-  recentInsights: Array<{
+  recentInsights: {
     id: string;
     type: string;
     title: string;
     severity: string;
-  }>;
+  }[];
 }
 
 export interface InitializeResult {
@@ -100,12 +100,12 @@ export async function getRealtimeAnalytics(
         focusTime: metrics?.total_focus_time?.value ?? 0,
       },
       streak: metrics?.streak_days?.value ?? 0,
-      recentInsights: (insights as Array<{
+      recentInsights: (insights as {
         id: string;
         type: string;
         title: string;
         severity: string;
-      }>) ?? [],
+      }[]) ?? [],
     };
   } catch {
     return defaultResult;
@@ -121,13 +121,13 @@ export async function initializeAnalytics(
   userId: string,
 ): Promise<InitializeResult> {
   try {
-    const [stats, insights, patterns] = await Promise.all([
+    const [stats, insights, _patterns] = await Promise.all([
       repository.fetchAggregatedStats(userId, 'today'),
       repository.fetchInsights(userId),
       repository.fetchDetectedPatterns(userId),
     ]);
 
-    const metrics = (stats as Record<string, unknown> & { metrics?: Record<string, { value: number }> }).metrics;
+    const _metrics = (stats as Record<string, unknown> & { metrics?: Record<string, { value: number }> }).metrics;
 
     return {
       success: true,
@@ -138,12 +138,12 @@ export async function initializeAnalytics(
           focusTime: 0,
         },
         streak: 0,
-        recentInsights: (insights as Array<{
+        recentInsights: (insights as {
           id: string;
           type: string;
           title: string;
           severity: string;
-        }>) ?? [],
+        }[]) ?? [],
       },
     };
   } catch (error) {

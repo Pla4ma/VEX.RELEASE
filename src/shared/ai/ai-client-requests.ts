@@ -35,6 +35,20 @@ export const AI_API_ENDPOINTS = {
   TRIGGER_JOB_BASE: '/api/jobs',
 } as const;
 
+const AI_INVOCATION_NAMES: Record<AIRequest['requestType'], string> = {
+  GENERATE_COACH_MESSAGE: 'ai/coach-message',
+  GENERATE_SESSION_SUMMARY: 'ai/session-summary',
+  GENERATE_COMEBACK_PROMPT: 'ai/comeback-prompt',
+  GENERATE_STREAK_RISK_NUDGE: 'ai/streak-nudge',
+  GENERATE_WEEKLY_REFLECTION: 'ai/weekly-reflection',
+};
+
+export function getAIInvocationName(
+  requestType: AIRequest['requestType'],
+): string {
+  return AI_INVOCATION_NAMES[requestType];
+}
+
 export function validateAIRequest(request: unknown): AIRequest {
   return AIRequestSchema.parse(request);
 }

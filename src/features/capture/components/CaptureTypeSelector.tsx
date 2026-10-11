@@ -13,12 +13,12 @@ import { spacing } from '../../../theme/tokens/spacing';
 import { springPresets } from '../../../theme/tokens/motion';
 import type { CaptureType } from '../types';
 
-const CAPTURE_TYPES: Array<{
+const CAPTURE_TYPES: {
   type: CaptureType;
   label: string;
   icon: string;
   color: string;
-}> = [
+}[] = [
   { type: 'voice', label: 'Voice', icon: 'mic', color: vexLightGlass.semantic.fire },
   { type: 'photo', label: 'Photo', icon: 'camera', color: vexLightGlass.semantic.info },
   { type: 'link', label: 'Link', icon: 'link', color: vexLightGlass.mint[500] },

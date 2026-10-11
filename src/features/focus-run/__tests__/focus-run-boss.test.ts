@@ -1,5 +1,4 @@
-import { resolvePersonalBlocker } from './focus-run.helpers';
-import { weekStartDaysAgo, nowForDaysAgo } from './focus-run.helpers';
+import { resolvePersonalBlocker , weekStartDaysAgo, nowForDaysAgo } from './focus-run.helpers';
 
 it('personal blocker is teaser when less than 3 days of evidence exist', () => {
   const blocker = resolvePersonalBlocker({

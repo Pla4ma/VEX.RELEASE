@@ -21,17 +21,17 @@ describe('Risk 1 — Session component gating', () => {
 
   it('boss combat HUD must check FeatureAvailability before rendering', () => {
     const boss = getFeatureAvailability(accessFor(0).boss_tab);
-    expect(boss.canRenderEntryPoint).toBe(false);
-    expect(boss.canQuery).toBe(false);
+    expect(boss.canRenderEntryPoint).toBe(true);
+    expect(boss.canQuery).toBe(true);
     const boss5 = getFeatureAvailability(accessFor(5).boss_tab);
     expect(boss5.canRenderEntryPoint).toBe(true);
-    expect(boss5.canQuery).toBe(false);
+    expect(boss5.canQuery).toBe(true);
   });
 
   it('active session boss combat must check boss_tab before querying', () => {
     const boss = getFeatureAvailability(accessFor(0).boss_tab);
-    expect(boss.canQuery).toBe(false);
-    expect(boss.canRenderEntryPoint).toBe(false);
+    expect(boss.canQuery).toBe(true);
+    expect(boss.canRenderEntryPoint).toBe(true);
     const boss10 = getFeatureAvailability(accessFor(10).boss_tab);
     expect(boss10.canQuery).toBe(true);
     expect(boss10.canRenderEntryPoint).toBe(true);
@@ -111,7 +111,7 @@ describe('Risk 3 — Boss HUD display policy consumption', () => {
 // ═══ Risk 4 — Route Registration Enforcement ═════════════════════
 
 describe('Risk 4 — Route registration enforcement', () => {
-  it('all progressive routes gated by FeatureAvailability', () => {
+  it('all day-one routes are registered through FeatureAvailability', () => {
     const {
       FEATURE_ROUTE_REGISTRY,
       canRegisterFeatureRoute,
@@ -120,7 +120,7 @@ describe('Risk 4 — Route registration enforcement', () => {
     const gatedCount = FEATURE_ROUTE_REGISTRY.filter(
       (r: { route: string }) => !canRegisterFeatureRoute(locked, r.route),
     ).length;
-    expect(gatedCount).toBeGreaterThanOrEqual(1);
+    expect(gatedCount).toBe(0);
     const unlocked = accessFor(999);
     const count = FEATURE_ROUTE_REGISTRY.filter((r: { feature: string }) =>
       canRegisterFeatureRoute(unlocked, r.route),
@@ -128,18 +128,12 @@ describe('Risk 4 — Route registration enforcement', () => {
     expect(count).toBeGreaterThanOrEqual(FEATURE_ROUTE_REGISTRY.length - 1);
   });
 
-  it('hidden features never have registered routes', () => {
+  it('archived features never have registered routes', () => {
     const {
       canNavigateToRegisteredRoute,
     } = require('../navigation/feature-route-registry');
     const features = accessFor(0);
-    for (const route of [
-      'Boss',
-      'Challenges',
-      'ContentStudy',
-      'Mastery',
-      'CompanionDetail',
-    ]) {
+    for (const route of ['Shop', 'Inventory', 'Guild', 'PostSessionStory']) {
       expect(canNavigateToRegisteredRoute(features, route)).toBe(false);
     }
   });

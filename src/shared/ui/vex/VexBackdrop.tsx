@@ -3,13 +3,15 @@ import { Image, View, type ImageSourcePropType } from 'react-native';
 
 import { useTheme } from '../../../theme/ThemeContext';
 import { opacity } from '../../../theme/tokens/opacity';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface VexBackdropProps {
   source: ImageSourcePropType;
   overlayOpacity?: number;
+  overlayColor?: string;
 }
 
-export function VexBackdrop({ source, overlayOpacity = opacity[5] }: VexBackdropProps): React.JSX.Element {
+export function VexBackdrop({ source, overlayColor = vexFire.background, overlayOpacity = opacity[5] }: VexBackdropProps): React.JSX.Element {
   const { theme } = useTheme();
 
   return (
@@ -22,7 +24,7 @@ export function VexBackdrop({ source, overlayOpacity = opacity[5] }: VexBackdrop
       />
       <View
         style={{
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: overlayColor,
           bottom: 0,
           left: 0,
           opacity: overlayOpacity,

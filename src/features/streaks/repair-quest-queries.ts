@@ -2,7 +2,7 @@ import { RepositoryError } from '../../lib/repository/error-handling';
 import { supabase } from './repository-helpers';
 
 export async function fetchActiveRepairQuest(
-  userId: string,
+  _userId: string,
 ): Promise<{
   id: string;
   userId: string;
@@ -108,13 +108,13 @@ export async function updateRepairQuest(
 }
 
 export async function fetchExpiredRepairQuests(): Promise<
-  Array<{
+  {
     id: string;
     userId: string;
     previousStreak: number;
     status: string;
     expiresAt: number;
-  }>
+  }[]
 > {
   const { data, error } = await supabase
     .from('streak_repair_quests')

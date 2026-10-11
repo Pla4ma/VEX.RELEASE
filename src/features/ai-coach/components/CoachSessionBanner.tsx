@@ -9,10 +9,13 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { useTheme } from '../../../theme/ThemeContext';
 import { Text } from '../../../components/primitives/Text';
+import { spacing } from '../../../theme/tokens/spacing';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+
+const COACH_ARTIFACT = require('../../../../assets/vex/coach/coach-artifact.png');
 
 export type CoachPersonaStyle = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';
 
@@ -52,7 +55,6 @@ export function CoachSessionBanner({
   elapsedSeconds,
   isPaused,
 }: CoachSessionBannerProps): JSX.Element | null {
-  const { theme } = useTheme();
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -86,45 +88,46 @@ export function CoachSessionBanner({
     }
   }, [elapsedSeconds, isPaused, currentMessageIndex, hasStarted]);
 
+  const totalShowTime = MAX_MESSAGES_PER_SESSION * MESSAGE_ROTATION_SECONDS;
+  const currentMessage = messages[currentMessageIndex];
+  const bannerStyle = useMemo(() => ({
+    position: 'absolute' as const,
+    top: spacing[24] + spacing[10],
+    left: spacing[4],
+    right: spacing[4],
+    backgroundColor: vexFire.panel,
+    borderRadius: spacing[3],
+    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[3],
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: spacing[2],
+    shadowColor: vexFire.shadow,
+    shadowOpacity: 0.22,
+    shadowRadius: spacing[2],
+    elevation: 3,
+    zIndex: 10,
+  }), []);
+  const avatarStyle = useMemo(() => ({
+    width: spacing[6],
+    height: spacing[6],
+    borderRadius: spacing[6],
+    backgroundColor: vexFire.backgroundRaised,
+    borderColor: vexFire.border,
+    borderWidth: 1,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+  }), []);
+
   // Don't show until session has started (after 30 seconds)
   if (!hasStarted || elapsedSeconds < 30) {
     return null;
   }
 
-  // Don't show if we've shown all 3 messages and 15 minutes have passed
-  const totalShowTime = MAX_MESSAGES_PER_SESSION * MESSAGE_ROTATION_SECONDS;
+  // Don't show if we've shown all messages and the session has continued.
   if (elapsedSeconds > totalShowTime + 30) {
     return null;
   }
-
-  const currentMessage = messages[currentMessageIndex];
-
-  // Memoize the banner style to avoid re-creating the large inline object every render
-  const bannerStyle = useMemo(() => ({
-    position: 'absolute' as const,
-    top: 140,
-    left: theme.spacing[4],
-    right: theme.spacing[4],
-    backgroundColor: theme.colors.background.elevated + 'E6',
-    borderRadius: theme.borderRadius.lg,
-    paddingVertical: theme.spacing[2],
-    paddingHorizontal: theme.spacing[3],
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    gap: theme.spacing[2],
-    boxShadow: `0px 2px 4px ${theme.colors.text.primary}20`,
-    elevation: 3,
-    zIndex: 10,
-  }), [theme]);
-
-  const avatarStyle = useMemo(() => ({
-    width: 28,
-    height: 28,
-    borderRadius: theme.borderRadius.full,
-    backgroundColor: theme.colors.primary[500] + '20',
-    justifyContent: 'center' as const,
-    alignItems: 'center' as const,
-  }), [theme]);
 
   return (
     <Animated.View
@@ -132,24 +135,23 @@ export function CoachSessionBanner({
       exiting={FadeOut.duration(300)}
       style={bannerStyle}
     >
-      {/* Coach Avatar Placeholder */}
       <View style={avatarStyle}>
-        <Text fontSize={14} />
+        <Image accessibilityIgnoresInvertColors accessibilityLabel="VEX Coach artifact" source={COACH_ARTIFACT} resizeMode="contain" style={{ height: spacing[6], width: spacing[6] }} />
       </View>
 
       {/* Message */}
       <View style={{ flex: 1 }}>
         <Text
           variant="caption"
-          color="secondary"
+          color={vexFire.ember}
           weight="semibold"
-          style={{ marginBottom: 2 }}
+          style={{ marginBottom: spacing[1] }}
         >
           {coachName}
         </Text>
         <Text
           variant="bodySmall"
-          color="primary"
+          color={vexFire.cream}
           numberOfLines={1}
           ellipsizeMode="tail"
         >

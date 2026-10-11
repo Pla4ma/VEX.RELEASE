@@ -9,7 +9,7 @@
  */
 
 /** Patterns that indicate prompt injection attempts */
-const INJECTION_PATTERNS: ReadonlyArray<RegExp> = [
+const INJECTION_PATTERNS: readonly RegExp[] = [
   /\b(?:ignore|forget|disregard)\s+(?:all\s+)?(?:previous|prior|above|earlier)\s+(?:instructions?|prompts?|rules?|context)\b/gi,
   /\b(?:you\s+are\s+now|act\s+as|pretend\s+to\s+be|roleplay\s+as|system\s*:\s*)\b/gi,
   /\b(?:ignore\s+(?:your|the)\s+(?:instructions?|rules?|constraints?|programming))\b/gi,

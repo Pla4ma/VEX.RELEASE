@@ -182,7 +182,7 @@ describe('Cross-cutting: no false confidence words in cold-start', () => {
 
   it('cold-start COMPLETION_COPY insightLabels are all null', () => {
     const { COLD_START_COMPLETION_COPY } = require('../copy-session');
-    const values = Object.values(COLD_START_COMPLETION_COPY) as Array<{ insightLabel: string | null }>;
+    const values = Object.values(COLD_START_COMPLETION_COPY) as { insightLabel: string | null }[];
     for (const entry of values) {
       expect(entry.insightLabel).toBeNull();
     }
@@ -190,7 +190,7 @@ describe('Cross-cutting: no false confidence words in cold-start', () => {
 
   it('cold-start WEEKLY_INTELLIGENCE_COPY bodies all say VEX is learning', () => {
     const { COLD_START_WEEKLY_INTELLIGENCE_COPY } = require('../copy-session');
-    const values = Object.values(COLD_START_WEEKLY_INTELLIGENCE_COPY) as Array<{ body: string }>;
+    const values = Object.values(COLD_START_WEEKLY_INTELLIGENCE_COPY) as { body: string }[];
     for (const entry of values) {
       expect(entry.body).toContain('VEX is learning');
     }

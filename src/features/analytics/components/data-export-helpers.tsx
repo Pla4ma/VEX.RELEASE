@@ -14,7 +14,7 @@ export interface DataExportScreenProps {
 
 // ─── Constants ──────────────────────────────────────────────────────
 
-export const CATEGORIES: Array<{ key: DataCategory; label: string; icon: string; description: string }> = [
+export const CATEGORIES: { key: DataCategory; label: string; icon: string; description: string }[] = [
   { key: 'all', label: 'Everything', icon: '', description: 'All your data in one export' },
   { key: 'sessions', label: 'Sessions', icon: '', description: 'Session history and stats' },
   { key: 'analytics', label: 'Analytics', icon: '', description: 'Charts, trends, and insights' },
@@ -22,7 +22,7 @@ export const CATEGORIES: Array<{ key: DataCategory; label: string; icon: string;
   { key: 'settings', label: 'Settings', icon: '', description: 'Preferences and configuration' },
 ];
 
-export const FORMATS: Array<{ key: ExportFormat; label: string; icon: string; description: string }> = [
+export const FORMATS: { key: ExportFormat; label: string; icon: string; description: string }[] = [
   { key: 'json', label: 'JSON', icon: '', description: 'Machine-readable, great for backups' },
   { key: 'csv', label: 'CSV', icon: '', description: 'Spreadsheet format, easy to analyze' },
 ];

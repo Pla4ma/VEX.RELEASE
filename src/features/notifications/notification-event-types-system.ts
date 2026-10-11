@@ -55,9 +55,9 @@ export interface NotificationPerformanceReportEvent extends BaseNotificationEven
       }
     >;
     trends: {
-      delivery: Array<{ date: Date; rate: number }>;
-      engagement: Array<{ date: Date; rate: number }>;
-      performance: Array<{ date: Date; score: number }>;
+      delivery: { date: Date; rate: number }[];
+      engagement: { date: Date; rate: number }[];
+      performance: { date: Date; score: number }[];
     };
   };
 }

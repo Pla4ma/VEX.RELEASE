@@ -28,12 +28,9 @@ const EMPTY_STREAK_STATE: LegacyStreakState = {
   streakFuneralShown: false,
 };
 
-export function getStreakService(userId?: string): StreakService {
+export function getStreakService(userId: string): StreakService {
   return {
     async getState(): Promise<LegacyStreakState> {
-      if (!userId) {
-        return EMPTY_STREAK_STATE;
-      }
       try {
         const streak = await getOrCreateStreak(userId);
         return {
@@ -47,9 +44,6 @@ export function getStreakService(userId?: string): StreakService {
       }
     },
     markFuneralShown(): void {
-      if (!userId) {
-        return;
-      }
       eventBus.publish('streak:funeral_shown', {
         userId,
         previousStreak: 0,
@@ -57,13 +51,10 @@ export function getStreakService(userId?: string): StreakService {
       });
     },
     async recordSession(options): Promise<LegacyStreakState> {
-      if (!userId) {
-        return EMPTY_STREAK_STATE;
-      }
-
       const result = await recordSession({
         userId,
         sessionId: options?.sessionId ?? v4(),
+        idempotencyKey: options?.idempotencyKey,
         duration: options?.duration ?? 10 * 60,
         qualityScore: options?.qualityScore ?? 80,
         completedAt: options?.completedAt ?? Date.now(),

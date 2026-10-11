@@ -66,13 +66,13 @@ describe('study-os service', () => {
     expect(updated.reviewItems).toHaveLength(2);
   });
 
-  it('student lane sees Study OS and non-student hides without plan', () => {
+  it('every lane sees the basic Study OS without a plan', () => {
     expect(
       buildStudyOsHomeSurface({ lane: 'student', plan: null }).hidden,
     ).toBe(false);
     expect(
       buildStudyOsHomeSurface({ lane: 'minimal_normal', plan: null }).hidden,
-    ).toBe(true);
+    ).toBe(false);
   });
 });
 

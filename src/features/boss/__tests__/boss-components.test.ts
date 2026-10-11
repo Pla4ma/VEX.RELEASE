@@ -8,9 +8,9 @@ import { BossBattleHUD } from '../components/boss-battle-hud';
 import { render } from '@testing-library/react-native';
 
 describe('BossBattleHUD', () => {
-  it('renders the archived message', async () => {
+  it('renders the day-one momentum message', async () => {
     const { getByText } = await render(React.createElement(BossBattleHUD));
-    expect(getByText(/Boss battles have been moved/i)).toBeTruthy();
+    expect(getByText(/Momentum encounters are now part of your focus loop/i)).toBeTruthy();
   });
 
   it('has accessibility label', async () => {

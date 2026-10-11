@@ -1,10 +1,9 @@
+import { resetCompletionMocks } from './completion-product-journey-helpers';
 import { applyCompletionSubsystems } from '../completion-subsystems';
 import {
   createCompletionLedger,
   createSessionSummary,
 } from './ledger-test-utils';
-import { resetCompletionMocks } from './completion-product-journey-helpers';
-
 describe('old reward integration disabled', () => {
   beforeEach(() => {
     resetCompletionMocks();
@@ -33,9 +32,7 @@ describe('old reward integration disabled', () => {
 
     const { getRewardService } = require('../../../rewards/RewardService');
     const rewardService = getRewardService();
-    const grantCalls = (rewardService.grantReward?.mock?.calls ?? []) as Array<
-      [string, ...unknown[]]
-    >;
+    const grantCalls = (rewardService.grantReward?.mock?.calls ?? []) as [string, ...unknown[]][];
     for (const call of grantCalls) {
       if (call[0]) {
         expect(call[0]).not.toBe('COINS');

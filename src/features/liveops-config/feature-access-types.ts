@@ -1,3 +1,4 @@
+import { z } from 'zod';
 export type UserExperienceStage =
   | 'NEW_USER'
   | 'ACTIVATING'
@@ -61,6 +62,9 @@ export interface FeatureAccess {
   isDegraded?: boolean;
   disableOnDegraded?: boolean;
   priority?: number;
+  unlockThreshold?: number;
+  currentEvidence?: string;
+  nextMilestone?: number | null;
   releaseState: FeatureReleaseState;
   acceleratingProfiles?: MotivationProfileType[];
   restrictingProfiles?: MotivationProfileType[];
@@ -84,9 +88,21 @@ export interface MotivationProfile {
   primary: MotivationProfileType;
   secondary: MotivationProfileType[];
 }
+export const UnlockBehaviorEvidenceSchema = z
+  .object({
+    bossEngagement: z.enum(['none', 'low', 'medium', 'high']),
+    coachInteractions: z.number().int().min(0),
+    ignoredFeatures: z.array(z.string().min(1)),
+    premiumFeatureAttempts: z.array(z.string().min(1)),
+    studySurfaceClicks: z.number().int().min(0),
+  })
+  .strict();
+export type UnlockBehaviorEvidence = z.infer<typeof UnlockBehaviorEvidenceSchema>;
+
 
 export interface FeatureAccessInputs {
   totalCompletedSessions: number;
   motivationProfile?: MotivationProfile;
+  behaviorEvidence?: UnlockBehaviorEvidence;
   degradedFeatures?: Set<FeatureKey>;
 }

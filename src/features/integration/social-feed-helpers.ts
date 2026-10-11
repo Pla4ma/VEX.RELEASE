@@ -57,7 +57,7 @@ export async function notifyRelevantUsers(
 export async function awardCompetitionRewards(
   result: CompetitiveResult,
 ): Promise<void> {
-  const rewards: Array<{ type: string; amount: number }> = [];
+  const rewards: { type: string; amount: number }[] = [];
   if (result.rank === 1) {
     rewards.push({ type: 'GEMS', amount: 100 });
     rewards.push({ type: 'TITLE', amount: 1 });
@@ -140,7 +140,7 @@ export async function getUserSquadId(_userId: string): Promise<string | null> {
 export async function getRecentSessions(
   _userId: string,
   _timeWindowMs: number,
-): Promise<Array<{ duration: number; qualityScore: number }>> {
+): Promise<{ duration: number; qualityScore: number }[]> {
   return [];
 }
 

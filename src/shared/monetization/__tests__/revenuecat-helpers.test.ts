@@ -1,5 +1,5 @@
 import { buildError, mapOfferingToDisplayInfo } from '../revenuecat-helpers';
-import type { RevenueCatError, PurchasesOfferingDisplayInfo, PurchasesPackageDisplayInfo } from '../revenuecat-types';
+import type {  PurchasesOfferingDisplayInfo, PurchasesPackageDisplayInfo } from '../revenuecat-types';
 
 jest.mock('react-native-purchases', () => ({}));
 

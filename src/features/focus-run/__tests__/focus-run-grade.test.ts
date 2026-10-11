@@ -1,15 +1,14 @@
-import { computeFocusRunGrade } from './focus-run.helpers';
-import { MOCK_RUN } from './focus-run.helpers';
+import { computeFocusRunGrade , MOCK_RUN } from './focus-run.helpers';
 import type { FocusRun, FocusRunGrade } from '../schemas';
 
 describe('computeFocusRunGrade', () => {
-  const gradeCases: Array<{
+  const gradeCases: {
     encounters: number;
     clean: number;
     recovery: number;
     upgrades: number;
     expected: FocusRunGrade;
-  }> = [
+  }[] = [
     { encounters: 0, clean: 0, recovery: 0, upgrades: 0, expected: 'D' },
     { encounters: 2, clean: 0, recovery: 0, upgrades: 0, expected: 'C' },
     { encounters: 3, clean: 2, recovery: 0, upgrades: 0, expected: 'B' },

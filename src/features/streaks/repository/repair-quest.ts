@@ -15,7 +15,7 @@ import { tableColumns } from '../../../lib/repository/tableColumns';
 const supabase = getSupabaseClient();
 
 export async function fetchActiveRepairQuestEnhanced(
-  userId: string,
+  _userId: string,
 ): Promise<RepositoryResult<StreakRepairQuest>> {
   return executeWithFallback('fetchActiveRepairQuest', async () => {
     const { data, error } = await supabase
@@ -106,13 +106,13 @@ export async function updateRepairQuestEnhanced(
 
 export async function fetchExpiredRepairQuestsEnhanced(): Promise<
   RepositoryResult<
-    Array<{
+    {
       id: string;
       userId: string;
       previousStreak: number;
       status: string;
       expiresAt: number;
-    }>
+    }[]
   >
 > {
   return executeWithFallback('fetchExpiredRepairQuests', async () => {

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 /**
  * StudyPlanSuggestionCard Component
  *
@@ -38,7 +39,7 @@ export function StudyPlanSuggestionCard({
   studyPlan,
   onSelect,
 }: StudyPlanSuggestionCardProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -73,29 +74,29 @@ export function StudyPlanSuggestionCard({
           gap="md"
           p="md"
           borderRadius="xl"
-          bg={`${theme.colors.info.DEFAULT}15`}
+          bg={`${vexFire.amber}15`}
           borderWidth={2}
-          borderColor={theme.colors.info.DEFAULT}
+          borderColor={vexFire.amber}
         >
           {/* Icon */}
           <Box
             width={48}
             height={48}
             borderRadius="lg"
-            bg={`${theme.colors.info.DEFAULT}25`}
+            bg={`${vexFire.amber}25`}
             justifyContent="center"
             alignItems="center"
           >
-            <Text fontSize={24} color={theme.colors.info.DEFAULT}>◊</Text>
+            <Text fontSize={24} color={vexFire.amber}>◊</Text>
           </Box>
 
           {/* Content */}
           <Box flex={1} gap="xs">
-            <Text variant="body" color="text.primary" fontWeight="600">
+            <Text variant="body" color={vexFire.cream} fontWeight="600">
               {title}
             </Text>
             {studyPlan.nextTask && (
-              <Text variant="caption" color="text.secondary" numberOfLines={1}>
+              <Text variant="caption" color={vexFire.textSecondary} numberOfLines={1}>
                 Next: {studyPlan.nextTask.content}
               </Text>
             )}
@@ -104,9 +105,9 @@ export function StudyPlanSuggestionCard({
                 px="sm"
                 py="xs"
                 borderRadius="sm"
-                bg={theme.colors.background.tertiary}
+                bg={vexFire.backgroundSoft}
               >
-                <Text variant="caption" color="text.secondary" fontSize={10}>
+                <Text variant="caption" color={vexFire.textSecondary} fontSize={10}>
                   {studyPlan.remainingMinutes} min remaining
                 </Text>
               </Box>
@@ -114,7 +115,7 @@ export function StudyPlanSuggestionCard({
                 px="sm"
                 py="xs"
                 borderRadius="sm"
-                bg={theme.colors.background.tertiary}
+                bg={vexFire.backgroundSoft}
               >
                 <Text variant="caption" color="info.DEFAULT" fontSize={10}>
                   {modeLabel}
@@ -124,7 +125,7 @@ export function StudyPlanSuggestionCard({
           </Box>
 
           {/* Arrow */}
-          <Text fontSize={20} color={theme.colors.info.DEFAULT}>
+          <Text fontSize={20} color={vexFire.amber}>
             ›
           </Text>
         </Box>
@@ -135,15 +136,15 @@ export function StudyPlanSuggestionCard({
           height={4}
           borderRadius={2}
           overflow="hidden"
-          style={{ backgroundColor: theme.colors.background.tertiary }}
+          style={{ backgroundColor: vexFire.backgroundSoft }}
         >
           <Box
             height="100%"
             width={`${studyPlan.progressPercent}%`}
-            style={{ backgroundColor: theme.colors.info.DEFAULT }}
+            style={{ backgroundColor: vexFire.amber }}
           />
         </Box>
-        <Text variant="caption" color="text.tertiary" mt="xs">
+        <Text variant="caption" color={vexFire.textMuted} mt="xs">
           {progressText}
         </Text>
       </Pressable>

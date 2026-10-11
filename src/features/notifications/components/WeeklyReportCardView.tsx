@@ -1,13 +1,12 @@
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import { lightColors } from '@/theme/tokens/colors';
 
 import { WeeklyReportStatsGrid } from './WeeklyReportStatsGrid';
-import { Text as VexText } from '../../../components/primitives/Text';
 import { formatCompactNumber } from '../formatters';
 
 export interface WeeklyReportCardProps {

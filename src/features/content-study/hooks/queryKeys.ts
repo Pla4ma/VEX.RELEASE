@@ -5,6 +5,8 @@
 
 export const contentStudyQueryKeys = {
   all: ['content-study'] as const,
+  eligibility: (userId: string) =>
+    [...contentStudyQueryKeys.all, 'eligibility', userId] as const,
   content: (id: string) =>
     [...contentStudyQueryKeys.all, 'content', id] as const,
   generation: (id: string) =>

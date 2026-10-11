@@ -49,7 +49,7 @@ export function PlanCard({
 }
 
 interface BenefitListProps {
-  benefits: ReadonlyArray<readonly [string, string]>;
+  benefits: readonly (readonly [string, string])[];
 }
 
 export function BenefitList({ benefits }: BenefitListProps): React.ReactNode {

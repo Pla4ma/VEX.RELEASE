@@ -98,11 +98,11 @@ export abstract class SessionOrchestratorBase {
     if (this.session)
       {await persistence.saveSessionState(this.session, this.repository);}
   }
-  finalizeSession(summary: SessionSummary): void {
-    doFinalizeSession(this, summary);
+  finalizeSession(summary: SessionSummary): Promise<void> {
+    return doFinalizeSession(this, summary);
   }
-  finalizeAbandonedSession(): void {
-    doFinalizeAbandonedSession(this);
+  finalizeAbandonedSession(): Promise<void> {
+    return doFinalizeAbandonedSession(this);
   }
 
   setUserId(id: string): void {

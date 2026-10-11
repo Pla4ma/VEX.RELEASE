@@ -3,7 +3,7 @@ import { deleteCurrentUser, signOutCurrentSession } from '../repository';
 import { revenueCatService } from '../../../shared/monetization/revenuecat-service';
 import {
   getSecureStorage,
-  SecureStorageKeys,
+  _SecureStorageKeys,
 } from '../../../persistence/SecureStorage';
 import {
   getDefaultStorageAdapter,

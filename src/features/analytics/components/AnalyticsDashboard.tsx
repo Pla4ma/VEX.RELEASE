@@ -11,7 +11,7 @@ import { analyticsKeys } from '../hooks/analyticsKeys';
 import type { AnalyticsMetric } from '../schemas';
 import { MetricSelector } from './MetricSelector';
 import { TimeRangeFilter } from './TimeRangeFilter';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 import { DashboardContent } from './DashboardContent';
 import { styles } from './AnalyticsDashboard.styles';
@@ -30,7 +30,7 @@ const DashboardRefreshControl = React.memo(function DashboardRefreshControl({
     <RefreshControl
       refreshing={isRefreshing}
       onRefresh={onRefresh}
-      tintColor={lightColors.semantic.primary}
+      tintColor={vexFire.ember}
     />
   );
 });

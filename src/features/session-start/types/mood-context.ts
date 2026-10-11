@@ -39,12 +39,12 @@ export interface SessionMoodAdjustedEvent extends BaseSessionStartEvent {
     adjustmentMethod: string;
     previousMood: Record<string, unknown>;
     currentMood: Record<string, unknown>;
-    changes: Array<{ dimension: string; change: number; significance: string }>;
-    activities: Array<{
+    changes: { dimension: string; change: number; significance: string }[];
+    activities: {
       activity: string;
       duration: number;
       effectiveness: number;
-    }>;
+    }[];
     sustainability: {
       duration: number;
       maintenance: string[];
@@ -95,13 +95,13 @@ export interface SessionContextUpdatedEvent extends BaseSessionStartEvent {
   type: 'session_context_updated';
   data: {
     updateType: 'environmental' | 'personal' | 'social' | 'system' | 'external';
-    changes: Array<{
+    changes: {
       aspect: string;
       previousValue: Record<string, unknown>;
       newValue: Record<string, unknown>;
       impact: string;
       timestamp: Date;
-    }>;
+    }[];
     implications: {
       immediate: string[];
       shortTerm: string[];

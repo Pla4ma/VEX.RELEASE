@@ -7,6 +7,7 @@ import {
   SessionGlyph,
   type SessionGlyphName,
 } from '../../../shared/ui/liquid-glass/SessionGlyphs';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 interface StakeCardProps {
   icon: SessionGlyphName;
@@ -33,27 +34,27 @@ export function StakeCard({
     switch (urgency) {
       case 'critical':
         return {
-          borderColor: theme.colors.error[500],
-          bgColor: `${theme.colors.error[500]}15`,
-          iconBg: theme.colors.error[500],
+          borderColor: vexFire.danger,
+          bgColor: `${vexFire.danger}15`,
+          iconBg: vexFire.danger,
         };
       case 'high':
         return {
-          borderColor: theme.colors.warning[500],
-          bgColor: `${theme.colors.warning[500]}10`,
-          iconBg: theme.colors.warning[500],
+          borderColor: vexFire.amber,
+          bgColor: `${vexFire.amber}10`,
+          iconBg: vexFire.amber,
         };
       case 'medium':
         return {
-          borderColor: accentColor || theme.colors.primary[500],
-          bgColor: `${accentColor || theme.colors.primary[500]}10`,
-          iconBg: accentColor || theme.colors.primary[500],
+          borderColor: accentColor || vexFire.ember,
+          bgColor: `${accentColor || vexFire.ember}10`,
+          iconBg: accentColor || vexFire.ember,
         };
       default:
         return {
-          borderColor: theme.colors.border.DEFAULT,
-          bgColor: theme.colors.background.primary,
-          iconBg: theme.colors.text.tertiary,
+          borderColor: vexFire.border,
+          bgColor: vexFire.panelSoft,
+          iconBg: vexFire.textMuted,
         };
     }
   };
@@ -83,7 +84,7 @@ export function StakeCard({
             width: 44,
             height: 44,
             borderRadius: theme.borderRadius['2xl'],
-            backgroundColor: theme.colors.semantic.surfaceElevated,
+            backgroundColor: vexFire.backgroundRaised,
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -91,10 +92,10 @@ export function StakeCard({
           <SessionGlyph name={icon} size={36} />
         </View>
         <View style={{ flex: 1 }}>
-          <Text variant="body" fontWeight="600" color="text.primary">
+          <Text variant="body" fontWeight="600" color={vexFire.cream}>
             {title}
           </Text>
-          <Text variant="caption" color="text.secondary">
+          <Text variant="caption" color={vexFire.textSecondary}>
             {subtitle}
           </Text>
         </View>

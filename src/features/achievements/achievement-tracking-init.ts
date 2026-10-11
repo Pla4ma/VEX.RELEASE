@@ -3,7 +3,7 @@ import { updateAchievementProgress } from './service';
 import { updateBossDefeatUnique } from './boss-defeat-tracking';
 
 export function initializeAchievementTracking(): () => void {
-  const unsubs: Array<() => void> = [];
+  const unsubs: (() => void)[] = [];
   unsubs.push(eventBus.subscribe('session:completed', async (event) => {
     const { userId, duration } = event;
     await updateAchievementProgress(userId, 'SESSION_COMPLETE', 1);

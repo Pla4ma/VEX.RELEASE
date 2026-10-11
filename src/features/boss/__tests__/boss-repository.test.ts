@@ -2,8 +2,7 @@
  * Tests for boss repository
  */
 
-import { bossRepository } from '../repository';
-import {
+import { bossRepository ,
   fetchBossTemplate,
   fetchActiveEncounter,
   hasActiveBossEncounter,

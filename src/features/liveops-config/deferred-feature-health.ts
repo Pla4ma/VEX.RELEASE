@@ -1,6 +1,7 @@
 import type { FeatureKey } from './feature-access';
 import { setDegradedFeatures } from './feature-access-store';
 import { shouldRunHealthCheck } from './FeatureFlagService';
+import { captureSilentFailure } from '../../utils/silent-failure';
 
 const CHECKABLE_FEATURES: FeatureKey[] = [
   'content_study',
@@ -49,11 +50,26 @@ async function pollFeatureHealth(
     if (!isCancelled()) {
       setDegradedFeatures(new Set(unhealthy));
     }
-  } catch (error: unknown) {
+  } catch {
     if (!isCancelled()) {
       setDegradedFeatures(eligible);
     }
   }
+}
+
+function pollFeatureHealthSafely(
+  totalCompletedSessions: number,
+  isCancelled: () => boolean,
+): void {
+  void pollFeatureHealth(totalCompletedSessions, isCancelled).catch(
+    (error: unknown) => {
+      captureSilentFailure(error, {
+        feature: 'liveops',
+        operation: 'poll-feature-health',
+        type: 'data',
+      });
+    },
+  );
 }
 
 export function startDeferredFeatureHealth(
@@ -61,9 +77,9 @@ export function startDeferredFeatureHealth(
 ): () => void {
   let cancelled = false;
 
-  pollFeatureHealth(totalCompletedSessions, () => cancelled);
+  pollFeatureHealthSafely(totalCompletedSessions, () => cancelled);
   const interval = setInterval(() => {
-    pollFeatureHealth(totalCompletedSessions, () => cancelled);
+    pollFeatureHealthSafely(totalCompletedSessions, () => cancelled);
   }, 60_000);
 
   return () => {

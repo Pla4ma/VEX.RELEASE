@@ -73,7 +73,7 @@ export interface RestoreEventProperties {
 export function createPaywallProperties(
   offeringId: string,
   source: string,
-  packages: Array<{ identifier: string; hasTrial: boolean }>,
+  packages: { identifier: string; hasTrial: boolean }[],
 ): PaywallEventProperties {
   return {
     offering_id: offeringId,
@@ -132,7 +132,7 @@ export function createEntitlementProperties(
 }
 export function createOfferingProperties(
   offeringId: string,
-  packages: Array<{ packageType: string }>,
+  packages: { packageType: string }[],
   error?: { code: string },
 ): OfferingEventProperties {
   const packageTypes = packages.map((p) => p.packageType);

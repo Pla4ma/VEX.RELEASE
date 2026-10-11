@@ -47,13 +47,13 @@ export async function activateComeback(
   return saved;
 }
 
-function generateComebackMessages(): Array<{
+function generateComebackMessages(): {
   id: string;
   day: number;
   content: string;
   sent: boolean;
   sentAt: number | null;
-}> {
+}[] {
   const messages = [
     {
       day: 1,

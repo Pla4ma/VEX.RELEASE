@@ -16,7 +16,7 @@ export function getActiveEncounter(
 ): Promise<{ status: string; bossId: string; id: string } | null> {
   return Promise.resolve(null);
 }
-export function getAvailableBosses(): Promise<Array<{ unlocked: boolean }>> {
+export function getAvailableBosses(): Promise<{ unlocked: boolean }[]> {
   return Promise.resolve([]);
 }
 export function canUserFightBoss(): Promise<{

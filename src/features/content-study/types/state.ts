@@ -3,9 +3,8 @@
  * UI state types for content study feature
  */
 
-import type { ExtractionStage, InputTab } from './enums';
+import type { ExtractionStage, InputTab , SessionDifficulty } from './enums';
 import type { StudyContent, StudyGeneration } from './content';
-import type { SessionDifficulty } from './enums';
 
 export interface ValidationError {
   field: string;

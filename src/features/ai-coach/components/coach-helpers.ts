@@ -1,4 +1,4 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 import type { CoachState, CoachUserState } from '../types';
 import {
   PERSONALITY_METADATA,
@@ -86,18 +86,18 @@ export function getStateColor(
   state?: CoachUserState | null,
 ): string {
   if (!state) {
-    return lightColors.semantic.success;
+    return vexFire.success;
   }
   const stateColors: Record<CoachUserState, string> = {
-    COLD_START: lightColors.accent.blue,
-    LOW_CONFIDENCE: lightColors.semantic.warning,
-    HIGH_CONFIDENCE: lightColors.semantic.success,
-    STREAK_AT_RISK: lightColors.semantic.danger,
-    COMEBACK_MODE: lightColors.accent.purple,
-    POST_FAILURE_SUPPORT: lightColors.accent.orange,
-    MILESTONE_HYPE: lightColors.accent.pink,
-    OVERLOAD_PROTECTION: lightColors.accent.teal,
-    MUTED_MODE: lightColors.text.muted,
+    COLD_START: vexFire.amber,
+    LOW_CONFIDENCE: vexFire.amber,
+    HIGH_CONFIDENCE: vexFire.success,
+    STREAK_AT_RISK: vexFire.danger,
+    COMEBACK_MODE: vexFire.copper,
+    POST_FAILURE_SUPPORT: vexFire.ember,
+    MILESTONE_HYPE: vexFire.ember,
+    OVERLOAD_PROTECTION: vexFire.textSecondary,
+    MUTED_MODE: vexFire.textMuted,
   };
-  return stateColors[state] || lightColors.semantic.success;
+  return stateColors[state] || vexFire.success;
 }

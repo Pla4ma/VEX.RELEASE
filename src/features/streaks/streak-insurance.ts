@@ -123,15 +123,3 @@ export function createInsurance(
     used: false,
   };
 }
-
-export { StreakGambleSchema, GAMBLE_CONFIGS, getGambleOptions } from './streak-gamble';
-export type { StreakGamble, GambleConfig } from './streak-gamble';
-
-export {
-  type SettleGambleResult,
-  type StreakRiskAssessment,
-  settleGamble,
-  assessStreakRisk,
-  convertShieldsToInsurance,
-  StreakInsuranceEvents,
-} from './streak-risk-assessment';

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import type {
   Achievement,
-  AchievementCategory,
-  AchievementRarity,
+
+
   UserAchievement,
 } from './types';
 import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';
@@ -44,7 +44,7 @@ export interface UseAchievementProgressResult {
   isError: boolean;
 }
 export interface UseRecentUnlocksResult {
-  data: Array<{ achievement: Achievement; unlockedAt: number }> | null;
+  data: { achievement: Achievement; unlockedAt: number }[] | null;
   error: Error | null;
   isLoading: boolean;
   isError: boolean;
@@ -161,10 +161,10 @@ export function useRecentUnlocks(userId: string): UseRecentUnlocksResult {
             }
             return { achievement, unlockedAt: ua.unlockedAt! };
           })
-          .filter(Boolean) as Array<{
+          .filter(Boolean) as {
           achievement: Achievement;
           unlockedAt: number;
-        }>;
+        }[];
         return recentUnlocks;
       } catch (err) {
         throw err instanceof Error

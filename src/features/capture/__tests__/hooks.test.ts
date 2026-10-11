@@ -13,7 +13,12 @@ const mockLoadCaptures = service.loadCaptures as jest.Mock;
 const mockCaptureException = Sentry.captureException as jest.Mock;
 
 function createWrapper() {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+      mutations: { gcTime: 0 },
+    },
+  });
   return ({ children }: { children: React.ReactNode }) =>
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 }
@@ -22,7 +27,12 @@ describe('useCaptureMutation', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('invalidates captures cache on success', async () => {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { gcTime: 0 },
+        mutations: { gcTime: 0 },
+      },
+    });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
     mockSubmitCapture.mockResolvedValue({ item: { id: '1' }, error: null });
 
@@ -36,6 +46,7 @@ describe('useCaptureMutation', () => {
     });
 
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['captures', 'user-1'] });
+    queryClient.clear();
   });
 
   it('reports errors to Sentry', async () => {

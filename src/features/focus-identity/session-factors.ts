@@ -1,12 +1,12 @@
 import type { FocusScoreFactors } from './FocusIdentityEngine-types';
 
 export function calculateSessionQualityFactorForInput(
-  sessions: Array<{
+  sessions: {
     focusPurity: number;
     grade: string;
     duration: number;
     wasAbandoned: boolean;
-  }>,
+  }[],
 ): FocusScoreFactors['sessionQuality'] {
   if (sessions.length === 0) {
     return {
@@ -63,12 +63,12 @@ export function calculateSessionQualityFactorForInput(
 }
 
 export function calculateDiversityFactorForInput(
-  sessions: Array<{
+  sessions: {
     mode: string;
     hour: number;
     dayOfWeek: number;
     context?: string;
-  }>,
+  }[],
 ): FocusScoreFactors['diversity'] {
   if (sessions.length === 0) {
     return {
@@ -116,7 +116,7 @@ export function calculateRecencyFactorForInput(
   daysSinceLastSession: number,
   last7Days: number,
   last30Days: number,
-  scoreHistory: Array<{ date: string; score: number }>,
+  scoreHistory: { date: string; score: number }[],
 ): FocusScoreFactors['recency'] {
   let score = 100;
   if (daysSinceLastSession === 1) {

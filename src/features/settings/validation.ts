@@ -118,14 +118,14 @@ export function validateSettingsExport(
 }
 
 export async function batchValidateSettings(
-  settings: Array<{
+  settings: {
     key: string;
     value: unknown;
     category: z.infer<typeof SettingCategorySchema>;
-  }>,
+  }[],
   options: { continueOnError?: boolean; maxErrors?: number } = {},
 ): Promise<{
-  results: Array<{ key: string; result: ValidationResult }>;
+  results: { key: string; result: ValidationResult }[];
   summary: {
     total: number;
     valid: number;
@@ -135,7 +135,7 @@ export async function batchValidateSettings(
   };
 }> {
   const { continueOnError = true, maxErrors = 10 } = options;
-  const results: Array<{ key: string; result: ValidationResult }> = [];
+  const results: { key: string; result: ValidationResult }[] = [];
   let errorCount = 0;
   let warningCount = 0;
   let validCount = 0;

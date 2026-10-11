@@ -1,3 +1,33 @@
+jest.mock('@sentry/react-native', () => ({
+  addBreadcrumb: jest.fn(),
+  captureException: jest.fn(),
+}));
+jest.mock('../../focus-identity/update-focus-score.helper', () => ({
+  updateFocusScoreFromSessionCompletion: jest.fn().mockResolvedValue(undefined),
+}));
+jest.mock('../../../progression/ProgressionService', () => ({
+  getProgressionService: jest.fn().mockReturnValue({
+    addXP: jest.fn().mockResolvedValue(undefined),
+  }),
+}));
+jest.mock('../../../streaks/StreakService', () => ({
+  getStreakService: jest.fn().mockReturnValue({
+    recordSession: jest.fn().mockResolvedValue({ currentStreak: 5 }),
+  }),
+}));
+jest.mock('../../../rewards/RewardService', () => ({
+  getRewardService: jest.fn().mockReturnValue({
+    grantReward: jest.fn().mockResolvedValue(undefined),
+  }),
+}));
+jest.mock('../../companion/service', () => ({
+  getCompanionService: jest.fn().mockReturnValue({
+    completeSession: jest.fn().mockReturnValue({ evolved: false, leveledUp: false }),
+  }),
+}));
+jest.mock('../completion-analytics', () => ({
+  trackCompletionAnalytics: jest.fn(),
+}));
 import { applyCompletionSubsystems } from '../completion-subsystems';
 import {
   createCompletionLedger,

@@ -77,7 +77,7 @@ export function DayDetailsPopover({
           <Text variant="caption" color="text.tertiary" mb="xs">
             EVENTS
           </Text>
-          {day.events.map((event, i) => (
+          {day.events.map((event, _i) => (
             <Box
               key={`event-${event}`}
               flexDirection="row"

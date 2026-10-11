@@ -22,8 +22,9 @@
  */
 
 import { useEffect, useState, useMemo } from 'react';
-import { AccessibilityInfo} from 'react-native';
+import { AccessibilityInfo } from 'react-native';
 import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
+import { captureSilentFailure } from '../utils/silent-failure';
 
 interface ReducedMotionResult {
   /** Whether user has enabled reduced motion */
@@ -61,32 +62,52 @@ function useSystemReducedMotion(): ReducedMotionResult {
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(
     reanimatedReducedMotion ?? false,
   );
-
   useEffect(() => {
     let cancelled = false;
-    // Update from Reanimated's value
+
     if (reanimatedReducedMotion !== null) {
       setIsReducedMotion(reanimatedReducedMotion);
     }
 
-    // Also subscribe to RN AccessibilityInfo for broader compatibility
-    const subscription = AccessibilityInfo.addEventListener(
-      'reduceMotionChanged',
-      (enabled) => {
-        setIsReducedMotion(enabled);
-      },
-    );
+    let subscription: { remove?: () => void } | null = null;
+    try {
+      subscription = AccessibilityInfo.addEventListener(
+        'reduceMotionChanged',
+        (enabled) => {
+          setIsReducedMotion(enabled);
+        },
+      );
+    } catch (error: unknown) {
+      captureSilentFailure(error, {
+        feature: 'accessibility',
+        operation: 'subscribe-reduced-motion',
+        type: 'ui',
+      });
+    }
 
-    // Initial check
-    AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
-      if (!cancelled) {
-        setIsReducedMotion(enabled);
-      }
-    });
+    const readNativePreference = AccessibilityInfo.isReduceMotionEnabled;
+    if (typeof readNativePreference === 'function') {
+      void Promise.resolve()
+        .then(() => readNativePreference.call(AccessibilityInfo))
+        .then((enabled) => {
+          if (!cancelled) {
+            setIsReducedMotion(enabled);
+          }
+        })
+        .catch((error: unknown) => {
+          captureSilentFailure(error, {
+            feature: 'accessibility',
+            operation: 'read-reduced-motion',
+            type: 'ui',
+          });
+        });
+    }
 
     return () => {
       cancelled = true;
-      subscription.remove();
+      if (subscription && typeof subscription.remove === 'function') {
+        subscription.remove();
+      }
     };
   }, [reanimatedReducedMotion]);
 

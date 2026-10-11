@@ -20,7 +20,7 @@ jest.mock('../../theme', () => ({
 }));
 jest.mock('../../components/ui/Skeleton', () => ({ Skeleton: () => null }));
 jest.mock('../../components', () => ({
-  Button: ({ children, onPress, accessibilityLabel }: any) =>
+  Button: ({ children, onPress, accessibilityLabel }: { children?: React.ReactNode; onPress?: () => void; accessibilityLabel?: string }) =>
     require('react').createElement(require('react-native').TouchableOpacity, { onPress, accessibilityLabel, testID: accessibilityLabel }, children),
 }));
 jest.mock('../../icons', () => ({ Icon: () => null }));

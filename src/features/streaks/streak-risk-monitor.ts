@@ -6,7 +6,7 @@ import type { StreakRiskStatus } from './schemas-risk-repair';
 
 export type { StreakRiskStatus };
 
-const debug = createDebugger('streak-risk-monitor');
+const _debug = createDebugger('streak-risk-monitor');
 const NOTIFICATION_THRESHOLDS = [
   {
     hoursRemaining: 20,

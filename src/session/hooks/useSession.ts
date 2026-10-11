@@ -68,7 +68,7 @@ export function useSession(userId: string): UseSessionReturn {
   }, [refresh]);
 
   useEffect(() => {
-    const unsubscribers: Array<() => void> = [];
+    const unsubscribers: (() => void)[] = [];
     unsubscribers.push(
       eventBus.subscribe('session:tick', (data) => {
         if (data.sessionId === sessionIdRef.current) {
@@ -134,6 +134,7 @@ export function useSession(userId: string): UseSessionReturn {
           return result;
         } catch (err) {
           debug.error('useSession action error:', err as Error);
+          debug.error('useSession action error stack:', (err as Error)?.stack ?? '(no stack)');
           setState((prev) => ({
             ...prev,
             isLoading: false,

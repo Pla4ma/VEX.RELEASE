@@ -112,7 +112,7 @@ export async function loadRecentSessionMoods(
   userId: string,
   limit: number = 5,
 ): Promise<
-  Array<{ mood: CompanionMood; timestamp: number; sessionId: string }>
+  { mood: CompanionMood; timestamp: number; sessionId: string }[]
 > {
   // Search for all companion growth keys for this user
   const allKeys = await storage.getAllKeys();

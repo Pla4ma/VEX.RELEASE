@@ -86,4 +86,14 @@ export const miscIcons: IconCollection = {
     outline: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
     solid: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z',
   },
+  'arrow-left': {
+    name: 'arrow-left',
+    outline: 'M19 12H5m7-7-7 7 7 7',
+    solid: 'M20 11H7.83l5.59-5.59L12 4l8 8-8 8 1.41 1.41L18.17 13H5v-2z',
+  },
+  'exclamation-circle': {
+    name: 'exclamation-circle',
+    outline: 'M12 9v4m0 4h.01M12 3a9 9 0 110 18 9 9 0 010-18z',
+    solid: 'M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z',
+  },
 };

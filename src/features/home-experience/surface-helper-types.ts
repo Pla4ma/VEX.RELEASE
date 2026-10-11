@@ -1,8 +1,7 @@
 import type {
   HomeSurfaceDecision,
   HomeSurfaceKey,
-} from './surface-decision-schemas';
-import type { SurfaceDecisionInputSchema } from './surface-decision-schemas';
+ SurfaceDecisionInputSchema } from './surface-decision-schemas';
 import type { z } from 'zod';
 
 export type SurfaceDecisionInput = z.infer<typeof SurfaceDecisionInputSchema>;

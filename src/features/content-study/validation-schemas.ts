@@ -1,16 +1,9 @@
 import { z } from 'zod';
 import { CONTENT_STUDY_CONSTANTS } from './types';
+import { isValidYoutubeStudyUrl } from './youtube-url';
 
 export const YouTubeUrlSchema = z.string().refine(
-  (url) => {
-    const patterns = [
-      /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]{11}/,
-      /^https?:\/\/(www\.)?youtu\.be\/[\w-]{11}/,
-      /^https?:\/\/(www\.)?youtube\.com\/shorts\/[\w-]{11}/,
-      /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]{11}/,
-    ];
-    return patterns.some((pattern) => pattern.test(url));
-  },
+  isValidYoutubeStudyUrl,
   { message: 'Invalid YouTube URL format' },
 );
 
@@ -27,8 +20,6 @@ export const FileUploadSchema = z.object({
     'application/pdf',
     'text/plain',
     'text/markdown',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   ] as const),
 });
 

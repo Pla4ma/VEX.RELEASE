@@ -1,39 +1,39 @@
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 /** Default screen width fallback for static style computation. */
 const DEFAULT_SCREEN_WIDTH = 375;
 
 /** Reactive styles for analytics dashboard — pass `screenWidth` from `useWindowDimensions()` to component for true reactivity. */
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: lightColors.surface.button },
+  container: { flex: 1, backgroundColor: vexFire.backgroundSoft },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border.light,
+    borderBottomColor: vexFire.border,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
   headerActions: { flexDirection: 'row', gap: 8 },
   iconButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.backgroundSoft,
   },
   iconButtonText: { fontSize: 12, fontWeight: '700' },
   filtersContainer: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.border.light,
+    borderBottomColor: vexFire.border,
   },
   scrollView: { flex: 1 },
   scrollContent: { padding: 16, paddingBottom: 32 },
@@ -46,10 +46,10 @@ export const styles = createSheet({
   summaryCard: {
     flex: 1,
     minWidth: (DEFAULT_SCREEN_WIDTH - 56) / 2,
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderRadius: 12,
     padding: 16,
-    shadowColor: lightColors.text.primary,
+    shadowColor: vexFire.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
@@ -58,11 +58,11 @@ export const styles = createSheet({
   summaryValue: {
     fontSize: 24,
     fontWeight: '700',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
   summaryLabel: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginTop: 4,
     textTransform: 'capitalize',
   },
@@ -73,12 +73,12 @@ export const styles = createSheet({
     borderRadius: 12,
     marginTop: 8,
   },
-  changePositive: { backgroundColor: lightColors.success[50] },
-  changeNegative: { backgroundColor: lightColors.error[50] },
+  changePositive: { backgroundColor: vexFire.backgroundSoft },
+  changeNegative: { backgroundColor: vexFire.backgroundSoft },
   changeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
   chartsContainer: { marginBottom: 16 },
   insightsSection: { marginTop: 8 },
@@ -91,29 +91,29 @@ export const styles = createSheet({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
   seeAllText: {
     fontSize: 14,
-    color: lightColors.semantic.primary,
+    color: vexFire.ember,
     fontWeight: '500',
   },
   partialWarning: {
-    backgroundColor: lightColors.warning[50],
+    backgroundColor: vexFire.backgroundSoft,
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
   },
   partialText: {
     fontSize: 12,
-    color: lightColors.semantic.warning,
+    color: vexFire.amber,
     textAlign: 'center',
   },
   skeletonContainer: { padding: 16, gap: 16 },
   skeletonTitle: { marginBottom: 8 },
   skeletonFilters: { flexDirection: 'row', gap: 12, marginBottom: 8 },
   heatmapSkeleton: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
@@ -121,7 +121,7 @@ export const styles = createSheet({
     gap: 12,
   },
   infoCard: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
@@ -130,12 +130,12 @@ export const styles = createSheet({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
     marginBottom: 6,
   },
   infoSubtitle: {
     fontSize: 14,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     lineHeight: 20,
   },
 });

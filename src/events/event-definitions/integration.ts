@@ -29,11 +29,11 @@ export interface IntegrationSessionRewardsEvent {
 export interface IntegrationSessionChallengesEvent {
   sessionId: string;
   userId: string;
-  challengesProgressed: Array<{
+  challengesProgressed: {
     challengeId: string;
     progressDelta: number;
     completed: boolean;
-  }>;
+  }[];
   achievementsUnlocked: string[];
   milestonesReached: string[];
 }

@@ -6,10 +6,14 @@ import {
 } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { SessionStackParams } from '../../navigation/types';
+import type {
+  ExtendedRootStackParams,
+  SessionStackParams,
+} from '../../navigation/types';
 import { parseSessionCompletionParams } from './params-parser';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
+type RootNavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type SessionCompleteRouteProp = RouteProp<
   SessionStackParams,
   'SessionComplete'
@@ -17,11 +21,12 @@ type SessionCompleteRouteProp = RouteProp<
 
 export function useSessionCompletionRouteState() {
   const navigation = useNavigation<SessionNavigationProp>();
+  const rootNavigation = navigation.getParent<RootNavigationProp>();
   const route = useRoute<SessionCompleteRouteProp>();
   const parsedRoute = useMemo(
     () => parseSessionCompletionParams(route.params),
     [route.params],
   );
 
-  return { navigation, parsedRoute };
+  return { navigation, parsedRoute, rootNavigation };
 }

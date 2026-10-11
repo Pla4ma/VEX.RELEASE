@@ -12,13 +12,13 @@ describe('message-library', () => {
   });
 
   test('getCoachPresenceMessage returns a message for every context+style combination', () => {
-    const contexts: Array<'day_0_after_motivation' | 'first_session_start' | 'comeback_session' | 'calm_user_completion'> = [
+    const contexts: ('day_0_after_motivation' | 'first_session_start' | 'comeback_session' | 'calm_user_completion')[] = [
       'day_0_after_motivation',
       'first_session_start',
       'comeback_session',
       'calm_user_completion',
     ];
-    const styles: Array<'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused'> = [
+    const styles: ('calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused')[] = [
       'calm', 'friendly', 'coach_led', 'game_like', 'intense', 'study_focused',
     ];
     for (const context of contexts) {
@@ -32,7 +32,7 @@ describe('message-library', () => {
   });
 
   test('messages are within 96 character limit', () => {
-    const contexts: Array<'day_0_after_motivation' | 'first_session_start' | 'comeback_session'> = [
+    const contexts: ('day_0_after_motivation' | 'first_session_start' | 'comeback_session')[] = [
       'day_0_after_motivation', 'first_session_start', 'comeback_session',
     ];
     for (const context of contexts) {

@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
@@ -32,12 +32,11 @@ export function NavigationGate({
     useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { theme } = useTheme();
 
-  const handleGoBack = () => {
+  const handleGoBack = (): void => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      const route = suggestedRoute as string;
-      navigation.navigate(route);
+      navigation.dispatch(CommonActions.navigate({ name: suggestedRoute }));
     }
   };
 

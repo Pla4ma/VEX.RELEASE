@@ -1,8 +1,7 @@
 import Purchases, {
   LOG_LEVEL,
   type CustomerInfo,
-} from 'react-native-purchases';
-import type { PurchasesPackage } from 'react-native-purchases';
+ PurchasesPackage } from 'react-native-purchases';
 import { Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { createDebugger } from '../../utils/debug';
@@ -38,28 +37,17 @@ class RevenueCatService {
   private status: RevenueCatStatus = 'uninitialized';
   private currentUserId: string | null = null;
   debugMode = __DEV__;
-  private customerInfoUpdateCallbacks: Array<(info: CustomerInfo) => void> = [];
+  private customerInfoUpdateCallbacks: ((info: CustomerInfo) => void)[] = [];
   reportError(operation: string, error: unknown): void {
     const err = error instanceof Error ? error : new Error(String(error));
     if (this.debugMode) {debug.error(`[RevenueCat] ${operation} failed`, err);}
     Sentry.captureException(err, { tags: { component: 'RevenueCatService', operation } });
   }
   async initialize(userId?: string | null): Promise<{ status: 'ready' | 'missing_keys' | 'error' }> {
-    if (!IOS_API_KEY && !ANDROID_API_KEY) {
-      if (__DEV__) {
-        debug.error('[RevenueCat] CRITICAL: No API keys configured. Set EXPO_PUBLIC_REVENUECAT_IOS_KEY and EXPO_PUBLIC_REVENUECAT_ANDROID_KEY in .env.local');
-      }
+    const apiKey = Platform.OS === 'ios' ? IOS_API_KEY : ANDROID_API_KEY;
+    if (isPlaceholderKey(apiKey)) {
       this.status = 'missing_keys';
-      return { status: 'missing_keys' };
-    }
-    // Block placeholder keys in production to prevent silent IAP failures
-    const iosPlaceholder = isPlaceholderKey(IOS_API_KEY);
-    const androidPlaceholder = isPlaceholderKey(ANDROID_API_KEY);
-    if (iosPlaceholder || androidPlaceholder) {
-      this.status = 'missing_keys';
-      const msg = iosPlaceholder && androidPlaceholder
-        ? 'Both RevenueCat API keys are placeholders'
-        : `${iosPlaceholder ? 'iOS' : 'Android'} RevenueCat API key is a placeholder`;
+      const msg = `${Platform.OS} RevenueCat API key is missing or a placeholder`;
       debug.error(`[RevenueCat] ${msg}. IAP will not work.`);
       Sentry.captureMessage(`[RevenueCat] ${msg}`, { level: 'error', tags: { component: 'RevenueCatService' } });
       return { status: 'missing_keys' };
@@ -70,7 +58,6 @@ class RevenueCatService {
     }
     this.status = 'initializing';
     try {
-      const apiKey = Platform.OS === 'ios' ? IOS_API_KEY : ANDROID_API_KEY;
       if (!apiKey) {
         this.reportError('configure', new Error(`RevenueCat API key not configured for ${Platform.OS}`));
         this.status = 'error';

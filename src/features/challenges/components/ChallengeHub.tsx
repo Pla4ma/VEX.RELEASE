@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { Image, View, Text, ScrollView, Pressable } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { useThemeObject } from '../../../theme/ThemeContext';
 import { Card } from '../../../components/primitives/Card';
 import { Badge } from '../../../components/Badge';
 import { ProgressBar } from '../../../components/ui/ProgressBar';
@@ -18,20 +17,24 @@ import {
   getFilteredChallenges,
   getChallengeStats,
 } from './challenge-hub-helpers';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+import { Text as VexText } from '../../../components/primitives/Text';
+import { RouteBackButton } from '../../../shared/ui/vex/RouteBackButton';
 
 interface ChallengeHubProps {
   userId: string;
   onChallengePress?: (challengeId: string) => void;
   onClaimReward?: (challengeId: string) => void;
   onBrowseChallenges?: () => void;
+  onBack?: () => void;
 }
 export const ChallengeHub = React.memo(({
   userId,
   onChallengePress,
   onClaimReward,
   onBrowseChallenges,
+  onBack,
 }: ChallengeHubProps) => {
-  const theme = useThemeObject();
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
   const { isLoading: isLoadingAll } = useActiveChallenges(userId);
   const { data: challengeSummaries, isLoading: isLoadingSummaries } =
@@ -55,10 +58,28 @@ export const ChallengeHub = React.memo(({
   }
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: theme.colors.background.primary }]}
+      style={[styles.container, { backgroundColor: vexFire.background }]}
       contentContainerStyle={styles.content}
     >
-      <Card style={styles.statsCard}>
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../../assets/vex/utility/challenge-badge.png')}
+        resizeMode="contain"
+        style={{ height: 180, opacity: 0.16, position: 'absolute', right: -40, top: 8, width: 180 }}
+      />
+      {onBack ? <RouteBackButton onPress={onBack} /> : null}
+      <View style={{ marginBottom: 16 }}>
+        <VexText style={{ color: vexFire.ember, fontSize: 12, fontWeight: '900', letterSpacing: 1.6 }}>
+          TRIAL BOARD
+        </VexText>
+        <VexText style={{ color: vexFire.cream, fontSize: 30, fontWeight: '900', marginTop: 4 }}>
+          Challenges
+        </VexText>
+        <VexText style={{ color: vexFire.textSecondary, fontSize: 15, marginTop: 4 }}>
+          Small tests. Clear rewards. One more reason to return.
+        </VexText>
+      </View>
+      <Card style={[styles.statsCard, { backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1 }]}>
         <Text style={styles.statsTitle}>Challenge Progress</Text>
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
@@ -112,7 +133,7 @@ export const ChallengeHub = React.memo(({
       </ScrollView>
 
       {(activeFilter === 'ALL' || activeFilter === 'DAILY') && (
-        <Card style={styles.streakCard}>
+        <Card style={[styles.streakCard, { borderColor: vexFire.border, borderWidth: 1 }]}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>Daily Streak</Text>
             <Badge variant="warning" label="3 Days" />

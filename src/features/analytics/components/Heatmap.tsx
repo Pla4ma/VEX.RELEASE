@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 import {
   DAYS,
@@ -94,7 +94,7 @@ export function Heatmap({
       {}
       <View style={styles.legend}>
         <Text style={styles.legendText}>Less</Text>
-        {colors.map((color, index) => (
+        {colors.map((color, _index) => (
           <View
             key={`color-${color}`}
             style={[styles.legendCell, { backgroundColor: color }]}
@@ -124,27 +124,27 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 const styles = createSheet({
   container: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
     marginVertical: 8,
   },
   header: { marginBottom: 16 },
-  title: { fontSize: 18, fontWeight: '700', color: lightColors.semantic.backgroundMuted },
-  subtitle: { fontSize: 14, color: lightColors.text.muted, marginTop: 4 },
+  title: { fontSize: 18, fontWeight: '700', color: vexFire.cream },
+  subtitle: { fontSize: 14, color: vexFire.textMuted, marginTop: 4 },
   heatmap: { gap: 4 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dayLabel: {
     width: 40,
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     fontWeight: '500',
   },
   hourLabel: {
     width: 32,
     fontSize: 10,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     textAlign: 'center',
   },
   cell: { width: 12, height: 28, borderRadius: 2, marginHorizontal: 1 },
@@ -160,7 +160,7 @@ const styles = createSheet({
   },
   legendText: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginHorizontal: 8,
   },
   legendCell: { width: 16, height: 16, borderRadius: 4 },
@@ -170,13 +170,13 @@ const styles = createSheet({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: lightColors.surface.button,
+    borderTopColor: vexFire.backgroundSoft,
   },
   statItem: { alignItems: 'center' },
   statValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
-  statLabel: { fontSize: 12, color: lightColors.text.muted, marginTop: 4 },
+  statLabel: { fontSize: 12, color: vexFire.textMuted, marginTop: 4 },
 });

@@ -37,7 +37,6 @@ export function summary(overrides?: Partial<SessionSummary>): SessionSummary {
     streakIncreased: true,
     streakMaintained: true,
     timeBonus: 0,
-    pauses: 0,
     userId: 'user-1',
     userLevel: 1,
     vsAverage: 0,

@@ -1,16 +1,13 @@
 import { eventBus } from '../../events';
 import { getRewardService } from '../../rewards/RewardService';
+import type { RewardService } from '../../rewards/RewardService';
 import type { SessionSummary } from '../types';
 import { createDebugger } from '../../utils/debug';
 const debug = createDebugger('session:rewardAdapter');
 export class RewardAdapter {
   private userId: string | null = null;
-  private rewardService = getRewardService();
-  setUserId(userId: string): void {
-    this.userId = userId;
-    this.rewardService.setUserId(userId);
-    debug.info('RewardAdapter user set: %s', userId);
-  }
+  private rewardService: RewardService | null = null;
+  setUserId(userId: string): void { this.userId = userId; this.rewardService = getRewardService(userId); debug.info('RewardAdapter user set: %s', userId); }
   async distributeSessionRewards(summary: SessionSummary): Promise<{
     xpGranted: number;
     coinsGranted: number;
@@ -76,7 +73,11 @@ export class RewardAdapter {
       amount: bonus.amount,
       description: bonus.description,
     });
-    await this.rewardService.grantReward(
+    const rewardService = this.rewardService;
+    if (!rewardService) {
+      throw new Error('RewardAdapter: No user set');
+    }
+    await rewardService.grantReward(
       'XP',
       'SESSION_COMPLETE',
       { baseAmount: bonus.amount, streakMultiplier: 1, levelMultiplier: 1 },
@@ -86,12 +87,12 @@ export class RewardAdapter {
   }
   private calculateBonusRewards(
     summary: SessionSummary,
-  ): Array<{ type: string; amount: number; description: string }> {
-    const bonuses: Array<{
+  ): { type: string; amount: number; description: string }[] {
+    const bonuses: {
       type: string;
       amount: number;
       description: string;
-    }> = [];
+    }[] = [];
     if (summary.completionPercentage >= 100 && summary.focusQuality >= 90) {
       bonuses.push({
         type: 'PERFECT_SESSION',
@@ -166,29 +167,31 @@ export class RewardAdapter {
       timestamp: Date.now(),
     });
     if (previousStreak >= 7) {
-      await this.rewardService.grantReward(
+      const rewardService = this.rewardService;
+      if (!rewardService) {
+        throw new Error('RewardAdapter: No user set');
+      }
+      await rewardService.grantReward(
         'XP',
         'COMEBACK_BONUS',
         { baseAmount: 100, streakMultiplier: 1, levelMultiplier: 1 },
-        { previousStreak, sessionId },
+        {
+          idempotencyKey: `streak-break:${this.userId}:${sessionId}`,
+          previousStreak,
+          sessionId,
+        },
       );
     }
     debug.info('Streak broken: was %d days', previousStreak);
   }
   async checkSessionAchievements(summary: SessionSummary): Promise<void> {
-    if (!this.userId) {
-      return;
-    }
+    if (!this.userId) {return;}
     debug.debug('Checked achievements for session %s', summary.sessionId);
   }
 }
-export function createRewardAdapter(): RewardAdapter {
-  return new RewardAdapter();
-}
+export function createRewardAdapter(): RewardAdapter { return new RewardAdapter(); }
 let adapterInstance: RewardAdapter | null = null;
 export function getRewardAdapter(): RewardAdapter {
-  if (!adapterInstance) {
-    adapterInstance = new RewardAdapter();
-  }
+  adapterInstance ??= new RewardAdapter();
   return adapterInstance;
 }

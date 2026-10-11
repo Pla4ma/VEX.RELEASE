@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export function ChallengesWidgetSkeleton(): React.ReactNode {
   const { theme } = useTheme();

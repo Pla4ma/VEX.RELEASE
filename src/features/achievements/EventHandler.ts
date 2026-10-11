@@ -23,7 +23,7 @@ const FEATURE_KEY = 'achievements' as const;
 const debug = createDebugger('achievements:event-handler');
 
 export class AchievementEventHandler {
-  private unsubscribeFns: Array<() => void> = [];
+  private unsubscribeFns: (() => void)[] = [];
   private isInitialized = false;
 
   initialize(): void {

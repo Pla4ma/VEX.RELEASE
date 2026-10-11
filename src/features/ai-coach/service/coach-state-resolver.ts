@@ -168,7 +168,7 @@ async function fetchRecentSessionMetrics(
       sessionsThisWeek: behaviorProfile.dataPoints,
       averageSessionQuality,
     };
-  } catch (error: unknown) {
+  } catch {
     return { sessionsToday: 0, sessionsThisWeek: 0, averageSessionQuality: 75 };
   }
 }

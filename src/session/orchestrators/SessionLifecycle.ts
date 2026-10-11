@@ -100,7 +100,12 @@ export async function resumeSession(
 export async function backgroundSession(
   orch: SessionOrchestratorBase,
 ): Promise<void> {
-  if (!orch.session || !orch.timerEngine) {return;}
+  if (!orch.session || !orch.timerEngine) {
+    return;
+  }
+  if (orch.session.status === 'BACKGROUNDED' || orch.session.status === 'PAUSED') {
+    return;
+  }
   orch.antiCheatEngine.recordBackgroundSwitch();
   orch.session.status = 'BACKGROUNDED';
   orch.session.updatedAt = Date.now();
@@ -120,7 +125,9 @@ export async function backgroundSession(
 export async function foregroundSession(
   orch: SessionOrchestratorBase,
 ): Promise<void> {
-  if (!orch.session || !orch.timerEngine) {return;}
+  if (!orch.session || !orch.timerEngine || orch.session.status !== 'BACKGROUNDED') {
+    return;
+  }
   const fgAt = Date.now();
   const bgDuration = orch.timerEngine.foreground();
   orch.antiCheatEngine.recordSuspension(bgDuration);

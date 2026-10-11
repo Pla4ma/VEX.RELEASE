@@ -11,7 +11,7 @@ import { useTheme } from '../../../theme/ThemeContext';
 import { Icon } from '../../../icons/components/Icon';
 import { createSheet } from '@/shared/ui/create-sheet';
 
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 interface NetworkStatusProps {
   isOffline: boolean;
@@ -28,7 +28,7 @@ export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
   onSync,
   onDismiss,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (!isOffline && !isSlowConnection) {
     return null;
@@ -44,8 +44,8 @@ export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
         styles.container,
         {
           backgroundColor: isOffline
-            ? theme.colors.error.DEFAULT
-            : theme.colors.warning.DEFAULT,
+            ? vexFire.danger
+            : vexFire.amber,
         },
       ]}
     >
@@ -53,14 +53,14 @@ export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
         <Icon
           name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
-          color={lightColors.text.inverse}
+          color={vexFire.cream}
         />
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: lightColors.text.inverse }]}>
+          <Text style={[styles.title, { color: vexFire.cream }]}>
             {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
           <Text
-            style={[styles.description, { color: lightColors.text.inverse }]}
+            style={[styles.description, { color: vexFire.cream }]}
           >
             {isOffline
               ? pendingSyncCount
@@ -82,7 +82,7 @@ export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
             accessibilityHint="Double tap to activate"
           >
             <Text
-              style={[styles.actionText, { color: lightColors.text.inverse }]}
+              style={[styles.actionText, { color: vexFire.cream }]}
             >
               Sync
             </Text>
@@ -100,7 +100,7 @@ export const NetworkStatus: React.ComponentType<NetworkStatusProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to dismiss"
           >
-            <Icon name="x" size="sm" color={lightColors.text.inverse} />
+            <Icon name="x" size="sm" color={vexFire.cream} />
           </Pressable>
         )}
       </View>
@@ -113,7 +113,7 @@ export const InlineNetworkIndicator: React.ComponentType<{
   isOffline: boolean;
   size?: 'sm' | 'md';
 }> = ({ isOffline, size = 'sm' }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (!isOffline) {
     return null;
@@ -126,12 +126,12 @@ export const InlineNetworkIndicator: React.ComponentType<{
       style={[
         styles.inline,
         {
-          backgroundColor: theme.colors.error.DEFAULT + '20',
+          backgroundColor: vexFire.danger + '20',
           padding: size === 'sm' ? 4 : 6,
         },
       ]}
     >
-      <Icon name="wifi-off" size={size} color={theme.colors.error.DEFAULT} />
+      <Icon name="wifi-off" size={size} color={vexFire.danger} />
     </View>
   );
 };

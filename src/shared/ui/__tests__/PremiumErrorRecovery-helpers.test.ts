@@ -1,7 +1,7 @@
 import {
   DEFAULT_RETRY_CONFIG,
   ERROR_MESSAGES,
-  type RetryConfig,
+  type _RetryConfig,
 } from '../PremiumErrorRecovery-helpers';
 
 describe('PremiumErrorRecovery-helpers', () => {
@@ -23,7 +23,7 @@ describe('PremiumErrorRecovery-helpers', () => {
     });
 
     it('each message has required fields', () => {
-      for (const [ctx, state] of Object.entries(ERROR_MESSAGES)) {
+      for (const [_ctx, state] of Object.entries(ERROR_MESSAGES)) {
         expect(state.message).toBeDefined();
         expect(state.message.length).toBeGreaterThan(0);
         expect(state.wittyMessage).toBeDefined();

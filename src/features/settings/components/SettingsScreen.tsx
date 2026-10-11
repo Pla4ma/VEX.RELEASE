@@ -1,9 +1,6 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { View, ScrollView, RefreshControl, Alert } from 'react-native';
-import { useSettingsUIState, useSyncSettings, useResetSettings, type SettingCategory } from '../hooks/useSettingsUIState';
-import { eventBus } from '../../../events/EventBus';
-import * as Sentry from '@sentry/react-native';
+import React, { useState } from 'react';
+import { View, ScrollView, RefreshControl } from 'react-native';
+import { useSettingsUIState } from '../hooks/useSettingsUIState';
 import { SettingsSectionHeader } from './SettingsSectionHeader';
 import { SettingsCategoryTabs } from './SettingsCategoryTabs';
 import { SettingsActions } from './SettingsActions';
@@ -15,8 +12,9 @@ import { SettingsAppearanceSection } from './SettingsAppearanceSection';
 import { SettingsPrivacySection } from './SettingsPrivacySection';
 import { SettingsDataControlSection } from './SettingsDataControlSection';
 import { settingsStyles as styles } from './settings-screen-styles';
-
-type SettingsState = 'idle' | 'loading' | 'error' | 'saving' | 'syncing';
+import { SETTINGS_CATEGORIES } from './settings-categories';
+import { useSettingsScreenActions } from './useSettingsScreenActions';
+import type { SettingCategory } from '../types';
 
 interface SettingsScreenProps {
   userId: string;
@@ -25,33 +23,14 @@ interface SettingsScreenProps {
   onCategoryChange?: (category: SettingCategory) => void;
 }
 
-const CATEGORIES: Array<{ key: SettingCategory; label: string; icon: string }> =
-  [
-    { key: 'general', label: 'General', icon: '\u2699\uFE0F' },
-    { key: 'notifications', label: 'Notifications', icon: '\uD83D\uDD14' },
-    { key: 'coach', label: 'Coach', icon: '\uD83C\uDFAF' },
-    { key: 'appearance', label: 'Appearance', icon: '\uD83C\uDFA8' },
-    { key: 'privacy', label: 'Privacy', icon: '\uD83D\uDD12' },
-    { key: 'data', label: 'Data', icon: '\uD83D\uDCBE' },
-  ];
 
 export function SettingsScreen({
   userId,
   initialCategory = 'general',
-  onBackPress: _onBackPress,
   onCategoryChange,
 }: SettingsScreenProps) {
   const [activeCategory, setActiveCategory] =
     useState<SettingCategory>(initialCategory);
-  const [settingsState, setSettingsState] = useState<SettingsState>('idle');
-  const mountedRef = useRef(true);
-
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
   const {
     isLoading,
     isError,
@@ -63,84 +42,20 @@ export function SettingsScreen({
     privacy,
     refetch,
   } = useSettingsUIState(userId);
-  const syncMutation = useSyncSettings(userId);
-  const resetMutation = useResetSettings(userId);
-
-  const handleRefresh = useCallback(async () => {
-    setSettingsState('loading');
-    try {
-      await refetch();
-      if (mountedRef.current) {
-        setSettingsState('idle');
-      }
-    } catch (err) {
-      captureSilentFailure(err, {
-        feature: 'settings',
-        operation: 'ui-fallback',
-        type: 'ui',
-      });
-      if (mountedRef.current) {
-        setSettingsState('error');
-      }
-    }
-  }, [refetch]);
-
-  const handleSync = useCallback(async () => {
-    setSettingsState('syncing');
-    try {
-      await syncMutation.mutateAsync({});
-      if (mountedRef.current) {
-        setSettingsState('idle');
-      }
-      Sentry.addBreadcrumb({
-        category: 'settings',
-        message: 'Settings synced successfully',
-        level: 'info',
-      });
-    } catch (err) {
-      if (mountedRef.current) {
-        setSettingsState('error');
-      }
-      Sentry.captureException(err, { tags: { operation: 'settingsSync' } });
-    }
-  }, [syncMutation]);
-
-  const handleReset = useCallback(() => {
-    Alert.alert(
-      'Reset Settings',
-      `Are you sure you want to reset ${activeCategory} settings to defaults?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Reset',
-          style: 'destructive',
-          onPress: async () => {
-            setSettingsState('saving');
-            try {
-              await resetMutation.mutateAsync({ category: activeCategory });
-              if (!mountedRef.current) {
-                return;
-              }
-              setSettingsState('idle');
-              eventBus.publish('settings:reset', { category: activeCategory });
-            } catch (err) {
-              if (mountedRef.current) {
-                setSettingsState('error');
-              }
-            }
-          },
-        },
-      ],
-    );
-  }, [activeCategory, resetMutation]);
-
-  const handleCategoryChange = useCallback(
-    (category: SettingCategory) => {
-      setActiveCategory(category);
-      onCategoryChange?.(category);
-    },
-    [onCategoryChange],
-  );
+  const {
+    handleCategoryChange,
+    handleRefresh,
+    handleReset,
+    handleSettingChange,
+    handleSync,
+    settingsState,
+  } = useSettingsScreenActions({
+    activeCategory,
+    onCategoryChange,
+    onRefetch: refetch,
+    setActiveCategory,
+    userId,
+  });
 
   if (isLoading || settingsState === 'loading') {
     return <SettingsLoadingState />;
@@ -151,12 +66,12 @@ export function SettingsScreen({
   }
 
   const activeLabel =
-    CATEGORIES.find((c) => c.key === activeCategory)?.label ?? '';
+    SETTINGS_CATEGORIES.find((c) => c.key === activeCategory)?.label ?? '';
 
   return (
     <View style={styles.container}>
       <SettingsCategoryTabs
-        categories={CATEGORIES}
+        categories={SETTINGS_CATEGORIES}
         activeCategory={activeCategory}
         onCategoryChange={handleCategoryChange}
       />
@@ -173,15 +88,26 @@ export function SettingsScreen({
         {activeCategory === 'general' && (
           <SettingsGeneralSection preferences={preferences} />
         )}
-        {activeCategory === 'coach' && <SettingsCoachSection coach={coach} />}
+        {activeCategory === 'coach' && (
+          <SettingsCoachSection coach={coach} onChange={handleSettingChange} />
+        )}
         {activeCategory === 'notifications' && (
-          <SettingsNotificationsSection notifications={notifications} />
+          <SettingsNotificationsSection
+            notifications={notifications}
+            onChange={handleSettingChange}
+          />
         )}
         {activeCategory === 'appearance' && (
-          <SettingsAppearanceSection appearance={appearance} />
+          <SettingsAppearanceSection
+            appearance={appearance}
+            onChange={handleSettingChange}
+          />
         )}
         {activeCategory === 'privacy' && (
-          <SettingsPrivacySection privacy={privacy} />
+          <SettingsPrivacySection
+            privacy={privacy}
+            onChange={handleSettingChange}
+          />
         )}
         {activeCategory === 'data' && (
           <SettingsDataControlSection userId={userId} />

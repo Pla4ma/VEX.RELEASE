@@ -1,6 +1,5 @@
-import type { TimerState } from '../types';
+import type { TimerState , TimerConfig } from '../types';
 import type { SerializedTimerState, TimerCallbacks } from './timer-types';
-import type { TimerConfig } from '../types';
 import { TimerEngineBase, debug } from './timer-engine-core';
 
 export class TimerEngine extends TimerEngineBase {

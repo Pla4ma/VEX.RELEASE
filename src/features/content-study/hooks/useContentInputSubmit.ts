@@ -15,6 +15,8 @@ import type { SubmitContentRequest, ContentInputState } from '../types';
 import { contentStudyQueryKeys } from './queryKeys';
 import { getUserFacingSubmitError } from './contentInputHelpers';
 import { computeValidationErrors } from './contentInputValidation';
+import { getContentStudyEligibility } from '../service-eligibility';
+import { useToast } from '../../../shared/ui/components/Toast';
 
 interface UseContentInputSubmitOptions {
   state: ContentInputState;
@@ -27,6 +29,7 @@ export function useContentInputSubmit({
 }: UseContentInputSubmitOptions) {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+  const { show } = useToast();
 
   const validateInput = useCallback((): boolean => {
     const errors = computeValidationErrors(state);
@@ -42,6 +45,12 @@ export function useContentInputSubmit({
     mutationFn: async () => {
       if (!user) throw new Error('User not authenticated');
       if (!validateInput()) throw new Error('Validation failed');
+      const eligibility = await getContentStudyEligibility();
+      if (!eligibility.canUpload) {
+        throw new Error(
+          eligibility.fallbackLabel ?? 'Study content is not unlocked yet.',
+        );
+      }
 
       let request: SubmitContentRequest;
 
@@ -55,7 +64,11 @@ export function useContentInputSubmit({
           state.selectedFile.name,
           user.id,
         );
-        request = { type: 'PDF', fileId };
+        request = {
+          type: 'PDF',
+          fileId,
+          filename: state.selectedFile.name,
+        };
       } else {
         throw new Error('Invalid input state');
       }
@@ -89,6 +102,11 @@ export function useContentInputSubmit({
       Sentry.captureException(error, {
         tags: { feature: 'content-study', operation: 'submitContent' },
       });
+      show({
+        type: 'error',
+        title: 'Content not submitted',
+        message: getUserFacingSubmitError(error),
+      });
     },
   });
 
@@ -98,10 +116,6 @@ export function useContentInputSubmit({
       return await submitMutation.mutateAsync();
     } catch (err: unknown) {
       const message = getUserFacingSubmitError(err);
-      Sentry.captureException(
-        err instanceof Error ? err : new Error('Content study submission failed'),
-        { extra: { area: 'content-study.submit' } },
-      );
       setState((prev) => ({ ...prev, error: message }));
       throw err;
     } finally {

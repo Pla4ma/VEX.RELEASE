@@ -111,7 +111,7 @@ export function getCoachAggregateMetrics(): {
   totalMessages: number;
   deliveryRate: number;
   engagementRate: number;
-  topCategories: Array<{ category: string; count: number }>;
+  topCategories: { category: string; count: number }[];
 } {
   const messages = coachMetrics.filter((m) => m.event.startsWith('message.'));
   const totalMessages = messages.length;

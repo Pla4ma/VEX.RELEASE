@@ -9,7 +9,7 @@ import { View, Text } from 'react-native';
 import { z } from 'zod';
 import { TimeSeriesDataSchema } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 type TimeSeriesData = z.infer<typeof TimeSeriesDataSchema>;
@@ -77,9 +77,9 @@ function StatBox({
 }) {
   const highlightColor =
     highlight === 'positive'
-      ? lightColors.accent.green
+      ? vexFire.success
       : highlight === 'negative'
-        ? lightColors.semantic.danger
+        ? vexFire.danger
         : undefined;
 
   return (
@@ -118,11 +118,11 @@ function formatValue(value: number, metric: string): string {
 
 const styles = createSheet({
   container: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.panel,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-    shadowColor: lightColors.text.primary,
+    shadowColor: vexFire.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     elevation: 2,
@@ -130,7 +130,7 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
     marginBottom: 12,
   },
   stats: {
@@ -139,34 +139,34 @@ const styles = createSheet({
     gap: 12,
   },
   statBox: {
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.backgroundSoft,
     borderRadius: 8,
     padding: 12,
     minWidth: 80,
   },
   statLabel: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: lightColors.semantic.backgroundMuted,
+    color: vexFire.cream,
   },
   dataPreview: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: lightColors.border.light,
+    borderTopColor: vexFire.border,
   },
   previewText: {
     fontSize: 12,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
   emptyText: {
     textAlign: 'center',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     padding: 24,
   },
 });

@@ -40,7 +40,7 @@ export async function withOptimisticLock<T extends VersionedEntity>(
 
 export interface BatchResult<TItem, TResult = TItem> {
   successful: TResult[];
-  failed: Array<{ item: TItem; error: RepositoryError }>;
+  failed: { item: TItem; error: RepositoryError }[];
 }
 
 export async function batchWithRetry<T, R>(

@@ -2,13 +2,12 @@
  * Phase 3B — Study Mode Polish
  */
 
-import { buildLaneSessionBrief, decideHomeSurfaces } from './helpers';
 import {
+  buildLaneSessionBrief,
+  decideHomeSurfaces,
   resolveCompletionExperiencePolicy,
   completionInput,
   SessionMode,
-} from './helpers';
-import {
   resolveLaneCopy,
   baseLaneProfile,
   baseStats,

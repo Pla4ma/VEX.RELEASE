@@ -7,7 +7,7 @@ describe('lane-home', () => {
   });
 
   it('schemas are valid Zod objects', () => {
-    const { LaneHomeSchemas } = require('../schemas');
+    const { LaneHomeSchemas: _LaneHomeSchemas } = require('../schemas');
     // schemas.ts currently exports nothing — placeholder for future activation
     expect(true).toBe(true);
   });

@@ -2,8 +2,8 @@ import {
   validatePurchase,
   PurchaseSchema,
   VALIDATION_RULES,
-  type ValidationResult,
-  type ValidationError,
+  type _ValidationResult,
+  type _ValidationError,
 } from '../purchase-validation';
 
 jest.mock('../../../utils/debug', () => ({

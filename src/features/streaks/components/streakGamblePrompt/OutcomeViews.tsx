@@ -1,11 +1,10 @@
 import React from 'react';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { Box } from '@/components/primitives/Box'
-import { Text } from '@/components/primitives/Text'
+import { Text , Text as VexText } from '@/components/primitives/Text'
 import { Button } from '@/components/primitives/Button';
 import { useTheme } from '@/theme';
 import type { GambleOutcome } from './types';
-import { Text as VexText } from '../../../../components/primitives/Text';
 
 interface GamblingViewProps {
   streakDays: number;

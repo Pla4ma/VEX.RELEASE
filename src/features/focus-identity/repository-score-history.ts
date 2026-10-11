@@ -26,7 +26,7 @@ export async function insertScoreHistory(
 export async function insertScoreHistoryBatch(
   userId: string,
   profileId: string,
-  entries: Array<{ date: string; score: number; reason: string }>,
+  entries: { date: string; score: number; reason: string }[],
 ): Promise<void> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
@@ -47,7 +47,7 @@ export async function insertScoreHistoryBatch(
 export async function getScoreHistory(
   userId: string,
   days: number = 90,
-): Promise<Array<{ date: string; score: number; reason: string }>> {
+): Promise<{ date: string; score: number; reason: string }[]> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
     const cutoffDate = new Date();

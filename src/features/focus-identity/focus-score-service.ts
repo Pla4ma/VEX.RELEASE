@@ -22,5 +22,12 @@ export async function getFocusScoreHistory(
   userId: string,
   days: number,
 ): Promise<FocusScoreHistoryPoint[]> {
-  return fetchFocusScoreHistory(userId, days);
+  try {
+    return await fetchFocusScoreHistory(userId, days);
+  } catch (error: unknown) {
+    Sentry.captureException(error, {
+      tags: { feature: 'focus-identity', operation: 'getFocusScoreHistory' },
+    });
+    throw error;
+  }
 }

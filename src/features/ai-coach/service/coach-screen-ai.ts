@@ -7,15 +7,17 @@ import {
   type AiCoachFunctionResponse,
 } from '../repository/coach-ai-function-repository';
 import type { CoachQuestionResponse } from './coach-screen-service';
+import type { CoachConversationTurn } from '../schemas';
 
 export async function askAiCoachFunction(
   question: string,
   userId?: string,
+  recentConversation: CoachConversationTurn[] = [],
 ): Promise<CoachQuestionResponse | null> {
   if (!userId) {
     throw new Error('Coach AI needs a signed-in user before it can respond.');
   }
-  const data = await invokeAiCoachFunction(question, userId);
+  const data = await invokeAiCoachFunction(question, userId, recentConversation);
   if (!data) {
     return null;
   }

@@ -40,7 +40,7 @@ export function safeJsonParse<T>(
 ): T {
   try {
     return JSON.parse(json) as T;
-  } catch (error) {
+  } catch {
     Sentry.addBreadcrumb({
       category: 'parse_error',
       message: `Failed to parse JSON${context ? ` (${context})` : ''}`,
@@ -57,7 +57,7 @@ export function safeJsonStringify(
 ): string {
   try {
     return JSON.stringify(obj);
-  } catch (error) {
+  } catch {
     Sentry.addBreadcrumb({
       category: 'stringify_error',
       message: `Failed to stringify${context ? ` (${context})` : ''}`,
@@ -77,7 +77,7 @@ export async function runHealthChecks(
   checks: HealthCheck[],
 ): Promise<{
   healthy: boolean;
-  results: Array<{ name: string; healthy: boolean; critical: boolean }>;
+  results: { name: string; healthy: boolean; critical: boolean }[];
 }> {
   const results = await Promise.all(
     checks.map(async (check) => {

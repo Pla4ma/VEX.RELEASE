@@ -21,7 +21,7 @@ interface OnboardingNavigatorProps {
 
 export function OnboardingNavigator({
   onStartSession,
-  onBack,
+  onBack: _onBack,
 }: OnboardingNavigatorProps): React.ReactNode {
   const store = useOnboardingStore();
   useOnboardingProgress();

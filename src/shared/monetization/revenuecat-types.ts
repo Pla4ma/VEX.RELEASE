@@ -80,7 +80,7 @@ export interface PurchasesPackageDisplayInfo {
       periodUnit: string;
       periodNumberOfUnits: number;
     } | null;
-    discounts?: Array<{
+    discounts?: {
       identifier: string;
       price: number;
       priceString: string;
@@ -88,7 +88,7 @@ export interface PurchasesPackageDisplayInfo {
       period: string;
       periodUnit: string;
       periodNumberOfUnits: number;
-    }>;
+    }[];
   };
 }
 export interface PurchasesOfferingDisplayInfo {

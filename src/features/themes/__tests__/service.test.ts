@@ -32,7 +32,7 @@ describe('themes service', () => {
 
     it('marks free themes as owned', async () => {
       const themes = await getSelectableThemes('user-1', null);
-      const freeThemes = themes.filter((t) => !t.isOwned);
+      const _freeThemes = themes.filter((t) => !t.isOwned);
       // Free themes should always be owned
       for (const theme of themes) {
         if (theme.coinCost === 0) {

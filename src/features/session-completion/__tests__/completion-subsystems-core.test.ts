@@ -47,6 +47,15 @@ describe('applyCompletionSubsystems', () => {
     );
   });
 
+  it('preserves a session-history failure from the persistence layer', async (): Promise<void> => {
+    const result = await applyCompletionSubsystems({
+      ledger: { ...baseLedger, degradedSystems: ['session-history'] },
+      summary: baseSummary,
+    });
+    expect(result.degradedSystems).toContain('session-history');
+    expect(result.ledger.degradedSystems).toContain('session-history');
+  });
+
   it('keeps the ledger when rewards fail and marks the story degraded', async () => {
     mockGrantReward.mockImplementationOnce(async (): Promise<void> => {
       mockOrder.push('rewards');
@@ -103,7 +112,10 @@ describe('applyCompletionSubsystems', () => {
     expect(mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
       'SESSION_COMPLETE',
-      { sessionId: baseLedger.sessionId },
+      expect.objectContaining({
+        idempotencyKey: `${baseLedger.idempotencyKey}:xp`,
+        sessionId: baseLedger.sessionId,
+      }),
     );
   });
 

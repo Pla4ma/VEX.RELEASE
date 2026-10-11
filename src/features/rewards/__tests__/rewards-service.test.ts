@@ -3,6 +3,12 @@
  * Covers: calculateXpReward, createReward, claimReward
  */
 
+import { jest } from '@jest/globals';
+
+jest.mock('../../reward-ledger/service', () => ({
+  createReward: jest.fn(async () => ({ id: 'ledger-id' })),
+  deliverReward: jest.fn(async () => undefined),
+}));
 import { calculateXpReward, createReward, claimReward } from '../service';
 
 describe('calculateXpReward', () => {
@@ -77,33 +83,16 @@ describe('calculateXpReward', () => {
 });
 
 describe('createReward', () => {
-  it('returns an id containing the userId', async () => {
+  it('returns the durable reward ledger id', async () => {
     const result = await createReward({
       userId: 'user-123',
       type: 'XP',
       amount: 100,
     });
-    expect(result.id).toContain('user-123');
-    expect(result.id).toMatch(/^reward_/);
+    expect(result.id).toBe('ledger-id');
   });
 
-  it('returns an id with a timestamp suffix', async () => {
-    const before = Date.now();
-    const result = await createReward({
-      userId: 'user-456',
-      type: 'XP',
-      amount: 50,
-      trigger: 'SESSION_COMPLETE',
-    });
-    const after = Date.now();
-    // Extract timestamp from id
-    const parts = result.id.split('_');
-    const ts = parseInt(parts[parts.length - 1], 10);
-    expect(ts).toBeGreaterThanOrEqual(before);
-    expect(ts).toBeLessThanOrEqual(after);
-  });
-
-  it('accepts all optional fields without error', async () => {
+  it('accepts all optional fields without changing the durable contract', async () => {
     const result = await createReward({
       userId: 'user-789',
       type: 'XP',
@@ -114,12 +103,12 @@ describe('createReward', () => {
       idempotencyKey: 'idem-key-1',
       metadata: { source: 'test' },
     });
-    expect(result.id).toBeDefined();
+    expect(result.id).toBe('ledger-id');
   });
 });
 
 describe('claimReward', () => {
-  it('resolves without error', async () => {
-    await expect(claimReward()).resolves.toBeUndefined();
+  it('requires a persisted ledger id', async () => {
+    await expect(claimReward('')).rejects.toThrow('ledger id is required');
   });
 });

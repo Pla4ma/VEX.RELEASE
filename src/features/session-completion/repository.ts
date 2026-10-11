@@ -40,7 +40,7 @@ export async function persistCompletionLedger(
     user_id: ledger.userId,
     completed_at: ledger.completedAt,
     ledger_payload: CompletionLedgerSchema.parse(ledger),
-    offline_sync_status: 'synced' as const,
+    offline_sync_status: ledger.degradedSystems.length > 0 ? 'failed' : 'synced',
     created_at: ledger.createdAt,
   };
 
@@ -53,8 +53,8 @@ export async function persistCompletionLedger(
   if (error) {
     const code =
       error != null && typeof error === 'object' && 'code' in error &&
-      typeof (error as { code?: unknown }).code === 'string'
-        ? (error as { code: string }).code
+      typeof error.code === 'string'
+        ? error.code
         : null;
     if (code === '23505') {
       // Duplicate idempotency key — fetch existing
@@ -92,8 +92,8 @@ export async function getCompletionLedgerByIdempotencyKey(
   if (error) {
     const code =
       error != null && typeof error === 'object' && 'code' in error &&
-      typeof (error as { code?: unknown }).code === 'string'
-        ? (error as { code: string }).code
+      typeof error.code === 'string'
+        ? error.code
         : null;
     if (code === 'PGRST116') {
       return null;
@@ -117,8 +117,8 @@ export async function getCompletionLedgerBySessionId(
   if (error) {
     const code =
       error != null && typeof error === 'object' && 'code' in error &&
-      typeof (error as { code?: unknown }).code === 'string'
-        ? (error as { code: string }).code
+      typeof error.code === 'string'
+        ? error.code
         : null;
     if (code === 'PGRST116') {
       return null;
@@ -153,7 +153,8 @@ export async function updateCompletionSyncStatus(
   const supabase = getSupabaseClient();
   const { error } = await supabase
     .from('session_completion_ledgers')
-    .update({ offline_sync_status: offlineSyncStatus })
+    .update({ offline_sync_status: offlineSyncStatus === 'pending_sync' ? 'pending'
+      : offlineSyncStatus === 'failed_sync' ? 'failed' : 'synced' })
     .eq('ledger_id', ledgerId);
 
   if (error) {

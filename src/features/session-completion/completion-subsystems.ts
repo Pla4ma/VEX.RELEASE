@@ -5,7 +5,7 @@ import { updateFocusScoreFromSessionCompletion } from '../../features/focus-iden
 import { getProgressionService } from '../../progression/ProgressionService';
 import { getRewardService } from '../../rewards/RewardService';
 import { getStreakService } from '../../streaks/StreakService';
-import { getCompanionService } from '../../features/companion/service';
+import { getCompanionService } from '../companion/service';
 import { trackCompletionAnalytics } from './completion-analytics';
 import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import type { CompletionLedger } from './schemas';
@@ -18,11 +18,18 @@ export type CompletionSubsystemResult = {
 export async function applyCompletionSubsystems(input: {
   ledger: CompletionLedger;
   summary: SessionSummary;
+  repair?: boolean;
 }): Promise<CompletionSubsystemResult> {
-  const degradedSystems: string[] = [];
+  const degradedSystems = [...input.ledger.degradedSystems];
+  const shouldRun = (name: string): boolean => {
+    if (input.repair && !input.ledger.degradedSystems.includes(name)) { return false; }
+    const index = degradedSystems.indexOf(name);
+    if (index >= 0) { degradedSystems.splice(index, 1); }
+    return true;
+  };
 
   // 1. Focus Identity — update focus score
-  await runSubsystem('focus-identity', degradedSystems, () =>
+  if (shouldRun('focus-identity')) { await runSubsystem('focus-identity', degradedSystems, () =>
     updateFocusScoreFromSessionCompletion(input.ledger.userId, {
       grade: input.ledger.grade,
       quality: input.ledger.qualityScore,
@@ -30,14 +37,16 @@ export async function applyCompletionSubsystems(input: {
     }),
   );
 
+  }
+
   // 2. Streak — record session
   let streakResult = input.ledger.streakResult;
-  try {
-    const streakService = getStreakService();
+  if (shouldRun('streak')) { try {
+    const streakService = getStreakService(input.ledger.userId);
     const result = await streakService.recordSession({
       completedAt: input.ledger.completedAt,
       duration: input.ledger.completedDurationSeconds,
-      idempotencyKey: input.ledger.idempotencyKey,
+      idempotencyKey: `${input.ledger.idempotencyKey}:streak`,
       qualityScore: input.ledger.qualityScore,
       sessionId: input.ledger.sessionId,
     });
@@ -52,26 +61,37 @@ export async function applyCompletionSubsystems(input: {
     });
   }
 
+  }
+
   // 3. Progression — award XP (ProgressionService owns XP mutation)
-  await runSubsystem('progression', degradedSystems, () =>
-    getProgressionService().addXP(
+  if (shouldRun('progression')) { await runSubsystem('progression', degradedSystems, () =>
+    getProgressionService(input.ledger.userId).addXP(
       input.ledger.xpDelta,
       'SESSION_COMPLETE',
-      { sessionId: input.ledger.sessionId },
+      {
+        idempotencyKey: `${input.ledger.idempotencyKey}:xp`,
+        sessionId: input.ledger.sessionId,
+      },
     ),
   );
 
+  }
+
   // 4. Rewards — receipt-only (not a second XP mutation)
-  const rewardIds: string[] = [];
-  try {
-    const rewardService = getRewardService();
+  const rewardIds = [...input.ledger.rewardIds];
+  if (shouldRun('rewards')) { try {
+    const rewardService = getRewardService(input.ledger.userId);
     await rewardService.grantReward(
       'XP',
       'SESSION_COMPLETE',
       { baseAmount: input.ledger.xpDelta },
-      { sessionId: input.ledger.sessionId },
+      {
+        idempotencyKey: `${input.ledger.idempotencyKey}:reward`,
+        sessionId: input.ledger.sessionId,
+      },
     );
-    rewardIds.push(`session-xp:${input.ledger.sessionId}`);
+    const receiptId = `session-xp:${input.ledger.sessionId}`;
+    if (!rewardIds.includes(receiptId)) { rewardIds.push(receiptId); }
   } catch (error: unknown) {
     degradedSystems.push('rewards');
     Sentry.captureException(error, {
@@ -79,11 +99,13 @@ export async function applyCompletionSubsystems(input: {
     });
   }
 
+  }
+
   // 5. Companion — react to session completion
   let companionReactionId = input.ledger.companionReactionId;
   let dailyMissionStatus = input.ledger.dailyMissionResult.status;
   const companionAvailability = getAvailabilityFor('companion_detail');
-  if (companionAvailability.canUseBackend) {
+  if (!input.repair && companionAvailability.canUseBackend) {
     try {
       const companionResult = getCompanionService().completeSession(
         Math.round(input.ledger.completedDurationSeconds / 60),
@@ -103,7 +125,7 @@ export async function applyCompletionSubsystems(input: {
     }
   }
 
-  Sentry.addBreadcrumb({
+  if (!input.repair) { Sentry.addBreadcrumb({
     category: 'session-completion',
     message: 'vex_session_completed',
     data: { sessionId: input.ledger.sessionId },
@@ -114,6 +136,8 @@ export async function applyCompletionSubsystems(input: {
     sessionId: input.ledger.sessionId,
     xpDelta: input.ledger.xpDelta,
   });
+
+  }
 
   return {
     degradedSystems,

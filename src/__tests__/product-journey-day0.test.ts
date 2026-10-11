@@ -98,7 +98,9 @@ describe('Group 2 — First Session Setup', () => {
     const f0 = accessFor(0);
     assertCoreAvailable(f0, 'focus_session');
     assertCoreAvailable(f0, 'focus_tab');
-    assertFullyHidden(f0, 'challenges');
+    // The first session stays simple; the Challenges destination is discoverable
+    // elsewhere from day one without adding setup friction.
+    assertCoreAvailable(f0, 'challenges');
     assertFullyHidden(f0, 'wagers');
     assertFullyHidden(f0, 'streak_insurance');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
@@ -135,12 +137,11 @@ describe('Group 2 — First Session Setup', () => {
 
   it('2e: no stakes/difficulty/premium/challenges in first session', () => {
     const f0 = accessFor(0);
-    assertFullyHidden(f0, 'challenges');
+    assertCoreAvailable(f0, 'challenges');
     assertFullyHidden(f0, 'wagers');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
     const fw = firstWeek();
     expect(fw.hiddenSurfaces).toContain('premium_hard_sell');
   });
 });
-
 

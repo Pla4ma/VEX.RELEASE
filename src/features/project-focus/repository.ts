@@ -16,7 +16,7 @@ export async function listStoredProjectThreads(
     const raw = storage.getString(keyFor(userId));
     if (!raw) {return [];}
     return ProjectThreadSchema.array().parse(JSON.parse(raw));
-  } catch (error: unknown) {
+  } catch {
     return [];
   }
 }

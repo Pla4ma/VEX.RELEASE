@@ -7,9 +7,8 @@
 
 import React, { useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { useSession } from '../../session/hooks/useSession';
+import { useSession , useSessionStats } from '../../session/hooks/useSession';
 import { sanitizeErrorMessage } from '../../utils/error-sanitizer';
-import { useSessionStats } from '../../session/hooks/useSession';
 import { ActiveSessionHUD } from '../../session/components/ActiveSessionHUD';
 import { SessionPresets } from '../../session/components/SessionPresets';
 import { SessionLoadingState } from '../../session/components/states/SessionLoadingState';

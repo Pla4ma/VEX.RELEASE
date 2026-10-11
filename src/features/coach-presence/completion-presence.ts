@@ -91,7 +91,7 @@ export function buildCompletionCoachPresence(
         summary.sessionMode === 'STUDY' ? 'Next study block' : 'Next focus',
       reason:
         summary.focusPurityScore >= 90
-          ? 'The rhythm is warm.'
+          ? `That ${summary.focusPurityScore}% focus score is the useful signal. Protect the next clean start.`
           : 'Keep the next move simple.',
     },
     sessionReflection: reflection.message,

@@ -113,12 +113,12 @@ export interface CoachEventDefinitions {
   };
   'coach:messages_queued': {
     userId: string;
-    messages: Array<{
+    messages: {
       id: string;
       type: string;
       content: string;
       priority: number;
-    }>;
+    }[];
     timestamp: number;
   };
   'coach:memory_created': {

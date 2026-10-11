@@ -1,4 +1,6 @@
 import { getContrastRatio, auditColorContrast } from '../contrast-checker';
+import { lightColors } from '../../../theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 describe('contrast-checker', () => {
   describe('getContrastRatio', () => {
@@ -70,5 +72,22 @@ describe('contrast-checker', () => {
       expect(failures.length).toBe(1);
       expect(failures[0]).toContain('bad');
     });
+  });
+
+  it('keeps light muted text readable on the primary background', () => {
+    const ratio = getContrastRatio(
+      lightColors.text.muted,
+      lightColors.background.primary,
+    );
+
+    expect(ratio).not.toBeNull();
+    expect(ratio ?? 0).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('keeps VEX Fire muted text readable on its dark surfaces', () => {
+    for (const background of [vexFire.background, vexFire.backgroundSoft]) {
+      const ratio = getContrastRatio(vexFire.textMuted, background);
+      expect(ratio ?? 0).toBeGreaterThanOrEqual(4.5);
+    }
   });
 });

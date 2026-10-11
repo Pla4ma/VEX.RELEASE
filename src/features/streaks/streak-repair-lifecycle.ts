@@ -1,6 +1,6 @@
 import { eventBus } from '../../events/EventBus';
 import * as repository from './repository';
-import type { StreakRepairQuest, RepairQuestStatus } from './streak-repair-quest';
+import type { StreakRepairQuest, RepairQuestStatus } from './streak-repair-types';
 
 const MIN_PREVIOUS_STREAK = 3;
 const RESTORED_STREAK_PERCENTAGE = 0.8;

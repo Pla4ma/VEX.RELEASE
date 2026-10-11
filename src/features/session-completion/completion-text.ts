@@ -1,5 +1,4 @@
-import type { CompletionReflectionInput } from './schemas';
-import type {
+import type { CompletionReflectionInput ,
   CompletionMemoryCandidate,
   CompletionPersonalizationInput,
   CompletionUnlockDecision,

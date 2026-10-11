@@ -54,7 +54,7 @@ export function useSessionRecommendation(
       }
 
       return rec;
-    } catch (error) {
+    } catch {
       // Error generating recommendation, use fallback
       return getFallbackRecommendation(recommendationInput);
     }

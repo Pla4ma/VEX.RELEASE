@@ -57,7 +57,7 @@ export async function parseErrorResponse(
 ): Promise<Partial<ApiError>> {
   try {
     return JSON.parse(await response.text());
-  } catch (error: unknown) {
+  } catch {
     return {};
   }
 }

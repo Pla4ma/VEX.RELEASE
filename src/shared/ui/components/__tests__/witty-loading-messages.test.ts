@@ -14,7 +14,7 @@ describe('witty-loading-messages', () => {
     });
 
     it('each context has 4 messages', () => {
-      for (const [ctx, messages] of Object.entries(wittyMessages)) {
+      for (const [_ctx, messages] of Object.entries(wittyMessages)) {
         expect(messages).toHaveLength(4);
       }
     });

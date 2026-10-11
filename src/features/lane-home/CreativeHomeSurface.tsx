@@ -74,7 +74,7 @@ export function CreativeHomeSurface({ viewModel }: CreativeHomeSurfaceProps): Re
 
           {projects.length > 0 ? (
             <Box gap="xs">
-              {projects.slice(0, 3).map((project, i) => (
+              {projects.slice(0, 3).map((project, _i) => (
                 <Pressable
                   key={project.name}
                   accessibilityLabel={`Project ${project.name}`}

@@ -2,10 +2,9 @@ import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { UnlockDecision } from '../types';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface UnlockExplainerCardProps {
   decision: UnlockDecision;

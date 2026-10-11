@@ -53,6 +53,7 @@ export function buildDeterministicDecision(
   }
 
   if (
+    context.currentStreak > 0 &&
     context.hoursUntilStreakDeadline !== null &&
     context.hoursUntilStreakDeadline <= 4
   ) {

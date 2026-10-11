@@ -7,8 +7,8 @@ import type {
   FeatureKey,
   MotivationProfile,
   MotivationProfileType,
+  UnlockBehaviorEvidence,
 } from './feature-access-types';
-
 // ── Motivation profile config (from JSON) ──
 
 export interface MotivationProfileConfig {
@@ -97,5 +97,6 @@ export interface FeatureAccessInput {
   feature: FeatureKey;
   sessions: number;
   profile: MotivationProfile | undefined;
+  behaviorEvidence?: UnlockBehaviorEvidence;
   unlockedFeatures?: Set<FeatureKey>;
 }

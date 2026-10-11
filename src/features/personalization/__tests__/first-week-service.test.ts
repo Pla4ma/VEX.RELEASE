@@ -62,12 +62,12 @@ describe('resolveFirstWeekExperience', () => {
   });
 
   it('sets Day 0 lane surfaces for all four lanes', () => {
-    const cases: Array<{
+    const cases: {
       primaryGoal: FirstWeekResolverInput['primaryGoal'];
       motivationStyle: FirstWeekResolverInput['motivationStyle'];
       lane: string;
       theme: string;
-    }> = [
+    }[] = [
       {
         primaryGoal: 'study',
         motivationStyle: 'study_focused',

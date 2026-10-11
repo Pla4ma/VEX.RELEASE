@@ -131,7 +131,9 @@ export async function fetchPendingRewards(
 ): Promise<RewardLedgerRecord[]> {
   const { data, error } = await supabase
     .from('reward_ledger')
-    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')    .eq('status', 'pending');
+    .select('id,user_id,idempotency_key,reward_type,amount,currency,status,source_event,created_at,delivered_at,failed_reason,expires_at')
+    .eq('user_id', userId)
+    .eq('status', 'pending');
 
   if (error) {
     throw new RewardLedgerRepositoryError('fetchPending', error);

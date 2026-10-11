@@ -16,7 +16,7 @@ export { getNotificationTitle, getNotificationBody, generateId } from './social-
 export type { SocialActivity, CompetitiveResult, SquadChallenge } from './social-feed-types';
 
 export function initializeSocialFeedIntegration(): () => void {
-  const handlers: Array<() => void> = [];
+  const handlers: (() => void)[] = [];
 
   handlers.push(
     eventBus.subscribe('social:activity', async (event: SocialActivity) => {

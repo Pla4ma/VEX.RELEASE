@@ -52,7 +52,7 @@ export interface FocusIdentityProfile {
   userId: string;
   currentScore: number;
   previousScore: number;
-  scoreHistory: Array<{ date: string; score: number; reason: string }>;
+  scoreHistory: { date: string; score: number; reason: string }[];
   percentileRank: number;
   band: ScoreBand;
   factors: FocusScoreFactors;

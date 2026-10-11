@@ -1,6 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Pressable } from 'react-native';
+import { View , Pressable } from 'react-native';
 import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import { getMinTouchTargetStyle } from '@/utils/touchTarget';

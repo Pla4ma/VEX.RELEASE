@@ -24,7 +24,7 @@ function loadRecords(
     if (!raw) {return [];}
     const parsed = JSON.parse(raw) as unknown[];
     return parsed.map((r) => QuotaUsageRecordSchema.parse(r));
-  } catch (error: unknown) {
+  } catch {
     return [];
   }
 }

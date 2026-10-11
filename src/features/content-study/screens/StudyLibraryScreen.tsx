@@ -1,24 +1,25 @@
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback, useMemo } from 'react';
-import { ScrollView } from 'react-native';
+import { Image, ScrollView } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import type { ContentStudyStackParamList } from '../types';
-import type { StudyContent, ContentStatus, ContentSourceType } from '../types';
+import type { ContentStudyStackParamList , StudyContent, ContentStatus, ContentSourceType } from '../types';
 import { useContentHistory } from '../hooks';
 import { useNetInfo } from '../../../network/useNetInfo';
 import { ContentItemCard } from '../components/ContentItemCard';
 import { FilterChip } from '../components/FilterChip';
 import { EmptyLibraryState } from '../components/EmptyLibraryState';
+import { StudyBackButton } from '../components/StudyBackButton';
+import { StudyLibraryAction } from '../components/StudyLibraryAction';
+import { useContentStudyEligibility } from '../hooks/useContentStudyEligibility';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import {
   STATUS_FILTERS,
   TYPE_FILTERS,
 } from './StudyLibraryScreen.constants';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type ContentStudyNavigationProp =
   NativeStackNavigationProp<ContentStudyStackParamList>;
@@ -28,6 +29,8 @@ function StudyLibraryScreen(): React.ReactNode {
   const { content, isLoading, error, refetch, deleteContent } =
     useContentHistory();
   const { isOffline } = useNetInfo();
+  const eligibility = useContentStudyEligibility();
+  const refetchEligibility = eligibility.refetch;
   const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>(
     'all',
   );
@@ -61,7 +64,8 @@ function StudyLibraryScreen(): React.ReactNode {
 
   const handleRefresh = useCallback(() => {
     refetch();
-  }, [refetch]);
+    void refetchEligibility();
+  }, [refetch, refetchEligibility]);
 
   const renderContentItem: ListRenderItem<StudyContent> = ({ item, index }) => (
     <ContentItemCard
@@ -73,44 +77,50 @@ function StudyLibraryScreen(): React.ReactNode {
   );
 
   return (
-    <Box flex={1} bg="background.primary">
+    <Box flex={1} style={{ backgroundColor: vexFire.background }}>
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../../assets/vex/study/library-codex.png')}
+        resizeMode="contain"
+        style={{ height: 220, opacity: 0.18, position: 'absolute', right: -48, top: 18, width: 220 }}
+      />
       {isOffline ? (
         <Box
-          bg="warning.light"
+          style={{ backgroundColor: vexFire.copper }}
           py="xs"
           px="sm"
           alignItems="center"
           accessibilityLabel="You are offline. Library sync requires a connection."
           accessibilityRole="alert"
         >
-          <Text variant="caption" color="text.primary">
+          <Text variant="caption" color={vexFire.cream}>
             You are offline. Library sync requires a connection.
           </Text>
         </Box>
       ) : null}
       <Box px="lg" pt="lg" pb="md">
+        <StudyBackButton onPress={() => navigation.goBack()} />
         <Box
           flexDirection="row"
           alignItems="center"
           justifyContent="space-between"
         >
           <Box>
-            <Text variant="h3" color="text.primary">
+            <Text variant="h3" style={{ color: vexFire.cream }}>
               Study Library
             </Text>
-            <Text variant="caption" color="text.secondary" mt="xs">
+            <Text variant="caption" style={{ color: vexFire.textSecondary }} mt="xs">
               {content.length} saved {content.length === 1 ? 'item' : 'items'}
             </Text>
           </Box>
-          <Button variant="outline"
-            size="sm"
-            onPress={() => navigation.navigate('ContentInput', {})}
-            accessibilityLabel="Add new content"
-            accessibilityRole="button"
-            accessibilityHint="Double tap to activate"
-          >
-            <VexText>+ Add New</VexText>
-          </Button>
+          <StudyLibraryAction
+            canUpload={eligibility.data?.canUpload ?? false}
+            hasContent={content.length > 0}
+            isError={eligibility.isError}
+            isPending={eligibility.isPending}
+            onAddContent={() => navigation.navigate('ContentInput', {})}
+            onRetry={() => { void eligibility.refetch(); }}
+          />
         </Box>
       </Box>
 
@@ -156,12 +166,15 @@ function StudyLibraryScreen(): React.ReactNode {
         onRefresh={handleRefresh}
         ListEmptyComponent={
           <EmptyLibraryState
-            isLoading={isLoading}
-            error={error}
+            isLoading={isLoading || eligibility.isPending}
+            error={error ?? (eligibility.isError ? 'Could not check content access. Please retry.' : null)}
+            errorTitle={eligibility.isError && !error ? 'Study access needs a retry' : 'Could not load your Study Library'}
             hasContent={content.length > 0}
             hasFilteredResults={filteredContent.length > 0}
             onRetry={handleRefresh}
             onAddContent={() => navigation.navigate('ContentInput', {})}
+            uploadLocked={eligibility.data?.canUpload === false}
+            lockedMessage={eligibility.data?.fallbackLabel}
           />
         }
       />

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -17,7 +18,7 @@ export const QuizPanel: React.ComponentType<QuizPanelProps> = ({
   score,
   readOnly = false,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
   const [shortAnswers, setShortAnswers] = useState<Record<string, string>>({});
 
@@ -68,12 +69,12 @@ export const QuizPanel: React.ComponentType<QuizPanelProps> = ({
           <Icon
             name="help-circle"
             size="sm"
-            color={theme.colors.primary[500]}
+            color={vexFire.ember}
           />
           <Text
             style={[
               quizPanelStyles.title,
-              { color: theme.colors.text.primary },
+              { color: vexFire.cream },
             ]}
           >
             Quick Quiz ({Object.keys(answers).length}/{items.length})
@@ -87,17 +88,17 @@ export const QuizPanel: React.ComponentType<QuizPanelProps> = ({
               {
                 backgroundColor:
                   calculateScore.percentage >= 70
-                    ? theme.colors.success[500]
+                    ? vexFire.success
                     : calculateScore.percentage >= 40
-                      ? theme.colors.warning[500]
-                      : theme.colors.error[500],
+                      ? vexFire.amber
+                      : vexFire.danger,
               },
             ]}
           >
             <Text
               style={[
                 quizPanelStyles.scoreText,
-                { color: theme.colors.background.primary },
+                { color: vexFire.background },
               ]}
             >
               {calculateScore.percentage}%

@@ -18,7 +18,6 @@ export function SettingsGeneralSection({
       <SettingItem
         label="Language"
         value={preferences?.settings?.['general.language']?.value ?? 'en'}
-        onPress={() => {}}
       />
       <SettingItem
         label="Timezone"
@@ -26,7 +25,6 @@ export function SettingsGeneralSection({
           preferences?.settings?.['general.timezone']?.value ??
           Intl.DateTimeFormat().resolvedOptions().timeZone
         }
-        onPress={() => {}}
       />
     </View>
   );

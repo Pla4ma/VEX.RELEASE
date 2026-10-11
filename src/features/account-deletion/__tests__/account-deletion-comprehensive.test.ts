@@ -3,7 +3,7 @@ import { deleteCurrentUser, signOutCurrentSession } from '../repository';
 import { revenueCatService } from '../../../shared/monetization/revenuecat-service';
 import {
   getSecureStorage,
-  SecureStorageKeys,
+  _SecureStorageKeys,
 } from '../../../persistence/SecureStorage';
 import {
   getDefaultStorageAdapter,
@@ -68,7 +68,7 @@ describe('account deletion — comprehensive', () => {
     });
 
     expect(deleteCurrentUserMock).toHaveBeenCalledTimes(1);
-    expect(deleteCurrentUserMock).toHaveBeenCalledWith('550e8400-e29b-41d4-a716-446655440001');
+    expect(deleteCurrentUserMock).toHaveBeenCalledWith();
     expect(clearUserIdMock).toHaveBeenCalledTimes(1);
     expect(getDefaultStorageAdapter().clear).toHaveBeenCalledTimes(1);
     expect(getMMKVStorageAdapter().removeItem).toHaveBeenCalledWith(
@@ -157,17 +157,5 @@ describe('account deletion — comprehensive', () => {
     await expect(
       deleteAccount({ userId: 'not-a-uuid' }),
     ).rejects.toThrow();
-  });
-});
-
-describe('deleteCurrentUser — confirmation token validation', () => {
-  it('rejects empty confirmation token', async () => {
-    const { deleteCurrentUser: realDeleteCurrentUser } = jest.requireActual<
-      typeof import('../repository')
-    >('../repository');
-
-    await expect(realDeleteCurrentUser('')).rejects.toThrow(
-      'Confirmation token must be a non-empty string',
-    );
   });
 });

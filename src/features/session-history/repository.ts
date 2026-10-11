@@ -131,7 +131,7 @@ export async function countCompletedSessions(userId: string): Promise<number> {
     .from('sessions')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
-    .eq('status', 'COMPLETED');
+    .eq('status', 'completed');
 
   if (error) {
     throw new SessionHistoryRepositoryError('countCompletedSessions', error);

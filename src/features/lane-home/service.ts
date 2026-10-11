@@ -5,13 +5,13 @@ export interface LaneViewModel {
   todayFocusMinutes: number;
   streakDays: number;
   hasStudyPlan: boolean;
-  todayTasks: Array<{ title: string; done: boolean }>;
+  todayTasks: { title: string; done: boolean }[];
   weekProgress: number;
   bossHealth: number;
   bossMaxHealth: number;
   currentRank: string;
   weeklyDamage: number;
-  activeProjects: Array<{ name: string; color: string; progress: number }>;
+  activeProjects: { name: string; color: string; progress: number }[];
   inspirationPrompt: string;
   lastSession: string | undefined;
   nextSuggestedDuration: number;

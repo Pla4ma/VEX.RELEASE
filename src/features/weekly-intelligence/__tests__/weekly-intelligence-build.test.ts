@@ -1,16 +1,16 @@
 import {
   WeeklyInsightInputSchema,
   WeeklyIntelligenceSchema,
-  InsightFindingSchema,
+  _InsightFindingSchema,
   type WeeklyInsightInput,
 } from '../schemas';
 import { buildWeeklyIntelligence } from '../service';
 import {
-  buildWhatHelped,
-  buildWhatGotInWay,
-  resolveBestNextSessionType,
-  buildAdjustment,
-  buildPremiumDeeperInsight,
+  _buildWhatHelped,
+  _buildWhatGotInWay,
+  _resolveBestNextSessionType,
+  _buildAdjustment,
+  _buildPremiumDeeperInsight,
 } from '../insight-builders/insight-builders';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

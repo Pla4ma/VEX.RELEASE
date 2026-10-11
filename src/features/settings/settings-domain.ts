@@ -17,7 +17,7 @@ export async function updateNotificationSettings(
   userId: string,
   settings: Partial<NotificationSettings>,
 ): Promise<NotificationSettings> {
-  const updates: Array<{ key: string; value: SettingValue; category: SettingCategory }> = [];
+  const updates: { key: string; value: SettingValue; category: SettingCategory }[] = [];
   if (settings.channels?.push) {
     updates.push(
       { key: 'notifications.push.enabled', value: settings.channels.push.enabled, category: 'notifications' },
@@ -45,7 +45,7 @@ export async function updateCoachSettings(
   userId: string,
   settings: Partial<CoachSettings>,
 ): Promise<CoachSettings> {
-  const updates: Array<{ key: string; value: SettingValue; category: SettingCategory }> = [];
+  const updates: { key: string; value: SettingValue; category: SettingCategory }[] = [];
   if (settings.enabled !== undefined) {updates.push({ key: 'coach.enabled', value: settings.enabled, category: 'coach' });}
   if (settings.personality) {updates.push({ key: 'coach.personality', value: settings.personality, category: 'coach' });}
   if (settings.frequency) {updates.push({ key: 'coach.frequency', value: settings.frequency, category: 'coach' });}
@@ -62,7 +62,7 @@ export async function updateAppearanceSettings(
   userId: string,
   settings: Partial<AppearanceSettings>,
 ): Promise<AppearanceSettings> {
-  const updates: Array<{ key: string; value: SettingValue; category: SettingCategory }> = [];
+  const updates: { key: string; value: SettingValue; category: SettingCategory }[] = [];
   if (settings.theme) {updates.push({ key: 'appearance.theme', value: settings.theme, category: 'appearance' });}
   if (settings.accentColor) {updates.push({ key: 'appearance.accentColor', value: settings.accentColor, category: 'appearance' });}
   if (settings.fontScale !== undefined) {updates.push({ key: 'appearance.fontScale', value: settings.fontScale, category: 'appearance' });}
@@ -79,7 +79,7 @@ export async function updatePrivacySettings(
   userId: string,
   settings: Partial<PrivacySettings>,
 ): Promise<PrivacySettings> {
-  const updates: Array<{ key: string; value: SettingValue; category: SettingCategory }> = [];
+  const updates: { key: string; value: SettingValue; category: SettingCategory }[] = [];
   if (settings.profileVisibility) {updates.push({ key: 'privacy.profileVisibility', value: settings.profileVisibility, category: 'privacy' });}
   if (settings.showOnlineStatus !== undefined) {updates.push({ key: 'privacy.showOnlineStatus', value: settings.showOnlineStatus, category: 'privacy' });}
   if (settings.analyticsOptOut !== undefined) {updates.push({ key: 'privacy.analyticsOptOut', value: settings.analyticsOptOut, category: 'privacy' });}

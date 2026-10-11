@@ -9,18 +9,18 @@ export type StatusConfigEntry = {
   icon: string;
 };
 
-export const STATUS_FILTERS: Array<{ label: string; value: ContentStatus | 'all' }> = [
+export const STATUS_FILTERS: { label: string; value: ContentStatus | 'all' }[] = [
   { label: 'All', value: 'all' },
   { label: 'Pending', value: 'PENDING' },
   { label: 'Extracting', value: 'EXTRACTING' },
   { label: 'Ready', value: 'READY' },
 ];
 
-export const TYPE_FILTERS: Array<{
+export const TYPE_FILTERS: {
   label: string;
   value: ContentSourceType | 'all';
   icon: string;
-}> = [
+}[] = [
   { label: 'All Types', value: 'all', icon: 'filter' },
   { label: 'PDF', value: 'PDF', icon: 'document' },
   { label: 'YouTube', value: 'YOUTUBE', icon: 'video' },

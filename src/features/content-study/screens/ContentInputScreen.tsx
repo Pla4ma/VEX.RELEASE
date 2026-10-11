@@ -1,7 +1,8 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Image } from 'react-native';
 import {
   useNavigation,
   useRoute,
@@ -19,6 +20,10 @@ import { UI_TEXT } from '../constants';
 import { useContentInput } from '../hooks';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { ContentStudyStackParamList } from '../types';
+import { StudyBackButton } from '../components/StudyBackButton';
+import { ContentStudyUploadGate } from '../components/ContentStudyUploadGate';
+import { ContentInputHeader } from '../components/ContentInputHeader';
+import { useContentStudyEligibility } from '../hooks/useContentStudyEligibility';
 
 type ContentInputRouteProp = RouteProp<
   ContentStudyStackParamList,
@@ -33,6 +38,7 @@ function ContentInputScreen(): React.ReactNode {
   const navigation = useNavigation<ContentInputNavigationProp>();
   const route = useRoute<ContentInputRouteProp>();
   const { theme } = useTheme();
+  const eligibility = useContentStudyEligibility();
   const {
     state,
     uploadProgress,
@@ -100,21 +106,34 @@ function ContentInputScreen(): React.ReactNode {
     }
   }, [navigation, state.activeTab, submit]);
 
-  return (
-    <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
-      <View style={{ gap: theme.spacing[2] }}>
-        <Text color="primary.300" variant="label">
-          AI study lab
-        </Text>
-        <Text color="text.primary" variant="h1">
-          {UI_TEXT.INPUT_TITLE}
-        </Text>
-        <Text color="text.secondary" variant="body">
-          {UI_TEXT.INPUT_SUBTITLE}
-        </Text>
-      </View>
+  if (
+    eligibility.isPending ||
+    eligibility.isError ||
+    !eligibility.data?.canUpload
+  ) {
+    return (
+      <ContentStudyUploadGate
+        isError={eligibility.isError}
+        isPending={eligibility.isPending}
+        message={eligibility.data?.fallbackLabel ?? null}
+        onBack={() => navigation.goBack()}
+        onRetry={() => { void eligibility.refetch(); }}
+      />
+    );
+  }
 
-      <Card size="lg" variant="glass">
+  return (
+    <AppScreen keyboardAvoiding variant="focus" contentStyle={{ gap: theme.spacing[5] }}>
+      <StudyBackButton onPress={() => navigation.goBack()} />
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../../assets/vex/study/library-codex.png')}
+        resizeMode="contain"
+        style={{ height: 150, opacity: 0.16, position: 'absolute', right: -28, top: 4, width: 150 }}
+      />
+      <ContentInputHeader />
+
+      <Card size="lg" variant="glass" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border }}>
         <InputTypeSelector
           activeTab={state.activeTab}
           onTabChange={setTab}
@@ -126,7 +145,7 @@ function ContentInputScreen(): React.ReactNode {
       <Card
         size="lg"
         variant="elevated"
-        style={{ minHeight: theme.spacing[8] * 4 }}
+        style={{ backgroundColor: vexFire.panelSoft, borderColor: vexFire.border, minHeight: theme.spacing[8] * 4 }}
       >
         <ContentInputActiveTab
           activeTab={state.activeTab}
@@ -144,11 +163,11 @@ function ContentInputScreen(): React.ReactNode {
       </Card>
 
       {error && !showExtractionProgress ? (
-        <Card size="md" state="error" variant="glass">
-          <Text color="error.DEFAULT" variant="label">
+        <Card size="md" state="error" variant="glass" style={{ backgroundColor: vexFire.panel, borderColor: vexFire.danger }}>
+          <Text color={vexFire.danger} variant="label">
             Study processing paused
           </Text>
-          <Text color="text.secondary" mt="xs" variant="bodySmall">
+          <Text color={vexFire.textSecondary} mt="xs" variant="bodySmall">
             {error}
           </Text>
           <Button accessibilityLabel="Dismiss" mt="md" onPress={clearError} size="sm" variant="ghost">

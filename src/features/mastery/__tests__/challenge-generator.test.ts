@@ -7,7 +7,7 @@ import type { MasteryState, MasteryRank } from '../types';
 describe('generateMasteryChallenges (real implementation)', () => {
 
   const actual = jest.requireActual('../challenge-generator') as {
-    generateMasteryChallenges: (techniques: MasteryState['techniques'], rank: MasteryRank) => Array<{ technique: string; difficulty: string; status: string; current: number; completedAt: null }>;
+    generateMasteryChallenges: (techniques: MasteryState['techniques'], rank: MasteryRank) => { technique: string; difficulty: string; status: string; current: number; completedAt: null }[];
   };
 
   it('generates 1-2 challenges', () => {

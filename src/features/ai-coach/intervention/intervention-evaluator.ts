@@ -8,8 +8,7 @@ import type {
   TriggerType,
 } from '../schemas';
 import { EvaluateInterventionsInputSchema } from '../schemas';
-import { checkConditions } from '../message/message-generator';
-import { generateMessage } from '../message/message-generator';
+import { checkConditions , generateMessage } from '../message/message-generator';
 
 const MAX_INTERVENTIONS_PER_DAY = 5;
 
@@ -128,7 +127,7 @@ async function executeIntervention(
     }
     execution.status = 'EXECUTED';
     execution.executedAt = Date.now();
-  } catch (error: unknown) {
+  } catch {
     execution.status = 'FAILED';
   }
 

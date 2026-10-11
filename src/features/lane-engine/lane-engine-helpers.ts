@@ -54,7 +54,7 @@ export function traitsForLane(lane: Lane): LaneProfile['traits'] {
 
 export function ranked(
   scores: LaneScores,
-): Array<{ lane: Lane; score: number }> {
+): { lane: Lane; score: number }[] {
   return ORDERED_LANES.map((lane) => ({
     lane,
     score: Math.max(0, scores[lane]),

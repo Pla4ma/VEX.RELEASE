@@ -81,7 +81,7 @@ export function createMockQualityAnalysis(
 }
 
 export function batchValidateMessages(
-  messages: Array<{ id: string; content: string; category: string }>,
+  messages: { id: string; content: string; category: string }[],
 ): MessageQualityAnalysis[] {
   return messages.map((message) =>
     validateMessageQuality(message.id, message.content, message.category),

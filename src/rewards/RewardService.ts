@@ -17,7 +17,7 @@ type GrantCalculation = {
   streakMultiplier?: number;
 };
 
-type RewardService = {
+export type RewardService = {
   grantReward: (
     type: RewardType,
     triggerType: RewardTrigger | 'COMEBACK_BONUS',
@@ -36,7 +36,7 @@ function normalizeTrigger(
   return triggerType;
 }
 
-export function getRewardService(userId?: string): RewardService {
+export function getRewardService(userId: string): RewardService {
   let activeUserId = userId;
   return {
     setUserId(nextUserId): void {

@@ -8,7 +8,7 @@ import {
   resolveInitialLane,
   shouldReconsiderLane,
   shouldSuggestLaneReconsideration,
-  mergeLaneProfiles,
+  _mergeLaneProfiles,
 } from '../service';
 import { observedAt } from './lane-engine.helpers';
 

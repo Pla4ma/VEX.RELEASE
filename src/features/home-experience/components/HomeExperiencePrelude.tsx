@@ -1,28 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import type { HomeExperienceModel } from '../schemas';
 
-export function useHomeExperienceModel(_a: unknown, _b: unknown, _c: unknown): HomeExperienceModel {
-  return useMemo(() => ({
-    stage: 'STAGE_0' as const,
-    spotlight: 'study' as const,
-    allowedRoutes: [],
-    aiCoachMessageStyle: '',
-    companionPlacement: '',
-    hiddenSections: [],
-    mustNotRun: [],
-    primaryCta: '',
-    progressPlacement: '',
-    rpgBossPlacement: '',
-    secondaryCta: '',
-    studyOsPlacement: '',
-    teasedElements: [],
-    unlockPathCopy: '',
-    visibleSections: [],
-    allowedQueries: [],
-  }), []);
-}
 import { Text } from '../../../components/primitives/Text';
 import { GlassPillSurface } from '../../../components/glass/GlassPillSurface';
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';

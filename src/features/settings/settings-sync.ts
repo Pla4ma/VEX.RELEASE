@@ -51,9 +51,9 @@ export async function syncSettings(
         const remoteChanges = (await withRetry(
           () => syncRepo.fetchRemoteChanges(userId, syncState?.lastSuccessfulSync),
           SYNC_RETRY_CONFIG,
-        )) as Array<{
+        )) as {
           key: string; value: unknown; category: SettingCategory; timestamp: number;
-        }>;
+        }[];
         if (remoteChanges.length > 0) {
           await syncRepo.applyRemoteChanges(userId, remoteChanges);
         }

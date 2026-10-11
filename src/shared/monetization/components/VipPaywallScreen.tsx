@@ -4,18 +4,17 @@ import { useNavigation, useRoute, type RouteProp } from '@react-navigation/nativ
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { capture } from '../../analytics/analytics-service';
 import { StatusBanner } from '../../ui/components/StatusFeedback';
 import { useTheme } from '../../../theme/ThemeContext';
 import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
-import { usePaywall, usePremiumStatus } from '../use-revenuecat';
+import { usePaywall, usePremiumStatus } from '../use-revenuecat-derived';
 import { PREMIUM_BENEFITS, type PaywallPlan } from './paywall-data';
 import { PlanCard, BenefitList } from './PaywallComponents';
 import { usePaywallActions } from './usePaywallActions';
 import { VipPaywallSkeleton } from './VipPaywallSkeleton';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type VipPaywallRouteProp = RouteProp<ExtendedRootStackParams, 'VipPaywall'>;

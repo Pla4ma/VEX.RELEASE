@@ -5,39 +5,42 @@ import { ToggleSetting } from './ToggleSetting';
 import { SettingItem } from './SettingItem';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { lightColors } from '@/theme/tokens/colors';
+import type { SettingChangeHandler } from './setting-change';
 
 
 interface SettingsCoachSectionProps {
   coach: CoachSettings | undefined;
+  onChange: SettingChangeHandler;
 }
 
-export function SettingsCoachSection({ coach }: SettingsCoachSectionProps) {
+export function SettingsCoachSection({
+  coach,
+  onChange,
+}: SettingsCoachSectionProps) {
   return (
     <View style={styles.settingsGroup}>
       <ToggleSetting
         label="Enable Coach"
         value={coach?.enabled ?? true}
-        onToggle={() => {}}
+        onToggle={(value) => onChange('coach.enabled', value, 'coach')}
       />
       <SettingItem
         label="Personality"
         value={coach?.personality ?? 'supportive'}
-        onPress={() => {}}
       />
       <SettingItem
         label="Frequency"
         value={coach?.frequency ?? 'moderate'}
-        onPress={() => {}}
       />
       <ToggleSetting
         label="Streak Reminders"
         value={coach?.messageTypes?.streakReminders ?? true}
-        onToggle={() => {}}
+        onToggle={(value) => onChange('coach.messageTypes.streakReminders', value, 'coach')}
       />
       <ToggleSetting
         label="Session Tips"
         value={coach?.messageTypes?.sessionTips ?? true}
-        onToggle={() => {}}
+        onToggle={(value) => onChange('coach.messageTypes.sessionTips', value, 'coach')}
       />
     </View>
   );

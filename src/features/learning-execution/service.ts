@@ -122,7 +122,6 @@ export function buildContentStudyGate(input: unknown) {
     parsed.storageConfigured &&
     parsed.rateLimitsConfigured &&
     parsed.hasPrivacyDisclosure;
-  const isStudyGoal = parsed.goal === 'STUDY' || parsed.goal === 'LEARNING';
 
   if (parsed.featureHealth !== 'healthy' || !configured) {
     return ContentStudyGateSchema.parse({
@@ -131,18 +130,9 @@ export function buildContentStudyGate(input: unknown) {
     });
   }
 
-  if (parsed.totalCompletedSessions < 3) {
-    return ContentStudyGateSchema.parse({
-      fallback: isStudyGoal
-        ? 'Start with a study target and one focused block.'
-        : 'Attach a goal to your session',
-      showUploadEntry: false,
-    });
-  }
-
   return ContentStudyGateSchema.parse({
-    fallback: isStudyGoal ? null : 'Build a deep work path',
-    showUploadEntry: isStudyGoal,
+    fallback: null,
+    showUploadEntry: true,
   });
 }
 
@@ -182,5 +172,4 @@ export function buildLearningExecutionLayer(input: {
     target: input.target,
   });
 }
-
 

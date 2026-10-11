@@ -1,6 +1,6 @@
 import {
   resolvePremiumStrategy,
-  type PremiumStrategyInput,
+  type _PremiumStrategyInput,
   type PremiumHighIntentAction,
 } from '../premium-strategy';
 

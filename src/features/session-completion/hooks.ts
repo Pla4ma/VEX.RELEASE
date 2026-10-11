@@ -1,16 +1,24 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import type { SessionStackParams } from '../../navigation/types';
+import type {
+  ExtendedRootStackParams,
+  SessionStackParams,
+} from '../../navigation/types';
 import type { SessionSummary } from '../../session/types';
 import type { MasteryState } from '../mastery/types';
 import type { HeadlineReward } from './headline-reward.schemas';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
 import { detectNewlyUnlockedFeatures } from './completion-personalization-step';
+import * as Sentry from '@sentry/react-native';
+import { repairPendingCompletion } from './completion-repair-service';
+import { useCompletionRewardRepair } from './completion-repair-hook';
+export { useRecoveredSessionCompletion } from './recovery-hooks';
 
 type SessionNavigation = NativeStackNavigationProp<SessionStackParams>;
+type RootNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 type Mood = 'GREAT' | 'GOOD' | 'NEUTRAL' | 'BAD' | 'TERRIBLE';
 type LevelUpCelebrationState = {
   oldLevel: number;
@@ -39,43 +47,29 @@ export function useSessionCompletionConsequences(input?: {
   }, [input?.userId, input?.summary]);
 }
 
-export function useRecoveredSessionCompletion(_sessionId?: string | null): {
-  data: null;
-  error: null;
-  isError: false;
-  isPending: false;
-  refetch: () => void;
-} {
-  return {
-    data: null,
-    error: null,
-    isError: false,
-    isPending: false,
-    refetch: () => {},
-  };
-}
 
-export function useCompletionSyncAutoRepair(_input?: {
+export function useCompletionSyncAutoRepair(input?: {
   isOnline?: boolean;
   userId?: string | null;
-}): void {}
-
-export function useHomeReturnCompletionSync(): void {}
-
-export function usePostSessionStoryViewModel(): null {
-  return null;
-}
-
-export function useSessionHeadline(): null {
-  return null;
-}
-
-export function useSessionRewardPriority(): null {
-  return null;
+}): void {
+  const lastRepairKey = useRef<string | null>(null);
+  useEffect(() => {
+    const repairKey = `${input?.userId ?? 'signed-out'}:${input?.isOnline ? 'online' : 'offline'}`;
+    if (!input?.userId || !input.isOnline || lastRepairKey.current === repairKey) {
+      return;
+    }
+    lastRepairKey.current = repairKey;
+    void repairPendingCompletion({ userId: input.userId }).catch((error: unknown) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'session-completion-auto-repair' },
+      });
+    });
+  }, [input?.isOnline, input?.userId]);
 }
 
 export function useSessionCompleteController({
   summary,
+  sessionId,
 }: {
   sessionId: string;
   summary: SessionSummary;
@@ -119,9 +113,16 @@ export function useSessionCompleteController({
   userId: string;
 } {
   const navigation = useNavigation<SessionNavigation>();
+  const rootNavigation = navigation.getParent<RootNavigation>();
   const { theme } = useTheme();
   const scrollRef = useRef(null);
   const userId = useAuthStore((state) => state.user?.id ?? null);
+  const {
+    applyCompletionRewards,
+    rewardCreditError,
+    rewardCreditStatus,
+  } = useCompletionRewardRepair(userId, sessionId);
+  const [completionStage, setCompletionStage] = useState(2);
   const [reflection, setReflection] = useState('');
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
   const [masteryState, setMasteryState] = useState<MasteryState | null>(null);
@@ -135,25 +136,40 @@ export function useSessionCompleteController({
 
   const rewards = useMemo(() => ({
     actions: {
-      applyCompletionRewards: async (): Promise<void> => {},
-      applyChestRewards: async (input: { sessionId: string; rewards: HeadlineReward[] }): Promise<void> => {},
-      handleRevealComplete: () => {},
+      applyCompletionRewards,
+      applyChestRewards: async (input: { sessionId: string; rewards: HeadlineReward[] }): Promise<void> => {
+        if (input.rewards.length > 0) {
+          throw new Error(`Unsupported chest rewards for session ${input.sessionId}`);
+        }
+        await applyCompletionRewards();
+      },
+      handleRevealComplete: () => setCompletionStage(2),
       setLevelUpCelebration,
     },
-    completionStage: 2,
+    completionStage,
     levelUpCelebration,
-    rewardCreditError: null,
-    rewardCreditStatus: 'idle' as const,
-    showCtas: true,
-  }), [levelUpCelebration]);
+    rewardCreditError,
+    rewardCreditStatus,
+    showCtas: completionStage >= 2,
+  }), [
+    applyCompletionRewards,
+    completionStage,
+    levelUpCelebration,
+    rewardCreditError,
+    rewardCreditStatus,
+  ]);
 
   return {
     finishSession: (_skipReflection?: boolean) => {
-      navigation.navigate({ name: 'Home', params: {} });
+      if (rootNavigation) {
+        rootNavigation.navigate('Main', { screen: 'Home' });
+        return;
+      }
+      navigation.goBack();
     },
     grade,
     hero: {
-      body: 'Your focus block is logged. Rewards are temporarily simplified while VEX rebuilds the completion details.',
+      body: 'Your focus block is logged. XP, streak, and progress are tied to this completion.',
       eyebrow: 'Session complete',
       title: grade.letter === 'S' ? 'Perfect pressure.' : 'Work locked in.',
     },
@@ -167,7 +183,7 @@ export function useSessionCompleteController({
     returnPlan: {
       homeCtaLabel: 'Back home',
       nextSessionLabel: 'Start next session',
-      returnReasonBody: 'Your session is saved. Rewards are degraded for now.',
+      returnReasonBody: 'Your session is saved. You can repair any delayed sync from this receipt.',
       returnReasonTitle: 'Focus logged',
     },
     rewards,

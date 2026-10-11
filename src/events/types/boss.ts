@@ -13,11 +13,11 @@ export interface BossEventDefinitions {
     encounterId?: string;
     damageDealt: number;
     maxHealth?: number;
-    contributors?: Array<{
+    contributors?: {
       userId: string;
       displayName: string;
       damageContribution: number;
-    }>;
+    }[];
     won: boolean;
     rewards: {
       xp: number;
@@ -63,7 +63,7 @@ export interface BossEventDefinitions {
   };
   'boss:prime_time_scheduled': {
     encounterId: string;
-    windows: Array<{ startTime: number; endTime: number }>;
+    windows: { startTime: number; endTime: number }[];
   };
   'boss:ability_used': {
     userId: string;

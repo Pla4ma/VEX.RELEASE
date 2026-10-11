@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, Switch, Alert, Linking } from 'react-native';
 import { useExportJobs } from '../hooks/useAnalyticsQueries';
@@ -5,7 +6,7 @@ import { useExportAnalytics } from '../hooks/useAnalyticsMutations';
 import { ExportProgress } from './ExportProgress';
 import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { SkeletonList } from '../../../shared/ui/primitives/Skeleton';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 import { styles } from './DataExportScreen.styles';
 import {
@@ -41,7 +42,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
         dateRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
       });
       Alert.alert('Export Started', "Your data export has been queued. You'll be notified when it's ready.", [{ text: 'OK' }]);
-    } catch (error) {
+    } catch {
       Alert.alert('Export Failed', 'Unable to start export. Please try again.', [{ text: 'OK' }]);
     }
   }, [exportMutation, selectedFormat, selectedCategory]);
@@ -116,7 +117,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
               <Switch
                 value={includeMetadata}
                 onValueChange={setIncludeMetadata}
-                trackColor={{ false: lightColors.border.light, true: lightColors.semantic.primary }}
+                trackColor={{ false: vexFire.border, true: vexFire.ember }}
               />
             </View>
           </View>

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { sizing } from '../../../theme/tokens/sizing';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export function HistorySkeleton(): React.ReactNode {
   return (
@@ -12,7 +12,7 @@ export function HistorySkeleton(): React.ReactNode {
       {[0, 1, 2].map((key) => (
         <Box
           key={key}
-          bg="background.secondary"
+          style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1 }}
           borderRadius="lg"
           height={sizing.height['2xl']}
           mb="sm"
@@ -29,10 +29,10 @@ export function HistoryEmptyState({
 }): React.ReactNode {
   return (
     <Box flex={1} justifyContent="center" alignItems="center" p="xl">
-      <Text variant="h3" color="text.primary" textAlign="center" mb="md">
+      <Text variant="h3" style={{ color: vexFire.cream }} textAlign="center" mb="md">
         Your record starts with one real session.
       </Text>
-      <Text variant="body" color="text.secondary" textAlign="center" mb="lg">
+      <Text variant="body" style={{ color: vexFire.textSecondary }} textAlign="center" mb="lg">
         Finish a focus block and VEX will track the rhythm you actually built.
       </Text>
       <Button

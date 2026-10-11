@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { createUserScopedOnboardingStorage } from './user-scoped-storage';
 
 import type { OnboardingState } from './schemas';
 import { createStoreActions } from './store-actions';
@@ -66,8 +67,14 @@ const initialState: OnboardingState = {
   mascotGuideCompletedAt: null,
   mascotGuideDismissedAt: null,
 };
+let activeOnboardingUserId: string | null = null;
 
 const mmkvStorage = getMMKVStorageAdapter();
+const onboardingStorage = createUserScopedOnboardingStorage(
+  mmkvStorage,
+  () => activeOnboardingUserId,
+  () => JSON.stringify({ state: initialState, version: 0 }),
+);
 
 export const useOnboardingStore = create(
   persist<OnboardingStore>(
@@ -77,14 +84,7 @@ export const useOnboardingStore = create(
     }),
     {
       name: 'onboarding-storage',
-      storage: createJSONStorage(() => ({
-        getItem: (name: string): string | null =>
-          mmkvStorage.getItemSync(name) ?? null,
-        setItem: (name: string, value: string): void =>
-          mmkvStorage.setItemSync(name, value),
-        removeItem: (name: string): void =>
-          mmkvStorage.removeItemSync(name),
-      })),
+      storage: createJSONStorage(() => onboardingStorage),
       // partialize: persist only state, not actions
       partialize: (state: OnboardingStore): OnboardingStore => {
         const {
@@ -125,4 +125,10 @@ export const useOnboardingStore = create(
     },
   ),
 );
+export async function hydrateOnboardingForUser(
+  userId: string | null,
+): Promise<void> {
+  activeOnboardingUserId = userId;
+  await useOnboardingStore.persist.rehydrate();
+}
 export { useAuthStore } from '../../store';

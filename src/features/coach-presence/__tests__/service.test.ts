@@ -1,8 +1,8 @@
 import {
   buildCoachPresence,
-  buildCompletionCoachPresence,
   resolveCoachActionIntent,
 } from '../service';
+import { buildCompletionCoachPresence } from '../completion-presence';
 
 const unlockedAvailability = {
   canNavigate: true,

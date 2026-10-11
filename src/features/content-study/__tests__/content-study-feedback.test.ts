@@ -21,9 +21,7 @@ describe('submitFeedback', () => {
     expect(result).toEqual({ success: true, feedbackId: 'fb-1' });
   });
 
-  // skip: throws normalized error, implementation tested through other paths
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('propagates errors', async () => {
+  it('propagates errors', async () => {
     jest.mocked(invokeAndParse).mockRejectedValue(new Error('fail'));
     await expect(submitFeedback({ contentId: 'c-1', rating: 1 })).rejects.toThrow('Failed to submit feedback');
   });

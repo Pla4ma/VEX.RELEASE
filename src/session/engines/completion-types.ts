@@ -1,7 +1,7 @@
 import type {
   DamageCalculation,
-  FocusQualityMetrics,
-  ScoreCalculation,
+
+
   SessionState,
   SessionSummary,
   SessionStatus,

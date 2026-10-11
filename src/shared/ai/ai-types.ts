@@ -83,23 +83,23 @@ export type AIResponse = z.infer<typeof AIResponseSchema>;
 
 export interface GeminiAPIRequest {
   model: string;
-  contents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>;
+  contents: { role: 'user' | 'model'; parts: { text: string }[] }[];
   generationConfig?: {
     temperature?: number;
     maxOutputTokens?: number;
     topP?: number;
     topK?: number;
   };
-  safetySettings?: Array<{ category: string; threshold: string }>;
+  safetySettings?: { category: string; threshold: string }[];
 }
 
 export interface GeminiAPIResponse {
-  candidates: Array<{
-    content: { parts: Array<{ text: string }>; role: string };
+  candidates: {
+    content: { parts: { text: string }[]; role: string };
     finishReason: string;
     index: number;
-    safetyRatings: Array<{ category: string; probability: string }>;
-  }>;
+    safetyRatings: { category: string; probability: string }[];
+  }[];
   usageMetadata: {
     promptTokenCount: number;
     candidatesTokenCount: number;

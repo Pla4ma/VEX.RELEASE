@@ -1,6 +1,7 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import type { InterventionType } from './intervention-types';
 import type { ColorPalette } from '../../../theme/colorTypes';
-import { lightColors } from '../../../theme/tokens/primary-palette';
+
 import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
 
 interface BannerColors {
@@ -9,7 +10,7 @@ interface BannerColors {
   accent: string;
 }
 
-const BRAND_VIOLET = lightColors.semantic.brandViolet;
+const BRAND_VIOLET = vexFire.copper;
 
 const SEVERITY_COLOR_MAP: Record<InterventionType, string> = {
   BURNOUT: vexLightGlass.semantic.warning,

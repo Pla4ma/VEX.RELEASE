@@ -5,7 +5,7 @@
  */
 
 import { buildFeatureAccess } from '../feature-access';
-import type { FeatureAccessInputs, FeatureKey } from '../feature-access-types';
+import type {  FeatureKey } from '../feature-access-types';
 
 describe('feature-access', () => {
   describe('buildFeatureAccess', () => {
@@ -74,11 +74,13 @@ describe('feature-access', () => {
       expect(result.features.boss_tab.isUnlocked).toBe(true);
     });
 
-    it('should not unlock features before threshold sessions', () => {
+    it('should expose day-one surfaces before depth thresholds', () => {
       const result = buildFeatureAccess({
         totalCompletedSessions: 0,
       });
-      expect(result.features.boss_tab.isUnlocked).toBe(false);
+      expect(result.features.boss_tab.isUnlocked).toBe(true);
+      expect(result.features.content_study.isUnlocked).toBe(true);
+      expect(result.features.challenges.isUnlocked).toBe(true);
     });
 
     it('should apply degraded status from input', () => {

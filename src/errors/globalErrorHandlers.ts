@@ -3,6 +3,21 @@ import { captureException } from '../config/sentry';
 
 const debug = createDebugger('error');
 
+let rejectionHandlerInstalled = false;
+
+function normalizeRejection(reason: unknown): Error {
+  if (reason instanceof Error) {
+    return reason;
+  }
+  return new Error(String(reason));
+}
+
+function handleUnhandledRejection(reason: unknown): void {
+  const rejectionError = normalizeRejection(reason);
+  debug.error('Unhandled promise rejection', rejectionError);
+  captureException(rejectionError, { area: 'unhandledRejection' });
+}
+
 export function setupGlobalErrorHandler(): void {
   const originalHandler = ErrorUtils.getGlobalHandler();
   ErrorUtils.setGlobalHandler((error: Error, isFatal?: boolean) => {
@@ -26,22 +41,24 @@ export function setupGlobalErrorHandler(): void {
 }
 
 export function setupRejectionHandler(): void {
-  const addEventListener = globalThis.addEventListener;
-  if (typeof addEventListener !== 'function') {
+  if (rejectionHandlerInstalled) {
     return;
   }
+  rejectionHandlerInstalled = true;
 
-  addEventListener.call(
-    globalThis,
-    'unhandledrejection',
-    (event: Event) => {
-      const reason = 'reason' in event ? event.reason : event;
-      const rejectionError =
-        reason instanceof Error
-          ? reason
-          : new Error(String(reason));
-      debug.error('Unhandled promise rejection', rejectionError);
-      captureException(rejectionError, { area: 'unhandledRejection' });
-    },
-  );
+  const addEventListener = globalThis.addEventListener;
+  if (typeof addEventListener === 'function') {
+    addEventListener.call(
+      globalThis,
+      'unhandledrejection',
+      (event: Event) => {
+        const reason = 'reason' in event ? event.reason : event;
+        handleUnhandledRejection(reason);
+      },
+    );
+  }
+
+  if (typeof process !== 'undefined' && typeof process.on === 'function') {
+    process.on('unhandledRejection', handleUnhandledRejection);
+  }
 }

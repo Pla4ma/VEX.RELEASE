@@ -1,12 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import type { Theme } from '../../../theme';
 import { ScoreOverviewCard } from './ScoreOverviewCard';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ScoreDriver {
   name: string;
@@ -72,7 +71,7 @@ export function ReportCards({
               Score Drivers
             </Text>
             <View style={{ gap: theme.spacing[3] }}>
-              {scoreDrivers.map((driver, index) => (
+              {scoreDrivers.map((driver, _index) => (
                 <View
                   key={driver.name}
                   style={{

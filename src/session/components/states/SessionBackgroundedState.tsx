@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -12,7 +12,6 @@ import {
   formatDuration,
   calculateProgressLoss,
 } from './session-backgrounded-helpers';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface SessionBackgroundedStateProps {
   backgroundDuration: number;

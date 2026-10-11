@@ -25,7 +25,10 @@ describe('Phase 6 — economy deactivation boundary', () => {
     expect(mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
       'SESSION_COMPLETE',
-      { sessionId: baseLedger.sessionId },
+      expect.objectContaining({
+        idempotencyKey: `${baseLedger.idempotencyKey}:xp`,
+        sessionId: baseLedger.sessionId,
+      }),
     );
     expect(result.degradedSystems).not.toContain('progression');
     expect(result.ledger.xpDelta).toBe(120);

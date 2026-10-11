@@ -125,7 +125,7 @@ export function emitCompanionMilestone(
  * Subscribe to companion events
  */
 export function subscribeToCompanionEvents() {
-  const unsubs: Array<() => void> = [];
+  const unsubs: (() => void)[] = [];
   return {
     cleanup: () => unsubs.forEach((fn) => fn()),
     onStateChanged: (callback: (data: Record<string, unknown>) => void) => {

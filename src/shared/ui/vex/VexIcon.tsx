@@ -5,19 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import type { IconColor, IconProps, IconSize } from '../../../icons/types';
 import { useTheme } from '../../../theme/ThemeContext';
-
-const FALLBACK_GLYPHS: Record<string, string> = {
-  alarm: '◌',
-  book: '▤',
-  chart: '▥',
-  'check-circle': '✓',
-  flame: '♨',
-  home: '⌂',
-  refresh: '↻',
-  sparkles: '✦',
-  target: '◎',
-  user: '♙',
-};
+import { FALLBACK_GLYPHS } from './VexIconGlyphs';
 
 interface VexIconProps extends Pick<IconProps, 'name' | 'variant' | 'strokeWidth'> {
   color?: IconColor | string;

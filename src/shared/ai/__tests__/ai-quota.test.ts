@@ -125,6 +125,16 @@ describe('AI Quota Service', () => {
       expect(exceeded.allowed).toBe(false);
       expect(exceeded.window).toBe('hourly');
     });
+    it('blocks requests after the daily token budget is exhausted', async () => {
+      clearUsage(TEST_USER, 'coach_message');
+      const tokenBudget = DEFAULT_QUOTA_STRATEGIES.free.limits.coach_message.tokenBudget;
+      await consumeQuota(TEST_USER, 'coach_message', tokenBudget);
+
+      const result = await checkQuota(TEST_USER, 'coach_message', 'free');
+
+      expect(result.allowed).toBe(false);
+      expect(result.window).toBe('daily');
+    });
   });
 
   describe('getRemainingQuota', () => {

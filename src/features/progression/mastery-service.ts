@@ -76,11 +76,11 @@ export function applyMasteryXp(
   xpByTrack: Record<MasteryTrack, number>,
 ): ApplyXpResult {
   const newState: UnifiedMasteryState = structuredClone(state);
-  const levelUps: Array<{
+  const levelUps: {
     track: MasteryTrack;
     oldLevel: number;
     newLevel: number;
-  }> = [];
+  }[] = [];
   for (const track of MASTERY_TRACKS) {
     const xp = xpByTrack[track];
     if (xp <= 0) {

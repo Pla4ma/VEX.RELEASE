@@ -94,7 +94,7 @@ export class RetryStrategy {
   ): Promise<T> {
     try {
       return await this.execute(operation, operationName, config);
-    } catch (error) {
+    } catch {
       debug.warn('%s failed, executing fallback', operationName);
       return fallback();
     }

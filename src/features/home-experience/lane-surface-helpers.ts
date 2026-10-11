@@ -2,8 +2,7 @@ import type { z } from 'zod';
 import type {
   HomeSurfaceDecision,
   HomeSurfaceKey,
-} from './surface-decision-schemas';
-import type { SurfaceDecisionInputSchema } from './surface-decision-schemas';
+ SurfaceDecisionInputSchema } from './surface-decision-schemas';
 
 type SurfaceDecisionInput = z.infer<typeof SurfaceDecisionInputSchema>;
 type PersonalizationProfile = SurfaceDecisionInput['personalizationProfile'];

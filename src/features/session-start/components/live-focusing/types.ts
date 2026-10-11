@@ -6,7 +6,7 @@ export interface LiveFocusingData {
   totalCount: number;
   friendsCount: number;
   squadCount: number;
-  sampleAvatars?: Array<{ url?: string; initials: string }>;
+  sampleAvatars?: { url?: string; initials: string }[];
   trend?: 'up' | 'down' | 'stable';
   trendPercent?: number;
 }

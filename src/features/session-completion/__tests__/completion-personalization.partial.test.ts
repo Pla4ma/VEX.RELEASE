@@ -2,8 +2,8 @@ import { SessionMode } from '../../../session/modes';
 
 import {
   LANES,
-  PARTIAL_REFLECTIONS,
-  ABANDONED_REFLECTIONS,
+  _PARTIAL_REFLECTIONS,
+  _ABANDONED_REFLECTIONS,
   buildResult,
 } from './completion-personalization.helpers';
 

@@ -15,27 +15,6 @@ const debug = createDebugger('ai-coach:memory');
 
 export type { CoachMemory, MemoryType };
 
-export {
-  storeStudyPattern,
-  storePreferredTechnique,
-  storeFailureMode,
-  storeOptimalFocusTime,
-  storeDocumentMilestone,
-  getStudyPatterns,
-  getPreferredTechniques,
-  getFailureModes,
-  getOptimalFocusTimes,
-} from './memory-patterns';
-
-export {
-  checkFirstSGrade,
-  checkLongestSession,
-  checkBestStreak,
-  checkFirstBossDefeated,
-  checkFirstRivalWin,
-} from './memory-milestones';
-
-export { generateMemoryReferenceMessage } from './memory-reference-message';
 
 export {
   hashEvidence,

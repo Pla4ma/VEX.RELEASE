@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Card } from '../../../components/primitives/Card';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -13,7 +13,6 @@ import {
   isFeatureUnlocked,
   type UnlockableFeature,
 } from './mastery-unlock-gate-data';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface MasteryUnlockGateProps {
   userRank: MasteryRank;

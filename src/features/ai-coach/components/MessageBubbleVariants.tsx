@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
@@ -33,15 +34,15 @@ export function SystemMessageBubble({
   const getCategoryColor = () => {
     switch (message.category) {
       case 'STREAK_RISK':
-        return theme.colors.error[500];
+        return vexFire.danger;
       case 'MILESTONE_HYPE':
-        return theme.colors.success[500];
+        return vexFire.success;
       case 'SESSION_SUGGESTION':
-        return theme.colors.primary[500];
+        return vexFire.ember;
       case 'COMEBACK_SUPPORT':
-        return theme.colors.warning[500];
+        return vexFire.amber;
       default:
-        return theme.colors.accent.purple;
+        return vexFire.copper;
     }
   };
   return (
@@ -71,7 +72,7 @@ export function SystemMessageBubble({
         </Text>
         <Text
           variant="bodySmall"
-          color={theme.colors.text.secondary}
+          color={vexFire.textSecondary}
           textAlign="center"
           fontWeight="500"
         >
@@ -112,18 +113,18 @@ export function UserMessageBubble({
     >
       <Animated.View
         style={{
-          backgroundColor: theme.colors.primary[500],
+          backgroundColor: vexFire.ember,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
           borderBottomRightRadius: 4,
         }}
       >
-        <Text variant="body" color={theme.colors.text.inverse}>
+        <Text variant="body" color={vexFire.cream}>
           {content}
         </Text>
         <Text
           variant="caption"
-          color={`${theme.colors.text.inverse}80`}
+          color={`${vexFire.cream}80`}
           style={{ marginTop: theme.spacing[1] }}
         >
           {formatTime(timestamp)}

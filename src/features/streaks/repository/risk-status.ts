@@ -39,7 +39,7 @@ export async function saveRiskStatusEnhanced(
 }
 
 export async function fetchRiskStatusEnhanced(
-  userId: string,
+  _userId: string,
 ): Promise<RepositoryResult<StreakRiskStatus | null>> {
   return executeWithFallback('fetchRiskStatus', async () => {
     const { data, error } = await supabase

@@ -37,7 +37,7 @@ function resolveMetrics(dataTypes: string[]): AnalyticsMetric[] {
 }
 
 function buildExportData(
-  fetchResults: Array<{ points: unknown; summary: unknown } | undefined>,
+  fetchResults: ({ points: unknown; summary: unknown } | undefined)[],
   metricsToFetch: AnalyticsMetric[],
   jobId: string,
   userId: string,

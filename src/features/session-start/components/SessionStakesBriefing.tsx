@@ -7,6 +7,7 @@ import type { SessionStakesBriefingProps } from './SessionStakesBriefing.types';
 import { StakeCard } from './StakeCard';
 import { EmptyStakesMessage } from './EmptyStakesMessage';
 import { buildStakes } from './buildStakes';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export type { SessionStake, SessionStakesBriefingProps } from './SessionStakesBriefing.types';
 
@@ -35,7 +36,7 @@ export function SessionStakesBriefing({
           }}
         >
           <Text fontSize={16}>🎯</Text>
-          <Text variant="label" color="text.tertiary">
+          <Text variant="label" color={vexFire.textMuted}>
             WHAT'S AT STAKE
           </Text>
         </View>

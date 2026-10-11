@@ -22,7 +22,7 @@ export function lazyScreen<
   return Component;
 }
 export function preloadCriticalScreens(
-  screens: Array<() => Promise<void>>,
+  screens: (() => Promise<void>)[],
 ): void {
   const schedule =
     typeof window !== 'undefined' && 'requestIdleCallback' in window

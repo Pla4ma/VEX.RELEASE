@@ -1,4 +1,4 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export const STUDY_PLAN_CONFIG = {
@@ -17,20 +17,20 @@ export const STUDY_PLAN_CONFIG = {
 export const TASK_PRIORITY_CONFIG = {
   HIGH: {
     label: 'High Priority',
-    color: lightColors.semantic.danger,
-    textColor: lightColors.text.inverse,
+    color: vexFire.danger,
+    textColor: vexFire.cream,
     weight: 3,
   },
   MEDIUM: {
     label: 'Medium Priority',
-    color: lightColors.semantic.warning,
-    textColor: lightColors.semantic.backgroundMuted,
+    color: vexFire.amber,
+    textColor: vexFire.backgroundSoft,
     weight: 2,
   },
   LOW: {
     label: 'Low Priority',
-    color: lightColors.accent.green,
-    textColor: lightColors.text.inverse,
+    color: vexFire.success,
+    textColor: vexFire.cream,
     weight: 1,
   },
 } as const;
@@ -38,20 +38,20 @@ export const TASK_PRIORITY_CONFIG = {
 export const QUIZ_DIFFICULTY_CONFIG = {
   EASY: {
     label: 'Easy',
-    color: lightColors.accent.green,
-    textColor: lightColors.text.inverse,
+    color: vexFire.success,
+    textColor: vexFire.cream,
     weight: 1,
   },
   MEDIUM: {
     label: 'Medium',
-    color: lightColors.semantic.warning,
-    textColor: lightColors.semantic.backgroundMuted,
+    color: vexFire.amber,
+    textColor: vexFire.backgroundSoft,
     weight: 2,
   },
   HARD: {
     label: 'Hard',
-    color: lightColors.semantic.danger,
-    textColor: lightColors.text.inverse,
+    color: vexFire.danger,
+    textColor: vexFire.cream,
     weight: 3,
   },
 } as const;

@@ -14,7 +14,7 @@ import { createRuntimeMMKV, type RuntimeMMKV } from './mmkv-runtime';
 // Singleton MMKV instance for Zustand storage
 let mmkvStorage: RuntimeMMKV | null = null;
 
-function getStorage(): RuntimeMMKV {
+function _getStorage(): RuntimeMMKV {
   if (!mmkvStorage) {
     mmkvStorage = createRuntimeMMKV({
       id: 'zustand-storage',

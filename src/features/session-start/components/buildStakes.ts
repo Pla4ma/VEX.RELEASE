@@ -1,5 +1,6 @@
 import type { Theme } from '../../../theme';
 import type { SessionStake, SessionStakesBriefingProps } from './SessionStakesBriefing.types';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type StakeInput = Pick<
   SessionStakesBriefingProps,
@@ -8,7 +9,7 @@ type StakeInput = Pick<
 
 export function buildStakes(
   input: StakeInput,
-  theme: Theme,
+  _theme: Theme,
 ): SessionStake[] {
   const stakes: SessionStake[] = [];
   const { bossStake, streakStake, challengeStake, rivalStake, squadWarStake } = input;
@@ -30,7 +31,7 @@ export function buildStakes(
         : bossStake.healthPercent <= 50
           ? 'high'
           : 'medium',
-      accentColor: theme.colors.primary[500],
+      accentColor: vexFire.ember,
     });
   }
   if (streakStake) {
@@ -50,7 +51,7 @@ export function buildStakes(
         ? 'Complete this session to save it!'
         : `Session ${streakStake.sessionNumberInStreak} • ${streakStake.multiplier.toFixed(1)}× multiplier`,
       urgency: isCritical ? 'critical' : streakStake.isAtRisk ? 'high' : 'low',
-      accentColor: theme.colors.warning[500],
+      accentColor: vexFire.amber,
     });
   }
   if (challengeStake) {
@@ -63,7 +64,7 @@ export function buildStakes(
         ? `This session completes it! (${challengeStake.current}/${challengeStake.target})`
         : `Progress: ${challengeStake.current}/${challengeStake.target}`,
       urgency: challengeStake.canComplete ? 'high' : 'medium',
-      accentColor: theme.colors.primary[500],
+      accentColor: vexFire.ember,
     });
   }
   if (rivalStake) {
@@ -77,7 +78,7 @@ export function buildStakes(
         ? `${rivalStake.gapMinutes} min behind — catch up?`
         : `You're ${Math.abs(rivalStake.gapMinutes)} min ahead`,
       urgency: isBehind ? 'medium' : 'low',
-      accentColor: theme.colors.error[500],
+      accentColor: vexFire.danger,
     });
   }
   if (squadWarStake) {
@@ -89,7 +90,7 @@ export function buildStakes(
       title: `Squad War ends in ${squadWarStake.hoursRemaining}h`,
       subtitle: `Squad needs ${squadWarStake.squadMinutesNeeded} more min`,
       urgency: isUrgent ? 'high' : 'medium',
-      accentColor: theme.colors.primary[500],
+      accentColor: vexFire.ember,
     });
   }
 

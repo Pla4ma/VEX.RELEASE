@@ -46,7 +46,16 @@ export const CompanionParticles: React.ComponentType<CompanionParticlesProps> = 
       {particles.map((p) => (
         <View
           key={p.key}
-          style={{}}
+          style={{
+            backgroundColor: theme.particle,
+            borderRadius: p.size / 2,
+            height: p.size,
+            left: p.left,
+            opacity: p.opacity,
+            position: 'absolute',
+            top: p.top,
+            width: p.size,
+          }}
         />
       ))}
     </Animated.View>

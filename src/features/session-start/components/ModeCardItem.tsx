@@ -1,11 +1,11 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { Image, Pressable } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
-import { SessionGlyph } from '../../../shared/ui/liquid-glass/SessionGlyphs';
-import { isSessionLessMode } from '../../../session/modes';
+import { spacing } from '../../../theme/tokens/spacing';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+import { isSessionLessMode, SessionMode } from '../../../session/modes';
 import type { ModeCard } from './ModeSelector.data';
 
 interface ModeCardItemProps {
@@ -23,7 +23,7 @@ export function ModeCardItem({
   disabledReason,
   onPress,
 }: ModeCardItemProps): React.ReactNode {
-  const { theme } = useTheme();
+  const asset = getModeAsset(card.mode);
 
   return (
     <Pressable
@@ -35,41 +35,49 @@ export function ModeCardItem({
       onPress={onPress}
     >
       <Box
-        minHeight={76}
+        minHeight={spacing[20] + spacing[4]}
         px="md"
         py="md"
-        bg={isSelected ? 'surface.selected' : 'semantic.surfaceGlass'}
-        borderRadius={24}
+        bg="background.primary"
+        borderRadius="xl"
         style={{
           borderWidth: isSelected ? 2 : 1,
           borderColor: isSelected
-            ? theme.colors.semantic.secondary
-            : theme.colors.semantic.liquidGlassBorder,
+            ? vexFire.ember
+            : vexFire.border,
+          backgroundColor: isSelected ? vexFire.backgroundRaised : vexFire.panel,
           opacity: isDisabled ? 0.55 : 1,
-          shadowColor: theme.colors.semantic.shadow,
-          shadowOffset: { width: 0, height: 8 },
+          shadowColor: vexFire.shadow,
+          shadowOffset: { width: 0, height: spacing[2] },
           shadowOpacity: isSelected ? 0.18 : 0.08,
-          shadowRadius: isSelected ? 16 : 10,
+          shadowRadius: isSelected ? spacing[4] : spacing[2],
         }}
       >
         <Box flexDirection="row" alignItems="center" gap="md">
           <Box
-            width={56}
-            height={56}
-            borderRadius={20}
-            bg="semantic.surfaceElevated"
+            width={spacing[16]}
+            height={spacing[16]}
+            borderRadius="lg"
+            bg="background.primary"
             alignItems="center"
             justifyContent="center"
+            style={{ borderColor: vexFire.line, borderWidth: 1 }}
           >
-            <SessionGlyph name={card.glyph} size={44} />
+            <Image
+              accessibilityIgnoresInvertColors
+              accessibilityLabel={`${card.name} artifact`}
+              source={asset}
+              resizeMode="contain"
+              style={{ height: spacing[12], width: spacing[12] }}
+            />
           </Box>
           <Box flex={1}>
-            <Text variant="label" color="text.primary">
+            <Text variant="label" color={vexFire.cream}>
               {card.name}
             </Text>
             <Text
               variant="caption"
-              color="text.secondary"
+              color={vexFire.textSecondary}
               style={{ lineHeight: 19 }}
             >
               {disabledReason ?? card.description}
@@ -77,13 +85,13 @@ export function ModeCardItem({
           </Box>
           <Box
             alignItems="center"
-            bg="semantic.backgroundElevated"
-            borderRadius={999}
+            bg="background.primary"
+            borderRadius="full"
             px="sm"
             py="xs"
-            style={{ borderColor: theme.colors.border.light, borderWidth: 1 }}
+            style={{ borderColor: vexFire.border, borderWidth: 1, backgroundColor: vexFire.backgroundSoft }}
           >
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" color={vexFire.textMuted}>
               {isSessionLessMode(card.mode) ? 'No timer' : 'Timer'}
             </Text>
           </Box>
@@ -91,4 +99,25 @@ export function ModeCardItem({
       </Box>
     </Pressable>
   );
+}
+
+function getModeAsset(mode: ModeCard['mode']): number {
+  switch (mode) {
+    case SessionMode.STUDY:
+      return require('../../../../assets/vex/session/study-mark.png');
+    case SessionMode.SPRINT:
+      return require('../../../../assets/vex/session/sprint-mark.png');
+    case SessionMode.CREATIVE:
+    case SessionMode.CAPTURE:
+      return require('../../../../assets/vex/home/reflection-relic.png');
+    case SessionMode.PLAN:
+    case SessionMode.REVIEW:
+      return require('../../../../assets/vex/home/progress-instrument.png');
+    case SessionMode.HABIT:
+      return require('../../../../assets/vex/session/recovery-mark.png');
+    case SessionMode.LIGHT_FOCUS:
+    case SessionMode.DEEP_WORK:
+    default:
+      return require('../../../../assets/vex/session/focus-core.png');
+  }
 }

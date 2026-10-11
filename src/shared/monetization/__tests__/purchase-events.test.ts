@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import {
   PurchaseEvents,
-  type PurchaseEvent,
+  type _PurchaseEvent,
   createPaywallProperties,
   createPurchaseProperties,
 } from '../purchase-events';

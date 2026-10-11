@@ -1,6 +1,7 @@
 import { YouTubeUrlSchema } from './validation-schemas';
 import type { ValidationError } from './types';
 import { CONTENT_STUDY_CONSTANTS } from './types';
+import { getYouTubeVideoId } from './youtube-url';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -46,8 +47,7 @@ export function validateYouTubeUrl(url: string): ValidationResult {
       severity: 'error',
     });
   } else {
-    const match = url.match(/(?:v=|\/|shorts\/|embed\/)([\w-]{11})/);
-    videoId = match?.[1];
+    videoId = getYouTubeVideoId(url) ?? undefined;
     if (url.includes('list='))
       {warnings.push({
         field: 'youtubeUrl',

@@ -3,8 +3,8 @@ import { View, Pressable, type ViewStyle } from 'react-native';
 import { Badge } from '../../../components/Badge';
 import { Button } from '../../../components/primitives/Button';
 import { Card } from '../../../components/primitives/Card';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import type { UserChallengeSummary } from '../schemas';
 import {
   getStatusBadge,
@@ -12,7 +12,6 @@ import {
   formatDuration,
   challengeCardStyles as styles,
 } from './challengeCardHelpers';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface ChallengeCardProps {
   challenge: UserChallengeSummary;
@@ -27,7 +26,6 @@ export function ChallengeCard({
   onReroll,
   loading = false,
 }: ChallengeCardProps): React.ReactNode {
-  const { theme } = useTheme();
   const isActionable =
     challenge.status === 'ACTIVE' || challenge.status === 'COMPLETED';
   const cardStyle: ViewStyle = challenge.isExpired
@@ -51,7 +49,7 @@ export function ChallengeCard({
           {challenge.title}
         </Text>
         <Text
-          style={[styles.description, { color: theme.colors.text.secondary }]}
+          style={[styles.description, { color: vexFire.textSecondary }]}
           numberOfLines={2}
         >
           {challenge.description}
@@ -67,7 +65,7 @@ export function ChallengeCard({
             <Text
               style={[
                 styles.progressPercent,
-                { color: theme.colors.primary[500] },
+                { color: vexFire.ember },
               ]}
             >
               {Math.round(challenge.progressPercent)}%
@@ -76,14 +74,14 @@ export function ChallengeCard({
           <View
             style={[
               styles.progressBarTrack,
-              { backgroundColor: theme.colors.background.tertiary },
+              { backgroundColor: vexFire.backgroundSoft },
             ]}
           >
             <View
               style={[
                 styles.progressBarFill,
                 {
-                  backgroundColor: theme.colors.primary[500],
+                  backgroundColor: vexFire.ember,
                   width: `${challenge.progressPercent}%`,
                 },
               ]}
@@ -93,7 +91,7 @@ export function ChallengeCard({
             <Text
               style={[
                 styles.expiresText,
-                { color: theme.colors.error.DEFAULT },
+                { color: vexFire.danger },
               ]}
             >
               Expires in {formatDuration(challenge.expiresInMs)}
@@ -105,11 +103,11 @@ export function ChallengeCard({
       <View
         style={[
           styles.rewardRow,
-          { borderTopColor: theme.colors.border.light },
+          { borderTopColor: vexFire.line },
         ]}
       >
         <Text
-          style={[styles.rewardText, { color: theme.colors.success.DEFAULT }]}
+          style={[styles.rewardText, { color: vexFire.success }]}
         >
           Reward: {challenge.rewardAmount} {challenge.rewardType}
         </Text>
@@ -119,7 +117,7 @@ export function ChallengeCard({
         <View
           style={[
             styles.actionsRow,
-            { borderTopColor: theme.colors.border.light },
+            { borderTopColor: vexFire.line },
           ]}
         >
           {challenge.status === 'COMPLETED' && onClaim && (

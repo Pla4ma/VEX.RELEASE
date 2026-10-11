@@ -5,7 +5,7 @@
  */
 
 import { capture } from '../../shared/analytics/analytics-service';
-import type { PersonalityEventType } from './CompanionPersonalityEngine';
+import type { PersonalityEventType } from './personality-responses';
 import type { CompanionPhase, CompanionMood } from './types';
 
 /**

@@ -31,7 +31,7 @@ export function markColdStart(
       mark,
       ...data,
     });
-  } catch (error: unknown) {
+  } catch {
     // Breadcrumbs must never affect startup.
   }
 }

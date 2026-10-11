@@ -48,4 +48,13 @@ describe('invisible agent decisions', () => {
     expect(decision.type).toBe('RESCUE_STREAK');
     expect(decision.policy.canAutoExecute).toBe(false);
   });
+
+  it('does not rescue an expired streak with no active streak', () => {
+    const decision = buildDeterministicDecision({
+      ...base,
+      currentStreak: 0,
+      hoursUntilStreakDeadline: 0,
+    });
+    expect(decision.type).toBe('START_SESSION');
+  });
 });

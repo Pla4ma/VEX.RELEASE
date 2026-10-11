@@ -24,25 +24,19 @@ describe('lane-premium-copy', () => {
   });
 
   it('each lane headline is not empty', () => {
-    for (const lane of Object.keys(LANE_PREMIUM_COPY) as Array<
-      keyof typeof LANE_PREMIUM_COPY
-    >) {
+    for (const lane of Object.keys(LANE_PREMIUM_COPY) as (keyof typeof LANE_PREMIUM_COPY)[]) {
       expect(LANE_PREMIUM_COPY[lane].headline.length).toBeGreaterThan(10);
     }
   });
 
   it('each lane body is not empty', () => {
-    for (const lane of Object.keys(LANE_PREMIUM_COPY) as Array<
-      keyof typeof LANE_PREMIUM_COPY
-    >) {
+    for (const lane of Object.keys(LANE_PREMIUM_COPY) as (keyof typeof LANE_PREMIUM_COPY)[]) {
       expect(LANE_PREMIUM_COPY[lane].body.length).toBeGreaterThan(20);
     }
   });
 
   it('premium copy has no old economy terms', () => {
-    for (const lane of Object.keys(LANE_PREMIUM_COPY) as Array<
-      keyof typeof LANE_PREMIUM_COPY
-    >) {
+    for (const lane of Object.keys(LANE_PREMIUM_COPY) as (keyof typeof LANE_PREMIUM_COPY)[]) {
       const copy =
         `${LANE_PREMIUM_COPY[lane].headline} ${LANE_PREMIUM_COPY[lane].body}`.toLowerCase();
       for (const banned of OLD_ECONOMY_TERMS) {
@@ -57,9 +51,7 @@ describe('lane-premium-copy', () => {
   });
 
   it('premium copy never mentions shop, coins, or gems', () => {
-    for (const lane of Object.keys(LANE_PREMIUM_COPY) as Array<
-      keyof typeof LANE_PREMIUM_COPY
-    >) {
+    for (const lane of Object.keys(LANE_PREMIUM_COPY) as (keyof typeof LANE_PREMIUM_COPY)[]) {
       const full =
         `${LANE_PREMIUM_COPY[lane].headline} ${LANE_PREMIUM_COPY[lane].body}`.toLowerCase();
       expect(full).not.toMatch(
@@ -82,9 +74,7 @@ describe('lane-premium-copy', () => {
   });
 
   it('premium never blocks core session loop — copy is informational only', () => {
-    for (const lane of Object.keys(LANE_PREMIUM_COPY) as Array<
-      keyof typeof LANE_PREMIUM_COPY
-    >) {
+    for (const lane of Object.keys(LANE_PREMIUM_COPY) as (keyof typeof LANE_PREMIUM_COPY)[]) {
       const copy = `${LANE_PREMIUM_COPY[lane].headline} ${LANE_PREMIUM_COPY[lane].body}`;
       const lower = copy.toLowerCase();
       expect(lower).not.toContain('restrict');

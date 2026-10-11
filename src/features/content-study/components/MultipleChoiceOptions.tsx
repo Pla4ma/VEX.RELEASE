@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -25,7 +26,7 @@ export const MultipleChoiceOptions: React.ComponentType<MultipleChoiceOptionsPro
   readOnly,
   onSelect,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const showCorrectness = isAnswered || isRevealed;
 
   return (
@@ -42,22 +43,22 @@ export const MultipleChoiceOptions: React.ComponentType<MultipleChoiceOptionsPro
               {
                 backgroundColor: showCorrectness
                   ? isCorrectOption
-                    ? theme.colors.success[500]
+                    ? vexFire.success
                     : isSelected
-                      ? theme.colors.error[500]
-                      : theme.colors.background.secondary
+                      ? vexFire.danger
+                      : vexFire.panel
                   : isSelected
-                    ? theme.colors.primary[500]
-                    : theme.colors.background.secondary,
+                    ? vexFire.ember
+                    : vexFire.panel,
                 borderColor: showCorrectness
                   ? isCorrectOption
-                    ? theme.colors.success[500]
+                    ? vexFire.success
                     : isSelected
-                      ? theme.colors.error[500]
-                      : theme.colors.border.DEFAULT
+                      ? vexFire.danger
+                      : vexFire.border
                   : isSelected
-                    ? theme.colors.primary[500]
-                    : theme.colors.border.DEFAULT,
+                    ? vexFire.ember
+                    : vexFire.border,
                 opacity:
                   pressed && !isAnswered && !readOnly ? 0.8 : 1,
               },
@@ -74,11 +75,11 @@ export const MultipleChoiceOptions: React.ComponentType<MultipleChoiceOptionsPro
                 {
                   color: showCorrectness
                     ? isCorrectOption || isSelected
-                      ? theme.colors.background.primary
-                      : theme.colors.text.primary
+                      ? vexFire.background
+                      : vexFire.cream
                     : isSelected
-                      ? theme.colors.background.primary
-                      : theme.colors.text.primary,
+                      ? vexFire.background
+                      : vexFire.cream,
                 },
               ]}
             >
@@ -88,14 +89,14 @@ export const MultipleChoiceOptions: React.ComponentType<MultipleChoiceOptionsPro
               <Icon
                 name="check"
                 size="sm"
-                color={theme.colors.background.primary}
+                color={vexFire.background}
               />
             )}
             {showCorrectness && isSelected && !isCorrectOption && (
               <Icon
                 name="x"
                 size="sm"
-                color={theme.colors.background.primary}
+                color={vexFire.background}
               />
             )}
           </Pressable>

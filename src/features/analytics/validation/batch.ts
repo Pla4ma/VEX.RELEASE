@@ -10,7 +10,7 @@ export async function batchValidate<T>(
     onProgress?: (completed: number, total: number) => void;
   } = {},
 ): Promise<{
-  results: Array<{ item: T; result: ValidationResult }>;
+  results: { item: T; result: ValidationResult }[];
   summary: {
     total: number;
     valid: number;
@@ -20,7 +20,7 @@ export async function batchValidate<T>(
   };
 }> {
   const { continueOnError = true, maxErrors = 10, onProgress } = options;
-  const results: Array<{ item: T; result: ValidationResult }> = [];
+  const results: { item: T; result: ValidationResult }[] = [];
   let errorCount = 0;
   let warningCount = 0;
   let validCount = 0;

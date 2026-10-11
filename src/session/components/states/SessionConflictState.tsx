@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme/ThemeContext';
 import { styles } from './SessionConflictState.styles';
 import { computeDifferences, handleResolve } from './conflict-state-helpers';
 import { ConflictDeviceCard } from './ConflictDeviceCard';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface SessionState {
   progress: number;

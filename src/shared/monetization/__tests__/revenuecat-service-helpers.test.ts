@@ -5,7 +5,7 @@ import {
   mapErrorCode,
   mapEntitlements,
 } from '../revenuecat-service-helpers';
-import type { RevenueCatError, EntitlementInfo } from '../revenuecat-types';
+import type {  EntitlementInfo } from '../revenuecat-types';
 
 jest.mock('react-native-purchases', () => ({
   PURCHASES_ERROR_CODE: {

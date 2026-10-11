@@ -145,7 +145,7 @@ export interface SquadCoreEventDefinitions {
     type: string;
     progress: number;
     target: number;
-    contributors: Array<{ userId: string; contribution: number }>;
+    contributors: { userId: string; contribution: number }[];
   };
 }
 

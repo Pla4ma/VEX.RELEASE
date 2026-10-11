@@ -56,10 +56,10 @@ describe('buildStudyOsHomeSurface', () => {
     expect(surface.ctaLabel).toBe('Create study block');
   });
 
-  it('non-student lane hides surface without plan', () => {
-    expect(buildStudyOsHomeSurface({ lane: 'minimal_normal', plan: null }).hidden).toBe(true);
-    expect(buildStudyOsHomeSurface({ lane: 'game_like', plan: null }).hidden).toBe(true);
-    expect(buildStudyOsHomeSurface({ lane: 'deep_creative', plan: null }).hidden).toBe(true);
+  it('every lane sees the basic surface without a plan', () => {
+    expect(buildStudyOsHomeSurface({ lane: 'minimal_normal', plan: null }).hidden).toBe(false);
+    expect(buildStudyOsHomeSurface({ lane: 'game_like', plan: null }).hidden).toBe(false);
+    expect(buildStudyOsHomeSurface({ lane: 'deep_creative', plan: null }).hidden).toBe(false);
   });
 
   it('non-student lane shows surface when plan exists', () => {

@@ -4,12 +4,12 @@ export interface SessionEnvironmentPreparedEvent extends BaseSessionStartEvent {
   type: 'session_environment_prepared';
   data: {
     environmentType: 'physical' | 'digital' | 'mixed';
-    preparationSteps: Array<{
+    preparationSteps: {
       step: string;
       status: 'completed' | 'skipped' | 'failed';
       duration: number;
       result: Record<string, unknown>;
-    }>;
+    }[];
     finalState: {
       lighting: number;
       noise: number;
@@ -28,13 +28,13 @@ export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
     assessmentType: 'comprehensive' | 'quick' | 'targeted';
     readinessScore: number;
     readinessLevel: 'low' | 'medium' | 'high' | 'optimal';
-    factors: Array<{
+    factors: {
       factor: string;
       score: number;
       weight: number;
       impact: string;
       recommendations: string[];
-    }>;
+    }[];
     trends: {
       current: number;
       previous: number;
@@ -61,12 +61,12 @@ export interface SessionReadinessImprovedEvent extends BaseSessionStartEvent {
     previousScore: number;
     currentScore: number;
     improvement: number;
-    activities: Array<{
+    activities: {
       activity: string;
       duration: number;
       effectiveness: number;
       result: Record<string, unknown>;
-    }>;
+    }[];
     factors: { improved: string[]; maintained: string[]; declined: string[] };
     nextAssessment: {
       recommended: boolean;
@@ -84,12 +84,12 @@ export interface SessionReadinessInsufficientEvent
     currentScore: number;
     requiredScore: number;
     gap: number;
-    criticalFactors: Array<{
+    criticalFactors: {
       factor: string;
       current: number;
       required: number;
       impact: string;
-    }>;
+    }[];
     recommendations: {
       quick: string[];
       comprehensive: string[];
@@ -108,7 +108,7 @@ export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
   type: 'session_goals_set';
   data: {
     goalType: 'primary' | 'secondary' | 'stretch' | 'maintenance';
-    goals: Array<{
+    goals: {
       id: string;
       type: string;
       description: string;
@@ -118,7 +118,7 @@ export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
       achievable: boolean;
       relevant: boolean;
       timebound: boolean;
-    }>;
+    }[];
     alignment: {
       userGoals: string[];
       systemRecommendations: string[];
@@ -143,13 +143,13 @@ export interface SessionGoalsUpdatedEvent extends BaseSessionStartEvent {
       | 'removal'
       | 'reordering'
       | 'reprioritization';
-    changes: Array<{
+    changes: {
       goalId: string;
       changeType: string;
       oldValue: Record<string, unknown>;
       newValue: Record<string, unknown>;
       reason: string;
-    }>;
+    }[];
     impact: {
       difficulty: number;
       duration: number;

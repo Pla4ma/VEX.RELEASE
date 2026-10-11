@@ -22,7 +22,7 @@ describe('No direct lane inference', () => {
       expect(profile).toHaveProperty('source');
       expect(profile).toHaveProperty('traits');
       expect(profile).toHaveProperty('evidence');
-      const requiredKeys: Array<keyof LaneProfile> = [
+      const requiredKeys: (keyof LaneProfile)[] = [
         'primaryLane',
         'secondaryLane',
         'confidence',

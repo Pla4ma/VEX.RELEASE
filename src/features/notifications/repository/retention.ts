@@ -154,7 +154,7 @@ export async function fetchChallengeExpiryCandidates(
 export async function fetchReEngagementCandidates(
   cutoff: number,
 ): Promise<
-  Array<{ userId: string; lastSessionAt: number; previousStreak: number }>
+  { userId: string; lastSessionAt: number; previousStreak: number }[]
 > {
   const { data, error } = await supabase
     .from('streaks')
@@ -165,7 +165,7 @@ export async function fetchReEngagementCandidates(
   if (error) {
     throw new RepositoryError('fetchReEngagementCandidates', error);
   }
-  const result: Array<{ userId: string; lastSessionAt: number; previousStreak: number }> = [];
+  const result: { userId: string; lastSessionAt: number; previousStreak: number }[] = [];
   for (const row of data ?? []) {
     const record = row as ReEngagementRow;
     const lastSessionAt = Number(record.last_qualifying_session_at);

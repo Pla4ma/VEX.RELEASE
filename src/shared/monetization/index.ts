@@ -40,8 +40,10 @@ export type {
   UseRevenueCatState,
 } from './revenuecat-types';
 
-// Hook exports
-export { useRevenueCat, usePremiumStatus, usePaywall } from './use-revenuecat';
+// Base and derived hooks are exported independently to keep the dependency
+// direction one-way: derived hooks consume useRevenueCat, never vice versa.
+export { useRevenueCat } from './use-revenuecat';
+export { usePremiumStatus, usePaywall } from './use-revenuecat-derived';
 
 export {
   KNOWN_PREMIUM_ENTITLEMENT_IDS,

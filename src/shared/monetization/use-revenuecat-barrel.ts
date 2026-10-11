@@ -7,12 +7,12 @@
  * otherwise warn about, and gives downstream consumers a single import path.
  */
 
-export {
-  useRevenueCat,
-  type UseRevenueCatState,
-  type PurchasesOfferingDisplayInfo,
-  type PurchasesPackageDisplayInfo,
-  type PurchaseResult,
-} from './use-revenuecat';
+export { useRevenueCat } from './use-revenuecat';
+export type {
+  UseRevenueCatState,
+  PurchasesOfferingDisplayInfo,
+  PurchasesPackageDisplayInfo,
+  PurchaseResult,
+} from './revenuecat-types';
 
 export { usePremiumStatus, usePaywall } from './use-revenuecat-derived';

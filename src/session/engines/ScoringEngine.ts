@@ -77,11 +77,11 @@ export class ScoringEngine {
 
   calculateFocusQuality(
     session: SessionState,
-    interruptions: Array<{
+    interruptions: {
       duration: number;
       severity: string;
       autoRecovered?: boolean;
-    }>,
+    }[],
   ): FocusQualityMetrics {
     return calcFocusQuality(session, interruptions);
   }

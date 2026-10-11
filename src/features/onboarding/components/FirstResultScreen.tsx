@@ -13,7 +13,7 @@ import React from 'react';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import { SuccessCelebration } from './SuccessCelebration';
@@ -21,7 +21,6 @@ import { FirstResultSessionResults } from './FirstResultSessionResults';
 import { calculateSessionGrade } from '../../session-completion/grading-service';
 import type { SessionGradingInput } from '../../session-completion/grading-schemas';
 import { resolveSessionMode } from '../../../session/modes';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface FirstResultScreenProps {
   userName: string;

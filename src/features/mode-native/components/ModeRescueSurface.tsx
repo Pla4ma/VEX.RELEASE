@@ -4,6 +4,8 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useModeRescueSurface } from '../hooks';
 import type { Lane } from '../../lane-engine/types';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+import { spacing } from '../../../theme/tokens/spacing';
 
 interface ModeRescueSurfaceProps {
   lane: Lane | null | undefined;
@@ -24,16 +26,16 @@ export function ModeRescueSurface({
       my="sm"
       p="md"
       borderRadius="lg"
-      bg="background.elevated"
+      style={{ backgroundColor: vexFire.panel }}
       borderWidth={1}
-      borderColor="border.light"
+      borderColor={vexFire.border}
       gap="sm"
     >
-      <Text variant="label" color="text.primary" fontWeight="600">
+      <Text variant="label" color={vexFire.cream} fontWeight="600">
         {surface.headline}
       </Text>
 
-      <Text variant="caption" color="text.secondary">
+      <Text variant="caption" color={vexFire.textSecondary}>
         {surface.body}
       </Text>
 
@@ -51,11 +53,11 @@ export function ModeRescueSurface({
           <Box
             minHeight={44}
             borderRadius="md"
-            bg="primary.500"
+            style={{ backgroundColor: vexFire.ember }}
             justifyContent="center"
             alignItems="center"
           >
-            <Text variant="label" color="text.inverse" fontWeight="600">
+            <Text variant="label" color={vexFire.background} fontWeight="600">
               {surface.actionLabel} ({surface.suggestedDurationMinutes}m)
             </Text>
           </Box>
@@ -73,7 +75,7 @@ export function ModeRescueSurface({
             opacity: pressed ? 0.6 : 1,
           })}
         >
-          <Text variant="caption" color="text.tertiary">
+          <Text variant="caption" color={vexFire.textMuted}>
             Not now
           </Text>
         </Pressable>
@@ -101,15 +103,15 @@ export function ModeActiveIndicatorBar({
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
         <Box flexDirection="row" alignItems="center" gap="sm">
           {indicator.targetLabel ? (
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" color={vexFire.ember}>
               {indicator.targetLabel}
             </Text>
           ) : null}
-          <Text variant="caption" color="text.primary" fontWeight="600">
+          <Text variant="caption" color={vexFire.cream} fontWeight="600" style={{ marginLeft: spacing[2] }}>
             {indicator.topLine}
           </Text>
         </Box>
-        <Text variant="caption" color="text.tertiary">
+        <Text variant="caption" color={vexFire.textMuted}>
           {Math.round(completionPercentage)}%
         </Text>
       </Box>
@@ -118,14 +120,14 @@ export function ModeActiveIndicatorBar({
         <Box
           height={3}
           borderRadius="full"
-          bg="background.secondary"
+          style={{ backgroundColor: vexFire.backgroundSoft }}
           overflow="hidden"
         >
           <Box
             height="100%"
             width={`${Math.min(100, completionPercentage)}%`}
             borderRadius="full"
-            bg="primary.500"
+            style={{ backgroundColor: vexFire.ember }}
           />
         </Box>
       ) : null}

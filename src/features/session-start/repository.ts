@@ -18,7 +18,7 @@ import type { DifficultyPreference, SessionDifficulty } from './schemas';
  * Get difficulty preference for user
  */
 export async function getDifficultyPreference(
-  userId: string,
+  _userId: string,
 ): Promise<DifficultyPreference | null> {
   try {
     const supabase = getSupabaseClient();

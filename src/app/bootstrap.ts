@@ -8,10 +8,10 @@ import {
 import { initializeAnalyticsEventBridge } from '../shared/analytics/event-bus-bridge';
 import { ProductAnalyticsEvents } from '../shared/analytics/product-events';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors/globalErrorHandlers';
-import { initializeSessionCompletionOrchestrator } from '../features/session-completion';
+import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator-init';
 import { getMmkvEncryptionKey } from '../persistence/mmkv-key';
 
-let bootstrapped = false;
+let bootstrapPromise: Promise<void> | null = null;
 let sessionRuntimeInitialized = false;
 const debug = createDebugger('app:bootstrap');
 
@@ -51,30 +51,35 @@ export const initializeSessionRuntime = (): void => {
   startAutoProcessing();
 };
 
-export const bootstrapApp = async (): Promise<void> => {
-  if (bootstrapped) {
-    return;
+export const bootstrapApp = (): Promise<void> => {
+  if (bootstrapPromise) {
+    return bootstrapPromise;
   }
 
-  bootstrapped = true;
-  try {
-    await getMmkvEncryptionKey();
-  } catch (error) {
-    debug.error('MMKV encryption key initialization failed', error);
-  }
-  try {
-    initializeCoreSystems();
-  } catch (error) {
-    debug.error('Core system initialization failed', error);
-  }
-  try {
-    initializeSessionCompletionOrchestrator();
-  } catch (error) {
-    debug.error('Session completion orchestrator initialization failed', error);
-  }
-  deferBootCall(initializeSessionRuntime);
+  bootstrapPromise = (async (): Promise<void> => {
+    try {
+      await getMmkvEncryptionKey();
+    } catch (error) {
+      debug.error('MMKV encryption key initialization failed', error);
+    }
+    try {
+      initializeCoreSystems();
+    } catch (error) {
+      debug.error('Core system initialization failed', error);
+    }
+    try {
+      initializeSessionCompletionOrchestrator();
+    } catch (error) {
+      debug.error('Session completion orchestrator initialization failed', error);
+    }
+    deferBootCall(initializeSessionRuntime);
+  })();
+
+  return bootstrapPromise;
 };
 
 export const bootstrapDevelopment = (): void => {
-  bootstrapApp();
+  void bootstrapApp().catch((error: unknown) => {
+    debug.error('Development bootstrap failed', error);
+  });
 };

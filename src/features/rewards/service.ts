@@ -1,5 +1,8 @@
 import type { RewardTrigger } from './schemas';
-
+import {
+  createReward as createLedgerReward,
+  deliverReward,
+} from '../reward-ledger/service';
 const BASE_XP = 50;
 const MULTIPLIER_PER_MINUTE = 1.5;
 
@@ -30,16 +33,34 @@ export async function createReward(input: {
   type: string;
   trigger?: string;
   triggerType?: string;
-
   triggerId?: unknown;
   idempotencyKey?: string;
   amount: number;
   metadata?: Record<string, unknown>;
 }): Promise<{ id: string }> {
-  input;
-  return { id: `reward_${input.userId}_${Date.now()}` };
+  if (!Number.isInteger(input.amount) || input.amount <= 0) {
+    throw new Error('Reward amount must be a positive integer');
+  }
+
+  const sourceEvent = input.triggerType ?? input.trigger ?? 'SESSION_COMPLETE';
+  const triggerId = input.triggerId == null ? 'none' : String(input.triggerId);
+  const idempotencyKey =
+    input.idempotencyKey ??
+    `reward:${input.userId}:${input.type}:${sourceEvent}:${triggerId}`;
+  const record = await createLedgerReward({
+    amount: input.amount,
+    currency: 'XP',
+    idempotencyKey,
+    rewardType: input.type,
+    sourceEvent,
+    userId: input.userId,
+  });
+  return { id: record.id };
 }
 
-export async function claimReward(): Promise<void> {
-  return Promise.resolve();
+export async function claimReward(ledgerId: string): Promise<void> {
+  if (!ledgerId) {
+    throw new Error('Reward ledger id is required');
+  }
+  await deliverReward(ledgerId);
 }

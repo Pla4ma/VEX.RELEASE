@@ -7,7 +7,7 @@ import type {
 } from './PredictiveInterventionEngine-types';
 
 export function calculateBreakFrequency(
-  history: Array<{ date: string; completed: boolean }>,
+  history: { date: string; completed: boolean }[],
 ): number {
   let breaks = 0;
   let currentStreak = 0;

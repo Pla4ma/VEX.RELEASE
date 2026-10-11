@@ -83,7 +83,7 @@ export function makeLtQuery(response: unknown): Record<string, jest.Mock> {
 }
 
 export function useQueries(
-  ...queries: Array<Record<string, jest.Mock>>
+  ...queries: Record<string, jest.Mock>[]
 ): jest.Mock {
   const from = jest.fn();
   queries.forEach((query) => from.mockReturnValueOnce(query));

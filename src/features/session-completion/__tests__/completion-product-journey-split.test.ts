@@ -61,7 +61,7 @@ describe('completion product journey', () => {
       const { getRewardService } = require('../../../rewards/RewardService');
       const rewardService = getRewardService();
       const grantCalls = (rewardService.grantReward?.mock?.calls ??
-        []) as Array<[string, ...unknown[]]>;
+        []) as [string, ...unknown[]][];
       for (const call of grantCalls) {
         if (call[0]) {
           expect(call[0]).not.toBe('COINS');
@@ -81,8 +81,8 @@ describe('completion product journey', () => {
 
       const focusIdentityUpdateMock =
         require('../../focus-identity/update-focus-score.helper').updateFocusScoreFromSessionCompletion;
-      expect(focusIdentityUpdateMock).toHaveBeenCalledTimes(0);
-      expect(result.degradedSystems).toContain('focus-identity');
+      expect(focusIdentityUpdateMock).toHaveBeenCalledTimes(1);
+      expect(result.degradedSystems).not.toContain('focus-identity');
     });
 
     it('focus identity called with correct user id and grade', async () => {
@@ -93,8 +93,8 @@ describe('completion product journey', () => {
 
       const focusIdentityUpdateMock =
         require('../../focus-identity/update-focus-score.helper').updateFocusScoreFromSessionCompletion;
-      expect(focusIdentityUpdateMock).toHaveBeenCalledTimes(0);
-      expect(result.degradedSystems).toContain('focus-identity');
+      expect(focusIdentityUpdateMock).toHaveBeenCalledTimes(1);
+      expect(result.degradedSystems).not.toContain('focus-identity');
     });
   });
 
@@ -136,8 +136,8 @@ describe('completion product journey', () => {
 
       const { getCompanionService } = require('../../companion/service');
       const companionService = getCompanionService();
-      expect(companionService.completeSession).toHaveBeenCalledTimes(0);
-      expect(result.degradedSystems).toContain('focus-identity');
+      expect(companionService.completeSession).toHaveBeenCalledTimes(1);
+      expect(result.degradedSystems).not.toContain('focus-identity');
     });
   });
 
@@ -148,9 +148,7 @@ describe('completion product journey', () => {
 
       const result = await applyCompletionSubsystems({ ledger, summary });
 
-      expect(result.degradedSystems).toEqual(
-        expect.arrayContaining(['focus-identity']),
-      );
+      expect(result.degradedSystems).not.toContain('focus-identity');
     });
   });
 });

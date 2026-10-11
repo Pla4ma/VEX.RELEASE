@@ -132,7 +132,7 @@ export function calculateAntiCheatPenalty(session: SessionState): number {
 }
 
 export function calculateConsistencyScore(
-  interruptions: Array<{ duration: number }>,
+  interruptions: { duration: number }[],
   totalDuration: number,
 ): number {
   if (interruptions.length === 0) {return 100;}
@@ -146,7 +146,7 @@ export function calculateConsistencyScore(
 }
 
 export function calculateRecoveryScore(
-  interruptions: Array<{ autoRecovered?: boolean }>,
+  interruptions: { autoRecovered?: boolean }[],
 ): number {
   if (interruptions.length === 0) {return 100;}
   const recoveredCount = interruptions.filter((i) => i.autoRecovered).length;

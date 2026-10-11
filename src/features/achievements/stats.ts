@@ -4,7 +4,7 @@ import * as repository from './repository';
 
 export async function getAllAchievementsWithProgress(
   userId: string,
-): Promise<Array<Achievement & { progress: number; isUnlocked: boolean }>> {
+): Promise<(Achievement & { progress: number; isUnlocked: boolean })[]> {
   const achievements = await Promise.all(
     ALL_ACHIEVEMENTS.map(async (achievement) => {
       const userAchievement = await repository.getUserAchievement(
@@ -67,7 +67,7 @@ export async function getAchievementStats(
 export async function getRecentlyUnlockedAchievements(
   userId: string,
   limit: number = 5,
-): Promise<Array<Achievement & { unlockedAt: number }>> {
+): Promise<(Achievement & { unlockedAt: number })[]> {
   const userAchievements = await repository.getAllUserAchievements(userId);
   const unlocked = userAchievements
     .filter((ua) => ua.isUnlocked && ua.unlockedAt)
@@ -83,16 +83,14 @@ export async function getNextAchievements(
   userId: string,
   limit: number = 3,
 ): Promise<
-  Array<
-    Achievement & {
+  (Achievement & {
       progress: number;
       remaining: number;
       percentComplete: number;
-    }
-  >
+    })[]
 > {
   const achievements = await getAllAchievementsWithProgress(userId);
-  const incomplete: Array<Achievement & { progress: number; remaining: number; percentComplete: number }> = [];
+  const incomplete: (Achievement & { progress: number; remaining: number; percentComplete: number })[] = [];
   for (const a of achievements) {
     if (a.isUnlocked || a.isHidden) continue;
     incomplete.push({

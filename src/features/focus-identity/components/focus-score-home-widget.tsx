@@ -1,14 +1,14 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
-import { Text } from '@components/primitives/Text'; // Use alias
-import { Skeleton } from '@components/ui/Skeleton'; // Use alias
-import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
+import { Text } from '@components/primitives/Text';
+import { Skeleton } from '@components/ui/Skeleton';
+import { StatusBanner } from '@/shared/ui/components/StatusFeedback';
 import { GlassCard } from '../../../components/glass/GlassCard';
-import { LiquidGlassSphere } from '../../../components/glass/LiquidGlassSphere';
 import { EmptyStateLens } from '../../../components/glass/EmptyStateLens';
 import { Icon } from '../../../icons/components/Icon';
-import { vexLightGlass } from '../../../theme/tokens/vex-light-glass';
-import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
+import { useTheme } from '../../../theme/ThemeContext';
+import type { FocusScoreDashboardModel } from '../types';
+
 
 interface FocusScoreHomeWidgetProps {
   model: FocusScoreDashboardModel;
@@ -21,14 +21,10 @@ export function FocusScoreHomeWidget({
   onPress,
   onRetry,
 }: FocusScoreHomeWidgetProps): React.ReactNode {
+  const { theme } = useTheme();
   if (model.isPending) {
     return (
-      <GlassCard
-        testID="focus-score-home-widget-skeleton"
-        variant="default"
-        padding={16}
-        radius={24}
-      >
+      <GlassCard testID="focus-score-home-widget-skeleton" variant="default" padding={16} radius={24}>
         <View style={{ gap: 8 }}>
           <Skeleton width={100} height={16} />
           <Skeleton width={200} height={24} />
@@ -55,32 +51,9 @@ export function FocusScoreHomeWidget({
         <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
           <EmptyStateLens sessionsNeeded={3} size={52} />
           <View style={{ flex: 1, gap: 3 }}>
-            <Text
-              style={{
-                color: vexLightGlass.text.secondary,
-                fontSize: 12,
-                fontWeight: '800',
-                letterSpacing: 0.8,
-                textTransform: 'uppercase',
-              }}
-            >
-              Focus Score
-            </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.primary,
-                fontSize: 14,
-                fontWeight: '800',
-              }}
-            >
-              3 sessions needed
-            </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.secondary,
-                fontSize: 12,
-              }}
-            >
+            <Text color="text.secondary" variant="label">Focus Score</Text>
+            <Text variant="h4">3 sessions needed</Text>
+            <Text color="text.secondary" variant="bodySmall">
               Finish three sessions and VEX will start reading your focus rhythm.
             </Text>
           </View>
@@ -110,53 +83,29 @@ export function FocusScoreHomeWidget({
       >
         <GlassCard variant="default" padding={14} radius={22}>
           <View style={{ alignItems: 'center', flexDirection: 'row', gap: 12 }}>
-            <LiquidGlassSphere
-              color="cyan"
-              icon={
-                <Icon color={vexLightGlass.semantic.info} name="bolt" size="sm" variant="solid" />
-              }
-              intensity={0.88}
-              size={52}
-            />
+            <View
+              style={{
+                alignItems: 'center',
+                backgroundColor: theme.colors.primary[100],
+                borderRadius: theme.borderRadius.full,
+                height: 52,
+                justifyContent: 'center',
+                width: 52,
+              }}
+            >
+              <Icon color={theme.colors.primary[700]} name="bolt" size="sm" variant="solid" />
+            </View>
             <View style={{ flex: 1, gap: 3 }}>
-            <Text
-              style={{
-                color: vexLightGlass.text.secondary,
-                fontSize: 12,
-                fontWeight: '800',
-                letterSpacing: 0.8,
-                textTransform: 'uppercase',
-              }}
-            >
-              Focus Score
-            </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.primary,
-                fontSize: 22,
-                fontWeight: '800',
-                letterSpacing: -0.3,
-              }}
-            >
-              {model.current.currentScore} · {model.current.band}
-            </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.secondary,
-                fontSize: 12,
-              }}
-            >
-              {delta >= 0 ? `+${delta}` : delta} since last session
-            </Text>
-            <Text
-              style={{
-                color: vexLightGlass.text.tertiary,
-                fontSize: 12,
-              }}
-              numberOfLines={2}
-            >
-              {reason}
-            </Text>
+              <Text color="text.secondary" variant="label">Focus Score</Text>
+              <Text variant="h2">
+                {model.current.currentScore} · {model.current.band}
+              </Text>
+              <Text color="text.secondary" variant="bodySmall">
+                {delta >= 0 ? `+${delta}` : delta} since last session
+              </Text>
+              <Text color="text.tertiary" variant="bodySmall" numberOfLines={2}>
+                {reason}
+              </Text>
             </View>
           </View>
         </GlassCard>

@@ -1,13 +1,12 @@
 import { z } from 'zod';
 import { SettingCategorySchema, SettingValueSchema } from './enums';
-import { UserPreferencesSchema } from './core-schemas';
-import { NotificationSettingsSchema } from './notification-schemas';
-import { CoachSettingsSchema } from './coach-schemas';
-import {
+import { UserPreferencesSchema ,
   AppearanceSettingsSchema,
   PrivacySettingsSchema,
   DataControlSettingsSchema,
 } from './core-schemas';
+import { NotificationSettingsSchema } from './notification-schemas';
+import { CoachSettingsSchema } from './coach-schemas';
 
 export const SettingsExportSchema = z
   .object({

@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useQueryClient } from '@tanstack/react-query';
 import { type CoachMessage, type CoachState } from '../schemas';
-import { COACH_QUERY_KEYS } from '.';
+import { COACH_QUERY_KEYS } from '../constants';
 import { createDebugger } from '../../../utils/debug';
 import {
   type QueuedMutation,
@@ -133,7 +133,7 @@ export function useOfflineCoachMessageActions(
   const markRead = useCallback(async () => {
     queryClient.setQueryData(
       COACH_QUERY_KEYS.messages(userId),
-      (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
+      (old: { pages: { messages: CoachMessage[] }[] } | undefined) => {
         if (!old) {
           return old;
         }
@@ -153,7 +153,7 @@ export function useOfflineCoachMessageActions(
   const dismiss = useCallback(async () => {
     queryClient.setQueryData(
       COACH_QUERY_KEYS.messages(userId),
-      (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
+      (old: { pages: { messages: CoachMessage[] }[] } | undefined) => {
         if (!old) {
           return old;
         }

@@ -57,10 +57,10 @@ export interface SelectionToolbarProps {
   totalCount: number;
   onClear: () => void;
   onSelectAll: () => void;
-  actions?: Array<{
+  actions?: {
     icon: string;
     label: string;
     onPress: () => void;
     destructive?: boolean;
-  }>;
+  }[];
 }

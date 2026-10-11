@@ -8,7 +8,7 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { TimeRangeSchema } from '../schemas';
 import type { z } from 'zod';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 type TimeRange = z.infer<typeof TimeRangeSchema>;
@@ -84,7 +84,7 @@ const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -96,14 +96,14 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.panel,
     borderWidth: 1,
-    borderColor: lightColors.border.light,
+    borderColor: vexFire.border,
     marginRight: 8,
   },
   chipActive: {
-    backgroundColor: lightColors.semantic.primary,
-    borderColor: lightColors.semantic.primary,
+    backgroundColor: vexFire.ember,
+    borderColor: vexFire.ember,
   },
   chipDisabled: {
     opacity: 0.5,
@@ -111,12 +111,12 @@ const styles = createSheet({
   chipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
   chipTextActive: {
-    color: lightColors.text.inverse,
+    color: vexFire.background,
   },
   chipTextDisabled: {
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
 });

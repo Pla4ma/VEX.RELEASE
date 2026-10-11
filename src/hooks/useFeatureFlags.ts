@@ -144,7 +144,7 @@ export function useFeatureFlag(key: string): UseFeatureFlagReturn {
             loading: false,
           });
         }
-      } catch (error) {
+      } catch {
         if (mounted) {
           setState({ enabled: false, value: false, loading: false });
         }

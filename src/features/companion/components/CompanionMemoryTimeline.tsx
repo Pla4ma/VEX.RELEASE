@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Card } from '../../../components/primitives/Card';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { ErrorState } from '../../../components/states/ErrorState';
 import type { CompanionMemory } from '../memory-types';
 import {
@@ -13,7 +13,6 @@ import {
   type CompanionMemoryGroup,
 } from './companion-memory-groups';
 import { CompanionMemoryItem } from './CompanionMemoryItem';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type CompanionMemoryTimelineProps = {
   isError: boolean;

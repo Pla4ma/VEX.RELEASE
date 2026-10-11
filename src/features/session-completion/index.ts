@@ -22,6 +22,7 @@ export * from './completion-personalization';
 
 // Hooks
 export * from './hooks';
+export { useSessionCompletionOfflineSync } from './offline-sync-exports';
 
 // Route
 export * from './route';

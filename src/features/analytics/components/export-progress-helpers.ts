@@ -1,6 +1,7 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { ExportJobSchema } from '../schemas';
 import type { z } from 'zod';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 export type ExportJob = z.infer<typeof ExportJobSchema>;
 
@@ -12,15 +13,15 @@ export interface ExportProgressProps {
 }
 
 export const STATUS_CONFIG = {
-  pending: { color: lightColors.text.muted, label: 'Queued', icon: '' },
+  pending: { color: vexFire.textMuted, label: 'Queued', icon: '' },
   processing: {
-    color: lightColors.accent.blue,
+    color: vexFire.amber,
     label: 'Processing',
     icon: '',
   },
-  completed: { color: lightColors.accent.green, label: 'Ready', icon: '' },
-  failed: { color: lightColors.semantic.danger, label: 'Failed', icon: '' },
-  cancelled: { color: lightColors.text.muted, label: 'Cancelled', icon: '' },
+  completed: { color: vexFire.success, label: 'Ready', icon: '' },
+  failed: { color: vexFire.danger, label: 'Failed', icon: '' },
+  cancelled: { color: vexFire.textMuted, label: 'Cancelled', icon: '' },
 };
 
 export function formatDate(timestamp: number): string {

@@ -1,7 +1,7 @@
 import type { Nullable } from '../types/global';
 import type { User } from '../types/models';
 import type { AuthOAuthProvider } from '../features/auth/types';
-
+import type { AuthStatus } from '../features/auth/schemas';
 export interface RegisterInput {
   email: string;
   password: string;
@@ -16,6 +16,7 @@ export interface AuthState {
   user: Nullable<User>;
   isAuthenticated: boolean;
   isLoading: boolean;
+  authStatus: AuthStatus;
   error: Nullable<string>;
   setUser: (user: User) => void;
   clearUser: () => void;

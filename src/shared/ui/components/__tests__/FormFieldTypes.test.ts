@@ -1,4 +1,4 @@
-import { sizeConfig, getFieldBorderColor, getFieldMessageColor, type FieldState } from '../FormFieldTypes';
+import { sizeConfig, getFieldBorderColor, getFieldMessageColor, _type  } from '../FormFieldTypes';
 
 describe('FormFieldTypes', () => {
   describe('sizeConfig', () => {

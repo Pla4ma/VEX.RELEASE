@@ -13,7 +13,7 @@ import {
 import { useContentInputSubmit } from './useContentInputSubmit';
 
 export function useContentInput() {
-  const { user } = useAuthStore();
+  const { user: _user } = useAuthStore();
   const [state, setState] = useState<ContentInputState>(
     createInitialContentInputState,
   );

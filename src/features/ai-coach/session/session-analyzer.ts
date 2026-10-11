@@ -161,18 +161,18 @@ export async function generateSessionSummary(
 export async function suggestChallenges(
   userId: string,
 ): Promise<{
-  suggestedChallenges: Array<{
+  suggestedChallenges: {
     challengeId: string;
     reason: string;
     matchScore: number;
-  }>;
+  }[];
 }> {
   const profile = await repository.fetchBehaviorProfile(userId);
-  const suggestions: Array<{
+  const suggestions: {
     challengeId: string;
     reason: string;
     matchScore: number;
-  }> = [];
+  }[] = [];
   if (profile) {
     const consistencySignal = profile.signals.find(
       (s) => s.signalType === 'CONSISTENCY_SCORE',

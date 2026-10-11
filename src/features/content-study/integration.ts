@@ -53,7 +53,7 @@ export function trackContentStudyScreenView(
 export function prepareContentStudySession(
   generationId: string,
   studyPlan: {
-    tasks: Array<{ id: string; content: string; priority: string }>;
+    tasks: { id: string; content: string; priority: string }[];
     recommendedDurationMinutes: number;
     recommendedDifficulty: string;
     focusAreas: string[];

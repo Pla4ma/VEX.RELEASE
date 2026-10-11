@@ -5,12 +5,12 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { buttonTap } from '../../../utils/haptics';
 import type { StudyContent } from '../types';
 import {
   STATUS_CONFIG,
   SOURCE_TYPE_ICONS,
-  statusColor,
 } from '../screens/StudyLibraryScreen.constants';
 
 interface ContentItemCardProps {
@@ -26,7 +26,7 @@ export function ContentItemCard({
   onDelete,
   index,
 }: ContentItemCardProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const status = STATUS_CONFIG[content.status];
   const typeIcon = SOURCE_TYPE_ICONS[content.sourceType];
 
@@ -41,7 +41,13 @@ export function ContentItemCard({
     );
   };
 
-  const resolvedStatusColor = statusColor(theme.colors, status.color);
+  const resolvedStatusColor = status.color === 'success'
+    ? vexFire.success
+    : status.color === 'error'
+      ? vexFire.danger
+      : status.color === 'warning'
+        ? vexFire.amber
+        : vexFire.copper;
 
   return (
     <Animated.View entering={FadeInUp.delay(index * 50).springify()}>
@@ -55,30 +61,29 @@ export function ContentItemCard({
           p="md"
           mb="sm"
           borderRadius="lg"
-          bg="background.secondary"
+          style={{ backgroundColor: vexFire.panel, borderColor: vexFire.border }}
           borderWidth={1}
-          borderColor="border.light"
         >
           <Box flexDirection="row" alignItems="flex-start" gap="md">
             <Box
               width={44}
               height={44}
               borderRadius="md"
-              bg="background.tertiary"
+              style={{ backgroundColor: vexFire.backgroundSoft }}
               justifyContent="center"
               alignItems="center"
             >
               <Icon
                 name={typeIcon}
                 size={20}
-                color={theme.colors.text.secondary}
+                color={vexFire.textSecondary}
               />
             </Box>
 
             <Box flex={1} gap="xs">
               <Text
                 variant="body"
-                color="text.primary"
+                color={vexFire.cream}
                 fontWeight="600"
                 numberOfLines={1}
               >
@@ -113,11 +118,11 @@ export function ContentItemCard({
                   </Text>
                 </Box>
 
-                <Text variant="caption" color="text.tertiary">
+                <Text variant="caption" color={vexFire.textMuted}>
                   {content.sourceType}
                 </Text>
 
-                <Text variant="caption" color="text.tertiary">
+                <Text variant="caption" color={vexFire.textMuted}>
                   {new Date(content.createdAt).toLocaleDateString()}
                 </Text>
               </Box>
@@ -125,7 +130,7 @@ export function ContentItemCard({
               {(content.status === 'PENDING' ||
                 content.status === 'EXTRACTING') && (
                 <Box mt="xs">
-                  <Text variant="caption" color="text.secondary">
+                  <Text variant="caption" color={vexFire.textSecondary}>
                     {content.status === 'PENDING'
                       ? 'Waiting to extract...'
                       : 'Extracting content...'}
@@ -137,7 +142,7 @@ export function ContentItemCard({
                 <Box mt="xs">
                   <Text
                     variant="caption"
-                    color="error.DEFAULT"
+                    color={vexFire.danger}
                     numberOfLines={2}
                   >
                     {content.errorMessage}
@@ -157,7 +162,7 @@ export function ContentItemCard({
                 <Icon
                   name="trash"
                   size={18}
-                  color={theme.colors.error.DEFAULT}
+                  color={vexFire.danger}
                 />
               </Box>
             </Pressable>

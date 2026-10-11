@@ -12,8 +12,7 @@ import { Box } from '@/components/primitives/Box'
 import { Text } from '@/components/primitives/Text';
 import { useTheme } from '@/theme';
 import { achievementUnlocked } from '@/utils/haptics';
-import type { AchievementRarity } from '../types';
-import type { Achievement } from '../types';
+import type { AchievementRarity , Achievement } from '../types';
 import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
 
 const DISMISS_DURATIONS: Record<AchievementRarity, number> = {

@@ -1,13 +1,12 @@
 import { useCallback, type ReactNode } from 'react';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Box } from '../components/primitives/Box';
-import { Text } from '../components/primitives/Text';
+import { Text , Text as VexText } from '../components/primitives/Text';
 import { Button } from '../components/primitives/Button';
 import { useTheme } from '../theme/ThemeContext';
 import { Icon } from '../icons/components/Icon';
 import { captureException } from '../config/sentry';
 import type { ErrorFallbackProps, ErrorCategory } from './ErrorBoundary.types';
-import { Text as VexText } from '../components/primitives/Text';
 
 function getErrorMessage(category: ErrorCategory, error: Error | null): string {
   switch (category) {

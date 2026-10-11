@@ -1,5 +1,4 @@
 import { SessionMode } from '../../../session/modes';
-import { isFeatureUnlocked, type UnlockableFeature } from '../../mastery/components/mastery-unlock-gate-data';
 import type { MasteryRank } from '../../mastery/types';
 
 export type { SessionMode };
@@ -74,23 +73,11 @@ export const SESSIONLESS_MODE_CARDS: ModeCard[] = [
 ];
 
 export function getDisabledReason(
-  mode: SessionMode,
-  hasActiveStudyPlan: boolean,
-  userMasteryRank?: MasteryRank,
+  _mode: SessionMode,
+  _hasActiveStudyPlan: boolean,
+  _userMasteryRank?: MasteryRank,
 ): string | null {
-  if (mode === SessionMode.STUDY && !hasActiveStudyPlan) {
-    return 'Requires an active study plan';
-  }
-
-  if (mode === SessionMode.DEEP_WORK && userMasteryRank) {
-    const isUnlocked = isFeatureUnlocked(
-      userMasteryRank,
-      'DEEP_WORK' as UnlockableFeature,
-    );
-    if (!isUnlocked) {
-      return 'Unlocks at Adept mastery rank';
-    }
-  }
-
+  // Day-one access is intentional. Progression changes depth and
+  // personalization, never whether a user can begin a useful session.
   return null;
 }

@@ -14,6 +14,9 @@ import {
 } from '@tanstack/react-query';
 import { AppState, AppStateStatus } from 'react-native';
 import { getNetInfoAdapter } from '../network/NetInfoAdapter';
+import { resolveConnectionState } from '../network/connection-state';
+import { updateConnectionState } from '../lib/repository/retry';
+import { captureSilentFailure } from '../utils/silent-failure';
 
 /**
  * Query client configuration
@@ -58,13 +61,13 @@ export function QueryProvider({ children }: QueryProviderProps) {
   useEffect(() => {
     // Initialize network monitoring
     const netInfo = getNetInfoAdapter();
-    netInfo.initialize();
+    void netInfo.initialize();
 
     // Subscribe to network changes
     const unsubscribe = netInfo.subscribe((state) => {
-      onlineManager.setOnline(
-        state.isConnected && (state.isInternetReachable ?? false),
-      );
+      const connectionState = resolveConnectionState(state);
+      updateConnectionState(connectionState);
+      onlineManager.setOnline(connectionState === 'online');
     });
 
     // Handle app state changes
@@ -77,7 +80,13 @@ export function QueryProvider({ children }: QueryProviderProps) {
 
         // Refetch when app comes to foreground
         if (isFocused) {
-          queryClient.resumePausedMutations();
+          void queryClient.resumePausedMutations().catch((error: unknown) => {
+            captureSilentFailure(error, {
+              feature: 'query-provider',
+              operation: 'resume-paused-mutations',
+              type: 'network',
+            });
+          });
         }
       },
     );

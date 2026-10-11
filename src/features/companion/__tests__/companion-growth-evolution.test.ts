@@ -5,7 +5,7 @@
  */
 
 import { CompanionGrowthServiceCore } from '../growth-service-core';
-import { CompanionState, CompanionPhase } from '../types';
+import { CompanionState } from '../types';
 
 // Mock the event emitters and analytics
 jest.mock('../events', () => ({

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -36,7 +37,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
   onShortAnswerChange,
   onShortAnswerSubmit,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const isAnswered = !!answer;
   const isCorrect = answer?.isCorrect;
   const difficultyConfig = QUIZ_DIFFICULTY_CONFIG[quiz.difficulty];
@@ -48,23 +49,23 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
         {
           backgroundColor: isAnswered
             ? isCorrect
-              ? theme.colors.success[50]
-              : theme.colors.error[50]
+              ? vexFire.panelSoft
+              : vexFire.panelSoft
             : isActive
-              ? theme.colors.primary[50]
-              : theme.colors.background.secondary,
+              ? vexFire.ember
+              : vexFire.panel,
           borderColor: isActive
-            ? theme.colors.primary[500]
+            ? vexFire.ember
             : isAnswered
               ? isCorrect
-                ? theme.colors.success[500]
-                : theme.colors.error[500]
-              : theme.colors.border.DEFAULT,
+                ? vexFire.success
+                : vexFire.danger
+              : vexFire.border,
         },
       ]}
     >
       <View style={quizPanelStyles.questionHeader}>
-        <Text style={[quizPanelStyles.questionNumber, { color: theme.colors.text.muted }]}>
+        <Text style={[quizPanelStyles.questionNumber, { color: vexFire.textMuted }]}>
           Q{index + 1}
         </Text>
         <View style={[quizPanelStyles.difficultyBadge, { backgroundColor: difficultyConfig.color }]}>
@@ -77,7 +78,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
             <Text
               style={[
                 quizPanelStyles.conceptText,
-                { color: theme.colors.text.muted },
+                { color: vexFire.textMuted },
               ]}
             >
               {quiz.conceptTag}
@@ -87,7 +88,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
       </View>
 
       <Text
-        style={[quizPanelStyles.question, { color: theme.colors.text.primary }]}
+        style={[quizPanelStyles.question, { color: vexFire.cream }]}
       >
         {quiz.question}
       </Text>
@@ -128,7 +129,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
           <Text
             style={[
               quizPanelStyles.revealText,
-              { color: theme.colors.primary[500] },
+              { color: vexFire.ember },
             ]}
           >
             Show Answer
@@ -140,13 +141,13 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
         <View
           style={[
             quizPanelStyles.answerReveal,
-            { backgroundColor: theme.colors.background.primary },
+            { backgroundColor: vexFire.background },
           ]}
         >
           <Text
             style={[
               quizPanelStyles.answerLabel,
-              { color: theme.colors.text.muted },
+              { color: vexFire.textMuted },
             ]}
           >
             Correct Answer:
@@ -154,7 +155,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
           <Text
             style={[
               quizPanelStyles.answerText,
-              { color: theme.colors.success[500] },
+              { color: vexFire.success },
             ]}
           >
             {quiz.answer}
@@ -166,13 +167,13 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
         <View
           style={[
             quizPanelStyles.explanationContainer,
-            { backgroundColor: theme.colors.background.primary },
+            { backgroundColor: vexFire.background },
           ]}
         >
           <Text
             style={[
               quizPanelStyles.explanationLabel,
-              { color: theme.colors.text.muted },
+              { color: vexFire.textMuted },
             ]}
           >
             Explanation:
@@ -180,7 +181,7 @@ export const QuizCard: React.ComponentType<QuizCardProps> = ({
           <Text
             style={[
               quizPanelStyles.explanationText,
-              { color: theme.colors.text.secondary },
+              { color: vexFire.textSecondary },
             ]}
           >
             {quiz.explanation}

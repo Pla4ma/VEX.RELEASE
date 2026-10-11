@@ -3,6 +3,8 @@ import { useMemo, useSyncExternalStore } from 'react';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
 import { useOnboardingStore } from '../onboarding/store'; // motivationProfile is a direct input to feature access — EventBus would add latency where we need synchronous derived state
+import { getBehaviorSignals } from '../personalization/behavior-signal-store';
+import { deriveUnlockBehaviorEvidence } from './feature-access-behavior';
 import {
   buildFeatureAccess,
   type FeatureAccessMap,
@@ -27,6 +29,7 @@ export type {
   ProductTier,
   UserExperienceStage,
   FeatureReleaseState,
+  UnlockBehaviorEvidence,
 } from './feature-access';
 export {
   buildFeatureAccess,
@@ -43,6 +46,7 @@ export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 export { registerFeatureHealthChecks } from './feature-health-checks';
 export { useDisclosureAnalytics } from './feature-analytics';
 export {
+  clearFeatureAccessMap,
   setFeatureAccessMap,
   getFeatureAccessMap,
   getAvailabilityFor,
@@ -74,7 +78,10 @@ export {
 export interface FeatureAccessResult {
   error: Error | null;
   features: FeatureAccessMap;
-  inputs: { totalCompletedSessions: number };
+  inputs: {
+    totalCompletedSessions: number;
+    behaviorEvidence: ReturnType<typeof deriveUnlockBehaviorEvidence>;
+  };
   isLoading: boolean;
   /** Alias for isLoading — consumers migrated to TanStack Query v5 isPending convention */
   isPending: boolean;
@@ -112,15 +119,26 @@ export function useFeatureAccess(
     getDegradedFeatures,
     getDegradedFeatures,
   );
+  const behaviorEvidence = useMemo(
+    () =>
+      deriveUnlockBehaviorEvidence(
+        enabled && userId
+          ? getBehaviorSignals(userId, { maxAgeMs: 14 * 24 * 60 * 60 * 1000 })
+          : [],
+        completedSessions,
+      ),
+    [completedSessions, enabled, userId],
+  );
 
   const access = useMemo(
     () =>
       buildFeatureAccess({
         totalCompletedSessions: completedSessions,
         motivationProfile: motivationProfile ?? undefined,
+        behaviorEvidence,
         degradedFeatures,
       }),
-    [completedSessions, motivationProfile, degradedFeatures],
+    [behaviorEvidence, completedSessions, motivationProfile, degradedFeatures],
   );
 
   setFeatureAccessMap(access.features);
@@ -128,7 +146,10 @@ export function useFeatureAccess(
   return {
     error: null,
     features: access.features,
-    inputs: { totalCompletedSessions: completedSessions },
+    inputs: {
+      totalCompletedSessions: completedSessions,
+      behaviorEvidence,
+    },
     isLoading: enabled ? stats.isLoading : false,
     isPending: enabled ? stats.isLoading : false,
     productTier: access.productTier,

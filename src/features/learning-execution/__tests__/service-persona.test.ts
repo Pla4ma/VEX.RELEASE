@@ -95,7 +95,7 @@ describe('learning execution service – persona and copy', () => {
   });
 
   describe('LEARNING goal content study gate', () => {
-    it('delays content upload for LEARNING users on Day 0', () => {
+    it('allows content upload for LEARNING users on Day 0', () => {
       const gate = buildContentStudyGate({
         aiConfigured: true,
         featureHealth: 'healthy',
@@ -106,8 +106,8 @@ describe('learning execution service – persona and copy', () => {
         totalCompletedSessions: 0,
       });
 
-      expect(gate.showUploadEntry).toBe(false);
-      expect(gate.fallback).toContain('study target');
+      expect(gate.showUploadEntry).toBe(true);
+      expect(gate.fallback).toBeNull();
     });
   });
 });

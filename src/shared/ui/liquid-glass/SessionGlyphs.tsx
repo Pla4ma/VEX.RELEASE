@@ -1,7 +1,9 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
-import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
+import { VexIcon } from '../vex/VexIcon';
 
 export type SessionGlyphName =
   | 'casual'
@@ -21,11 +23,15 @@ export function SessionGlyph({
   name,
   size = 52,
 }: SessionGlyphProps): React.JSX.Element {
-  const { theme } = useTheme();
-  const teal = theme.colors.semantic.secondary;
-  const deep = theme.colors.semantic.primary;
-  const amber = theme.colors.semantic.accent;
-  const muted = theme.colors.semantic.border;
+  if (Platform.OS === 'web') {
+    const fallbackName = name === 'study' ? 'book' : name === 'casual' ? 'flame' : name === 'stake' ? 'diamond' : 'target';
+    const fallbackSize = size >= 48 ? 'xl' : size >= 36 ? 'lg' : 'md';
+    return <VexIcon accessibilityLabel={`${name} session glyph`} color={name === 'deep' || name === 'sprint' ? vexFire.amber : vexFire.ember} name={fallbackName} size={fallbackSize} variant="solid" />;
+  }
+  const teal = vexFire.ember;
+  const deep = vexFire.copper;
+  const amber = vexFire.amber;
+  const muted = vexFire.border;
 
   const stroke = name === 'deep' || name === 'sprint' ? amber : deep;
 
@@ -39,7 +45,7 @@ export function SessionGlyph({
     >
       <Defs>
         <LinearGradient id="g" x1="10" y1="6" x2="62" y2="66">
-          <Stop offset="0" stopColor="theme.glassColors.vexWhite" stopOpacity="0.92" />
+          <Stop offset="0" stopColor={vexFire.cream} stopOpacity="0.92" />
           <Stop offset="0.55" stopColor={teal} stopOpacity="0.22" />
           <Stop offset="1" stopColor={amber} stopOpacity="0.18" />
         </LinearGradient>

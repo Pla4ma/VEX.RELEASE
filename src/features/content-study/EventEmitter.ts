@@ -7,7 +7,7 @@ import { captureException } from '../../config/sentry';
  * This class remains for backward compatibility with existing emitters.
  */
 export class EventEmitter<Events extends object> {
-  private listeners: Map<keyof Events, Array<(data: unknown) => void>> =
+  private listeners: Map<keyof Events, ((data: unknown) => void)[]> =
     new Map();
 
   subscribe<K extends keyof Events>(

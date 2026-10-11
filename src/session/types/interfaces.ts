@@ -118,12 +118,12 @@ export interface FocusQualityMetrics {
   timeInDeepFocus: number;
   timeInShallowFocus: number;
   timeDistracted: number;
-  focusSegments: Array<{
+  focusSegments: {
     startAt: number;
     endAt: number;
     duration: number;
     quality: number;
-  }>;
+  }[];
   consistencyScore: number;
   depthScore: number;
   recoveryScore: number;

@@ -79,7 +79,7 @@ function computePatterns(factors: FocusFactors): {
     recency: 'Recency',
   };
 
-  const entries: Array<{ key: string; name: string; score: number }> = [];
+  const entries: { key: string; name: string; score: number }[] = [];
   for (const [key, v] of Object.entries(factors)) {
     if (v !== undefined && typeof v.score === 'number') {
       entries.push({ key, name: patternMap[key] ?? key, score: v.score });

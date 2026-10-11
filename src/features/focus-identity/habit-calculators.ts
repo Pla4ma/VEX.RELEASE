@@ -22,11 +22,11 @@ export function calculateConsistencyFactorForInput(
 export function calculateStreakStabilityFactorForInput(
   currentStreak: number,
   longestStreak: number,
-  streakHistory: Array<{
+  streakHistory: {
     start: number;
     end: number | null;
     length: number;
-  }>,
+  }[],
 ): FocusScoreFactors['streakStability'] {
   const completedStreaks = streakHistory.filter((s) => s.end !== null);
   const avgLength =

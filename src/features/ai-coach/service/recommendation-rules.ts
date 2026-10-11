@@ -1,47 +1,6 @@
-import type { CoachRecommendation, CoachRecommendationType, RecommendationContext, CoachPersona } from './CoachRecommendationService-types';
-import {
-  generateProtectStreakMessage,
-  generateStudyBehindMessage,
-  generateBossOpportunityMessage,
-  generateMomentumBuildingMessage,
-} from './recommendation-messages';
-import {
-  generateComebackMessage,
-  generateStudyPlanCompleteMessage,
-  generateFocusSessionMessage,
-  generateStudyPlanMessage,
-  generateBossBattleMessage,
-} from './recommendation-messages-engaging';
+import { generateRecommendationMessage } from './recommendation-message-generator';
+import type { RecommendationRule } from './recommendation-rule-types';
 import { RECOMMENDATION_RULES_STANDARD } from './recommendation-rules-standard';
-
-export function generateMessage(
-  type: CoachRecommendationType,
-  context: RecommendationContext,
-  persona: CoachPersona,
-): { headline: string; subtext: string; coachMessage: string } {
-  const generators: Record<
-    CoachRecommendationType,
-    (ctx: RecommendationContext, p: CoachPersona) => { headline: string; subtext: string; coachMessage: string }
-  > = {
-    protect_streak: generateProtectStreakMessage,
-    study_behind: generateStudyBehindMessage,
-    boss_opportunity: generateBossOpportunityMessage,
-    momentum_building: generateMomentumBuildingMessage,
-    comeback: generateComebackMessage,
-    study_plan_complete: generateStudyPlanCompleteMessage,
-    focus_session: generateFocusSessionMessage,
-    study_plan: generateStudyPlanMessage,
-    boss_battle: generateBossBattleMessage,
-  };
-  return generators[type](context, persona);
-}
-
-export interface RecommendationRule {
-  name: string;
-  priority: number;
-  condition: (ctx: RecommendationContext) => boolean;
-  generate: (ctx: RecommendationContext, persona: CoachPersona) => CoachRecommendation;
-}
 
 const RULES_HIGH_PRIORITY: RecommendationRule[] = [
   {
@@ -53,7 +12,7 @@ const RULES_HIGH_PRIORITY: RecommendationRule[] = [
       return (ctx.hoursUntilStreakBreak ?? 24) <= 4;
     },
     generate: (ctx, persona) => {
-      const messages = generateMessage('protect_streak', ctx, persona);
+      const messages = generateRecommendationMessage('protect_streak', ctx, persona);
       const hoursLeft = ctx.hoursUntilStreakBreak ?? 0;
       return {
         id: `streak-critical-${Date.now()}`,
@@ -77,7 +36,7 @@ const RULES_HIGH_PRIORITY: RecommendationRule[] = [
       return ctx.studyPlanDaysBehind >= 2;
     },
     generate: (ctx, persona) => {
-      const messages = generateMessage('study_behind', ctx, persona);
+      const messages = generateRecommendationMessage('study_behind', ctx, persona);
       // plan is non-null: condition() checked ctx.activeStudyPlan before calling generate()
       const plan = ctx.activeStudyPlan!;
       return {
@@ -103,7 +62,7 @@ const RULES_HIGH_PRIORITY: RecommendationRule[] = [
       return hp < 30 && hp > 0;
     },
     generate: (ctx, persona) => {
-      const messages = generateMessage('boss_opportunity', ctx, persona);
+      const messages = generateRecommendationMessage('boss_opportunity', ctx, persona);
       return {
         id: `boss-opportunity-${Date.now()}`,
         type: 'boss_opportunity',
@@ -125,7 +84,7 @@ const RULES_HIGH_PRIORITY: RecommendationRule[] = [
       return ctx.studyPlanProgress >= 1;
     },
     generate: (ctx, persona) => {
-      const messages = generateMessage('study_plan_complete', ctx, persona);
+      const messages = generateRecommendationMessage('study_plan_complete', ctx, persona);
       return {
         id: `study-complete-${Date.now()}`,
         type: 'study_plan_complete',

@@ -3,45 +3,18 @@
  * TanStack Query hooks for UI consumption
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as Sentry from '@sentry/react-native';
-import { useToast } from '../../../shared/ui/components/Toast';
+import { useQuery } from '@tanstack/react-query';
+import { progressionKeys } from './query-keys';
 import * as service from '../service';
 import * as repository from '../repository';
 import {
   getProgressionEnhanced,
   getProgressionSummaryEnhanced,
 } from '../service-read';
-import {
-  AddXpInputSchema,
-  PrestigeInputSchema,
-  type AddXpInput,
-  type PrestigeInput,
-} from '../schemas';
-import {
-  getProgressionService,
-} from '../../../progression/ProgressionService';
-import type { AddXpOperationResult } from '../service-xp-core';
+export { progressionKeys } from './query-keys';
+export { useAddXp, usePrestige } from './progression-mutations';
 export { useOptimisticXp } from './use-optimistic-xp';
 
-// ============================================================================
-// Query Keys
-// ============================================================================
-
-export const progressionKeys = {
-  all: ['progression'] as const,
-  byUser: (userId: string) => [...progressionKeys.all, userId] as const,
-  summary: (userId: string) =>
-    [...progressionKeys.byUser(userId), 'summary'] as const,
-  history: (userId: string) =>
-    [...progressionKeys.byUser(userId), 'history'] as const,
-  daily: (userId: string, date: string) =>
-    [...progressionKeys.byUser(userId), 'daily', date] as const,
-  weekly: (userId: string, weekStart: string) =>
-    [...progressionKeys.byUser(userId), 'weekly', weekStart] as const,
-};
-
-// ============================================================================
 // Read Hooks
 // ============================================================================
 
@@ -100,61 +73,5 @@ export function useDailyProgress(userId: string | null, date: string) {
       return service.getDailyProgress(userId);
     },
     enabled: !!userId,
-  });
-}
-
-// ============================================================================
-// Mutation Hooks
-// ============================================================================
-
-export function useAddXp() {
-  const queryClient = useQueryClient();
-  const { show } = useToast();
-
-  return useMutation<AddXpOperationResult, Error, AddXpInput>({
-    mutationFn: async (input) => {
-      const validated = AddXpInputSchema.parse(input);
-      return service.addXp(validated.userId, validated);
-    },
-    onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: progressionKeys.byUser(variables.userId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: progressionKeys.summary(variables.userId),
-      });
-    },
-    onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: 'progression', operation: 'addXp' } });
-      show({ type: 'error', title: 'XP not added', message: 'Try again when connection returns.' });
-    },
-  });
-}
-
-export function usePrestige() {
-  const queryClient = useQueryClient();
-  const { show } = useToast();
-
-  return useMutation<void, Error, PrestigeInput>({
-    mutationFn: async (input) => {
-      const validated = PrestigeInputSchema.parse(input);
-      const progressionService = getProgressionService(validated.userId);
-      if (!progressionService.canPrestige()) {
-        throw new Error('Prestige is not available');
-      }
-      await progressionService.prestige();
-    },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: progressionKeys.byUser(variables.userId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: progressionKeys.summary(variables.userId),
-      });
-    },
-    onError: (error) => {
-      Sentry.captureException(error, { tags: { feature: 'progression', operation: 'prestige' } });
-      show({ type: 'error', title: 'Prestige failed', message: 'Try again when connection returns.' });
-    },
   });
 }

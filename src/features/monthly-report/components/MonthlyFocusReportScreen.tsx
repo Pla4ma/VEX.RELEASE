@@ -6,7 +6,7 @@ import { Box, Text } from '@components/primitives';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useNetInfo } from '../../../network/useNetInfo';
 import { useMonthlyReport } from '../hooks';
-import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat';
+import { usePremiumStatus } from '../../../shared/monetization/use-revenuecat-derived';
 import { useAuthStore } from '../../../store';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import { ReportSkeleton } from './ReportSkeleton';
@@ -16,6 +16,7 @@ import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
 import { useFeatureAccess } from '../../liveops-config';
 import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export const MonthlyFocusReportScreen = withScreenErrorBoundary(
   function MonthlyFocusReportScreen(): React.ReactNode {
@@ -40,7 +41,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     const handleOpenPaywall = () => {
       if (monthlyReportAction !== 'paywall') {
-        navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup' });
+        navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} });
         return;
       }
       navigateToRootScreen(navigation, 'Paywall', {
@@ -51,7 +52,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     if (isPending) {
       return (
-        <Box flex={1} bg="background.primary">
+        <Box flex={1} style={{ backgroundColor: vexFire.background }}>
           {isOffline ? (
             <Box bg="warning" p="sm" alignItems="center">
               <Text variant="caption" color="text.primary">
@@ -68,7 +69,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
 
     if (isError) {
       return (
-        <Box flex={1} bg="background.primary">
+        <Box flex={1} style={{ backgroundColor: vexFire.background }}>
           {isOffline ? (
             <Box bg="warning" p="sm" alignItems="center">
               <Text variant="caption" color="text.primary">
@@ -107,13 +108,13 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
       return (
         <ReportEmptyState
           isOffline={isOffline}
-          onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup' })}
+          onStartSession={() => navigateToRootScreen(navigation, 'SessionStack', { screen: 'SessionSetup', params: {} })}
         />
       );
     }
 
     return (
-      <Box flex={1} bg="background.primary">
+      <Box flex={1} style={{ backgroundColor: vexFire.background }}>
         {isOffline ? (
           <Box bg="warning" p="sm" alignItems="center">
             <Text variant="caption" color="text.primary">
@@ -131,7 +132,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
             <RefreshControl
               refreshing={false}
               onRefresh={() => refetch()}
-              tintColor={theme.colors.primary[500]}
+              tintColor={vexFire.ember}
             />
           }
           accessibilityLabel="Monthly focus report content"

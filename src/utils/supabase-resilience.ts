@@ -1,5 +1,6 @@
 import type { PostgrestError } from '@supabase/supabase-js';
 import { addBreadcrumb, captureException } from '../config/sentry';
+import { DEV_BYPASS_USER_ID } from '../config/dev-identity';
 import { useAuthStore } from '../store';
 
 type ResilientQueryResult<TData, TError = PostgrestError | null> = {
@@ -49,8 +50,11 @@ export function isRLSViolation(error: unknown): boolean {
 export function isDevUser(): boolean {
   try {
     const user = useAuthStore.getState().user;
-    return user?.id === 'dev-user-1' || Boolean(user?.id?.startsWith('dev-'));
-  } catch (error: unknown) {
+    return user?.metadata?.signupSource === 'dev-bypass' ||
+      user?.id === DEV_BYPASS_USER_ID ||
+      user?.id === 'dev-user-1' ||
+      Boolean(user?.id?.startsWith('dev-'));
+  } catch {
     return false;
   }
 }

@@ -1,5 +1,6 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 export type SeverityLevel =
   | 'info'
@@ -13,28 +14,28 @@ export const SEVERITY_CONFIG: Record<
   { color: string; bgColor: string; icon: string }
 > = {
   info: {
-    color: lightColors.accent.blue,
-    bgColor: lightColors.info[50],
+    color: vexFire.amber,
+    bgColor: vexFire.panelSoft,
     icon: '',
   },
   positive: {
-    color: lightColors.accent.green,
-    bgColor: lightColors.success[50],
+    color: vexFire.success,
+    bgColor: vexFire.panelSoft,
     icon: '',
   },
   warning: {
-    color: lightColors.semantic.warning,
-    bgColor: lightColors.warning[50],
+    color: vexFire.amber,
+    bgColor: vexFire.panelSoft,
     icon: '',
   },
   critical: {
-    color: lightColors.semantic.danger,
-    bgColor: lightColors.error[50],
+    color: vexFire.danger,
+    bgColor: vexFire.panelSoft,
     icon: '',
   },
   celebration: {
-    color: lightColors.accent.purple,
-    bgColor: lightColors.primary[50],
+    color: vexFire.copper,
+    bgColor: vexFire.panelSoft,
     icon: '',
   },
 };
@@ -95,14 +96,14 @@ export const styles = createSheet({
     marginLeft: 8,
   },
   badgeText: {
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     fontSize: 10,
     fontWeight: '600',
   },
   unreadDot: { width: 8, height: 8, borderRadius: 4, marginLeft: 8 },
   description: {
     fontSize: 14,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -113,7 +114,7 @@ export const styles = createSheet({
   },
   tag: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   tagText: { fontSize: 12, fontWeight: '500' },
-  date: { fontSize: 12, color: lightColors.text.muted },
+  date: { fontSize: 12, color: vexFire.textMuted },
   actions: { flexDirection: 'row', marginTop: 12, gap: 12 },
   actionButton: {
     paddingHorizontal: 16,
@@ -123,7 +124,7 @@ export const styles = createSheet({
     alignItems: 'center',
   },
   actionButtonText: {
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     fontWeight: '600',
     fontSize: 14,
   },

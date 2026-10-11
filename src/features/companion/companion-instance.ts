@@ -1,4 +1,4 @@
-import { CompanionService } from './service';
+import { CompanionService } from './CompanionService';
 import type { CompanionState } from './types';
 
 let companionServiceInstance: CompanionService | null = null;

@@ -14,9 +14,9 @@ import {
   generateQualityFallback,
 } from './message-ai-backend';
 import { getDefaultTemplate } from './default-message-templates';
+import { trackMessageAction } from '../analytics';
 export { generateMemoryAwareMessage } from '../memory/memory-message-templates';
 
-export { evaluateInterventions } from '../intervention/intervention-evaluator';
 export { generatePerformanceSummary } from '../analytics-detail/performance-summary';
 
 export async function generateMessage(
@@ -105,12 +105,12 @@ function isCategoryMuted(
 }
 
 export function checkConditions(
-  conditions: Array<{
+  conditions: {
     type?: string;
     operator: string;
     value?: unknown;
     field?: string;
-  }>,
+  }[],
   context: Record<string, unknown>,
 ): boolean {
   return conditions.every((condition) => {
@@ -180,19 +180,19 @@ export async function markMessageAction(
   input: MarkMessageActionInput,
 ): Promise<CoachMessage> {
   const validated = MarkMessageActionInputSchema.parse(input);
+  const actionAt = Date.now();
   const message = await repository.markMessageAction(
     validated.messageId,
     validated.action,
-    Date.now(),
+    actionAt,
   );
-  await trackEffectiveness(message, validated.action, validated.metadata);
+  const actionOrigin = message.deliveredAt ?? message.createdAt;
+  const timeToActionSeconds = Math.max(0, (actionAt - actionOrigin) / 1000);
+  trackMessageAction(
+    message.userId,
+    message.id,
+    validated.action,
+    timeToActionSeconds,
+  );
   return message;
-}
-
-async function trackEffectiveness(
-  message: CoachMessage,
-  _action: string,
-  _metadata?: Record<string, unknown>,
-): Promise<void> {
-  message;
 }

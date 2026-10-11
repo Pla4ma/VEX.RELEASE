@@ -13,9 +13,18 @@ import type {
   FeatureReleaseState,
   MotivationProfile,
   FeatureAccess,
-  UserExperienceStage,
-  ProductTier,
+  UnlockBehaviorEvidence,
 } from './feature-access-types';
+export {
+  getFeatureAvailability,
+  getFeatureAvailabilityFor,
+  isFeatureAvailableForNavigation,
+  isFeatureAvailableForQueries,
+} from './feature-availability';
+export type {
+  FeatureAvailability,
+  FeatureAvailabilityState,
+} from './feature-availability';
 import {
   resolveEffectiveThreshold as _resolveThreshold,
   resolveFeatureVisibility as _resolveVisibility,
@@ -39,6 +48,7 @@ import {
 // ── Re-export types from split modules ──
 
 export type { DegradedFeatureKey, FinalReleaseFeatureEntry, FinalReleaseStatus } from './feature-flag-release';
+export { getProductTier, getStage } from './feature-stage';
 export type { MotivationProfileConfig, FeatureAccessInput } from './feature-flag-resolution';
 export { FINAL_RELEASE_INCLUDED_SYSTEMS, FINAL_RELEASE_HIDDEN_SYSTEMS, APP_STORE_READINESS_CHECKLIST, FINAL_RELEASE_READINESS_CHECKLIST } from './feature-flag-release';
 
@@ -89,7 +99,7 @@ export const FEATURE_COPY: Partial<Record<FeatureKey, FeatureCopy>> = {
   economy_basic: { lockedDescription: 'Spendable rewards stay archived so XP, streaks, and progress remain the focus.', recommendedUnlockMoment: 'Not part of final release', unlockReason: 'Archived until separately approved.' },
   inventory: { lockedDescription: 'Customization stays hidden so focus sessions remain the only thing that matters.', recommendedUnlockMoment: 'Not part of final release', unlockReason: 'Archived until separately approved.' },
   shop: { lockedDescription: 'The shop stays closed so the app proves value before offering extras.', recommendedUnlockMoment: 'Not part of final release', unlockReason: 'Archived until separately approved.' },
-  premium_paywall: { lockedDescription: 'Premium becomes visible after enough sessions prove the core habit is real.', recommendedUnlockMoment: 'After 40 completed sessions', unlockReason: 'Appears when your focus rhythm is proven and RevenueCat billing is healthy.' },
+  premium_paywall: { lockedDescription: 'Premium becomes visible after the core habit proves value.', recommendedUnlockMoment: 'After 5 completed sessions', unlockReason: 'Appears after five completed sessions when your focus rhythm has proven value and RevenueCat billing is healthy.' },
   streak_insurance: { lockedDescription: 'Streak recovery is gentle: comeback sessions, rhythm recovery, and fresh starts.', recommendedUnlockMoment: 'Not part of final release', unlockReason: 'Recovery tools unlock when needed, not before.' },
 };
 
@@ -99,55 +109,64 @@ export function resolveEffectiveThreshold(feature: FeatureKey, baseThreshold: nu
   return _resolveThreshold(feature, baseThreshold, profile, FEATURE_MOTIVATION_PROFILES);
 }
 
+export function resolveBehaviorThreshold(
+  feature: FeatureKey,
+  threshold: number,
+  sessions: number,
+  evidence: UnlockBehaviorEvidence | undefined,
+): number {
+  if (!evidence || sessions < 3 || evidence.ignoredFeatures.includes(feature)) {
+    return threshold;
+  }
+  if (feature === 'content_study' && evidence.studySurfaceClicks >= 3) {
+    return Math.min(threshold, 5);
+  }
+  if (feature === 'ai_coach_advanced' && evidence.coachInteractions >= 3) {
+    return Math.max(3, threshold - 2);
+  }
+  if (feature === 'boss_tab' && evidence.bossEngagement === 'high') {
+    return Math.max(3, threshold - 2);
+  }
+  return threshold;
+}
+
 export function resolveFeatureVisibility(feature: FeatureKey, baseVisible: boolean, profile: MotivationProfile | undefined, sessions: number): boolean {
   return _resolveVisibility(feature, baseVisible, profile, sessions, FEATURE_MOTIVATION_PROFILES);
 }
-
 export function checkDependenciesSatisfied(feature: FeatureKey, unlockedFeatures: Set<FeatureKey>): boolean {
   return _checkDeps(feature, unlockedFeatures, FEATURE_DEPENDENCIES);
 }
 
-export function computeFeatureAccess(input: FeatureAccessInput): { isUnlocked: boolean; isVisible: boolean; isTeased: boolean; releaseState: FeatureReleaseState } {
-  const { feature, sessions, profile, unlockedFeatures } = input;
+export function computeFeatureAccess(input: FeatureAccessInput): {
+  isUnlocked: boolean;
+  isVisible: boolean;
+  isTeased: boolean;
+  releaseState: FeatureReleaseState;
+  effectiveThreshold: number;
+  behaviorAdjusted: boolean;
+} {
+  const { feature, sessions, profile, behaviorEvidence, unlockedFeatures } = input;
   const releaseState = FEATURE_RELEASE_STATES[feature];
   const disabled = releaseState === 'final_release_deactivated' || releaseState === 'archived' || releaseState === 'final_release_internal';
   const baseThreshold = FEATURE_THRESHOLDS[feature];
-  const threshold = resolveEffectiveThreshold(feature, baseThreshold, profile);
+  const profileThreshold = resolveEffectiveThreshold(feature, baseThreshold, profile);
+  const threshold = resolveBehaviorThreshold(feature, profileThreshold, sessions, behaviorEvidence);
   const thresholdMet = !disabled && sessions >= threshold;
   const depsSatisfied = unlockedFeatures ? checkDependenciesSatisfied(feature, unlockedFeatures) : true;
   const isUnlocked = thresholdMet && depsSatisfied;
   const teaserStart = FEATURE_TEASER_STARTS[feature];
   const isTeased = !disabled && !isUnlocked && typeof teaserStart === 'number' && sessions >= teaserStart;
   const isVisible = resolveFeatureVisibility(feature, !disabled, profile, sessions);
-  return { isUnlocked, isVisible, isTeased, releaseState };
+  return {
+    isUnlocked,
+    isVisible,
+    isTeased,
+    releaseState,
+    effectiveThreshold: threshold,
+    behaviorAdjusted: threshold !== profileThreshold,
+  };
 }
 
-// ── Availability functions ──
-
-export type FeatureAvailabilityState = 'hidden' | 'teased' | 'locked' | 'unlocked' | 'disabled' | 'degraded';
-export interface FeatureAvailability { state: FeatureAvailabilityState; canRenderEntryPoint: boolean; canNavigate: boolean; canQuery: boolean; canUseBackend: boolean; canRegisterRoute: boolean; canSubscribeToEvents: boolean; canShowNotification: boolean; reason: string; }
-
-function resolveFeatureAvailability(feature: FeatureAccess | undefined): FeatureAvailability {
-  const unavailable: FeatureAvailability = { state: 'disabled', canRenderEntryPoint: false, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature?.lockedDescription ?? 'Feature not configured.' };
-  if (!feature) {return unavailable;}
-  const disabled = !feature.isVisible || feature.releaseState === 'final_release_deactivated' || feature.releaseState === 'archived';
-  if (disabled) {return { ...unavailable, reason: feature.lockedDescription };}
-  if (feature.isUnlocked) {
-    if (feature.isDegraded === true) {
-      if (feature.disableOnDegraded) {return { ...unavailable, reason: feature.lockedDescription };}
-      return { state: 'degraded', canRenderEntryPoint: true, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: true, canSubscribeToEvents: false, canShowNotification: false, reason: feature.unlockReason };
-    }
-    return { state: 'unlocked', canRenderEntryPoint: true, canNavigate: true, canQuery: true, canUseBackend: true, canRegisterRoute: true, canSubscribeToEvents: true, canShowNotification: true, reason: feature.unlockReason };
-  }
-  if (feature.isTeased) {return { state: 'teased', canRenderEntryPoint: true, canNavigate: false, canQuery: false, canUseBackend: false, canRegisterRoute: false, canSubscribeToEvents: false, canShowNotification: false, reason: feature.recommendedUnlockMoment };}
-  return { ...unavailable, reason: feature.lockedDescription };
-}
-
-/** @deprecated Use getFeatureAvailabilityFor for feature-specific routing, premium, prefetch, and notifications. */
-export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature); }
-export function getFeatureAvailabilityFor(_key: FeatureKey, feature: FeatureAccess): FeatureAvailability { return resolveFeatureAvailability(feature); }
-export function isFeatureAvailableForNavigation(availability: FeatureAvailability): boolean { return availability.canNavigate && availability.canRegisterRoute; }
-export function isFeatureAvailableForQueries(availability: FeatureAvailability): boolean { return availability.canQuery && availability.canUseBackend; }
 
 // ── Final release map functions (delegating to feature-flag-release) ──
 
@@ -165,23 +184,6 @@ export function shouldBlockFullSurface(feature: DegradedFeatureKey, isDegraded: 
 }
 export function getDegradedFallbackSurface(feature: DegradedFeatureKey): string {
   return DEGRADED_SURFACE_BLOCKS[feature]?.fallbackSurface ?? 'start_session';
-}
-
-// ── Stage/tier functions ──
-
-export function getStage(totalCompletedSessions: number): UserExperienceStage {
-  if (totalCompletedSessions <= 0) {return 'NEW_USER';}
-  if (totalCompletedSessions < 3) {return 'ACTIVATING';}
-  if (totalCompletedSessions < 10) {return 'ENGAGED';}
-  return 'POWER_USER';
-}
-
-export function getProductTier(stage: UserExperienceStage, totalCompletedSessions: number): ProductTier {
-  if (totalCompletedSessions >= 40) {return 'SOCIAL_DEPTH';}
-  if (totalCompletedSessions >= 20) {return 'RPG_DEPTH';}
-  if (totalCompletedSessions >= 10) {return 'STUDY_OS';}
-  if (stage === 'ENGAGED') {return 'COACHING';}
-  return 'CORE_EXECUTION';
 }
 
 // ── Health policy (delegating to feature-flag-health) ──

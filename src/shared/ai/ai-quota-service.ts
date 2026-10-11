@@ -79,12 +79,17 @@ export async function checkQuota(
   }
 
   const hourlyUsed = getHourlyUsage(userId, category).count;
-  const dailyUsed = getDailyUsage(userId, category).count;
-
+  const dailyUsage = getDailyUsage(userId, category);
+  const dailyUsed = dailyUsage.count;
   const hourlyRemaining = Math.max(0, (limits.hourly ?? Infinity) - hourlyUsed);
   const dailyRemaining = Math.max(0, (limits.daily ?? Infinity) - dailyUsed);
+  const tokenRemaining = Math.max(
+    0,
+    (limits.tokenBudget ?? Infinity) - dailyUsage.tokenCount,
+  );
 
-  const allowed = hourlyRemaining > 0 && dailyRemaining > 0;
+  const allowed =
+    hourlyRemaining > 0 && dailyRemaining > 0 && tokenRemaining > 0;
   const window = !allowed && hourlyRemaining === 0 ? 'hourly' : 'daily';
   const resetAt =
     window === 'hourly'

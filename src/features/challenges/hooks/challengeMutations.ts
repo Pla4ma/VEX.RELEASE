@@ -9,8 +9,7 @@ import { useActiveChallenges } from './challengeQueries';
 import { challengeKeys } from './challengeKeys';
 import { economyKeys } from '../../economy/hooks';
 import type { UpdateChallengeProgressInput } from '../schemas';
-import type { UserChallengeSummary } from '../schemas/responses';
-import type { ChallengeDetail } from '../schemas/responses';
+import type { UserChallengeSummary , ChallengeDetail } from '../schemas/responses';
 
 export function useUpdateChallengeProgress() {
   const queryClient = useQueryClient();

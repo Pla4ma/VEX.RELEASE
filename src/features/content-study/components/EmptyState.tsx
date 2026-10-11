@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 /**
  * Empty State Component
  * Reusable empty state for content study feature
@@ -33,28 +34,28 @@ export const EmptyState: React.ComponentType<EmptyStateProps> = ({
   onSecondaryAction,
   testID,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <View style={styles.container} testID={testID}>
       <View
         style={[
           styles.iconContainer,
-          { backgroundColor: theme.colors.background.secondary },
+          { backgroundColor: vexFire.panel },
         ]}
       >
-        <Icon name={icon} size="2xl" color={theme.colors.primary[500]} />
+        <Icon name={icon} size="2xl" color={vexFire.ember} />
       </View>
 
       <Text
-        style={[styles.title, { color: theme.colors.text.primary }]}
+        style={[styles.title, { color: vexFire.cream }]}
         accessibilityRole="header"
       >
         {title}
       </Text>
 
       <Text
-        style={[styles.description, { color: theme.colors.text.secondary }]}
+        style={[styles.description, { color: vexFire.textSecondary }]}
       >
         {description}
       </Text>
@@ -85,7 +86,7 @@ export const EmptyState: React.ComponentType<EmptyStateProps> = ({
           accessibilityHint="Performs the secondary action for this section"
         >
           <Text
-            style={[styles.secondaryText, { color: theme.colors.primary[500] }]}
+            style={[styles.secondaryText, { color: vexFire.ember }]}
           >
             {secondaryActionLabel}
           </Text>

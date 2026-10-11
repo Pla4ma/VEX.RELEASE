@@ -61,9 +61,13 @@ describe('Group 6 — Coach', () => {
     const userId = 'user-coach-1';
     const queryKey = COACH_QUERY_KEYS.recommendations(userId);
 
-    queryClient.setQueryData(queryKey, []);
-    await queryClient.invalidateQueries({ queryKey });
+    try {
+      queryClient.setQueryData(queryKey, []);
+      await queryClient.invalidateQueries({ queryKey });
 
-    expect(queryClient.getQueryState(queryKey)?.isInvalidated).toBe(true);
+      expect(queryClient.getQueryState(queryKey)?.isInvalidated).toBe(true);
+    } finally {
+      queryClient.clear();
+    }
   });
 });

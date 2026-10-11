@@ -4,8 +4,7 @@
  * Builds the hero section and return plan for the completion experience.
  */
 
-import { SessionCompletionHeroSchema, type SessionCompletionHero } from './schemas';
-import { SessionCompletionReturnPlanSchema, type SessionCompletionReturnPlan } from './schemas';
+import { SessionCompletionHeroSchema, type SessionCompletionHero , SessionCompletionReturnPlanSchema, type SessionCompletionReturnPlan } from './schemas';
 
 export function buildSessionCompletionHero(input: {
   focusedDurationLabel: string;

@@ -26,7 +26,7 @@ describe('Category Gate', () => {
   });
 
   it('filterBehaviorCategories removes SHOP_PURCHASE', () => {
-    const input: Array<'SESSIONS' | 'SHOP_PURCHASE' | 'STREAK'> = ['SESSIONS', 'SHOP_PURCHASE', 'STREAK'];
+    const input: ('SESSIONS' | 'SHOP_PURCHASE' | 'STREAK')[] = ['SESSIONS', 'SHOP_PURCHASE', 'STREAK'];
     const result = filterBehaviorCategories(input);
     expect(result).toEqual(['SESSIONS', 'STREAK']);
   });

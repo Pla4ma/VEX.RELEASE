@@ -29,6 +29,7 @@ export type ProgressionService = {
 
 function normalizeXpSource(source: string): XpSource {
   if (
+    source === 'CHALLENGE_BONUS' ||
     source === 'STREAK_BONUS' ||
     source === 'BOSS_BONUS' ||
     source === 'SQUAD_BONUS'
@@ -49,16 +50,16 @@ function createDefaultState(): ProgressionServiceState {
   };
 }
 
-export function getProgressionService(userId?: string): ProgressionService {
+export function getProgressionService(userId: string): ProgressionService {
   const state = createDefaultState();
 
   return {
     async addXP(amount, source, options): Promise<void> {
-      if (!userId || amount <= 0) {
+      if (amount <= 0) {
         return;
       }
 
-      await addXp(
+      const result = await addXp(
         userId,
         {
           userId,
@@ -69,6 +70,9 @@ export function getProgressionService(userId?: string): ProgressionService {
         },
         { idempotencyKey: options?.idempotencyKey },
       );
+      if (!result.success) {
+        throw new Error(result.error?.message ?? 'Progression update failed');
+      }
     },
     getState(): ProgressionServiceState {
       return { ...state };

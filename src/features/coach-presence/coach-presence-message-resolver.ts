@@ -97,7 +97,7 @@ export function getCoachPresenceMessageForInterruption(
   );
   try {
     return getMessageFromLibrary({ context: libContext, style });
-  } catch (error: unknown) {
+  } catch {
     return 'Start with one clean block.';
   }
 }
@@ -118,7 +118,7 @@ export function getCoachSessionCompletionMessage(params: {
         context: 'first_session_completion',
         style,
       });
-    } catch (error: unknown) {
+    } catch {
       return 'First session is real now. Choose the next block.';
     }
   }
@@ -126,7 +126,7 @@ export function getCoachSessionCompletionMessage(params: {
   if (params.isComeback) {
     try {
       return getMessageFromLibrary({ context: 'comeback_session', style });
-    } catch (error: unknown) {
+    } catch {
       return 'That return counted. Keep the next block small.';
     }
   }
@@ -151,7 +151,7 @@ export function getCoachSessionCompletionMessage(params: {
 
   try {
     return getMessageFromLibrary({ context: 'strong_streak', style });
-  } catch (error: unknown) {
+  } catch {
     return 'Session banked. Home has the next move.';
   }
 }

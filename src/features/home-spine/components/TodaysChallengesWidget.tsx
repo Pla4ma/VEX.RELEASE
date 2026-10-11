@@ -3,7 +3,7 @@ import { Pressable } from 'react-native';
 import Animated, { FadeIn, FadeInUp, Layout } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
 import {
   ChallengesWidgetSkeleton,
@@ -12,7 +12,6 @@ import {
 } from './TodaysChallengesStates';
 import { ChallengeProgressRow } from './ChallengeProgressRow';
 import type { TodaysChallengesWidgetProps } from './todays-challenges-types';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export type { TodaysChallengesWidgetProps, ChallengeItem } from './todays-challenges-types';
 

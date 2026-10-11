@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 /**
  * Empty State Components
  *
@@ -10,7 +11,7 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useTheme } from '../../../../theme/ThemeContext';
 import { Icon } from '../../../../icons/components/Icon';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 interface EmptyStateProps {
   iconName: string;
@@ -31,21 +32,21 @@ export function EmptyState({
   secondaryActionLabel,
   onSecondaryAction,
 }: EmptyStateProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <Animated.View entering={FadeIn.duration(400)} style={styles.container}>
       <Animated.View entering={FadeInUp.delay(100).duration(400)}>
-        <View style={[styles.iconCircle, { backgroundColor: theme.colors.semantic.vexCyanSoft, borderColor: theme.colors.semantic.border }]}>
-          <Icon name={iconName} size={32} color={theme.colors.semantic.vexCyan} variant="outline" />
+        <View style={[styles.iconCircle, { backgroundColor: vexFire.panelSoft, borderColor: vexFire.border }]}>
+          <Icon name={iconName} size={32} color={vexFire.amber} variant="outline" />
         </View>
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(200).duration(400)}>
-        <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
+        <Text style={[styles.title, { color: vexFire.cream }]}>{title}</Text>
       </Animated.View>
 
       <Animated.View entering={FadeInUp.delay(300).duration(400)}>
-        <Text style={[styles.message, { color: theme.colors.text.secondary }]}>{message}</Text>
+        <Text style={[styles.message, { color: vexFire.textSecondary }]}>{message}</Text>
       </Animated.View>
 
       {(actionLabel || secondaryActionLabel) && (
@@ -56,7 +57,7 @@ export function EmptyState({
           {actionLabel && onAction && (
             <Pressable
               onPress={onAction}
-              style={[styles.primaryButton, { backgroundColor: theme.colors.semantic.vexCyan }]}
+              style={[styles.primaryButton, { backgroundColor: vexFire.amber }]}
               accessibilityLabel={actionLabel}
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
@@ -68,12 +69,12 @@ export function EmptyState({
           {secondaryActionLabel && onSecondaryAction && (
             <Pressable
               onPress={onSecondaryAction}
-              style={[styles.secondaryButton, { borderColor: theme.colors.border.DEFAULT }]}
+              style={[styles.secondaryButton, { borderColor: vexFire.border }]}
               accessibilityLabel={secondaryActionLabel}
               accessibilityRole="button"
               accessibilityHint="Double tap to activate"
             >
-              <Text style={[styles.secondaryButtonText, { color: theme.colors.text.secondary }]}>
+              <Text style={[styles.secondaryButtonText, { color: vexFire.textSecondary }]}>
                 {secondaryActionLabel}
               </Text>
             </Pressable>
@@ -125,7 +126,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     fontSize: 16,
     fontWeight: '600',
   },

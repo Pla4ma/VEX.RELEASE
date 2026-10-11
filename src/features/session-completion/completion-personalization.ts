@@ -6,12 +6,11 @@ import {
   type CompletionPersonalization,
   type CompletionPersonalizationInput,
   type CompletionPersonalizationResult,
-} from './schemas';
+ PostSessionNextAction } from './schemas';
 import { resolveCompletionLaneProfile } from '../lane-engine/service';
 import type { Lane, LaneProfile } from '../lane-engine/types';
 import type { SessionSummary } from '../../session/types';
 import { buildPostSessionNextAction } from './post-session-next-action';
-import type { PostSessionNextAction } from './schemas';
 import {
   REFLECTIONS,
   situationFor,

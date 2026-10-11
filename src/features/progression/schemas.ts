@@ -48,6 +48,7 @@ export const XpEntrySchema = z
     amount: z.number().positive(),
     source: XpSourceSchema,
     sessionId: z.string().uuid().nullable(),
+    idempotencyKey: z.string().min(1).optional(),
     metadata: XpMetadataSchema.nullable(),
     createdAt: z.number(),
   })
@@ -57,6 +58,7 @@ export const LevelUpRecordSchema = z
     level: z.number().min(1),
     achievedAt: z.number(),
     xpAtLevel: z.number().min(0),
+    idempotencyKey: z.string().min(1).optional(),
   })
   .strict();
 export const XpBreakdownSchema = z

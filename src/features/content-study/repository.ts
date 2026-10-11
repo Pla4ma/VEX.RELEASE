@@ -7,6 +7,7 @@ import type {
 } from './types';
 import { withResilience } from '../../utils/supabase-resilience';
 import { mapContentRow, mapGenerationRow } from './row-mappers';
+import { getContentStudyFunctionName } from './content-study-api-constants';
 
 export {
   validateFileUri,
@@ -19,8 +20,9 @@ export async function invokeContentStudy(
   body?: unknown,
   method?: 'GET' | 'POST',
 ) {
+  const functionName = getContentStudyFunctionName(path);
   return withResilience(
-    getSupabaseClient().functions.invoke(path, {
+    getSupabaseClient().functions.invoke(functionName, {
       body: body as
         | Record<string, unknown>
         | string
@@ -30,8 +32,20 @@ export async function invokeContentStudy(
         | undefined,
       ...(method ? { method } : {}),
     }),
-    { operation: `invokeContentStudy:${path}` },
+    { operation: `invokeContentStudy:${functionName}` },
   );
+}
+
+export async function fetchContentStudyEligibility(): Promise<unknown> {
+  const { data, error } = await invokeContentStudy(
+    'eligibility',
+    undefined,
+    'GET',
+  );
+  if (error) {
+    throw error;
+  }
+  return data;
 }
 
 export async function fetchContentHistoryRecords(userId: string, limit = 20) {

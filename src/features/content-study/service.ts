@@ -148,11 +148,15 @@ export async function submitFeedback(request: SubmitFeedbackRequest) {
       request,
     );
   } catch (error) {
-    throw normalizeError(
-      error,
+    const failure = buildError(
       ContentStudyErrorCode.EXTRACTION_FAILED,
       'Failed to submit feedback',
+      error instanceof Error ? { cause: error.message } : undefined,
+      true,
     );
+    const failureError = new Error(failure.message);
+    failureError.name = failure.code;
+    throw failureError;
   }
 }
 

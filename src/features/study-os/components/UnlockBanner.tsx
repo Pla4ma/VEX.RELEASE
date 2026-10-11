@@ -23,7 +23,7 @@ export interface UnlockBannerProps {
 
 export function UnlockBanner({
   gate,
-  currentSessions,
+  currentSessions: _currentSessions,
 }: UnlockBannerProps): React.ReactNode {
   const { theme } = useTheme();
   if (gate.isUnlocked) {return <></>;}

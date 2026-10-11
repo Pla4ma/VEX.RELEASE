@@ -1,5 +1,6 @@
 import type { ColorPalette } from '../../theme/types';
 import { darkColors, lightColors } from '../../theme/tokens/colors';
+import { vexFire } from '../../theme/tokens/vex-fire';
 import { createDebugger } from '../../utils/debug';
 
 const debug = createDebugger('accessibility:contrast');
@@ -100,6 +101,16 @@ export function initializeDevContrastChecker(): void {
   const failures = auditColorContrast([
     ...buildPairs('light', lightColors),
     ...buildPairs('dark', darkColors),
+    {
+      background: vexFire.backgroundSoft,
+      foreground: vexFire.textMuted,
+      label: 'fire: muted text on soft background',
+    },
+    {
+      background: vexFire.background,
+      foreground: vexFire.textMuted,
+      label: 'fire: muted text on primary background',
+    },
   ]);
 
   if (failures.length === 0) {

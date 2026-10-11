@@ -108,3 +108,8 @@ export {
   type MarkMessageActionInput,
   type UpdateCoachPreferencesInput,
 } from './inputs';
+
+export {
+  CoachConversationTurnSchema,
+  type CoachConversationTurn,
+} from './ai-context';

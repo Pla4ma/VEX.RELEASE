@@ -146,6 +146,7 @@ export const RecordSessionInputSchema = z
   .object({
     userId: z.string().uuid(),
     sessionId: z.string().uuid(),
+    idempotencyKey: z.string().min(1).optional(),
     completedAt: z.number(),
     duration: z.number().min(0),
     qualityScore: z.number().min(0).max(100),

@@ -28,6 +28,7 @@ import {
   type DifficultySelectorProps,
   type SessionDifficulty,
 } from './DifficultySelector.types';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export type { SessionDifficulty };
 
@@ -115,7 +116,7 @@ function DifficultyCard({
     : theme.colors.semantic.liquidGlassBorder;
   const backgroundColor = isSelected
     ? `${option.color}18`
-    : theme.colors.semantic.surfaceGlass;
+    : vexFire.backgroundRaised;
 
   return (
     <Animated.View style={[{ flex: 1 }, scale]}>
@@ -133,7 +134,11 @@ function DifficultyCard({
             borderColor,
             backgroundColor,
             opacity: disabled ? 0.5 : 1,
-            boxShadow: '0px 10px isSelected ? 18 : 10px theme.colors.semantic.shadow / isSelected ? 0.2 : 0.08',
+            shadowColor: vexFire.shadow,
+            shadowOpacity: isSelected ? 0.28 : 0.12,
+            shadowRadius: isSelected ? theme.spacing[4] : theme.spacing[2],
+            shadowOffset: { width: 0, height: theme.spacing[2] },
+            elevation: isSelected ? 5 : 2,
           },
         ]}
 accessibilityLabel={`${option.name} difficulty: ${option.pauseLimit} pauses, ${option.xpMultiplier} XP. ${option.description}`}
@@ -145,7 +150,7 @@ accessibilityState={{ selected: isSelected }}
 
         <Text
           variant="body"
-          color={theme.colors.text.primary}
+          color={vexFire.cream}
           style={{
             fontWeight: '800',
             marginBottom: theme.spacing[1],
@@ -156,7 +161,7 @@ accessibilityState={{ selected: isSelected }}
         </Text>
 
         <View style={{ marginBottom: theme.spacing[2] }}>
-          <Text variant="caption" color={theme.colors.text.secondary}>
+          <Text variant="caption" color={vexFire.textSecondary}>
             {option.pauseLimit} pauses
           </Text>
           <Text
@@ -170,7 +175,7 @@ accessibilityState={{ selected: isSelected }}
 
         <Text
           variant="caption"
-          color={theme.colors.text.tertiary}
+          color={vexFire.textMuted}
           style={{ lineHeight: 17 }}
         >
           {option.description}

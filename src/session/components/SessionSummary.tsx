@@ -103,7 +103,7 @@ export const SessionSummary: React.ComponentType<SessionSummaryProps> = ({
         {summary.bonuses && summary.bonuses.length > 0 && (
           <View style={styles.bonusesSection}>
             <Text style={styles.sectionTitle}>Bonus Awards</Text>
-            {summary.bonuses.map((bonus, index) => (
+            {summary.bonuses.map((bonus, _index) => (
               <View key={`bonus-${bonus.type}-${bonus.amount}`} style={styles.bonusItem}>
                 <Text style={styles.bonusIcon}>🏆</Text>
                 <View style={styles.bonusInfo}>

@@ -8,8 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme/ThemeContext';
-import { useMonthlyReport } from '../hooks';
-import { useFocusScoreColor } from '../hooks';
+import { useMonthlyReport , useFocusScoreColor } from '../hooks';
 import {
   publishMonthlyReportViewed,
   publishMonthlyReportDismissed,

@@ -33,7 +33,7 @@ export interface TabItemProps {
 }
 
 export interface BreadcrumbProps {
-  items: Array<{ label: string; onPress?: () => void }>;
+  items: { label: string; onPress?: () => void }[];
   separator?: string;
   style?: ViewStyle;
 }

@@ -1,11 +1,14 @@
-import { createDebugger } from '../../utils/debug';
 import { useState, useEffect, useCallback } from 'react';
 import { ANALYSIS_WINDOW_DAYS, DEFAULT_PEAK_HOUR } from './SmartNotificationScheduler-types';
-import type { PeakFocusWindow } from './SmartNotificationScheduler-types';
+import type { NotificationContentType, PeakFocusWindow } from './SmartNotificationScheduler-types';
 import { selectNotificationType } from './SmartNotificationScheduler-generators';
 import { checkRateLimit, recordNotificationSent } from './SmartNotificationScheduler-rankReport';
 import { fetchCompletedSessionsInWindow, fetchNotificationEnabledUsers } from './repository';
-
+import { buildFeatureAccess } from '../liveops-config/feature-access';
+import { getFeatureAvailabilityFor } from '../liveops-config/FeatureFlagService';
+import type { FeatureAccessMap } from '../liveops-config/feature-access-types';
+import { presentInAppNotification } from './push-delivery';
+import { createDebugger } from '../../utils/debug';
 const debug = createDebugger('notifications:smart-scheduler');
 
 const DEFAULT_RESULT: Omit<PeakFocusWindow, 'userId'> = {
@@ -98,18 +101,51 @@ export async function processUserSmartNotification(
       debug.info('Not in peak window', { userId, peakHour: peakWindow.peakHour });
       return;
     }
-    const content = await selectNotificationType(userId, [
-      'COMEBACK', 'BOSS', 'STREAK', 'SOCIAL', 'POSITIVE',
-    ]);
+    const featureAccess = buildFeatureAccess({
+      totalCompletedSessions: peakWindow.sessionCount,
+    }).features;
+    const preferredTypes: NotificationContentType[] = [
+      'COMEBACK',
+      'BOSS',
+      'STREAK',
+      'SOCIAL',
+      'POSITIVE',
+    ];
+    const content = await selectNotificationType(
+      userId,
+      preferredTypes.filter((type) => notificationTypeAllowed(type, featureAccess)),
+    );
     if (!content) {
       debug.info('No notification content generated', { userId });
       return;
     }
-    debug.info('Would send smart notification', { userId, title: content.title });
+    await presentInAppNotification({
+      title: content.title,
+      body: content.body,
+      data: { ...content.data, userId },
+    });
     await recordNotificationSent(userId, String(content.data.type ?? 'UNKNOWN'));
   } catch (error) {
     debug.error('Error processing user notification', error instanceof Error ? error : undefined);
   }
+}
+function notificationTypeAllowed(
+  type: NotificationContentType,
+  featureAccess: FeatureAccessMap,
+): boolean {
+  if (type === 'BOSS') {
+    return getFeatureAvailabilityFor(
+      'boss_tab',
+      featureAccess.boss_tab,
+    ).canShowNotification;
+  }
+  if (type === 'SOCIAL') {
+    return getFeatureAvailabilityFor(
+      'social_tab',
+      featureAccess.social_tab,
+    ).canShowNotification;
+  }
+  return true;
 }
 
 // ─── React Hook ─────────────────────────────────────────────────────────────

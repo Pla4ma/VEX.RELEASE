@@ -125,13 +125,13 @@ export interface SessionMasteryXp {
 export interface SessionMasteryResult {
   totalXp: number;
   byTrack: Record<MasteryTrack, number>;
-  levelUps: Array<{ track: MasteryTrack; newLevel: number }>;
+  levelUps: { track: MasteryTrack; newLevel: number }[];
   overallLevelUp: boolean;
 }
 
 export interface ApplyXpResult {
   newState: UnifiedMasteryState;
-  levelUps: Array<{ track: MasteryTrack; oldLevel: number; newLevel: number }>;
+  levelUps: { track: MasteryTrack; oldLevel: number; newLevel: number }[];
   overallLevelUp: {
     oldLevel: number;
     newLevel: number;

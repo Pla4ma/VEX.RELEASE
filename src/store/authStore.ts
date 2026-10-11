@@ -12,6 +12,7 @@ export const useAuthStore = create<AuthState>()(
         user: null,
         isAuthenticated: false,
         isLoading: false,
+        authStatus: 'unknown',
         error: null,
         ...createAuthActions(set),
       }),

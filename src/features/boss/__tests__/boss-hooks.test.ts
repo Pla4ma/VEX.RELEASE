@@ -10,7 +10,10 @@ import { renderHook, waitFor } from '@testing-library/react-native';
 
 function createWrapper() {
   const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+      mutations: { gcTime: 0 },
+    },
   });
   return function Wrapper({ children }: { children: React.ReactNode }) {
     return React.createElement(

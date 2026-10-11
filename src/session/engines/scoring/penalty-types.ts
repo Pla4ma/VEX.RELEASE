@@ -8,11 +8,11 @@ export interface PausePenaltyInput {
 export type InterruptionSeverity = 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
 
 export interface InterruptionPenaltyInput {
-  interruptions: Array<{
+  interruptions: {
     severity: InterruptionSeverity;
     duration: number;
     autoRecovered: boolean;
-  }>;
+  }[];
 }
 
 export interface QualityPenaltyInput {
@@ -29,11 +29,11 @@ export type AntiCheatViolationType =
   | 'IMPOSSIBLE_SCORE';
 
 export interface AntiCheatPenaltyInput {
-  violations: Array<{
+  violations: {
     type: AntiCheatViolationType;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timestamp: number;
-  }>;
+  }[];
 }
 
 export interface AbandonPenaltyInput {
@@ -73,7 +73,7 @@ export interface AntiCheatViolationResult {
 
 export interface AntiCheatPenaltyResult {
   total: number;
-  violations: Array<AntiCheatViolationResult>;
+  violations: AntiCheatViolationResult[];
   actionRequired: PenaltyAction;
 }
 

@@ -6,7 +6,7 @@ import {
   type CoachMessage,
   type CoachState,
 } from '../schemas';
-import { COACH_QUERY_KEYS } from '.';
+import { COACH_QUERY_KEYS } from '../constants';
 import {
   subscribeToCoachMessages,
   subscribeToCoachState,
@@ -36,10 +36,10 @@ export function useRealtimeCoachMessages(userId: string) {
         (
           old:
             | {
-                pages: Array<{
+                pages: {
                   messages: CoachMessage[];
                   nextCursor?: number;
-                }>;
+                }[];
               }
             | undefined,
         ) => {

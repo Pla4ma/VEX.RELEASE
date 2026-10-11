@@ -1,33 +1,15 @@
 import { PURCHASES_ERROR_CODE, type CustomerInfo } from 'react-native-purchases';
 import type { EntitlementInfo, RevenueCatError } from './revenuecat-types';
-
-interface PurchasesErrorShape {
-  code: PURCHASES_ERROR_CODE;
-  message: string;
-}
+import { PurchasesErrorSchema } from './revenuecat-error.schemas';
 
 export function normalizeError(error: unknown): RevenueCatError {
-  const purchasesError = error as Partial<PurchasesErrorShape>;
-  if (
-    purchasesError.code !== undefined &&
-    Object.values(PURCHASES_ERROR_CODE).includes(purchasesError.code)
-  ) {
-    const err = new Error(
-      purchasesError.message || String(error),
-    ) as RevenueCatError;
-    err.name = 'RevenueCatError';
-    err.code = mapErrorCode(purchasesError.code);
-    err.underlyingError =
-      error instanceof Error ? error : new Error(String(error));
-    return err;
-  }
-  const err = new Error(
-    error instanceof Error ? error.message : String(error),
-  ) as RevenueCatError;
-  err.name = 'RevenueCatError';
-  err.code = 'UNKNOWN';
-  err.underlyingError =
-    error instanceof Error ? error : new Error(String(error));
+  const parsed = PurchasesErrorSchema.safeParse(error);
+  const code = parsed.success && parsed.data.code !== undefined
+    ? mapErrorCode(parsed.data.code) : 'UNKNOWN';
+  const err = createServiceError(code, parsed.success
+    ? parsed.data.message || String(error)
+    : error instanceof Error ? error.message : String(error));
+  err.underlyingError = error instanceof Error ? error : new Error(String(error));
   return err;
 }
 
@@ -35,18 +17,14 @@ export function createServiceError(
   code: RevenueCatError['code'],
   message: string,
 ): RevenueCatError {
-  const err = new Error(message) as RevenueCatError;
-  err.name = 'RevenueCatError';
-  err.code = code;
-  err.underlyingError = new Error(message);
-  return err;
+  return Object.assign(new Error(message), {
+    name: 'RevenueCatError', code, underlyingError: new Error(message),
+  } satisfies Pick<RevenueCatError, 'name' | 'code' | 'underlyingError'>);
 }
 
 export function isUserCancelled(error: unknown): boolean {
-  const purchasesError = error as Partial<PurchasesErrorShape>;
-  return (
-    purchasesError.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR
-  );
+  const parsed = PurchasesErrorSchema.safeParse(error);
+  return parsed.success && parsed.data.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 }
 
 export function mapErrorCode(code: PURCHASES_ERROR_CODE): RevenueCatError['code'] {

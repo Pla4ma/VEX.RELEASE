@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
@@ -59,7 +60,7 @@ export function CoachMessageBubble({
             width: 36,
             height: 36,
             borderRadius: 18,
-            backgroundColor: theme.colors.primary[500],
+            backgroundColor: vexFire.ember,
             justifyContent: 'center',
             alignItems: 'center',
             marginTop: theme.spacing[1],
@@ -73,8 +74,8 @@ export function CoachMessageBubble({
       <Animated.View
         style={{
           backgroundColor: isCoach
-            ? theme.colors.background.secondary
-            : theme.colors.primary[500],
+            ? vexFire.panel
+            : vexFire.ember,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
           borderBottomLeftRadius: isCoach ? 4 : theme.borderRadius.xl,
@@ -84,7 +85,7 @@ export function CoachMessageBubble({
         <Text
           variant="body"
           color={
-            isCoach ? theme.colors.text.primary : theme.colors.text.inverse
+            isCoach ? vexFire.cream : vexFire.cream
           }
         >
           {displayContent}
@@ -100,7 +101,7 @@ export function CoachMessageBubble({
           >
             <Text
               variant="caption"
-              color={theme.colors.primary[500]}
+              color={vexFire.ember}
               fontWeight="600"
               style={{ marginTop: theme.spacing[1] }}
             >
@@ -114,8 +115,8 @@ export function CoachMessageBubble({
           variant="caption"
           color={
             isCoach
-              ? theme.colors.text.tertiary
-              : `${theme.colors.text.inverse}80`
+              ? vexFire.textMuted
+              : `${vexFire.cream}80`
           }
           style={{ marginTop: theme.spacing[1] }}
         >
@@ -128,8 +129,8 @@ export function CoachMessageBubble({
             onPress={() => { buttonTap(); onActionPress?.(message.actionTaken || ''); }}
             style={{
               backgroundColor: isCoach
-                ? theme.colors.primary[500]
-                : theme.colors.background.primary,
+                ? vexFire.ember
+                : vexFire.background,
               paddingHorizontal: theme.spacing[3],
               paddingVertical: theme.spacing[2],
               borderRadius: theme.borderRadius.lg,
@@ -143,7 +144,7 @@ export function CoachMessageBubble({
             <Text
               variant="bodySmall"
               color={
-                isCoach ? theme.colors.text.inverse : theme.colors.text.primary
+                isCoach ? vexFire.cream : vexFire.cream
               }
               fontWeight="600"
             >

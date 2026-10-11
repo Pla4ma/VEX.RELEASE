@@ -9,7 +9,7 @@ jest.mock('../../../store', () => ({
 }));
 
 jest.mock('../../../shared/ui/components/Toast', () => {
-  const ReactRuntime = require('react');
+  const _ReactRuntime = require('react');
   return {
     __esModule: true,
     ToastProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -55,7 +55,10 @@ describe('useContentHistory', () => {
 
   beforeEach(() => {
     queryClient = new QueryClient({
-      defaultOptions: { queries: { retry: false, gcTime: 0 } },
+      defaultOptions: {
+        queries: { retry: false, gcTime: 0 },
+        mutations: { gcTime: 0 },
+      },
     });
     jest.clearAllMocks();
   });
@@ -112,7 +115,10 @@ describe('useRateLimit', () => {
 
   beforeEach(() => {
     queryClient = new QueryClient({
-      defaultOptions: { queries: { retry: false, gcTime: 0 } },
+      defaultOptions: {
+        queries: { retry: false, gcTime: 0 },
+        mutations: { gcTime: 0 },
+      },
     });
     jest.clearAllMocks();
   });

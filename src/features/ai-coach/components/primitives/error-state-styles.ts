@@ -1,5 +1,6 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export const errorStateStyles = createSheet({
@@ -7,26 +8,26 @@ export const errorStateStyles = createSheet({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.cream,
     borderRadius: 12,
     margin: 16,
   },
   degradedContainer: {
-    backgroundColor: lightColors.warning[50],
+    backgroundColor: vexFire.panelSoft,
     borderWidth: 1,
-    borderColor: lightColors.semantic.warning,
+    borderColor: vexFire.amber,
   },
   icon: { fontSize: 48, marginBottom: 12 },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: lightColors.semantic.obsidian,
+    color: vexFire.backgroundRaised,
     textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 16,
@@ -37,20 +38,20 @@ export const errorStateStyles = createSheet({
     gap: 6,
     marginBottom: 16,
   },
-  errorCodeLabel: { fontSize: 12, color: lightColors.text.disabled },
+  errorCodeLabel: { fontSize: 12, color: vexFire.textMuted },
   errorCode: {
     fontSize: 12,
-    color: lightColors.text.disabled,
+    color: vexFire.textMuted,
     fontFamily: 'monospace',
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.ember,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
-  attemptsText: { fontSize: 12, color: lightColors.text.disabled, marginBottom: 12 },
+  attemptsText: { fontSize: 12, color: vexFire.textMuted, marginBottom: 12 },
   actions: { gap: 8, width: '100%' },
   retryButton: {
-    backgroundColor: lightColors.semantic.danger,
+    backgroundColor: vexFire.danger,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -58,25 +59,25 @@ export const errorStateStyles = createSheet({
     minWidth: 120,
   },
   retryButtonText: {
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     fontSize: 16,
     fontWeight: '600',
   },
   buttonDisabled: { opacity: 0.6 },
   dismissButton: { paddingVertical: 12, alignItems: 'center' },
   dismissButtonText: {
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     fontSize: 14,
     fontWeight: '500',
   },
   maxRetriesText: {
     fontSize: 12,
-    color: lightColors.text.disabled,
+    color: vexFire.textMuted,
     textAlign: 'center',
     marginTop: 8,
   },
   degradedBadge: {
-    backgroundColor: lightColors.semantic.warning,
+    backgroundColor: vexFire.amber,
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
@@ -85,17 +86,17 @@ export const errorStateStyles = createSheet({
   degradedBadgeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: lightColors.text.secondary,
+    color: vexFire.textSecondary,
   },
   inlineContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     padding: 8,
-    backgroundColor: lightColors.error[50],
+    backgroundColor: vexFire.panelSoft,
     borderRadius: 6,
     marginTop: 4,
   },
   inlineIcon: { fontSize: 14 },
-  inlineText: { fontSize: 12, color: lightColors.semantic.danger, flex: 1 },
+  inlineText: { fontSize: 12, color: vexFire.danger, flex: 1 },
 });

@@ -1,15 +1,14 @@
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useState, useCallback } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { Image, View, Text, Pressable, ScrollView } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStudyPlan } from '../hooks';
 import { UI_TEXT } from '../constants';
 import { useNetInfo } from '../../../network/useNetInfo';
-import { lightColors } from '@/theme/tokens/colors';
-
 import { styles } from './StudyPlanScreen.styles';
+import { StudyOfflineNotice } from './StudyOfflineNotice';
 import {
   type RouteProps,
   type NavigationProp,
@@ -20,8 +19,7 @@ import {
   RatingSection,
 } from './study-plan-helpers';
 import { navigateToRootScreen } from '../../../navigation/navigation-helpers';
-import type { NavigationProp as RootNavigationProp } from '@react-navigation/native';
-
+import { StudyBackButton } from '../components/StudyBackButton';
 function StudyPlanScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProps>();
@@ -37,7 +35,6 @@ function StudyPlanScreen() {
   const { isOffline } = useNetInfo();
   const [revealedAnswers, setRevealedAnswers] = useState<Set<string>>(new Set());
   const [userRating, setUserRating] = useState<number | null>(null);
-
   const toggleAnswer = useCallback((quizId: string) => {
     setRevealedAnswers((prev) => {
       const next = new Set(prev);
@@ -49,17 +46,22 @@ function StudyPlanScreen() {
       return next;
     });
   }, []);
-
   const handleStartSession = useCallback(async () => {
     const sessionConfig = await startSession();
     if (sessionConfig && generation) {
-      navigateToRootScreen((navigation as unknown) as RootNavigationProp<import('../../../navigation/types').RootStackParams>, 'SessionStack', {
+      const suggestedDifficulty = sessionConfig.difficulty === 'EASY' ||
+        sessionConfig.difficulty === 'NORMAL' ||
+        sessionConfig.difficulty === 'CHALLENGING' ||
+        sessionConfig.difficulty === 'PUSH'
+          ? sessionConfig.difficulty
+          : 'NORMAL';
+      navigateToRootScreen(navigation, 'SessionStack', {
         screen: 'SessionSetup',
         params: {
           suggestedDurationSeconds: sessionConfig.duration,
-          suggestedDifficulty: sessionConfig.difficulty,
+          suggestedDifficulty,
           goal: sessionConfig.goal,
-          focusAreas: generation.keyConcepts.slice(0, 3),
+          focusAreas: generation.keyConcepts.slice(0, 3).map((concept) => concept.term),
           sessionCategory: sessionConfig.category,
           sessionTags: sessionConfig.tags,
           source: 'content-study',
@@ -70,26 +72,10 @@ function StudyPlanScreen() {
       });
     }
   }, [contentId, generation, generationId, navigation, startSession]);
-
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        {isOffline ? (
-          <View style={{
-            backgroundColor: lightColors.warning.light,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            alignItems: 'center',
-          }}>
-            <Text style={{
-              fontSize: 13,
-              fontWeight: '500',
-              color: lightColors.warning[500],
-            }}>
-              You are offline. Study plan generation requires a connection.
-            </Text>
-          </View>
-        ) : null}
+        {isOffline ? <StudyOfflineNotice message="You are offline. Study plan generation requires a connection." /> : null}
         <View style={styles.loadingContainer}>
           <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading study plan...</Text>
@@ -101,22 +87,7 @@ function StudyPlanScreen() {
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
-        {isOffline ? (
-          <View style={{
-            backgroundColor: lightColors.warning.light,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            alignItems: 'center',
-          }}>
-            <Text style={{
-              fontSize: 13,
-              fontWeight: '500',
-              color: lightColors.warning[500],
-            }}>
-              You are offline. Study plan generation requires a connection.
-            </Text>
-          </View>
-        ) : null}
+        {isOffline ? <StudyOfflineNotice message="You are offline. Study plan generation requires a connection." /> : null}
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
@@ -135,23 +106,15 @@ function StudyPlanScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isOffline ? (
-        <View style={{
-          backgroundColor: lightColors.warning.light,
-          paddingVertical: 8,
-          paddingHorizontal: 16,
-          alignItems: 'center',
-        }}>
-          <Text style={{
-            fontSize: 13,
-            fontWeight: '500',
-            color: lightColors.warning[500],
-          }}>
-            You are offline. Study plan generation requires a connection.
-          </Text>
-        </View>
-      ) : null}
+      {isOffline ? <StudyOfflineNotice message="You are offline. Study plan generation requires a connection." /> : null}
+      <StudyBackButton onPress={() => navigation.goBack()} />
       <ScrollView style={styles.scrollView}>
+        <Image
+          accessibilityIgnoresInvertColors
+          source={require('../../../../assets/vex/study/plan-constellation.png')}
+          resizeMode="contain"
+          style={{ height: 150, opacity: 0.18, position: 'absolute', right: -28, top: 4, width: 150 }}
+        />
         <View style={styles.header}>
           <Text style={styles.title}>{UI_TEXT.PLAN_TITLE}</Text>
           {content?.title && <Text style={styles.subtitle}>{content.title}</Text>}

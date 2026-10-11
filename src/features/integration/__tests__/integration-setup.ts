@@ -8,10 +8,10 @@
 /* ─── Mocks (must be inline factories, no external const refs) ── */
 
 // Track subscribers for event-driven tests
-export const mockActiveSubscribers: Array<{
+export const mockActiveSubscribers: {
   event: string;
   handler: (...args: unknown[]) => void;
-}> = [];
+}[] = [];
 
 jest.mock('../../../events/EventBus', () => ({
   eventBus: {

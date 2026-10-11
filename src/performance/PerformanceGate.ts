@@ -9,6 +9,7 @@ import {
   evaluateFPS, evaluateMemory, evaluateAnimations, evaluateNetwork, evaluateBundle,
 } from './PerformanceGate-evaluators';
 import { generateRecommendations, generateReport as buildReport } from './PerformanceGate-report';
+import { PerformanceGateInstrumentation } from './PerformanceGateInstrumentation';
 
 const debug = createDebugger('performance-gate');
 
@@ -16,14 +17,15 @@ export class PerformanceGate {
   private static instance: PerformanceGate;
   private targets: PerformanceTargets;
   private performanceMonitor: PerformanceMonitor;
-  private networkMetrics: Array<{ duration: number; timestamp: number }> = [];
-  private animationMetrics: Array<{ duration: number; timestamp: number }> = [];
+  private networkMetrics: { duration: number; timestamp: number }[] = [];
+  private animationMetrics: { duration: number; timestamp: number }[] = [];
   private bundleSize: number = 0;
+  private instrumentation = new PerformanceGateInstrumentation();
+  private isCollecting = false;
 
   private constructor() {
     this.targets = __DEV__ ? DEVELOPMENT_TARGETS : PRODUCTION_TARGETS;
     this.performanceMonitor = new PerformanceMonitor();
-    this.initializeMetricsCollection();
   }
 
   static getInstance(): PerformanceGate {
@@ -48,50 +50,30 @@ export class PerformanceGate {
 
   private initializeMetricsCollection(): void {
     this.performanceMonitor.start();
+    if (this.isCollecting) {return;}
     this.performanceMonitor.onJank((metrics) => {
       this.recordPerformanceMetrics('jank', metrics);
     });
-    this.setupNetworkMonitoring();
-    this.setupAnimationMonitoring();
+    this.instrumentation.install(
+      (duration) => this.recordNetworkMetric(duration),
+      (duration) => this.recordAnimationMetric(duration),
+    );
+    this.isCollecting = true;
     debug.info('Performance metrics collection initialized');
   }
 
-  private setupNetworkMonitoring(): void {
-    const originalFetch = global.fetch;
-    global.fetch = async (
-      ...args: Parameters<typeof fetch>
-    ): Promise<Response> => {
-      const start = performance.now();
-      try {
-        const response = await originalFetch(...args);
-        const duration = performance.now() - start;
-        this.networkMetrics.push({ duration, timestamp: Date.now() });
-        if (this.networkMetrics.length > 100) {
-          this.networkMetrics = this.networkMetrics.slice(-100);
-        }
-        return response;
-      } catch (error) {
-        const duration = performance.now() - start;
-        this.networkMetrics.push({ duration, timestamp: Date.now() });
-        throw error;
-      }
-    };
+  private recordNetworkMetric(duration: number): void {
+    this.networkMetrics.push({ duration, timestamp: Date.now() });
+    if (this.networkMetrics.length > 100) {
+      this.networkMetrics = this.networkMetrics.slice(-100);
+    }
   }
 
-  private setupAnimationMonitoring(): void {
-    const originalRAF = global.requestAnimationFrame;
-    global.requestAnimationFrame = (callback: FrameRequestCallback) => {
-      const start = performance.now();
-      const wrappedCallback = (timestamp: number) => {
-        const duration = performance.now() - start;
-        this.animationMetrics.push({ duration, timestamp: Date.now() });
-        if (this.animationMetrics.length > 50) {
-          this.animationMetrics = this.animationMetrics.slice(-50);
-        }
-        return callback(timestamp);
-      };
-      return originalRAF(wrappedCallback);
-    };
+  private recordAnimationMetric(duration: number): void {
+    this.animationMetrics.push({ duration, timestamp: Date.now() });
+    if (this.animationMetrics.length > 50) {
+      this.animationMetrics = this.animationMetrics.slice(-50);
+    }
   }
 
   private recordPerformanceMetrics(
@@ -172,6 +154,8 @@ export class PerformanceGate {
 
   cleanup(): void {
     this.performanceMonitor.stop();
+    this.instrumentation.cleanup();
+    this.isCollecting = false;
     this.networkMetrics = [];
     this.animationMetrics = [];
     debug.info('Performance gate cleaned up');

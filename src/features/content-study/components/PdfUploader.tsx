@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useState } from 'react';
 import { Pressable } from 'react-native';
 import { Skeleton } from '../../../components/ui/Skeleton';
@@ -35,7 +36,7 @@ export const PdfUploader: React.ComponentType<PdfUploaderProps> = ({
   onRetry,
   maxSize = CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const [isPicking, setIsPicking] = useState(false);
 
   const pickDocument = useCallback(async () => {
@@ -106,8 +107,8 @@ export const PdfUploader: React.ComponentType<PdfUploaderProps> = ({
       style={({ pressed }) => [
         styles.uploadContainer,
         {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.DEFAULT ?? theme.colors.border,
+          backgroundColor: vexFire.panel,
+          borderColor: vexFire.border ?? vexFire.border,
           opacity: pressed ? 0.7 : 1,
         },
       ]}
@@ -124,16 +125,16 @@ export const PdfUploader: React.ComponentType<PdfUploaderProps> = ({
           <Icon
             name="upload"
             size="xl"
-            color={theme.colors.primary[500]}
+            color={vexFire.ember}
             style={styles.uploadIcon}
           />
           <Text
-            style={[styles.uploadTitle, { color: theme.colors.text.primary }]}
+            style={[styles.uploadTitle, { color: vexFire.cream }]}
           >
             Tap to select a file
           </Text>
           <Text
-            style={[styles.uploadSubtitle, { color: theme.colors.text.muted }]}
+            style={[styles.uploadSubtitle, { color: vexFire.textMuted }]}
           >
             PDF, TXT, or MD up to {formatFileSize(maxSize)}
           </Text>

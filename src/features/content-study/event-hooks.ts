@@ -18,10 +18,10 @@ export function useContentStudyEvent<K extends keyof ContentStudyEventMap>(
 }
 
 export function useContentStudyEvents(
-  events: Array<{
+  events: {
     event: keyof ContentStudyEventMap;
     callback: (data: unknown) => void;
-  }>,
+  }[],
 ): void {
   useEffect(() => {
     const unsubscribes = events.map(({ event, callback }) =>
@@ -34,7 +34,7 @@ export function useContentStudyEvents(
 }
 
 export function composeEventHandlers<T>(
-  ...handlers: Array<(data: T) => void | Promise<void>>
+  ...handlers: ((data: T) => void | Promise<void>)[]
 ): (data: T) => void {
   return (data: T) => {
     handlers.forEach((handler) => {
@@ -67,7 +67,7 @@ export function initializeContentStudyEventIntegration(appEventBus?: {
   if (!appEventBus) {
     return;
   }
-  const eventsToForward: Array<keyof ContentStudyEventMap> = [
+  const eventsToForward: (keyof ContentStudyEventMap)[] = [
     'content-study:session-started',
     'content-study:session-ended',
     'content-study:content-deleted',

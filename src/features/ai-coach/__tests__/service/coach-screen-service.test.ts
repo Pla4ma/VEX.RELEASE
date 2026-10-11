@@ -1,6 +1,11 @@
-import { askCoachQuestion } from '../../service/coach-screen-service';
+import {
+  askCoachQuestion,
+  buildLocalCoachResponse,
+  getCoachHistory,
+} from '../../service/coach-screen-service';
 
 jest.mock('../../../../config/supabase', () => ({
+  getSupabaseClient: jest.fn(() => ({})),
   isSupabaseConfigured: jest.fn(() => false),
   supabase: {
     auth: {
@@ -12,10 +17,10 @@ jest.mock('../../../../config/supabase', () => ({
   },
 }));
 
-jest.mock('../../repository/state', () => ({
-  fetchCoachState: jest.fn(),
+jest.mock('../../repository/messages', () => ({
+  fetchCoachHistory: jest.fn(),
 }));
-
+import { fetchCoachHistory } from '../../repository/messages';
 jest.mock('../../../liveops-config', () => ({
   getAvailabilityFor: jest.fn(() => ({ canNavigate: true })),
 }));
@@ -38,11 +43,18 @@ describe('coach screen service', () => {
     supabaseConfig.isSupabaseConfigured.mockReturnValue(false);
   });
 
-  it('uses deterministic fallback when AI backend is unavailable', async () => {
-    const response = await askCoachQuestion('I need to study', '00000000-0000-4000-8000-000000000001');
+  it('builds an actionable local coach response for dev sessions', () => {
+    expect(buildLocalCoachResponse('Help me study this material')).toMatchObject({
+      actionLabel: 'Start study',
+      hasAction: true,
+      actionData: { type: 'START_STUDY_SESSION' },
+    });
+  });
 
-    expect(response.message.toLowerCase()).toContain('study');
-    expect(response.hasAction).toBe(true);
+  it('does not present a canned reply when AI backend is unavailable', async () => {
+    await expect(
+      askCoachQuestion('I need to study', '00000000-0000-4000-8000-000000000001'),
+    ).rejects.toThrow();
     expect(supabaseConfig.supabase.functions.invoke).not.toHaveBeenCalled();
   });
 
@@ -112,9 +124,27 @@ describe('coach screen service', () => {
       },
     });
 
-    // AI failure falls back to a graceful response instead of throwing
-    const response = await askCoachQuestion('Hello', 'local-user-id');
-    expect(response.message).toBeTruthy();
-    expect(response.hasAction).toBe(true);
+    await expect(
+      askCoachQuestion('Hello', 'local-user-id'),
+    ).rejects.toThrow();
+  });
+  it('requires an authenticated user instead of using a canned reply', async () => {
+    await expect(askCoachQuestion('Hello')).rejects.toThrow();
+    expect(supabaseConfig.supabase.functions.invoke).not.toHaveBeenCalled();
+  });
+  it('returns only the authenticated user history through the repository', async () => {
+    jest.mocked(fetchCoachHistory).mockResolvedValue({
+      messages: [],
+      mutedCategories: [],
+    });
+
+    await expect(getCoachHistory('11111111-1111-4111-8111-111111111111', 10)).resolves.toEqual({
+      messages: [],
+      mutedCategories: [],
+    });
+    expect(fetchCoachHistory).toHaveBeenCalledWith(
+      '11111111-1111-4111-8111-111111111111',
+      10,
+    );
   });
 });

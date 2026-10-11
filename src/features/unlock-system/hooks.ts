@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { checkFeatureUnlock } from './service';
-import type { UnlockSignal, CompositeScore, FeatureUnlockState } from './types';
+import type { UnlockSignal, CompositeScore,  } from './types';
 
 export function useUnlockSignals(userId: string | null) {
   return useQuery({

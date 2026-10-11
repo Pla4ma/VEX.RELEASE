@@ -1,9 +1,22 @@
+import * as Sentry from '@sentry/react-native';
 import { isSupabaseConfigured, supabase } from '../../../config/supabase';
+import { fetchProgression } from '../../progression/repository';
+import { fetchStreak } from '../../streaks/streak-queries';
 import { readFunctionErrorMessage } from '../service/coach-screen-ai-errors';
+import type { CoachConversationTurn } from '../schemas';
+import { fetchBehaviorProfile } from './behavior';
+import { fetchCoachState } from './state';
 
 const AI_COACH_FUNCTION = resolveCoachFunctionName(
   process.env.EXPO_PUBLIC_AI_COACH_FUNCTION,
 );
+
+export class CoachSessionUnavailableError extends Error {
+  constructor() {
+    super('AI Coach is using local development mode because no Supabase session is available.');
+    this.name = 'CoachSessionUnavailableError';
+  }
+}
 
 export interface AiCoachFunctionResponse {
   success?: unknown;
@@ -24,17 +37,21 @@ export interface AiCoachFunctionResponse {
 export async function invokeAiCoachFunction(
   question: string,
   userId: string,
+  recentConversation: CoachConversationTurn[] = [],
 ): Promise<AiCoachFunctionResponse | null> {
   if (!isSupabaseConfigured() || !AI_COACH_FUNCTION.trim()) {
     return null;
   }
 
   const session = await supabase.auth.getSession();
+  if (!session.data.session && __DEV__ && !process.env.JEST_WORKER_ID) {
+    throw new CoachSessionUnavailableError();
+  }
   const { data, error } = await supabase.functions.invoke<AiCoachFunctionResponse>(
     AI_COACH_FUNCTION,
     {
       body: {
-        context: buildCoachContext(question),
+        context: await buildCoachContext(question, userId, recentConversation),
         requestType: 'GENERATE_COACH_MESSAGE',
         userId,
       },
@@ -54,14 +71,73 @@ export async function invokeAiCoachFunction(
   return data;
 }
 
-function buildCoachContext(question: string): Record<string, unknown> {
+async function buildCoachContext(
+  question: string,
+  userId: string,
+  recentConversation: CoachConversationTurn[],
+): Promise<Record<string, unknown>> {
+  const [coachStateResult, behaviorResult, streakResult, progressionResult] =
+    await Promise.allSettled([
+      fetchCoachState(userId),
+      fetchBehaviorProfile(userId),
+      fetchStreak(userId),
+      fetchProgression(userId),
+    ]);
+
+  const coachState = getSettledValue(coachStateResult);
+  const behaviorProfile = getSettledValue(behaviorResult);
+  const streak = getSettledValue(streakResult);
+  const progression = getSettledValue(progressionResult);
+
+  captureContextReadFailures([
+    coachStateResult,
+    behaviorResult,
+    streakResult,
+    progressionResult,
+  ]);
+
+  const lastSessionAt = streak?.lastQualifyingSessionAt ?? null;
+  const hoursSinceLastSession = lastSessionAt
+    ? Math.max(0, (Date.now() - lastSessionAt) / (60 * 60 * 1000))
+    : null;
+
   return {
     category: chooseCoachCategory(question),
-    currentLevel: 1,
-    currentStreak: 0,
-    hoursSinceLastSession: 0,
+    ...(progression ? { currentLevel: progression.level } : {}),
+    ...(streak
+      ? { currentStreak: streak.currentDays, longestStreak: streak.longestDays }
+      : {}),
+    ...(hoursSinceLastSession !== null ? { hoursSinceLastSession } : {}),
+    coachState: coachState?.currentState ?? null,
+    behaviorProfile: behaviorProfile
+      ? {
+          confidenceLevel: behaviorProfile.confidenceLevel,
+          coldStart: behaviorProfile.coldStart,
+          dataPoints: behaviorProfile.dataPoints,
+          signals: behaviorProfile.signals.slice(0, 12),
+        }
+      : null,
+    recentConversation: recentConversation.slice(-8),
     userMessage: question,
   };
+}
+
+function getSettledValue<T>(
+  result: PromiseSettledResult<T>,
+): T | null {
+  return result.status === 'fulfilled' ? result.value : null;
+}
+
+function captureContextReadFailures(
+  results: PromiseSettledResult<unknown>[],
+): void {
+  results.forEach((result) => {
+    if (result.status === 'rejected') {
+      Sentry.captureException(result.reason, {
+        tags: { feature: 'ai-coach', operation: 'build-coach-context' },
+      });
+    }
+  });
 }
 
 function chooseCoachCategory(question: string): string {

@@ -48,8 +48,7 @@ export function Skeleton({
       );
     }
     // shimmerValue is a stable useSharedValue ref
-    // eslint-disable-next-line react-doctor/exhaustive-deps
-  }, [animated, reducedMotion]);
+  }, [animated, reducedMotion, shimmerValue]);
   const shimmerStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: interpolate(shimmerValue.value, [0, 1], [-200, 200]) },

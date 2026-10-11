@@ -1,5 +1,4 @@
-import type { BaseSessionStartEvent } from './base';
-import type {
+import type { BaseSessionStartEvent ,
   SessionInitiatedEvent,
   SessionPreparationStartedEvent,
   SessionPreparationCompletedEvent,
@@ -78,18 +77,18 @@ export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: Record<string, unknown>;
-    insights: Array<{
+    insights: {
       type: string;
       description: string;
       significance: string;
       recommendations: string[];
-    }>;
-    trends: Array<{
+    }[];
+    trends: {
       metric: string;
       direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
-    }>;
+    }[];
     generatedAt: Date;
   };
 }
@@ -114,15 +113,15 @@ export interface SessionStartPerformanceReportEvent
       byGoal: Record<string, unknown>;
     };
     readiness: {
-      trends: Array<{ date: Date; score: number }>;
+      trends: { date: Date; score: number }[];
       factors: Record<string, number>;
       improvements: string[];
       challenges: string[];
     };
     efficiency: {
-      preparationTime: Array<{ date: Date; time: number }>;
-      readinessImprovement: Array<{ date: Date; improvement: number }>;
-      goalAlignment: Array<{ date: Date; alignment: number }>;
+      preparationTime: { date: Date; time: number }[];
+      readinessImprovement: { date: Date; improvement: number }[];
+      goalAlignment: { date: Date; alignment: number }[];
     };
     insights: {
       strengths: string[];

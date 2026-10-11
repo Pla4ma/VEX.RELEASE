@@ -32,7 +32,7 @@ class CompanionPersonalityEngine {
 
   private listeners: Set<(state: CompanionPersonalityState) => void> =
     new Set();
-  private unsubscribeFunctions: Array<() => void> = [];
+  private unsubscribeFunctions: (() => void)[] = [];
 
   initialize(): void {
     const availability = getAvailabilityFor(FEATURE_KEY);

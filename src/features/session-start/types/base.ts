@@ -51,12 +51,12 @@ export interface SessionPreparationStartedEvent extends BaseSessionStartEvent {
   type: 'session_preparation_started';
   data: {
     preparationType: 'standard' | 'quick' | 'comprehensive' | 'custom';
-    preparationSteps: Array<{
+    preparationSteps: {
       step: string;
       required: boolean;
       estimatedDuration: number;
       dependencies: string[];
-    }>;
+    }[];
     environment: {
       setupRequired: string[];
       checks: string[];

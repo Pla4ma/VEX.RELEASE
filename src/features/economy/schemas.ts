@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const CurrencyRpcResultSchema = z.object({
   success: z.boolean(),
   new_balance: z.number().optional(),
+  error: z.string().optional(),
 });
 export type CurrencyRpcResult = z.infer<typeof CurrencyRpcResultSchema>;
 

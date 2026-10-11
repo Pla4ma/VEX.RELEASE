@@ -6,3 +6,5 @@
 
 // AI Integration (Server-side Gemini)
 export * as ai from './ai';
+// Canonical cross-feature runtime, event, and error contracts.
+export * as contracts from './contracts';

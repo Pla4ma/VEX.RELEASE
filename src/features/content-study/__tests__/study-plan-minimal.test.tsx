@@ -1,7 +1,5 @@
-import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react-native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useContentReview, useStudyPlan } from '../hooks';
+
+
 
 jest.mock('@sentry/react-native', () => ({
   captureException: jest.fn(),
@@ -29,18 +27,7 @@ jest.mock('../ContentStudyService', () => ({
   fetchContentHistory: jest.fn(),
   deleteContent: jest.fn(),
 }));
-import * as service from '../ContentStudyService';
 
-const createTestQueryClient = () =>
-  new QueryClient({ defaultOptions: { queries: { retry: false } } });
-const wrapper = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = createTestQueryClient();
-  return React.createElement(
-    QueryClientProvider,
-    { client: queryClient },
-    children,
-  );
-};
 
 test('minimal test', () => {
   expect(1).toBe(1);

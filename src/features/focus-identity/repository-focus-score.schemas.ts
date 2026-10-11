@@ -41,8 +41,8 @@ export const CurrentFocusScoreRowSchema = z
     band: FocusScoreBandLabelSchema,
     factors: FocusScoreFactorsSchema,
     last_change_reason: z.string().min(1),
-    top_positive_factor: FocusScoreFactorKeySchema.optional(), // Add this
-    top_negative_factor: FocusScoreFactorKeySchema.optional(), // Add this
+    top_positive_factor: FocusScoreFactorKeySchema.nullish().transform((value) => value ?? undefined),
+    top_negative_factor: FocusScoreFactorKeySchema.nullish().transform((value) => value ?? undefined),
     created_at: z.string().datetime(),
     updated_at: z.string().datetime(),
   })

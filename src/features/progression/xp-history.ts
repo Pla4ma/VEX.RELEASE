@@ -13,6 +13,7 @@ function parseXpEntryRow(row: unknown): XpEntry {
     amount: parsed.amount,
     source: parsed.source,
     sessionId: parsed.session_id,
+    idempotencyKey: parsed.idempotency_key ?? undefined,
     metadata: parsed.metadata,
     createdAt: parsed.created_at,
   });
@@ -24,10 +25,8 @@ export async function fetchXpHistory(
 ): Promise<XpEntry[]> {
   let query = getSupabaseClient()
     .from('xp_history')
-    .select('id, amount, source, session_id, metadata, created_at')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
-
+    .select('id, amount, source, session_id, idempotency_key, metadata, created_at')
+    .eq('user_id', userId);
   if (options?.since) {
     query = query.gte('created_at', options.since);
   }
@@ -48,6 +47,7 @@ export async function recordXpEntry(
     amount: entry.amount,
     created_at: entry.createdAt,
     id: v4(),
+    idempotency_key: entry.idempotencyKey ?? null,
     metadata: entry.metadata,
     session_id: entry.sessionId,
     source: entry.source,
@@ -55,7 +55,7 @@ export async function recordXpEntry(
   };
 
   const { data, error } = await withResilience(
-    getSupabaseClient().from('xp_history').insert(newEntry).select('id, amount, source, session_id, metadata, created_at').single(),
+    getSupabaseClient().from('xp_history').insert(newEntry).select('id, amount, source, session_id, idempotency_key, metadata, created_at').single(),
     { fallbackValue: newEntry, operation: 'recordXpEntry' },
   );
   if (error) {
@@ -89,12 +89,14 @@ export async function recordLevelUp(
   userId: string,
   level: number,
   xpAtLevel: number,
+  idempotencyKey?: string,
 ): Promise<void> {
   const { error } = await getSupabaseClient()
     .from('level_up_history')
     .insert({
       achieved_at: Date.now(),
       id: v4(),
+      idempotency_key: idempotencyKey ?? null,
       level,
       user_id: userId,
       xp_at_level: xpAtLevel,
@@ -107,7 +109,7 @@ export async function recordLevelUp(
 
 export async function fetchLevelUpHistory(
   userId: string,
-): Promise<Array<{ achievedAt: number; level: number; xpAtLevel: number }>> {
+): Promise<{ achievedAt: number; level: number; xpAtLevel: number }[]> {
   const { data, error } = await getSupabaseClient()
     .from('level_up_history')
     .select('level, achieved_at, xp_at_level')

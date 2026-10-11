@@ -13,14 +13,13 @@ export const SubmitContentRequestSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('PDF'),
     fileId: z.string(),
+    filename: z.string().max(255).optional(),
+    title: z.string().max(500).optional(),
   }),
   z.object({
     type: z.literal('YOUTUBE'),
     url: z.string().url(),
-  }),
-  z.object({
-    type: z.literal('URL'),
-    url: z.string().url(),
+    title: z.string().max(500).optional(),
   }),
 ]);
 

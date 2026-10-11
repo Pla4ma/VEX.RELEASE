@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { createSheet } from '@/shared/ui/create-sheet';
 import {
@@ -16,7 +17,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { lightColors } from '@/theme/tokens/colors';
+
 import { IconButton } from './IconButton';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
@@ -36,11 +37,11 @@ interface ButtonProps extends PressableProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const variantStyles = {
-  primary: { indicatorColor: lightColors.text.inverse },
-  secondary: { indicatorColor: lightColors.accent.teal },
-  outline: { indicatorColor: lightColors.accent.teal },
-  ghost: { indicatorColor: lightColors.accent.teal },
-  danger: { indicatorColor: lightColors.text.inverse },
+  primary: { indicatorColor: vexFire.cream },
+  secondary: { indicatorColor: vexFire.amber },
+  outline: { indicatorColor: vexFire.amber },
+  ghost: { indicatorColor: vexFire.amber },
+  danger: { indicatorColor: vexFire.cream },
 };
 
 export function Button({
@@ -136,18 +137,18 @@ const styles = createSheet({
   mdText: { fontSize: 16 },
   lg: { paddingVertical: 16, paddingHorizontal: 28 },
   lgText: { fontSize: 18 },
-  primary: { backgroundColor: lightColors.accent.teal },
-  primaryText: { color: lightColors.text.inverse },
-  secondary: { backgroundColor: lightColors.success[50] },
-  secondaryText: { color: lightColors.accent.teal },
+  primary: { backgroundColor: vexFire.amber },
+  primaryText: { color: vexFire.cream },
+  secondary: { backgroundColor: vexFire.panelSoft },
+  secondaryText: { color: vexFire.amber },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: lightColors.accent.teal,
+    borderColor: vexFire.amber,
   },
-  outlineText: { color: lightColors.accent.teal },
+  outlineText: { color: vexFire.amber },
   ghost: { backgroundColor: 'transparent' },
-  ghostText: { color: lightColors.text.muted },
-  danger: { backgroundColor: lightColors.semantic.danger },
-  dangerText: { color: lightColors.text.inverse },
+  ghostText: { color: vexFire.textMuted },
+  danger: { backgroundColor: vexFire.danger },
+  dangerText: { color: vexFire.cream },
 });

@@ -3,10 +3,9 @@ import * as Sentry from '@sentry/react-native';
 
 import { Box } from '../../components/primitives/Box';
 import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
+import { Text , Text as VexText } from '../../components/primitives/Text';
 import { getQuizForStudyPlan } from '../content-study/service';
 import type { QuizItem } from '../content-study/types';
-import { Text as VexText } from '../../components/primitives/Text';
 
 type StudyQuizBreakProps = {
   isVisible: boolean;

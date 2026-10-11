@@ -101,7 +101,8 @@ export function createLedgerRow(
     interruption_count: ledger.interruptionCount,
     ledger_id: ledger.ledgerId,
     mode: ledger.mode,
-    offline_sync_status: ledger.offlineSyncStatus,
+    offline_sync_status: ledger.offlineSyncStatus === 'pending_sync' ? 'pending'
+      : ledger.offlineSyncStatus === 'failed_sync' ? 'failed' : 'synced',
     pause_count: ledger.pauseCount,
     quality_score: ledger.qualityScore,
     reward_ids: ledger.rewardIds,

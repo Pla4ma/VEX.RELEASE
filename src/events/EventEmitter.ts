@@ -9,6 +9,10 @@ interface EventSubscription<T = unknown> {
   once: boolean;
   priority: number;
 }
+function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
+  return typeof value === 'object' && value !== null
+    && typeof Reflect.get(value, 'then') === 'function';
+}
 export class EventEmitter {
   private subscriptions: Map<string, EventSubscription[]> = new Map();
   private static instance: EventEmitter | null = null;
@@ -61,7 +65,12 @@ export class EventEmitter {
     const toRemove: EventSubscription[] = [];
     for (const subscription of toCall) {
       try {
-        subscription.handler(data);
+        const result = subscription.handler(data);
+        if (isPromiseLike(result)) {
+          void Promise.resolve(result).catch((error: unknown) => {
+            this.handleError(error, event, data);
+          });
+        }
         if (subscription.once) {
           toRemove.push(subscription);
         }

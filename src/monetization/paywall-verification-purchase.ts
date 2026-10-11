@@ -6,10 +6,9 @@ import type {
   PurchasesPackage,
   PurchasesOffering,
   PurchasesOfferings,
-} from '../shared/monetization/revenuecat-types';
+ PurchaseResult } from '../shared/monetization/revenuecat-types';
 import { createDebugger } from '../utils/debug';
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
-import type { PurchaseResult } from '../shared/monetization/revenuecat-types';
 
 const debug = createDebugger('paywall-verification:purchase');
 
@@ -65,7 +64,7 @@ async function testPurchaseFlow(pkg: PurchasesPackage): Promise<string[]> {
     const purchaseResult = await revenueCatService.purchasePackage(pkg);
     const resultIssues = validatePurchaseResult(purchaseResult);
     issues.push(...resultIssues);
-  } catch (error: unknown) {
+  } catch {
     issues.push('Purchase flow test threw an unexpected error');
   }
 

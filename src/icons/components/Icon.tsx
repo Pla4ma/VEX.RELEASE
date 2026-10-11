@@ -31,7 +31,7 @@ export function Icon({
   variant = 'outline',
   strokeWidth = 'normal',
   animated = false,
-  animation,
+  animation: _animation,
   style,
   testID,
   accessibilityLabel,

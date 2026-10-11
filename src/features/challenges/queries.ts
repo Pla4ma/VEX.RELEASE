@@ -7,6 +7,7 @@ import type {
   UserChallengeSummary,
 } from './schemas';
 import { CONFIG } from './helpers';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 
 export async function getActiveChallenges(
   userId: string,
@@ -25,6 +26,7 @@ export async function getUserChallengeSummaries(
   userId: string,
 ): Promise<UserChallengeSummary[]> {
   const details = await getActiveChallenges(userId);
+  const currencyAvailable = getAvailabilityFor('economy_basic').canUseBackend;
   return details.map((detail) => ({
     challengeId: detail.challenge.id,
     title: detail.challenge.title,
@@ -48,8 +50,8 @@ export async function getUserChallengeSummaries(
     expiresInMs: detail.userChallenge.expiresAt
       ? Math.max(0, detail.userChallenge.expiresAt - Date.now())
       : null,
-    rewardType: detail.coinReward > 0 ? 'COINS' : 'XP',
-    rewardAmount: detail.coinReward > 0 ? detail.coinReward : detail.xpReward,
+    rewardType: currencyAvailable && detail.coinReward > 0 ? 'COINS' : 'XP',
+    rewardAmount: currencyAvailable && detail.coinReward > 0 ? detail.coinReward : detail.xpReward,
     canReroll: detail.userChallenge.status === 'ACTIVE',
     rerollCost: CONFIG.PAID_REROLL_COST,
     freeRerollAvailable:

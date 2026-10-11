@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
@@ -17,7 +18,7 @@ export function MemoryList({
   type,
   onStartSession,
 }: MemoryListProps): React.ReactNode {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { data, isPending, isError, error, refetch, isOffline } =
     useCoachMemories(userId, type);
 
@@ -48,7 +49,7 @@ export function MemoryList({
   return (
     <View>
       {isOffline && (
-        <Text style={{ color: theme.colors.warning[500] }}>
+        <Text style={{ color: vexFire.amber }}>
           Coach memory is showing saved context until you reconnect.
         </Text>
       )}
@@ -77,13 +78,13 @@ function MemoryRow({ memory }: { memory: CoachMemory }): React.ReactNode {
       style={{
         paddingVertical: theme.spacing[3],
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors.border.DEFAULT,
+        borderBottomColor: vexFire.border,
       }}
     >
-      <Text style={{ color: theme.colors.text.primary, fontWeight: '600' }}>
+      <Text style={{ color: vexFire.cream, fontWeight: '600' }}>
         {memory.title}
       </Text>
-      <Text style={{ color: theme.colors.text.secondary }}>
+      <Text style={{ color: vexFire.textSecondary }}>
         {memory.description}
       </Text>
     </View>
@@ -100,7 +101,7 @@ function MemoryListSkeleton(): React.ReactNode {
           style={{
             minHeight: theme.spacing[12],
             marginBottom: theme.spacing[2],
-            backgroundColor: theme.colors.background.secondary,
+            backgroundColor: vexFire.panel,
             borderRadius: theme.borderRadius.md,
           }}
         />
@@ -119,10 +120,10 @@ function EmptyMemoryState({
   const { theme } = useTheme();
   return (
     <View>
-      <Text style={{ color: theme.colors.text.primary, fontWeight: '700' }}>
+      <Text style={{ color: vexFire.cream, fontWeight: '700' }}>
         {isOffline ? 'Coach memory is offline' : 'No coach memory yet'}
       </Text>
-      <Text style={{ color: theme.colors.text.secondary }}>
+      <Text style={{ color: vexFire.textSecondary }}>
         {isOffline
           ? 'Reconnect to refresh saved patterns.'
           : 'Finish a focus session and your coach will remember useful patterns.'}
@@ -135,7 +136,7 @@ function EmptyMemoryState({
           accessibilityHint="Starts a session so coach memory can learn from real progress"
           style={{ minHeight: theme.spacing[12], justifyContent: 'center' }}
         >
-          <Text style={{ color: theme.colors.primary[500], fontWeight: '600' }}>
+          <Text style={{ color: vexFire.ember, fontWeight: '600' }}>
             Start a session
           </Text>
         </Pressable>

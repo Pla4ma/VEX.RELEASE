@@ -57,14 +57,14 @@ describe('service – buildContentStudyGate', () => {
     expect(gate.showUploadEntry).toBe(false);
   });
 
-  it('blocks upload for non-STUDY goal even after 3 sessions', () => {
+  it('allows upload for non-STUDY goals when services are healthy', () => {
     const gate = buildContentStudyGate({
       ...healthyBase,
       goal: 'WORK',
       totalCompletedSessions: 5,
     });
-    expect(gate.showUploadEntry).toBe(false);
-    expect(gate.fallback).toBe('Build a deep work path');
+    expect(gate.showUploadEntry).toBe(true);
+    expect(gate.fallback).toBeNull();
   });
 
   it('allows upload for LEARNING goal after 3 sessions', () => {

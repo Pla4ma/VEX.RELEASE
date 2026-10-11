@@ -1,5 +1,5 @@
-import { lightColors } from '@/theme/tokens/colors';
 import type { SessionGlyphName } from '@/shared/ui/liquid-glass';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
@@ -28,7 +28,7 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: 'Unlimited',
     xpMultiplier: '50%',
     description: 'Good for maintenance',
-    color: lightColors.semantic.primary,
+    color: vexFire.copper,
   },
   {
     id: 'FOCUSED',
@@ -37,7 +37,7 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '2 max',
     xpMultiplier: '100%',
     description: 'Standard mode',
-    color: lightColors.semantic.secondary,
+    color: vexFire.ember,
   },
   {
     id: 'DEEP_WORK',
@@ -46,6 +46,6 @@ export const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '0 pauses',
     xpMultiplier: '150%',
     description: 'Maximum impact',
-    color: lightColors.semantic.accent,
+    color: vexFire.amber,
   },
 ];

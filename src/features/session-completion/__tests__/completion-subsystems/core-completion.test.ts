@@ -48,7 +48,10 @@ describe('applyCompletionSubsystems', () => {
     expect(require('./helpers').mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
       'SESSION_COMPLETE',
-      { sessionId: baseLedger.sessionId },
+      expect.objectContaining({
+        idempotencyKey: `${baseLedger.idempotencyKey}:xp`,
+        sessionId: baseLedger.sessionId,
+      }),
     );
   });
 });

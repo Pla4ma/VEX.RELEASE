@@ -13,6 +13,13 @@ import {
 import type { CoachMessage, CoachState } from '../types';
 import { useAuthStore } from '../../../store';
 import * as Sentry from '@sentry/react-native';
+import type { CoachConversationTurn } from '../schemas';
+import { isDevUser } from '../../../utils/supabase-resilience';
+
+interface CoachQuestionInput {
+  question: string;
+  conversation: CoachConversationTurn[];
+}
 
 const debug = createDebugger('coach:hooks');
 
@@ -23,11 +30,13 @@ export function useCoachScreenState(): {
   historyLoading: boolean;
 } {
   const { user } = useAuthStore();
-  const userId = user?.id ?? 'anonymous';
+  const userId = user?.id ?? '';
+  const localDevMode = isDevUser();
 
   const { data: coachState, isLoading: stateLoading } = useQuery<CoachState>({
     queryKey: ['coach', 'state', userId],
     queryFn: () => getCoachState(userId),
+    enabled: Boolean(userId) && !localDevMode,
     staleTime: 60000,
   });
 
@@ -35,7 +44,8 @@ export function useCoachScreenState(): {
     messages: CoachMessage[];
   }>({
     queryKey: ['coach', 'history', userId],
-    queryFn: getCoachHistory,
+    queryFn: () => getCoachHistory(userId),
+    enabled: Boolean(userId) && !localDevMode,
     staleTime: 300000,
   });
 
@@ -56,14 +66,15 @@ export function useAskCoachQuestionMutation(callbacks: {
   const { user } = useAuthStore();
 
   return useMutation({
-    mutationFn: (question: string) => askCoachQuestion(question, user?.id),
+    mutationFn: ({ question, conversation }: CoachQuestionInput) =>
+      askCoachQuestion(question, user?.id, conversation),
     onMutate: callbacks.onMutate,
     onSuccess: (response) => {
       callbacks.onSuccess(response);
       queryClient.invalidateQueries({ queryKey: ['coach', 'history'] });
     },
     onError: (err) => {
-      callbacks.onError('Sorry, I had trouble responding. Please try again.');
+      callbacks.onError('AI Coach could not reach the live model. Check your connection and try again.');
       Sentry.captureException(err, {
         tags: { feature: 'ai-coach', operation: 'ask-coach-question' },
       });

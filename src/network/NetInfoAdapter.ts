@@ -7,7 +7,7 @@
 import type {} from '../types/global';
 import type {
   NetInfoState,
-  NetInfoSubscription,
+
 } from '@react-native-community/netinfo';
 import { createDebugger } from '../utils/debug';
 
@@ -37,8 +37,8 @@ export class NetInfoAdapter {
   private unsubscribe: (() => void) | null = null;
   private initialized = false;
   private currentState: NetworkState = {
-    isConnected: true,
-    isInternetReachable: true,
+    isConnected: false,
+    isInternetReachable: null,
     type: 'unknown',
     details: null,
   };

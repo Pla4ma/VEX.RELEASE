@@ -32,7 +32,12 @@ jest.mock('../ContentStudyService', () => ({
 import * as service from '../ContentStudyService';
 
 const createTestQueryClient = () =>
-  new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+      mutations: { gcTime: 0 },
+    },
+  });
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
   return React.createElement(

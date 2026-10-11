@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, type ViewStyle } from 'react-native';
-import { useTheme } from '../../../theme/ThemeContext';
-import { VexMeshAtmosphere } from '../../../components/atmosphere/VexMeshAtmosphere';
+import { Image, View, type ViewStyle } from 'react-native';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 type LiquidGlassScreenProps = {
   children: React.ReactNode;
@@ -12,20 +11,23 @@ export function LiquidGlassScreen({
   children,
   style,
 }: LiquidGlassScreenProps): React.JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <View
       style={[
         {
           flex: 1,
-          backgroundColor: theme.colors.semantic.background,
+          backgroundColor: vexFire.background,
           overflow: 'hidden',
         },
         style,
       ]}
     >
-      <VexMeshAtmosphere variant="default" />
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../../assets/vex/utility/notification-signal.png')}
+        resizeMode="contain"
+        style={{ height: 240, opacity: 0.1, position: 'absolute', right: -58, top: 20, width: 240 }}
+      />
       {children}
     </View>
   );

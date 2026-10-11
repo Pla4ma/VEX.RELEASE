@@ -8,6 +8,7 @@ import {
   getStreakCelebrationMessage,
   type StreakState,
 } from '../StreakEvolutionSystem';
+import { lightColors } from '@/theme/tokens/colors';
 
 jest.mock('../../../events', () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },
@@ -22,20 +23,20 @@ describe('StreakEvolutionSystem', () => {
     it('should return info for ACTIVE state', () => {
       const info = getStreakStateInfo('ACTIVE');
       expect(info.label).toBe('Active');
-      expect(info.color).toBe('#15803D');
+      expect(info.color).toBe(lightColors.semantic.success);
       expect(info.icon).toBeDefined();
     });
 
     it('should return info for AT_RISK state', () => {
       const info = getStreakStateInfo('AT_RISK');
       expect(info.label).toBe('At Risk');
-      expect(info.color).toBe('#F97316');
+      expect(info.color).toBe(lightColors.accent.orange);
     });
 
     it('should return info for BROKEN state', () => {
       const info = getStreakStateInfo('BROKEN');
       expect(info.label).toBe('Broken');
-      expect(info.color).toBe('#B91C1C');
+      expect(info.color).toBe(lightColors.semantic.danger);
     });
 
     it('should return default for invalid state', () => {

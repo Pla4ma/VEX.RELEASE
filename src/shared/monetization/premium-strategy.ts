@@ -36,7 +36,7 @@ export interface PremiumStrategy {
     | 'none'
     | 'after_value'
     | PremiumHighIntentAction;
-  freeVsProMatrix: Array<{ free: string; pro: string }>;
+  freeVsProMatrix: { free: string; pro: string }[];
 }
 
 const FREE_FEATURES = [
@@ -56,7 +56,7 @@ const PREMIUM_FEATURES = [
   'Calendar Intelligence — focus windows, quiet planning, deadline-aware scheduling',
 ];
 
-const FREE_VS_PRO_MATRIX: Array<{ free: string; pro: string }> = [
+const FREE_VS_PRO_MATRIX: { free: string; pro: string }[] = [
   {
     free: 'Start and complete sessions',
     pro: 'Deeper personalization from real session evidence',

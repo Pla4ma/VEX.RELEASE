@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { lightColors } from '@/theme/tokens/colors';
 
-import { UserPreferencesSchema, AppearanceSettingsSchema } from './core-schemas';
+import { UserPreferencesSchema, AppearanceSettingsSchema , PrivacySettingsSchema, DataControlSettingsSchema } from './core-schemas';
 import type { AppearanceSettings } from './core-schemas';
 import { NotificationSettingsSchema } from './notification-schemas';
 import { CoachSettingsSchema } from './coach-schemas';
-import { PrivacySettingsSchema, DataControlSettingsSchema } from './core-schemas';
 
 export function createDefaultSettings(
   userId: string,

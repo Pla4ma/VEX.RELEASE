@@ -110,7 +110,7 @@ export function DayCell({
           )}
           {day.events.length > 0 && (
             <Box flexDirection="row" gap="xs" mt="xs">
-              {day.events.slice(0, 2).map((event, i) => (
+              {day.events.slice(0, 2).map((event, _i) => (
                 <Text key={`event-${event}`} fontSize={8}>
                   {EVENT_ICONS[event]}
                 </Text>

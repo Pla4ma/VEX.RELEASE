@@ -28,8 +28,8 @@ export class ApiClient {
   private config: ApiConfig;
   private circuitBreaker: CircuitBreaker;
   private deduplicator = new RequestDeduplicator();
-  private requestInterceptors: Array<RequestInterceptor> = [];
-  private responseInterceptors: Array<ResponseInterceptor> = [];
+  private requestInterceptors: RequestInterceptor[] = [];
+  private responseInterceptors: ResponseInterceptor[] = [];
   private authProvider: AuthProvider | null = null;
 
   constructor(config: Partial<ApiConfig> = {}) {

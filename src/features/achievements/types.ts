@@ -60,11 +60,11 @@ export interface UserAchievement {
   maxProgress: number;
   isUnlocked: boolean;
   unlockedAt?: number;
-  progressHistory: Array<{
+  progressHistory: {
     timestamp: number;
     progress: number;
     source: string;
-  }>;
+  }[];
 }
 
 export const DEDICATION_ACHIEVEMENTS: Achievement[] = [

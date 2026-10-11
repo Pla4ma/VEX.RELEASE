@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View, Text, type ViewStyle } from 'react-native';
 import Animated, {
@@ -9,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { styles } from './progress-state.styles';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 interface ProgressBarProps {
   progress: number;
@@ -24,8 +25,8 @@ interface ProgressBarProps {
 export function ProgressBar({
   progress,
   height = 8,
-  backgroundColor = lightColors.border.light,
-  fillColor = lightColors.accent.teal,
+  backgroundColor = vexFire.border,
+  fillColor = vexFire.amber,
   animated = true,
   style,
   showPercentage = false,
@@ -90,8 +91,8 @@ export function SegmentedProgress({
               borderRadius: height / 2,
               backgroundColor:
                 i < completed
-                  ? lightColors.accent.teal
-                  : lightColors.border.light,
+                  ? vexFire.amber
+                  : vexFire.border,
               flex: 1,
             },
           ]}
@@ -114,8 +115,8 @@ export function CircularProgress({
   progress,
   size = 64,
   strokeWidth = 6,
-  color = lightColors.accent.teal,
-  backgroundColor = lightColors.border.light,
+  color = vexFire.amber,
+  backgroundColor = vexFire.border,
   showText = true,
 }: CircularProgressProps) {
   const progressAnim = useSharedValue(0);

@@ -23,6 +23,17 @@ describe('timing', () => {
       const result = await withTimeout(Promise.resolve('done'), 1000);
       expect(result).toBe('done');
     });
+
+    it('clears its timeout handle when the promise resolves first', async () => {
+      jest.useFakeTimers();
+      try {
+        await expect(withTimeout(Promise.resolve('done'), 60_000))
+          .resolves.toBe('done');
+        expect(jest.getTimerCount()).toBe(0);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
   });
 
   describe('debounce', () => {

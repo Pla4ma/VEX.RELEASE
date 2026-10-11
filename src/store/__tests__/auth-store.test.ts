@@ -151,7 +151,7 @@ describe('useAuthStore auth actions', () => {
   });
 
   describe('logout', () => {
-    it('does not clear state when signOut fails', async () => {
+    it('clears local state even when signOut fails', async () => {
       useAuthStore.setState({ user: mockUser, isAuthenticated: true });
       jest
         .mocked(authService.signOut)
@@ -159,8 +159,8 @@ describe('useAuthStore auth actions', () => {
 
       await useAuthStore.getState().logout();
 
-      expect(useAuthStore.getState().isAuthenticated).toBe(true);
-      expect(useAuthStore.getState().user).toEqual(mockUser);
+      expect(useAuthStore.getState().isAuthenticated).toBe(false);
+      expect(useAuthStore.getState().user).toBeNull();
       expect(captureException).toHaveBeenCalledTimes(1);
     });
 

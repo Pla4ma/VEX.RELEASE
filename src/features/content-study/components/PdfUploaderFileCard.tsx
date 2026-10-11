@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, Pressable } from 'react-native';
 import Animated, {
@@ -5,12 +6,11 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Icon } from '../../../icons/components/Icon';
 import { styles } from './PdfUploader.styles';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface FileCardProps {
   fileName: string;
@@ -24,8 +24,8 @@ interface FileCardProps {
   onRemove: () => void;
   validation: {
     isValid: boolean;
-    errors: Array<{ message: string }>;
-    warnings: Array<{ message: string }>;
+    errors: { message: string }[];
+    warnings: { message: string }[];
   };
   formatFileSize: (bytes: number) => string;
   getFileIcon: (mimeType: string) => string;
@@ -45,7 +45,7 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
   formatFileSize,
   getFileIcon,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const progressAnim = useSharedValue(0);
 
   React.useEffect(() => {
@@ -63,20 +63,20 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
           name={getFileIcon(fileType)}
           size="lg"
           color={
-            isOversized ? theme.colors.error[500] : theme.colors.primary[500]
+            isOversized ? vexFire.danger : vexFire.ember
           }
         />
         <View style={styles.fileDetails}>
           <Text
-            style={[styles.fileName, { color: theme.colors.text.primary }]}
+            style={[styles.fileName, { color: vexFire.cream }]}
             numberOfLines={1}
           >
             {fileName}
           </Text>
-          <Text style={[styles.fileMeta, { color: theme.colors.text.muted }]}>
+          <Text style={[styles.fileMeta, { color: vexFire.textMuted }]}>
             {formatFileSize(fileSize)}
             {isOversized && (
-              <Text style={{ color: theme.colors.error[500] }}>
+              <Text style={{ color: vexFire.danger }}>
                 {' '}
                 (exceeds {formatFileSize(maxSize)} limit)
               </Text>
@@ -89,19 +89,19 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
           <View
             style={[
               styles.progressBar,
-              { backgroundColor: theme.colors.background.primary },
+              { backgroundColor: vexFire.background },
             ]}
           >
             <Animated.View
               style={[
                 styles.progressFill,
-                { backgroundColor: theme.colors.primary[500] },
+                { backgroundColor: vexFire.ember },
                 progressWidthStyle,
               ]}
             />
           </View>
           <Text
-            style={[styles.progressText, { color: theme.colors.text.muted }]}
+            style={[styles.progressText, { color: vexFire.textMuted }]}
           >
             {uploadProgress}%
           </Text>
@@ -110,7 +110,7 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
       {uploadError && (
         <View style={styles.errorContainer}>
           <Text
-            style={[styles.errorText, { color: theme.colors.error[500] }]}
+            style={[styles.errorText, { color: vexFire.danger }]}
           >
             {uploadError}
           </Text>
@@ -124,7 +124,7 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
               <Text
                 style={[
                   styles.retryText,
-                  { color: theme.colors.primary[500] },
+                  { color: vexFire.ember },
                 ]}
               >
                 Retry
@@ -138,7 +138,7 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
           {validation.errors.map((error, index) => (
             <Text
               key={`error-${error.message}-${index}`}
-              style={[styles.errorText, { color: theme.colors.error[500] }]}
+              style={[styles.errorText, { color: vexFire.danger }]}
             >
               {error.message}
             </Text>
@@ -152,7 +152,7 @@ export const PdfUploaderFileCard: React.ComponentType<FileCardProps> = ({
               key={`warning-${warning.message}-${index}`}
               style={[
                 styles.warningText,
-                { color: theme.colors.warning[500] },
+                { color: vexFire.amber },
               ]}
             >
               {warning.message}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import {
   getPremiumCardStyle,
   withAlpha,
@@ -12,7 +12,6 @@ import type { MasteryState } from '../types';
 import { MasteryRankBadge } from './MasteryRankBadge';
 import { TechniqueBar } from './TechniqueBar';
 import { TECHNIQUES, difficultyColors } from './mastery-card-constants';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type Props = {
   userId: string;
@@ -26,7 +25,7 @@ export function MasteryCard({
   onStateChange,
 }: Props): React.ReactNode {
   const { theme } = useTheme();
-  const { claimChallenge, getMasteryState } = useMasteryActions();
+  const { claimChallenge, getMasteryState: _getMasteryState } = useMasteryActions();
 
   // Use prop directly instead of mirroring into state via useEffect
 

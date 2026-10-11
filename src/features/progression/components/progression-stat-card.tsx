@@ -35,7 +35,7 @@ export const ProgressionStatCard: React.ComponentType<ProgressionStatCardProps> 
   const strokeWidth = 4;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const strokeDashoffset = circumference - progress * circumference;
+  const _strokeDashoffset = circumference - progress * circumference;
 
   return (
     <GlassCard

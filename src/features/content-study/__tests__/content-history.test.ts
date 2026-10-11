@@ -48,7 +48,10 @@ describe('useContentHistory', () => {
 
   beforeEach(() => {
     queryClient = new QueryClient({
-      defaultOptions: { queries: { retry: false, gcTime: 0 } },
+      defaultOptions: {
+        queries: { retry: false, gcTime: 0 },
+        mutations: { gcTime: 0 },
+      },
     });
     jest.clearAllMocks();
   });
@@ -101,7 +104,10 @@ describe('useRateLimit', () => {
 
   beforeEach(() => {
     queryClient = new QueryClient({
-      defaultOptions: { queries: { retry: false, gcTime: 0 } },
+      defaultOptions: {
+        queries: { retry: false, gcTime: 0 },
+        mutations: { gcTime: 0 },
+      },
     });
     jest.clearAllMocks();
   });

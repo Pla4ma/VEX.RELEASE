@@ -22,6 +22,7 @@ import {
   generateFromPersonalityTemplate,
   calculatePriority,
 } from './message-generator-helpers';
+import { trackMessageGenerationError } from '../analytics';
 
 // ─── Main Generator ───
 
@@ -169,7 +170,9 @@ function generateMessageId(): string {
 }
 
 function logGenerationError(
-  _userId: string,
-  _category: MessageCategory,
-  _error: unknown,
-): void {}
+  userId: string,
+  category: MessageCategory,
+  error: unknown,
+): void {
+  trackMessageGenerationError(userId, category, error);
+}

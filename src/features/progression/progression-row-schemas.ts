@@ -28,6 +28,7 @@ export const XpEntryRowSchema = z
     amount: z.number().positive(),
     source: XpSourceSchema,
     session_id: z.string().uuid().nullable(),
+    idempotency_key: z.string().min(1).nullable().optional(),
     metadata: z.record(z.string(), z.unknown()).nullable(),
     created_at: ProgressionTimestampSchema,
   })

@@ -1,6 +1,6 @@
 import type { RecommendationContext, CoachPersona } from './CoachRecommendationService-types';
-import { generateMessage } from './recommendation-rules';
-import type { RecommendationRule } from './recommendation-rules';
+import { generateRecommendationMessage } from './recommendation-message-generator';
+import type { RecommendationRule } from './recommendation-rule-types';
 
 export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
   {
@@ -11,7 +11,7 @@ export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
       return ctx.studyPlanProgress < 1 && ctx.studyPlanProgress > 0;
     },
     generate: (ctx: RecommendationContext, persona: CoachPersona) => {
-      const messages = generateMessage('study_plan', ctx, persona);
+      const messages = generateRecommendationMessage('study_plan', ctx, persona);
       const plan = ctx.activeStudyPlan!;
       return {
         id: `study-continue-${Date.now()}`,
@@ -36,7 +36,7 @@ export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
       return true;
     },
     generate: (ctx: RecommendationContext, persona: CoachPersona) => {
-      const messages = generateMessage('momentum_building', ctx, persona);
+      const messages = generateRecommendationMessage('momentum_building', ctx, persona);
       return {
         id: `momentum-${Date.now()}`,
         type: 'momentum_building',
@@ -60,7 +60,7 @@ export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
       return hp >= 30;
     },
     generate: (ctx: RecommendationContext, persona: CoachPersona) => {
-      const messages = generateMessage('boss_battle', ctx, persona);
+      const messages = generateRecommendationMessage('boss_battle', ctx, persona);
       return {
         id: `boss-active-${Date.now()}`,
         type: 'boss_battle',
@@ -109,7 +109,7 @@ export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
       return true;
     },
     generate: (ctx: RecommendationContext, persona: CoachPersona) => {
-      const messages = generateMessage('comeback', ctx, persona);
+      const messages = generateRecommendationMessage('comeback', ctx, persona);
       return {
         id: `comeback-${Date.now()}`,
         type: 'comeback',
@@ -129,7 +129,7 @@ export const RECOMMENDATION_RULES_STANDARD: RecommendationRule[] = [
     priority: 50,
     condition: () => true,
     generate: (ctx: RecommendationContext, persona: CoachPersona) => {
-      const messages = generateMessage('focus_session', ctx, persona);
+      const messages = generateRecommendationMessage('focus_session', ctx, persona);
       return {
         id: `default-${Date.now()}`,
         type: 'focus_session',

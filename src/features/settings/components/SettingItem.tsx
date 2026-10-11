@@ -22,6 +22,18 @@ export function SettingItem({
   onPress,
   children,
 }: SettingItemProps): React.ReactElement {
+  const content = (
+    <View style={styles.content}>
+      <Text style={styles.label}>{label}</Text>
+      {value !== undefined && (
+        <Text style={styles.value}>{String(value)}</Text>
+      )}
+      {children}
+    </View>
+  );
+  if (!onPress) {
+    return <View style={styles.container}>{content}</View>;
+  }
   return (
     <Pressable
       onPress={onPress}
@@ -30,13 +42,7 @@ export function SettingItem({
       accessibilityRole="button"
       accessibilityHint="Double tap to activate"
     >
-      <View style={styles.content}>
-        <Text style={styles.label}>{label}</Text>
-        {value !== undefined && (
-          <Text style={styles.value}>{String(value)}</Text>
-        )}
-        {children}
-      </View>
+      {content}
       <Text style={styles.arrow}>→</Text>
     </Pressable>
   );

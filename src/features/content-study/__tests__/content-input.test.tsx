@@ -13,6 +13,10 @@ jest.mock('../../../store', () => ({
   }),
 }));
 
+jest.mock('../../../shared/ui/components/Toast', () => ({
+  useToast: () => ({ show: jest.fn() }),
+}));
+
 jest.mock('../ContentStudyService', () => ({
   submitContent: jest.fn(),
   extractContent: jest.fn(),
@@ -28,7 +32,12 @@ jest.mock('../ContentStudyService', () => ({
 }));
 
 const createTestQueryClient = () =>
-  new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, gcTime: 0 },
+      mutations: { gcTime: 0 },
+    },
+  });
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
   return React.createElement(

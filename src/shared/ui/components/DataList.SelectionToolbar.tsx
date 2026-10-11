@@ -40,7 +40,7 @@ export const SelectionToolbar: React.ComponentType<SelectionToolbarProps> = ({
       </View>
       {actions && (
         <View style={styles.toolbarActions}>
-          {actions.map((action, index) => (
+          {actions.map((action, _index) => (
             <Pressable
               key={action.label}
               onPress={action.onPress}

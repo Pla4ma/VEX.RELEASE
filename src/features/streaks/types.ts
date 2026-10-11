@@ -30,7 +30,7 @@ export interface StreakMilestone {
   visualEffect: string;
   achieved: boolean;
   achievedAt: number | null;
-  rewards: Array<{ type: string; value: number }>;
+  rewards: { type: string; value: number }[];
 }
 
 export interface StreakInsurance {

@@ -10,11 +10,11 @@ import {
 
 export function calculateFocusQuality(
   session: SessionState,
-  interruptions: Array<{
+  interruptions: {
     duration: number;
     severity: string;
     autoRecovered?: boolean;
-  }>,
+  }[],
 ): FocusQualityMetrics {
   const now = Date.now();
   const sessionDuration = session.config.duration * 1000;

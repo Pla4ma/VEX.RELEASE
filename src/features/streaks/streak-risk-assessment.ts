@@ -1,12 +1,9 @@
-import type {
-  StreakGamble,
-  StreakInsurance,
-  ComebackToken,
-} from './streak-insurance';
+import type { StreakGamble } from './streak-gamble';
+import { getGambleOptions } from './streak-gamble';
+import type { StreakInsurance, ComebackToken } from './streak-insurance';
 import {
   calculateInsuranceCost,
   createInsurance,
-  getGambleOptions,
 } from './streak-insurance';
 
 export interface SettleGambleResult {

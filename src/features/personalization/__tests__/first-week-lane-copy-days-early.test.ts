@@ -24,14 +24,14 @@ type Goal = FirstWeekResolverInput['primaryGoal'];
 type Style = FirstWeekResolverInput['motivationStyle'];
 
 describe('Day 1 return copy per lane', () => {
-  const cases: Array<{
+  const cases: {
     goal: Goal;
     style: Style;
     lane: string;
     theme: string;
     msg: string;
     unlock: string;
-  }> = [
+  }[] = [
     {
       goal: 'study',
       style: 'study_focused',
@@ -85,13 +85,13 @@ describe('Day 1 return copy per lane', () => {
 });
 
 describe('Day 2 proof copy per lane', () => {
-  const cases: Array<{
+  const cases: {
     goal: Goal;
     style: Style;
     lane: string;
     theme: string;
     msg: string;
-  }> = [
+  }[] = [
     {
       goal: 'study',
       style: 'study_focused',

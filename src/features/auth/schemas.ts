@@ -3,6 +3,14 @@ import type { User } from '../../types/models';
 
 const UserRoleSchema = z.enum(['user', 'moderator', 'admin', 'superadmin']);
 const UserStatusSchema = z.enum(['active', 'inactive', 'suspended', 'pending']);
+export const AuthStatusSchema = z.enum([
+  'unknown',
+  'checking',
+  'authenticated',
+  'signed_out',
+  'error',
+]);
+export type AuthStatus = z.infer<typeof AuthStatusSchema>;
 
 const UserPreferencesSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),

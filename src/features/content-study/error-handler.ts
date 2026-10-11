@@ -13,7 +13,7 @@ export class ContentStudyErrorHandler {
   private retryAttempts: Map<string, number> = new Map();
   private errorCallbacks: Map<
     ContentStudyErrorCode,
-    Array<(error: ContentStudyError) => void>
+    ((error: ContentStudyError) => void)[]
   > = new Map();
   private static instance: ContentStudyErrorHandler;
 

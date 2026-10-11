@@ -20,13 +20,38 @@ export type RuntimeMMKV = {
   size?: number;
 };
 
-declare const require: (name: string) => {
-  createMMKV: (configuration: RuntimeMMKVConfiguration) => unknown;
-};
+interface NativeMMKVModule {
+  createMMKV?: (configuration: RuntimeMMKVConfiguration) => unknown;
+  MMKV?: new (configuration?: RuntimeMMKVConfiguration) => unknown;
+}
+
+interface NativeMMKV {
+  set(key: string, value: MMKVValue): void;
+  getBoolean?(key: string): boolean | undefined;
+  getString?(key: string): string | undefined;
+  getNumber?(key: string): number | undefined;
+  getBuffer?(key: string): Uint8Array | undefined;
+  contains?(key: string): boolean;
+  remove?(key: string): void;
+  delete?(key: string): void;
+  getAllKeys?(): string[];
+  clearAll?(): void;
+  recrypt?(key: string | undefined): void;
+  size?: number;
+}
+
+declare const require: (name: string) => NativeMMKVModule;
 
 function canUseNativeMMKV(): boolean {
   return typeof (globalThis as { nativeCallSyncHook?: unknown })
     .nativeCallSyncHook === 'function';
+}
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object';
+}
+
+function isNativeMMKV(value: unknown): value is NativeMMKV {
+  return isRecord(value) && typeof value.set === 'function';
 }
 
 const memoryStores = new Map<string, Map<string, MMKVValue>>();
@@ -110,22 +135,20 @@ export function createRuntimeMMKV(
 
   try {
     // SAFETY: require() defers native MMKV access so unsupported runtimes can fall back cleanly.
-    // MMKV v4 exposes createMMKV() instead of the v3 `new MMKV()` class constructor.
-    const { createMMKV } = require('react-native-mmkv');
-    const native = createMMKV(configuration) as {
-      set(key: string, value: MMKVValue): void;
-      getBoolean?(key: string): boolean | undefined;
-      getString?(key: string): string | undefined;
-      getNumber?(key: string): number | undefined;
-      getBuffer?(key: string): Uint8Array | undefined;
-      contains?(key: string): boolean;
-      remove?(key: string): void;
-      delete?(key: string): void;
-      getAllKeys?(): string[];
-      clearAll?(): void;
-      recrypt?(key: string | undefined): void;
-      size?: number;
-    };
+    const nativeModule = require('react-native-mmkv');
+    let native: unknown;
+    if (typeof nativeModule.createMMKV === 'function') {
+      native = nativeModule.createMMKV(configuration);
+    } else if (typeof nativeModule.MMKV === 'function') {
+      native = new nativeModule.MMKV(configuration);
+    } else {
+      return new MemoryMMKV(configuration.id);
+    }
+
+    if (!isNativeMMKV(native)) {
+      return new MemoryMMKV(configuration.id);
+    }
+
     // v4 renamed .delete() to .remove(); re-expose .delete() to keep the RuntimeMMKV contract stable.
     const deleteFn = native.remove ?? native.delete ?? (() => {});
     const adapted: RuntimeMMKV = {

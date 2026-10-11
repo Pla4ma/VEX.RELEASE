@@ -1,5 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react';
-import { AppState, type AppStateStatus } from 'react-native';
+import { AppState, Platform, type AppStateStatus } from 'react-native';
 import { createDebugger } from '../../utils/debug';
 import { eventBus } from '../../events/EventBus';
 
@@ -104,6 +104,9 @@ export function useSessionTimerSubscriptions(
   startRef.current = start;
 
   useEffect(() => {
+    if (Platform.OS === 'web') {
+      return undefined;
+    }
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
       if (nextAppState === 'background' && isRunning && !isPaused) {
         backgroundedAtRef.current = Date.now();
@@ -165,22 +168,17 @@ export function useSessionTimerSubscriptions(
       }
     };
   }, [
+    backgroundTimeRef,
+    backgroundedAtRef,
     duration,
     elapsedTime,
+    intervalRef,
     isPaused,
     isRunning,
+    lastTickRef,
     tickInterval,
   ]);
 
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-    // intervalRef is a ref — stable across renders, no need for dep
-    // eslint-disable-next-line react-doctor/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (autoStart && !isRunning) {

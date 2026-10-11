@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { supabase } from '../../config/supabase';
 import { RepositoryError } from '../../lib/repository/error-handling';
-import type { SyncState, SyncConflict, SettingCategory } from './types';
+import type { SyncState, SyncConflict } from './types';
 
 const TABLE_SYNC_STATE = 'settings_sync_state';
 const TABLE_PENDING_CHANGES = 'settings_pending_changes';
@@ -18,7 +18,7 @@ type PendingChange = z.infer<typeof PendingChangeSchema>;
 const RemoteChangeSchema = z.object({
   key: z.string(),
   value: z.unknown(),
-  category: z.string() as z.ZodType<SettingCategory>,
+  category: z.string().min(1),
   timestamp: z.number(),
 });
 type RemoteChange = z.infer<typeof RemoteChangeSchema>;
@@ -26,7 +26,9 @@ type RemoteChange = z.infer<typeof RemoteChangeSchema>;
 export async function fetchSyncState(userId: string): Promise<SyncState | null> {
   const { data, error } = await supabase
     .from(TABLE_SYNC_STATE)
-    .select('user_id,status,last_sync_attempt,last_successful_sync,pending_changes,error_message')    .single();
+    .select('user_id,status,last_sync_attempt,last_successful_sync,pending_changes,error_message')
+    .eq('user_id', userId)
+    .single();
   if (error) {
     if (error.code === 'PGRST116') {return null;}
     throw new Error(`Failed to fetch sync state: ${error.message}`);
@@ -69,18 +71,20 @@ export async function trackPendingChange(userId: string, key: string, value: unk
 export async function clearPendingChange(userId: string, key: string): Promise<void> {
   const { error } = await supabase
     .from(TABLE_PENDING_CHANGES)
-    .delete()    .eq('key', key);
+    .delete()
+    .eq('user_id', userId)
+    .eq('key', key);
   if (error) { throw new RepositoryError('clearPendingChange', error); }
 }
 
 export async function fetchPendingChanges(userId: string): Promise<PendingChange[]> {
   const { data, error } = await supabase
     .from(TABLE_PENDING_CHANGES)
-    .select('key,value,timestamp')    .order('timestamp', { ascending: true });
+    .select('key,value,timestamp')
+    .eq('user_id', userId)
+    .order('timestamp', { ascending: true });
   if (error) {throw new Error(`Failed to fetch pending changes: ${error.message}`);}
-  return (data || []).map((row: PendingChange) => ({
-    key: row.key, value: row.value, timestamp: row.timestamp,
-  }));
+  return (data || []).map((row: unknown) => PendingChangeSchema.parse(row));
 }
 
 export async function pushChanges(
@@ -91,7 +95,9 @@ export async function pushChanges(
   for (const change of changes) {
     const { data: remote } = await supabase
       .from(TABLE_SETTINGS)
-      .select('last_modified')      .eq('key', change.key)
+      .select('last_modified')
+      .eq('user_id', userId)
+      .eq('key', change.key)
       .single();
     if (remote && remote.last_modified > change.timestamp) {
       conflicts.push({
@@ -114,9 +120,15 @@ export async function fetchRemoteChanges(userId: string, sinceTimestamp?: number
   if (sinceTimestamp) {query = query.gt('last_modified', sinceTimestamp);}
   const { data, error } = await query.order('last_modified', { ascending: true });
   if (error) {throw new Error(`Failed to fetch remote changes: ${error.message}`);}
-  return (data || []).map((row: Record<string, unknown>) => ({
-    key: row.key, value: row.value, category: row.category, timestamp: row.last_modified,
-  })) as RemoteChange[];
+  return (data || []).map((row: unknown) => {
+    const raw = z.record(z.string(), z.unknown()).parse(row);
+    return RemoteChangeSchema.parse({
+      key: raw.key,
+      value: raw.value,
+      category: raw.category,
+      timestamp: raw.last_modified,
+    });
+  });
 }
 
 export async function applyRemoteChanges(userId: string, changes: RemoteChange[]): Promise<void> {

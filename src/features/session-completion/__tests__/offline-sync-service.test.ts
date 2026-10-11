@@ -14,7 +14,9 @@ import {
   SessionCompletionOfflineSyncService,
   sessionCompletionOfflineSync,
 } from '../offline-sync-service';
-import { enqueue } from '../../../lib/offline/queue';
+import { saveCompletionOutcome } from '../completion-ledger-repository';
+import type { CompletionLedger } from '../schemas';
+import { enqueue, getQueue, registerProcessor } from '../../../lib/offline/queue';
 import {
   getNetInfoAdapter,
   type NetworkChangeCallback,
@@ -31,6 +33,8 @@ jest.mock('../repository', () => {
   };
 });
 jest.mock('../../../lib/offline/queue');
+jest.mock('../completion-ledger-repository', () => ({ saveCompletionOutcome: jest.fn() }));
+jest.mock('../session-history-service', () => ({ recordCompletedSession: jest.fn() }));
 jest.mock('../../../network/NetInfoAdapter', () => ({
   getNetInfoAdapter: jest.fn(() => ({
     getCurrentState: () => ({
@@ -75,10 +79,11 @@ jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
 const persistLedgerMock = jest.mocked(persistCompletionLedger);
 const updateSyncMock = jest.mocked(updateCompletionSyncStatus);
 const enqueueMock = jest.mocked(enqueue);
+const getQueueMock = jest.mocked(getQueue);
+const registerProcessorMock = jest.mocked(registerProcessor);
 const getNetInfoAdapterMock = jest.mocked(getNetInfoAdapter);
 const captureSilentFailureMock = jest.mocked(captureSilentFailure);
 
-let networkCallback: NetworkChangeCallback | null = null;
 
 describe('SessionCompletionOfflineSyncService', () => {
   beforeAll(() => {
@@ -86,11 +91,13 @@ describe('SessionCompletionOfflineSyncService', () => {
   });
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    getQueueMock.mockReturnValue([]);
+    jest.mocked(saveCompletionOutcome).mockImplementation(async (ledger: CompletionLedger): Promise<CompletionLedger> => ledger);
     Object.keys(mockStorage).forEach((k) => delete mockStorage[k]);
     networkCallback = null;
     networkState.isConnected = false;
     networkState.isInternetReachable = false;
-    jest.clearAllMocks();
     getNetInfoAdapterMock.mockReturnValue({
       getCurrentState: () => networkState,
       subscribe: (callback: NetworkChangeCallback) => {
@@ -115,12 +122,11 @@ describe('SessionCompletionOfflineSyncService', () => {
     expect(result).toMatchObject({ queued: true, synced: false });
     expect(enqueueMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        operation: 'SESSION_COMPLETE',
+        operation: 'CREATE',
         idempotencyKey: payload.idempotencyKey,
-        payload,
+        payload: { ledger: payload },
       }),
     );
-    expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(1);
     service.cleanup();
   });
 
@@ -132,20 +138,19 @@ describe('SessionCompletionOfflineSyncService', () => {
     const service = new SessionCompletionOfflineSyncService();
     await service.queueSessionCompletion(payload);
 
-    networkState.isConnected = true;
-    networkState.isInternetReachable = true;
-    networkCallback?.(networkState);
-    await Promise.resolve();
-    await Promise.resolve();
-    await Promise.resolve();
+    const registration = registerProcessorMock.mock.calls.find(
+      ([feature, operation]) =>
+        feature === 'sessions' && operation === 'CREATE',
+    );
+    expect(registration).toBeDefined();
+    await registration?.[2](queueEntry(payload));
 
     expect(persistLedgerMock).toHaveBeenCalledWith(payload);
-    expect(updateSyncMock).toHaveBeenCalledWith(payload.ledgerId, 'synced');
-    expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(0);
+    expect(saveCompletionOutcome).toHaveBeenCalledWith(expect.objectContaining({ ledgerId: payload.ledgerId }));
     service.cleanup();
   });
 
-  it('treats duplicate ledger replay as idempotent success', async () => {
+  it('keeps an unresolved duplicate ledger available for recovery', async () => {
     const payload = ledger();
     persistLedgerMock.mockRejectedValue(
       new SessionCompletionRepositoryError('create', { code: '23505' }),
@@ -158,7 +163,7 @@ describe('SessionCompletionOfflineSyncService', () => {
       forceSync: true,
     });
 
-    expect(result).toMatchObject({ queued: false, synced: true });
+    expect(result).toMatchObject({ queued: false, synced: false, error: expect.any(Error) });
     service.cleanup();
   });
 

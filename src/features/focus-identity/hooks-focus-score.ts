@@ -40,7 +40,7 @@ export function useFocusScore(
 
 
 
-  const { data: historyData, status: historyStatus, error: historyError, refetch: refetchHistory } = useQuery({
+  const { data: historyData, status: _historyStatus, error: _historyError, refetch: _refetchHistory } = useQuery({
     queryKey: focusScoreKeys.history(userId ?? 'none', days),
     queryFn: () => getFocusScoreHistory(userId ?? '', days),
     enabled: Boolean(userId),

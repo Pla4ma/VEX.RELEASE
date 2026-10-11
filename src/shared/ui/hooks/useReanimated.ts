@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -164,4 +164,3 @@ export function useCountUp(targetValue: number, duration = 1000) {
   }, [animatedValue, targetValue, duration]);
   return displayValue;
 }
-import React from 'react';

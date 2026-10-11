@@ -13,6 +13,7 @@ import {
   getMinTouchTargetStyle,
 } from '../../../utils/touchTarget';
 import { formatDuration } from '../../../utils/format-duration';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString('en-US', {
@@ -59,39 +60,38 @@ export function HistoryItem({
       >
         <Box
           alignItems="center"
-          bg="background.secondary"
           borderRadius="lg"
           flexDirection="row"
           mb="sm"
           p="md"
-          style={getMinTouchTargetStyle()}
+          style={[getMinTouchTargetStyle(), { backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1 }]}
         >
           <Box
             alignItems="center"
-            bg="background.primary"
+            style={{ backgroundColor: vexFire.backgroundSoft }}
             borderRadius="full"
             height={sizing.avatar.lg}
             justifyContent="center"
             mr="md"
             width={sizing.avatar.lg}
           >
-            <Text variant="h4" color="primary.500">
+            <Text variant="h4" style={{ color: vexFire.ember }}>
               {entry.grade}
             </Text>
           </Box>
           <Box flex={1}>
-            <Text variant="body" fontWeight="600" color="text.primary">
+            <Text variant="body" fontWeight="600" style={{ color: vexFire.cream }}>
               {entry.title}
             </Text>
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" style={{ color: vexFire.textSecondary }}>
               {formatDate(entry.startedAtMs)}
             </Text>
           </Box>
           <Box alignItems="flex-end">
-            <Text variant="body" fontWeight="600" color="text.primary">
+            <Text variant="body" fontWeight="600" style={{ color: vexFire.cream }}>
               {formatDuration(entry.effectiveDurationSeconds)}
             </Text>
-            <Text variant="caption" color="text.secondary">
+            <Text variant="caption" style={{ color: vexFire.textSecondary }}>
               {entry.finalScore} pts
             </Text>
           </Box>

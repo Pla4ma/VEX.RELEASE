@@ -27,6 +27,7 @@ export async function tryAtomicAddXp(
       return null;
     }
 
+    if (!data?.success) { throw new Error('Atomic XP award was not accepted'); }
     return data;
   } catch (error) {
     Sentry.captureException(error, {

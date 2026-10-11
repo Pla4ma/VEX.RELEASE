@@ -41,7 +41,7 @@ export const AgentContextSnapshotSchema = z.object({
   isOnline: z.boolean(),
   completedToday: z.boolean(),
   currentStreak: z.number().min(0),
-  hoursUntilStreakDeadline: z.number().nullable(),
+  hoursUntilStreakDeadline: z.number().min(0).nullable(),
   recentSessionIds: z.array(z.string()),
   activeStudyPackId: z.string().nullable(),
   lowEnergyPattern: z.boolean(),

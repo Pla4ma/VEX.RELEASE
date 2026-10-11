@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useCallback, useMemo } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
@@ -27,7 +28,7 @@ export const StudyTaskList: React.ComponentType<StudyTaskListProps> = ({
   estimatedTotalTime,
   completedTime,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const sortedTasks = useMemo(() => {
     const priorityOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 };
     return [...tasks].sort((a, b) => {
@@ -58,9 +59,9 @@ export const StudyTaskList: React.ComponentType<StudyTaskListProps> = ({
           <Icon
             name="check-square"
             size="sm"
-            color={theme.colors.primary[500]}
+            color={vexFire.ember}
           />
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>
+          <Text style={[styles.title, { color: vexFire.cream }]}>
             Study Tasks ({completedIds.size}/{tasks.length})
           </Text>
         </View>
@@ -68,20 +69,20 @@ export const StudyTaskList: React.ComponentType<StudyTaskListProps> = ({
           <View
             style={[
               styles.progressBar,
-              { backgroundColor: theme.colors.background.primary },
+              { backgroundColor: vexFire.background },
             ]}
           >
             <View
               style={[
                 styles.progressFill,
                 {
-                  backgroundColor: theme.colors.success[500],
+                  backgroundColor: vexFire.success,
                   width: `${completionPercentage}%`,
                 },
               ]}
             />
           </View>
-          <Text style={[styles.timeText, { color: theme.colors.text.muted }]}>
+          <Text style={[styles.timeText, { color: vexFire.textMuted }]}>
             {formatDuration(completedTime)} /{' '}
             {formatDuration(estimatedTotalTime)}
           </Text>

@@ -24,12 +24,12 @@ type Goal = FirstWeekResolverInput['primaryGoal'];
 type Style = FirstWeekResolverInput['motivationStyle'];
 
 describe('Day 3 companion/memory per lane', () => {
-  const cases: Array<{
+  const cases: {
     goal: Goal;
     style: Style;
     lane: string;
     theme: string;
-  }> = [
+  }[] = [
     {
       goal: 'study',
       style: 'study_focused',
@@ -74,12 +74,12 @@ describe('Day 3 companion/memory per lane', () => {
 });
 
 describe('Day 7 weekly intelligence per lane', () => {
-  const cases: Array<{
+  const cases: {
     goal: Goal;
     style: Style;
     lane: string;
     theme: string;
-  }> = [
+  }[] = [
     {
       goal: 'study',
       style: 'study_focused',
@@ -124,7 +124,7 @@ describe('Day 7 weekly intelligence per lane', () => {
   });
 
   it('all four lanes have Day 7 copy', () => {
-    const lanes: Array<{ goal: Goal; style: Style; lane: string }> = [
+    const lanes: { goal: Goal; style: Style; lane: string }[] = [
       { goal: 'study', style: 'study_focused', lane: 'student' },
       { goal: 'work', style: 'game_like', lane: 'game_like' },
       { goal: 'creative', style: 'coach_led', lane: 'deep_creative' },

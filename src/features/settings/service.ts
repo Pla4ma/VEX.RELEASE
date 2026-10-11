@@ -52,7 +52,7 @@ export async function updateSetting(
   const { skipSync = false, deviceId } = options;
   try {
     const oldSetting = await getSetting(userId, key);
-    const oldValue = oldSetting?.value ?? null;
+    const _oldValue = oldSetting?.value ?? null;
     const v = validateSettingValue(key, value, category);
     if (!v.valid) {throw new SettingsValidationError(`Invalid setting value: ${v.errors.join(', ')}`, key, v.errors);}
     const sanitized = v.sanitized ?? value;
@@ -73,11 +73,11 @@ export async function updateSetting(
 
 export async function batchUpdateSettings(
   userId: string,
-  updates: Array<{ key: string; value: SettingValue; category: SettingCategory }>,
+  updates: { key: string; value: SettingValue; category: SettingCategory }[],
   options: { skipSync?: boolean } = {},
 ): Promise<Setting[]> {
   const { skipSync = false } = options;
-  const ve: Array<{ key: string; error: string }> = [];
+  const ve: { key: string; error: string }[] = [];
   for (const u of updates) {
     const r = validateSettingValue(u.key, u.value, u.category);
     if (!r.valid) {ve.push({ key: u.key, error: r.errors.join(', ') });}

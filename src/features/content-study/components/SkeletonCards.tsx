@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
@@ -5,12 +6,12 @@ import { Skeleton } from './SkeletonBase';
 import { styles } from './skeleton-styles';
 
 export const StudyPlanSkeleton: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <View
       style={[
         styles.card,
-        { backgroundColor: theme.colors.background.primary },
+        { backgroundColor: vexFire.background },
       ]}
     >
       {}
@@ -95,12 +96,12 @@ export const StudyPlanSkeleton: React.ComponentType = () => {
 };
 
 export const ContentHistorySkeleton: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <View
       style={[
         styles.list,
-        { backgroundColor: theme.colors.background.primary },
+        { backgroundColor: vexFire.background },
       ]}
     >
       {[1, 2, 3, 4, 5].map((i) => (
@@ -108,7 +109,7 @@ export const ContentHistorySkeleton: React.ComponentType = () => {
           key={`item-${i}`}
           style={[
             styles.listItem,
-            { backgroundColor: theme.colors.background.secondary },
+            { backgroundColor: vexFire.panel },
           ]}
         >
           <View style={styles.itemIcon}>
@@ -131,12 +132,12 @@ export const ContentHistorySkeleton: React.ComponentType = () => {
 };
 
 export const ExtractionSkeleton: React.ComponentType = () => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <View
       style={[
         styles.extractionCard,
-        { backgroundColor: theme.colors.background.secondary },
+        { backgroundColor: vexFire.panel },
       ]}
     >
       <View style={styles.extractionHeader}>

@@ -10,12 +10,12 @@ export async function getRealtimeAnalytics(
   today: { sessions: number; xp: number; focusTime: number };
   streak: number;
   level: number;
-  recentInsights: Array<{
+  recentInsights: {
     id: string;
     type: string;
     title: string;
     severity: string;
-  }>;
+  }[];
 }> {
   const cached = stateCache.get(userId);
   const now = Date.now();

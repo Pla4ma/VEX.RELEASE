@@ -1,4 +1,4 @@
-var mockStorage: Record<string, string> | undefined;
+let mockStorage: Record<string, string> | undefined;
 
 jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
   MMKVStorageAdapter: jest.fn().mockImplementation(() => ({

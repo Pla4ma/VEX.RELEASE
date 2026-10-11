@@ -21,7 +21,7 @@ export interface SessionMetaEventDefinitions {
     sessionId: string;
     userId: string;
     rewards: unknown;
-    challengesProgressed: Array<{ challengeId: string; progress: number }>;
+    challengesProgressed: { challengeId: string; progress: number }[];
     milestoneReached: string | null;
     timestamp: number;
   };

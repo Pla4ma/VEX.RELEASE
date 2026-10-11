@@ -2,10 +2,9 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
-import { useTheme } from '../../../theme/ThemeContext';
+import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { buttonTap } from '../../../utils/haptics';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 
 interface FilterChipProps {
@@ -21,7 +20,6 @@ export function FilterChip({
   onPress,
   icon,
 }: FilterChipProps): React.ReactNode {
-  const { theme } = useTheme();
   return (
     <Pressable
       onPress={() => { buttonTap(); onPress(); }}
@@ -37,27 +35,26 @@ export function FilterChip({
         px="md"
         py="sm"
         borderRadius="full"
-        bg={isActive ? 'primary.500' : 'background.tertiary'}
         style={{
           borderWidth: 1,
-          borderColor: isActive ? 'transparent' : theme.colors.border.light,
+          borderColor: isActive ? vexFire.ember : vexFire.border,
+          backgroundColor: isActive ? vexFire.ember : vexFire.panel,
         }}
       >
         {icon && (
-          <Icon
+          <VexIcon
             name={icon}
-            size={14}
+            size="sm"
             color={
-              isActive ? lightColors.text.inverse : theme.colors.text.secondary
+              isActive ? vexFire.background : vexFire.textSecondary
             }
+            variant="solid"
           />
         )}
         <Text
           variant="caption"
           style={{
-            color: isActive
-              ? lightColors.text.inverse
-              : theme.colors.text.secondary,
+            color: isActive ? vexFire.background : vexFire.textSecondary,
             fontWeight: isActive ? '600' : '400',
           }}
         >

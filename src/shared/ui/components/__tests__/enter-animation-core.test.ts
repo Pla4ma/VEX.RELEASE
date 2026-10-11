@@ -1,4 +1,4 @@
-import type { EnterDirection, EnterSpeed } from '../enter-animation-core';
+import type { EnterDirection,  } from '../enter-animation-core';
 import { SPEED_CONFIGS, getEnterAnimation } from '../enter-animation-core';
 
 // Mock react-native-reanimated

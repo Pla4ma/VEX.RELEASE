@@ -12,19 +12,14 @@ import type {
   PatternMetrics,
 } from './session-analytics-types';
 import { setupAnalyticsEventListeners } from './session-analytics-listeners';
+export {
+  setOrchestratorHandlesCompletion,
+  getOrchestratorHandlesCompletion,
+} from './session-analytics-state';
 import { calculatePatternMetricsFromHistory } from './session-analytics-helpers';
 
 const debug = createDebugger('session:analytics');
 
-let orchestratorHandlesCompletion = false;
-
-export function setOrchestratorHandlesCompletion(v: boolean): void {
-  orchestratorHandlesCompletion = v;
-}
-
-export function getOrchestratorHandlesCompletion(): boolean {
-  return orchestratorHandlesCompletion;
-}
 
 export class SessionAnalytics {
   private userId: string | null = null;
@@ -102,11 +97,12 @@ export class SessionAnalytics {
     history: SessionHistoryEntry[],
     recoveries: RecoveryRecord[],
   ): Promise<PatternMetrics> {
-    this.patterns = await calculatePatternMetricsFromHistory(
+    const patterns = await calculatePatternMetricsFromHistory(
       history,
       recoveries,
     );
-    return this.patterns;
+    this.patterns = patterns;
+    return patterns;
   }
 
   trackMilestone(

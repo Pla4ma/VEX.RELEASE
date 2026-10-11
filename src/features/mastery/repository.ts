@@ -2,8 +2,7 @@ import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import { supabase } from '../../config/supabase';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { z } from 'zod';
-import { masteryStateSchema } from './schemas';
-import { rankSchema } from './schemas';
+import { masteryStateSchema , rankSchema } from './schemas';
 import type { MasteryRank, MasteryState } from './types';
 
 const STORAGE_KEY = (userId: string) => `mastery_state_${userId}`;

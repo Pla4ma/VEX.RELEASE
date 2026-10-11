@@ -45,7 +45,7 @@ export const ConfettiField: React.ComponentType<ConfettiFieldProps> = ({
 };
 
 interface RewardsSectionProps {
-  rewards: Array<{ type: string; amount: number; itemName?: string }>;
+  rewards: { type: string; amount: number; itemName?: string }[];
 }
 
 export const RewardsSection: React.ComponentType<RewardsSectionProps> = ({ rewards }) => {
@@ -95,7 +95,7 @@ export const UnlocksSection: React.ComponentType<UnlocksSectionProps> = ({ unloc
   return (
     <View style={styles.unlocksSection}>
       <Text style={styles.unlocksLabel}>NEW UNLOCKS</Text>
-      {unlocks.map((unlock, index) => (
+      {unlocks.map((unlock, _index) => (
         <View key={`unlock-${unlock}`} style={styles.unlockItem}>
           <Text style={styles.unlockIcon}>→</Text>
           <Text style={styles.unlockText}>{unlock}</Text>

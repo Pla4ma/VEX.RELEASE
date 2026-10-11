@@ -96,7 +96,7 @@ export class RateLimiter {
 }
 
 export class AsyncQueue {
-  private queue: Array<() => Promise<void>> = [];
+  private queue: (() => Promise<void>)[] = [];
   private running = 0;
   private concurrency: number;
 

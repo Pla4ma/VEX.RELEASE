@@ -1,16 +1,16 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View } from 'react-native';
 import { Image } from 'expo-image';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { getOptimizedImageUrl } from '../../../shared/performance';
 
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Icon } from '../../../icons/components/Icon';
 import type { YouTubeInputProps } from '../types';
 import { styles, formatDuration } from './YouTubeInputStyles';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 type VideoInfo = NonNullable<YouTubeInputProps['videoInfo']>;
 
@@ -27,14 +27,14 @@ export function YouTubeVideoPreview({
   extractionError,
   onExtract,
 }: YouTubeVideoPreviewProps) {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   return (
     <View
       style={[
         styles.previewCard,
         {
-          backgroundColor: theme.colors.background.secondary,
-          borderColor: theme.colors.border.DEFAULT,
+          backgroundColor: vexFire.panel,
+          borderColor: vexFire.border,
         },
       ]}
     >
@@ -44,7 +44,7 @@ export function YouTubeVideoPreview({
           <Text
             style={[
               styles.extractingText,
-              { color: theme.colors.text.secondary },
+              { color: vexFire.textSecondary },
             ]}
           >
             Extracting video transcript...
@@ -64,7 +64,7 @@ export function YouTubeVideoPreview({
             <Text
               style={[
                 styles.videoTitle,
-                { color: theme.colors.text.primary },
+                { color: vexFire.cream },
               ]}
               numberOfLines={2}
             >
@@ -74,7 +74,7 @@ export function YouTubeVideoPreview({
               <Text
                 style={[
                   styles.channelName,
-                  { color: theme.colors.text.secondary },
+                  { color: vexFire.textSecondary },
                 ]}
               >
                 {videoInfo.channelName}
@@ -85,12 +85,12 @@ export function YouTubeVideoPreview({
                 <Icon
                   name="clock"
                   size="xs"
-                  color={theme.colors.text.muted}
+                  color={vexFire.textMuted}
                 />
                 <Text
                   style={[
                     styles.durationText,
-                    { color: theme.colors.text.muted },
+                    { color: vexFire.textMuted },
                   ]}
                 >
                   {formatDuration(videoInfo.duration ?? 0)}
@@ -105,12 +105,12 @@ export function YouTubeVideoPreview({
           <Icon
             name="alert-circle"
             size="md"
-            color={theme.colors.error[500]}
+            color={vexFire.danger}
           />
           <Text
             style={[
               styles.extractionErrorText,
-              { color: theme.colors.error[500] },
+              { color: vexFire.danger },
             ]}
           >
             {extractionError}

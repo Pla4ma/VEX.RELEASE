@@ -32,6 +32,7 @@ type LevelUpInput = {
   level: number;
   achievedAt: number;
   xpAtLevel: number;
+  idempotencyKey?: string;
   metadata: Record<string, unknown> | null;
 };
 
@@ -79,20 +80,6 @@ function getPeriodStart(period: XpStatsPeriod): number {
   return start.getTime();
 }
 
-function createStarterProgression(userId: string): Progression {
-  const now = Date.now();
-  return {
-    id: crypto.randomUUID(),
-    userId,
-    level: 1,
-    xp: 0,
-    totalXp: 0,
-    nextLevelThreshold: 100,
-    lastLevelUpAt: null,
-    createdAt: now,
-    updatedAt: now,
-  };
-}
 
 export async function fetchProgressionEnhanced(
   userId: string,
@@ -103,7 +90,8 @@ export async function fetchProgressionEnhanced(
       existing ?? (await repository.createProgression(userId));
     return { data: progression, error: null };
   } catch (error) {
-    return { data: createStarterProgression(userId), error: null };
+    const normalized = toRepositoryError(error);
+    return { data: null, error: normalized };
   }
 }
 
@@ -143,7 +131,12 @@ export async function recordLevelUpEnhanced(
   entry: LevelUpInput,
 ): Promise<RepositoryResult<void>> {
   try {
-    await repository.recordLevelUp(userId, entry.level, entry.xpAtLevel);
+    await repository.recordLevelUp(
+      userId,
+      entry.level,
+      entry.xpAtLevel,
+      entry.idempotencyKey,
+    );
     return { data: undefined, error: null };
   } catch (error) {
     return { data: null, error: toRepositoryError(error) };

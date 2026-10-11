@@ -13,7 +13,11 @@ describe('Group 2 — First Session Setup', () => {
 
     assertCoreAvailable(f0, 'focus_session');
     assertCoreAvailable(f0, 'focus_tab');
-    assertFullyHidden(f0, 'challenges');
+    assertCoreAvailable(f0, 'challenges');
+    assertCoreAvailable(f0, 'boss_tab');
+    assertCoreAvailable(f0, 'companion_detail');
+    assertCoreAvailable(f0, 'content_study');
+    assertCoreAvailable(f0, 'memory_console');
     assertFullyHidden(f0, 'wagers');
     assertFullyHidden(f0, 'streak_insurance');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
@@ -53,7 +57,7 @@ describe('Group 2 — First Session Setup', () => {
 
   it('2e: no stakes/difficulty/premium/challenges in first session setup', () => {
     const f0 = accessFor(0);
-    assertFullyHidden(f0, 'challenges');
+    assertCoreAvailable(f0, 'challenges');
     assertFullyHidden(f0, 'wagers');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
 

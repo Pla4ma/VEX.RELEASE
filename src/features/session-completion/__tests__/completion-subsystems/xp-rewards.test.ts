@@ -1,6 +1,8 @@
 import {
   applyCompletionSubsystems,
   mockAddXP,
+  mockGetProgressionService,
+  mockGetRewardService,
   mockGrantReward,
   baseLedger,
   baseSummary,
@@ -12,16 +14,20 @@ describe('applyCompletionSubsystems', () => {
     resetMocks();
   });
 
-  it('calls addXP exactly once — ProgressionService owns XP mutation', async () => {
+  it('passes user identity and an idempotency key to progression', async () => {
     await applyCompletionSubsystems({
       ledger: baseLedger,
       summary: baseSummary,
     });
-    expect(mockAddXP).toHaveBeenCalledTimes(1);
+
+    expect(mockGetProgressionService).toHaveBeenCalledWith(baseLedger.userId);
     expect(mockAddXP).toHaveBeenCalledWith(
       baseLedger.xpDelta,
       'SESSION_COMPLETE',
-      { sessionId: baseLedger.sessionId },
+      {
+        sessionId: baseLedger.sessionId,
+        idempotencyKey: `${baseLedger.idempotencyKey}:xp`,
+      },
     );
   });
 
@@ -32,11 +38,15 @@ describe('applyCompletionSubsystems', () => {
     });
 
     expect(mockAddXP).toHaveBeenCalledTimes(1);
+    expect(mockGetRewardService).toHaveBeenCalledWith(baseLedger.userId);
     expect(mockGrantReward).toHaveBeenCalledWith(
       'XP',
       'SESSION_COMPLETE',
       expect.objectContaining({ baseAmount: expect.any(Number) }),
-      expect.objectContaining({ sessionId: baseLedger.sessionId }),
+      expect.objectContaining({
+        idempotencyKey: `${baseLedger.idempotencyKey}:reward`,
+        sessionId: baseLedger.sessionId,
+      }),
     );
 
     const rewardIds = result.ledger.rewardIds as string[];

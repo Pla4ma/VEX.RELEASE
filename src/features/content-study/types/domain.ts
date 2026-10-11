@@ -4,7 +4,7 @@
  */
 
 import type {
-  ContentSourceType,
+
   TaskPriority,
   QuizDifficulty,
   SessionDifficulty,

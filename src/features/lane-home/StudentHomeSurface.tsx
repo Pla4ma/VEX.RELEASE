@@ -108,7 +108,7 @@ onPressIn={handlePressIn}
                     }}
                   />
                 </Box>
-                {tasks.slice(0, 3).map((task, i) => (
+                {tasks.slice(0, 3).map((task, _i) => (
                   <Box key={task.title} flexDirection="row" alignItems="center" gap="xs">
                     <Text variant="caption" style={{ fontSize: 12 }}>
                       {task.done ? '✅' : '⬜'}

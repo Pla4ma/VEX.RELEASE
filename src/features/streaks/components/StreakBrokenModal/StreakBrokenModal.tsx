@@ -1,13 +1,12 @@
 import { captureSilentFailure } from '../../../../utils/silent-failure';
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
 import { Box } from '../../../../components/primitives/Box';
-import { Text } from '../../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../../components/primitives/Text';
 import { Button } from '../../../../components/primitives/Button';
 import { useTheme } from '../../../../theme/ThemeContext';
-import { useState } from 'react';
 import type { StreakBrokenModalProps } from './types';
 import { calculateRestoreCost } from './helpers';
 import {
@@ -17,7 +16,6 @@ import {
   CoachMessage,
 } from './Subcomponents';
 import { RestoreStreakCard } from './RestoreStreakCard';
-import { Text as VexText } from '../../../../components/primitives/Text';
 
 export function StreakBrokenModal({
   visible,

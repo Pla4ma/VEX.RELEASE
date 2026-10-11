@@ -1,10 +1,9 @@
-import { ContentSourceType, ContentStudyErrorCode } from './types';
+import { ContentSourceType, ContentStudyErrorCode , CONTENT_STUDY_CONSTANTS } from './types';
 import type {
   ValidationError,
   ContentStudyError,
   ErrorRecoveryAction,
 } from './types';
-import { CONTENT_STUDY_CONSTANTS } from './types';
 import type { ValidationResult } from './validators';
 import {
   validateYouTubeUrl,

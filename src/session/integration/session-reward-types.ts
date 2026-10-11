@@ -16,7 +16,7 @@ export interface RewardCalculationResult {
   streakDays: number;
   streakIncreased: boolean;
   achievementsUnlocked: string[];
-  challengesProgressed: Array<{ challengeId: string; progress: number }>;
+  challengesProgressed: { challengeId: string; progress: number }[];
   milestoneReached: string | null;
   socialActivityId: string | null;
 }

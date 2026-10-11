@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Pressable, TextInput, View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -48,7 +49,7 @@ export function TextPasteInput({
           borderWidth: 1,
           borderRadius: theme.borderRadius.xl,
           borderColor,
-          backgroundColor: theme.colors.semantic.inputBackground,
+          backgroundColor: vexFire.backgroundRaised,
           position: 'relative',
         }}
       >
@@ -62,14 +63,14 @@ export function TextPasteInput({
           onChangeText={handleChange}
           onFocus={() => setIsFocused(true)}
           placeholder="Paste your notes, article, or any study text here..."
-          placeholderTextColor={theme.colors.text.placeholder}
+          placeholderTextColor={vexFire.textMuted}
           ref={inputRef}
           style={{
             minHeight: theme.spacing[8] * 3,
             maxHeight: theme.spacing[8] * 6,
             padding: theme.spacing[4],
             paddingRight: theme.spacing[8],
-            color: theme.colors.text.primary,
+            color: vexFire.cream,
             fontSize: theme.typography.body.medium.fontSize,
             lineHeight: theme.typography.body.medium.lineHeight,
             opacity: disabled ? 0.64 : 1,
@@ -85,7 +86,7 @@ export function TextPasteInput({
             onPress={clearInput}
             style={{}}
           >
-            <Text color="text.secondary" variant="label">
+            <Text color={vexFire.textSecondary} variant="label">
               x
             </Text>
           </Pressable>
@@ -114,7 +115,7 @@ export function TextPasteInput({
           </Text>
           {wordCount > 0 ? (
             <Text
-              color="text.muted"
+              color={vexFire.textMuted}
               variant="caption"
             >{`${wordCount.toLocaleString()} words`}</Text>
           ) : null}
@@ -123,7 +124,7 @@ export function TextPasteInput({
 
       <View style={{ marginTop: theme.spacing[2], gap: theme.spacing[1] }}>
         {errors.map((error) => (
-          <Text key={error.message} color="error.DEFAULT" variant="caption">
+          <Text key={error.message} color={vexFire.danger} variant="caption">
             {error.message}
           </Text>
         ))}
@@ -131,7 +132,7 @@ export function TextPasteInput({
           ? warnings.slice(0, 2).map((warning) => (
               <Text
                 key={warning.message}
-                color="warning.DEFAULT"
+                color={vexFire.amber}
                 variant="caption"
               >
                 {warning.message}

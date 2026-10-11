@@ -13,6 +13,9 @@ const degradedFeatureListeners = new Set<() => void>();
 export function setFeatureAccessMap(map: FeatureAccessMap): void {
   _featureAccessMap = map;
 }
+export function clearFeatureAccessMap(): void {
+  _featureAccessMap = null;
+}
 
 export function getFeatureAccessMap(): FeatureAccessMap | null {
   return _featureAccessMap;

@@ -9,7 +9,7 @@ describe('EmptyState.presets', () => {
   });
 
   it('each preset has a title', () => {
-    for (const [key, preset] of Object.entries(PRESETS)) {
+    for (const [_key, preset] of Object.entries(PRESETS)) {
       expect(preset.title).toBeDefined();
       expect(preset.title.length).toBeGreaterThan(0);
     }
@@ -25,7 +25,7 @@ describe('EmptyState.presets', () => {
   });
 
   it('action-oriented presets have action labels', () => {
-    const actionPresets: Array<keyof typeof PRESETS> = ['inventory', 'feed', 'leaderboards', 'challenges', 'shop', 'squadWars', 'error'];
+    const actionPresets: (keyof typeof PRESETS)[] = ['inventory', 'feed', 'leaderboards', 'challenges', 'shop', 'squadWars', 'error'];
     for (const key of actionPresets) {
       const preset = PRESETS[key];
       expect(preset.actionLabel).toBeDefined();

@@ -3,7 +3,7 @@ export interface LevelUpOverlayProps {
   isVisible: boolean;
   previousLevel: number;
   newLevel: number;
-  rewards: Array<{ type: string; amount: number; itemName?: string }>;
+  rewards: { type: string; amount: number; itemName?: string }[];
   unlocks: string[];
   onContinue: () => void;
 }

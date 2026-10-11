@@ -46,7 +46,7 @@ export const SessionDegradedState: React.ComponentType<SessionDegradedStateProps
         <Text style={[styles.featuresTitle, { color: semantic.textMuted }]}>
           Features ({availableCount}/{totalCount} available):
         </Text>
-        {features.map((feature, index) => (
+        {features.map((feature, _index) => (
           <View
             key={feature.name}
             style={[styles.featureRow, { borderBottomColor: semantic.border }]}

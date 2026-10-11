@@ -7,10 +7,12 @@ import { styles } from './CoachScreen.styles';
 
 interface CoachRecommendationCardProps {
   recommendation: CoachRecommendation;
+  onStartSession: () => void;
 }
 
 export function CoachRecommendationCard({
   recommendation,
+  onStartSession,
 }: CoachRecommendationCardProps): React.ReactNode {
   const { track } = useAnalytics();
 
@@ -31,6 +33,7 @@ export function CoachRecommendationCard({
             difficulty: recommendation.difficulty,
             source: 'coach_recommendation',
           });
+          onStartSession();
         }}
         accessibilityLabel="Start recommended session"
         accessibilityRole="button"

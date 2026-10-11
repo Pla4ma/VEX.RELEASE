@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, Pressable, Text } from 'react-native';
 import { styles } from './CoachScreen.styles';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 
 interface ChatInputBarProps {
@@ -24,7 +24,7 @@ export function ChatInputBar({
         value={value}
         onChangeText={onChangeText}
         placeholder="Ask your coach anything..."
-        placeholderTextColor={lightColors.text.muted}
+        placeholderTextColor={vexFire.textMuted}
         multiline
         maxLength={200}
         onSubmitEditing={onSend}

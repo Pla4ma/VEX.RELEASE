@@ -46,9 +46,7 @@ function personalizedCopy(): string {
 
 describe('phase 12 premium integrity', () => {
   it.each(blockedTerms)('keeps "%s" out of paywall context copy', (term) => {
-    const contextTypes = Object.keys(PAYWALL_CONTEXTS) as Array<
-      keyof typeof PAYWALL_CONTEXTS
-    >;
+    const contextTypes = Object.keys(PAYWALL_CONTEXTS) as (keyof typeof PAYWALL_CONTEXTS)[];
     const allCopy = contextTypes
       .flatMap((ctx) => {
         const data = getPaywallContext(ctx);

@@ -1,4 +1,4 @@
-import { getStorage, STORAGE_KEYS } from '../persistence';
+import { getStorage, STORAGE_KEYS } from './storage';
 import { CONTENT_STUDY_CONSTANTS } from '../types';
 
 export async function getStorageUsage(): Promise<{

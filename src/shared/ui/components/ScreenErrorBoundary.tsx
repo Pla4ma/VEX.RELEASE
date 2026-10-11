@@ -10,8 +10,8 @@ import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 
 import { OfflineEmptyState } from './EmptyState';
 import { captureException } from '../../../config/sentry';
+import { createDebugger } from '../../../utils/debug';
 import { ErrorFallback } from './ErrorFallback';
-import type {} from './ErrorFallback';
 
 export { ErrorFallback }
 export type { ErrorFallbackProps } from './ErrorFallback';
@@ -25,7 +25,7 @@ export interface ScreenErrorBoundaryProps {
   /** Feature tag for Sentry error grouping */
   featureTag?: string;
 }
-
+const debug = createDebugger('screen-error-boundary');
 interface ScreenErrorState {
   hasError: boolean;
   error: Error | null;
@@ -55,6 +55,7 @@ export class ScreenErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const { featureTag } = this.props;
+    debug.error(`Screen ${this.props.screenName} failed`, error);
     captureException(error, {
       tags: { feature: featureTag ?? 'screen-error-boundary' },
       extra: { componentStack: errorInfo.componentStack ?? '' },

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AI Coach Store
  *
  * @deprecated This barrel file is maintained for backward compatibility.

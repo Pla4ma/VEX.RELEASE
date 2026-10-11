@@ -1,8 +1,7 @@
 import {
   BehaviorSignalSchema,
   type BehaviorSignal,
-} from '../behavior-signal-schemas';
-import type { BehaviorResolverInput } from '../behavior-signal-schemas';
+ BehaviorResolverInput } from '../behavior-signal-schemas';
 
 export function makeSignal(overrides: Partial<BehaviorSignal>): BehaviorSignal {
   return BehaviorSignalSchema.parse({

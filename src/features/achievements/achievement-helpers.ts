@@ -36,7 +36,7 @@ const ALL_ACHIEVEMENTS = [
 
 export function getProgressionGuide(
   unlockedIds: string[],
-  inProgressAchievements: Array<{ id: string; progress: number }>,
+  inProgressAchievements: { id: string; progress: number }[],
 ): ProgressionGuide {
   const currentAchievement =
     unlockedIds.length > 0

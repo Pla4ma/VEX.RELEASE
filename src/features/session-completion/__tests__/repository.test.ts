@@ -35,7 +35,7 @@ describe('Session completion repository', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
+    jest.mocked(getSupabaseClient).mockReturnValue(mockSupabase);
   });
 
   it('creates completion ledger successfully', async () => {
@@ -125,7 +125,7 @@ describe('Session completion repository', () => {
     mockSupabase.eq.mockResolvedValueOnce({ error: null });
     await updateCompletionSyncStatus(ledger.ledgerId, 'failed_sync');
     expect(mockSupabase.update).toHaveBeenCalledWith({
-      offline_sync_status: 'failed_sync',
+      offline_sync_status: 'failed',
     });
   });
 

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import {
   View,
@@ -22,7 +23,7 @@ export const ShortAnswerInput: React.ComponentType<ShortAnswerInputProps> = ({
   onChangeText,
   onSubmit,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   return (
     <KeyboardAvoidingView
@@ -35,13 +36,13 @@ export const ShortAnswerInput: React.ComponentType<ShortAnswerInputProps> = ({
             style={[
               quizPanelStyles.shortAnswerInput,
               {
-                color: theme.colors.text.primary,
-                borderColor: theme.colors.border.DEFAULT,
-                backgroundColor: theme.colors.background.primary,
+                color: vexFire.cream,
+                borderColor: vexFire.border,
+                backgroundColor: vexFire.background,
               },
             ]}
             placeholder="Type your answer..."
-            placeholderTextColor={theme.colors.text.muted}
+            placeholderTextColor={vexFire.textMuted}
             value={value}
             onChangeText={onChangeText}
             multiline

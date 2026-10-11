@@ -1,11 +1,12 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
 import { Skeleton } from './SkeletonCard';
-import { Text as VexText } from '../../../components/primitives/Text';
+import { StudyPathCta } from './StudyPathCta';
 
 interface EmptyLibraryStateProps {
   isLoading: boolean;
@@ -14,6 +15,9 @@ interface EmptyLibraryStateProps {
   hasFilteredResults: boolean;
   onRetry: () => void;
   onAddContent: () => void;
+  uploadLocked?: boolean;
+  lockedMessage?: string | null;
+  errorTitle?: string;
 }
 
 export function EmptyLibraryState({
@@ -23,8 +27,11 @@ export function EmptyLibraryState({
   hasFilteredResults,
   onRetry,
   onAddContent,
+  uploadLocked = false,
+  lockedMessage = null,
+  errorTitle,
 }: EmptyLibraryStateProps): JSX.Element | null {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
 
   if (isLoading) {
     return (
@@ -44,14 +51,14 @@ export function EmptyLibraryState({
         <Icon
           name="alert-circle"
           size={48}
-          color={theme.colors.error.DEFAULT}
+          color={vexFire.danger}
         />
-        <Text variant="body" color="error.DEFAULT" mt="md" textAlign="center">
-          Failed to load study library
+        <Text variant="body" color={vexFire.danger} mt="md" textAlign="center">
+          {errorTitle ?? (hasContent ? 'Could not refresh your Study Library' : 'Study access needs a retry')}
         </Text>
         <Text
           variant="caption"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           mt="xs"
           textAlign="center"
         >
@@ -74,18 +81,20 @@ export function EmptyLibraryState({
   if (!hasFilteredResults) {
     return (
       <Box alignItems="center" py="xl">
-        <Icon name="book" size={48} color={theme.colors.text.tertiary} />
+        <Icon name="book" size={48} color={vexFire.textMuted} />
         <Text
           variant="body"
-          color="text.secondary"
+          color={vexFire.textSecondary}
           mt="md"
           textAlign="center"
         >
           {hasContent
             ? 'No content matches your filters'
-            : 'No study content yet'}
+            : uploadLocked
+              ? (lockedMessage ?? 'Complete a focused study session to open content tools.')
+              : 'No study content yet'}
         </Text>
-        {!hasContent && (
+        {!hasContent && !uploadLocked && (
           <Button variant="primary"
             size="sm"
             mt="md"
@@ -97,6 +106,7 @@ export function EmptyLibraryState({
             <VexText>Add Your First Content</VexText>
           </Button>
         )}
+        {!hasContent && uploadLocked ? <StudyPathCta /> : null}
       </Box>
     );
   }

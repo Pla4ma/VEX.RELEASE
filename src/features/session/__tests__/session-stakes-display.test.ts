@@ -1,5 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 import { calculateStakesResult } from '../session-stakes';
+import { lightColors } from '@/theme/tokens/colors';
 
 describe('Session Stakes - Quality & Display', () => {
   describe('Quality Score Based on Pauses', () => {
@@ -60,7 +61,7 @@ describe('Session Stakes - Quality & Display', () => {
         require('../session-stakes').getDifficultyDisplay('CASUAL');
       expect(label).toBe('Casual');
       expect(icon).toBe('');
-      expect(color).toBe('#15803D');
+      expect(color).toBe(lightColors.semantic.success);
       expect(riskLevel).toBe('LOW');
     });
     it('should return correct display for FOCUSED', () => {
@@ -68,7 +69,7 @@ describe('Session Stakes - Quality & Display', () => {
         require('../session-stakes').getDifficultyDisplay('FOCUSED');
       expect(label).toBe('Focused');
       expect(icon).toBe('');
-      expect(color).toBe('#B45309');
+      expect(color).toBe(lightColors.semantic.warning);
       expect(riskLevel).toBe('MEDIUM');
     });
     it('should return correct display for DEEP_WORK', () => {
@@ -76,7 +77,7 @@ describe('Session Stakes - Quality & Display', () => {
         require('../session-stakes').getDifficultyDisplay('DEEP_WORK');
       expect(label).toBe('Deep Work');
       expect(icon).toBe('');
-      expect(color).toBe('#A855F7');
+      expect(color).toBe(lightColors.accent.purple);
       expect(riskLevel).toBe('HIGH');
     });
   });

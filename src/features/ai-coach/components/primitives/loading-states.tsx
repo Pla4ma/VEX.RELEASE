@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import Animated, {
@@ -11,7 +12,7 @@ import Animated, {
 
 import { styles } from './progress-state.styles';
 import { ProgressBar } from './progress-indicators';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 interface LoadingStateProps {
   message?: string;
@@ -28,7 +29,7 @@ export function LoadingState({
 }: LoadingStateProps) {
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={lightColors.accent.teal} />
+      <ActivityIndicator size="large" color={vexFire.amber} />
       <Text style={styles.loadingMessage}>{message}</Text>
       {submessage && <Text style={styles.loadingSubmessage}>{submessage}</Text>}
       {showProgress && progress !== undefined && (

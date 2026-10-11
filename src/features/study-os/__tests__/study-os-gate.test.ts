@@ -7,12 +7,12 @@ import {
 describe('Study OS unlock gate', () => {
   beforeEach(() => mockStore.clear());
 
-  it('Day 0 blocks full unlock, shows day_zero reason', () => {
+  it('Day 0 exposes the basic Study OS with day_zero depth', () => {
     const gate = computeStudyOsUnlockGate({
       completedSessions: 0,
       studyUsageRatio: 0,
     });
-    expect(gate.isUnlocked).toBe(false);
+    expect(gate.isUnlocked).toBe(true);
     expect(gate.isDayZero).toBe(true);
     expect(gate.unlockReason).toBe('day_zero');
   });

@@ -1,6 +1,17 @@
-import { withRetry, sleep } from '../retry';
+import { withRetry, sleep, withTimeout } from '../retry';
 
 describe('retry', () => {
+  it('clears the timeout handle when work finishes first', async () => {
+    jest.useFakeTimers();
+    try {
+      await expect(withTimeout(() => Promise.resolve('done'), 60_000))
+        .resolves.toBe('done');
+      expect(jest.getTimerCount()).toBe(0);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
   describe('sleep', () => {
     it('resolves after the specified time', async () => {
       const start = Date.now();

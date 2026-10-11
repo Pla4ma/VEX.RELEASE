@@ -1,4 +1,4 @@
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export interface HeatmapData {
@@ -19,25 +19,25 @@ export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const HOURS = Array.from({ length: 24 }, (_, i) => i);
 export const COLOR_SCHEMES = {
   blue: [
-    lightColors.info[50],
-    lightColors.info[50],
-    lightColors.accent.blue,
-    lightColors.accent.blue,
-    lightColors.accent.blue,
+    vexFire.backgroundSoft,
+    vexFire.backgroundSoft,
+    vexFire.copper,
+    vexFire.copper,
+    vexFire.copper,
   ],
   green: [
-    lightColors.success[50],
-    lightColors.success[50],
-    lightColors.success.light,
-    lightColors.semantic.success,
-    lightColors.semantic.success,
+    vexFire.backgroundSoft,
+    vexFire.backgroundSoft,
+    vexFire.success,
+    vexFire.success,
+    vexFire.success,
   ],
   purple: [
-    lightColors.primary[50],
-    lightColors.primary[50],
-    lightColors.accent.purple,
-    lightColors.accent.purple,
-    lightColors.accent.purple,
+    vexFire.backgroundSoft,
+    vexFire.backgroundSoft,
+    vexFire.ember,
+    vexFire.ember,
+    vexFire.ember,
   ],
 };
 

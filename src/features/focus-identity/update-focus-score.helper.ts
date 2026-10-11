@@ -7,6 +7,7 @@ import {
   upsertCurrentFocusScore,
   appendFocusScoreHistory,
 } from './repository-focus-score';
+import { recordSessionFocusScore } from './session-score-repository';
 import { calculateFocusScoreUpdate } from './score-algorithm';
 
 export interface SessionCompletionData {
@@ -76,53 +77,57 @@ export async function updateFocusScoreFromSessionCompletion(
   sessionData: SessionCompletionData,
 ): Promise<void> {
   try {
-    const existing = await fetchCurrentFocusScore(userId);
-    const previousScore = existing?.currentScore ?? 550;
-    const contractSignal = await getCompletionSignal(userId, 14);
-    const result = calculateFocusScoreUpdate({
-      userId,
-      previousScore,
-      eventType: 'session:completed',
-      grade: readGrade(sessionData.grade),
-      sessionMode: readSessionMode(sessionData.sessionMode),
-      contractCompletionRate: contractSignal.rate,
-      completedContractCount: contractSignal.completedContractCount,
-      occurredAt: sessionData.completedAt ?? new Date().toISOString(),
-      signals: buildSignals(sessionData),
-    });
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const existing = await fetchCurrentFocusScore(userId);
+      const previousScore = existing?.currentScore ?? 550;
+      const contractSignal = await getCompletionSignal(userId, 14);
+      const result = calculateFocusScoreUpdate({
+        userId,
+        previousScore,
+        eventType: 'session:completed',
+        grade: readGrade(sessionData.grade),
+        sessionMode: readSessionMode(sessionData.sessionMode),
+        contractCompletionRate: contractSignal.rate,
+        completedContractCount: contractSignal.completedContractCount,
+        occurredAt: sessionData.completedAt ?? new Date().toISOString(),
+        signals: buildSignals(sessionData),
+      });
 
-    await upsertCurrentFocusScore(userId, {
-      currentScore: result.newScore,
-      previousScore: result.previousScore,
-      band: result.band,
-      factors: result.factors,
-      lastChangeReason: result.userFacingReason,
-      topPositiveFactor: result.topPositiveFactor,
-      topNegativeFactor: result.topNegativeFactor,
-    });
-    await appendFocusScoreHistory({
-      userId,
-      timestamp: result.historyPoint.timestamp,
-      score: result.historyPoint.score,
-      delta: result.historyPoint.delta,
-      reason: result.historyPoint.reason,
-    });
+      const score = {
+        currentScore: result.newScore, previousScore: result.previousScore,
+        band: result.band, factors: result.factors, lastChangeReason: result.userFacingReason,
+        topPositiveFactor: result.topPositiveFactor, topNegativeFactor: result.topNegativeFactor,
+      };
+      if (sessionData.sessionId) {
+        const saved = await recordSessionFocusScore({ userId, sessionId: sessionData.sessionId,
+          score, occurredAt: result.historyPoint.timestamp });
+        if (saved.duplicate) { return; }
+        if (saved.conflict) { continue; }
+      } else {
+        await upsertCurrentFocusScore(userId, score);
+        await appendFocusScoreHistory({ userId, timestamp: result.historyPoint.timestamp,
+          score: result.historyPoint.score, delta: result.historyPoint.delta,
+          reason: result.historyPoint.reason });
+      }
 
-    eventBus.publish('focus-identity:score_updated', {
-      userId,
-      previousScore: result.previousScore,
-      newScore: result.newScore,
-      delta: result.delta,
-      band: result.band,
-      timestamp: Date.now(),
-    });
-    capture('vex_focus_score_changed', {
-      previous_score: result.previousScore,
-      new_score: result.newScore,
-      delta: result.delta,
-      band: result.band,
-    });
-  } catch (error) {
+      eventBus.publish('focus-identity:score_updated', {
+        userId,
+        previousScore: result.previousScore,
+        newScore: result.newScore,
+        delta: result.delta,
+        band: result.band,
+        timestamp: Date.now(),
+      });
+      capture('vex_focus_score_changed', {
+        previous_score: result.previousScore,
+        new_score: result.newScore,
+        delta: result.delta,
+        band: result.band,
+      });
+      return;
+    }
+    throw new Error('Focus score changed during sync. Retry this session.');
+  } catch (error: unknown) {
     Sentry.captureException(error, {
       tags: {
         feature: 'focus-identity',

@@ -22,11 +22,11 @@ interface StreakFlameChainProps {
   longestStreak: number;
   isAtRisk: boolean;
   riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  streakDays: Array<{
+  streakDays: {
     date: string;
     completed: boolean;
     hasMilestone?: boolean;
-  }>;
+  }[];
 }
 
 export const StreakFlameChain: React.ComponentType<StreakFlameChainProps> = ({

@@ -78,40 +78,46 @@ export async function createSession(
 }
 
 export function loadActiveSession(orch: SessionOrchestratorBase): void {
-  persistence.loadActiveSession(orch.repository).then((s) => {
-    if (!s) {return;}
-    orch.session = s;
-    orch.userId = s.userId;
-    orch.eventEmitter.attach(s.id, s.userId);
-    if (s.status === 'ACTIVE' || s.status === 'PAUSED') {
-      orch.timerEngine = persistence.restoreTimerEngine(
-        s,
-        orch.config.timerConfig || {},
-        {
-          onTick: orch.handleTimerTick.bind(orch),
-          onComplete: orch.handleTimerComplete.bind(orch),
-          onWarning: orch.handleTimerWarning.bind(orch),
-        },
-      );
-      orch.isActive = s.status === 'ACTIVE';
-    }
-    debug.info('Restored active session: %s', s.id);
-  });
+  void persistence
+    .loadActiveSession(orch.repository)
+    .then((s) => {
+      if (!s) {return;}
+      orch.session = s;
+      orch.userId = s.userId;
+      orch.eventEmitter.attach(s.id, s.userId);
+      if (s.status === 'ACTIVE' || s.status === 'PAUSED') {
+        orch.timerEngine = persistence.restoreTimerEngine(
+          s,
+          orch.config.timerConfig || {},
+          {
+            onTick: orch.handleTimerTick.bind(orch),
+            onComplete: orch.handleTimerComplete.bind(orch),
+            onWarning: orch.handleTimerWarning.bind(orch),
+          },
+        );
+        orch.isActive = s.status === 'ACTIVE';
+      }
+      debug.info('Restored active session: %s', s.id);
+    })
+    .catch((error: unknown) => {
+      debug.error('Failed to restore active session', error);
+    });
 }
 
-export function finalizeSession(
+export async function finalizeSession(
   orch: SessionOrchestratorBase,
   summary: Parameters<typeof persistence.finalizeSession>[1],
-): void {
+): Promise<void> {
   if (!orch.session) {return;}
-  persistence.finalizeSession(orch.session, summary, orch.repository);
+  await persistence.finalizeSession(orch.session, summary, orch.repository);
 }
 
-export function finalizeAbandonedSession(orch: SessionOrchestratorBase): void {
+export async function finalizeAbandonedSession(
+  orch: SessionOrchestratorBase,
+): Promise<void> {
   if (!orch.session) {return;}
-  persistence.finalizeAbandonedSession(orch.session, orch.repository);
+  await persistence.finalizeAbandonedSession(orch.session, orch.repository);
 }
-
 export function createEmptyFocusMetrics(
   sessionId?: string,
 ): FocusQualityMetrics {

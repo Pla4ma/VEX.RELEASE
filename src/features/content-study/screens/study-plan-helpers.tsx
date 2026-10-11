@@ -11,14 +11,14 @@ import { UI_TEXT, TASK_PRIORITY_CONFIG, QUIZ_DIFFICULTY_CONFIG } from '../consta
 import { useTheme } from '@/theme';
 
 import { styles } from './StudyPlanScreen.styles';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 export type RouteProps = RouteProp<ContentStudyStackParamList, 'StudyPlan'>;
 export type NavigationProp = { navigate: (screen: string, params?: unknown) => void; goBack: () => void };
 
 export function Icon({ name: _name, color }: { name: string; color?: string }) {
-  const { theme } = useTheme();
-  return <Text style={[styles.icon, { color: color ?? theme.colors.text.secondary }]}>◊</Text>;
+  const { theme: _theme } = useTheme();
+  return <Text style={[styles.icon, { color: color ?? vexFire.textSecondary }]}>◊</Text>;
 }
 
 export function formatDuration(seconds: number): string {
@@ -134,25 +134,25 @@ export function SessionPlanSection({ sessionPlan }: { sessionPlan: SessionPlan }
       <Text style={styles.sectionTitle}>{UI_TEXT.SESSION_SECTION}</Text>
       <View style={styles.sessionCard}>
         <View style={styles.sessionRow}>
-          <Icon name="clock" color={lightColors.accent.blue} />
+          <Icon name="clock" color={vexFire.amber} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DURATION}</Text>
             <Text style={styles.sessionValue}>{formatDuration(sessionPlan.recommendedDuration)}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="trending-up" color={lightColors.accent.green} />
+          <Icon name="trending-up" color={vexFire.success} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DIFFICULTY}</Text>
             <Text style={styles.sessionValue}>{sessionPlan.suggestedDifficulty}</Text>
           </View>
         </View>
         <View style={styles.sessionRow}>
-          <Icon name="target" color={lightColors.semantic.warning} />
+          <Icon name="target" color={vexFire.amber} />
           <View style={styles.sessionInfo}>
             <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
             <View style={styles.focusAreas}>
-              {sessionPlan.focusAreas.map((area, index) => (
+              {sessionPlan.focusAreas.map((area, _index) => (
                 <View key={`area-${area}`} style={styles.focusAreaTag}>
                   <Text style={styles.focusAreaText}>{area}</Text>
                 </View>

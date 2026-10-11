@@ -33,6 +33,7 @@ import {
   registerProcessor,
   processEntry,
   resolveConflict,
+  retryDeadLetter,
   pruneExpiredEntries,
   type OfflineQueueEntryInput,
 } from '../queue';
@@ -87,6 +88,24 @@ describe('processEntry', () => {
     const queue = getQueue();
     expect(queue[0]!.retryCount).toBe(1);
     expect(queue[0]!.error).toBe('fail');
+  });
+  it('dead-letters an entry after max retries and allows explicit retry', async () => {
+    const processor = jest
+      .fn<() => Promise<void>>()
+      .mockRejectedValueOnce(new Error('permanent'))
+      .mockResolvedValueOnce(undefined);
+    registerProcessor('sessions', 'CREATE', processor);
+    const added = enqueue(
+      makeInput({ idempotencyKey: 'pe-dead-letter', maxRetries: 1 }),
+    );
+
+    await expect(processEntry(added)).rejects.toThrow('permanent');
+    expect(getQueue()[0]?.status).toBe('dead_letter');
+    retryDeadLetter(added.id);
+    await processEntry(getQueue()[0]!);
+
+    expect(getQueueLength()).toBe(0);
+    expect(processor).toHaveBeenCalledTimes(2);
   });
 });
 

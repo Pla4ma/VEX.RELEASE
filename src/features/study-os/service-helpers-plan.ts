@@ -59,10 +59,9 @@ export function buildStudyOsHomeSurface(input: {
   lane: 'student' | 'game_like' | 'deep_creative' | 'minimal_normal';
   plan: StudyPlan | null;
 }): StudyOsHomeSurface {
-  const hidden = input.lane !== 'student' && !input.plan;
   return StudyOsHomeSurfaceSchema.parse({
     ctaLabel: input.plan ? 'Start study block' : 'Create study block',
-    hidden,
+    hidden: false,
     offlineFallback: input.isOffline
       ? 'Offline: start a manual study block now; import sync can retry later.'
       : null,
@@ -81,7 +80,7 @@ export function computeStudyOsUnlockGate(input: {
 
   if (isDayZero) {
     return StudyOsUnlockGateSchema.parse({
-      isUnlocked: false,
+      isUnlocked: true,
       isDayZero: true,
       completedSessions,
       studyUsageRatio,

@@ -16,12 +16,12 @@ export interface CalculateScoreInput {
   missedDaysLast30Days: number;
   currentStreak: number;
   longestStreak: number;
-  streakHistory: Array<{
+  streakHistory: {
     start: number;
     end: number | null;
     length: number;
-  }>;
-  sessionDetails: Array<{
+  }[];
+  sessionDetails: {
     focusPurity: number;
     grade: string;
     duration: number;
@@ -29,11 +29,11 @@ export interface CalculateScoreInput {
     mode: string;
     startTime: string;
     context?: string;
-  }>;
+  }[];
   daysSinceLastSession: number;
   last7DaySessions: number;
   last30DaySessions: number;
-  scoreHistory: Array<{ date: string; score: number }>;
+  scoreHistory: { date: string; score: number }[];
 }
 
 export interface CalculateScoreResult {

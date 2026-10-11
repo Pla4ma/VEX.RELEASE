@@ -26,7 +26,7 @@ export class SessionStorageHelper {
     try {
       this.mmkv = createRuntimeMMKV({ id: 'session-storage' });
       this.useMMKV = true;
-    } catch (error: unknown) {
+    } catch {
       this.useMMKV = false;
     }
   }

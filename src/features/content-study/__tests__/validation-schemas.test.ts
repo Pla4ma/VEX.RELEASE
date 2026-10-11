@@ -11,6 +11,7 @@ describe('Validation Schemas', () => {
     it('should validate standard youtube.com/watch URLs', () => {
       const validUrls = [
         'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://www.youtube.com/watch?feature=share&v=dQw4w9WgXcQ',
         'https://youtube.com/watch?v=dQw4w9WgXcQ',
         'http://www.youtube.com/watch?v=dQw4w9WgXcQ',
       ];
@@ -94,13 +95,23 @@ describe('Validation Schemas', () => {
       expect(FileUploadSchema.safeParse(oversizedFile).success).toBe(false);
     });
     it('should reject unsupported file types', () => {
-      const invalidFile = {
-        uri: 'file:///path/to/image.jpg',
-        name: 'image.jpg',
-        size: 1000,
-        type: 'image/jpeg',
-      };
-      expect(FileUploadSchema.safeParse(invalidFile).success).toBe(false);
+      const invalidFiles = [
+        {
+          uri: 'file:///path/to/image.jpg',
+          name: 'image.jpg',
+          size: 1000,
+          type: 'image/jpeg',
+        },
+        {
+          uri: 'file:///path/to/document.docx',
+          name: 'document.docx',
+          size: 1000,
+          type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        },
+      ];
+      invalidFiles.forEach((invalidFile) => {
+        expect(FileUploadSchema.safeParse(invalidFile).success).toBe(false);
+      });
     });
     it('should reject files with missing required fields', () => {
       const incompleteFiles = [

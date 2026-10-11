@@ -89,14 +89,14 @@ export async function upsertSetting(setting: {
 }
 
 export async function batchUpsertSettings(
-  settings: Array<{
+  settings: {
     userId: string;
     key: string;
     value: unknown;
     category: SettingCategory;
     lastModified: number;
     deviceId?: string;
-  }>,
+  }[],
 ): Promise<Setting[]> {
   if (settings.length === 0) {
     return [];

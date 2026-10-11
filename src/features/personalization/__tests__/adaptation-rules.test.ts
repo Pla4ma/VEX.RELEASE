@@ -122,7 +122,7 @@ describe('Adaptation Rule 5: study targets → review recommendation', () => {
 // ─── Test Case 6: cold start → VEX admits learning ─────────────────────
 describe('Adaptation Rule 6: cold start → VEX admits learning', () => {
   it('returns low confidence when no signals', () => {
-    const signals: Array<{ signalType: string; timestamp: number }> = [];
+    const signals: { signalType: string; timestamp: number }[] = [];
     const summary = summarizeSessionBehavior(signals);
     const result = resolveAdaptation(emptyInput({ summary }));
 
@@ -132,7 +132,7 @@ describe('Adaptation Rule 6: cold start → VEX admits learning', () => {
   });
 
   it('completion copy shows cold start for no-signal users', () => {
-    const signals: Array<{ signalType: string; timestamp: number }> = [];
+    const signals: { signalType: string; timestamp: number }[] = [];
     const summary = summarizeSessionBehavior(signals);
     const result = resolveAdaptation(emptyInput({ summary }));
     const copy = getCompletionAdaptationCopy(result);

@@ -12,7 +12,7 @@ export function setupEventListeners(
   getUserId: () => string | null,
   challengeManager: ChallengeManager,
 ): () => void {
-  const unsubscribers: Array<() => void> = [];
+  const unsubscribers: (() => void)[] = [];
 
   unsubscribers.push(
     eventBus.subscribe(

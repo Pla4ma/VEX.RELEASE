@@ -15,11 +15,10 @@ export function SettingsDataControlSection({
 }: SettingsDataControlSectionProps) {
   return (
     <View style={styles.settingsGroup}>
-      <SettingItem label="Data Retention" value="standard" onPress={() => {}} />
+      <SettingItem label="Data Retention" value="standard" />
       <SettingItem
         label="Auto Export"
         value="disabled"
-        onPress={() => {}}
       />
       <Pressable
         style={({ pressed }) => [

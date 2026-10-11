@@ -108,8 +108,8 @@ export function publishChallengeProgress(
   userId: string,
   summary: SessionSummary,
   rewards: Pick<RewardCalculationResult, 'streakDays' | 'streakIncreased'>,
-): { challengesProgressed: Array<{ challengeId: string; progress: number }> } {
-  const progressed: Array<{ challengeId: string; progress: number }> = [];
+): { challengesProgressed: { challengeId: string; progress: number }[] } {
+  const progressed: { challengeId: string; progress: number }[] = [];
   eventBus.publish('challenge:progress', {
     userId,
     challengeId: 'daily_focus_time',

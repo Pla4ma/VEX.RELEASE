@@ -1,6 +1,7 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 import {
   type ExportProgressProps,
@@ -48,8 +49,8 @@ export function ExportProgress({
                 {
                   width: `${job.progress}%`,
                   backgroundColor: isComplete
-                    ? lightColors.accent.green
-                    : lightColors.accent.blue,
+                    ? vexFire.success
+                    : vexFire.amber,
                 },
               ]}
             />

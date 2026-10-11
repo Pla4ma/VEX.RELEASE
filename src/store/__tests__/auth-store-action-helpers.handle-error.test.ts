@@ -110,12 +110,12 @@ const createSetter = (state: MockAuthState) => {
 };
 
 describe('handleAuthCheckError', () => {
-  it('sets loading false and clears error for non-network errors', () => {
+  it('sets loading false and surfaces non-network errors', () => {
     const state = { ...createMockState(), isLoading: true };
     const setState = createSetter(state);
     handleAuthCheckError(setState, new Error('boom'));
     expect(state.isLoading).toBe(false);
-    expect(state.error).toBeNull();
+    expect(state.error).toBe('boom');
   });
 
   it('treats non-network errors as auth failure', () => {
@@ -138,7 +138,7 @@ describe('handleAuthCheckError', () => {
     const state = { ...createMockState(), isLoading: true };
     const setState = createSetter(state);
     handleAuthCheckError(setState, 'plain string');
-    expect(state.error).toBeNull();
+    expect(state.error).toBe('Auth check failed');
   });
 
   it('detects various network error patterns', () => {

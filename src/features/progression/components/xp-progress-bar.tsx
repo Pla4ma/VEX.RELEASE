@@ -31,7 +31,7 @@ export const XpProgressBar: React.ComponentType<XpProgressBarProps> = ({
   const { width } = useWindowDimensions();
   const BAR_WIDTH = width - 48;
   const [particles, setParticles] = useState<
-    Array<{ id: number; x: number; y: number }>
+    { id: number; x: number; y: number }[]
   >([]);
   const progressPercent = Math.min(100, (currentXp / threshold) * 100);
   const progressWidth = (BAR_WIDTH * progressPercent) / 100;

@@ -12,17 +12,8 @@ export class AccountDeletionRepositoryError extends Error {
   }
 }
 
-export async function deleteCurrentUser(confirmationToken: string): Promise<void> {
-  if (typeof confirmationToken !== 'string' || confirmationToken.length === 0) {
-    throw new AccountDeletionRepositoryError(
-      'deleteCurrentUser',
-      new Error('Confirmation token must be a non-empty string'),
-    );
-  }
-  const supabase = getSupabaseClient();
-  const { error } = await supabase.rpc('delete_current_user', {
-    confirmation_token: confirmationToken,
-  });
+export async function deleteCurrentUser(): Promise<void> {
+  const { error } = await getSupabaseClient().rpc('delete_current_user');
   if (error) {
     throw new AccountDeletionRepositoryError('deleteCurrentUser', error);
   }

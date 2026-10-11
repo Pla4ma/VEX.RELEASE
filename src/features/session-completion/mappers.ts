@@ -8,7 +8,7 @@
 import { z } from 'zod';
 import {
   CompletionLedgerSchema,
-  CompletionSyncStatusSchema,
+  type CompletionSyncStatus,
   type CompletionLedger,
 } from './schemas';
 
@@ -18,7 +18,10 @@ const LedgerRowSchema = z.object({
   session_id: z.string().uuid(),
   user_id: z.string().min(1),
   completed_at: z.number().int().nonnegative(),
-  offline_sync_status: CompletionSyncStatusSchema,
+  offline_sync_status: z.enum(['pending', 'synced', 'failed']).transform(
+    (status): CompletionSyncStatus => status === 'pending' ? 'pending_sync'
+      : status === 'failed' ? 'failed_sync' : 'synced',
+  ),
   created_at: z.number().int().nonnegative(),
   ledger_payload: CompletionLedgerSchema,
 });

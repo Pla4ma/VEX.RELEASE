@@ -1,7 +1,7 @@
 import { eventBus } from '../../events/EventBus';
 import { capture } from '../../shared/analytics/analytics-service';
 import { SessionEvents } from '../../shared/analytics/analytics-events';
-import { getOrchestratorHandlesCompletion } from './SessionAnalytics';
+import { getOrchestratorHandlesCompletion } from './session-analytics-state';
 import { subscribeErrorEventListeners } from './session-analytics-listener-helpers';
 
 type TrackFunction = (
@@ -29,7 +29,7 @@ export function setupAnalyticsEventListeners(
   track: TrackFunction,
 ): () => void {
   let sessionDuration = 0;
-  const unsubs: Array<() => void> = [];
+  const unsubs: (() => void)[] = [];
 
   unsubs.push(eventBus.subscribe('session:created', (data) => {
     if (!data) { return; }

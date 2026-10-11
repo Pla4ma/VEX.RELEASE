@@ -5,7 +5,7 @@ export interface MotivationOption {
   value: ExplicitMotivationStyle;
 }
 
-export const OPTIONS: Array<MotivationOption> = [
+export const OPTIONS: MotivationOption[] = [
   { label: 'Calm', value: 'calm' },
   { label: 'Study-focused', value: 'study_focused' },
   { label: 'Game-like', value: 'game_like' },

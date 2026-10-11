@@ -34,7 +34,7 @@ export const FALLBACK_HOME_MESSAGES: Record<
   CoachPresenceMotivationStyle,
   string
 > = {
-  CALM: 'Your rhythm is warm. One clean block next.',
+  CALM: 'No clear pattern yet. Start one clean block and give VEX something real to learn from.',
   FRIENDLY: 'The next block has a clear shape. Start there.',
   COACH_LED: 'Next rep is clear. Start the block.',
   GAME_LIKE: 'Your streak has a lane. Bank the next block.',

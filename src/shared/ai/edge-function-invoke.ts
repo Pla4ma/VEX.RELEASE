@@ -1,5 +1,4 @@
 import { captureSilentFailure } from '../../utils/silent-failure';
-import { getSupabaseClient } from '../../config/supabase';
 import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import * as Sentry from '@sentry/react-native';
 import { checkQuota, recordAIUsage } from './ai-quota-service';
@@ -13,8 +12,9 @@ import {
 import type { AIRequest, AIResponse } from './ai-types';
 import { AIResponseSchema } from './ai-types';
 import { validateAIResponse } from './ai-client-contracts';
+import { invokeEdgeFunctionWithTimeout } from './edge-function-timeout';
+import { getAIInvocationName } from './ai-client-requests';
 
-export const FUNCTION_NAME = 'ai-coach';
 export const CACHE_WINDOW_MS = 300000;
 export const EDGE_FUNCTION_TIMEOUT_MS = 15000;
 
@@ -122,14 +122,11 @@ export async function invokeAIWithFallback(
   }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), EDGE_FUNCTION_TIMEOUT_MS);
-
-    const { data, error } = await getSupabaseClient().functions.invoke(
-      FUNCTION_NAME,
-      { body },
+    const { data, error } = await invokeEdgeFunctionWithTimeout(
+      getAIInvocationName(requestType),
+      body,
+      EDGE_FUNCTION_TIMEOUT_MS,
     );
-    clearTimeout(timeoutId);
     if (error) {throw new Error(error.message);}
 
     const response = validateAIResponse(data);

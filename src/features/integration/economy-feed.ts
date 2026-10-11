@@ -13,7 +13,7 @@ import {
 export type { CurrencyTransaction, ShopOwnership };
 
 export function initializeEconomyFeedIntegration(): () => void {
-  const handlers: Array<() => void> = [];
+  const handlers: (() => void)[] = [];
   handlers.push(
     eventBus.subscribe(
       'economy:transaction',

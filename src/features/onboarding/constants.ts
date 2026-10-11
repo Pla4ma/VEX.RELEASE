@@ -1,10 +1,10 @@
 import type { FocusGoal } from './schemas';
 
-export const ONBOARDING_GOALS: Array<{
+export const ONBOARDING_GOALS: {
   id: FocusGoal;
   label: string;
   description: string;
-}> = [
+}[] = [
   {
     id: 'WORK',
     label: 'Find My Rhythm',

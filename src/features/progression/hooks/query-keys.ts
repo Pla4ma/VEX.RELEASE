@@ -1,7 +1,3 @@
-/**
- * Progression query keys (extracted to break self-cycle with useOptimisticXp).
- */
-
 export const progressionKeys = {
   all: ['progression'] as const,
   byUser: (userId: string) => [...progressionKeys.all, userId] as const,

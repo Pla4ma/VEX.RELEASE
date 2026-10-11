@@ -81,7 +81,7 @@ export function evaluateMemory(
 }
 
 export function evaluateAnimations(
-  animationMetrics: Array<{ duration: number; timestamp: number }>,
+  animationMetrics: { duration: number; timestamp: number }[],
   targets: PerformanceTargets,
 ): EvalResult<{ averageDuration: number; limit: number; passed: boolean }> {
   const issues: PerformanceIssue[] = [];
@@ -118,7 +118,7 @@ export function evaluateAnimations(
 }
 
 export function evaluateNetwork(
-  networkMetrics: Array<{ duration: number; timestamp: number }>,
+  networkMetrics: { duration: number; timestamp: number }[],
   targets: PerformanceTargets,
 ): EvalResult<{ averageResponseTime: number; limit: number; passed: boolean }> {
   const issues: PerformanceIssue[] = [];

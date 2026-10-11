@@ -93,7 +93,7 @@ export function useStudySessionReturn(args: BuildReturnArgs) {
     }
     try {
       return await coachService.getSessionAdvice(currentSessionQuery.data);
-    } catch (error: unknown) {
+    } catch {
       return null;
     }
   }, [coachService, currentSessionQuery.data]);

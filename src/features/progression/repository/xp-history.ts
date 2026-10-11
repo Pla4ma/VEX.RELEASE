@@ -122,7 +122,7 @@ export async function recordLevelUp(
 /** Fetch all level-up milestones for a user. */
 export async function fetchLevelUpHistory(
   userId: string,
-): Promise<Array<{ level: number; achievedAt: number; xpAtLevel: number }>> {
+): Promise<{ level: number; achievedAt: number; xpAtLevel: number }[]> {
   const { data, error } = await supabase
     .from('level_up_history')
     .select('level, achieved_at, xp_at_level')

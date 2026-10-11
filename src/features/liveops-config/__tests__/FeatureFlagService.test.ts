@@ -121,7 +121,7 @@ describe('FeatureFlagService', () => {
       });
       expect(result.state).toBe('degraded');
       expect(result.canRenderEntryPoint).toBe(true);
-      expect(result.canNavigate).toBe(false);
+      expect(result.canNavigate).toBe(true);
       expect(result.canQuery).toBe(false);
     });
 

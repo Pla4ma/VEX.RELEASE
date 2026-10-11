@@ -10,7 +10,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import type { Nullable } from '../types/global';
-import type { StorageAdapter, StorageResult } from './StorageAdapter';
+import type { StorageAdapter,  } from './StorageAdapter';
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('storage');
 // Web storage prefix to avoid collisions

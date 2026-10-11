@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme/ThemeContext';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 import { SessionMode } from '../../../session/modes';
 import { FOCUS_MODE_CARDS, SESSIONLESS_MODE_CARDS, getDisabledReason } from './ModeSelector.data';
 import { ModeCardItem } from './ModeCardItem';
@@ -25,11 +25,9 @@ export function ModeSelector({
   userMasteryRank,
   showSessionless = false,
 }: ModeSelectorProps): React.ReactNode {
-  const { theme } = useTheme();
-
   return (
     <Box gap="sm">
-      <Text variant="label" color="text.secondary">
+      <Text variant="label" color={vexFire.textSecondary}>
         Session Type
       </Text>
 
@@ -58,7 +56,7 @@ export function ModeSelector({
 
       {showSessionless && (
         <>
-          <Text variant="label" color="text.secondary" style={{ marginTop: 8 }}>
+          <Text variant="label" color={vexFire.textSecondary} style={{ marginTop: 8 }}>
             Session-less
           </Text>
           <Box gap="sm">

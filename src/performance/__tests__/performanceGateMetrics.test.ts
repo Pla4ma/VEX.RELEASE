@@ -168,5 +168,18 @@ describe('PerformanceGate', () => {
       const diagnostics = gate.getDiagnosticInfo();
       expect(diagnostics.isMonitoring).toBe(false);
     });
+
+    it('restores global APIs after monitoring stops', () => {
+      const originalFetch = global.fetch;
+      const originalRequestAnimationFrame = global.requestAnimationFrame;
+      gate.restartMetricsCollection();
+      expect(global.fetch).not.toBe(originalFetch);
+      expect(global.requestAnimationFrame).not.toBe(originalRequestAnimationFrame);
+
+      gate.cleanup();
+
+      expect(global.fetch).toBe(originalFetch);
+      expect(global.requestAnimationFrame).toBe(originalRequestAnimationFrame);
+    });
   });
 });

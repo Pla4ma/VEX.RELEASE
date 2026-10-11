@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { Image, View, Text, Pressable } from 'react-native';
 import type { ChatMessage } from './coach-chat-types';
 import { buttonTap } from '../../../utils/haptics';
 import { styles } from './CoachScreen.styles';
-import { VexAssetImage } from '../../../components/glass/VexAssetImage';
+import { spacing } from '../../../theme/tokens/spacing';
+
+const COACH_ARTIFACT = require('../../../../assets/vex/coach/coach-artifact.png');
 
 interface ChatMessageItemProps {
   message: ChatMessage;
@@ -30,7 +32,7 @@ export function ChatMessageItem({
     >
       {isCoach && (
         <View style={styles.coachAvatar}>
-          <VexAssetImage name="orangeCoach" size={30} />
+          <Image accessibilityIgnoresInvertColors accessibilityLabel="VEX Coach artifact" source={COACH_ARTIFACT} resizeMode="contain" style={{ height: spacing[8], width: spacing[8] }} />
         </View>
       )}
 

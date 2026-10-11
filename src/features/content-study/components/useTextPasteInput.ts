@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import type { RefObject } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TextInput, ViewStyle } from 'react-native';
@@ -37,7 +38,7 @@ export function useTextPasteInput({
   onChange,
   onValidationChange,
   onAutoSave,
-  disabled = false,
+  disabled: _disabled = false,
   autoFocus = false,
 }: TextPasteInputProps): UseTextPasteInputReturn {
   const { theme } = useTheme();
@@ -115,13 +116,13 @@ export function useTextPasteInput({
     characterCount > 0;
   let borderColor: string;
   if (isFocused) {
-    borderColor = theme.colors.semantic.primary;
+    borderColor = vexFire.ember;
   } else if (errors.length > 0) {
-    borderColor = theme.colors.semantic.danger;
+    borderColor = vexFire.danger;
   } else if (warnings.length > 0) {
-    borderColor = theme.colors.semantic.warning;
+    borderColor = vexFire.amber;
   } else {
-    borderColor = theme.colors.semantic.inputBorder;
+    borderColor = vexFire.border;
   }
 
   return {

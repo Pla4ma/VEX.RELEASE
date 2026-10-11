@@ -35,7 +35,7 @@ import {
   isProcessing,
   subscribe,
   OfflineQueueEntrySchema,
-  type OfflineQueueEntry,
+  type _OfflineQueueEntry,
   type OfflineQueueEntryInput,
 } from '../queue';
 
@@ -129,6 +129,14 @@ describe('queue operations', () => {
     expect(queue[0]!.priority).toBe('critical');
     expect(queue[1]!.priority).toBe('high');
     expect(queue[2]!.priority).toBe('low');
+  });
+  it('records the user ID from queued payloads', () => {
+    const userId = '11111111-1111-4111-8111-111111111111';
+    const result = enqueue(
+      makeInput({ payload: { userId } }),
+    );
+
+    expect(result.userId).toBe(userId);
   });
 
   it('dequeue removes and returns entry', () => {

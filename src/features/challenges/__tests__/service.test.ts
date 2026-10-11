@@ -4,6 +4,9 @@ import * as repository from '../repository';
 import * as queries from '../queries';
 import { eventBus } from '../../../events/EventBus';
 jest.mock('../repository');
+jest.mock('../../../progression/ProgressionService', () => ({
+  getProgressionService: jest.fn(() => ({ addXP: jest.fn().mockResolvedValue(undefined) })),
+}));
 jest.mock('../queries', () => ({ getCompletedChallenges: jest.fn() }));
 jest.mock('../../../events/EventBus', () => ({ eventBus: { publish: jest.fn() } }));
 jest.mock('../../../rewards/RewardService', () => ({
@@ -180,13 +183,6 @@ describe('Challenges Service', () => {
       expect(result.rewards.length).toBeGreaterThanOrEqual(1);
     });
     it('should fail for uncompleted challenge', async () => {
-      const mockUserChallenge = {
-        id: 'uc-1',
-        userId: 'user-1',
-        challengeId: 'c-1',
-        status: 'ACTIVE',
-        claimedAt: null,
-      };
       mockedQueries.getCompletedChallenges.mockResolvedValue([] as unknown);
       const result = await service.claimChallengeReward({
         userId: 'user-1',

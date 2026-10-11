@@ -1,8 +1,11 @@
 import { ContentSourceType, ContentStatus } from './types';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
+
+const CONTENT_STUDY_FUNCTION_NAME = 'content-study';
 
 export const CONTENT_STUDY_API = {
+  FUNCTION_NAME: CONTENT_STUDY_FUNCTION_NAME,
   BASE_URL: '/functions/v1/content-study',
   ENDPOINTS: {
     SUBMIT: 'submit',
@@ -15,6 +18,16 @@ export const CONTENT_STUDY_API = {
   POLL_INTERVAL: 2000,
   MAX_POLL_ATTEMPTS: 30,
 } as const;
+
+export function getContentStudyFunctionName(path: string): string {
+  const withoutLeadingSlash = path.trim().replace(/^\/+/, '');
+  const route = withoutLeadingSlash.replace(/^functions\/v1\//, '');
+  if (!route) throw new Error('Content study route is required');
+  return route === CONTENT_STUDY_FUNCTION_NAME ||
+    route.startsWith(`${CONTENT_STUDY_FUNCTION_NAME}/`)
+    ? route
+    : `${CONTENT_STUDY_FUNCTION_NAME}/${route}`;
+}
 
 export const CONTENT_SOURCES: Record<
   ContentSourceType,
@@ -68,42 +81,42 @@ export const CONTENT_STATUS_CONFIG: Record<
   PENDING: {
     label: 'Pending',
     description: 'Waiting to process',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTING: {
     label: 'Extracting',
     description: 'Reading content...',
-    color: lightColors.accent.blue,
+    color: vexFire.amber,
     isLoading: true,
     canGenerate: false,
   },
   EXTRACTED: {
     label: 'Extracted',
     description: 'Ready to generate study plan',
-    color: lightColors.accent.green,
+    color: vexFire.success,
     isLoading: false,
     canGenerate: true,
   },
   PROCESSING: {
     label: 'Processing',
     description: 'AI is creating your study plan...',
-    color: lightColors.accent.purple,
+    color: vexFire.copper,
     isLoading: true,
     canGenerate: false,
   },
   READY: {
     label: 'Ready',
     description: 'Study plan complete',
-    color: lightColors.accent.green,
+    color: vexFire.success,
     isLoading: false,
     canGenerate: false,
   },
   FAILED: {
     label: 'Failed',
     description: 'Something went wrong',
-    color: lightColors.semantic.danger,
+    color: vexFire.danger,
     isLoading: false,
     canGenerate: false,
   },

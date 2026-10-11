@@ -1,5 +1,5 @@
 import { formatNumber, getCurrencySymbol, getSizeConfig } from '../AnimatedCounter.helpers';
-import type { CounterSize, CounterVariant } from '../AnimatedCounter.helpers';
+import type { CounterSize,  } from '../AnimatedCounter.helpers';
 
 describe('AnimatedCounter.helpers', () => {
   describe('formatNumber', () => {

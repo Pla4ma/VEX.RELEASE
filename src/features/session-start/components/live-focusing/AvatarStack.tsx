@@ -8,7 +8,7 @@ import { Avatar } from '../../../../components/Avatar';
 import { useTheme } from '../../../../theme/ThemeContext';
 
 interface AvatarStackProps {
-  avatars?: Array<{ url?: string; initials: string }>;
+  avatars?: { url?: string; initials: string }[];
   maxDisplay?: number;
 }
 

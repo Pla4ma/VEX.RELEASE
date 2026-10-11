@@ -120,7 +120,7 @@ export async function deleteOldAnalyticsData(
 }
 
 export async function bulkInsertAnalyticsEvents(
-  events: Array<{
+  events: {
     user_id: string;
     metric_type: AnalyticsMetric;
     timestamp: number;
@@ -128,7 +128,7 @@ export async function bulkInsertAnalyticsEvents(
     dimension_type?: AnalyticsDimension;
     dimension_value?: string;
     metadata?: Record<string, unknown>;
-  }>,
+  }[],
 ) {
   const { error } = await supabase.from('analytics_events').insert(events);
   if (error) {

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React from 'react';
 import { createSheet } from '@/shared/ui/create-sheet';
 import {
@@ -11,7 +12,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
-import { lightColors } from '@/theme/tokens/colors';
+
 import { StandardHitSlops } from '@/utils/touchTarget';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
@@ -36,15 +37,15 @@ const iconButtonStyles = createSheet({
   smIconButton: { width: 32, height: 32 },
   mdIconButton: { width: 44, height: 44 },
   lgIconButton: { width: 56, height: 56 },
-  primaryIconButton: { backgroundColor: lightColors.accent.teal },
-  secondaryIconButton: { backgroundColor: lightColors.success[50] },
+  primaryIconButton: { backgroundColor: vexFire.amber },
+  secondaryIconButton: { backgroundColor: vexFire.panelSoft },
   outlineIconButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: lightColors.accent.teal,
+    borderColor: vexFire.amber,
   },
   ghostIconButton: { backgroundColor: 'transparent' },
-  dangerIconButton: { backgroundColor: lightColors.semantic.danger },
+  dangerIconButton: { backgroundColor: vexFire.danger },
 });
 
 export function IconButton({

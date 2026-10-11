@@ -1,16 +1,17 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 
 export const styles = createSheet({
   container: {
-    backgroundColor: lightColors.text.inverse,
+    backgroundColor: vexFire.cream,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     marginHorizontal: 12,
     borderLeftWidth: 4,
-    shadowColor: lightColors.text.primary,
+    shadowColor: vexFire.cream,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -19,8 +20,8 @@ export const styles = createSheet({
   header: { flexDirection: 'row', alignItems: 'flex-start' },
   icon: { fontSize: 24, marginRight: 12 },
   info: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '600', color: lightColors.semantic.backgroundMuted },
-  subtitle: { fontSize: 13, color: lightColors.text.muted, marginTop: 2 },
+  title: { fontSize: 16, fontWeight: '600', color: vexFire.backgroundSoft },
+  subtitle: { fontSize: 13, color: vexFire.textMuted, marginTop: 2 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
   statusText: { fontSize: 12, fontWeight: '600' },
   progressSection: {
@@ -32,7 +33,7 @@ export const styles = createSheet({
   progressBarContainer: {
     flex: 1,
     height: 6,
-    backgroundColor: lightColors.border.light,
+    backgroundColor: vexFire.border,
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -40,24 +41,24 @@ export const styles = createSheet({
   progressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     minWidth: 40,
   },
   fileInfo: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: lightColors.surface.button,
+    backgroundColor: vexFire.ember,
     borderRadius: 8,
   },
-  fileSize: { fontSize: 14, fontWeight: '500', color: lightColors.text.muted },
-  fileUrl: { fontSize: 12, color: lightColors.text.muted, marginTop: 4 },
+  fileSize: { fontSize: 14, fontWeight: '500', color: vexFire.textMuted },
+  fileUrl: { fontSize: 12, color: vexFire.textMuted, marginTop: 4 },
   errorSection: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: lightColors.error[50],
+    backgroundColor: vexFire.panelSoft,
     borderRadius: 8,
   },
-  errorText: { fontSize: 13, color: lightColors.semantic.danger },
+  errorText: { fontSize: 13, color: vexFire.danger },
   actions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -71,22 +72,22 @@ export const styles = createSheet({
     minWidth: 100,
     alignItems: 'center',
   },
-  cancelButton: { backgroundColor: lightColors.surface.button },
-  cancelButtonText: { color: lightColors.text.muted, fontWeight: '500' },
+  cancelButton: { backgroundColor: vexFire.ember },
+  cancelButtonText: { color: vexFire.textMuted, fontWeight: '500' },
   loadingIndicator: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   skeletonPill: {
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: lightColors.border.light,
+    backgroundColor: vexFire.border,
   },
   loadingText: {
     fontSize: 14,
-    color: lightColors.accent.blue,
+    color: vexFire.amber,
     fontWeight: '500',
   },
-  downloadButton: { backgroundColor: lightColors.accent.green },
-  downloadButtonText: { color: lightColors.text.inverse, fontWeight: '600' },
-  retryButton: { backgroundColor: lightColors.accent.blue },
-  retryButtonText: { color: lightColors.text.inverse, fontWeight: '600' },
+  downloadButton: { backgroundColor: vexFire.success },
+  downloadButtonText: { color: vexFire.cream, fontWeight: '600' },
+  retryButton: { backgroundColor: vexFire.amber },
+  retryButtonText: { color: vexFire.cream, fontWeight: '600' },
 });

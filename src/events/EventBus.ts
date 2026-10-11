@@ -23,7 +23,7 @@ const DEFAULT_OPTIONS: EventBusOptions = {
 export class EventBus {
   private emitter: EventEmitter;
   private options: EventBusOptions;
-  private history: Array<{ event: string; data: unknown; timestamp: number }> =
+  private history: { event: string; data: unknown; timestamp: number }[] =
     [];
   private static instance: EventBus | null = null;
   constructor(options: EventBusOptions = {}) {
@@ -131,7 +131,7 @@ export class EventBus {
     this.emitter.removeAllListeners();
     this.history = [];
   }
-  getHistory(): Array<{ event: string; data: unknown; timestamp: number }> {
+  getHistory(): { event: string; data: unknown; timestamp: number }[] {
     return [...this.history];
   }
   clearHistory(): void {

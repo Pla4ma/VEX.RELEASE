@@ -7,12 +7,11 @@
 
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { Icon } from '../../../icons/components/Icon';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { SessionRecommendation } from '../types';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 export interface SessionRecommendationCardProps {
   recommendation: SessionRecommendation;

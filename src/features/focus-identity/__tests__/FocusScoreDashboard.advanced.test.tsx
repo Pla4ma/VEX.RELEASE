@@ -64,7 +64,7 @@ describe('FocusScoreDashboard — advanced states', () => {
       isRefetching: true,
     });
     const { getByText } = await render(<FocusScoreDashboard />);
-    expect(getByText('Updating...')).toBeTruthy();
+    expect(getByText('Updating your signal…')).toBeTruthy();
   });
 
   it('renders empty history message when no history is available', async () => {
@@ -75,7 +75,7 @@ describe('FocusScoreDashboard — advanced states', () => {
       isRefetching: false,
     });
     const { getByText } = await render(<FocusScoreDashboard />);
-    expect(getByText('No history available yet.')).toBeTruthy();
+    expect(getByText('No history yet. The next completed block starts the trace.')).toBeTruthy();
   });
 
   it('renders 30-day trend with history data', async () => {

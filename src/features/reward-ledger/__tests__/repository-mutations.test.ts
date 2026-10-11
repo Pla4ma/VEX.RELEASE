@@ -128,7 +128,8 @@ describe('reward-ledger repository', () => {
       const eqStatus = jest
         .fn()
         .mockReturnValue({ data: pendingRewards, error: null });
-      const selectMock = jest.fn().mockReturnValue({ eq: eqStatus });
+      const eqUser = jest.fn().mockReturnValue({ eq: eqStatus });
+      const selectMock = jest.fn().mockReturnValue({ eq: eqUser });
       mockFrom.mockReturnValue({ select: selectMock });
 
       const result = await fetchPendingRewards(userId);
@@ -138,7 +139,8 @@ describe('reward-ledger repository', () => {
 
     it('returns empty array when no pending rewards', async () => {
       const eqStatus = jest.fn().mockReturnValue({ data: [], error: null });
-      const selectMock = jest.fn().mockReturnValue({ eq: eqStatus });
+      const eqUser = jest.fn().mockReturnValue({ eq: eqStatus });
+      const selectMock = jest.fn().mockReturnValue({ eq: eqUser });
       mockFrom.mockReturnValue({ select: selectMock });
 
       const result = await fetchPendingRewards(userId);
@@ -152,7 +154,8 @@ describe('reward-ledger repository', () => {
           data: null,
           error: { message: 'timeout', code: 'PGRST999' },
         });
-      const selectMock = jest.fn().mockReturnValue({ eq: eqStatus });
+      const eqUser = jest.fn().mockReturnValue({ eq: eqStatus });
+      const selectMock = jest.fn().mockReturnValue({ eq: eqUser });
       mockFrom.mockReturnValue({ select: selectMock });
 
       await expect(fetchPendingRewards(userId)).rejects.toThrow(

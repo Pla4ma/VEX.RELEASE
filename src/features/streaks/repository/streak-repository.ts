@@ -17,7 +17,7 @@ import { calculateStreakRisk } from '../streak-risk-monitor';
 const supabase = getSupabaseClient();
 
 export async function fetchStreakSummary(
-  userId: string,
+  _userId: string,
 ): Promise<RepositoryResult<StreakSummary | null>> {
   return executeWithFallback('fetchStreakSummary', async () => {
     const { data: streakData, error: streakError } = await supabase
@@ -56,7 +56,7 @@ export async function fetchStreakSummary(
 }
 
 export async function fetchStreakEnhanced(
-  userId: string,
+  _userId: string,
 ): Promise<RepositoryResult<Streak>> {
   return executeWithFallback('fetchStreak', async () => {
     const { data, error } = await supabase
@@ -160,16 +160,16 @@ export async function recordShieldUsageEnhanced(
 }
 
 export async function batchUpdateStreaks(
-  updates: Array<{ userId: string; streak: Partial<Streak> }>,
+  updates: { userId: string; streak: Partial<Streak> }[],
 ): Promise<{
     successful: Streak[];
-    failed: Array<{ userId: string; error: StreaksRepositoryError }>;
+    failed: { userId: string; error: StreaksRepositoryError }[];
   }> {
     const settled = await Promise.allSettled(
       updates.map((u) => updateStreakEnhanced(u.userId, u.streak).then((result) => ({ userId: u.userId, result }))),
     );
     const successful: Streak[] = [];
-    const failed: Array<{ userId: string; error: StreaksRepositoryError }> = [];
+    const failed: { userId: string; error: StreaksRepositoryError }[] = [];
     for (const item of settled) {
       if (item.status === 'fulfilled' && item.value.result.data) {
         successful.push(item.value.result.data);

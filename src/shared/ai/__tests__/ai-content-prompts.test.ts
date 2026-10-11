@@ -39,7 +39,7 @@ describe('ai-fallback-content', () => {
   });
 
   it('all fallback Coach messages are non-empty strings', () => {
-    for (const [category, messages] of Object.entries(FALLBACK_CONTENT.COACH_MESSAGE)) {
+    for (const [_category, messages] of Object.entries(FALLBACK_CONTENT.COACH_MESSAGE)) {
       for (const msg of messages) {
         expect(typeof msg).toBe('string');
         expect(msg.length).toBeGreaterThan(0);
@@ -58,7 +58,7 @@ describe('ai-prompts', () => {
   });
 
   it('system prompts are non-empty strings', () => {
-    for (const [key, prompt] of Object.entries(SYSTEM_PROMPTS)) {
+    for (const [_key, prompt] of Object.entries(SYSTEM_PROMPTS)) {
       expect(typeof prompt).toBe('string');
       expect(prompt.length).toBeGreaterThan(10);
     }

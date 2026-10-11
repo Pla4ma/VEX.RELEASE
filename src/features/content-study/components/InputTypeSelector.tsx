@@ -1,8 +1,9 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { memo } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons/components/Icon';
+import { VexIcon } from '../../../shared/ui/vex/VexIcon';
 import { useTheme } from '../../../theme/ThemeContext';
 import type { InputTab } from '../types';
 
@@ -34,7 +35,7 @@ export const InputTypeSelector = memo(function InputTypeSelector({
         gap: theme.spacing[2],
         padding: theme.spacing[1],
         borderRadius: theme.borderRadius.xl,
-        backgroundColor: theme.colors.semantic.backgroundMuted,
+        backgroundColor: vexFire.backgroundSoft,
       }}
     >
       {TABS.map((tab) => {
@@ -59,26 +60,27 @@ export const InputTypeSelector = memo(function InputTypeSelector({
               borderRadius: theme.borderRadius.lg,
               borderWidth: 1,
               borderColor: isActive
-                ? theme.colors.semantic.primary
-                : theme.colors.semantic.border,
+                ? vexFire.ember
+                : vexFire.border,
               backgroundColor: isActive
-                ? theme.colors.semantic.primary
-                : theme.colors.semantic.surfaceGlass,
+                ? vexFire.ember
+                : vexFire.panel,
               opacity: disabled ? 0.56 : pressed ? 0.86 : 1,
               paddingHorizontal: theme.spacing[2],
             })}
           >
-            <Icon
+            <VexIcon
               color={
                 isActive
-                  ? theme.colors.text.inverse
-                  : theme.colors.text.secondary
+                  ? vexFire.cream
+                  : vexFire.textSecondary
               }
               name={tab.icon}
               size="sm"
+              variant="solid"
             />
             <Text
-              color={isActive ? 'text.inverse' : 'text.secondary'}
+              color={isActive ? vexFire.background : vexFire.textSecondary}
               variant="caption"
             >
               {tab.label}
@@ -89,7 +91,7 @@ export const InputTypeSelector = memo(function InputTypeSelector({
                   width: theme.spacing[2],
                   height: theme.spacing[2],
                   borderRadius: theme.borderRadius.full,
-                  backgroundColor: theme.colors.semantic.warning,
+                  backgroundColor: vexFire.amber,
                 }}
               />
             ) : null}

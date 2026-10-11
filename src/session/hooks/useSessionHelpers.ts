@@ -1,5 +1,5 @@
 import { createDebugger } from '../../utils/debug';
-import type { SessionConfig, SessionState } from '../types';
+import type {  SessionState } from '../types';
 import type { SessionActions } from './useSessionActions';
 
 export const debug = createDebugger('hooks:useSession');

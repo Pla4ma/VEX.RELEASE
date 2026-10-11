@@ -74,8 +74,8 @@ describe('FocusScoreDashboard', () => {
       refetch: mockRefetch,
     });
     const { getByText } = await render(<FocusScoreDashboard />);
-    expect(getByText('Error: Test Error')).toBeTruthy();
-    const retryButton = getByText('Retry');
+    expect(getByText('Test Error')).toBeTruthy();
+    const retryButton = getByText('Retry score');
     expect(retryButton).toBeTruthy();
     await fireEvent.press(retryButton);
     expect(mockRefetch).toHaveBeenCalledTimes(1);
@@ -88,7 +88,7 @@ describe('FocusScoreDashboard', () => {
     });
     const { getByText } = await render(<FocusScoreDashboard />);
     expect(
-      getByText('Start your first session to see your Focus Score.'),
+      getByText('Start a session'),
     ).toBeTruthy();
   });
 
@@ -100,7 +100,7 @@ describe('FocusScoreDashboard', () => {
     const mockUseNetInfo = jest.requireMock('../../../network/useNetInfo').useNetInfo as jest.Mock;
     mockUseNetInfo.mockReturnValue({ isOffline: true });
     const { getByText } = await render(<FocusScoreDashboard />);
-    expect(getByText('You are offline. Data may be outdated.')).toBeTruthy();
+    expect(getByText('You are reading the saved signal')).toBeTruthy();
   });
 
   it('renders success state with all data', async () => {
@@ -128,12 +128,10 @@ describe('FocusScoreDashboard', () => {
         'Weakest: Intentional difficulty is helping your score stay stable.',
       ),
     ).toBeTruthy();
-    expect(getByText('View Monthly Report')).toBeTruthy();
-    expect(queryByText('Updating...')).toBeNull();
+    expect(getByText('Open analytics')).toBeTruthy();
+    expect(queryByText('Updating your signal…')).toBeNull();
 
-    await fireEvent.press(getByText('View Monthly Report'));
-    expect(mockNavigate).toHaveBeenCalledWith('Analytics', {
-      month: new Date().toISOString().slice(0, 7),
-    });
+    await fireEvent.press(getByText('Open analytics'));
+    expect(mockNavigate).toHaveBeenCalledWith('Analytics');
   });
 });

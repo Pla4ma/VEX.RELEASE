@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import Animated, {
@@ -7,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { styles } from './progress-state.styles';
-import { lightColors } from '@/theme/tokens/colors';
+
 
 export { ProgressBar, SegmentedProgress, CircularProgress } from './progress-indicators';
 export { LoadingState, LoadingDots } from './loading-states';
@@ -117,7 +118,7 @@ interface ProcessingStateProps {
 export function ProcessingState({ steps }: ProcessingStateProps) {
   return (
     <View style={styles.processingContainer}>
-      {steps.map((step, index) => (
+      {steps.map((step, _index) => (
         <View key={step.label} style={styles.processingItem}>
           <View
             style={[
@@ -134,7 +135,7 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
               <Text style={styles.processingError}>✕</Text>
             )}
             {step.status === 'processing' && (
-              <ActivityIndicator size="small" color={lightColors.text.inverse} />
+              <ActivityIndicator size="small" color={vexFire.cream} />
             )}
           </View>
           <Text

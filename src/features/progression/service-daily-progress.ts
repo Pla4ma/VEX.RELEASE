@@ -53,7 +53,7 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
       dailyGoalMet: xpEarned >= dailyGoal,
       goalProgressPercent,
     });
-  } catch (_error) {
+  } catch {
     const statsResult = await fetchXpStats(userId, 'day').catch((error: unknown) => {
       captureSilentFailure(error, { feature: 'progression', operation: 'fetchXpStatsFallback', type: 'network' });
       return null;

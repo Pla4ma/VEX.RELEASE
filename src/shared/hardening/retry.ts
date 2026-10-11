@@ -59,11 +59,24 @@ export async function withRetry<T>(
 
 export { CircuitBreaker } from './circuit-breaker';
 
-export async function withTimeout<T>(fn: () => Promise<T>, timeoutMs: number, _label?: string): Promise<T> {
-  const timeout = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs)
-  );
-  return Promise.race([fn(), timeout]);
+export async function withTimeout<T>(
+  fn: () => Promise<T>,
+  timeoutMs: number,
+  label?: string,
+): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(
+      () => reject(new Error(label ?? `Timeout after ${timeoutMs}ms`)),
+      timeoutMs,
+    );
+  });
+
+  try {
+    return await Promise.race([Promise.resolve().then(fn), timeout]);
+  } finally {
+    if (timeoutId !== undefined) clearTimeout(timeoutId);
+  }
 }
 
 export function classifyError(error: unknown): string {

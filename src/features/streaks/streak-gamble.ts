@@ -53,12 +53,12 @@ export function getGambleOptions(
   hoursRemaining: number,
 ): {
   available: boolean;
-  options: Array<{
+  options: {
     type: string;
     config: GambleConfig;
     available: boolean;
     reason?: string;
-  }>;
+  }[];
 } {
   const options = Object.entries(GAMBLE_CONFIGS).map(([type, config]) => {
     const available = hoursRemaining <= config.timeWindowHours;

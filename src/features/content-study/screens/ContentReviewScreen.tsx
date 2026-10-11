@@ -7,6 +7,7 @@ import { captureSilentFailure } from '../../../utils/silent-failure';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback } from 'react';
 import {
+  Image,
   View,
   Text,
   Pressable,
@@ -22,7 +23,8 @@ import { useNetInfo } from '../../../network/useNetInfo';
 
 import { styles } from './ContentReviewScreen.styles';
 import { StatusBadge, ContentView, ErrorDisplay } from './ContentReviewScreen.helpers';
-import { lightColors } from '@/theme/tokens/colors';
+import { StudyOfflineNotice } from './StudyOfflineNotice';
+import { StudyBackButton } from '../components/StudyBackButton';
 
 type RouteProps = RouteProp<ContentStudyStackParamList, 'ContentReview'>;
 type NavigationProp = {
@@ -76,22 +78,7 @@ function ContentReviewScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        {isOffline ? (
-          <View style={{
-            backgroundColor: lightColors.warning.light,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            alignItems: 'center',
-          }}>
-            <Text style={{
-              fontSize: 13,
-              fontWeight: '500',
-              color: lightColors.warning[500],
-            }}>
-              You are offline. Content processing requires a connection.
-            </Text>
-          </View>
-        ) : null}
+        {isOffline ? <StudyOfflineNotice message="You are offline. Content processing requires a connection." /> : null}
         <View style={styles.loadingContainer}>
           <Skeleton width={60} height={20} variant="rounded" />
           <Text style={styles.loadingText}>Loading content...</Text>
@@ -102,22 +89,14 @@ function ContentReviewScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isOffline ? (
-        <View style={{
-          backgroundColor: lightColors.warning.light,
-          paddingVertical: 8,
-          paddingHorizontal: 16,
-          alignItems: 'center',
-        }}>
-          <Text style={{
-            fontSize: 13,
-            fontWeight: '500',
-            color: lightColors.warning[500],
-          }}>
-            You are offline. Content processing requires a connection.
-          </Text>
-        </View>
-      ) : null}
+      {isOffline ? <StudyOfflineNotice message="You are offline. Content processing requires a connection." /> : null}
+      <StudyBackButton onPress={() => navigation.goBack()} />
+      <Image
+        accessibilityIgnoresInvertColors
+        source={require('../../../../assets/vex/study/review-orbit.png')}
+        resizeMode="contain"
+        style={{ height: 170, opacity: 0.18, position: 'absolute', right: -34, top: 16, width: 170 }}
+      />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

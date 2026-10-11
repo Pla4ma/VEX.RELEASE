@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
+import { Text , Text as VexText } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
@@ -16,7 +16,6 @@ import { VexFocusMark } from '../../../screens/auth/components/VexFocusMark';
 import { PathSelectionCard } from './PathSelectionCard';
 import { spacing } from '../../../theme/tokens/spacing';
 import type { OnboardingPath } from '../onboarding-paths';
-import { Text as VexText } from '../../../components/primitives/Text';
 
 interface WelcomeScreenProps {
   onStart: (path: OnboardingPath) => void;

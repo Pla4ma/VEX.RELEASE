@@ -1,7 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { View, PanResponder, ActivityIndicator } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { useSharedValue } from 'react-native-reanimated';
+import Animated, { useSharedValue } from 'react-native-reanimated';
 import { useTheme } from '@/theme';
 import { useReducedMotion } from '@/hooks';
 import { haptics } from '@/shared/feedback';

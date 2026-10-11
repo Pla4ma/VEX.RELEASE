@@ -10,7 +10,7 @@ export interface TomorrowPreviewProps {
   streakWillContinue: boolean;
   currentStreak: number;
   challengesResetting: string[];
-  events: Array<{
+  events: {
     type:
       | 'double_xp'
       | 'squad_war'
@@ -20,7 +20,7 @@ export interface TomorrowPreviewProps {
       | 'prime_time';
     name: string;
     time?: string;
-  }>;
+  }[];
   onPress: () => void;
   bossPreview?: {
     bossName: string;

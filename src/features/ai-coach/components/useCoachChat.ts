@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { type FlashListRef } from '@shopify/flash-list';
 import { useAnalytics } from '@/shared/analytics';
 import { CoachEvents } from '@/shared/analytics/analytics-events';
@@ -7,6 +8,12 @@ import { useAskCoachQuestionMutation, useCoachScreenState } from '../hooks';
 import type { ChatMessage } from './coach-chat-types';
 import { CoachMessageInputSchema } from './coach-chat-types';
 import { getWelcomeMessage } from './coach-helpers';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { executeCoachAction } from './coach-action-navigation';
+import type { CoachConversationTurn } from '../schemas';
+import { scrollCoachListToEnd } from './coach-list-scroll';
+import { useCoachResponseTimer } from './useCoachResponseTimer';
 
 const MIN_COACH_RESPONSE_MS = 3000;
 
@@ -20,6 +27,7 @@ export function useCoachChat() {
   const [error, setError] = useState<string | null>(null);
   const { coachState, coachHistory, stateLoading, historyLoading } =
     useCoachScreenState();
+  const scheduleCoachResponse = useCoachResponseTimer();
 
   const askMutation = useAskCoachQuestionMutation({
     onMutate: () => {
@@ -41,7 +49,7 @@ export function useCoachChat() {
       };
       const elapsedMs = Date.now() - requestStartedAtRef.current;
       const delayMs = Math.max(MIN_COACH_RESPONSE_MS - elapsedMs, 0);
-      setTimeout(() => {
+      scheduleCoachResponse(() => {
         setIsTyping(false);
         setChatMessages((prev) => [...prev, coachMsg]);
         track(CoachEvents.COACH_QUESTION_ANSWERED, {
@@ -56,8 +64,10 @@ export function useCoachChat() {
   });
 
   useEffect(() => {
-    if (coachHistory?.messages && chatMessages.length === 0) {
-      const initialMessages: ChatMessage[] = coachHistory.messages
+    if (stateLoading || historyLoading || chatMessages.length > 0) {
+      return;
+    }
+    const initialMessages: ChatMessage[] = (coachHistory?.messages ?? [])
         .slice(-20)
         .map((msg): ChatMessage => {
           const parsed = CoachMessageInputSchema.parse(msg);
@@ -72,23 +82,22 @@ export function useCoachChat() {
           };
         })
         .filter((message) => !isCoachPromptEcho(message));
-      if (initialMessages.length === 0) {
-        initialMessages.push({
-          id: 'welcome',
-          type: 'coach',
-          content: getWelcomeMessage(coachState),
-          timestamp: Date.now(),
-          metadata: { state: coachState?.currentState },
-        });
-      }
-      setChatMessages(initialMessages);
+    if (initialMessages.length === 0) {
+      initialMessages.push({
+        id: 'welcome',
+        type: 'coach',
+        content: getWelcomeMessage(coachState),
+        timestamp: Date.now(),
+        metadata: { state: coachState?.currentState },
+      });
     }
-  }, [chatMessages.length, coachHistory, coachState]);
+    setChatMessages(initialMessages);
+  }, [chatMessages.length, coachHistory, coachState, historyLoading, stateLoading]);
 
   useEffect(() => {
     if (chatMessages.length > 0) {
       const timer = setTimeout(() => {
-        flashListRef.current?.scrollToEnd({ animated: true });
+        scrollCoachListToEnd(flashListRef, true);
       }, 100);
       return () => clearTimeout(timer);
     }
@@ -109,32 +118,28 @@ export function useCoachChat() {
     track(CoachEvents.COACH_QUESTION_ASKED, {
       question: question.substring(0, 50),
     });
-    askMutation.mutate(question);
-  }, [inputText, askMutation, track]);
+    const conversation: CoachConversationTurn[] = chatMessages
+      .filter((message) => message.type === 'user' || message.type === 'coach')
+      .slice(-8)
+      .map((message) => ({
+        role: message.type === 'user' ? 'user' : 'assistant',
+        content: message.content,
+      }));
+    askMutation.mutate({ question, conversation });
+  }, [chatMessages, inputText, askMutation, track]);
 
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const handleActionPress = useCallback(
     (message: ChatMessage) => {
-      if (!message.metadata?.actionData) {return;}
-      const action = message.metadata.actionData;
-      switch (action.type) {
-        case 'START_SESSION':
-          track(CoachEvents.COACH_CTA_CLICKED, {
-            cta_type: 'start_session',
-            session_duration:
-              typeof action.duration === 'number' ? action.duration : 0,
-          });
-          break;
-        case 'VIEW_STREAK':
-          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: 'view_streak' });
-          break;
-        case 'VIEW_PROGRESS':
-          track(CoachEvents.COACH_CTA_CLICKED, { cta_type: 'view_progress' });
-          break;
-        default:
-          break;
+      const action = message.metadata?.actionData;
+      if (!action || !executeCoachAction(navigation, action)) {
+        return;
       }
+      track(CoachEvents.COACH_CTA_CLICKED, {
+        cta_type: String(action.type ?? 'unknown'),
+      });
     },
-    [track],
+    [navigation, track],
   );
 
   const recommendation = coachState

@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import {
   View,
@@ -27,7 +28,7 @@ const Skeleton: React.ComponentType<SkeletonProps> = ({
   borderRadius = 6,
   style,
 }) => {
-  const { theme } = useTheme();
+  const { theme: _theme } = useTheme();
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const shimmerAnim = useSharedValue(-1);
   useEffect(() => {
@@ -48,7 +49,7 @@ const Skeleton: React.ComponentType<SkeletonProps> = ({
         {
           height,
           borderRadius,
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: vexFire.panel,
         },
         widthStyle,
         style,

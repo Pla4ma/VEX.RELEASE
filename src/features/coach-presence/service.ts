@@ -26,7 +26,6 @@ import {
   styleForLane,
 } from './service-helpers';
 
-export { buildCompletionCoachPresence } from './completion-presence';
 export { getActionReason, getTone, getVisualState, goalForLane, styleForLane } from './service-helpers';
 
 export function resolveCoachActionIntent(input: {

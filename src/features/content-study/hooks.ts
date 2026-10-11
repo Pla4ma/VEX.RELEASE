@@ -12,6 +12,7 @@ export { useContentReview } from './hooks/useContentReview';
 export { useStudyPlan } from './hooks/useStudyPlan';
 export { useContentHistory } from './hooks/useContentHistory';
 export { useRateLimit } from './hooks/useRateLimit';
+export { useContentStudyEligibility } from './hooks/useContentStudyEligibility';
 export { useActiveStudyPlan } from './hooks/useActiveStudyPlan';
 export { useCompleteStudyPlanTask } from './hooks/useCompleteStudyPlanTask';
 

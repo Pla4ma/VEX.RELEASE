@@ -1,3 +1,4 @@
+import { vexFire } from "@/theme/tokens/vex-fire";
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -111,8 +112,8 @@ export function ExtractionProgress({
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: isFailed
-                  ? theme.colors.error[50]
-                  : theme.colors.semantic.primarySoft,
+                  ? vexFire.panelSoft
+                  : vexFire.panelSoft,
               },
               pulseStyle,
             ]}
@@ -120,8 +121,8 @@ export function ExtractionProgress({
             <Icon
               color={
                 isFailed
-                  ? theme.colors.semantic.danger
-                  : theme.colors.semantic.primary
+                  ? vexFire.danger
+                  : vexFire.ember
               }
               name={currentStage.icon}
               size="lg"
@@ -138,7 +139,7 @@ export function ExtractionProgress({
                   ? 'Study source ready'
                   : currentStage.label}
             </Text>
-            <Text color="text.secondary" variant="bodySmall">
+            <Text color={vexFire.textSecondary} variant="bodySmall">
               {isFailed
                 ? (error?.message ?? 'VEX could not finish this source.')
                 : formatTime(estimatedTimeRemaining) ||
@@ -154,7 +155,7 @@ export function ExtractionProgress({
                 height: theme.spacing[2],
                 borderRadius: theme.borderRadius.full,
                 overflow: 'hidden',
-                backgroundColor: theme.colors.semantic.backgroundMuted,
+                backgroundColor: vexFire.backgroundSoft,
               }}
             >
               <Animated.View
@@ -163,21 +164,21 @@ export function ExtractionProgress({
                     height: theme.spacing[2],
                     borderRadius: theme.borderRadius.full,
                     backgroundColor: isComplete
-                      ? theme.colors.semantic.success
-                      : theme.colors.semantic.primary,
+                      ? vexFire.success
+                      : vexFire.ember,
                   },
                   fillStyle,
                 ]}
               />
             </View>
-            <Text color="text.muted" textAlign="right" variant="caption">
+            <Text color={vexFire.textMuted} textAlign="right" variant="caption">
               {Math.round(progress)}%
             </Text>
           </View>
         ) : null}
 
         {error?.details ? (
-          <Text color="text.muted" variant="caption">
+          <Text color={vexFire.textMuted} variant="caption">
             The source is safe to retry when storage finishes syncing.
           </Text>
         ) : null}

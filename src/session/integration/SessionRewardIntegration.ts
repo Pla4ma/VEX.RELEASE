@@ -47,7 +47,7 @@ export class SessionRewardIntegration {
   private config: RewardIntegrationConfig;
   private processedSessionIds = new Set<string>();
   private static readonly MAX_PROCESSED_IDS = 500;
-  private unsubscribeFns: Array<() => void> = [];
+  private unsubscribeFns: (() => void)[] = [];
 
   constructor(config: Partial<RewardIntegrationConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };

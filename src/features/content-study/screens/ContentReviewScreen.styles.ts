@@ -4,23 +4,23 @@
  */
 
 import { createSheet } from '@/shared/ui/create-sheet';
-import { lightColors } from '@/theme/tokens/colors';
+import { vexFire } from '@/theme/tokens/vex-fire';
 
 
 export const styles = createSheet({
-  container: { flex: 1, backgroundColor: lightColors.semantic.obsidian },
+  container: { flex: 1, backgroundColor: vexFire.background },
   scrollView: { flex: 1 },
   scrollContent: { padding: 20 },
   header: { marginBottom: 20 },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     marginBottom: 8,
   },
-  subtitle: { fontSize: 16, color: lightColors.text.muted },
+  subtitle: { fontSize: 16, color: vexFire.textMuted },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 16, fontSize: 16, color: lightColors.text.muted },
+  loadingText: { marginTop: 16, fontSize: 16, color: vexFire.textMuted },
   statusContainer: {
     borderRadius: 12,
     padding: 16,
@@ -31,18 +31,18 @@ export const styles = createSheet({
   statusLabel: { fontSize: 16, fontWeight: '600', marginTop: 8 },
   statusDescription: {
     fontSize: 14,
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
     marginTop: 4,
     textAlign: 'center',
   },
   hidden: { opacity: 0 },
   contentContainer: {
-    backgroundColor: lightColors.semantic.obsidian,
+    backgroundColor: vexFire.background,
     borderRadius: 16,
     marginBottom: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: lightColors.semantic.obsidian,
+    borderColor: vexFire.background,
   },
   contentHeader: {
     flexDirection: 'row',
@@ -50,25 +50,25 @@ export const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: lightColors.semantic.obsidian,
+    borderBottomColor: vexFire.background,
   },
   contentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
   },
-  contentStats: { fontSize: 12, color: lightColors.text.muted },
+  contentStats: { fontSize: 12, color: vexFire.textMuted },
   contentScroll: { maxHeight: 300 },
   contentText: {
     fontSize: 14,
     lineHeight: 22,
-    color: lightColors.border.light,
+    color: vexFire.textSecondary,
     padding: 16,
   },
   contentEditInput: {
     fontSize: 14,
     lineHeight: 22,
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
     padding: 16,
     minHeight: 300,
     textAlignVertical: 'top',
@@ -77,12 +77,12 @@ export const styles = createSheet({
     flexDirection: 'row',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: lightColors.semantic.obsidian,
+    borderTopColor: vexFire.background,
     gap: 12,
   },
   editButton: {
     flex: 1,
-    backgroundColor: lightColors.semantic.obsidian,
+    backgroundColor: vexFire.background,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -90,11 +90,11 @@ export const styles = createSheet({
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: lightColors.semantic.obsidian,
+    backgroundColor: vexFire.background,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -102,11 +102,11 @@ export const styles = createSheet({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.muted,
+    color: vexFire.textMuted,
   },
   saveButton: {
     flex: 1,
-    backgroundColor: lightColors.accent.blue,
+    backgroundColor: vexFire.ember,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -114,10 +114,10 @@ export const styles = createSheet({
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
   },
   generateButton: {
-    backgroundColor: lightColors.accent.blue,
+    backgroundColor: vexFire.ember,
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -128,29 +128,29 @@ export const styles = createSheet({
   generateButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
   },
   buttonSpinner: { marginRight: 8 },
   processingNote: { marginTop: 16, alignItems: 'center' },
-  processingNoteText: { fontSize: 14, color: lightColors.text.muted },
+  processingNoteText: { fontSize: 14, color: vexFire.textMuted },
   errorContainer: {
-    backgroundColor: lightColors.semantic.danger + '20',
+    backgroundColor: vexFire.danger + '20',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: lightColors.semantic.danger + '40',
+    borderColor: vexFire.danger + '40',
   },
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: lightColors.semantic.danger,
+    color: vexFire.danger,
     marginBottom: 8,
   },
-  errorText: { fontSize: 14, color: lightColors.semantic.danger },
+  errorText: { fontSize: 14, color: vexFire.danger },
   retryButton: {
     marginTop: 12,
-    backgroundColor: lightColors.semantic.danger + '40',
+    backgroundColor: vexFire.danger + '40',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -159,6 +159,6 @@ export const styles = createSheet({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: lightColors.text.inverse,
+    color: vexFire.cream,
   },
 });

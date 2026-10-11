@@ -14,11 +14,9 @@ import type { PostSessionStoryViewModel } from './post-session-story-view-model'
 import {
   getCompletionLedgerByIdempotencyKey,
   persistCompletionLedger,
-  SessionCompletionRepositoryError,
 } from './repository';
-import {
-  createSessionRecord,
-} from '../session-history/repository';
+import { retainCompletionOutcome } from './completion-outcome-service';
+import { recordCompletedSession } from './session-history-service';
 import {
   beginKeyProcessing,
   markKeyProcessed,
@@ -82,11 +80,12 @@ export async function orchestrateSessionCompletion(
     // If parsing fails, abort processing
     return null;
   }
-  const isOnline = getConnectionState() !== 'offline';
+  const isOnline = getConnectionState() === 'online';
 
   // LAYER 1: Local completion receipt — always succeeds
   const ledger = buildCompletionLedger({
     completedAt: parsed.timestamp ?? Date.now(),
+    degradedSystems: ['session-history', 'focus-identity', 'streak', 'progression', 'rewards'],
     offlineSyncStatus: isOnline ? 'synced' : 'pending_sync',
     sessionId: parsed.sessionId,
     summary,
@@ -99,10 +98,17 @@ export async function orchestrateSessionCompletion(
   if (!beginKeyProcessing(key)) {return null;}
 
   try {
-    const existing = await getCompletionLedgerByIdempotencyKey(key);
+    let existing = null;
+    if (isOnline) {
+      try {
+        existing = await getCompletionLedgerByIdempotencyKey(key);
+      } catch (error: unknown) {
+        Sentry.captureException(error, { tags: { feature: 'session-completion-lookup' } });
+      }
+    }
     if (existing) {
       markKeyProcessed(key);
-      setCompletionSyncState(existing.ledgerId, [], false);
+      setCompletionSyncState(existing.ledgerId, existing.degradedSystems, existing.offlineSyncStatus !== 'synced');
       return null;
     }
 
@@ -111,40 +117,29 @@ export async function orchestrateSessionCompletion(
     if (isOnline) {
       try {
         persisted = await persistCompletionLedger(ledger);
-        createSessionRecord({
-          sessionId: ledger.sessionId,
-          userId: ledger.userId,
-          status: 'COMPLETED',
-          duration: ledger.targetDurationSeconds,
-          effectiveDuration: ledger.effectiveFocusedSeconds,
-          qualityScore: ledger.qualityScore,
-          mode: ledger.mode,
-          difficulty: null,
-          metadata: {},
-          startedAt: new Date(ledger.startedAt).toISOString(),
-          completedAt: new Date(ledger.completedAt).toISOString(),
-          endedAt: new Date(ledger.completedAt).toISOString(),
-        }).catch((err: unknown) => {
-          Sentry.captureException(err, { tags: { feature: 'session-record-creation' } });
-        });
-      } catch (error: unknown) {
-        const repoErr =
-          error instanceof SessionCompletionRepositoryError ? error : null;
-        const cause = repoErr?.cause;
-        const causeCode =
-          cause != null && typeof cause === 'object' && 'code' in cause &&
-          typeof (cause as { code?: unknown }).code === 'string'
-            ? (cause as { code: string }).code : null;
-        const isDuplicate = causeCode === '23505' || causeCode === '409';
-
-        if (isDuplicate) {
-          debug.info('Duplicate idempotency key %s — already synced', key);
-          persisted = { ...ledger, offlineSyncStatus: 'synced' };
-        } else {
-          Sentry.captureException(error, { tags: { feature: 'session-completion-ledger' } });
-          enqueue({ feature: 'sessions', idempotencyKey: ledger.idempotencyKey, operation: 'CREATE', payload: { ledger } });
-          persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
+        if (persisted.ledgerId !== ledger.ledgerId) {
+          markKeyProcessed(key);
+          setCompletionSyncState(persisted.ledgerId, persisted.degradedSystems, persisted.offlineSyncStatus !== 'synced');
+          return null;
         }
+        try {
+          await recordCompletedSession(ledger);
+          persisted = { ...persisted, degradedSystems: persisted.degradedSystems.filter((name) => name !== 'session-history') };
+        } catch (error: unknown) {
+          Sentry.captureException(error, {
+            tags: { feature: 'session-record-creation' },
+          });
+          persisted = {
+            ...persisted,
+            degradedSystems: [...new Set([...persisted.degradedSystems, 'session-history'])],
+          };
+          enqueue({ feature: 'sessions', idempotencyKey: key, operation: 'CREATE',
+            payload: { ledger: persisted }, priority: 'high', maxRetries: 10 });
+        }
+      } catch (error: unknown) {
+        Sentry.captureException(error, { tags: { feature: 'session-completion-ledger' } });
+        enqueue({ feature: 'sessions', idempotencyKey: key, operation: 'CREATE', payload: { ledger } });
+        persisted = { ...ledger, offlineSyncStatus: 'pending_sync' };
       }
     } else {
       enqueue({ feature: 'sessions', idempotencyKey: ledger.idempotencyKey, operation: 'CREATE', payload: { ledger } });
@@ -152,7 +147,7 @@ export async function orchestrateSessionCompletion(
 
     // LAYER 3: XP / streak / progression / rewards
     const subsystemResult = await applyCompletionSubsystems({ ledger: persisted, summary });
-    const finalLedger = subsystemResult.ledger;
+    const finalLedger = await retainCompletionOutcome(subsystemResult.ledger, isOnline);
 
     // LAYER 3.5 + 4: Personalization and side effects
     const storyViewModel = await applyPersonalizationAndSideEffects({
@@ -165,7 +160,7 @@ export async function orchestrateSessionCompletion(
     debug.info('Session completion orchestrated for %s', parsed.sessionId);
     invalidateCompletionQueries(parsed.userId);
     markKeyProcessed(key);
-    setCompletionSyncState(finalLedger.ledgerId, subsystemResult.degradedSystems, false);
+    setCompletionSyncState(finalLedger.ledgerId, subsystemResult.degradedSystems, finalLedger.offlineSyncStatus !== 'synced');
     return storyViewModel;
   } catch (error) {
     releaseKeyProcessing(key);

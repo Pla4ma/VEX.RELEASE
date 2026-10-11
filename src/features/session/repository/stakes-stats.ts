@@ -91,13 +91,13 @@ export async function batchSaveStakesSessions(
   records: StakesSessionRecord[],
 ): Promise<{
   successful: StakesSessionRecord[];
-  failed: Array<{ record: StakesSessionRecord; error: RepositoryError }>;
+  failed: { record: StakesSessionRecord; error: RepositoryError }[];
 }> {
   const settled = await Promise.allSettled(
     records.map((record) => saveStakesSession(record).then((result) => ({ record, result }))),
   );
   const successful: StakesSessionRecord[] = [];
-  const failed: Array<{ record: StakesSessionRecord; error: RepositoryError }> = [];
+  const failed: { record: StakesSessionRecord; error: RepositoryError }[] = [];
   for (const item of settled) {
     if (item.status === 'fulfilled' && item.value.result.data) {
       successful.push(item.value.result.data);

@@ -1,6 +1,7 @@
 import { Badge } from '../../../components/Badge';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { UserChallengeSummary } from '../schemas';
+import { vexFire } from '../../../theme/tokens/vex-fire';
 
 export function getStatusBadge(
   status: UserChallengeSummary['status'],
@@ -39,11 +40,11 @@ export function getDifficultyVariant(
 export { formatDurationFromMs as formatDuration } from '../../../utils/format-duration';
 
 export const challengeCardStyles = createSheet({
-  container: { padding: 16, marginHorizontal: 16, marginBottom: 12 },
+  container: { backgroundColor: vexFire.panel, borderColor: vexFire.border, borderWidth: 1, padding: 16, marginHorizontal: 16, marginBottom: 12 },
   expiredContainer: { opacity: 0.6 },
   header: { marginBottom: 12 },
   categoryRow: { flexDirection: 'row', gap: 8, marginBottom: 8 },
-  title: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
+  title: { color: vexFire.cream, fontSize: 16, fontWeight: '600', marginBottom: 4 },
   description: { fontSize: 14 },
   progressSection: { marginBottom: 12 },
   progressRow: {
@@ -51,7 +52,7 @@ export const challengeCardStyles = createSheet({
     justifyContent: 'space-between',
     marginBottom: 4,
   },
-  progressText: { fontSize: 14, fontWeight: '500' },
+  progressText: { color: vexFire.textSecondary, fontSize: 14, fontWeight: '500' },
   progressPercent: { fontSize: 14, fontWeight: '600' },
   progressBarTrack: { height: 8, borderRadius: 4 },
   progressBarFill: { height: '100%', borderRadius: 4 },

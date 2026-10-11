@@ -1,18 +1,18 @@
 import { accessFor } from './helpers';
 
 describe('Risk 4 — Route registration enforcement', () => {
-  it('all progressive routes gated by FeatureAvailability', () => {
+  it('all day-one routes are registered through FeatureAvailability', () => {
     const {
       FEATURE_ROUTE_REGISTRY,
       canRegisterFeatureRoute,
     } = require('../../navigation/feature-route-registry');
 
     const locked = accessFor(0);
-    // Some routes may be always-available; verify core features ARE gated
+    // Day-one destinations are intentionally discoverable from the first session.
     const gatedCount = FEATURE_ROUTE_REGISTRY.filter(
       (r: { route: string }) => !canRegisterFeatureRoute(locked, r.route),
     ).length;
-    expect(gatedCount).toBeGreaterThanOrEqual(1);
+    expect(gatedCount).toBe(0);
 
     const unlocked = accessFor(999);
     const count = FEATURE_ROUTE_REGISTRY.filter((r: { feature: string }) =>
@@ -21,20 +21,19 @@ describe('Risk 4 — Route registration enforcement', () => {
     expect(count).toBeGreaterThanOrEqual(FEATURE_ROUTE_REGISTRY.length - 1);
   });
 
-  it('hidden features never have registered routes', () => {
+  it('day-one feature routes remain navigable while archived routes stay blocked', () => {
     const {
       canNavigateToRegisteredRoute,
     } = require('../../navigation/feature-route-registry');
 
     const features = accessFor(0);
-    expect(canNavigateToRegisteredRoute(features, 'Boss')).toBe(false);
-    expect(canNavigateToRegisteredRoute(features, 'Challenges')).toBe(false);
-    // AICoach available early via ai_coach_basic gate
-    expect(canNavigateToRegisteredRoute(features, 'ContentStudy')).toBe(false);
-    expect(canNavigateToRegisteredRoute(features, 'Mastery')).toBe(false);
-    expect(canNavigateToRegisteredRoute(features, 'CompanionDetail')).toBe(
-      false,
-    );
+    expect(canNavigateToRegisteredRoute(features, 'Boss')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'Challenges')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'ContentStudy')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'Mastery')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'CompanionDetail')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'MemoryConsole')).toBe(true);
+    expect(canNavigateToRegisteredRoute(features, 'Shop')).toBe(false);
   });
 
   it('core navigation routes always available', () => {

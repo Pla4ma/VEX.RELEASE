@@ -27,7 +27,7 @@ export function calculateAntiCheatPenalty(
     CRITICAL: 4,
   };
   let total = 0;
-  const violations: Array<{ type: AntiCheatViolationType; penalty: number }> =
+  const violations: { type: AntiCheatViolationType; penalty: number }[] =
     [];
   let maxSeverity: string = 'LOW';
   for (const violation of input.violations) {

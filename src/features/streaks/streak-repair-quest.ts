@@ -2,44 +2,13 @@ import { eventBus } from '../../events/EventBus';
 import { v4 } from '../../utils/uuid';
 import * as repository from './repository';
 import { expireRepairQuest, completeRepairQuest } from './streak-repair-lifecycle';
-
-export {
-  expireRepairQuest,
-  completeRepairQuest,
-  getRepairQuestStatus,
-  processExpiredRepairQuests,
-} from './streak-repair-lifecycle';
-
+import type { StreakRepairQuest } from './streak-repair-types';
 const REPAIR_QUEST_CONFIG = {
   sessionsRequired: 3,
   timeWindowHours: 24,
   restoredStreakPercentage: 0.8,
   minPreviousStreak: 3,
 } as const;
-
-export interface StreakRepairQuest {
-  id: string;
-  userId: string;
-  previousStreak: number;
-  targetRestoreDays: number;
-  sessionsCompleted: number;
-  sessionsRequired: number;
-  startedAt: number;
-  expiresAt: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'ABANDONED';
-  sessionIds: string[];
-  completedAt: number | null;
-}
-
-export interface RepairQuestStatus {
-  hasActiveQuest: boolean;
-  quest: StreakRepairQuest | null;
-  progressPercent: number;
-  hoursRemaining: number;
-  canStartQuest: boolean;
-  previousStreak: number;
-  potentialRestoreDays: number;
-}
 
 export async function createRepairQuest(
   userId: string,

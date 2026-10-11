@@ -6,7 +6,6 @@ import {
   ChallengeTemplateSchema,
 } from './schemas';
 import { RepositoryError } from './repository-helpers';
-import type {} from './schemas';
 
 const supabase = getSupabaseClient();
 

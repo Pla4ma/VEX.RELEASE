@@ -44,16 +44,27 @@ jest.mock(
   }),
 );
 
+export const mockGetProgressionService = jest.fn(() => ({
+  addXP: mockAddXP,
+}));
+export const mockGetStreakService = jest.fn(() => ({
+  recordSession: mockRecordSession,
+}));
+export const mockGetRewardService = jest.fn(() => ({
+  grantReward: mockGrantReward,
+}));
+
 jest.mock('../../../../progression/ProgressionService', () => ({
-  getProgressionService: jest.fn(() => ({ addXP: mockAddXP })),
+  getProgressionService: (userId?: string) =>
+    mockGetProgressionService(userId),
 }));
 
 jest.mock('../../../../streaks/StreakService', () => ({
-  getStreakService: jest.fn(() => ({ recordSession: mockRecordSession })),
+  getStreakService: (userId?: string) => mockGetStreakService(userId),
 }));
 
 jest.mock('../../../../rewards/RewardService', () => ({
-  getRewardService: jest.fn(() => ({ grantReward: mockGrantReward })),
+  getRewardService: (userId?: string) => mockGetRewardService(userId),
 }));
 
 jest.mock('../../../../features/companion/service', () => ({

@@ -92,7 +92,7 @@ export async function addXpEnhanced(
     };
   }
 
-  const operationKey = `${userId}:addXp:${input.sessionId || Date.now()}`;
+  const operationKey = `${userId}:addXp:${idempotencyKey}`;
   return deduplicateConcurrent(operationKey, async () => {
     const result = await runAddXpOperation(
       userId,
@@ -101,9 +101,13 @@ export async function addXpEnhanced(
       startTime,
       options?.skipEvents,
       () =>
-        addXpEnhanced(userId, input, { ...options, idempotencyKey: undefined }),
+        addXpEnhanced(userId, input, {
+          ...options,
+          idempotencyKey,
+        }),
+      idempotencyKey,
     );
-    if (result.success || result.offlineQueued) {
+    if (result.success) {
       markOperationProcessed(idempotencyKey);
     }
     return result;
@@ -111,7 +115,7 @@ export async function addXpEnhanced(
 }
 
 export async function batchAddXp(
-  operations: Array<{ userId: string; input: AddXpInput }>,
+  operations: { userId: string; input: AddXpInput }[],
 ): Promise<AddXpOperationResult[]> {
   const results: AddXpOperationResult[] = [];
   const chunkSize = 5;

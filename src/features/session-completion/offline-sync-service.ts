@@ -1,11 +1,17 @@
-import { enqueue, type OfflineQueueEntry, type OfflineQueueEntryInput } from '../../lib/offline/queue';
 import {
-  persistCompletionLedger,
-  SessionCompletionRepositoryError,
-  updateCompletionSyncStatus,
-} from './repository';
-import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
-import { fallbackStorage, SessionCompletionOfflineEntrySchema } from './offline-sync-storage';
+  getQueue,
+  registerProcessor,
+  unregisterProcessor,
+  type OfflineQueueEntry,
+} from '../../lib/offline/queue';
+import {
+  CompletionLedgerSchema,
+  type CompletionLedger,
+} from './schemas';
+import {
+  fallbackStorage,
+  SessionCompletionOfflineEntrySchema,
+} from './offline-sync-storage';
 import type {
   SessionCompletionSyncOptions,
   OfflineSyncReport,
@@ -14,13 +20,21 @@ import type {
   ForceRetryResult,
   DiagnosticsResult,
 } from './offline-sync-types';
-import { SessionCompletionOfflineSyncError } from './offline-sync-types';
 import { createDebugger } from '../../utils/debug';
 import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
 import { registerSessionCompletionProcessors } from './offline-sync-processors';
-
+import { syncCompletionLedger } from './offline-ledger-service';
+import {
+  buildOfflineSyncDiagnostics,
+  buildOfflineSyncReport,
+} from './offline-sync-health';
+import {
+  buildCompletionSyncStatus,
+  queueCompletion,
+  retryAllCompletions,
+  summarizeQueueDiagnostics,
+} from './offline-sync-operations';
 const debug = createDebugger('session-completion:offline-sync');
-
 export class SessionCompletionOfflineSyncService {
   private isInitialized = false;
   private unsubscribeNetwork: (() => void) | null = null;
@@ -28,66 +42,63 @@ export class SessionCompletionOfflineSyncService {
   private successCount = 0;
   private failureCount = 0;
   private totalRetryCount = 0;
-
   constructor() {
     fallbackStorage.reload();
     this.initialize();
   }
 
-  async queueSessionCompletion(
+  queueSessionCompletion(
     ledger: CompletionLedger,
     options: SessionCompletionSyncOptions = {},
   ): Promise<QueueResult> {
     const validated = CompletionLedgerSchema.parse(ledger);
-    const { forceSync = false, skipQueue = false, maxRetries = 10 } = options;
-    try {
-      if (forceSync && !skipQueue && this.isOnline()) {
-        await this.syncImmediately(validated);
-        return { queued: false, synced: true };
-      }
-      const entry: OfflineQueueEntryInput = { operation: 'SESSION_COMPLETE', feature: 'sessions', payload: validated, idempotencyKey: validated.idempotencyKey, retryCount: 0, maxRetries, priority: 'high' };
-      const queuedEntry = enqueue(entry);
-      fallbackStorage.addEntry({ id: queuedEntry.id, operation: 'SESSION_COMPLETE', feature: 'sessions', payload: validated, idempotencyKey: queuedEntry.idempotencyKey, createdAt: queuedEntry.createdAt, retryCount: queuedEntry.retryCount, maxRetries: queuedEntry.maxRetries, priority: 'high' });
-      return { queued: true, synced: false, entryId: queuedEntry.id };
-    } catch (error) {
-      return { queued: false, synced: false, error: error instanceof Error ? error : new Error(String(error)) };
-    }
+    return queueCompletion(
+      validated,
+      options,
+      this.isOnline(),
+      (currentLedger) => this.syncImmediately(currentLedger),
+    );
   }
 
   async getSyncStatus(sessionId: string): Promise<SyncStatusResult> {
-    const fallbackEntry = fallbackStorage.getEntries().find((e) => e.payload.sessionId === sessionId);
-    return { status: 'pending_sync', isQueued: !!fallbackEntry, hasFallback: !!fallbackEntry, lastSyncAt: fallbackStorage.getLastSyncAt() };
+    return buildCompletionSyncStatus(
+      sessionId,
+      fallbackStorage.getEntries(),
+      getQueue(),
+      fallbackStorage.getLastSyncAt(),
+    );
   }
-
-  async forceRetryAll(): Promise<ForceRetryResult> {
-    const entries = fallbackStorage.getEntries();
-    let successful = 0;
-    let failed = 0;
-    for (const entry of entries) {
-      try {
-        await this.processSessionCompletion(entry);
-        successful += 1;
-      } catch (error) {
-        this.recordFailure(entry.retryCount);
-        failed += 1;
-        debug.warn('Force retry failed for %s:', entry.payload.sessionId, error);
-      }
-    }
-    return { attempted: entries.length, successful, failed };
+  async forceRetryAll(userId?: string): Promise<ForceRetryResult> {
+    return retryAllCompletions(
+      getQueue().filter((entry) => !userId || entry.userId === userId ||
+        CompletionLedgerSchema.safeParse(entry.payload.ledger).data?.userId === userId),
+      fallbackStorage.getEntries().filter((entry) => !userId || entry.payload.userId === userId),
+      (entry) => this.processSessionCompletion(entry),
+      (retryCount) => this.recordFailure(retryCount),
+      (sessionId, error) => {
+        debug.warn('Force retry failed for %s:', sessionId, error);
+      },
+    );
   }
-
   async generateHealthReport(): Promise<OfflineSyncReport> {
-    const d = this.getDiagnostics();
-    const issues = d.oldestEntryAge && d.oldestEntryAge > 86400000 ? ['Oldest entry is older than 24 hours'] : [];
-    const totalAttempts = this.successCount + this.failureCount;
-    const successRate = totalAttempts > 0 ? Math.round((this.successCount / totalAttempts) * 100) : (this.isInitialized ? 100 : 0);
-    const averageRetryCount = totalAttempts > 0 ? Math.round((this.totalRetryCount / totalAttempts) * 100) / 100 : 0;
-    return { queueSize: d.fallbackEntriesCount, successRate, averageRetryCount, lastSyncTime: d.lastSyncAt > 0 ? d.lastSyncAt : null, isHealthy: issues.length === 0, issues, timestamp: Date.now() };
+    return buildOfflineSyncReport(
+      this.getDiagnostics(),
+      this.successCount,
+      this.failureCount,
+      this.totalRetryCount,
+    );
   }
 
   getDiagnostics(): DiagnosticsResult {
-    const entries = fallbackStorage.getEntries();
-    return { fallbackEntriesCount: entries.length, lastSyncAt: fallbackStorage.getLastSyncAt(), isInitialized: this.isInitialized, oldestEntryAge: entries[0] ? Date.now() - entries[0].createdAt : undefined };
+    const fallbackDiagnostics = buildOfflineSyncDiagnostics(
+      fallbackStorage.getEntries(),
+      fallbackStorage.getLastSyncAt(),
+      this.isInitialized,
+    );
+    const canonicalQueueLength = getQueue().filter(
+      (entry) => entry.feature === 'sessions' && entry.operation === 'CREATE',
+    ).length;
+    return summarizeQueueDiagnostics(fallbackDiagnostics, canonicalQueueLength);
   }
 
   clearFallbackData(): void { fallbackStorage.clear(); }
@@ -97,6 +108,7 @@ export class SessionCompletionOfflineSyncService {
     this.unsubscribeNetwork = null;
     if (this.syncIntervalId) {clearInterval(this.syncIntervalId);}
     this.syncIntervalId = null;
+    unregisterProcessor('sessions', 'CREATE');
   }
 
   destroy(): void {
@@ -107,6 +119,11 @@ export class SessionCompletionOfflineSyncService {
   private initialize(): void {
     if (this.isInitialized) {return;}
     registerSessionCompletionProcessors(this.processSessionCompletion.bind(this));
+    registerProcessor(
+      'sessions',
+      'CREATE',
+      this.processCanonicalSessionCompletion.bind(this),
+    );
     this.startAutoSync();
     this.isInitialized = true;
   }
@@ -118,6 +135,12 @@ export class SessionCompletionOfflineSyncService {
     fallbackStorage.removeEntry(sessionEntry.payload.sessionId);
     this.successCount += 1;
   }
+  private async processCanonicalSessionCompletion(
+    entry: OfflineQueueEntry,
+  ): Promise<void> {
+    const ledger = CompletionLedgerSchema.parse(entry.payload.ledger);
+    await this.syncImmediately(ledger);
+  }
 
   private recordFailure(retryCount: number): void {
     this.failureCount += 1;
@@ -125,15 +148,7 @@ export class SessionCompletionOfflineSyncService {
   }
 
   private async syncImmediately(ledger: CompletionLedger): Promise<CompletionLedger> {
-    try {
-      const synced = await persistCompletionLedger(ledger);
-      await updateCompletionSyncStatus(ledger.ledgerId, 'synced');
-      return synced;
-    } catch (error) {
-      if (error instanceof SessionCompletionRepositoryError && error.cause && typeof error.cause === 'object' && 'code' in error.cause && (((error.cause as { code?: string }).code === '23505') || (error.cause as { code?: string }).code === '409'))
-        {return ledger;}
-      throw new SessionCompletionOfflineSyncError('immediate-sync', error);
-    }
+    return syncCompletionLedger(ledger);
   }
 
   private startAutoSync(): void {
@@ -166,6 +181,5 @@ export class SessionCompletionOfflineSyncService {
 
 export const sessionCompletionOfflineSync = new SessionCompletionOfflineSyncService();
 export const offlineSyncService = sessionCompletionOfflineSync;
-export { useSessionCompletionOfflineSync } from './offline-sync-exports';
 export type { SessionCompletionSyncOptions, OfflineSyncReport, QueueResult, SyncStatusResult, ForceRetryResult, DiagnosticsResult } from './offline-sync-types';
 export { SessionCompletionOfflineSyncError } from './offline-sync-types';

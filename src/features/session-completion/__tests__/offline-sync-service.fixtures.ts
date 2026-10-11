@@ -59,9 +59,9 @@ export function ledger(
 export function queueEntry(payload: CompletionLedger): OfflineQueueEntry {
   return {
     id: '550e8400-e29b-41d4-a716-446655440099',
-    operation: 'SESSION_COMPLETE',
+    operation: 'CREATE',
     feature: 'sessions',
-    payload,
+    payload: { ledger: payload },
     idempotencyKey: payload.idempotencyKey,
     createdAt: 1700001800000,
     retryCount: 0,

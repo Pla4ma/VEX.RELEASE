@@ -15,7 +15,7 @@ import {
 
 type AuthActions = Omit<
   AuthState,
-  'error' | 'isAuthenticated' | 'isLoading' | 'user'
+  'authStatus' | 'error' | 'isAuthenticated' | 'isLoading' | 'user'
 >;
 
 async function finishLogin(set: AuthStateSetter, user: User): Promise<void> {
@@ -28,6 +28,7 @@ async function finishLogin(set: AuthStateSetter, user: User): Promise<void> {
 function setAuthLoading(set: AuthStateSetter): void {
   set((state) => {
     state.isLoading = true;
+    state.authStatus = 'checking';
     state.error = null;
   });
 }
@@ -35,6 +36,7 @@ function setAuthLoading(set: AuthStateSetter): void {
 function setAuthError(set: AuthStateSetter, error: string): void {
   set((state) => {
     state.isLoading = false;
+    state.authStatus = 'error';
     state.error = error;
   });
 }
@@ -45,20 +47,28 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
       set((state) => {
         state.user = user;
         state.isAuthenticated = true;
+        state.authStatus = 'authenticated';
       }),
     clearUser: () =>
       set((state) => {
         state.user = null;
         state.isAuthenticated = false;
+        state.authStatus = 'signed_out';
         state.error = null;
       }),
     setLoading: (loading) =>
       set((state) => {
         state.isLoading = loading;
+        if (loading) {
+          state.authStatus = 'checking';
+        }
       }),
     setError: (error) =>
       set((state) => {
         state.error = error;
+        if (error) {
+          state.authStatus = 'error';
+        }
       }),
     clearError: () =>
       set((state) => {
@@ -69,6 +79,7 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
         state.user = user;
         state.isAuthenticated = true;
         state.isLoading = false;
+        state.authStatus = 'authenticated';
         state.error = null;
       });
     },

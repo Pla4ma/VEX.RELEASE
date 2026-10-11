@@ -6,7 +6,6 @@ import {
   type UpsertCurrentFocusScoreInput,
   UpsertCurrentFocusScoreInputSchema,
 } from './repository-focus-score.schemas';
-import { createDebugger } from '../../utils/debug';
 import { withResilience } from '../../utils/supabase-resilience';
 import {
   FocusIdentityRepositoryError,
@@ -14,7 +13,6 @@ import {
   mapHistoryRowToPoint,
 } from './repository-focus-score-mappers';
 
-const debug = createDebugger('focus-identity:repository');
 
 function isMissingFocusScoreColumns(error: { code?: string; message?: string }): boolean {
   return error.code === '42703' || /column .* does not exist|top_positive_factor|top_negative_factor/i.test(error.message ?? '');
@@ -111,26 +109,20 @@ export async function fetchFocusScoreHistory(
   userId: string,
   days: number,
 ): Promise<FocusScoreHistoryPoint[]> {
-  try {
-    const cutoff = new Date();
-    cutoff.setUTCDate(cutoff.getUTCDate() - days);
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
+  const cutoff = new Date();
+  cutoff.setUTCDate(cutoff.getUTCDate() - days);
+  const supabase = getSupabaseClient();
+  const { data, error } = await withResilience(
+    supabase
       .from('focus_score_history')
       .select('user_id, occurred_at, score, delta, reason')
       .eq('user_id', userId)
       .gte('occurred_at', cutoff.toISOString())
-      .order('occurred_at', { ascending: true });
-    if (error) {
-      debug.warn(
-        'Supabase fetchFocusScoreHistory failed, returning empty fallback',
-        error,
-      );
-      return [];
-    }
-    return (data ?? []).map(mapHistoryRowToPoint);
-  } catch (err: unknown) {
-    debug.error('Unexpected error in fetchFocusScoreHistory', err as Error);
-    return [];
+      .order('occurred_at', { ascending: true }),
+    { operation: 'fetchFocusScoreHistory' },
+  );
+  if (error) {
+    throw new FocusIdentityRepositoryError('fetchFocusScoreHistory', error);
   }
+  return (data ?? []).map(mapHistoryRowToPoint);
 }

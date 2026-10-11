@@ -52,7 +52,7 @@ export function useBatchUpdateSettings(
     UseMutationOptions<
       Setting[],
       Error,
-      Array<{ key: string; value: SettingValue; category: SettingCategory }>
+      { key: string; value: SettingValue; category: SettingCategory }[]
     >,
     'mutationFn'
   >,

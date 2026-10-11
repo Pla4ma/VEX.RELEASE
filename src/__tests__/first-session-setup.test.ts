@@ -3,6 +3,7 @@ import {
   firstWeek,
   accessFor,
   assertFullyHidden,
+  assertCoreAvailable,
 } from './debloat-test-helpers';
 import { getFeatureAvailability } from '../features/liveops-config/feature-access';
 
@@ -15,7 +16,7 @@ describe('Group 2 — First Session Setup', () => {
     );
     expect(getFeatureAvailability(f0.focus_session).canNavigate).toBe(true);
     expect(getFeatureAvailability(f0.focus_session).canQuery).toBe(true);
-    assertFullyHidden(f0, 'challenges');
+    assertCoreAvailable(f0, 'challenges');
     assertFullyHidden(f0, 'wagers');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
   });
@@ -54,7 +55,7 @@ describe('Group 2 — First Session Setup', () => {
 
   it('2e: no stakes/difficulty/premium/challenges in first session setup', () => {
     const f0 = accessFor(0);
-    assertFullyHidden(f0, 'challenges');
+    assertCoreAvailable(f0, 'challenges');
     assertFullyHidden(f0, 'wagers');
     expect(getFeatureAvailability(f0.premium_paywall).canNavigate).toBe(false);
 
