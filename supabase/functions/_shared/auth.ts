@@ -132,7 +132,7 @@ export async function verifyAuthorizedUser(
     email: payload.email ?? null,
     emailVerified,
     role: appMeta.role ?? null,
-    banned: appMeta.banned === true,
+    banned: Boolean(appMeta.banned),
   };
 
   return { ok: true, user };

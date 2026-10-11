@@ -5,11 +5,14 @@
  * Extracted from index.ts for file size compliance.
  */
 
-import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
-import { SubmitContentSchema, GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
+import type { ContentStudyClient } from './supabase-client.ts';
+import { GenerateStudyPlanSchema, SubmitFeedbackSchema, type StudyTask, type QuizItem, type SessionPlan, type RawStudyTask, type RawQuizItem, type RawStudyPlanResponse, type RawSessionPlan } from './schemas.ts';
 import { generateStudyPlan, resolveStudyPlanModel } from './extractors.ts';
 import { STUDY_CONTENT_COLUMNS_STR, STUDY_CONTENT_WITH_GENERATIONS } from './columns.ts';
+import { json } from './responses.ts';
+import { normalizeStudyContentJson, type ContentStudyDatabase } from './database.ts';
 export { handleExtract } from './handlers-extract.ts';
+export { handleSubmit } from './handlers-submit.ts';
 
 const MAX_CONTENT_LENGTH = 50000;
 const DAILY_GENERATION_LIMIT = 10;
@@ -108,34 +111,15 @@ function parseStudyPlanResponse(text: string): { tasks: StudyTask[]; quizItems: 
   }
 }
 
-async function checkRateLimit(supabase: SupabaseClient, userId: string): Promise<{ canGenerate: boolean; remaining: number }> {
+async function checkRateLimit(supabase: ContentStudyClient, userId: string): Promise<{ canGenerate: boolean; remaining: number }> {
   const { data, error } = await supabase.rpc('check_daily_generation_limit', { p_user_id: userId, p_limit: DAILY_GENERATION_LIMIT });
   if (error || !data) return { canGenerate: false, remaining: 0 };
   return { canGenerate: data[0]?.can_generate ?? true, remaining: data[0]?.remaining ?? 0 };
 }
 
-export function json(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
-}
+export { json };
 
-export async function handleSubmit(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
-  const body = await req.json();
-  const validated = SubmitContentSchema.parse(body);
-  const { data: content, error } = await supabase.from('study_content').insert({
-    user_id: userId, source_type: validated.type,
-    source_url: validated.type === 'YOUTUBE' ? validated.content : null,
-    original_filename: validated.filename || null,
-    title: validated.title || null,
-    extracted_text: validated.type === 'PASTE' ? validated.content : '',
-    extracted_length: validated.type === 'PASTE' ? validated.content.length : 0,
-    status: validated.type === 'PASTE' ? 'EXTRACTED' : 'PENDING',
-    extracted_at: validated.type === 'PASTE' ? new Date().toISOString() : null,
-  }).select().single();
-  if (error || !content) return json({ success: false, error: 'Content submission failed. Please try again.' }, 400);
-  return json({ success: true, contentId: content.id, status: content.status, message: validated.type === 'PASTE' ? 'Content ready' : 'Submitted for extraction' }, 200);
-}
-
-export async function handleGenerate(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
+export async function handleGenerate(req: Request, supabase: ContentStudyClient, userId: string): Promise<Response> {
   const startTime = Date.now();
   const body = await req.json();
   const validated = GenerateStudyPlanSchema.parse(body);
@@ -150,11 +134,16 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
     const prompt = buildStudyPlanPrompt(textToProcess, content.title || undefined);
     const geminiResponse = await generateStudyPlan(textToProcess, content.title || undefined);
     const parsed = parseStudyPlanResponse(geminiResponse);
-    const { data: generation, error: genError } = await supabase.from('study_generations').insert({
+    const generationInput: ContentStudyDatabase['public']['Tables']['study_generations']['Insert'] = {
       content_id: validated.contentId, user_id: userId, model: resolveStudyPlanModel(), processing_time_ms: Date.now() - startTime,
-      summary: parsed.summary, key_concepts: parsed.keyConcepts, tasks: parsed.tasks, quiz_items: parsed.quizItems, session_plan: parsed.sessionPlan,
+      summary: parsed.summary,
+      key_concepts: parsed.keyConcepts,
+      tasks: normalizeStudyContentJson(parsed.tasks),
+      quiz_items: normalizeStudyContentJson(parsed.quizItems),
+      session_plan: normalizeStudyContentJson(parsed.sessionPlan),
       is_llm_generated: true,
-    }).select().single();
+    };
+    const { data: generation, error: genError } = await supabase.from('study_generations').insert(generationInput).select().single();
     if (genError) {
       throw new Error('Failed to save study generation');
     }
@@ -166,7 +155,7 @@ export async function handleGenerate(req: Request, supabase: SupabaseClient, use
   }
 }
 
-export async function handleStatus(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
+export async function handleStatus(req: Request, supabase: ContentStudyClient, userId: string): Promise<Response> {
   const contentId = new URL(req.url).pathname.split('/').pop();
   if (!contentId) return json({ success: false, error: 'contentId required' }, 400);
   const { data: content, error } = await supabase.from('study_content').select(STUDY_CONTENT_WITH_GENERATIONS).eq('id', contentId).eq('user_id', userId).single();
@@ -174,7 +163,7 @@ export async function handleStatus(req: Request, supabase: SupabaseClient, userI
   return json({ success: true, contentId: content.id, status: content.status, extractedLength: content.extracted_length, errorMessage: content.error_message, generation: content.study_generations?.[0] || null });
 }
 
-export async function handleFeedback(req: Request, supabase: SupabaseClient, userId: string): Promise<Response> {
+export async function handleFeedback(req: Request, supabase: ContentStudyClient, userId: string): Promise<Response> {
   const body = await req.json();
   const validated = SubmitFeedbackSchema.parse(body);
   const { error } = await supabase.from('study_generations').update({ user_rating: validated.rating, was_helpful: validated.wasHelpful }).eq('id', validated.generationId).eq('user_id', userId);

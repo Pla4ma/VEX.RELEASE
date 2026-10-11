@@ -1,3 +1,4 @@
+DROP POLICY IF EXISTS admin_users_self_read ON public.admin_users;
 CREATE POLICY admin_users_self_read ON public.admin_users
   FOR SELECT TO authenticated
   USING (
@@ -5,10 +6,12 @@ CREATE POLICY admin_users_self_read ON public.admin_users
     AND COALESCE((auth.jwt() ->> 'is_anonymous')::boolean, false) = false
   );
 
+DROP POLICY IF EXISTS battle_pass_tiers_authenticated_read ON public.battle_pass_tiers;
 CREATE POLICY battle_pass_tiers_authenticated_read ON public.battle_pass_tiers
   FOR SELECT TO authenticated
   USING (COALESCE((auth.jwt() ->> 'is_anonymous')::boolean, false) = false);
 
+DROP POLICY IF EXISTS unified_wallets_owner_read ON public.unified_wallets;
 CREATE POLICY unified_wallets_owner_read ON public.unified_wallets
   FOR SELECT TO authenticated
   USING (
@@ -16,6 +19,7 @@ CREATE POLICY unified_wallets_owner_read ON public.unified_wallets
     AND COALESCE((auth.jwt() ->> 'is_anonymous')::boolean, false) = false
   );
 
+DROP POLICY IF EXISTS unified_wallets_owner_insert ON public.unified_wallets;
 CREATE POLICY unified_wallets_owner_insert ON public.unified_wallets
   FOR INSERT TO authenticated
   WITH CHECK (

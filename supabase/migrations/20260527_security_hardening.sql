@@ -418,9 +418,9 @@ CREATE POLICY rate_limit_service_only ON public.rate_limit_buckets
 -- These functions must only be called by Edge Functions using the service role.
 -- Direct client calls are blocked to prevent XP/economy manipulation.
 
-REVOKE EXECUTE ON FUNCTION public.atomic_add_xp FROM anon, authenticated;
-REVOKE EXECUTE ON FUNCTION public.complete_session FROM anon, authenticated;
-REVOKE EXECUTE ON FUNCTION public.check_rate_limit FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.atomic_add_xp(UUID, INTEGER, TEXT, UUID, TEXT, JSONB) FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.complete_session(UUID, UUID, TEXT, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, TEXT, INTEGER, INTEGER, INTEGER) FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.check_rate_limit(UUID, TEXT, INTEGER, INTEGER) FROM anon, authenticated;
 
 -- === Security: Ensure all economy functions are SECURITY DEFINER ===
 -- The atomic_add_xp and complete_session functions above use SECURITY DEFINER

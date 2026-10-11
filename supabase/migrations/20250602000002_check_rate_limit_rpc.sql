@@ -15,10 +15,10 @@ AS $$
 DECLARE
   window_start bigint;
   current_count integer;
-  current_time bigint;
+  current_epoch_ms bigint;
 BEGIN
-  current_time := floor(extract(epoch FROM now()) * 1000)::bigint;
-  window_start := current_time - (p_window_seconds * 1000);
+  current_epoch_ms := floor(extract(epoch FROM now()) * 1000)::bigint;
+  window_start := current_epoch_ms - (p_window_seconds * 1000);
 
   -- Count requests in the current window
   SELECT count(*) INTO current_count
@@ -41,13 +41,13 @@ BEGIN
   ELSE
     -- Insert rate limit record
     INSERT INTO public.rate_limits (user_id, operation, created_at_ms)
-    VALUES (p_user_id, p_operation, current_time);
+    VALUES (p_user_id, p_operation, current_epoch_ms);
 
     RETURN QUERY
     SELECT
       true AS allowed,
       (p_max_requests - current_count - 1)::integer AS remaining,
-      (current_time + (p_window_seconds * 1000))::bigint AS reset_at;
+      (current_epoch_ms + (p_window_seconds * 1000))::bigint AS reset_at;
   END IF;
 END;
 $$;

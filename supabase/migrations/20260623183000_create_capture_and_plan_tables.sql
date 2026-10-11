@@ -96,6 +96,23 @@ alter table public.plan_projects enable row level security;
 alter table public.plan_study_plans enable row level security;
 alter table public.plan_items enable row level security;
 
+drop policy if exists "captures owner select" on public.captures;
+drop policy if exists "captures owner insert" on public.captures;
+drop policy if exists "captures owner update" on public.captures;
+drop policy if exists "captures owner delete" on public.captures;
+drop policy if exists "plan projects owner select" on public.plan_projects;
+drop policy if exists "plan projects owner insert" on public.plan_projects;
+drop policy if exists "plan projects owner update" on public.plan_projects;
+drop policy if exists "plan projects owner delete" on public.plan_projects;
+drop policy if exists "plan study plans owner select" on public.plan_study_plans;
+drop policy if exists "plan study plans owner insert" on public.plan_study_plans;
+drop policy if exists "plan study plans owner update" on public.plan_study_plans;
+drop policy if exists "plan study plans owner delete" on public.plan_study_plans;
+drop policy if exists "plan items owner select" on public.plan_items;
+drop policy if exists "plan items owner insert" on public.plan_items;
+drop policy if exists "plan items owner update" on public.plan_items;
+drop policy if exists "plan items owner delete" on public.plan_items;
+
 create policy "captures owner select" on public.captures
   for select to authenticated using (
     (select auth.uid()) = user_id

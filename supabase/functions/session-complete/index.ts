@@ -119,8 +119,8 @@ Deno.serve(async (request: Request) => {
   const result: CompleteSessionResponse = parsedResult.data;
 
   return respond({
-    success: true,
     ...result,
+    success: true,
     processingTimeMs: Date.now() - startedAt,
     rateLimit: {
       remaining: typeof rateLimit.remaining === 'number' ? rateLimit.remaining : 0,

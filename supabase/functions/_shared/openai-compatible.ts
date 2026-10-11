@@ -20,6 +20,8 @@ type OpenAIResponse = {
   usage?: OpenAIUsage;
 };
 
+const httpRequest: typeof fetch = (...args) => globalThis.fetch(...args);
+
 export type OpenAICompatibleConfig = {
   apiKey: string;
   baseUrl: string;
@@ -35,8 +37,6 @@ export type OpenAICompatibleResult = {
   responseTokens?: number;
 };
 
-const httpRequest = globalThis.fetch.bind(globalThis);
-const FREELLMAPI_DEFAULT_BASE_URL = 'http://167.71.255.199:3001/v1';
 
 export function getOpenAICompatibleConfig(): OpenAICompatibleConfig | null {
   const explicitConfig =
@@ -45,15 +45,25 @@ export function getOpenAICompatibleConfig(): OpenAICompatibleConfig | null {
     readConfigPair('FREE_LLM_API_KEY', 'FREE_LLM_BASE_URL');
   if (explicitConfig) {return explicitConfig;}
   const apiKey = Deno.env.get('LLM_API_KEY') ?? Deno.env.get('FREELLMAPI_KEY') ?? Deno.env.get('FREE_LLM_API_KEY');
-  const baseUrl = Deno.env.get('LLM_BASE_URL') ?? Deno.env.get('FREELLMAPI_BASE_URL') ?? Deno.env.get('FREE_LLM_BASE_URL') ?? FREELLMAPI_DEFAULT_BASE_URL;
-  if (!apiKey) {return null;}
-  return { apiKey, baseUrl, source: 'fallback' };
+  const baseUrl = Deno.env.get('LLM_BASE_URL') ?? Deno.env.get('FREELLMAPI_BASE_URL') ?? Deno.env.get('FREE_LLM_BASE_URL');
+  if (!apiKey || !baseUrl || !isSecureBaseUrl(baseUrl)) {return null;}
+  return { apiKey, baseUrl, source: 'environment' };
+}
+function isSecureBaseUrl(baseUrl: string): boolean {
+  try {
+    const protocol = new URL(baseUrl).protocol;
+    return protocol === 'https:' || (protocol === 'http:' && Deno.env.get('LLM_ALLOW_INSECURE_HTTP') === 'true');
+  } catch {
+    return false;
+  }
 }
 
 function readConfigPair(keyName: string, baseUrlName: string): OpenAICompatibleConfig | null {
   const apiKey = Deno.env.get(keyName);
   const baseUrl = Deno.env.get(baseUrlName);
-  return apiKey && baseUrl ? { apiKey, baseUrl, source: keyName + '+' + baseUrlName } : null;
+  return apiKey && baseUrl && isSecureBaseUrl(baseUrl)
+    ? { apiKey, baseUrl, source: keyName + '+' + baseUrlName }
+    : null;
 }
 
 export function getOpenAICompatibleModel(kind: 'fast' | 'pro', fallback: string): string {
@@ -87,6 +97,8 @@ export async function callOpenAICompatible(params: {
         messages: buildMessages(params.systemPrompt, params.userPrompt),
         temperature: params.temperature,
         max_tokens: params.maxTokens,
+        stream: false,
+        reasoning_effort: 'none',
         ...(params.jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
       signal: controller.signal,

@@ -83,6 +83,60 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_memory_vectors: {
+        Row: {
+          content: string
+          content_hash: string
+          created_at: string
+          deleted_at: string | null
+          embedding: string
+          embedding_model: string
+          id: string
+          last_referenced_at: string | null
+          memory_type: string
+          metadata: Json
+          reference_count: number
+          source_id: string
+          source_table: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          content_hash: string
+          created_at?: string
+          deleted_at?: string | null
+          embedding: string
+          embedding_model: string
+          id?: string
+          last_referenced_at?: string | null
+          memory_type: string
+          metadata?: Json
+          reference_count?: number
+          source_id: string
+          source_table: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          content_hash?: string
+          created_at?: string
+          deleted_at?: string | null
+          embedding?: string
+          embedding_model?: string
+          id?: string
+          last_referenced_at?: string | null
+          memory_type?: string
+          metadata?: Json
+          reference_count?: number
+          source_id?: string
+          source_table?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_quota_log: {
         Row: {
           category: string
@@ -742,6 +796,9 @@ export type Database = {
           created_at: string | null
           deleted_at: string | null
           description: string
+          embedded_at: string | null
+          embedding: string | null
+          embedding_model: string | null
           evidence_hash: string | null
           id: string
           last_referenced_at: string | null
@@ -757,6 +814,9 @@ export type Database = {
           created_at?: string | null
           deleted_at?: string | null
           description: string
+          embedded_at?: string | null
+          embedding?: string | null
+          embedding_model?: string | null
           evidence_hash?: string | null
           id?: string
           last_referenced_at?: string | null
@@ -772,6 +832,9 @@ export type Database = {
           created_at?: string | null
           deleted_at?: string | null
           description?: string
+          embedded_at?: string | null
+          embedding?: string | null
+          embedding_model?: string | null
           evidence_hash?: string | null
           id?: string
           last_referenced_at?: string | null
@@ -1056,6 +1119,99 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      companion_profiles: {
+        Row: {
+          color_hue: number
+          created_at: string
+          current_mood: string
+          element: string
+          element_affinity: number
+          energy_level: number
+          equipped_items: Json
+          id: string
+          last_fed_at: string
+          last_petted_at: string | null
+          level: number
+          longest_focus_streak: number
+          name: string
+          next_evolution_at: number
+          particle_density: number
+          perfect_sessions: number
+          phase: string
+          profile_type: string
+          purity_score: number
+          session_count: number
+          session_progress: number
+          special_ability_charge: number
+          total_focus_minutes: number
+          unlocked_abilities: Json
+          updated_at: string
+          user_id: string
+          visual_seed: number
+          xp: number
+        }
+        Insert: {
+          color_hue?: number
+          created_at?: string
+          current_mood?: string
+          element?: string
+          element_affinity?: number
+          energy_level?: number
+          equipped_items?: Json
+          id?: string
+          last_fed_at?: string
+          last_petted_at?: string | null
+          level?: number
+          longest_focus_streak?: number
+          name?: string
+          next_evolution_at?: number
+          particle_density?: number
+          perfect_sessions?: number
+          phase?: string
+          profile_type?: string
+          purity_score?: number
+          session_count?: number
+          session_progress?: number
+          special_ability_charge?: number
+          total_focus_minutes?: number
+          unlocked_abilities?: Json
+          updated_at?: string
+          user_id: string
+          visual_seed?: number
+          xp?: number
+        }
+        Update: {
+          color_hue?: number
+          created_at?: string
+          current_mood?: string
+          element?: string
+          element_affinity?: number
+          energy_level?: number
+          equipped_items?: Json
+          id?: string
+          last_fed_at?: string
+          last_petted_at?: string | null
+          level?: number
+          longest_focus_streak?: number
+          name?: string
+          next_evolution_at?: number
+          particle_density?: number
+          perfect_sessions?: number
+          phase?: string
+          profile_type?: string
+          purity_score?: number
+          session_count?: number
+          session_progress?: number
+          special_ability_charge?: number
+          total_focus_minutes?: number
+          unlocked_abilities?: Json
+          updated_at?: string
+          user_id?: string
+          visual_seed?: number
+          xp?: number
+        }
+        Relationships: []
       }
       companion_promises: {
         Row: {
@@ -1614,6 +1770,8 @@ export type Database = {
           id: string
           last_change_reason: string
           previous_score: number
+          top_negative_factor: string | null
+          top_positive_factor: string | null
           updated_at: string
           user_id: string
         }
@@ -1625,6 +1783,8 @@ export type Database = {
           id?: string
           last_change_reason: string
           previous_score: number
+          top_negative_factor?: string | null
+          top_positive_factor?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1636,6 +1796,8 @@ export type Database = {
           id?: string
           last_change_reason?: string
           previous_score?: number
+          top_negative_factor?: string | null
+          top_positive_factor?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1649,6 +1811,7 @@ export type Database = {
           occurred_at: string
           reason: string
           score: number
+          session_id: string | null
           user_id: string
         }
         Insert: {
@@ -1658,6 +1821,7 @@ export type Database = {
           occurred_at: string
           reason: string
           score: number
+          session_id?: string | null
           user_id: string
         }
         Update: {
@@ -1667,6 +1831,7 @@ export type Database = {
           occurred_at?: string
           reason?: string
           score?: number
+          session_id?: string | null
           user_id?: string
         }
         Relationships: []
@@ -1740,6 +1905,45 @@ export type Database = {
           metadata?: Json
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      idempotency_keys: {
+        Row: {
+          created_at: string
+          id: string
+          idempotency_key: string
+          locked_until: string
+          operation: string
+          request_hash: string
+          response_payload: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idempotency_key: string
+          locked_until?: string
+          operation: string
+          request_hash: string
+          response_payload?: Json
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idempotency_key?: string
+          locked_until?: string
+          operation?: string
+          request_hash?: string
+          response_payload?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -2014,25 +2218,37 @@ export type Database = {
       }
       level_up_history: {
         Row: {
+          achieved_at: number | null
           created_at: string
           id: string
+          idempotency_key: string | null
+          level: number | null
           metadata: Json
           updated_at: string
           user_id: string | null
+          xp_at_level: number | null
         }
         Insert: {
+          achieved_at?: number | null
           created_at?: string
           id?: string
+          idempotency_key?: string | null
+          level?: number | null
           metadata?: Json
           updated_at?: string
           user_id?: string | null
+          xp_at_level?: number | null
         }
         Update: {
+          achieved_at?: number | null
           created_at?: string
           id?: string
+          idempotency_key?: string | null
+          level?: number | null
           metadata?: Json
           updated_at?: string
           user_id?: string | null
+          xp_at_level?: number | null
         }
         Relationships: []
       }
@@ -2586,23 +2802,38 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          last_level_up_at: number | null
+          level: number | null
           metadata: Json
+          next_level_threshold: number | null
+          total_xp: number | null
           updated_at: string
           user_id: string | null
+          xp: number | null
         }
         Insert: {
           created_at?: string
           id?: string
+          last_level_up_at?: number | null
+          level?: number | null
           metadata?: Json
+          next_level_threshold?: number | null
+          total_xp?: number | null
           updated_at?: string
           user_id?: string | null
+          xp?: number | null
         }
         Update: {
           created_at?: string
           id?: string
+          last_level_up_at?: number | null
+          level?: number | null
           metadata?: Json
+          next_level_threshold?: number | null
+          total_xp?: number | null
           updated_at?: string
           user_id?: string | null
+          xp?: number | null
         }
         Relationships: []
       }
@@ -3124,6 +3355,54 @@ export type Database = {
         }
         Relationships: []
       }
+      schema_column_contracts: {
+        Row: {
+          allowed_values: string[] | null
+          column_name: string
+          contract_note: string
+          created_at: string
+          data_type: string
+          id: string
+          max_numeric: number | null
+          min_numeric: number | null
+          nullable: boolean
+          pii_classification: string
+          schema_name: string
+          table_name: string
+          updated_at: string
+        }
+        Insert: {
+          allowed_values?: string[] | null
+          column_name: string
+          contract_note?: string
+          created_at?: string
+          data_type: string
+          id?: string
+          max_numeric?: number | null
+          min_numeric?: number | null
+          nullable: boolean
+          pii_classification?: string
+          schema_name?: string
+          table_name: string
+          updated_at?: string
+        }
+        Update: {
+          allowed_values?: string[] | null
+          column_name?: string
+          contract_note?: string
+          created_at?: string
+          data_type?: string
+          id?: string
+          max_numeric?: number | null
+          min_numeric?: number | null
+          nullable?: boolean
+          pii_classification?: string
+          schema_name?: string
+          table_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       season_history: {
         Row: {
           challenges_completed: number | null
@@ -3271,6 +3550,45 @@ export type Database = {
           ledger_id?: string
           ledger_payload?: Json
           offline_sync_status?: string | null
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      session_events: {
+        Row: {
+          event_payload: Json
+          event_type: string
+          event_version: number
+          id: string
+          idempotency_key: string
+          occurred_at: string
+          recorded_at: string
+          sequence_number: number
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          event_payload?: Json
+          event_type: string
+          event_version?: number
+          id?: string
+          idempotency_key: string
+          occurred_at?: string
+          recorded_at?: string
+          sequence_number?: never
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          event_payload?: Json
+          event_type?: string
+          event_version?: number
+          id?: string
+          idempotency_key?: string
+          occurred_at?: string
+          recorded_at?: string
+          sequence_number?: never
           session_id?: string
           user_id?: string
         }
@@ -5490,23 +5808,35 @@ export type Database = {
       }
       xp_history: {
         Row: {
+          amount: number | null
           created_at: string
           id: string
+          idempotency_key: string | null
           metadata: Json
+          session_id: string | null
+          source: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          amount?: number | null
           created_at?: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
+          session_id?: string | null
+          source?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          amount?: number | null
           created_at?: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
+          session_id?: string | null
+          source?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -5514,13 +5844,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_economy_stats_mv: {
+        Row: {
+          coins: number | null
+          refreshed_at: string | null
+          tokens: number | null
+          total_earned_coins: number | null
+          total_earned_tokens: number | null
+          total_spent_coins: number | null
+          total_spent_tokens: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
+      user_progress_stats_mv: {
+        Row: {
+          average_quality_score: number | null
+          completed_sessions: number | null
+          last_completed_at: string | null
+          refreshed_at: string | null
+          total_effective_seconds: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      apply_wallet_delta: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_description?: string
+          p_idempotency_key: string
+          p_metadata?: Json
+          p_source: string
+          p_source_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       atomic_add_currency: {
         Args: {
           p_amount: number
           p_currency: string
+          p_source: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      atomic_add_xp: {
+        Args: {
+          p_amount: number
+          p_idempotency_key?: string
+          p_metadata?: Json
+          p_session_id?: string
           p_source: string
           p_user_id: string
         }
@@ -5535,6 +5912,10 @@ export type Database = {
         }
         Returns: Json
       }
+      can_upload_study_content: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
       can_user_reroll: {
         Args: { p_date?: string; p_user_id: string }
         Returns: boolean
@@ -5546,15 +5927,29 @@ export type Database = {
           remaining: number
         }[]
       }
-      check_rate_limit: {
-        Args: {
-          p_max_requests: number
-          p_operation: string
-          p_user_id: string
-          p_window_seconds: number
-        }
-        Returns: Json
-      }
+      check_rate_limit:
+        | {
+            Args: {
+              p_max_requests?: number
+              p_operation: string
+              p_user_id: string
+              p_window_seconds?: number
+            }
+            Returns: {
+              allowed: boolean
+              remaining: number
+              reset_at: number
+            }[]
+          }
+        | {
+            Args: {
+              p_max_requests: number
+              p_operation: string
+              p_user_id: string
+              p_window_seconds: number
+            }
+            Returns: Json
+          }
       check_rls_status: {
         Args: never
         Returns: {
@@ -5570,6 +5965,46 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_rate_limit_buckets: {
+        Args: { p_max_age_hours?: number }
+        Returns: number
+      }
+      complete_session:
+        | {
+            Args: {
+              p_completion_percentage: number
+              p_duration_seconds: number
+              p_effective_duration_seconds: number
+              p_final_score?: number
+              p_focus_quality: number
+              p_idempotency_key: string
+              p_interruptions?: number
+              p_mode_bonus?: number
+              p_pauses?: number
+              p_session_id: string
+              p_session_mode?: string
+              p_user_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_completion_percentage: number
+              p_duration_seconds: number
+              p_effective_duration_seconds: number
+              p_final_score?: number
+              p_focus_quality: number
+              p_idempotency_key: string
+              p_interruptions?: number
+              p_mode_bonus?: number
+              p_pauses?: number
+              p_session_id: string
+              p_session_mode?: string
+              p_streak_days?: number
+              p_user_id: string
+            }
+            Returns: Json
+          }
       create_squad: {
         Args: {
           p_avatar_url?: string
@@ -5592,6 +6027,30 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_my_economy_stats: {
+        Args: never
+        Returns: {
+          coins: number
+          refreshed_at: string
+          tokens: number
+          total_earned_coins: number
+          total_earned_tokens: number
+          total_spent_coins: number
+          total_spent_tokens: number
+          user_id: string
+        }[]
+      }
+      get_my_progress_stats: {
+        Args: never
+        Returns: {
+          average_quality_score: number
+          completed_sessions: number
+          last_completed_at: string
+          refreshed_at: string
+          total_effective_seconds: number
+          user_id: string
+        }[]
+      }
       get_season_stats: {
         Args: { p_season_id: string }
         Returns: {
@@ -5608,6 +6067,13 @@ export type Database = {
           most_engaging_beat_type: string
           total_stories: number
           viewed_stories: number
+        }[]
+      }
+      get_study_content_access: {
+        Args: { p_user_id: string }
+        Returns: {
+          can_upload: boolean
+          fallback_label: string
         }[]
       }
       get_today_dungeon: {
@@ -5727,17 +6193,18 @@ export type Database = {
         }
         Returns: Json
       }
-      spend_currency_idempotent: {
-        Args: {
-          p_amount: number
-          p_currency: string
-          p_description?: string
-          p_idempotency_key: string
-          p_sink: string
-          p_source_id?: string
-          p_user_id: string
-        }
-        Returns: Json
+      increment_coins: {
+        Args: { p_amount: number; p_user_id: string }
+        Returns: number
+      }
+      is_admin_user: { Args: never; Returns: boolean }
+      join_study_circle: {
+        Args: { p_circle_id: string; p_role?: string; p_user_id: string }
+        Returns: boolean
+      }
+      leave_study_circle: {
+        Args: { p_circle_id: string; p_user_id: string }
+        Returns: boolean
       }
       match_ai_memories: {
         Args: {
@@ -5756,53 +6223,37 @@ export type Database = {
           source_table: string
         }[]
       }
-      record_session_event: {
+      match_coach_memories: {
         Args: {
-          p_event_payload: Json
-          p_event_type: string
-          p_idempotency_key: string
-          p_occurred_at?: string
-          p_session_id: string
-          p_user_id: string
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
         }
-        Returns: Json
-      }
-      get_my_progress_stats: {
-        Args: never
         Returns: {
-          average_quality_score: number
-          completed_sessions: number
-          last_completed_at: string
-          refreshed_at: string
-          total_effective_seconds: number
+          created_at: string
+          deleted_at: string
+          description: string
+          evidence_hash: string
+          id: string
+          last_referenced_at: string
+          metadata: Json
+          occurred_at: string
+          referenced_count: number
+          similarity: number
+          title: string
+          type: string
+          updated_at: string
           user_id: string
         }[]
       }
-      get_my_economy_stats: {
+      production_rls_release_gate: {
         Args: never
         Returns: {
-          coins: number
-          refreshed_at: string
-          tokens: number
-          total_earned_coins: number
-          total_earned_tokens: number
-          total_spent_coins: number
-          total_spent_tokens: number
-          user_id: string
+          check_name: string
+          detail: string
+          object_name: string
+          status: string
         }[]
-      }
-      increment_coins: {
-        Args: { p_amount: number; p_user_id: string }
-        Returns: number
-      }
-      is_admin_user: { Args: never; Returns: boolean }
-      join_study_circle: {
-        Args: { p_circle_id: string; p_role?: string; p_user_id: string }
-        Returns: boolean
-      }
-      leave_study_circle: {
-        Args: { p_circle_id: string; p_user_id: string }
-        Returns: boolean
       }
       purchase_battle_pass_premium: {
         Args: {
@@ -5825,6 +6276,26 @@ export type Database = {
           user_id: string
         }[]
       }
+      record_session_event: {
+        Args: {
+          p_event_payload: Json
+          p_event_type: string
+          p_idempotency_key: string
+          p_occurred_at?: string
+          p_session_id: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      record_session_focus_score: {
+        Args: {
+          p_occurred_at: string
+          p_score: Json
+          p_session_id: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       record_squad_war_damage:
         | {
             Args: {
@@ -5845,6 +6316,7 @@ export type Database = {
             }
             Returns: undefined
           }
+      refresh_user_stats_materialized_views: { Args: never; Returns: undefined }
       send_study_buddy_encouragement: {
         Args: {
           p_buddy_pair_id: string
@@ -5856,6 +6328,18 @@ export type Database = {
         Returns: boolean
       }
       soft_delete_old_content: { Args: never; Returns: number }
+      spend_currency_idempotent: {
+        Args: {
+          p_amount: number
+          p_currency: string
+          p_description?: string
+          p_idempotency_key: string
+          p_sink: string
+          p_source_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       transfer_funds: {
         Args: {
           p_amount: number
@@ -5893,12 +6377,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -5922,11 +6406,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -5947,11 +6431,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -5972,11 +6456,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -5989,11 +6473,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

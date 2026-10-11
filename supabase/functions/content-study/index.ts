@@ -8,14 +8,17 @@ import {
   handleStatus,
   handleFeedback,
 } from './handlers.ts';
-import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.103.3';
+import { handleEligibility } from './eligibility-handler.ts';
+import type { ContentStudyDatabase } from './database.ts';
+import type { ContentStudyClient } from './supabase-client.ts';
 
-let cachedServiceClient: SupabaseClient | null = null;
+let cachedServiceClient: ContentStudyClient | null = null;
 
-function getServiceClient(): SupabaseClient {
+function getServiceClient(): ContentStudyClient {
   if (!cachedServiceClient) {
     const config = requireConfig();
-    cachedServiceClient = createClient(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY, {
+    cachedServiceClient = createClient<ContentStudyDatabase>(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
   }
@@ -35,13 +38,14 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
   const routePath = url.pathname.replace('/functions/v1/content-study', '').replace(/^\//, '');
-  let supabase: SupabaseClient;
+  let supabase: ContentStudyClient;
   try {
     supabase = getServiceClient();
   } catch {
     return respondError('Missing Supabase service configuration', 500, req);
   }
   if (req.method === 'POST' && routePath === 'submit') return withCorsHeaders(await handleSubmit(req, supabase, auth.user.id), corsHeaders);
+  if (req.method === 'GET' && routePath === 'eligibility') return withCorsHeaders(await handleEligibility(supabase, auth.user.id), corsHeaders);
   if (req.method === 'POST' && routePath === 'extract') return withCorsHeaders(await handleExtract(req, supabase, auth.user.id), corsHeaders);
   if (req.method === 'POST' && routePath === 'generate') return withCorsHeaders(await handleGenerate(req, supabase, auth.user.id), corsHeaders);
   if (req.method === 'GET' && routePath.startsWith('status/')) return withCorsHeaders(await handleStatus(req, supabase, auth.user.id), corsHeaders);

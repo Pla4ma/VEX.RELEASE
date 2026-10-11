@@ -1,8 +1,17 @@
-import { extractJsonObject, stripAiMarkdown } from '../_shared/vex-ai-output.ts';
+import { stripAiMarkdown } from '../_shared/vex-ai-output.ts';
+import { CoachPayloadSchema, type CoachPayload } from './schemas.ts';
 
-export function readCoachPayload(text: string): unknown {
-  const matched = extractJsonObject(text);
-  if (matched) {return JSON.parse(matched) as unknown;}
+export function readCoachPayload(text: string): CoachPayload {
+  const candidate = text.trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '')
+    .trim();
+  if (candidate.startsWith('{') && candidate.endsWith('}')) {
+    const decoded: unknown = JSON.parse(candidate);
+    const parsed = CoachPayloadSchema.safeParse(decoded);
+    if (!parsed.success) throw new Error('LLM returned an invalid coach payload');
+    return parsed.data;
+  }
   if (isLowQualityCoachText(text)) {throw new Error('LLM returned low-quality coach output');}
   const message = normalizeCoachMessage(text);
   if (isPromptEcho(message)) {throw new Error('LLM echoed prompt instead of answering');}
@@ -14,8 +23,8 @@ export function normalizeCoachMessage(text: string): string {
   return stripWrappingQuotes(
     stripAiMarkdown(text)
       .replace(/\s+/g, ' ')
-      .replace(/let'?s get back to the game ?plan[.!]?/gi, 'Pick one small next move.')
-      .replace(/let'?s get started on our first match[.!]?/gi, 'Start with one clear target.')
+      .replace(/let['’]?s get back to the game ?plan[.!]?/gi, 'Pick one small next move.')
+      .replace(/let['’]?s get started on our first match[.!]?/gi, 'Start with one clear target.')
       .replace(/building our team'?s skills/gi, 'building your focus')
       .replace(/vex robotics competition coach/gi, 'VEX coach')
       .replace(/vex game mechanics and rules/gi, 'your current focus routine')

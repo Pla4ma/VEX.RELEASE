@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:zod@3": "3.25.76"
+  },
+  "npm": {
+    "zod@3.25.76": {
+      "integrity": "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ=="
+    }
+  },
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.103.3": "f6efbe62d34ae9d50f3cf7eb51496246ec9378f422c38ff2b637a38157d4fc6b",
+    "https://esm.sh/jose@5.9.6": "8c535558ee938997693933217d3f71cdbb97f968cc9b5385ab442664458aa576"
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:zod@3"
+    ]
+  }
+}

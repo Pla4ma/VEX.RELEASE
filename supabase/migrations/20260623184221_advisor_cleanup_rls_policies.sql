@@ -22,6 +22,10 @@ drop policy if exists admin_users_super_admin_all_select on public.admin_users;
 drop policy if exists admin_users_super_admin_all_insert on public.admin_users;
 drop policy if exists admin_users_super_admin_all_update on public.admin_users;
 drop policy if exists admin_users_super_admin_all_delete on public.admin_users;
+drop policy if exists admin_users_owner_or_super_admin_select on public.admin_users;
+drop policy if exists admin_users_super_admin_insert on public.admin_users;
+drop policy if exists admin_users_super_admin_update on public.admin_users;
+drop policy if exists admin_users_super_admin_delete on public.admin_users;
 
 create policy admin_users_owner_or_super_admin_select on public.admin_users
   for select to authenticated
@@ -84,6 +88,9 @@ create policy admin_users_super_admin_delete on public.admin_users
   );
 
 drop policy if exists battle_pass_tiers_admin_write on public.battle_pass_tiers;
+drop policy if exists battle_pass_tiers_admin_insert on public.battle_pass_tiers;
+drop policy if exists battle_pass_tiers_admin_update on public.battle_pass_tiers;
+drop policy if exists battle_pass_tiers_admin_delete on public.battle_pass_tiers;
 
 create policy battle_pass_tiers_admin_insert on public.battle_pass_tiers
   for insert to authenticated

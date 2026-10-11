@@ -41,12 +41,13 @@ export function buildTextSuccess(
   fallbackUsed: boolean,
   promptTokens = 0,
   responseTokens = 0,
+  structuredData?: unknown,
 ) {
   return {
     success: true,
     requestType: request.requestType,
     content,
-    structuredData: readStructuredData(request, content),
+    structuredData: structuredData ?? readStructuredData(request, content),
     metadata: {
       model,
       processingTimeMs: Date.now() - startedAt,
