@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AIBaseResponseSchema } from './ai-base-schemas';
+import { AIBaseResponseSchema } from './ai-base-schemas.ts';
 
 // Response schemas — each requestType has its own response schema for the discriminated union.
 

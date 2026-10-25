@@ -114,5 +114,5 @@ export const DashboardWidgetTypeSchema = z.enum([
 ]);
 export type DashboardWidgetType = z.infer<typeof DashboardWidgetTypeSchema>;
 
-export const ExportFormatSchema = z.enum(['json', 'csv', 'xlsx', 'pdf']);
+export const ExportFormatSchema = z.enum(['json', 'csv']);
 export type ExportFormat = z.infer<typeof ExportFormatSchema>;

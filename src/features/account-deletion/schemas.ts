@@ -12,6 +12,8 @@ export const AccountDeletionResultSchema = z
     deletedAt: z.number().int().positive(),
     localStorageCleared: z.boolean(),
     secureStorageCleared: z.boolean(),
+    sessionSignedOut: z.boolean(),
+    sentryIdentityCleared: z.boolean(),
     monetizationSignedOut: z.boolean(),
   })
   .strict();

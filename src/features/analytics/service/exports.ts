@@ -9,7 +9,7 @@ import { classifyError } from '../../../shared/hardening/error-utils';
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import { eventBus } from '../../../events/EventBus';
 import * as Sentry from '@sentry/react-native';
-import type { TimeRange, AnalyticsMetric } from '../schemas';
+import type { AnalyticsMetric } from '../schemas';
 
 const exportCircuitBreaker = new CircuitBreaker({
   failureThreshold: 3,
@@ -24,33 +24,67 @@ const exportCircuitBreaker = new CircuitBreaker({
   },
 });
 
-const DATA_TYPE_TO_METRIC: Record<string, AnalyticsMetric> = {
-  sessions: 'sessions_completed',
-  xp: 'xp_earned',
-  streaks: 'streak_days',
-  boss: 'boss_damage_dealt',
-  items: 'items_crafted',
+const CATEGORY_METRICS: Record<string, AnalyticsMetric[]> = {
+  sessions: ['sessions_completed', 'sessions_abandoned', 'total_focus_time', 'average_session_duration'],
+  analytics: ['streak_days', 'longest_streak', 'xp_earned', 'level_progression', 'social_interactions', 'squad_contributions', 'daily_active', 'weekly_active', 'retention_rate'],
+  achievements: ['boss_damage_dealt', 'bosses_defeated', 'rewards_claimed', 'challenges_completed'],
+  all: ['sessions_completed', 'sessions_abandoned', 'total_focus_time', 'average_session_duration', 'streak_days', 'longest_streak', 'xp_earned', 'level_progression', 'boss_damage_dealt', 'bosses_defeated', 'rewards_claimed', 'coins_earned', 'coins_spent', 'gems_earned', 'gems_spent', 'items_crafted', 'challenges_completed', 'social_interactions', 'squad_contributions', 'daily_active', 'weekly_active', 'retention_rate'],
 };
 
-function resolveMetrics(dataTypes: string[]): AnalyticsMetric[] {
-  return dataTypes.map((type) => DATA_TYPE_TO_METRIC[type] ?? 'sessions_completed');
+export function resolveExportMetrics(dataTypes: string[]): AnalyticsMetric[] {
+  const metrics = dataTypes.flatMap((type) => {
+    const categoryMetrics = CATEGORY_METRICS[type];
+    if (!categoryMetrics) { throw new Error(`Unsupported export category: ${type}`); }
+    return categoryMetrics;
+  });
+  return [...new Set(metrics)];
 }
 
-function buildExportData(
-  fetchResults: ({ points: unknown; summary: unknown } | undefined)[],
+type ExportPoint = { timestamp: number; value: number; dimension?: string; metadata?: Record<string, unknown> };
+type ExportResult = { points: ExportPoint[]; summary: unknown };
+
+export function buildExportData(
+  fetchResults: (ExportResult | undefined)[],
   metricsToFetch: AnalyticsMetric[],
   jobId: string,
   userId: string,
   dateRange: { start: number; end: number },
-  format: string,
-): Record<string, unknown> {
-  const exportData: Record<string, unknown> = {
-    metadata: { jobId, userId, generatedAt: Date.now(), dateRange, format, version: '2.0' },
-  };
+  format: 'json' | 'csv',
+  includeMetadata: boolean,
+): unknown {
+  const metadata = { jobId, userId, generatedAt: Date.now(), dateRange, format, version: '2.0' };
+  if (format === 'csv') {
+    const rows: Record<string, unknown>[] = [];
+    const csvMetadata = includeMetadata
+      ? { jobId, userId, generatedAt: metadata.generatedAt, start: dateRange.start, end: dateRange.end, format, version: metadata.version }
+      : {};
+    metricsToFetch.forEach((metric, index) => {
+      fetchResults[index]?.points.forEach(({ metadata: pointMetadata, ...point }) => {
+        rows.push({
+          recordType: 'metric', metric, timestamp: point.timestamp, value: point.value,
+          dimension: point.dimension ?? '',
+          pointMetadata: includeMetadata && pointMetadata ? JSON.stringify(pointMetadata) : '',
+          ...csvMetadata,
+        });
+      });
+    });
+    if (includeMetadata) {
+      rows.unshift({
+        recordType: 'metadata', metric: '', timestamp: '', value: '', dimension: '',
+        pointMetadata: '', ...csvMetadata,
+      });
+    }
+    return rows;
+  }
+  const exportData: Record<string, unknown> = {};
+  if (includeMetadata) { exportData.metadata = metadata; }
   metricsToFetch.forEach((metric, index) => {
     const result = fetchResults[index];
     if (result) {
-      exportData[metric] = { points: result.points, summary: result.summary };
+      const points = includeMetadata
+        ? result.points
+        : result.points.map(({ metadata: _metadata, ...point }) => point);
+      exportData[metric] = { points, summary: result.summary };
     }
   });
   return exportData;
@@ -78,18 +112,20 @@ export async function exportAnalyticsData(
   userId: string,
   format: 'json' | 'csv',
   dateRange: { start: number; end: number },
+  dataTypes: string[],
+  includeMetadata = true,
 ) {
   const exportJob = await createExportJob({
     id: crypto.randomUUID(),
     userId,
     status: 'pending',
     format,
-    dataTypes: ['sessions', 'xp', 'streaks', 'insights'],
+    dataTypes,
     dateRange,
     progress: 0,
     createdAt: Date.now(),
   });
-  processExportJob(exportJob.id, userId, format, dateRange);
+  processExportJob(exportJob.id, userId, format, dateRange, dataTypes, includeMetadata);
   return exportJob;
 }
 
@@ -98,22 +134,23 @@ async function processExportJob(
   userId: string,
   format: 'json' | 'csv',
   dateRange: { start: number; end: number },
-  dataTypes?: string[],
+  dataTypes: string[],
+  includeMetadata: boolean,
 ) {
   const startTime = Date.now();
   try {
     await exportCircuitBreaker.execute(async () => {
       await updateExportJobProgress(jobId, 5);
-      const metricsToFetch = resolveMetrics(dataTypes ?? ['sessions', 'xp', 'streaks']);
+      const metricsToFetch = resolveExportMetrics(dataTypes);
       const [, fetchResults] = await Promise.all([
         updateExportJobProgress(jobId, 10),
         withRetry(
-          async () => Promise.all(metricsToFetch.map((metric) => fetchTimeSeriesData(userId, metric, 'custom' as TimeRange, 'day'))),
+          async () => Promise.all(metricsToFetch.map((metric) => fetchTimeSeriesData(userId, metric, 'custom', 'day', undefined, undefined, dateRange))),
           { maxAttempts: 3, baseDelayMs: 1000, retryableErrors: ['network_error', 'timeout', 'temporarily_unavailable'], onRetry: (attempt, error) => { Sentry.addBreadcrumb({ category: 'analytics_export', message: `Retrying data fetch attempt ${attempt}`, level: 'warning', data: { jobId, error: error.message } }); } },
         ),
       ]);
       await updateExportJobProgress(jobId, 40);
-      const exportData = buildExportData(fetchResults, metricsToFetch, jobId, userId, dateRange, format);
+      const exportData = buildExportData(fetchResults, metricsToFetch, jobId, userId, dateRange, format, includeMetadata);
       const [, uploadResult] = await Promise.all([
         updateExportJobProgress(jobId, 60),
         withRetry(

@@ -1,4 +1,4 @@
-import type { AIRequest } from './ai-types';
+import type { AIRequest } from './ai-types.ts';
 
 export function buildAIResponseData(
   request: AIRequest,

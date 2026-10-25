@@ -24,6 +24,7 @@ export interface AuthState {
   setError: (error: string | null) => void;
   clearError: () => void;
   login: (user: User) => void;
+  loginAnonymously: () => Promise<User | null>;
   loginWithCredentials: (email: string, password: string) => Promise<boolean>;
   loginWithOAuth: (provider: AuthOAuthProvider) => Promise<boolean>;
   completeOAuthCallback: (url: string) => Promise<boolean>;

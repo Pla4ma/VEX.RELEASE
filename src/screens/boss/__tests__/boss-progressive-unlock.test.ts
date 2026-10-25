@@ -18,13 +18,18 @@ function resolveBossIntensity(style: string | null): string {
 }
 
 describe('BossScreen progressive unlock', () => {
-  it('day-one boss can query and navigate at a shallow depth', () => {
-    const features = buildFeatureAccess({ totalCompletedSessions: 0 });
-    const availability = getFeatureAvailability(features.features.boss_tab);
+  it('keeps the full boss system gated until its session threshold', () => {
+    const dayZero = buildFeatureAccess({ totalCompletedSessions: 0 });
+    const locked = getFeatureAvailability(dayZero.features.boss_tab);
+    expect(locked.canQuery).toBe(false);
+    expect(locked.canUseBackend).toBe(false);
+    expect(locked.canNavigate).toBe(false);
 
-    expect(availability.canQuery).toBe(true);
-    expect(availability.canUseBackend).toBe(true);
-    expect(availability.canNavigate).toBe(true);
+    const unlocked = buildFeatureAccess({ totalCompletedSessions: 7 });
+    const available = getFeatureAvailability(unlocked.features.boss_tab);
+    expect(available.canQuery).toBe(true);
+    expect(available.canUseBackend).toBe(true);
+    expect(available.canNavigate).toBe(true);
   });
 
   it('degraded boss reports degraded availability', () => {

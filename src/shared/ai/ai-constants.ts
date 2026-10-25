@@ -7,12 +7,12 @@ export {
   AI_TIMEOUTS,
   RETRY_CONFIG,
   CACHE_CONFIG,
-} from './ai-models';
+} from './ai-models.ts';
 export {
   SYSTEM_PROMPTS,
   USER_PROMPT_TEMPLATES,
-} from './ai-prompts';
-export { FALLBACK_CONTENT } from './ai-fallback-content';
+} from './ai-prompts.ts';
+export { FALLBACK_CONTENT } from './ai-fallback-content.ts';
 
 export const VALIDATION_RULES = {
   COACH_MESSAGE: {

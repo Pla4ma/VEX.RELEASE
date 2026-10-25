@@ -26,7 +26,7 @@ type ContentStudyNavigationProp =
 
 function StudyLibraryScreen(): React.ReactNode {
   const navigation = useNavigation<ContentStudyNavigationProp>();
-  const { content, isLoading, error, refetch, deleteContent } =
+  const { content, isLoading, error, refetch, deleteContent, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useContentHistory();
   const { isOffline } = useNetInfo();
   const eligibility = useContentStudyEligibility();
@@ -110,7 +110,7 @@ function StudyLibraryScreen(): React.ReactNode {
               Study Library
             </Text>
             <Text variant="caption" style={{ color: vexFire.textSecondary }} mt="xs">
-              {content.length} saved {content.length === 1 ? 'item' : 'items'}
+              Showing {content.length} saved {content.length === 1 ? 'item' : 'items'}
             </Text>
           </Box>
           <StudyLibraryAction
@@ -164,6 +164,10 @@ function StudyLibraryScreen(): React.ReactNode {
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
         refreshing={isLoading}
         onRefresh={handleRefresh}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
+        }}
+        onEndReachedThreshold={0.4}
         ListEmptyComponent={
           <EmptyLibraryState
             isLoading={isLoading || eligibility.isPending}

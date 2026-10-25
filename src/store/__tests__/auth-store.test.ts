@@ -1,4 +1,5 @@
 import { useAuthStore } from '../index';
+import { UserSchema } from '../../features/auth/schemas';
 import * as authService from '../../features/auth/service';
 import {
   captureException,
@@ -8,6 +9,7 @@ import { revenueCatService } from '../../shared/monetization/revenuecat-service'
 
 jest.mock('../../features/auth/service', () => ({
   signIn: jest.fn(),
+  signInAnonymously: jest.fn(),
   signUp: jest.fn(),
   signOut: jest.fn(),
   getCurrentUser: jest.fn(),

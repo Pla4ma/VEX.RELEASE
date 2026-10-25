@@ -26,8 +26,9 @@ export async function fetchTimeSeriesData(
   granularity: 'hour' | 'day' | 'week' | 'month',
   dimensions?: AnalyticsDimension[],
   filters?: AnalyticsFilter[],
+  dateRange?: { start: number; end: number },
 ) {
-  const { start, end } = getTimeRangeDates(timeRange);
+  const { start, end } = dateRange ?? getTimeRangeDates(timeRange);
   let query = supabase
     .from('analytics_events')
     .select('user_id,metric_type,timestamp,value,dimension_type,dimension_value,metadata')

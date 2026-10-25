@@ -79,8 +79,10 @@ class AnalyticsService {
     return this.config.enabled && this.initialized && this.client !== null;
   }
   setEnabled(enabled: boolean): void {
-    this.config.enabled =
-      enabled && Boolean(POSTHOG_API_KEY) && (!__DEV__ || FORCE_DEV_ANALYTICS);
+    this.config.enabled = enabled &&
+      !ANALYTICS_DISABLED &&
+      Boolean(POSTHOG_API_KEY) &&
+      (!__DEV__ || FORCE_DEV_ANALYTICS);
     if (!this.config.enabled) {
       this.client = null;
       this.initialized = false;

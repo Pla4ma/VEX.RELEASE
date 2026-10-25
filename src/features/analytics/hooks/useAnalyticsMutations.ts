@@ -11,6 +11,7 @@ import {
   type TimeRange,
 } from '../schemas';
 import { analyticsKeys } from './analyticsKeys';
+import { useUIStore } from '../../../store';
 
 export function useMarkInsightAsRead(userId: string) {
   const queryClient = useQueryClient();
@@ -50,15 +51,18 @@ export function useUpdateDashboardWidget(userId: string) {
 
 export function useCreateExportJob(userId: string) {
   const queryClient = useQueryClient();
+  const showToast = useUIStore((state) => state.showToast);
   return useMutation({
     mutationFn: async (
-      input: Omit<z.infer<typeof CreateExportJobInputSchema>, 'userId'>,
+      input: Omit<z.input<typeof CreateExportJobInputSchema>, 'userId'>,
     ) => {
       const validated = CreateExportJobInputSchema.parse({ ...input, userId });
       return service.exportAnalyticsData(
         userId,
-        validated.format as 'json' | 'csv',
+        validated.format,
         validated.dateRange,
+        validated.dataTypes,
+        validated.includeMetadata,
       );
     },
     onSuccess: () => {
@@ -69,6 +73,11 @@ export function useCreateExportJob(userId: string) {
     onError: (error) => {
       Sentry.captureException(error, {
         tags: { feature: 'analytics', operation: 'create-export-job' },
+      });
+      showToast({
+        message: 'Data export could not start. Try again when your connection returns.',
+        type: 'error',
+        duration: 5000,
       });
     },
   });

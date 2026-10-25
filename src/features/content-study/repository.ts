@@ -48,7 +48,7 @@ export async function fetchContentStudyEligibility(): Promise<unknown> {
   return data;
 }
 
-export async function fetchContentHistoryRecords(userId: string, limit = 20) {
+export async function fetchContentHistoryRecords(userId: string, limit = 20, offset = 0) {
   const { data, error } = await withResilience(
     getSupabaseClient()
       .from('study_content')
@@ -56,7 +56,7 @@ export async function fetchContentHistoryRecords(userId: string, limit = 20) {
       .eq('user_id', userId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
-      .limit(limit),
+      .range(offset, offset + limit - 1),
     { operation: 'fetchContentHistoryRecords', fallbackValue: [] },
   );
   if (error) {

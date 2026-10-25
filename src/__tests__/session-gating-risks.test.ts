@@ -19,22 +19,28 @@ describe('Risk 1 — Session component gating', () => {
     expect(bp100.canQuery).toBe(false);
   });
 
-  it('boss combat HUD must check FeatureAvailability before rendering', () => {
-    const boss = getFeatureAvailability(accessFor(0).boss_tab);
-    expect(boss.canRenderEntryPoint).toBe(true);
-    expect(boss.canQuery).toBe(true);
-    const boss5 = getFeatureAvailability(accessFor(5).boss_tab);
-    expect(boss5.canRenderEntryPoint).toBe(true);
-    expect(boss5.canQuery).toBe(true);
+  it('keeps boss combat hidden until the full route unlocks', () => {
+    const bossDay0 = getFeatureAvailability(accessFor(0).boss_tab);
+    expect(bossDay0.canRenderEntryPoint).toBe(false);
+    expect(bossDay0.canQuery).toBe(false);
+    expect(bossDay0.canNavigate).toBe(false);
+
+    const bossTeaser = getFeatureAvailability(accessFor(5).boss_tab);
+    expect(bossTeaser.state).toBe('teased');
+    expect(bossTeaser.canRenderEntryPoint).toBe(true);
+    expect(bossTeaser.canQuery).toBe(false);
+    expect(bossTeaser.canNavigate).toBe(false);
+
+    const bossUnlocked = getFeatureAvailability(accessFor(7).boss_tab);
+    expect(bossUnlocked.canRenderEntryPoint).toBe(true);
+    expect(bossUnlocked.canQuery).toBe(true);
+    expect(bossUnlocked.canNavigate).toBe(true);
   });
 
-  it('active session boss combat must check boss_tab before querying', () => {
-    const boss = getFeatureAvailability(accessFor(0).boss_tab);
-    expect(boss.canQuery).toBe(true);
-    expect(boss.canRenderEntryPoint).toBe(true);
-    const boss10 = getFeatureAvailability(accessFor(10).boss_tab);
-    expect(boss10.canQuery).toBe(true);
-    expect(boss10.canRenderEntryPoint).toBe(true);
+  it('does not query active-session boss data before the boss unlock', () => {
+    expect(getFeatureAvailability(accessFor(0).boss_tab).canQuery).toBe(false);
+    expect(getFeatureAvailability(accessFor(6).boss_tab).canQuery).toBe(false);
+    expect(getFeatureAvailability(accessFor(7).boss_tab).canQuery).toBe(true);
   });
 
   it('inventory and shop navigation in completion must be gated', () => {
@@ -111,19 +117,25 @@ describe('Risk 3 — Boss HUD display policy consumption', () => {
 // ═══ Risk 4 — Route Registration Enforcement ═════════════════════
 
 describe('Risk 4 — Route registration enforcement', () => {
-  it('all day-one routes are registered through FeatureAvailability', () => {
+  it('registers day-one routes and keeps the Boss route gated until unlock', () => {
     const {
       FEATURE_ROUTE_REGISTRY,
       canRegisterFeatureRoute,
     } = require('../navigation/feature-route-registry');
-    const locked = accessFor(0);
-    const gatedCount = FEATURE_ROUTE_REGISTRY.filter(
-      (r: { route: string }) => !canRegisterFeatureRoute(locked, r.route),
-    ).length;
-    expect(gatedCount).toBe(0);
+    const dayZero = accessFor(0);
+    expect(canRegisterFeatureRoute(dayZero, 'Boss')).toBe(false);
+    expect(canRegisterFeatureRoute(dayZero, 'ContentStudy')).toBe(true);
+    expect(canRegisterFeatureRoute(dayZero, 'Challenges')).toBe(true);
+
+    const gatedRoutes = FEATURE_ROUTE_REGISTRY.filter(
+      (route: { route: string }) => !canRegisterFeatureRoute(dayZero, route.route),
+    ).map((route: { route: string }) => route.route);
+    expect(gatedRoutes).toContain('Boss');
+    expect(canRegisterFeatureRoute(accessFor(7), 'Boss')).toBe(true);
+
     const unlocked = accessFor(999);
-    const count = FEATURE_ROUTE_REGISTRY.filter((r: { feature: string }) =>
-      canRegisterFeatureRoute(unlocked, r.route),
+    const count = FEATURE_ROUTE_REGISTRY.filter((route: { route: string }) =>
+      canRegisterFeatureRoute(unlocked, route.route),
     ).length;
     expect(count).toBeGreaterThanOrEqual(FEATURE_ROUTE_REGISTRY.length - 1);
   });

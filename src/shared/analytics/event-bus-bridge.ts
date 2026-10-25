@@ -1,5 +1,6 @@
 import { eventBus } from '../../events/EventBus';
-import { analyticsService, capture, screen } from './analytics-service';
+import { capture, screen } from './analytics-service';
+import { applyAnalyticsPreference } from '../../features/settings/analytics-preference';
 import { ProductAnalyticsEvents } from './product-events';
 
 let cleanupBridge: (() => void) | null = null;
@@ -27,7 +28,7 @@ export function initializeAnalyticsEventBridge(): () => void {
         payload.key === 'privacy.analyticsOptOut' &&
         typeof payload.value === 'boolean'
       ) {
-        analyticsService.setEnabled(!payload.value);
+        applyAnalyticsPreference(!payload.value);
         capture(ProductAnalyticsEvents.SETTINGS_CHANGED, {
           key: payload.key,
           enabled: !payload.value,

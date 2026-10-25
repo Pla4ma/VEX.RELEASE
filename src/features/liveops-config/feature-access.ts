@@ -46,7 +46,6 @@ export { getStage, getProductTier };
 const DAY_ONE_SURFACES = new Set<FeatureKey>([
   'companion_detail',
   'challenges',
-  'boss_tab',
   'achievements',
   'content_study',
   'quiz_review_mode',

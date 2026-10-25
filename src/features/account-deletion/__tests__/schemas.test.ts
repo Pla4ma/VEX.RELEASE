@@ -26,6 +26,8 @@ describe('AccountDeletionResultSchema', () => {
     deletedAt: 1234567890,
     localStorageCleared: true,
     secureStorageCleared: true,
+    sessionSignedOut: true,
+    sentryIdentityCleared: true,
     monetizationSignedOut: false,
   };
 

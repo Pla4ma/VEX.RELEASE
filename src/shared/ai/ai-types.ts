@@ -13,7 +13,7 @@ export {
   type AIBaseRequest,
   type AIBaseResponse,
   type AIErrorCode,
-} from './ai-base-schemas';
+} from './ai-base-schemas.ts';
 
 // Re-export request schemas and types
 export {
@@ -27,7 +27,7 @@ export {
   type GenerateComebackPromptRequest,
   type GenerateStreakRiskNudgeRequest,
   type GenerateWeeklyReflectionRequest,
-} from './ai-request-schemas';
+} from './ai-request-schemas.ts';
 
 // Re-export response schemas and types
 export {
@@ -41,7 +41,7 @@ export {
   type GenerateComebackPromptResponse,
   type GenerateStreakRiskNudgeResponse,
   type GenerateWeeklyReflectionResponse,
-} from './ai-response-schemas';
+} from './ai-response-schemas.ts';
 
 // --- Discriminated unions ---
 
@@ -51,15 +51,15 @@ import {
   GenerateComebackPromptRequestSchema,
   GenerateStreakRiskNudgeRequestSchema,
   GenerateWeeklyReflectionRequestSchema,
-} from './ai-request-schemas';
+} from './ai-request-schemas.ts';
 import {
   GenerateCoachMessageResponseSchema,
   GenerateSessionSummaryResponseSchema,
   GenerateComebackPromptResponseSchema,
   GenerateStreakRiskNudgeResponseSchema,
   GenerateWeeklyReflectionResponseSchema,
-} from './ai-response-schemas';
-import type { AIRequestType, AIErrorCode } from './ai-base-schemas';
+} from './ai-response-schemas.ts';
+import type { AIRequestType, AIErrorCode } from './ai-base-schemas.ts';
 
 export const AIRequestSchema = z.discriminatedUnion('requestType', [
   GenerateCoachMessageRequestSchema,

@@ -83,6 +83,23 @@ export function createAuthActions(set: AuthStateSetter): AuthActions {
         state.error = null;
       });
     },
+    loginAnonymously: async () => {
+      try {
+        setAuthLoading(set);
+        const { user, error } = await authService.signInAnonymously();
+        if (error || !user) {
+          setAuthError(set, error?.message ?? 'Guest sign-in failed.');
+          return null;
+        }
+        await finishLogin(set, user);
+        return user;
+      } catch (err) {
+        const authError = toError(err);
+        setAuthError(set, authError.message);
+        captureException(authError, { tags: { feature: 'auth-anonymous' } });
+        return null;
+      }
+    },
     loginWithCredentials: async (email, password) => {
       try {
         setAuthLoading(set);

@@ -3,10 +3,11 @@
  * Manages user's content history and deletion
  */
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
+import { deleteContent, fetchContentHistory } from '../ContentStudyService';
 
 import { contentStudyQueryKeys } from './queryKeys';
 
@@ -15,38 +16,20 @@ export function useContentHistory() {
   const queryClient = useQueryClient();
   const { show } = useToast();
 
-  const { data, isPending, error, refetch } = useQuery({
+  const history = useInfiniteQuery({
     queryKey: contentStudyQueryKeys.history(user?.id ?? ''),
-    queryFn: async () => {
-    if (!user) {
-    return [];
-    }
-    const { fetchContentHistory: fetchHistory } =
-    await import('../ContentStudyService');
-    return fetchHistory(user.id, 20);
-    },
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) => user
+      ? fetchContentHistory(user.id, 20, pageParam)
+      : Promise.resolve([]),
+    getNextPageParam: (lastPage, _pages, lastOffset) =>
+      lastPage.length === 20 ? lastOffset + 20 : undefined,
     enabled: !!user,
     staleTime: 60 * 1000,
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
+  });
+  const data = history.data?.pages.flat() ?? [];
   const deleteContentMutation = useMutation({
-    mutationFn: async (contentId: string) => {
-      const { deleteContent: deleteItem } =
-        await import('../ContentStudyService');
-      await deleteItem(contentId);
-    },
+    mutationFn: (contentId: string) => deleteContent(contentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: contentStudyQueryKeys.all,
@@ -59,10 +42,13 @@ export function useContentHistory() {
   });
 
   return {
-    content: data || [],
-    isLoading: isPending,
-    error: error?.message || null,
-    refetch: refetch,
+    content: data,
+    error: history.error?.message ?? null,
+    fetchNextPage: history.fetchNextPage,
+    hasNextPage: history.hasNextPage ?? false,
+    isFetchingNextPage: history.isFetchingNextPage,
+    isLoading: history.isPending,
+    refetch: history.refetch,
     deleteContent: deleteContentMutation.mutate,
   };
 }

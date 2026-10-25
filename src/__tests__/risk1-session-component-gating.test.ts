@@ -16,29 +16,18 @@ describe('Risk 1 — Session component gating', () => {
     expect(bp100.canQuery).toBe(false);
   });
 
-  it('boss combat HUD must check FeatureAvailability before rendering', () => {
+  it('boss combat HUD stays gated until the feature unlocks', () => {
     const f0 = accessFor(0);
     const boss = getFeatureAvailability(f0.boss_tab);
-    expect(boss.canRenderEntryPoint).toBe(true);
-    expect(boss.canQuery).toBe(true);
+    expect(boss.canRenderEntryPoint).toBe(false);
+    expect(boss.canQuery).toBe(false);
 
     const f5 = accessFor(5);
     const boss5 = getFeatureAvailability(f5.boss_tab);
     expect(boss5.canRenderEntryPoint).toBe(true);
-    expect(boss5.canQuery).toBe(true);
+    expect(boss5.canQuery).toBe(false);
   });
 
-  it('active session boss combat must check boss_tab before querying hooks', () => {
-    const f0 = accessFor(0);
-    const boss = getFeatureAvailability(f0.boss_tab);
-    expect(boss.canQuery).toBe(true);
-    expect(boss.canRenderEntryPoint).toBe(true);
-
-    const f10 = accessFor(10);
-    const boss10 = getFeatureAvailability(f10.boss_tab);
-    expect(boss10.canQuery).toBe(true);
-    expect(boss10.canRenderEntryPoint).toBe(true);
-  });
 
   it('inventory and shop navigation in completion must be gated', () => {
     const f0 = accessFor(0);

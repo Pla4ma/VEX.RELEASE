@@ -21,8 +21,6 @@ function createParams(
     setSoundEffects: jest.fn(),
     haptics: true,
     setHaptics: jest.fn(),
-    analyticsEnabled: true,
-    setAnalyticsEnabled: jest.fn(),
     mode: 'system',
     handleThemeChange: jest.fn(),
     navigation: {

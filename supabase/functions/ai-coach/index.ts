@@ -4,10 +4,13 @@ import { AIRequestSchema, type AIRequest } from './schemas.ts';
 import { checkRateLimit } from '../_shared/rate-limit.ts';
 import { callOpenAICompatible, getOpenAICompatibleConfig, getOpenAICompatibleModel, type OpenAICompatibleConfig, type OpenAICompatibleResult } from '../_shared/openai-compatible.ts';
 import { readCoachPayload } from './coach-output.ts';
-import { COACH_MODEL_LADDER } from './coach-models.ts';
+import {
+  getAIModelCandidates,
+  VERIFIED_AI_MODEL_PRIMARY,
+} from '../_shared/ai-model-routing.ts';
 import { buildGuardrailReply } from './coach-guardrails.ts';
 import { buildPrompt, type CoachPrompt } from './prompt.ts';
-import { callGemini } from './gemini.ts';
+import { callGeminiWithFallback } from './gemini.ts';
 import { requireConfig } from '../_shared/config.ts';
 import { buildModelSuccessResponse } from './success-response.ts';
 import {
@@ -97,20 +100,49 @@ async function handleRequest(request: Request): Promise<Response> {
       if (guardrail) {
         return respond(buildTextSuccess(authorizedRequest, guardrail, 'vex-guardrail', startedAt, false), 200, request);
       }
-      const llm = await callCoachModelLadder(llmConfig, prompt, authorizedRequest.requestType === 'GENERATE_COACH_MESSAGE');
-      return respond(buildModelSuccessResponse(authorizedRequest, llm.content, llm.model, startedAt, llm.fallbackUsed, llm.promptTokens, llm.responseTokens), 200, request);
+      try {
+        const llm = await callCoachModelLadder(llmConfig, prompt, authorizedRequest.requestType === 'GENERATE_COACH_MESSAGE');
+        return respond(buildModelSuccessResponse(authorizedRequest, llm.content, llm.model, startedAt, llm.fallbackUsed, llm.promptTokens, llm.responseTokens), 200, request);
+      } catch (compatibleProviderError) {
+        if (!apiKey) throw compatibleProviderError;
+        const gemini = await callGeminiWithFallback(
+          apiKey,
+          prompt.system,
+          prompt.user,
+          prompt.maxOutputTokens,
+          authorizedRequest.requestType === 'GENERATE_COACH_MESSAGE'
+            ? readCoachPayload
+            : undefined,
+        );
+        return respond(buildModelSuccessResponse(
+          authorizedRequest,
+          gemini.content,
+          gemini.model,
+          startedAt,
+          true,
+          gemini.response.usageMetadata?.promptTokenCount ?? 0,
+          gemini.response.usageMetadata?.candidatesTokenCount ?? 0,
+        ), 200, request);
+      }
     }
     if (!apiKey) {return respond(buildError(authorizedRequest.requestType, startedAt, 'LLM_API_ERROR', 'Missing LLM configuration', true), 200, request);}
-    const gemini = await callGemini(apiKey, prompt.system, prompt.user, prompt.maxOutputTokens);
-    const content = gemini.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? '';
+    const gemini = await callGeminiWithFallback(
+      apiKey,
+      prompt.system,
+      prompt.user,
+      prompt.maxOutputTokens,
+      authorizedRequest.requestType === 'GENERATE_COACH_MESSAGE'
+        ? readCoachPayload
+        : undefined,
+    );
     return respond(buildModelSuccessResponse(
       authorizedRequest,
-      content,
-      'gemini-1.5-flash',
+      gemini.content,
+      gemini.model,
       startedAt,
       false,
-      gemini.usageMetadata?.promptTokenCount ?? 0,
-      gemini.usageMetadata?.candidatesTokenCount ?? 0,
+      gemini.response.usageMetadata?.promptTokenCount ?? 0,
+      gemini.response.usageMetadata?.candidatesTokenCount ?? 0,
     ), 200, request);
   } catch (error) {
     return respond(buildError(authorizedRequest.requestType, startedAt, 'LLM_API_ERROR', error instanceof Error ? error.message : 'LLM request failed', true), 200, request);
@@ -126,12 +158,10 @@ function readGuardrailReply(request: AIRequest): string | null {
 async function callCoachModelLadder(
   config: OpenAICompatibleConfig,
   prompt: CoachPrompt,
-  useFallbacks: boolean,
+  validateCoachPayload: boolean,
 ): Promise<OpenAICompatibleResult> {
-  const configuredModel = Deno.env.get('LLM_MODEL_COACH') ?? getOpenAICompatibleModel('fast', 'auto/best-free');
-  const models = useFallbacks
-    ? [configuredModel, 'auto/best-free', ...COACH_MODEL_LADDER.filter((model) => model !== configuredModel)]
-    : [configuredModel];
+  const configuredModel = Deno.env.get('LLM_MODEL_COACH') ?? getOpenAICompatibleModel('fast', VERIFIED_AI_MODEL_PRIMARY);
+  const models = getAIModelCandidates(configuredModel);
   const startedAt = Date.now();
   let lastError: Error | null = null;
   for (const model of models) {
@@ -139,7 +169,7 @@ async function callCoachModelLadder(
     if (remainingMs <= 0) {break;}
     try {
       const llm = await callOpenAICompatible({ config, model, systemPrompt: prompt.system, userPrompt: prompt.user, timeoutMs: Math.min(COACH_MODEL_TIMEOUT_MS, remainingMs), temperature: 0.45, maxTokens: prompt.maxOutputTokens, jsonMode: false });
-      if (useFallbacks) {readCoachPayload(llm.content);}
+      if (validateCoachPayload) {readCoachPayload(llm.content);}
       return { ...llm, fallbackUsed: model !== configuredModel };
     } catch (error) {
       lastError = error instanceof Error ? error : new Error('LLM request failed');

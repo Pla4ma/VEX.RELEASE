@@ -164,7 +164,7 @@ describe('AnalyticsService', () => {
         userId: 'user-123',
         status: 'pending',
         format: 'json',
-        dataTypes: ['sessions', 'xp', 'streaks', 'boss', 'items'],
+        dataTypes: ['all'],
         dateRange: { start: 1, end: 2 },
         progress: 0,
         createdAt: Date.now(),
@@ -173,7 +173,7 @@ describe('AnalyticsService', () => {
       const result = await exportAnalyticsData('user-123', 'json', {
         start: 1,
         end: 2,
-      });
+      }, ['all'], true);
       expect(result.id).toBe('job-123');
       expect(result.status).toBe('pending');
       expect(mockExportJobs.createExportJob).toHaveBeenCalled();

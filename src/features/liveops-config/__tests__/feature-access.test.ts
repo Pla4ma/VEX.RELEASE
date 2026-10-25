@@ -74,13 +74,18 @@ describe('feature-access', () => {
       expect(result.features.boss_tab.isUnlocked).toBe(true);
     });
 
-    it('should expose day-one surfaces before depth thresholds', () => {
-      const result = buildFeatureAccess({
-        totalCompletedSessions: 0,
-      });
-      expect(result.features.boss_tab.isUnlocked).toBe(true);
-      expect(result.features.content_study.isUnlocked).toBe(true);
-      expect(result.features.challenges.isUnlocked).toBe(true);
+    it('keeps the full boss screen behind its configured progression threshold', () => {
+      const dayZero = buildFeatureAccess({ totalCompletedSessions: 0 });
+      const teaser = buildFeatureAccess({ totalCompletedSessions: 5 });
+      const unlocked = buildFeatureAccess({ totalCompletedSessions: 7 });
+
+      expect(dayZero.features.boss_tab.isUnlocked).toBe(false);
+      expect(dayZero.features.boss_tab.isTeased).toBe(false);
+      expect(teaser.features.boss_tab.isUnlocked).toBe(false);
+      expect(teaser.features.boss_tab.isTeased).toBe(true);
+      expect(unlocked.features.boss_tab.isUnlocked).toBe(true);
+      expect(dayZero.features.content_study.isUnlocked).toBe(true);
+      expect(dayZero.features.challenges.isUnlocked).toBe(true);
     });
 
     it('should apply degraded status from input', () => {

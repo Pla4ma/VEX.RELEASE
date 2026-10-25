@@ -33,6 +33,7 @@
     "emitDecoratorMetadata": true,
     "isolatedModules": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "types": [
       "react",
       "react-native",

@@ -15,6 +15,29 @@ EXPO_PUBLIC_SENTRY_DSN=https://...@sentry.io/...
 
 Never put Supabase service role keys, database URLs, or AI provider keys in `.env.local` or any `EXPO_PUBLIC_` variable. Server-only secrets belong in `.env.server` locally and in Supabase/Trigger.dev secret storage when deployed.
 
+## Guest access
+
+“Skip login” creates a real Supabase anonymous-auth session; it does not create a fabricated local identity. The session gives AI Edge Functions a verifiable JWT, so guest AI access does not require email or Google sign-in. Enable anonymous sign-ins in Supabase Auth (`enable_anonymous_sign_ins = true`); the local configuration limits new anonymous sign-ins to 30 per hour per IP.
+
+Guest identity is tied to the saved app session. Clearing app data or reinstalling can make that identity unrecoverable. Users should sign in with a permanent account before removing the app or device data.
+
+EAS Updates require the installed native build to embed `updates.url`, the matching channel, and the matching runtime version. If `updates.url` is added after an APK is built, publish a new APK once; later JavaScript-only fixes can use OTA updates.
+
+## AI Edge Function deployment
+
+Keep `LLM_API_KEY`, `LLM_BASE_URL`, and `LLM_MODEL*` settings in `.env.server`; never put provider credentials in the Expo app environment.
+
+Both AI Edge Functions use a verified primary model (`nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning`) and fall back to `nvidia/nvidia/nemotron-3.5-lightning-30b-a3b`. Unreliable `auto/best-free` and `auto/best-chat` aliases are replaced by this route. Model providers can still change availability; the fallback only helps when its provider credentials are active.
+
+When server provider settings change, sync them and deploy both AI functions:
+
+```bash
+supabase secrets set --env-file .env.server --project-ref <project-ref>
+supabase functions deploy ai-coach ai --project-ref <project-ref>
+```
+
+Verify real chat-completions generation for both models and all AI request types before treating the deployment as healthy. The provider's model catalog does not establish pricing; check provider billing terms before assuming a model is free.
+
 ## Supabase Schema
 
 Run this SQL in your Supabase SQL editor:

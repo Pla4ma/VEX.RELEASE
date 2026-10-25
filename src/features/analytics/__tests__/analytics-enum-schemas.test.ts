@@ -138,15 +138,16 @@ describe('Analytics Enum Schemas', () => {
   });
 
   describe('ExportFormatSchema', () => {
-    it('accepts valid formats', () => {
-      const formats = ['json', 'csv', 'xlsx', 'pdf'];
-      formats.forEach((f) => {
-        expect(ExportFormatSchema.parse(f)).toBe(f);
-      });
+    it('accepts only formats that the export service can generate', () => {
+      for (const format of ['json', 'csv']) {
+        expect(ExportFormatSchema.parse(format)).toBe(format);
+      }
     });
 
-    it('rejects invalid format', () => {
-      expect(() => ExportFormatSchema.parse('xml')).toThrow();
+    it('rejects formats without an export implementation', () => {
+      for (const format of ['xlsx', 'pdf', 'xml']) {
+        expect(() => ExportFormatSchema.parse(format)).toThrow();
+      }
     });
   });
 });

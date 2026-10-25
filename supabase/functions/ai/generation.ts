@@ -1,3 +1,7 @@
+import {
+  getAIModelCandidates,
+  VERIFIED_AI_MODEL_PRIMARY,
+} from '../_shared/ai-model-routing.ts';
 import type { AIRequest } from '../../../src/shared/ai/ai-types.ts';
 import {
   AI_TIMEOUTS,
@@ -7,6 +11,7 @@ import {
   USER_PROMPT_TEMPLATES,
 } from '../../../src/shared/ai/ai-constants.ts';
 import { callGemini } from './gemini.ts';
+import { getGeminiModelCandidates } from '../_shared/gemini-model-routing.ts';
 import {
   callOpenAICompatible,
   getOpenAICompatibleConfig,
@@ -32,66 +37,99 @@ export async function generateAIContent(
   const timeoutMs = resolveTimeout(request.requestType);
 
   if (llmConfig) {
-    const result = await callOpenAICompatible({
-      config: llmConfig,
-      model,
-      systemPrompt,
-      userPrompt,
-      timeoutMs,
-      temperature: settings.temperature,
-      maxTokens: settings.maxOutputTokens,
-    });
-    return {
-      content: result.content,
-      model: result.model,
-      ...(result.promptTokens !== undefined
-        ? { promptTokens: result.promptTokens }
-        : {}),
-      ...(result.responseTokens !== undefined
-        ? { responseTokens: result.responseTokens }
-        : {}),
-    };
+    let lastError: Error | null = null;
+    for (const candidateModel of getAIModelCandidates(model)) {
+      try {
+        const result = await callOpenAICompatible({
+          config: llmConfig,
+          model: candidateModel,
+          systemPrompt,
+          userPrompt,
+          timeoutMs,
+          temperature: settings.temperature,
+          maxTokens: settings.maxOutputTokens,
+        });
+        return {
+          content: result.content,
+          model: result.model,
+          ...(result.promptTokens !== undefined ? { promptTokens: result.promptTokens } : {}),
+          ...(result.responseTokens !== undefined ? { responseTokens: result.responseTokens } : {}),
+        };
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error('LLM request failed');
+      }
+    }
+    if (geminiApiKey) {
+      return generateWithGeminiFallback(
+        geminiApiKey,
+        request.requestType,
+        systemPrompt,
+        userPrompt,
+        settings,
+        timeoutMs,
+      );
+    }
+    throw lastError ?? new Error('LLM request failed');
   }
 
   if (!geminiApiKey) throw new Error('Missing LLM configuration');
-  return {
-    content: await callGemini({
-      apiKey: geminiApiKey,
-      model,
-      systemPrompt,
-      userPrompt,
-      timeoutMs,
-      generationConfig: settings,
-    }),
-    model,
-  };
+  return generateWithGeminiFallback(
+    geminiApiKey,
+    request.requestType,
+    systemPrompt,
+    userPrompt,
+    settings,
+    timeoutMs,
+  );
+}
+
+async function generateWithGeminiFallback(
+  apiKey: string,
+  requestType: AIRequest['requestType'],
+  systemPrompt: string,
+  userPrompt: string,
+  settings: { temperature: number; maxOutputTokens: number },
+  timeoutMs: number,
+): Promise<GeneratedAIContent> {
+  const isProRequest = requestType === 'GENERATE_SESSION_SUMMARY' ||
+    requestType === 'GENERATE_WEEKLY_REFLECTION';
+  const models = getGeminiModelCandidates(
+    resolveGeminiModel(requestType),
+    isProRequest ? 'pro' : 'flash',
+  );
+  let lastError: Error | null = null;
+  for (const model of models) {
+    try {
+      return {
+        content: await callGemini({
+          apiKey, model, systemPrompt, userPrompt, timeoutMs,
+          generationConfig: settings,
+        }),
+        model,
+      };
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Gemini request failed');
+    }
+  }
+  throw lastError ?? new Error('Gemini request failed');
 }
 
 function resolveModel(
   requestType: AIRequest['requestType'],
   hasCompatibleProvider: boolean,
 ): string {
-  if (hasCompatibleProvider) {
-    const kind =
-      requestType === 'GENERATE_SESSION_SUMMARY' ||
-      requestType === 'GENERATE_WEEKLY_REFLECTION'
-        ? 'pro'
-        : 'fast';
-    return getOpenAICompatibleModel(
-      kind,
-      kind === 'pro' ? 'mistral-small-latest' : 'llama-3.1-8b-instant',
-    );
-  }
-  const configuredName =
-    requestType === 'GENERATE_SESSION_SUMMARY' ||
-    requestType === 'GENERATE_WEEKLY_REFLECTION'
-      ? 'GEMINI_MODEL_PRO'
-      : 'GEMINI_MODEL_FLASH';
-  return (
-    Deno.env.get(configuredName) ??
-    MODEL_BY_USE_CASE[requestType] ??
-    'gemini-2.5-flash'
-  );
+  if (!hasCompatibleProvider) return resolveGeminiModel(requestType);
+  const kind = requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION'
+    ? 'pro'
+    : 'fast';
+  return getOpenAICompatibleModel(kind, VERIFIED_AI_MODEL_PRIMARY);
+}
+
+function resolveGeminiModel(requestType: AIRequest['requestType']): string {
+  const configuredName = requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION'
+    ? 'GEMINI_MODEL_PRO'
+    : 'GEMINI_MODEL_FLASH';
+  return Deno.env.get(configuredName) ?? MODEL_BY_USE_CASE[requestType] ?? 'gemini-2.5-flash';
 }
 
 function resolveTimeout(requestType: AIRequest['requestType']): number {

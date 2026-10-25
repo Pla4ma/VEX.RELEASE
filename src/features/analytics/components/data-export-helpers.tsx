@@ -5,7 +5,7 @@ import { styles } from './DataExportScreen.styles';
 // ─── Types ──────────────────────────────────────────────────────────
 
 export type ExportFormat = 'json' | 'csv';
-export type DataCategory = 'sessions' | 'analytics' | 'achievements' | 'settings' | 'all';
+export type DataCategory = 'sessions' | 'analytics' | 'achievements' | 'all';
 
 export interface DataExportScreenProps {
   userId: string;
@@ -15,11 +15,10 @@ export interface DataExportScreenProps {
 // ─── Constants ──────────────────────────────────────────────────────
 
 export const CATEGORIES: { key: DataCategory; label: string; icon: string; description: string }[] = [
-  { key: 'all', label: 'Everything', icon: '', description: 'All your data in one export' },
+  { key: 'all', label: 'Everything', icon: '', description: 'All available analytics data' },
   { key: 'sessions', label: 'Sessions', icon: '', description: 'Session history and stats' },
-  { key: 'analytics', label: 'Analytics', icon: '', description: 'Charts, trends, and insights' },
-  { key: 'achievements', label: 'Achievements', icon: '', description: 'Badges and milestones' },
-  { key: 'settings', label: 'Settings', icon: '', description: 'Preferences and configuration' },
+  { key: 'analytics', label: 'Analytics', icon: '', description: 'Progress, activity, and trends' },
+  { key: 'achievements', label: 'Achievements', icon: '', description: 'Achievement-related activity metrics' },
 ];
 
 export const FORMATS: { key: ExportFormat; label: string; icon: string; description: string }[] = [

@@ -23,8 +23,6 @@ export interface BuildSettingsGroupsParams {
   setSoundEffects: (v: boolean) => void;
   haptics: boolean;
   setHaptics: (v: boolean) => void;
-  analyticsEnabled: boolean;
-  setAnalyticsEnabled: (v: boolean) => void;
   mode: ThemeMode;
   handleThemeChange: (mode: ThemeMode) => void;
   navigation: Nav;
@@ -45,7 +43,7 @@ export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[
     {
       title: 'Profile',
       items: [
-        { id: 'edit-profile', icon: 'user', title: 'Edit Profile', subtitle: 'Name, photo, bio', type: 'link',
+        { id: 'profile', icon: 'user', title: 'Profile', subtitle: 'View your progress and history', type: 'link',
           onPress: () => navigateToRootScreen(p.navigation, 'Main', { screen: 'Profile' }) },
         { id: 'focus-mode', icon: 'target', title: 'Focus Mode', subtitle: 'Study, Run, Project, or Clean', type: 'link',
           onPress: p.navigateToLaneMode },
@@ -98,8 +96,6 @@ export function buildSettingsGroups(p: BuildSettingsGroupsParams): SettingGroup[
       items: [
         { id: 'privacy-settings', icon: 'lock', title: 'Privacy Settings', subtitle: 'Visibility, data, analytics', type: 'link',
           onPress: p.navigateToPrivacy },
-        { id: 'analytics', icon: 'bar-chart-2', title: 'Anonymous Analytics', subtitle: 'Help improve VEX', type: 'toggle',
-          value: p.analyticsEnabled, onToggle: p.setAnalyticsEnabled },
       ],
     },
     {

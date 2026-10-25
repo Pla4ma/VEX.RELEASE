@@ -96,3 +96,31 @@ export interface RawStudyPlanResponse {
   quizItems?: unknown;
   sessionPlan?: RawSessionPlan;
 }
+export const StudyPlanModelResponseSchema = z.object({
+  summary: z.string().trim().min(1),
+  keyConcepts: z.array(z.string().trim().min(1)).min(1),
+  tasks: z.array(z.object({
+    id: z.string().optional(),
+    content: z.string().trim().min(1),
+    estimatedMinutes: z.number().optional(),
+    priority: z.enum(["HIGH", "MEDIUM", "LOW"]).optional(),
+    dependsOn: z.array(z.string()).optional(),
+  })).min(1),
+  quizItems: z.array(z.object({
+    id: z.string().optional(),
+    question: z.string().trim().min(1),
+    answer: z.string().trim().min(1),
+    options: z.array(z.string()).optional(),
+    explanation: z.string().optional(),
+    difficulty: z.enum(["EASY", "MEDIUM", "HARD"]).optional(),
+    conceptTag: z.string().optional(),
+  })).min(1),
+  sessionPlan: z.object({
+    recommendedDuration: z.number().optional(),
+    recommendedSessions: z.number().optional(),
+    breakIntervalMinutes: z.number().optional(),
+    suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING"]).optional(),
+    focusAreas: z.array(z.string()).optional(),
+  }).optional(),
+});
+export type StudyPlanModelResponse = z.infer<typeof StudyPlanModelResponseSchema>;

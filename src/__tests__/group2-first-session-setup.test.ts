@@ -14,7 +14,7 @@ describe('Group 2 — First Session Setup', () => {
     assertCoreAvailable(f0, 'focus_session');
     assertCoreAvailable(f0, 'focus_tab');
     assertCoreAvailable(f0, 'challenges');
-    assertCoreAvailable(f0, 'boss_tab');
+    expect(getFeatureAvailability(f0.boss_tab).canNavigate).toBe(false);
     assertCoreAvailable(f0, 'companion_detail');
     assertCoreAvailable(f0, 'content_study');
     assertCoreAvailable(f0, 'memory_console');

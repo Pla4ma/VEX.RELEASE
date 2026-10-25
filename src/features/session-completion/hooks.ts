@@ -11,12 +11,13 @@ import type { MasteryState } from '../mastery/types';
 import type { HeadlineReward } from './headline-reward.schemas';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme/ThemeContext';
-import { detectNewlyUnlockedFeatures } from './completion-personalization-step';
 import * as Sentry from '@sentry/react-native';
 import { repairPendingCompletion } from './completion-repair-service';
 import { useCompletionRewardRepair } from './completion-repair-hook';
+import { resolveCompletionNextAction } from './completion-next-action';
+import type { PostSessionNextAction } from './schemas';
 export { useRecoveredSessionCompletion } from './recovery-hooks';
-
+export { useSessionCompletionConsequences } from './completion-consequences-hook';
 type SessionNavigation = NativeStackNavigationProp<SessionStackParams>;
 type RootNavigation = NativeStackNavigationProp<ExtendedRootStackParams>;
 type Mood = 'GREAT' | 'GOOD' | 'NEUTRAL' | 'BAD' | 'TERRIBLE';
@@ -34,18 +35,6 @@ type LevelMetric = {
   value: string;
 } | null;
 
-export function useSessionCompletionConsequences(input?: {
-  summary: SessionSummary;
-  userId: string | null;
-}): { newlyUnlockedFeatures: string[] } {
-  return useMemo(() => {
-    if (!input?.userId || !input?.summary) {
-      return { newlyUnlockedFeatures: [] };
-    }
-    const features = detectNewlyUnlockedFeatures(input.userId, input.summary);
-    return { newlyUnlockedFeatures: features };
-  }, [input?.userId, input?.summary]);
-}
 
 
 export function useCompletionSyncAutoRepair(input?: {
@@ -80,7 +69,7 @@ export function useSessionCompleteController({
   levelMetric: LevelMetric;
   masteryState: MasteryState | null;
   navigation: SessionNavigation;
-  nextAction: { ctaLabel: string; routeParams: Record<string, never> } | null;
+  nextAction: PostSessionNextAction | null;
   progressionError: null;
   progressionLoading: false;
   reflection: string;
@@ -176,7 +165,7 @@ export function useSessionCompleteController({
     levelMetric: null,
     masteryState,
     navigation,
-    nextAction: null,
+    nextAction: useMemo(() => resolveCompletionNextAction(summary), [summary]),
     progressionError: null,
     progressionLoading: false,
     reflection,

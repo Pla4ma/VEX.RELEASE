@@ -43,7 +43,6 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     achievementUnlocks,
     soundEffects,
     haptics,
-    analyticsEnabled,
     setPreference,
   } = useSettingsStore();
   const showEconomyToggles =
@@ -62,7 +61,6 @@ export const SettingsScreen = withScreenErrorBoundary(function SettingsScreen({
     achievementUnlocks, setAchievementUnlocks: (v) => setPreference('achievementUnlocks', v),
     soundEffects, setSoundEffects: (v) => setPreference('soundEffects', v),
     haptics, setHaptics: (v) => setPreference('haptics', v),
-    analyticsEnabled, setAnalyticsEnabled: (v) => setPreference('analyticsEnabled', v),
     mode, handleThemeChange, navigation,
     openSupport, openPrivacyPolicy, openTerms,
     navigateToCoach: () => navigateToSettingsStackScreen(navigation, 'CoachSettings'),

@@ -25,9 +25,9 @@ export async function deleteStudyFile(filePath: string) {
   }
 }
 
-export async function fetchContentHistory(userId: string, limit = 20) {
+export async function fetchContentHistory(userId: string, limit = 20, offset = 0) {
   try {
-    return await fetchContentHistoryRecords(userId, limit);
+    return await fetchContentHistoryRecords(userId, limit, offset);
   } catch (error) {
     throw new Error(`Failed to fetch content history: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }

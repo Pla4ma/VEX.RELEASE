@@ -6,6 +6,7 @@ const mockInitializeSessionCompletionOrchestrator = jest.fn<void, []>();
 const mockGetQueueLength = jest.fn<number, []>(() => 0);
 const mockStartAutoProcessing = jest.fn<void, []>();
 const mockInitializeNetInfo = jest.fn<void, []>();
+const mockInitializeAnalyticsPreference = jest.fn<Promise<boolean>, []>(() => Promise.resolve(false));
 
 jest.mock('../../persistence/mmkv-key', () => ({
   getMmkvEncryptionKey: mockResolveEncryptionKey,
@@ -20,6 +21,9 @@ jest.mock('../../lib/offline/queue', () => ({
 jest.mock('../../shared/analytics/analytics-service', () => ({
   analyticsService: { initialize: jest.fn(() => Promise.resolve(false)) },
   capture: jest.fn(),
+}));
+jest.mock('../../features/settings/analytics-preference', () => ({
+  initializeAnalyticsPreference: mockInitializeAnalyticsPreference,
 }));
 jest.mock('../../shared/analytics/event-bus-bridge', () => ({
   initializeAnalyticsEventBridge: mockInitializeAnalyticsEventBridge,
@@ -54,6 +58,7 @@ describe('bootstrap readiness', () => {
     mockGetQueueLength.mockReturnValue(0);
     mockStartAutoProcessing.mockReset();
     mockInitializeNetInfo.mockReset();
+    mockInitializeAnalyticsPreference.mockClear();
   });
 
   it('shares the in-flight bootstrap and waits for the encryption key', async () => {

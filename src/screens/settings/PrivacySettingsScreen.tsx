@@ -1,16 +1,19 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Alert, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme/ThemeContext';
-import { Card } from '../../components/primitives'
 import { Text } from '../../components/primitives/Text';
 import type { SettingsStackParams } from '../../navigation';
 import { useDeleteAccount } from '../../features/account-deletion/hooks';
 import { useAuthStore, useUIStore } from '../../store/index';
+import { useSettingsStore } from '../../features/settings/store';
+import { usePrivacySettings, useUpdatePrivacySettings } from '../../features/settings/hooks';
 import { usePaywall } from '../../shared/monetization/use-revenuecat-derived';
 import { captureSilentFailure } from '../../utils/silent-failure';
+import { ErrorState } from '../../components/states/ErrorState';
+import { applyAnalyticsPreference } from '../../features/settings/analytics-preference';
 import { PrivacyToggleRow } from './PrivacyToggleRow';
 import { PrivacySettingsSkeleton } from './PrivacySettingsSkeleton';
 import { TOGGLE_ROWS } from './privacy-toggle-data';
@@ -30,15 +33,21 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
   const showToast = useUIStore((state) => state.showToast);
   const { restore } = usePaywall();
   const deleteAccountMutation = useDeleteAccount();
-  const [toggles, setToggles] = useState<Record<ToggleKey, boolean>>({
-    activitySharing: false,
-    squadFeed: false,
-    analytics: true,
-  });
-
-  const toggleValue = useCallback((key: ToggleKey): void => {
-    setToggles((current) => ({ ...current, [key]: !current[key] }));
-  }, []);
+  const privacyQuery = usePrivacySettings(user?.id ?? '');
+  const updatePrivacy = useUpdatePrivacySettings(user?.id ?? '');
+  const analyticsEnabled = useSettingsStore((state) => state.analyticsEnabled);
+  useEffect(() => {
+    if (privacyQuery.data) applyAnalyticsPreference(!privacyQuery.data.analyticsOptOut);
+  }, [privacyQuery.data]);
+  const analyticsOptOut = privacyQuery.data?.analyticsOptOut ?? false;
+  const toggleValue = useCallback((_key: ToggleKey): void => {
+    if (!user?.id) return;
+    const nextOptOut = !analyticsOptOut;
+    applyAnalyticsPreference(!nextOptOut);
+    updatePrivacy.mutate({ analyticsOptOut: nextOptOut }, {
+      onError: () => applyAnalyticsPreference(analyticsEnabled),
+    });
+  }, [analyticsEnabled, analyticsOptOut, updatePrivacy, user?.id]);
 
   const confirmDelete = useCallback((): void => {
     if (!user?.id) {
@@ -95,10 +104,17 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
 
   return (
     <LiquidGlassScreen>
-      {deleteAccountMutation.isPending ? (
+      {deleteAccountMutation.isPending || Boolean(user?.id && privacyQuery.isPending) ? (
         <PrivacySettingsSkeleton />
+      ) : privacyQuery.isError ? (
+        <ErrorState
+          title="Privacy settings are unavailable"
+          description="Your privacy controls did not load. Try again."
+          retryLabel="Retry"
+          onRetry={() => { void privacyQuery.refetch(); }}
+        />
       ) : (
-      <ScrollView
+        <ScrollView
         contentContainerStyle={{
           paddingBottom: insets.bottom + theme.spacing[6],
           paddingHorizontal: liquidGlassSpacing.screenX,
@@ -119,29 +135,13 @@ const PrivacySettingsScreen: React.ComponentType<Props> = () => {
             <PrivacyToggleRow
               key={row.key}
               row={row}
-              value={toggles[row.key]}
+              value={!analyticsOptOut}
+              disabled={updatePrivacy.isPending || !user?.id}
               onToggle={toggleValue}
             />
           ))}
         </LiquidGlassCard>
 
-        <Card
-          variant="outlined"
-          size="md"
-          style={{ marginBottom: theme.spacing[4] }}
-        >
-          <Text variant="body" color={vexFire.cream}>
-            Data Export
-          </Text>
-          <Text
-            variant="caption"
-            color={vexFire.textSecondary}
-            style={{ marginTop: theme.spacing[1] }}
-          >
-            Export is disabled until the verified export pipeline is live. No
-            fake request is shown.
-          </Text>
-        </Card>
 
         <Pressable
           accessibilityHint="Restores App Store purchases through the shared purchase layer."

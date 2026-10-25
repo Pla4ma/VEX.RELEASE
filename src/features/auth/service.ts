@@ -6,6 +6,7 @@ import type {
   SignUpMetadata,
   AuthResult,
 } from './types';
+import * as anonymousAuthRepository from './anonymous-auth-repository';
 import * as repository from './repository';
 import { UserSchema } from './schemas';
 import { signInWithNativeApple } from './apple-oauth';
@@ -47,6 +48,14 @@ async function openSystemAuthSession(url: string): Promise<AuthResult> {
         : new Error('Unable to open social sign in.'),
     };
   }
+}
+
+export async function signInAnonymously(): Promise<AuthResult> {
+  const result = await anonymousAuthRepository.signInAnonymously();
+  if (result.user) {
+    UserSchema.parse(result.user);
+  }
+  return result;
 }
 
 export async function signUp(

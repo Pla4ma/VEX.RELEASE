@@ -38,52 +38,95 @@ export async function deleteAccount(
   trackAccountDeletionStarted(validated.userId);
   try {
     await deleteCurrentUser();
-    const [monetizationSignedOut, secureStorageCleared, localStorageCleared] =
-      await Promise.all([
-        signOutMonetization(),
-        clearSecureStorage(),
-        clearLocalStorage(),
-      ]);
-    await signOutCurrentSession().catch((error: unknown) => {
-      captureAccountDeletionError(error, 'signOutCurrentSession');
-    });
-    clearSentryUser();
+
+    const monetizationSignedOut = await signOutMonetization();
+    const secureStorageCleared = await clearSecureStorage();
+    const localStorageCleared = await clearLocalStorage();
+    let sessionSignedOut = true;
+    try {
+      await signOutCurrentSession();
+    } catch (error: unknown) {
+      safelyCaptureAccountDeletionError(error, 'signOutCurrentSession');
+      sessionSignedOut = false;
+    }
+    let sentryIdentityCleared = true;
+    try {
+      clearSentryUser();
+    } catch (error: unknown) {
+      safelyCaptureAccountDeletionError(error, 'clearSentryUser');
+      sentryIdentityCleared = false;
+    }
+
     const result = AccountDeletionResultSchema.parse({
       userId: validated.userId,
       deletedAt: Date.now(),
       localStorageCleared,
       secureStorageCleared,
+      sessionSignedOut,
       monetizationSignedOut,
+      sentryIdentityCleared,
     });
-    trackAccountDeletionCompleted(validated.userId);
-    emitAccountDeletionCompleted(result);
+    try {
+      trackAccountDeletionCompleted(validated.userId);
+    } catch (error: unknown) {
+      safelyCaptureAccountDeletionError(error, 'trackAccountDeletionCompleted');
+    }
+    try {
+      emitAccountDeletionCompleted(result);
+    } catch (error: unknown) {
+      safelyCaptureAccountDeletionError(error, 'emitAccountDeletionCompleted');
+    }
     return result;
   } catch (error) {
-    captureAccountDeletionError(error, 'deleteAccount');
+    safelyCaptureAccountDeletionError(error, 'deleteAccount');
     throw new AccountDeletionServiceError('deleteAccount', error);
   }
 }
-
+ 
 async function signOutMonetization(): Promise<boolean> {
   try {
     await revenueCatService.clearUserId();
     return true;
   } catch (error) {
-    captureAccountDeletionError(error, 'signOutMonetization');
+    safelyCaptureAccountDeletionError(error, 'signOutMonetization');
     return false;
   }
 }
 
 async function clearSecureStorage(): Promise<boolean> {
-  const storage = getSecureStorage();
-  await Promise.all(
-    Object.values(SecureStorageKeys).map((key) => storage.removeItem(key)),
-  );
-  return true;
+  try {
+    const storage = getSecureStorage();
+    await Promise.all(
+      Object.values(SecureStorageKeys).map((key) => storage.removeItem(key)),
+    );
+    return true;
+  } catch (error) {
+    safelyCaptureAccountDeletionError(error, 'clearSecureStorage');
+    return false;
+  }
 }
 
 async function clearLocalStorage(): Promise<boolean> {
-  await getDefaultStorageAdapter().clear();
-  await getMMKVStorageAdapter().removeItem('auth-storage');
-  return true;
+  let cleared = true;
+  try {
+    await getDefaultStorageAdapter().clear();
+  } catch (error) {
+    safelyCaptureAccountDeletionError(error, 'clearDefaultStorage');
+    cleared = false;
+  }
+  try {
+    await getMMKVStorageAdapter().removeItem('auth-storage');
+  } catch (error) {
+    safelyCaptureAccountDeletionError(error, 'clearAuthStorage');
+    cleared = false;
+  }
+  return cleared;
 }
+function safelyCaptureAccountDeletionError(error: unknown, operation: string): void {
+  try {
+    captureAccountDeletionError(error, operation);
+  } catch {
+    // Telemetry must not change the result of account deletion.
+  }
+}
+

@@ -61,10 +61,10 @@ describe('useContentHistory', () => {
       { id: 'content-1', source_type: 'PASTE' },
       { id: 'content-2', source_type: 'YOUTUBE' },
     ];
-    // Pre-populate the query cache since dynamic import() bypasses jest.mock
+    // Seed the first page in TanStack's infinite-query cache.
     queryClient.setQueryData(
       contentStudyQueryKeys.history('test-user-id'),
-      mockHistory,
+      { pages: [mockHistory], pageParams: [0] },
     );
     const wrapper = createWrapper(queryClient);
     const { result } = await renderHook(() => useContentHistory(), { wrapper });
@@ -80,7 +80,7 @@ describe('useContentHistory', () => {
     const mockHistory = [{ id: 'content-1', source_type: 'PASTE' }];
     queryClient.setQueryData(
       contentStudyQueryKeys.history('test-user-id'),
-      mockHistory,
+      { pages: [mockHistory], pageParams: [0] },
     );
     const wrapper = createWrapper(queryClient);
     const { result } = await renderHook(() => useContentHistory(), { wrapper });

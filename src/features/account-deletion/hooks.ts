@@ -29,11 +29,19 @@ export function useDeleteAccount(): UseMutationResult<
         duration: 5000,
       });
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries();
+      const cleanupCompleted =
+        result.localStorageCleared &&
+        result.secureStorageCleared &&
+        result.sessionSignedOut &&
+        result.sentryIdentityCleared &&
+        result.monetizationSignedOut;
       showToast({
-        message: 'Your account and local data were deleted.',
-        type: 'success',
+        message: cleanupCompleted
+          ? 'Your account and local data were deleted.'
+          : 'Your account was deleted, but some local cleanup could not be completed.',
+        type: cleanupCompleted ? 'success' : 'error',
         duration: 5000,
       });
     },

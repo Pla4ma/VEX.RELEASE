@@ -7,13 +7,13 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { buttonTap } from '../../utils/haptics';
 import type { AuthOAuthProvider } from '../../features/auth/types';
 import { captureSilentFailure } from '../../utils/silent-failure';
-import { skipLogin } from './dev-bypass';
+import { skipLogin } from './skip-login';
 import { loginSchema } from './schemas';
 type LoginErrors = { email?: string; password?: string };
 
 export function useLoginScreen(initialEmail: string) {
   const { isReducedMotion } = useReducedMotion();
-  const { loginWithCredentials, loginWithOAuth, isLoading, error } = useAuthStore();
+  const { loginWithCredentials, loginWithOAuth, loginAnonymously, isLoading, error } = useAuthStore();
   const { show: showToast } = useToast();
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
@@ -85,22 +85,23 @@ export function useLoginScreen(initialEmail: string) {
   }, [error, loginWithOAuth, showToast]);
   const handleSkipLogin = useCallback((): void => {
     void skipLogin(
-      useAuthStore.getState().login,
+      loginAnonymously,
       hydrateOnboardingForUser,
       useOnboardingStore.getState().completeOnboarding,
     ).catch((caught: unknown) => {
       captureSilentFailure(caught, {
         feature: 'auth',
-        operation: 'development-skip-login',
+        operation: 'guest-skip-login',
         type: 'ui',
       });
       showToast({
-        message: 'Could not open local testing. Tap Skip login to try again.',
-        title: 'Try again',
+        message: useAuthStore.getState().error
+          ?? (caught instanceof Error ? caught.message : 'Try guest sign-in again.'),
+        title: 'Guest sign-in unavailable',
         type: 'error',
       });
     });
-  }, [showToast]);
+  }, [loginAnonymously, showToast]);
   return {
     actionEntering,
     bodyEntering,

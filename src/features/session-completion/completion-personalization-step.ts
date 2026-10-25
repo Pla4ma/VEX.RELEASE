@@ -8,11 +8,8 @@ import type { SessionSummary } from '../../session/types';
 import { buildPostSessionStoryViewModel } from './post-session-story-view-model';
 import { buildFeatureAccess } from '../liveops-config/feature-access';
 import { useOnboardingStore } from '../onboarding/store';
-import {
-  initializeOnboarding,
-  getOnboardingState,
-  recordSession,
-} from '../onboarding/onboarding-state';
+import { FEATURE_UNLOCK_GATES } from '../onboarding/onboarding-gates';
+import { getSessionOrchestrator } from '../../session/SessionOrchestrator';
 
 async function resolveCompletionPersonalBest(
   _userId: string,
@@ -29,28 +26,23 @@ interface PersonalizationInput {
   degradedSystems: string[];
 }
 
-export function detectNewlyUnlockedFeatures(
+export async function detectNewlyUnlockedFeatures(
   userId: string,
   summary: SessionSummary,
-): string[] {
-  const features: string[] = [];
+): Promise<string[]> {
   try {
-    const state =
-      getOnboardingState(userId) ?? initializeOnboarding(userId);
-    const sessionsBefore = state.sessionsCompleted;
-    recordSession(
-      userId,
-      Math.max(1, Math.round(summary.effectiveDuration / 60)),
-      `session:${summary.sessionId ?? Date.now()}`,
-    );
-    const sessionsAfter = sessionsBefore + 1;
-    const stateAfter = getOnboardingState(userId);
-    if (stateAfter) {
-      const boardFeatures = stateAfter.unlockedFeatures
-        .filter((f) => !f.introduced)
-        .map((f) => f.featureId);
-      features.push(...boardFeatures);
-    }
+    const orchestrator = getSessionOrchestrator();
+    orchestrator.setUserId(userId);
+    const sessionStats = await orchestrator.getSessionStats();
+    const sessionsAfter = sessionStats.completedSessions;
+    const sessionsBefore = Math.max(0, sessionsAfter - 1);
+    const features = FEATURE_UNLOCK_GATES
+      .filter(
+        (gate) =>
+          sessionsBefore < gate.requiresSessions &&
+          sessionsAfter >= gate.requiresSessions,
+      )
+      .map((gate) => gate.featureId);
     const profile = useOnboardingStore.getState().motivationProfile;
     const before = buildFeatureAccess({
       totalCompletedSessions: sessionsBefore,
@@ -60,23 +52,33 @@ export function detectNewlyUnlockedFeatures(
       totalCompletedSessions: sessionsAfter,
       motivationProfile: profile ?? undefined,
     });
-    const featureSet = new Set(features);
-    for (const [key, feat] of Object.entries(after.features)) {
+    for (const key of Object.keys(after.features)) {
+      if (!hasFeatureKey(after.features, key) || !hasFeatureKey(before.features, key)) {
+        continue;
+      }
       if (
-        feat.isUnlocked &&
-        !(before.features[key as keyof typeof before.features]?.isUnlocked)
+        after.features[key].isUnlocked &&
+        !before.features[key].isUnlocked &&
+        !features.includes(key)
       ) {
-        if (!featureSet.has(key)) {
-          features.push(key);
-        }
+        features.push(key);
       }
     }
-  } catch (error) {
+    return features;
+  } catch (error: unknown) {
     Sentry.captureException(error, {
       tags: { feature: 'completion-unlock-detection' },
+      extra: { userId, sessionId: summary.sessionId },
     });
+    return [];
   }
-  return features;
+}
+
+function hasFeatureKey<T extends object>(
+  features: T,
+  key: string,
+): key is Extract<keyof T, string> {
+  return Object.prototype.hasOwnProperty.call(features, key);
 }
 
 export async function applyPersonalizationAndSideEffects(
@@ -90,7 +92,7 @@ export async function applyPersonalizationAndSideEffects(
     summary,
   );
 
-  const newlyUnlockedFeatures = detectNewlyUnlockedFeatures(userId, summary);
+  const newlyUnlockedFeatures = await detectNewlyUnlockedFeatures(userId, summary);
 
   try {
     const focusProfile = await getFocusProfile(userId).catch(() => null);

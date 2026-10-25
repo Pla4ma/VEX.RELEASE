@@ -52,6 +52,7 @@ export const CreateExportJobInputSchema = z
       })
       .strict(),
     filters: z.array(AnalyticsFilterSchema).optional(),
+    includeMetadata: z.boolean().default(true),
   })
   .strict();
 

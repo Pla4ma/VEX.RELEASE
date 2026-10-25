@@ -24,7 +24,15 @@ try {
   });
   execFileSync(
     deno,
-    ['test', '--no-config', 'supabase/functions/ai-coach/success-response_test.ts'],
+    [
+      'test',
+      '--no-config',
+      '--allow-env=GEMINI_MODEL_FLASH',
+      'supabase/functions/ai-coach/success-response_test.ts',
+      'supabase/functions/ai-coach/gemini_test.ts',
+      'supabase/functions/_shared/ai-model-routing_test.ts',
+      'supabase/functions/_shared/gemini-model-routing_test.ts',
+    ],
     { cwd: repoRoot, stdio: 'inherit' },
   );
   execFileSync(deno, ['check', '--no-config', ...contentStudyFiles], {
@@ -36,10 +44,12 @@ try {
     [
       'test',
       '--no-config',
+      '--allow-env=LLM_API_KEY,LLM_BASE_URL,LLM_MODEL_PRO,LLM_MODEL_JSON_FALLBACK,GEMINI_API_KEY,GEMINI_MODEL_PRO',
       'supabase/functions/content-study/__tests__/study-access.test.ts',
       'supabase/functions/content-study/__tests__/submit-content.test.ts',
       'supabase/functions/content-study/__tests__/extractors-text.test.ts',
       'supabase/functions/content-study/__tests__/youtube-video.test.ts',
+      'supabase/functions/content-study/__tests__/study-plan-response.test.ts',
     ],
     { cwd: repoRoot, stdio: 'inherit' },
   );
@@ -61,7 +71,7 @@ try {
       '--unstable-sloppy-imports',
       '--config',
       'supabase/functions/ai/deno.json',
-      '--allow-env=LLM_API_KEY,LLM_BASE_URL,LLM_MODEL_FAST,LLM_ALLOW_INSECURE_HTTP',
+      '--allow-env=LLM_API_KEY,LLM_BASE_URL,LLM_MODEL_FAST,LLM_ALLOW_INSECURE_HTTP,GEMINI_MODEL_FLASH,GEMINI_MODEL_PRO',
       'supabase/functions/ai/generation_test.ts',
     ],
     { cwd: repoRoot, stdio: 'inherit' },

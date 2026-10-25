@@ -1,11 +1,9 @@
 import { getNetInfoAdapter } from '../network/NetInfoAdapter';
 import { getQueueLength, startAutoProcessing } from '../lib/offline/queue';
 import { createDebugger } from '../utils/debug';
-import {
-  analyticsService,
-  capture,
-} from '../shared/analytics/analytics-service';
+import { capture } from '../shared/analytics/analytics-service';
 import { initializeAnalyticsEventBridge } from '../shared/analytics/event-bus-bridge';
+import { initializeAnalyticsPreference } from '../features/settings/analytics-preference';
 import { ProductAnalyticsEvents } from '../shared/analytics/product-events';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors/globalErrorHandlers';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator-init';
@@ -29,8 +27,7 @@ function initializeCoreSystems(): void {
   setupGlobalErrorHandler();
   setupRejectionHandler();
   initializeAnalyticsEventBridge();
-  analyticsService
-    .initialize()
+  initializeAnalyticsPreference()
     .then((enabled) => {
       if (enabled) {
         capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });

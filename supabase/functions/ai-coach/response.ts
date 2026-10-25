@@ -1,3 +1,4 @@
+import { z } from 'https://esm.sh/zod@3.22.4';
 import { buildCorsHeaders } from '../_shared/cors.ts';
 import {
   AIRequestTypeSchema,
@@ -5,10 +6,18 @@ import {
   type AIRequest,
 } from './schemas.ts';
 
-export type GeminiResponse = {
-  candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-  usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number };
-};
+export const GeminiResponseSchema = z.object({
+  candidates: z.array(z.object({
+    content: z.object({
+      parts: z.array(z.object({ text: z.string().optional() })).optional(),
+    }).optional(),
+  })).optional(),
+  usageMetadata: z.object({
+    promptTokenCount: z.number().optional(),
+    candidatesTokenCount: z.number().optional(),
+  }).optional(),
+}).passthrough();
+export type GeminiResponse = z.infer<typeof GeminiResponseSchema>;
 
 export function buildError(
   requestType: AIRequest['requestType'],
@@ -25,7 +34,7 @@ export function buildError(
       ? { message: '', tone: 'calm', urgency: 'low' }
       : {},
     metadata: {
-      model: 'gemini-1.5-flash',
+      model: 'unavailable',
       processingTimeMs: Date.now() - startedAt,
       cached: false,
     },
@@ -58,18 +67,6 @@ export function buildTextSuccess(
   };
 }
 
-export function buildSuccess(request: AIRequest, response: GeminiResponse, startedAt: number) {
-  const content = response.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? '';
-  return buildTextSuccess(
-    request,
-    content,
-    'gemini-1.5-flash',
-    startedAt,
-    false,
-    response.usageMetadata?.promptTokenCount ?? 0,
-    response.usageMetadata?.candidatesTokenCount ?? 0,
-  );
-}
 
 export function readRequestType(rawBody: unknown): AIRequest['requestType'] {
   if (isRecord(rawBody) && AIRequestTypeSchema.safeParse(rawBody.requestType).success) {

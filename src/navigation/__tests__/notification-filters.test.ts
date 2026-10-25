@@ -30,10 +30,11 @@ describe('getAvailableNotificationFilters', () => {
     }
   });
 
-  it('boss filter included from day one', () => {
+  it('boss filter stays unavailable before the progressive unlock', () => {
     const features = makeFeatureAccess(0).features;
     const filters = getAvailableNotificationFilters(features);
-    expect(filters).toContain('view_boss');
+    expect(features.boss_tab.isUnlocked).toBe(false);
+    expect(filters).not.toContain('view_boss');
   });
 
   it('coach filter included when ai_coach_advanced available', () => {

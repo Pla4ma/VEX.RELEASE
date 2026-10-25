@@ -28,7 +28,7 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json');
   const [includeMetadata, setIncludeMetadata] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const { data: exportJobs, isLoading: jobsLoading } = useExportJobs(userId);
+  const { data: exportJobs, isLoading: jobsLoading, isError: jobsError } = useExportJobs(userId);
   const exportMutation = useExportAnalytics(userId);
 
   const handleExport = useCallback(() => { setShowConfirmModal(true); }, []);
@@ -40,12 +40,13 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
         format: selectedFormat,
         dataTypes: [selectedCategory],
         dateRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
+        includeMetadata,
       });
-      Alert.alert('Export Started', "Your data export has been queued. You'll be notified when it's ready.", [{ text: 'OK' }]);
+      Alert.alert('Export Started', "Your export is being prepared. This screen updates when it's ready.", [{ text: 'OK' }]);
     } catch {
-      Alert.alert('Export Failed', 'Unable to start export. Please try again.', [{ text: 'OK' }]);
+      return;
     }
-  }, [exportMutation, selectedFormat, selectedCategory]);
+  }, [exportMutation, selectedFormat, selectedCategory, includeMetadata]);
 
   const handleDownload = useCallback((jobId: string) => {
     const job = exportJobs?.find((j) => j.id === jobId);
@@ -69,15 +70,16 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
   }, [exportJobs]);
 
   const handleRetryExport = useCallback(() => {
-    exportMutation.mutateAsync({
+    exportMutation.mutate({
       format: selectedFormat,
-      dataTypes: ['analytics'],
+      dataTypes: [selectedCategory],
       dateRange: {
         start: Date.now() - 30 * 24 * 60 * 60 * 1000,
         end: Date.now(),
       },
+      includeMetadata,
     });
-  }, [exportMutation, selectedFormat]);
+  }, [exportMutation, selectedFormat, selectedCategory, includeMetadata]);
 
   return (
     <View style={styles.container}>
@@ -111,8 +113,8 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
             <Text style={styles.sectionTitle}>Options</Text>
             <View style={styles.optionRow}>
               <View style={styles.optionInfo}>
-                <Text style={styles.optionTitle}>Include Metadata</Text>
-                <Text style={styles.optionSubtitle}>Timestamps, device info, app version</Text>
+                <Text style={styles.optionTitle}>Include Export Metadata</Text>
+                <Text style={styles.optionSubtitle}>Job details and source metadata in JSON or CSV</Text>
               </View>
               <Switch
                 value={includeMetadata}
@@ -159,6 +161,10 @@ export function DataExportScreen({ userId, onClose }: DataExportScreenProps) {
             <Text style={styles.sectionTitle}>Previous Exports</Text>
             {jobsLoading ? (
               <SkeletonList count={2} />
+            ) : jobsError ? (
+              <View style={styles.emptyExports}>
+                <Text style={styles.emptyExportsText}>Unable to load previous exports</Text>
+              </View>
             ) : exportJobs && exportJobs.length > 0 ? (
               exportJobs.map((job) => (
                 <ExportProgress
